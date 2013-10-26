@@ -87,10 +87,13 @@ namespace CellAO.Database
                 {
                     foreach (string sqlFile in files)
                     {
-                        fName = Path.GetFileNameWithoutExtension(sqlFile).ToLower();
-                        if (!Exists(conn, fName))
+                        if (sqlFile != null)
                         {
-                            tablesNotFound.Add(sqlFile);
+                            fName = Path.GetFileNameWithoutExtension(sqlFile).ToLower();
+                            if (!Exists(conn, fName))
+                            {
+                                tablesNotFound.Add(sqlFile);
+                            }
                         }
                     }
                 }
