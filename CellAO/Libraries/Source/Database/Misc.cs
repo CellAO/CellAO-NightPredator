@@ -55,7 +55,6 @@ namespace CellAO.Database
             string applicationFolder = Path.Combine(Directory.GetCurrentDirectory(), "SQLTables");
             string[] files = Directory.GetFiles(applicationFolder, "*.sql", SearchOption.TopDirectoryOnly);
 
-            bool connectionStringCorrect = false;
             string errorMessage = string.Empty;
             try
             {
