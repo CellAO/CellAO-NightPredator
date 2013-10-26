@@ -39,7 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RevisionNameAttribute.cs" />
+    <Compile Include="Attributes\RevisionNameAttribute.cs" />
+    <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\ConfigReadWrite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
