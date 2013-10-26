@@ -27,35 +27,42 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-26 21:32
-// Created:       2013-10-26 20:50
+// Created:       2013-10-26 21:26
 
 #endregion
 
-#region Usings ...
+namespace Database
+{
+    #region Usings ...
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+    using System;
+    using System.Data;
 
-#endregion
+    using Npgsql;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
+    #endregion
 
-[assembly: AssemblyTitle("Database")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Database")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+    public class NpgsqlConnector : IDatabaseConnector
+    {
+        public NpgsqlConnector()
+        {
+            this.ConnectionString = string.Empty;
+        }
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
+        public NpgsqlConnector(string connectionString)
+        {
+            this.ConnectionString = connectionString;
+        }
 
-[assembly: ComVisible(false)]
+        public IDbConnection GetConnection()
+        {
+            if (string.IsNullOrEmpty(this.ConnectionString))
+            {
+                throw new NullReferenceException("Connection string can not be empty");
+            }
+            return new NpgsqlConnection(this.ConnectionString);
+        }
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-
-[assembly: Guid("1a47aa38-7245-4e44-995e-70da7d2108bd")]
+        public string ConnectionString { get; set; }
+    }
+}

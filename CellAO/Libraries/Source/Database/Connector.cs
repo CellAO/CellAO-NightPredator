@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-26 21:02
+// Last modified: 2013-10-26 21:38
 // Created:       2013-10-26 20:50
 
 #endregion
@@ -37,13 +37,10 @@ namespace CellAO.Database
 
     using System;
     using System.Data;
-    using System.Data.SqlClient;
-
-    using MySql.Data.MySqlClient;
-
-    using Npgsql;
 
     using Utility.Config;
+
+    using global::Database;
 
     #endregion
 
@@ -69,6 +66,8 @@ namespace CellAO.Database
         private static readonly string ConnectionString_PostGreSQL =
             ConfigReadWrite.Instance.CurrentConfig.PostgreConnection;
 
+        private static IDatabaseConnector connector;
+
         // CONNECTION POOLING IS A MUST!!!
         // TODO: Rewrite needed for config.xml, only providing username, password and database. Create connection string via stringbuilders
         /// <summary>
@@ -80,20 +79,30 @@ namespace CellAO.Database
         public static IDbConnection GetConnection()
         {
             IDbConnection conn = null;
-            if (Sqltype == "MySql")
+            if (connector == null)
             {
-                conn = new MySqlConnection(ConnectionString_MySQL);
+                if (Sqltype == "MySql")
+                {
+                    connector = new MySQLConnector(ConnectionString_MySQL);
+                }
+
+                if (Sqltype == "MsSql")
+                {
+                    connector = new MSSqlConnector(ConnectionString_MSSQL);
+                }
+
+                if (Sqltype == "PostgreSQL")
+                {
+                    connector = new NpgsqlConnector(ConnectionString_PostGreSQL);
+                }
             }
 
-            if (Sqltype == "MsSql")
+            if (connector == null)
             {
-                conn = new SqlConnection(ConnectionString_MSSQL);
+                throw new Exception("Could not determine your database");
             }
 
-            if (Sqltype == "PostgreSQL")
-            {
-                conn = new NpgsqlConnection(ConnectionString_PostGreSQL);
-            }
+            conn = connector.GetConnection();
 
             if (conn == null)
             {
