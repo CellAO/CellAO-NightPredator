@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoneEngine", "Server\ZoneEn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginEngine", "Server\LoginEngine\LoginEngine.csproj", "{CA8044C8-3283-4382-8B47-3CA7972692F9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Libraries\Source\Database\Database.csproj", "{63D6C409-58EB-4033-87E0-E0DDA6594075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,8 +29,15 @@ Global
 		{CA8044C8-3283-4382-8B47-3CA7972692F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA8044C8-3283-4382-8B47-3CA7972692F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA8044C8-3283-4382-8B47-3CA7972692F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63D6C409-58EB-4033-87E0-E0DDA6594075} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 	EndGlobalSection
 EndGlobal
