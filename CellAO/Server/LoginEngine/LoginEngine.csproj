@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Source\Database\Database.csproj">
+      <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
+      <Name>Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>

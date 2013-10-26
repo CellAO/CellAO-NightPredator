@@ -2,10 +2,16 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEngine\ChatEngine.csproj", "{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA8044C8-3283-4382-8B47-3CA7972692F9} = {CA8044C8-3283-4382-8B47-3CA7972692F9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoneEngine", "Server\ZoneEngine\ZoneEngine.csproj", "{60385925-84F5-4893-A5E0-C8C1D1190790}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginEngine", "Server\LoginEngine\LoginEngine.csproj", "{CA8044C8-3283-4382-8B47-3CA7972692F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60385925-84F5-4893-A5E0-C8C1D1190790} = {60385925-84F5-4893-A5E0-C8C1D1190790}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}"
 EndProject
@@ -74,9 +80,9 @@ Global
 		{527583DE-BD66-461E-8965-F451A6CBE823} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal
