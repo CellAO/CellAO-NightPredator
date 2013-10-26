@@ -39,6 +39,6 @@ using Utility;
 
 #endregion
 
-[assembly: AssemblyVersion("1.4.1.3")]
-[assembly: AssemblyFileVersion("1.4.1.3")]
+[assembly: AssemblyVersion("1.4.1.5")]
+[assembly: AssemblyFileVersion("1.4.1.5")]
 [assembly: RevisionName("Night Predator")]

@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Connector.cs" />
     <Compile Include="IPersistentObject.cs" />
+    <Compile Include="Misc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
