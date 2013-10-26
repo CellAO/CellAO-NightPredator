@@ -11,6 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Libraries\Source\Database\Database.csproj", "{63D6C409-58EB-4033-87E0-E0DDA6594075}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BD319BA9-7666-49DD-9CAE-51C23AC78581}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Libraries\Source\Utility\Utility.csproj", "{CB56F285-02AE-4816-9E8A-EC69991400E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +40,16 @@ Global
 		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63D6C409-58EB-4033-87E0-E0DDA6594075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63D6C409-58EB-4033-87E0-E0DDA6594075} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{CB56F285-02AE-4816-9E8A-EC69991400E5} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 	EndGlobalSection
 EndGlobal
