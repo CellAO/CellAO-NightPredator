@@ -52,4 +52,10 @@ Global
 		{63D6C409-58EB-4033-87E0-E0DDA6594075} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{CB56F285-02AE-4816-9E8A-EC69991400E5} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+	EndGlobalSection
 EndGlobal
