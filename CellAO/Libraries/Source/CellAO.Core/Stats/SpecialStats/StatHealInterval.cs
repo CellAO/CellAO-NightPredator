@@ -37,7 +37,7 @@ namespace CellAO.Core.Stats.SpecialStats
 
     using System;
 
-    using CellAO.Core.Enums;
+    using CellAO.Enums;
 
     #endregion
 

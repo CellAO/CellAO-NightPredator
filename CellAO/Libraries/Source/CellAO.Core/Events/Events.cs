@@ -40,13 +40,14 @@ namespace CellAO.Core.Events
     using System.Collections.Generic;
 
     using CellAO.Core.Functions;
+    using CellAO.Interfaces;
 
     #endregion
 
     /// <summary>
     /// </summary>
     [Serializable]
-    public class Events
+    public class Events : IEvents
     {
         #region Fields
 

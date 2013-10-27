@@ -38,9 +38,9 @@ namespace CellAO.Database
     using System;
     using System.Data;
 
-    using Utility.Config;
+    using CellAO.Interfaces;
 
-    using global::Database;
+    using Utility.Config;
 
     #endregion
 

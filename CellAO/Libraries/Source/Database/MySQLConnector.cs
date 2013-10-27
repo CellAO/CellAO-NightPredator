@@ -31,12 +31,14 @@
 
 #endregion
 
-namespace Database
+namespace CellAO.Database
 {
     #region Usings ...
 
     using System;
     using System.Data;
+
+    using CellAO.Interfaces;
 
     using MySql.Data.MySqlClient;
 

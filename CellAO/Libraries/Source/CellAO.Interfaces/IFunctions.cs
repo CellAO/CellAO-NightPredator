@@ -26,54 +26,62 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 10:05
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-27 10:06
+// Created:       2013-10-27 09:43
 
 #endregion
 
-namespace CellAO.Core.Requirements
+namespace CellAO.Interfaces
 {
-    #region Usings ...
+    using System.Collections.Generic;
 
-    using System;
-
-    using CellAO.Interfaces;
-
-    #endregion
-
-    /// <summary>
-    /// AORequirements
-    /// </summary>
-    [Serializable]
-    public class Requirements : IRequirements
+    public interface IFunctions
     {
-        #region Fields
+        /// <summary>
+        /// List of Arguments
+        /// </summary>
+        IFunctionArguments Arguments { get; set; }
 
         /// <summary>
-        /// Child operator
+        /// Type of function (constants in ItemLoader)
         /// </summary>
-        public int ChildOperator { get; set; }
+        int FunctionType { get; set; }
 
         /// <summary>
-        /// Operator
+        /// Requirements to execute this function
         /// </summary>
-        public int Operator { get; set; }
+        List<IRequirements> Requirements { get; set; }
 
         /// <summary>
-        /// Stat to check against
+        /// TargetType (constants in ItemLoader)
         /// </summary>
-        public int Statnumber { get; set; }
+        int Target { get; set; }
 
         /// <summary>
-        /// Target, from constants
+        /// TickCount (for timers)
         /// </summary>
-        public int Target { get; set; }
+        int TickCount { get; set; }
 
         /// <summary>
-        /// Value to check against
+        /// TickInterval (for timers)
         /// </summary>
-        public int Value { get; set; }
+        uint TickInterval { get; set; }
 
-        #endregion
+        /// <summary>
+        /// process local stats (not serialized)
+        /// </summary>
+        bool dolocalstats { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        string Serialize();
+
+        /// <summary>
+        /// Copy Function
+        /// </summary>
+        /// <returns>new copy</returns>
+        Interfaces.IFunctions ShallowCopy();
     }
 }

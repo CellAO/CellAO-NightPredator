@@ -31,9 +31,23 @@
 
 #endregion
 
-namespace CellAO.Core.InstancedEntities
+namespace CellAO.Interfaces
 {
-    public interface IInstancedEntity
+    #region Usings ...
+
+    using System.Collections.Generic;
+
+    #endregion
+
+    /// <summary>
+    /// Adding Actions to classes
+    /// TODO: complete with methods
+    /// </summary>
+    public interface IItemNanoActions
     {
+        /// <summary>
+        /// List of Game Action (toUse, toWear)
+        /// </summary>
+        List<IActions> Actions { get; set; }
     }
 }

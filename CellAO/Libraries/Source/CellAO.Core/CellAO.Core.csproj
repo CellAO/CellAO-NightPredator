@@ -57,22 +57,15 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Actions\Actions.cs" />
-    <Compile Include="Actions\IItemNanoActions.cs" />
-    <Compile Include="Enums\Expansions.cs" />
-    <Compile Include="Enums\InventoryError.cs" />
-    <Compile Include="Enums\MoveModes.cs" />
     <Compile Include="Events\Events.cs" />
-    <Compile Include="Events\IItemNanoEvents.cs" />
+    <Compile Include="Functions\Constants.cs" />
     <Compile Include="Functions\FunctionArguments.cs" />
     <Compile Include="Functions\Functions.cs" />
-    <Compile Include="InstancedEntities\IInstancedEntity.cs" />
-    <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemLoader.cs" />
     <Compile Include="Items\ItemTemplate.cs" />
     <Compile Include="Nanos\NanoFormula.cs" />
     <Compile Include="Nanos\NanoHandler.cs" />
-    <Compile Include="Playfields\IPlayfield.cs" />
     <Compile Include="Playfields\Playfield.cs" />
     <Compile Include="Playfields\PlayfieldDistrict.cs" />
     <Compile Include="Playfields\Playfields.cs" />
@@ -81,8 +74,6 @@
     <Compile Include="Stats\CharacterStats.cs" />
     <Compile Include="Stats\DynelStat.cs" />
     <Compile Include="Stats\DynelStats.cs" />
-    <Compile Include="Stats\IStat.cs" />
-    <Compile Include="Stats\IStatList.cs" />
     <Compile Include="Stats\SkillTrickleTable.cs" />
     <Compile Include="Stats\SpecialStats\StatAlienNextXP.cs" />
     <Compile Include="Stats\SpecialStats\StatCurrentNano.cs" />
@@ -104,7 +95,9 @@
     <Compile Include="Stats\StatelStats.cs" />
     <Compile Include="Stats\StatNamesDefaults.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="InstancedEntities\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
       <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
@@ -114,9 +107,17 @@
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Database\Database.csproj">
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
+      <Name>CellAO.Enums</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
+      <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
+      <Name>CellAO.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
-      <Name>Database</Name>
+      <Name>CellAO.Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>

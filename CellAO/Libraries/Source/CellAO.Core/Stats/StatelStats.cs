@@ -38,6 +38,8 @@ namespace CellAO.Core.Stats
     using System;
     using System.Collections.Generic;
 
+    using CellAO.Interfaces;
+
     #endregion
 
     /// <summary>

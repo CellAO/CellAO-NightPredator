@@ -31,54 +31,98 @@
 
 #endregion
 
-namespace CellAO.Core.Enums
+namespace CellAO.Enums
 {
     /// <summary>
+    /// Enumeration of Move modes
     /// </summary>
-    public enum Expansions
+    public enum MoveModes
     {
         /// <summary>
         /// </summary>
-        NotumWars = 0,
+        None,
 
         /// <summary>
         /// </summary>
-        ShadowLands = 1,
+        Rooted,
 
         /// <summary>
         /// </summary>
-        ShadowLandsPreOrder = 2,
+        Walk,
 
         /// <summary>
         /// </summary>
-        AlienInvasion = 3,
+        Run,
 
         /// <summary>
         /// </summary>
-        AlienInvasionPreOrder = 4,
+        Swim,
 
         /// <summary>
         /// </summary>
-        LostEden = 5,
+        Crawl,
 
         /// <summary>
         /// </summary>
-        LostEdenPreOrder = 6,
+        Sneak,
 
         /// <summary>
         /// </summary>
-        LegacyOfXan = 7,
+        Fly,
 
         /// <summary>
         /// </summary>
-        LegacyOfXanPreOrder = 8,
+        Sit,
 
         /// <summary>
         /// </summary>
-        Mail = 9,
+        SocialTemp, // NV: What is this again exactly?
+        /// <summary>
+        /// </summary>
+        Nothing,
 
         /// <summary>
         /// </summary>
-        PMVObsidianEdition = 10
+        Sleep,
+
+        /// <summary>
+        /// </summary>
+        Lounge
+    }
+
+    /// <summary>
+    /// Enumeration of Spin or Strafe directions
+    /// </summary>
+    public enum SpinOrStrafeDirections
+    {
+        /// <summary>
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// </summary>
+        Left,
+
+        /// <summary>
+        /// </summary>
+        Right
+    }
+
+    /// <summary>
+    /// Enumeration of Move directions
+    /// </summary>
+    public enum MoveDirections
+    {
+        /// <summary>
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// </summary>
+        Forwards,
+
+        /// <summary>
+        /// </summary>
+        Backwards
     }
 }

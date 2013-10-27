@@ -31,44 +31,18 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Interfaces
 {
     #region Usings ...
 
-    using CellAO.Database;
+    using System.Data;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public interface IStatList : IDatabaseObject
+    public interface IDatabaseConnector
     {
-        /// <summary>
-        /// Number-indexed access to Stats List
-        /// </summary>
-        /// <param name="index">
-        /// Id of Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[int index] { get; }
+        IDbConnection GetConnection();
 
-        /// <summary>
-        /// Name-indexed access to Stats List
-        /// </summary>
-        /// <param name="name">
-        /// Name of the Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[string name] { get; }
-
-        /// <summary>
-        /// </summary>
-        void ClearModifiers();
-
-        void ClearChangedFlags();
+        string ConnectionString { get; set; }
     }
 }

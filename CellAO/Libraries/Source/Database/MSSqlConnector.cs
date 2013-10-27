@@ -31,13 +31,15 @@
 
 #endregion
 
-namespace Database
+namespace CellAO.Database
 {
     #region Usings ...
 
     using System;
     using System.Data;
     using System.Data.SqlClient;
+
+    using CellAO.Interfaces;
 
     #endregion
 

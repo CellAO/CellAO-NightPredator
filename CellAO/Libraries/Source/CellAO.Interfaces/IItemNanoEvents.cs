@@ -26,54 +26,29 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 10:05
+// Last modified: 2013-10-27 08:48
 // Created:       2013-10-27 07:58
 
 #endregion
 
-namespace CellAO.Core.Requirements
+namespace CellAO.Interfaces
+
 {
     #region Usings ...
 
-    using System;
-
-    using CellAO.Interfaces;
+    using System.Collections.Generic;
 
     #endregion
 
     /// <summary>
-    /// AORequirements
+    /// Adding Item / Nano Events to class
+    /// TODO: complete with methods
     /// </summary>
-    [Serializable]
-    public class Requirements : IRequirements
+    public interface IItemNanoEvents
     {
-        #region Fields
-
         /// <summary>
-        /// Child operator
+        /// List of Game Events (onWear, onCollide etc)
         /// </summary>
-        public int ChildOperator { get; set; }
-
-        /// <summary>
-        /// Operator
-        /// </summary>
-        public int Operator { get; set; }
-
-        /// <summary>
-        /// Stat to check against
-        /// </summary>
-        public int Statnumber { get; set; }
-
-        /// <summary>
-        /// Target, from constants
-        /// </summary>
-        public int Target { get; set; }
-
-        /// <summary>
-        /// Value to check against
-        /// </summary>
-        public int Value { get; set; }
-
-        #endregion
+        List<IEvents> Events { get; }
     }
 }

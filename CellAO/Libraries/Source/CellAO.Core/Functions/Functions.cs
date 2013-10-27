@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 10:13
 // Created:       2013-10-27 07:58
 
 #endregion
@@ -40,55 +40,64 @@ namespace CellAO.Core.Functions
     using System.IO;
 
     using CellAO.Core.Requirements;
+    using CellAO.Interfaces;
 
     using MsgPack.Serialization;
 
     #endregion
 
+
     /// <summary>
     /// AOFunctions
     /// </summary>
     [Serializable]
-    public class Functions
+    public class Functions : IFunctions
     {
         #region Fields
 
         /// <summary>
         /// List of Arguments
         /// </summary>
-        public FunctionArguments Arguments = new FunctionArguments();
+        public FunctionArguments Arguments { get; set; }
 
         /// <summary>
         /// Type of function (constants in ItemLoader)
         /// </summary>
-        public int FunctionType;
+        public int FunctionType { get; set; }
 
         /// <summary>
         /// Requirements to execute this function
         /// </summary>
-        public List<Requirements> Requirements = new List<Requirements>();
+        public List<IRequirements> Requirements { get; set; }
 
         /// <summary>
         /// TargetType (constants in ItemLoader)
         /// </summary>
-        public int Target;
+        public int Target { get; set; }
 
         /// <summary>
         /// TickCount (for timers)
         /// </summary>
-        public int TickCount;
+        public int TickCount { get; set; }
 
         /// <summary>
         /// TickInterval (for timers)
         /// </summary>
-        public uint TickInterval;
+        public uint TickInterval { get; set; }
 
         /// <summary>
         /// process local stats (not serialized)
         /// </summary>
-        public bool dolocalstats = true;
+        public bool dolocalstats { get; set; }
 
         #endregion
+
+        public Functions()
+        {
+            this.Arguments = new FunctionArguments();
+            this.Requirements = new List<IRequirements>();
+            this.dolocalstats = true;
+        }
 
         #region Public Methods and Operators
 
@@ -122,9 +131,9 @@ namespace CellAO.Core.Functions
         /// Copy Function
         /// </summary>
         /// <returns>new copy</returns>
-        public Functions ShallowCopy()
+        public IFunctions ShallowCopy()
         {
-            Functions newAOF = new Functions();
+            IFunctions newAOF = new Functions();
             foreach (Requirements aor in this.Requirements)
             {
                 Requirements newAOR = new Requirements();

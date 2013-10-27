@@ -7,8 +7,8 @@
     <ProjectGuid>{63D6C409-58EB-4033-87E0-E0DDA6594075}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Database</RootNamespace>
-    <AssemblyName>Database</AssemblyName>
+    <RootNamespace>CellAO.Database</RootNamespace>
+    <AssemblyName>CellAO.Database</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
@@ -62,8 +62,6 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Connector.cs" />
-    <Compile Include="IDatabaseConnector.cs" />
-    <Compile Include="IDatabaseObject.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
     <Compile Include="NpgsqlConnector.cs" />
@@ -71,6 +69,10 @@
     <Compile Include="MSSqlConnector.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
+      <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
+      <Name>CellAO.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>

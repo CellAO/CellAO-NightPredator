@@ -31,18 +31,54 @@
 
 #endregion
 
-namespace Database
+namespace CellAO.Interfaces
 {
-    #region Usings ...
-
-    using System.Data;
-
-    #endregion
-
-    public interface IDatabaseConnector
+    /// <summary>
+    /// </summary>
+    public interface IStat
     {
-        IDbConnection GetConnection();
+        /// <summary>
+        /// </summary>
+        int StatId { get; }
 
-        string ConnectionString { get; set; }
+        /// <summary>
+        /// </summary>
+        int Value { get; set; }
+
+        /// <summary>
+        /// </summary>
+        uint BaseValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int Trickle { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int Modifier { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int PercentageModifier { get; set; }
+
+        /// <summary>
+        /// </summary>
+        bool AnnounceToPlayfield { get; set; }
+
+        /// <summary>
+        /// </summary>
+        void CalcTrickle();
+
+        /// <summary>
+        /// </summary>
+        void AffectStats();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="old">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        uint GetMaxValue(uint old);
     }
 }

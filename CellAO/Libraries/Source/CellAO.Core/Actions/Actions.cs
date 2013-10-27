@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 10:09
 // Created:       2013-10-27 07:58
 
 #endregion
@@ -39,6 +39,7 @@ namespace CellAO.Core.Actions
     using System.Collections.Generic;
 
     using CellAO.Core.Requirements;
+    using CellAO.Interfaces;
 
     #endregion
 
@@ -46,16 +47,21 @@ namespace CellAO.Core.Actions
     /// AOActions covers all action types, with their reqs
     /// </summary>
     [Serializable]
-    public class Actions
+    public class Actions : IActions
     {
         /// <summary>
         /// Type of Action (constants in ItemLoader)
         /// </summary>
-        public int ActionType;
+        public int ActionType { get; set; }
 
         /// <summary>
         /// List of Requirements for this action
         /// </summary>
-        public List<Requirements> Requirements = new List<Requirements>();
+        public List<IRequirements> Requirements { get; set; }
+
+        public Actions()
+        {
+            this.Requirements = new List<IRequirements>();
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace CellAO.Core.Stats
     using System;
     using System.Collections.Generic;
 
-    using CellAO.Core.InstancedEntities;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 

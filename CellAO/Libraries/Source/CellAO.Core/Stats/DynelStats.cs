@@ -39,7 +39,7 @@ namespace CellAO.Core.Stats
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
-    using CellAO.Core.InstancedEntities;
+    using CellAO.Interfaces;
     using CellAO.Core.Stats.SpecialStats;
 
     #endregion

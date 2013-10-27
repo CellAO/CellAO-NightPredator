@@ -26,54 +26,29 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 10:05
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-27 10:06
+// Created:       2013-10-27 09:42
 
 #endregion
 
-namespace CellAO.Core.Requirements
+namespace CellAO.Interfaces
 {
     #region Usings ...
 
-    using System;
-
-    using CellAO.Interfaces;
+    using System.Collections.Generic;
 
     #endregion
 
-    /// <summary>
-    /// AORequirements
-    /// </summary>
-    [Serializable]
-    public class Requirements : IRequirements
+    public interface IEvents
     {
-        #region Fields
+        /// <summary>
+        /// List of Functions of the Event
+        /// </summary>
+        List<IFunctions> Functions { get; set; }
 
         /// <summary>
-        /// Child operator
+        /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        public int ChildOperator { get; set; }
-
-        /// <summary>
-        /// Operator
-        /// </summary>
-        public int Operator { get; set; }
-
-        /// <summary>
-        /// Stat to check against
-        /// </summary>
-        public int Statnumber { get; set; }
-
-        /// <summary>
-        /// Target, from constants
-        /// </summary>
-        public int Target { get; set; }
-
-        /// <summary>
-        /// Value to check against
-        /// </summary>
-        public int Value { get; set; }
-
-        #endregion
+        int EventType { get; set; }
     }
 }

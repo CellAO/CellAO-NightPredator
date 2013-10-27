@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 10:16
 // Created:       2013-10-27 07:58
 
 #endregion
@@ -40,26 +40,34 @@ namespace CellAO.Core.Functions
     using System.Runtime.Serialization;
     using System.Text;
 
+    using CellAO.Interfaces;
+
     using MsgPack;
 
     #endregion
+
 
     /// <summary>
     /// Holder class for Function arguments
     /// </summary>
     [Serializable]
-    public class FunctionArguments : IPackable, IUnpackable
+    public class FunctionArguments : IPackable, IUnpackable, IFunctionArguments
     {
         #region Fields
 
         /// <summary>
         /// The function's arguments
         /// </summary>
-        public List<object> Values = new List<object>();
+        public List<object> Values { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public FunctionArguments()
+        {
+            this.Values = new List<object>();
+        }
 
         /// <summary>
         /// Use msgpack to compress the data

@@ -31,54 +31,12 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Interfaces
 {
-    /// <summary>
-    /// </summary>
-    public interface IStat
+    public interface IDatabaseObject
     {
-        /// <summary>
-        /// </summary>
-        int StatId { get; }
+        bool Read();
 
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        bool AnnounceToPlayfield { get; set; }
-
-        /// <summary>
-        /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        void AffectStats();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        uint GetMaxValue(uint old);
+        bool Write();
     }
 }

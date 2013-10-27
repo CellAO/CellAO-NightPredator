@@ -31,158 +31,126 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Interfaces
 {
-    using CellAO.Interfaces;
+    #region Usings ...
+
+    using System.Collections.Generic;
+
+    using CellAO.Enums;
+
+    using MemBus;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
+
+    #endregion
 
     /// <summary>
     /// </summary>
-    public class StatelStat : IStat
+    public interface IPlayfield
     {
         /// <summary>
-        /// Stat's value
         /// </summary>
-        private int value;
-
-        /// <summary>
-        /// Stat's Id
-        /// </summary>
-        public int StatId { get; private set; }
-
-        /// <summary>
-        /// Stat's value
-        /// </summary>
-        public int Value
-        {
-            get
-            {
-                return this.value;
-            }
-
-            set
-            {
-                this.value = value;
-            }
-        }
-
-        /// <summary>
-        /// Always 'value' for Statels
-        /// </summary>
-        public uint BaseValue
-        {
-            get
-            {
-                return (uint)this.value;
-            }
-
-            set
-            {
-                this.value = (int)value;
-            }
-        }
-
-        /// <summary>
-        /// Always 0 for Statels
-        /// </summary>
-        public int Trickle
-        {
-            get
-            {
-                return 0;
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
-        /// Always 0 for Statels
-        /// </summary>
-        public int Modifier
-        {
-            get
-            {
-                return 0;
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
-        /// Always 100%
-        /// </summary>
-        public int PercentageModifier
-        {
-            get
-            {
-                return 100;
-            }
-
-            set
-            {
-            }
-        }
+        IBus PlayfieldBus { get; set; }
 
         /// <summary>
         /// </summary>
-        public bool AnnounceToPlayfield { get; set; }
+        Identity Identity { get; set; }
 
         /// <summary>
-        /// Nothing to do here, no trickles in statels
         /// </summary>
-        public void CalcTrickle()
-        {
-            return;
-        }
+        HashSet<IInstancedEntity> Entities { get; }
 
         /// <summary>
-        /// Never called on statels
         /// </summary>
-        public void AffectStats()
-        {
-        }
-
-        /// <summary>
-        /// Never called on Statels
-        /// </summary>
-        /// <param name="old">
-        /// </param>
-        /// old (actual) value
         /// <returns>
         /// </returns>
-        public uint GetMaxValue(uint old)
-        {
-            return 0;
-        }
+        int NumberOfPlayers();
 
         /// <summary>
-        /// Create new Stat and fill with default value
         /// </summary>
-        /// <param name="statNumber">
-        /// Stat's id
-        /// </param>
-        public StatelStat(int statNumber)
-        {
-            this.StatId = statNumber;
-            this.value = StatNamesDefaults.GetDefault(statNumber);
-        }
+        /// <returns>
+        /// </returns>
+        int NumberOfDynels();
 
         /// <summary>
-        /// Create Stat and fill with designated value
         /// </summary>
-        /// <param name="statNumber">
-        /// Stat's Id
+        List<IFunctions> EnvironmentFunctions { get; }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool IsInstancedPlayfield();
+
+        /// <summary>
+        /// </summary>
+        List<IPlayfieldDistrict> Districts { get; }
+
+        /// <summary>
+        /// </summary>
+        float X { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float Z { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float XScale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float ZScale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        Expansions Expansion { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
         /// </param>
-        /// <param name="statValue">
-        /// Stat's initial value
+        /// <returns>
+        /// </returns>
+        IInstancedEntity FindByIdentity(Identity identity);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
         /// </param>
-        public StatelStat(int statNumber, int statValue)
-            : this(statNumber)
-        {
-            this.value = statValue;
-        }
+        void Announce(Message message);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        void Announce(MessageBody messageBody);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        /// <param name="dontSend">
+        /// </param>
+        void AnnounceOthers(MessageBody messageBody, Identity dontSend);
+
+        /// <summary>
+        /// </summary>
+        void DisconnectAllClients();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj">
+        /// </param>
+        void Publish(object obj);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendSCFUs">
+        /// </param>
+        // TODO: Reactivate
+        // void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs);
     }
 }

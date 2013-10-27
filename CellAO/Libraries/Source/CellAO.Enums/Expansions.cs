@@ -31,12 +31,54 @@
 
 #endregion
 
-namespace CellAO.Database
+namespace CellAO.Enums
 {
-    public interface IDatabaseObject
+    /// <summary>
+    /// </summary>
+    public enum Expansions
     {
-        bool Read();
+        /// <summary>
+        /// </summary>
+        NotumWars = 0,
 
-        bool Write();
+        /// <summary>
+        /// </summary>
+        ShadowLands = 1,
+
+        /// <summary>
+        /// </summary>
+        ShadowLandsPreOrder = 2,
+
+        /// <summary>
+        /// </summary>
+        AlienInvasion = 3,
+
+        /// <summary>
+        /// </summary>
+        AlienInvasionPreOrder = 4,
+
+        /// <summary>
+        /// </summary>
+        LostEden = 5,
+
+        /// <summary>
+        /// </summary>
+        LostEdenPreOrder = 6,
+
+        /// <summary>
+        /// </summary>
+        LegacyOfXan = 7,
+
+        /// <summary>
+        /// </summary>
+        LegacyOfXanPreOrder = 8,
+
+        /// <summary>
+        /// </summary>
+        Mail = 9,
+
+        /// <summary>
+        /// </summary>
+        PMVObsidianEdition = 10
     }
 }

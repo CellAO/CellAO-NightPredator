@@ -4,39 +4,37 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{60385925-84F5-4893-A5E0-C8C1D1190790}</ProjectGuid>
+    <ProjectGuid>{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZoneEngine</RootNamespace>
-    <AssemblyName>ZoneEngine</AssemblyName>
+    <RootNamespace>Extractor_Serializer</RootNamespace>
+    <AssemblyName>Extractor Serializer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\CellAO\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Built\Debug\</OutputPath>
+    <OutputPath>..\..\..\CellAO\Built\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Built\Release\</OutputPath>
+    <OutputPath>..\..\..\CellAO\Built\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,37 +42,33 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="zlib.net">
+      <HintPath>..\..\..\CellAO\packages\zlib.net.1.0.4.0\lib\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\CellAO\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="bStream.cs" />
+    <Compile Include="Extractor.cs" />
+    <Compile Include="NewParser.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Source\Database\CellAO.Database.csproj">
-      <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
-      <Name>CellAO.Database</Name>
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
+      <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
+      <Name>CellAO.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Config\Config.xml">
-      <Link>Config.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Datafiles\items.dat">
-      <Link>items.dat</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Datafiles\nanos.dat">
-      <Link>nanos.dat</Link>
+    <None Include="FunctionSets.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

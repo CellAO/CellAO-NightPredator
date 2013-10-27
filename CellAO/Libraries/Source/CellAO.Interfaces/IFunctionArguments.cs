@@ -26,90 +26,49 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-27 10:17
+// Created:       2013-10-27 10:16
 
 #endregion
 
-namespace CellAO.Core.Items
+namespace CellAO.Interfaces
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
+    using MsgPack;
 
     #endregion
 
-    /// <summary>
-    /// Item Interface
-    /// </summary>
-    public interface IItem
+    public interface IFunctionArguments
     {
         /// <summary>
-        /// Quality level of the item
+        /// The function's arguments
         /// </summary>
-        int Quality { get; set; }
+        List<object> Values { get; set; }
 
         /// <summary>
-        /// Identity of the item (if it is instanced)
+        /// Use msgpack to compress the data
         /// </summary>
-        Identity Identity { get; }
-
-        /// <summary>
-        /// Get item attribute
-        /// </summary>
-        /// <param name="attributeId">
-        /// Id of the attribute
+        /// <param name="packer">
+        /// The msgpack packer
         /// </param>
-        /// <returns>
-        /// Stored item attribute value
-        /// </returns>
-        int GetAttribute(int attributeId);
-
-        /// <summary>
-        /// Set an item attribute
-        /// </summary>
-        /// <param name="attributeId">
-        /// Id of the attribute
+        /// <param name="options">
+        /// msgpack packing options
         /// </param>
-        /// <param name="newValue">
-        /// The new value of the item attribute
+        void PackToMessage(Packer packer, PackingOptions options);
+
+        /// <summary>
+        /// Unpack from msgpack'd stream
+        /// </summary>
+        /// <param name="unpacker">
+        /// The msgpack unpacker
         /// </param>
-        void SetAttribute(int attributeId, int newValue);
-
-        /// <summary>
-        /// LowId of the item template
-        /// </summary>
-        int LowID { get; }
-
-        /// <summary>
-        /// HighId of the item template
-        /// </summary>
-        int HighID { get; }
-
-        /// <summary>
-        /// We Dont Know (TM)
-        /// </summary>
-        int Nothing { get; }
-
-        /// <summary>
-        /// Stacked count of the item
-        /// </summary>
-        int MultipleCount { get; set; }
-
-        /// <summary>
-        /// Item's Flags
-        /// </summary>
-        int Flags { get; }
-
-        /// <summary>
-        /// Write item to database
-        /// </summary>
-        void WriteToDatabase();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        byte[] GetItemAttributes();
+        /// <exception cref="SerializationException">
+        /// Unsuitable data encountered
+        /// </exception>
+        void UnpackFromMessage(Unpacker unpacker);
     }
 }

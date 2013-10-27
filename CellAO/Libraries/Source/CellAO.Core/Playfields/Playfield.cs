@@ -26,12 +26,12 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 10:00
 // Created:       2013-10-27 07:58
 
 #endregion
 
-namespace ZoneEngine.GameObject.Playfields
+namespace CellAO.Core.Playfields
 {
     #region Usings ...
 
@@ -40,10 +40,8 @@ namespace ZoneEngine.GameObject.Playfields
 
     using Cell.Core;
 
-    using CellAO.Core.Enums;
-    using CellAO.Core.Functions;
-    using CellAO.Core.InstancedEntities;
-    using CellAO.Core.Playfields;
+    using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using MemBus;
     using MemBus.Configurators;
@@ -73,7 +71,7 @@ namespace ZoneEngine.GameObject.Playfields
 
         /// <summary>
         /// </summary>
-        private List<PlayfieldDistrict> districts = new List<PlayfieldDistrict>();
+        private List<IPlayfieldDistrict> districts = new List<IPlayfieldDistrict>();
 
         /// <summary>
         /// </summary>
@@ -108,7 +106,7 @@ namespace ZoneEngine.GameObject.Playfields
 
         /// <summary>
         /// </summary>
-        public List<Functions> EnvironmentFunctions { get; private set; }
+        public List<IFunctions> EnvironmentFunctions { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -123,7 +121,7 @@ namespace ZoneEngine.GameObject.Playfields
 
         /// <summary>
         /// </summary>
-        public List<PlayfieldDistrict> Districts
+        public List<IPlayfieldDistrict> Districts
         {
             get
             {

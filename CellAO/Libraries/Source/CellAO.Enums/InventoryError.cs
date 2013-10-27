@@ -31,7 +31,7 @@
 
 #endregion
 
-namespace CellAO.Core.Enums
+namespace CellAO.Enums
 {
     /// <summary>
     /// </summary>

@@ -4,38 +4,39 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{60385925-84F5-4893-A5E0-C8C1D1190790}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{D53F0612-FEFE-4EAF-80AA-480F25C8DD76}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZoneEngine</RootNamespace>
-    <AssemblyName>ZoneEngine</AssemblyName>
+    <RootNamespace>CellAO.Interfaces</RootNamespace>
+    <AssemblyName>CellAO.Interfaces</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Built\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Built\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
+    <Reference Include="MemBus">
+      <HintPath>..\..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
+    </Reference>
+    <Reference Include="MsgPack">
+      <HintPath>..\..\..\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,37 +47,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="IActions.cs" />
+    <Compile Include="IDatabaseConnector.cs" />
+    <Compile Include="IDatabaseObject.cs" />
+    <Compile Include="IEvents.cs" />
+    <Compile Include="IFunctionArguments.cs" />
+    <Compile Include="IFunctions.cs" />
+    <Compile Include="IInstancedEntity.cs" />
+    <Compile Include="IItem.cs" />
+    <Compile Include="IItemNanoActions.cs" />
+    <Compile Include="IItemNanoEvents.cs" />
+    <Compile Include="INamedEntity.cs" />
+    <Compile Include="IPlayfield.cs" />
+    <Compile Include="IPlayfieldDistrict.cs" />
+    <Compile Include="IRequirements.cs" />
+    <Compile Include="IStat.cs" />
+    <Compile Include="IStatList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Source\Database\CellAO.Database.csproj">
-      <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
-      <Name>CellAO.Database</Name>
+    <ProjectReference Include="..\..\..\..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+      <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
+      <Name>CellAO.Enums</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Config\Config.xml">
-      <Link>Config.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Datafiles\items.dat">
-      <Link>items.dat</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Datafiles\nanos.dat">
-      <Link>nanos.dat</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

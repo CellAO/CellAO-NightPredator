@@ -26,29 +26,36 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-27 09:32
+// Created:       2013-10-27 09:21
 
 #endregion
 
-namespace CellAO.Core.Events
+#region Usings ...
 
-{
-    #region Usings ...
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-    using System.Collections.Generic;
+#endregion
 
-    #endregion
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 
-    /// <summary>
-    /// Adding Item / Nano Events to class
-    /// TODO: complete with methods
-    /// </summary>
-    public interface IItemNanoEvents
-    {
-        /// <summary>
-        /// List of Game Events (onWear, onCollide etc)
-        /// </summary>
-        List<Events> Events { get; }
-    }
-}
+[assembly: AssemblyTitle("Extractor Serializer")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Extractor Serializer")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+
+[assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+
+[assembly: Guid("07aaa4db-4304-4174-81e7-ebe986fa2242")]

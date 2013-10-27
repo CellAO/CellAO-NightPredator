@@ -33,24 +33,32 @@
 
 namespace CellAO.Core.Playfields
 {
+    using CellAO.Interfaces;
+
     /// <summary>
     /// </summary>
-    public class PlayfieldDistrict
+    public class PlayfieldDistrict : IPlayfieldDistrict
     {
         /// <summary>
         /// </summary>
-        public string Name = "Nameless District";
+        public string Name { get; set; }
 
         /// <summary>
         /// </summary>
-        public int MinLevel;
+        public int MinLevel { get; set; }
 
         /// <summary>
         /// </summary>
-        public int MaxLevel;
+        public int MaxLevel { get; set; }
 
         /// <summary>
         /// </summary>
-        public int SuppressionGas = 100;
+        public int SuppressionGas { get; set; }
+
+        public PlayfieldDistrict()
+        {
+            Name = "Nameless District";
+            SuppressionGas = 100;
+        }
     }
 }

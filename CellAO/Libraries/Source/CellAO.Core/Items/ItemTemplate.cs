@@ -41,6 +41,7 @@ namespace CellAO.Core.Items
 
     using CellAO.Core.Actions;
     using CellAO.Core.Events;
+    using CellAO.Interfaces;
 
     #endregion
 
@@ -713,16 +714,16 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            this.Events = new List<Events>();
-            this.Actions = new List<Actions>();
+            this.Events = new List<IEvents>();
+            this.Actions = new List<IActions>();
         }
 
         /// <summary>
         /// </summary>
-        public List<Events> Events { get; set; }
+        public List<IEvents> Events { get; set; }
 
         /// <summary>
         /// </summary>
-        public List<Actions> Actions { get; set; }
+        public List<IActions> Actions { get; set; }
     }
 }

@@ -26,103 +26,43 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-27 09:45
+// Created:       2013-10-27 09:38
 
 #endregion
 
-namespace CellAO.Core.Enums
+namespace CellAO.Interfaces
 {
     /// <summary>
-    /// Enumeration of Move modes
     /// </summary>
-    public enum MoveModes
+    public interface IStatList : IDatabaseObject
     {
         /// <summary>
+        /// Number-indexed access to Stats List
         /// </summary>
-        None,
+        /// <param name="index">
+        /// Id of Stat
+        /// </param>
+        /// <returns>
+        /// IStat object
+        /// </returns>
+        IStat this[int index] { get; }
+
+        /// <summary>
+        /// Name-indexed access to Stats List
+        /// </summary>
+        /// <param name="name">
+        /// Name of the Stat
+        /// </param>
+        /// <returns>
+        /// IStat object
+        /// </returns>
+        IStat this[string name] { get; }
 
         /// <summary>
         /// </summary>
-        Rooted,
+        void ClearModifiers();
 
-        /// <summary>
-        /// </summary>
-        Walk,
-
-        /// <summary>
-        /// </summary>
-        Run,
-
-        /// <summary>
-        /// </summary>
-        Swim,
-
-        /// <summary>
-        /// </summary>
-        Crawl,
-
-        /// <summary>
-        /// </summary>
-        Sneak,
-
-        /// <summary>
-        /// </summary>
-        Fly,
-
-        /// <summary>
-        /// </summary>
-        Sit,
-
-        /// <summary>
-        /// </summary>
-        SocialTemp, // NV: What is this again exactly?
-        /// <summary>
-        /// </summary>
-        Nothing,
-
-        /// <summary>
-        /// </summary>
-        Sleep,
-
-        /// <summary>
-        /// </summary>
-        Lounge
-    }
-
-    /// <summary>
-    /// Enumeration of Spin or Strafe directions
-    /// </summary>
-    public enum SpinOrStrafeDirections
-    {
-        /// <summary>
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// </summary>
-        Left,
-
-        /// <summary>
-        /// </summary>
-        Right
-    }
-
-    /// <summary>
-    /// Enumeration of Move directions
-    /// </summary>
-    public enum MoveDirections
-    {
-        /// <summary>
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// </summary>
-        Forwards,
-
-        /// <summary>
-        /// </summary>
-        Backwards
+        void ClearChangedFlags();
     }
 }

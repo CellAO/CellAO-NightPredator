@@ -31,127 +31,85 @@
 
 #endregion
 
-namespace CellAO.Core.Playfields
+namespace CellAO.Interfaces
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using CellAO.Core.Enums;
-    using CellAO.Core.Functions;
-    using CellAO.Core.InstancedEntities;
-
-    using MemBus;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
+    /// Item Interface
     /// </summary>
-    public interface IPlayfield
+    public interface IItem
     {
         /// <summary>
+        /// Quality level of the item
         /// </summary>
-        IBus PlayfieldBus { get; set; }
+        int Quality { get; set; }
 
         /// <summary>
+        /// Identity of the item (if it is instanced)
         /// </summary>
-        Identity Identity { get; set; }
+        Identity Identity { get; }
 
         /// <summary>
+        /// Get item attribute
         /// </summary>
-        HashSet<IInstancedEntity> Entities { get; }
+        /// <param name="attributeId">
+        /// Id of the attribute
+        /// </param>
+        /// <returns>
+        /// Stored item attribute value
+        /// </returns>
+        int GetAttribute(int attributeId);
+
+        /// <summary>
+        /// Set an item attribute
+        /// </summary>
+        /// <param name="attributeId">
+        /// Id of the attribute
+        /// </param>
+        /// <param name="newValue">
+        /// The new value of the item attribute
+        /// </param>
+        void SetAttribute(int attributeId, int newValue);
+
+        /// <summary>
+        /// LowId of the item template
+        /// </summary>
+        int LowID { get; }
+
+        /// <summary>
+        /// HighId of the item template
+        /// </summary>
+        int HighID { get; }
+
+        /// <summary>
+        /// We Dont Know (TM)
+        /// </summary>
+        int Nothing { get; }
+
+        /// <summary>
+        /// Stacked count of the item
+        /// </summary>
+        int MultipleCount { get; set; }
+
+        /// <summary>
+        /// Item's Flags
+        /// </summary>
+        int Flags { get; }
+
+        /// <summary>
+        /// Write item to database
+        /// </summary>
+        void WriteToDatabase();
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        int NumberOfPlayers();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        int NumberOfDynels();
-
-        /// <summary>
-        /// </summary>
-        List<Functions> EnvironmentFunctions { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool IsInstancedPlayfield();
-
-        /// <summary>
-        /// </summary>
-        List<PlayfieldDistrict> Districts { get; }
-
-        /// <summary>
-        /// </summary>
-        float X { get; set; }
-
-        /// <summary>
-        /// </summary>
-        float Z { get; set; }
-
-        /// <summary>
-        /// </summary>
-        float XScale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        float ZScale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Expansions Expansion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInstancedEntity FindByIdentity(Identity identity);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        void Announce(Message message);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        void Announce(MessageBody messageBody);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        /// <param name="dontSend">
-        /// </param>
-        void AnnounceOthers(MessageBody messageBody, Identity dontSend);
-
-        /// <summary>
-        /// </summary>
-        void DisconnectAllClients();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="obj">
-        /// </param>
-        void Publish(object obj);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendSCFUs">
-        /// </param>
-        void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs);
+        byte[] GetItemAttributes();
     }
 }
