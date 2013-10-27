@@ -60,7 +60,7 @@
     </Compile>
     <Compile Include="Connector.cs" />
     <Compile Include="IDatabaseConnector.cs" />
-    <Compile Include="IPersistentObject.cs" />
+    <Compile Include="IDatabaseObject.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
     <Compile Include="NpgsqlConnector.cs" />

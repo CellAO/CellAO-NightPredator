@@ -26,20 +26,34 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-26 21:32
-// Created:       2013-10-26 20:50
+// Last modified: 2013-10-26 22:26
+// Created:       2013-10-26 22:14
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Actions
+{
+    #region Usings ...
 
-using System.Reflection;
+    using System;
+    using System.Collections.Generic;
+    using CellAO.Core.Requirements;
+    #endregion
 
-using Utility;
+    /// <summary>
+    /// AOActions covers all action types, with their reqs
+    /// </summary>
+    [Serializable]
+    public class Actions
+    {
+        /// <summary>
+        /// Type of Action (constants in ItemLoader)
+        /// </summary>
+        public int ActionType;
 
-#endregion
-
-[assembly: AssemblyVersion("1.4.1.45")]
-[assembly: AssemblyFileVersion("1.4.1.45")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+        /// <summary>
+        /// List of Requirements for this action
+        /// </summary>
+        public List<Requirements> Requirements = new List<Requirements>();
+    }
+}

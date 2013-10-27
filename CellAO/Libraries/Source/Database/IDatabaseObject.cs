@@ -31,15 +31,12 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Database
+{
+    public interface IDatabaseObject
+    {
+        bool Read();
 
-using System.Reflection;
-
-using Utility;
-
-#endregion
-
-[assembly: AssemblyVersion("1.4.1.45")]
-[assembly: AssemblyFileVersion("1.4.1.45")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+        bool Write();
+    }
+}

@@ -26,20 +26,29 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-26 21:32
-// Created:       2013-10-26 20:50
+// Last modified: 2013-10-26 22:26
+// Created:       2013-10-26 22:13
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Events
 
-using System.Reflection;
+{
+    #region Usings ...
 
-using Utility;
+    using System.Collections.Generic;
 
-#endregion
+    #endregion
 
-[assembly: AssemblyVersion("1.4.1.45")]
-[assembly: AssemblyFileVersion("1.4.1.45")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+    /// <summary>
+    /// Adding Item / Nano Events to class
+    /// TODO: complete with methods
+    /// </summary>
+    public interface IItemNanoEvents
+    {
+        /// <summary>
+        /// List of Game Events (onWear, onCollide etc)
+        /// </summary>
+        List<Events> Events { get; }
+    }
+}

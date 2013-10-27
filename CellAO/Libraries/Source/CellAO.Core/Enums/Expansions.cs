@@ -26,20 +26,59 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-26 21:32
-// Created:       2013-10-26 20:50
+// Last modified: 2013-10-26 22:26
+// Created:       2013-10-26 22:09
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Enums
+{
+    /// <summary>
+    /// </summary>
+    public enum Expansions
+    {
+        /// <summary>
+        /// </summary>
+        NotumWars = 0,
 
-using System.Reflection;
+        /// <summary>
+        /// </summary>
+        ShadowLands = 1,
 
-using Utility;
+        /// <summary>
+        /// </summary>
+        ShadowLandsPreOrder = 2,
 
-#endregion
+        /// <summary>
+        /// </summary>
+        AlienInvasion = 3,
 
-[assembly: AssemblyVersion("1.4.1.45")]
-[assembly: AssemblyFileVersion("1.4.1.45")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+        /// <summary>
+        /// </summary>
+        AlienInvasionPreOrder = 4,
+
+        /// <summary>
+        /// </summary>
+        LostEden = 5,
+
+        /// <summary>
+        /// </summary>
+        LostEdenPreOrder = 6,
+
+        /// <summary>
+        /// </summary>
+        LegacyOfXan = 7,
+
+        /// <summary>
+        /// </summary>
+        LegacyOfXanPreOrder = 8,
+
+        /// <summary>
+        /// </summary>
+        Mail = 9,
+
+        /// <summary>
+        /// </summary>
+        PMVObsidianEdition = 10
+    }
+}
