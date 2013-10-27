@@ -33,6 +33,8 @@
 
 namespace CellAO.Core.Stats.SpecialStats
 {
+    using CellAO.Interfaces;
+
     /// <summary>
     /// </summary>
     public class StatHealth : DynelStat
@@ -93,7 +95,7 @@ namespace CellAO.Core.Stats.SpecialStats
             int[] breedMultiplicatorHitPoints = { 3, 3, 2, 4, 8, 8, 10 };
             int[] breedModificatorHitPoints = { 0, -1, -1, 0, 0, 0, 0 };
 
-            if ((this.Parent is Character) || (this.Parent is NonPlayerCharacter))
+            if ((this.Parent is ICharacter) || (this.Parent is INonPlayerCharacter))
             {
                 // This condition could be obsolete
                 Character character = (Character)this.Parent;

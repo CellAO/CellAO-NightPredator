@@ -27,19 +27,26 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 07:58
+// Created:       2013-10-27 10:52
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Interfaces
+{
+    #region Usings ...
 
-using System.Reflection;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
-using Utility;
+    #endregion
 
-#endregion
+    public interface IEntity
+    {
+        #region Public Properties
 
-[assembly: AssemblyVersion("1.4.1.114")]
-[assembly: AssemblyFileVersion("1.4.1.114")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+        /// <summary>
+        /// </summary>
+        Identity Identity { get; }
+
+        #endregion
+    }
+}

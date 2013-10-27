@@ -27,19 +27,22 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 07:58
+// Created:       2013-10-27 10:27
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Interfaces
+{
+    #region Usings ...
 
-using System.Reflection;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
-using Utility;
+    #endregion
 
-#endregion
+    public interface IIMSendAOtMessageToClient
+    {
+        IZoneClient client { get; set; }
 
-[assembly: AssemblyVersion("1.4.1.114")]
-[assembly: AssemblyFileVersion("1.4.1.114")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+        Message message { get; set; }
+    }
+}
