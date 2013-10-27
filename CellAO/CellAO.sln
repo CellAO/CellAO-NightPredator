@@ -19,6 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Libraries\Sourc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BD319BA9-7666-49DD-9CAE-51C23AC78581}"
 	ProjectSection(SolutionItems) = preProject
+		Config\Config.xml = Config\Config.xml
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
