@@ -51,27 +51,51 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IActions.cs" />
+    <Compile Include="IActiveNano.cs" />
+    <Compile Include="ICharacter.cs" />
+    <Compile Include="ICoordinate.cs" />
     <Compile Include="IDatabaseConnector.cs" />
     <Compile Include="IDatabaseObject.cs" />
+    <Compile Include="IEntity.cs" />
     <Compile Include="IEvents.cs" />
     <Compile Include="IFunctionArguments.cs" />
     <Compile Include="IFunctions.cs" />
+    <Compile Include="IIMSendAOtMessageToClient.cs" />
     <Compile Include="IInstancedEntity.cs" />
+    <Compile Include="IInternalMessage.cs" />
+    <Compile Include="IInternalMessageBody.cs" />
+    <Compile Include="IInventoryPage.cs" />
+    <Compile Include="IInventoryPages.cs" />
     <Compile Include="IItem.cs" />
+    <Compile Include="IItemContainer.cs" />
     <Compile Include="IItemNanoActions.cs" />
     <Compile Include="IItemNanoEvents.cs" />
+    <Compile Include="IMeshLayers.cs" />
+    <Compile Include="IMeshs.cs" />
+    <Compile Include="IMoving.cs" />
     <Compile Include="INamedEntity.cs" />
+    <Compile Include="IPacketReceivingEntity.cs" />
     <Compile Include="IPlayfield.cs" />
     <Compile Include="IPlayfieldDistrict.cs" />
+    <Compile Include="IQuaternion.cs" />
     <Compile Include="IRequirements.cs" />
     <Compile Include="IStat.cs" />
     <Compile Include="IStatList.cs" />
+    <Compile Include="IStats.cs" />
+    <Compile Include="ISummoner.cs" />
+    <Compile Include="IUploadedNanos.cs" />
+    <Compile Include="IVector3.cs" />
+    <Compile Include="IZoneClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
       <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cell.Core\Cell.Core.csproj">
+      <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
+      <Name>Cell.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
       <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>

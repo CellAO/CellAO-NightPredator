@@ -26,13 +26,15 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 11:37
 // Created:       2013-10-27 07:58
 
 #endregion
 
 namespace CellAO.Core.Stats.SpecialStats
 {
+    using CellAO.Interfaces;
+
     /// <summary>
     /// </summary>
     public class StatWeaponsStyle : DynelStat
@@ -71,7 +73,7 @@ namespace CellAO.Core.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
-            if ((this.Parent is Character) || (this.Parent is NonPlayerCharacter))
+            if (this.Parent is IStats)
             {
                 // This condition could be obsolete
                 this.Value = this.Parent.Stats["WeaponStyleLeft"].Value | this.Parent.Stats["WeaponStyleRight"].Value;

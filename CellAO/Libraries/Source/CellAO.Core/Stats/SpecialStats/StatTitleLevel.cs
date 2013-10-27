@@ -26,13 +26,19 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 11:47
 // Created:       2013-10-27 07:58
 
 #endregion
 
 namespace CellAO.Core.Stats.SpecialStats
 {
+    #region Usings ...
+
+    using CellAO.Interfaces;
+
+    #endregion
+
     /// <summary>
     /// </summary>
     public class StatTitleLevel : DynelStat
@@ -71,10 +77,10 @@ namespace CellAO.Core.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
-            if ((this.Parent is Character) || (this.Parent is NonPlayerCharacter))
+            if ((this.Parent is IStats))
             {
                 // This condition could be obsolete
-                Character character = (Character)this.Parent;
+                IStats character = (IStats)this.Parent;
                 int level = character.Stats["Level"].Value;
 
                 if (level >= 205)

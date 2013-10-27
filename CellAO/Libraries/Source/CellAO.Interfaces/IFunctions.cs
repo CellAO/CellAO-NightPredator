@@ -26,14 +26,18 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 10:06
+// Last modified: 2013-10-27 11:38
 // Created:       2013-10-27 09:43
 
 #endregion
 
 namespace CellAO.Interfaces
 {
+    #region Usings ...
+
     using System.Collections.Generic;
+
+    #endregion
 
     public interface IFunctions
     {
@@ -82,6 +86,6 @@ namespace CellAO.Interfaces
         /// Copy Function
         /// </summary>
         /// <returns>new copy</returns>
-        Interfaces.IFunctions ShallowCopy();
+        IFunctions ShallowCopy();
     }
 }

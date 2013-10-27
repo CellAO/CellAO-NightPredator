@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 10:13
+// Last modified: 2013-10-27 11:37
 // Created:       2013-10-27 07:58
 
 #endregion
@@ -46,7 +46,6 @@ namespace CellAO.Core.Functions
 
     #endregion
 
-
     /// <summary>
     /// AOFunctions
     /// </summary>
@@ -58,7 +57,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// List of Arguments
         /// </summary>
-        public FunctionArguments Arguments { get; set; }
+        public IFunctionArguments Arguments { get; set; }
 
         /// <summary>
         /// Type of function (constants in ItemLoader)

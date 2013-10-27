@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 08:48
+// Last modified: 2013-10-27 11:52
 // Created:       2013-10-27 07:58
 
 #endregion
@@ -36,6 +36,8 @@ namespace CellAO.Core.Stats.SpecialStats
     #region Usings ...
 
     using System;
+
+    using CellAO.Interfaces;
 
     #endregion
 
@@ -77,21 +79,18 @@ namespace CellAO.Core.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
-            if ((this.Parent is Character) || (this.Parent is NonPlayerCharacter))
+            // This condition could be obsolete
+            IInstancedEntity character = this.Parent;
+            uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
+            uint nanoDelta = nanodelta[character.Stats["Breed"].Value - 1]
+                             + (uint)Math.Floor((double)(character.Stats["NanoEnergyPool"].Value / 100));
+
+            // Whats this? TODO: Find the original routine again
+            this.BaseValue = nanoDelta;
+
+            if (!this.Parent.Starting)
             {
-                // This condition could be obsolete
-                Character character = (Character)this.Parent;
-                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
-                uint nanoDelta = nanodelta[character.Stats["Breed"].Value - 1]
-                                 + (uint)Math.Floor((double)(character.Stats["NanoEnergyPool"].Value / 100));
-
-                // Whats this? TODO: Find the original routine again
-                this.BaseValue = nanoDelta;
-
-                if (!this.Parent.Starting)
-                {
-                    this.AffectStats();
-                }
+                this.AffectStats();
             }
         }
 
