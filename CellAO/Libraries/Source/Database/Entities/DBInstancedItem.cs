@@ -26,29 +26,53 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:44
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 20:29
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System.Collections.Generic;
+    using System.Data.Linq;
 
     #endregion
 
-    public interface IActions
+    public class DBInstancedItem
     {
-        /// <summary>
-        /// Type of Action (constants in ItemLoader)
-        /// </summary>
-        int ActionType { get; set; }
+        public int containertype { get; set; }
 
-        /// <summary>
-        /// List of Requirements for this action
-        /// </summary>
-        List<IRequirements> Requirements { get; set; }
+        public int containerinstance { get; set; }
+
+        public int containerplacement { get; set; }
+
+        public int itemtype { get; set; }
+
+        public int iteminstance { get; set; }
+
+        public int lowid { get; set; }
+
+        public int highid { get; set; }
+
+        public int quality { get; set; }
+
+        public int multiplecount { get; set; }
+
+        public float x { get; set; }
+
+        public float y { get; set; }
+
+        public float z { get; set; }
+
+        public float headingx { get; set; }
+
+        public float headingy { get; set; }
+
+        public float headingz { get; set; }
+
+        public float headingw { get; set; }
+
+        public Binary stats { get; set; }
     }
 }

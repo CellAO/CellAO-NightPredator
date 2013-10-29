@@ -26,81 +26,55 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:53
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 20:29
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using CellAO.Enums;
+    using System;
 
     #endregion
 
-    public interface IInventoryPages
+    /// <summary>
+    /// </summary>
+    public class DBLoginData
     {
-        /// <summary>
-        /// </summary>
-        IDictionary<int, IInventoryPage> Pages { get; }
+        public int ID { get; set; }
+
+        public DateTime CreationDate { get; set; }
+
+        public string Email { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError AddToPage(int pageNum, int slotNum, IItem item);
+        public string Username { get; set; }
+
+        public string Password { get; set; }
 
         /// <summary>
         /// </summary>
-        int StandardPage { get; set; }
+        public int Allowed_Characters { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IItem RemoveItem(int pageNum, int slotNum);
+        public int Flags { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Read();
+        public int AccountFlags { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Write();
+        public int Expansions { get; set; }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInventoryPage this[int index] { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError TryAdd(IItem item);
-
-        IInventoryPage PageFromSlot(int slotNum);
+        public int GM { get; set; }
     }
 }

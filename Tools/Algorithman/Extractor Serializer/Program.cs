@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:25
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -84,6 +84,11 @@ namespace Extractor_Serializer
     using System.Globalization;
     using System.IO;
     using System.Text;
+
+    using CellAO.Core.Items;
+    using CellAO.Core.Nanos;
+
+    using MsgPack.Serialization;
 
     using zlib;
 
@@ -396,9 +401,9 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Checking Nanos...");
             Console.WriteLine();
-            NanoHandler.CacheAllNanos("nanos.dat");
+            NanoLoader.CacheAllNanos("nanos.dat");
             Console.WriteLine();
-            Console.WriteLine("Nanos: " + NanoHandler.NanoList.Count + " successfully converted");
+            Console.WriteLine("Nanos: " + NanoLoader.NanoList.Count + " successfully converted");
 
             Console.WriteLine();
             Console.WriteLine();

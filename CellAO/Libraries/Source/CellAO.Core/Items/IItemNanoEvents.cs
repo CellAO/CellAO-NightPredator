@@ -26,29 +26,31 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:49
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 21:13
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Items
+
 {
-    public interface IPlayfieldDistrict
+    #region Usings ...
+
+    using System.Collections.Generic;
+
+    using CellAO.Core.Events;
+
+    #endregion
+
+    /// <summary>
+    /// Adding Item / Nano Events to class
+    /// TODO: complete with methods
+    /// </summary>
+    public interface IItemNanoEvents
     {
         /// <summary>
+        /// List of Game Events (onWear, onCollide etc)
         /// </summary>
-        string Name { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int MinLevel { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int MaxLevel { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int SuppressionGas { get; set; }
+        List<Events> Events { get; }
     }
 }

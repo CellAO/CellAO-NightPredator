@@ -26,14 +26,18 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
 namespace CellAO.Core.Stats.SpecialStats
 {
-    using CellAO.Interfaces;
+    #region Usings ...
+
+    using CellAO.Core.Entities;
+
+    #endregion
 
     /// <summary>
     /// </summary>
@@ -98,7 +102,7 @@ namespace CellAO.Core.Stats.SpecialStats
             if ((this.Parent is ICharacter) || (this.Parent is INonPlayerCharacter))
             {
                 // This condition could be obsolete
-                Character character = (Character)this.Parent;
+                IStats character = this.Parent;
                 uint breed = character.Stats["Breed"].BaseValue;
                 uint profession = character.Stats["Profession"].BaseValue;
                 if (profession > 13)
@@ -110,7 +114,7 @@ namespace CellAO.Core.Stats.SpecialStats
                 uint level = character.Stats["Level"].BaseValue;
 
                 // BreedBaseHP+(Level*(TableProfHP+BreedModiHP))+(BodyDevelopment*BreedMultiHP))
-                if (this.Parent is NonPlayerCharacter)
+                if (this.Parent is INonPlayerCharacter)
                 {
                     // TODO: correct calculation of mob HP
                     Set(

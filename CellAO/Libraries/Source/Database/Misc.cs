@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -52,6 +52,40 @@ namespace CellAO.Database
     /// </summary>
     public static class Misc
     {
+        public static List<int> GetOrgMembers(uint orgId)
+        {
+            return GetOrgMembers(orgId, false);
+        }
+
+        public static List<int> GetOrgMembers(uint orgId, bool excludePresident)
+        {
+            List<int> orgMembers = new List<int>();
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    string pres = string.Empty;
+
+                    if (excludePresident)
+                    {
+                        pres =
+                            " AND `ID` NOT IN (SELECT `ID` FROM `characters_stats` WHERE `Stat` = '48' AND `Value` = '0')";
+                    }
+
+                    DynamicParameters p = new DynamicParameters();
+                    p.Add("@orgId");
+                    orgMembers.AddRange(
+                        conn.Query<int>(
+                            "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres, p));
+                }
+            }
+                // TODO: Catch
+            catch
+            {
+            }
+            return orgMembers;
+        }
+
         /// <summary>
         /// </summary>
         public static void LogOffAll()

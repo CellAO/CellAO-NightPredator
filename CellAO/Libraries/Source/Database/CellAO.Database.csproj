@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,20 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Connector.cs" />
+    <Compile Include="Dao\CharacterDao.cs" />
+    <Compile Include="Dao\InstancedItemDao.cs" />
+    <Compile Include="Dao\ItemDao.cs" />
+    <Compile Include="Dao\LoginDataDao.cs" />
+    <Compile Include="Dao\OnlineDao.cs" />
+    <Compile Include="Dao\OrganizationDao.cs" />
+    <Compile Include="Dao\StatDao.cs" />
+    <Compile Include="Entities\DBCharacter.cs" />
+    <Compile Include="Entities\DBInstancedItem.cs" />
+    <Compile Include="Entities\DBItem.cs" />
+    <Compile Include="Entities\DBLoginData.cs" />
+    <Compile Include="Entities\DBOnline.cs" />
+    <Compile Include="Entities\DBOrganization.cs" />
+    <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
     <Compile Include="NpgsqlConnector.cs" />
@@ -72,6 +87,10 @@
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+      <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
+      <Name>Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>

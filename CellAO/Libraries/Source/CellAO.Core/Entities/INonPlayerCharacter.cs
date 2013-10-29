@@ -26,15 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:40
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:05
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Entities
 {
-    public interface IInstancedEntity : IStats
+    public interface INonPlayerCharacter : IInstancedEntity
     {
-        bool Starting { get; set; }
     }
 }

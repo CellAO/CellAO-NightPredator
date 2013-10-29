@@ -26,29 +26,28 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:40
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 20:29
 
 #endregion
 
-namespace CellAO.Interfaces
-
+namespace CellAO.Database.Dao
 {
-    #region Usings ...
 
-    using System.Collections.Generic;
+    #region Usings ...
 
     #endregion
 
     /// <summary>
-    /// Adding Item / Nano Events to class
-    /// TODO: complete with methods
     /// </summary>
-    public interface IItemNanoEvents
+    public class DBStats
     {
-        /// <summary>
-        /// List of Game Events (onWear, onCollide etc)
-        /// </summary>
-        List<IEvents> Events { get; }
+        public int type { get; set; }
+
+        public int instance { get; set; }
+
+        public int statid { get; set; }
+
+        public int statvalue { get; set; }
     }
 }

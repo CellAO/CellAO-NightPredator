@@ -26,21 +26,24 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:23
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:09
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Inventory
 {
-    public interface IInternalMessage
+    #region Usings ...
+
+    using CellAO.Core.Entities;
+
+    #endregion
+
+    public interface IItemContainer : IEntity
     {
         /// <summary>
+        /// The inventory of this Container
         /// </summary>
-        IInstancedEntity Sender { get; set; }
-
-        /// <summary>
-        /// </summary>
-        IInternalMessageBody MessageBody { get; set; }
+        IInventoryPages BaseInventory { get; }
     }
 }

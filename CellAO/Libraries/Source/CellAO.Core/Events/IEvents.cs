@@ -26,27 +26,31 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:52
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 20:59
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Events
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using System.Collections.Generic;
+
+    using CellAO.Core.Functions;
 
     #endregion
 
-    public interface IEntity
+    public interface IEvents
     {
-        #region Public Properties
+        /// <summary>
+        /// List of Functions of the Event
+        /// </summary>
+        List<Functions> Functions { get; set; }
 
         /// <summary>
+        /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        Identity Identity { get; }
-
-        #endregion
+        int EventType { get; set; }
     }
 }

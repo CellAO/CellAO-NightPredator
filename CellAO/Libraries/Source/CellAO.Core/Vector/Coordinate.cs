@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 11:01
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -240,7 +240,7 @@ namespace CellAO.Core.Vector
         /// </returns>
         public static double Distance3D(Coordinate c1, Coordinate c2)
         {
-            Vector3 difference = c1.coordinate - c2.coordinate;
+            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
 
             return difference.Magnitude;
         }
@@ -271,7 +271,7 @@ namespace CellAO.Core.Vector
         /// </returns>
         public static double Distance2D(Coordinate c1, Coordinate c2)
         {
-            Vector3 difference = c1.coordinate - c2.coordinate;
+            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
 
             return Math.Sqrt((difference.x * difference.x) + (difference.z * difference.z));
         }

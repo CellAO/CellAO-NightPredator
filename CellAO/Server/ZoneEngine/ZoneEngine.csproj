@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NLog">
       <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -49,10 +50,15 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssemblyInfoclass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
+      <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
+      <Name>CellAO.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>

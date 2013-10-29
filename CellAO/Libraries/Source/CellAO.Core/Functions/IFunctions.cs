@@ -26,85 +26,68 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:52
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 20:58
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Functions
 {
     #region Usings ...
 
     using System.Collections.Generic;
 
-    using CellAO.Enums;
+    using CellAO.Core.Requirements;
 
     #endregion
 
-    public interface IInventoryPage : IEntity
+    public interface IFunctions
     {
         /// <summary>
+        /// List of Arguments
         /// </summary>
-        int Page { get; set; }
+        FunctionArguments Arguments { get; set; }
 
         /// <summary>
+        /// Type of function (constants in ItemLoader)
         /// </summary>
-        int MaxSlots { get; set; }
+        int FunctionType { get; set; }
 
         /// <summary>
+        /// Requirements to execute this function
         /// </summary>
-        int FirstSlotNumber { get; set; }
+        List<Requirements> Requirements { get; set; }
 
         /// <summary>
+        /// TargetType (constants in ItemLoader)
         /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError Add(int slot, IItem item);
+        int Target { get; set; }
 
         /// <summary>
+        /// TickCount (for timers)
         /// </summary>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IItem Remove(int slotNum);
+        int TickCount { get; set; }
 
         /// <summary>
+        /// TickInterval (for timers)
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Read();
+        uint TickInterval { get; set; }
 
         /// <summary>
+        /// process local stats (not serialized)
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Write();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IItem this[int index] { get; }
+        bool dolocalstats { get; set; }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        IDictionary<int, IItem> List();
+        string Serialize();
 
         /// <summary>
+        /// Copy Function
         /// </summary>
-        /// <returns>
-        /// </returns>
-        int FindFreeSlot();
-
-        bool ValidSlot(int slotNum);
+        /// <returns>new copy</returns>
+        IFunctions ShallowCopy();
     }
 }

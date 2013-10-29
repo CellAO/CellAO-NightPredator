@@ -26,23 +26,82 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:27
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:10
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using System.Collections.Generic;
+
+    using CellAO.Core.Items;
+    using CellAO.Enums;
 
     #endregion
 
-    public interface IIMSendAOtMessageToClient
+    public interface IInventoryPages
     {
-        IZoneClient client { get; set; }
+        /// <summary>
+        /// </summary>
+        IDictionary<int, IInventoryPage> Pages { get; }
 
-        Message message { get; set; }
+        /// <summary>
+        /// </summary>
+        /// <param name="pageNum">
+        /// </param>
+        /// <param name="slotNum">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        InventoryError AddToPage(int pageNum, int slotNum, IItem item);
+
+        /// <summary>
+        /// </summary>
+        int StandardPage { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="pageNum">
+        /// </param>
+        /// <param name="slotNum">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IItem RemoveItem(int pageNum, int slotNum);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool Read();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool Write();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="index">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IInventoryPage this[int index] { get; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        InventoryError TryAdd(IItem item);
+
+        IInventoryPage PageFromSlot(int slotNum);
     }
 }

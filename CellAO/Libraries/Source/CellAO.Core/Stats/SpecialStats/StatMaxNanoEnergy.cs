@@ -26,13 +26,19 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
 namespace CellAO.Core.Stats.SpecialStats
 {
+    #region Usings ...
+
+    using CellAO.Core.Entities;
+
+    #endregion
+
     /// <summary>
     /// </summary>
     public sealed class StatMaxNanoEnergy : DynelStat
@@ -98,10 +104,10 @@ namespace CellAO.Core.Stats.SpecialStats
             int[] breedMultiplicatorNanoPoints = { 3, 3, 4, 2, 3, 3, 3 };
             int[] breedModificatorNanoPoints = { 0, -1, 1, -2, 0, 0, 0 };
 
-            if ((this.Parent is Character) || (this.Parent is NonPlayerCharacter))
+            if ((this.Parent is ICharacter) || (this.Parent is INonPlayerCharacter))
             {
                 // This condition could be obsolete
-                Character character = (Character)this.Parent;
+                IStats character = this.Parent;
                 uint breed = character.Stats["Breed"].BaseValue;
                 uint profession = character.Stats["Profession"].BaseValue;
                 if (profession > 13)
@@ -113,7 +119,7 @@ namespace CellAO.Core.Stats.SpecialStats
                 uint level = character.Stats["Level"].BaseValue;
 
                 // BreedBaseNP+(Level*(TableProfNP+BreedModiNP))+(NanoEnergyPool*BreedMultiNP))
-                if (this.Parent is NonPlayerCharacter)
+                if (this.Parent is INonPlayerCharacter)
                 {
                     // TODO: correct calculation of mob NP
                     this.Set(

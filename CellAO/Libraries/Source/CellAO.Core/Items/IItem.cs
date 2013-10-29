@@ -26,74 +26,90 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 21:09
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Core.Items
 {
     #region Usings ...
 
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
     /// <summary>
+    /// Item Interface
     /// </summary>
-    internal class OrgMisc
+    public interface IItem
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// Quality level of the item
+        /// </summary>
+        int Quality { get; set; }
+
+        /// <summary>
+        /// Identity of the item (if it is instanced)
+        /// </summary>
+        Identity Identity { get; }
+
+        /// <summary>
+        /// Get item attribute
+        /// </summary>
+        /// <param name="attributeId">
+        /// Id of the attribute
+        /// </param>
+        /// <returns>
+        /// Stored item attribute value
+        /// </returns>
+        int GetAttribute(int attributeId);
+
+        /// <summary>
+        /// Set an item attribute
+        /// </summary>
+        /// <param name="attributeId">
+        /// Id of the attribute
+        /// </param>
+        /// <param name="newValue">
+        /// The new value of the item attribute
+        /// </param>
+        void SetAttribute(int attributeId, int newValue);
+
+        /// <summary>
+        /// LowId of the item template
+        /// </summary>
+        int LowID { get; }
+
+        /// <summary>
+        /// HighId of the item template
+        /// </summary>
+        int HighID { get; }
+
+        /// <summary>
+        /// We Dont Know (TM)
+        /// </summary>
+        int Nothing { get; }
+
+        /// <summary>
+        /// Stacked count of the item
+        /// </summary>
+        int MultipleCount { get; set; }
+
+        /// <summary>
+        /// Item's Flags
+        /// </summary>
+        int Flags { get; }
+
+        /// <summary>
+        /// Write item to database
+        /// </summary>
+        void WriteToDatabase();
 
         /// <summary>
         /// </summary>
-        /// <param name="orgId">
-        /// </param>
         /// <returns>
         /// </returns>
-        public static List<int> GetOrgMembers(uint orgId)
-        {
-            return GetOrgMembers(orgId, false);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="orgId">
-        /// </param>
-        /// <param name="excludePresident">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static List<int> GetOrgMembers(uint orgId, bool excludePresident)
-        {
-            // Stat #5 == Clan == OrgID
-            // Stat #48 == ClanLevel == Org Rank (0 is president)
-            SqlWrapper mySql = new SqlWrapper();
-            List<int> orgMembers = new List<int>();
-            string pres = string.Empty;
-
-            if (excludePresident)
-            {
-                pres = " AND `ID` NOT IN (SELECT `ID` FROM `characters_stats` WHERE `Stat` = '48' AND `Value` = '0')";
-            }
-
-            DataTable dt =
-                mySql.ReadDatatable(
-                    "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = '" + orgId + "'" + pres);
-
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow row in dt.Rows)
-                {
-                    orgMembers.Add((Int32)row[0]);
-                }
-            }
-
-            return orgMembers;
-        }
-
-        #endregion
+        byte[] GetItemAttributes();
     }
 }

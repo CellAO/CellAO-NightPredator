@@ -26,66 +26,38 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:43
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 20:58
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Requirements
 {
-    #region Usings ...
-
-    using System.Collections.Generic;
-
-    #endregion
-
-    public interface IFunctions
+    public interface IRequirements
     {
         /// <summary>
-        /// List of Arguments
+        /// Child operator
         /// </summary>
-        IFunctionArguments Arguments { get; set; }
+        int ChildOperator { get; set; }
 
         /// <summary>
-        /// Type of function (constants in ItemLoader)
+        /// Operator
         /// </summary>
-        int FunctionType { get; set; }
+        int Operator { get; set; }
 
         /// <summary>
-        /// Requirements to execute this function
+        /// Stat to check against
         /// </summary>
-        List<IRequirements> Requirements { get; set; }
+        int Statnumber { get; set; }
 
         /// <summary>
-        /// TargetType (constants in ItemLoader)
+        /// Target, from constants
         /// </summary>
         int Target { get; set; }
 
         /// <summary>
-        /// TickCount (for timers)
+        /// Value to check against
         /// </summary>
-        int TickCount { get; set; }
-
-        /// <summary>
-        /// TickInterval (for timers)
-        /// </summary>
-        uint TickInterval { get; set; }
-
-        /// <summary>
-        /// process local stats (not serialized)
-        /// </summary>
-        bool dolocalstats { get; set; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        string Serialize();
-
-        /// <summary>
-        /// Copy Function
-        /// </summary>
-        /// <returns>new copy</returns>
-        IFunctions ShallowCopy();
+        int Value { get; set; }
     }
 }

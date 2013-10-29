@@ -26,23 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 12:05
-// Created:       2013-10-27 12:04
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:07
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.InternalMessaging
 {
-    #region Usings ...
-
-    using CellAO.Enums;
-
-    #endregion
-
-    public interface IMoving : IInstancedEntity
+    public interface IInternalMessageBody
     {
-        MoveModes MoveMode { get; set; }
-
-        MoveModes PreviousMoveMode { get; set; }
     }
 }

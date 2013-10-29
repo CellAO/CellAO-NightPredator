@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -39,7 +39,10 @@ namespace CellAO.Core.Stats
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
+    using CellAO.Core.Entities;
+    using CellAO.Core.Exceptions;
     using CellAO.Core.Stats.SpecialStats;
+    using CellAO.Database.Dao;
     using CellAO.Interfaces;
 
     #endregion
@@ -10859,7 +10862,8 @@ namespace CellAO.Core.Stats
         {
             if (!((DynelStat)sender).Parent.DoNotDoTimers)
             {
-                Stat.Send(e.Stat.Parent, e.Stat.StatId, e.NewValue, e.Stat.AnnounceToPlayfield);
+                // TODO: Sending the value back to the client/whole playfield
+                // Stat.Send(e.Stat.Parent, e.Stat.StatId, e.NewValue, e.Stat.AnnounceToPlayfield);
 
                 e.Stat.Changed = false;
             }
@@ -11206,7 +11210,8 @@ namespace CellAO.Core.Stats
             }
             catch (Exception ex)
             {
-                LogUtil.Debug(ex.Message);
+                // TODO: Get LogUtil back in
+                // LogUtil.Debug(ex.Message);
                 return false;
             }
         }

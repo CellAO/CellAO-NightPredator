@@ -26,14 +26,45 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:24
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 20:29
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Database.Dao
 {
-    public interface IInternalMessageBody
+    #region Usings ...
+
+    using System;
+
+    #endregion
+
+    public class DBOrganization
     {
+        public int ID { get; set; }
+
+        public string Name { get; set; }
+
+        public int LeaderID { get; set; }
+
+        public int GovernmentForm { get; set; }
+
+        public string Description { get; set; }
+
+        public string Objective { get; set; }
+
+        public string History { get; set; }
+
+        public int Tax { get; set; }
+
+        public UInt64 Bank { get; set; }
+
+        public int Commission { get; set; }
+
+        public int ContractsID { get; set; }
+
+        public int CityID { get; set; }
+
+        public int TowerFieldID { get; set; }
     }
 }

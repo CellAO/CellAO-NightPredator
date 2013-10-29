@@ -26,90 +26,43 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:40
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 20:29
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Database.Dao
 {
-    #region Usings ...
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
-
-    #endregion
-
     /// <summary>
-    /// Item Interface
     /// </summary>
-    public interface IItem
+    public class DBItem
     {
         /// <summary>
-        /// Quality level of the item
         /// </summary>
-        int Quality { get; set; }
-
-        /// <summary>
-        /// Identity of the item (if it is instanced)
-        /// </summary>
-        Identity Identity { get; }
-
-        /// <summary>
-        /// Get item attribute
-        /// </summary>
-        /// <param name="attributeId">
-        /// Id of the attribute
-        /// </param>
-        /// <returns>
-        /// Stored item attribute value
-        /// </returns>
-        int GetAttribute(int attributeId);
-
-        /// <summary>
-        /// Set an item attribute
-        /// </summary>
-        /// <param name="attributeId">
-        /// Id of the attribute
-        /// </param>
-        /// <param name="newValue">
-        /// The new value of the item attribute
-        /// </param>
-        void SetAttribute(int attributeId, int newValue);
-
-        /// <summary>
-        /// LowId of the item template
-        /// </summary>
-        int LowID { get; }
-
-        /// <summary>
-        /// HighId of the item template
-        /// </summary>
-        int HighID { get; }
-
-        /// <summary>
-        /// We Dont Know (TM)
-        /// </summary>
-        int Nothing { get; }
-
-        /// <summary>
-        /// Stacked count of the item
-        /// </summary>
-        int MultipleCount { get; set; }
-
-        /// <summary>
-        /// Item's Flags
-        /// </summary>
-        int Flags { get; }
-
-        /// <summary>
-        /// Write item to database
-        /// </summary>
-        void WriteToDatabase();
+        public int containertype { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        byte[] GetItemAttributes();
+        public int containerinstance { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int containerplacement { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int lowid { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int highid { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int quality { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int multiplecount { get; set; }
     }
 }

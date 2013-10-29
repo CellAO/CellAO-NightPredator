@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -38,6 +38,7 @@ namespace CellAO.Core.Stats
     using System;
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
     using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -250,7 +251,8 @@ namespace CellAO.Core.Stats
                 this.baseValue = value;
                 if (sendit)
                 {
-                    Stat.Send(this.Parent, this.StatId, value, this.announceToPlayfield);
+                    // TODO: Sending the value back to the client/whole playfield
+                    // Stat.Send(this.Parent, this.StatId, value, this.announceToPlayfield);
                 }
             }
         }
@@ -313,7 +315,7 @@ namespace CellAO.Core.Stats
         /// </summary>
         public void AffectStats()
         {
-            if (!(this.Parent is Character) && !(this.Parent is NonPlayerCharacter))
+            if (!(this.Parent is ICharacter) && !(this.Parent is INonPlayerCharacter))
             {
                 return;
             }
@@ -416,7 +418,8 @@ namespace CellAO.Core.Stats
             if (doit)
             {
                 Identity id = this.Parent.Identity;
-                StatDao.AddStat((int)id.Type, id.Instance, this.StatId, (int)this.baseValue);
+                // TODO: Write Data object and write routine in CellAO.Database
+                // StatDao.AddStat((int)id.Type, id.Instance, this.StatId, (int)this.baseValue);
             }
         }
 

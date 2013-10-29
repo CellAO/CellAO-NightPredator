@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 11:12
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -407,7 +407,7 @@ namespace CellAO.Core.Vector
         public static IVector3 RotateVector3(IQuaternion q1, IVector3 v2)
         {
             Quaternion QuatVect = new Quaternion(v2.x, v2.y, v2.z, 0);
-            Quaternion QuatNorm = q1.Normalize();
+            Quaternion QuatNorm = (Quaternion)q1.Normalize();
             Quaternion Result = Hamilton(Hamilton(QuatNorm, QuatVect), QuatNorm.Conjugate());
             return new Vector3(Result.x, Result.y, Result.z);
         }

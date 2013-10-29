@@ -26,28 +26,37 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:20
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:03
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Stats
 {
-    public interface INamedEntity : IInstancedEntity
+    #region Usings ...
+
+    using CellAO.Core.Functions;
+    using CellAO.Interfaces;
+
+    #endregion
+
+    public interface IStats
     {
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        string Name { get; set; }
+        IStatList Stats { get; }
 
         /// <summary>
         /// </summary>
-        string FirstName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string LastName { get; set; }
+        /// <param name="aof">
+        /// </param>
+        /// <param name="checkAll">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool CheckRequirements(Functions aof, bool checkAll);
 
         #endregion
     }

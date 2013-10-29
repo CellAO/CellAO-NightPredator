@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 11:24
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -60,6 +60,8 @@ namespace CellAO.Interfaces
         double y { get; set; }
 
         double z { get; set; }
+
+        double w { get; set; }
 
         /// <summary>
         /// Return the yaw/heading of the Quaternion (flight dynamics style). Value 0 - 2pi Radians or 0 to 360 if converted to degrees (North turning clockwise to a complete revolution)

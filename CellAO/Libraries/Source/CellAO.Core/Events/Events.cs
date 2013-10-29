@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -39,7 +39,7 @@ namespace CellAO.Core.Events
     using System;
     using System.Collections.Generic;
 
-    using CellAO.Interfaces;
+    using CellAO.Core.Functions;
 
     #endregion
 
@@ -58,14 +58,14 @@ namespace CellAO.Core.Events
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        private List<IFunctions> functions = new List<IFunctions>();
+        private List<Functions> functions = new List<Functions>();
 
         #endregion
 
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        public List<IFunctions> Functions
+        public List<Functions> Functions
         {
             get
             {

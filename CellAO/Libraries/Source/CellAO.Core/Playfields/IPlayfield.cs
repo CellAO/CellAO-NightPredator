@@ -26,110 +26,89 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:34
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 21:08
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Playfields
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
+    using CellAO.Core.Functions;
     using CellAO.Enums;
+
+    using MemBus;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
-    public interface ICharacter : IPacketReceivingEntity, INamedEntity, ISummoner, IItemContainer
+    /// <summary>
+    /// </summary>
+    public interface IPlayfield
     {
         /// <summary>
         /// </summary>
-        IZoneClient Client { get; }
+        IBus PlayfieldBus { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        MoveModes MoveMode { get; set; }
-
-        MoveModes PreviousMoveMode { get; set; }
-
-        /// <summary>
-        /// Active Nanos list
-        /// </summary>
-        List<IActiveNano> ActiveNanos { get; }
-
-        /// <summary>
-        /// Caching Mesh layer structure
-        /// </summary>
-        IMeshLayers MeshLayer { get; }
-
-        /// <summary>
-        /// Caching Mesh layer for social tab items
-        /// </summary>
-        IMeshLayers SocialMeshLayer { get; }
-
-        /// <summary>
-        /// Uploaded Nanos list
-        /// </summary>
-        List<IUploadedNanos> UploadedNanos { get; }
+        Identity Identity { get; set; }
 
         /// <summary>
         /// </summary>
-        Identity FightingTarget { get; set; }
+        HashSet<IInstancedEntity> Entities { get; }
 
         /// <summary>
         /// </summary>
-        Identity SelectedTarget { get; set; }
+        /// <returns>
+        /// </returns>
+        int NumberOfPlayers();
 
         /// <summary>
         /// </summary>
-        IInventoryPage MainInventory { get; }
+        /// <returns>
+        /// </returns>
+        int NumberOfDynels();
 
         /// <summary>
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        IPlayfield Playfield { get; set; }
+        List<Functions> EnvironmentFunctions { get; }
 
         /// <summary>
         /// </summary>
-        TimeSpan PredictionDuration { get; }
+        /// <returns>
+        /// </returns>
+        bool IsInstancedPlayfield();
 
         /// <summary>
         /// </summary>
-        ICoordinate Coordinates { get; set; }
+        List<IPlayfieldDistrict> Districts { get; }
 
         /// <summary>
         /// </summary>
-        Quaternion Heading { get; set; }
+        float X { get; set; }
 
         /// <summary>
         /// </summary>
-        Vector3 RawCoordinates { get; set; }
+        float Z { get; set; }
 
         /// <summary>
         /// </summary>
-        Quaternion RawHeading { get; set; }
+        float XScale { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        void Send(MessageBody messageBody, bool announceToPlayfield);
+        float ZScale { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        void CalculateSkills();
+        Expansions Expansion { get; set; }
 
         /// <summary>
         /// </summary>
@@ -137,18 +116,43 @@ namespace CellAO.Interfaces
         /// </param>
         /// <returns>
         /// </returns>
-        bool SetFightingTarget(Identity identity);
+        IInstancedEntity FindByIdentity(Identity identity);
 
         /// <summary>
-        /// Update move type
         /// </summary>
-        /// <param name="moveType">
-        /// new move type
+        /// <param name="message">
         /// </param>
-        void UpdateMoveType(byte moveType);
+        void Announce(Message message);
 
         /// <summary>
         /// </summary>
-        void WriteStats();
+        /// <param name="messageBody">
+        /// </param>
+        void Announce(MessageBody messageBody);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        /// <param name="dontSend">
+        /// </param>
+        void AnnounceOthers(MessageBody messageBody, Identity dontSend);
+
+        /// <summary>
+        /// </summary>
+        void DisconnectAllClients();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj">
+        /// </param>
+        void Publish(object obj);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendSCFUs">
+        /// </param>
+        // TODO: Reactivate
+        // void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs);
     }
 }

@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -39,8 +39,9 @@ namespace CellAO.Core.Items
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
+    using CellAO.Core.Actions;
+    using CellAO.Core.Events;
     using CellAO.Core.Stats;
-    using CellAO.Interfaces;
 
     #endregion
 
@@ -713,16 +714,16 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            this.Events = new List<IEvents>();
-            this.Actions = new List<IActions>();
+            this.Events = new List<Events>();
+            this.Actions = new List<Actions>();
         }
 
         /// <summary>
         /// </summary>
-        public List<IEvents> Events { get; set; }
+        public List<Events> Events { get; set; }
 
         /// <summary>
         /// </summary>
-        public List<IActions> Actions { get; set; }
+        public List<Actions> Actions { get; set; }
     }
 }

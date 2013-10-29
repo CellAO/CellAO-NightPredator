@@ -26,28 +26,87 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 09:43
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:10
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
+    using CellAO.Enums;
+
     #endregion
 
-    /// <summary>
-    /// Adding Actions to classes
-    /// TODO: complete with methods
-    /// </summary>
-    public interface IItemNanoActions
+    public interface IInventoryPage : IEntity
     {
         /// <summary>
-        /// List of Game Action (toUse, toWear)
         /// </summary>
-        List<IActions> Actions { get; set; }
+        int Page { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int MaxSlots { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int FirstSlotNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        InventoryError Add(int slot, IItem item);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slotNum">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IItem Remove(int slotNum);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool Read();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool Write();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="index">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IItem this[int index] { get; }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        IDictionary<int, IItem> List();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        int FindFreeSlot();
+
+        bool ValidSlot(int slotNum);
     }
 }

@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:37
-// Created:       2013-10-27 07:58
+// Last modified: 2013-10-29 21:42
+// Created:       2013-10-29 19:57
 
 #endregion
 
@@ -40,7 +40,6 @@ namespace CellAO.Core.Functions
     using System.IO;
 
     using CellAO.Core.Requirements;
-    using CellAO.Interfaces;
 
     using MsgPack.Serialization;
 
@@ -57,7 +56,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// List of Arguments
         /// </summary>
-        public IFunctionArguments Arguments { get; set; }
+        public FunctionArguments Arguments { get; set; }
 
         /// <summary>
         /// Type of function (constants in ItemLoader)
@@ -67,7 +66,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// Requirements to execute this function
         /// </summary>
-        public List<IRequirements> Requirements { get; set; }
+        public List<Requirements> Requirements { get; set; }
 
         /// <summary>
         /// TargetType (constants in ItemLoader)
@@ -94,7 +93,7 @@ namespace CellAO.Core.Functions
         public Functions()
         {
             this.Arguments = new FunctionArguments();
-            this.Requirements = new List<IRequirements>();
+            this.Requirements = new List<Requirements>();
             this.dolocalstats = true;
         }
 

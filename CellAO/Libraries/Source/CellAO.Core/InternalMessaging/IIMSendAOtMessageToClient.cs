@@ -26,31 +26,25 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-27 11:38
-// Created:       2013-10-27 10:28
+// Last modified: 2013-10-29 21:43
+// Created:       2013-10-29 21:12
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Core.InternalMessaging
 {
     #region Usings ...
 
-    using Cell.Core;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
-    public interface IZoneClient : IClient
+    public interface IIMSendAOtMessageToClient
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        void SendCompressed(MessageBody messageBody);
+        IZoneClient client { get; set; }
 
-        /// <summary>
-        /// </summary>
-        ICharacter Character { get; set; }
+        Message message { get; set; }
     }
 }
