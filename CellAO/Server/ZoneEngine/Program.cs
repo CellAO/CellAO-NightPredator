@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:27
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-29 23:06
+// Created:       2013-10-29 22:45
 
 #endregion
 
@@ -44,12 +44,45 @@ namespace ZoneEngine
 
     internal class Program
     {
+        private static void CenteredString(string text, string boundary, ConsoleColor c = ConsoleColor.Black)
+        {
+            int consoleWidth = Console.WindowWidth;
+            ConsoleColor oldColor = Console.ForegroundColor;
+            int centered = (consoleWidth - text.Length) / 2;
+            Console.Write(boundary.PadRight(centered, ' '));
+
+            if (c != ConsoleColor.Black)
+            {
+                Console.ForegroundColor = c;
+            }
+
+            Console.Write(text);
+            Console.ForegroundColor = oldColor;
+            Console.Write(boundary.PadLeft(consoleWidth - (text.Length + centered), ' '));
+        }
+
+        private static void PrintCellAOBanner()
+        {
+            int consoleWidth = Console.WindowWidth;
+
+            Console.Clear();
+
+            Console.Write("**".PadRight(consoleWidth, '*'));
+            CenteredString("", "**");
+            CenteredString(AssemblyInfoclass.Title, "**", ConsoleColor.Blue);
+            CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.DarkGreen);
+            CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
+            CenteredString("", "**");
+            Console.Write("**".PadRight(consoleWidth, '*'));
+        }
+
         private static void Main(string[] args)
         {
-            string CellAOVersion = AssemblyInfoclass.Title + " " + AssemblyInfoclass.AssemblyVersion + " "
-                                   + AssemblyInfoclass.RevisionName;
-            Console.WriteLine(CellAOVersion);
+
+            PrintCellAOBanner();
+
             ItemLoader.CacheAllItems();
+            Console.WriteLine();
             NanoLoader.CacheAllNanos();
             Console.ReadLine();
         }
