@@ -36,6 +36,7 @@ namespace CellAO.Database.Dao
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Linq;
 
@@ -43,79 +44,63 @@ namespace CellAO.Database.Dao
 
     #endregion
 
-    public static class OrganizationDao
+    public static class LoginDataDao
     {
-        public static bool OrgExists(string name)
+        public static IEnumerable<DBLoginData> GetAll()
         {
             using (IDbConnection conn = Connector.GetConnection())
             {
-                return
-                    conn.Query<int>("SELECT count(*) FROM organizations WHERE Name=@name", new { name })
-                        .Single()
-                        .Equals(1);
+                return conn.Query<DBLoginData>("SELECT * FROM login");
             }
         }
 
-        public static bool OrgExists(int orgId)
+        public static DBLoginData GetByUsername(string username)
         {
             using (IDbConnection conn = Connector.GetConnection())
             {
-                return
-                    conn.Query<int>("SELECT count(*) FROM organizations WHERE ID=@orgId", new { orgId })
-                        .Single()
-                        .Equals(1);
-            }
-        }
-
-        public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
-        {
-            bool canBeCreated = !OrgExists(desiredOrgName);
-            if (canBeCreated)
-            {
-                using (IDbConnection conn = Connector.GetConnection())
+                try
                 {
-                    conn.Execute(
-                        "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)",
-                        new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
+                    return
+                        conn.Query<DBLoginData>("SELECT * FROM login where Username=@user", new { user = username })
+                            .First();
+                }
+                catch (Exception)
+                {
+                    return null;
                 }
             }
-            return canBeCreated;
         }
 
-        public static int GetOrganizationId(string orgName)
+        public static void WriteLoginData(DBLoginData login)
         {
             using (IDbConnection conn = Connector.GetConnection())
             {
-                return conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName }).Single();
+                conn.Execute(
+                    "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
+                    new
+                        {
+                            creationdate = DateTime.Now,
+                            email = login.Email,
+                            firstname = login.FirstName,
+                            lastname = login.LastName,
+                            username = login.Username,
+                            password = login.Password,
+                            allowed_characters = login.Allowed_Characters,
+                            flags = login.Flags,
+                            accountflags = login.AccountFlags,
+                            expansions = login.Expansions,
+                            gm = login.GM
+                        });
             }
         }
 
-        public static int GetGovernmentForm(int orgId)
+        public static void WriteNewPassword(DBLoginData login)
         {
             using (IDbConnection conn = Connector.GetConnection())
             {
-                return
-                    conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId }).Single();
-            }
-        }
-
-        public static DBOrganization GetOrganizationData(int orgId)
-        {
-            if (!OrgExists(orgId))
-            {
-                return null;
-            }
-            using (IDbConnection conn = Connector.GetConnection())
-            {
-                return conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId }).Single();
-            }
-        }
-
-        public static void SetNewPrez(int orgId, int newLeaderId)
-        {
-            using (IDbConnection conn = Connector.GetConnection())
-            {
-                conn.Execute("UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", new { newLeaderId, orgId });
+                conn.Execute(
+                    "UPDATE login SET password=@pwd WHERE Username=@user",
+                    new { pwd = login.Password, user = login.Username });
             }
         }
     }

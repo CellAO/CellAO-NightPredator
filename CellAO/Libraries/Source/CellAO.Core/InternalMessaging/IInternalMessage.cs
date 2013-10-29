@@ -27,11 +27,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 21:09
+// Created:       2013-10-29 21:07
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace CellAO.Core.InternalMessaging
 {
     #region Usings ...
 
@@ -39,11 +39,14 @@ namespace CellAO.Core.Inventory
 
     #endregion
 
-    public interface IItemContainer : IEntity
+    public interface IInternalMessage
     {
         /// <summary>
-        /// The inventory of this Container
         /// </summary>
-        IInventoryPages BaseInventory { get; }
+        IInstancedEntity Sender { get; set; }
+
+        /// <summary>
+        /// </summary>
+        IInternalMessageBody MessageBody { get; set; }
     }
 }

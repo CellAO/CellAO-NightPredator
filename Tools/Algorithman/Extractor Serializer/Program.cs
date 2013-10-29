@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 21:43
+// Last modified: 2013-10-29 22:29
 // Created:       2013-10-29 19:57
 
 #endregion
@@ -454,8 +454,71 @@ namespace Extractor_Serializer
             Console.WriteLine("Further Instructions:");
             Console.WriteLine("- Copy items.dat and nanos.dat into your CellAO folder and overwrite.");
             Console.WriteLine("- Apply itemnames.sql to your database");
-            Console.WriteLine("Press Enter to exit and have fun with CellAO");
-            Console.ReadLine();
+            Console.WriteLine();
+            Console.WriteLine("   OR   ");
+            Console.WriteLine();
+            Console.WriteLine("Let me copy it over to the Source Tree");
+            Console.WriteLine();
+            while (true)
+            {
+                Console.WriteLine("Please choose:");
+                Console.WriteLine("1: Copy the files to CellAO/Datafiles and CellAO/.../CellAO.Database/SqlTables.");
+                Console.WriteLine("2: Exit and copy yourself");
+                Console.WriteLine("[1,2]:");
+                string line = Console.ReadLine();
+                if (line.Trim() == "1")
+                {
+                    if (CopyDatafiles())
+                    {
+                        break;
+                    }
+                }
+                if (line.Trim() == "2")
+                {
+                    break;
+                }
+            }
+        }
+
+        private static bool CopyDatafiles()
+        {
+            bool result = true;
+            // Presume we are in CellAO/Built/Debug or Release
+            string pathToDatafiles = Path.Combine("..", "..", "Datafiles");
+            if (File.Exists(Path.Combine(pathToDatafiles, "items.dat")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "items.dat"));
+                File.Copy("items.dat", Path.Combine(pathToDatafiles, "items.dat"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old items.dat in the Datafiles folder.");
+                result = false;
+            }
+
+            if (File.Exists(Path.Combine(pathToDatafiles, "nanos.dat")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "nanos.dat"));
+                File.Copy("nanos.dat", Path.Combine(pathToDatafiles, "nanos.dat"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old nanos.dat in the Datafiles folder.");
+                result = false;
+            }
+
+            pathToDatafiles = Path.Combine("..", "..", "Libraries", "Source", "CellAO.Database", "SqlTables");
+            if (File.Exists(Path.Combine(pathToDatafiles, "itemnames.sql")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "itemnames.sql"));
+                File.Copy("itemnames.sql", Path.Combine(pathToDatafiles, "itemnames.sql"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old itemnames.sql in the SqlTables folder.");
+                result = false;
+            }
+            return result;
         }
 
         public static string GetVersion(string path)

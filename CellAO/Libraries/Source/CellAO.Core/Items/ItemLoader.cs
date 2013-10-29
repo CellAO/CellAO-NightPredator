@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 21:42
+// Last modified: 2013-10-29 22:26
 // Created:       2013-10-29 19:57
 
 #endregion
@@ -123,6 +123,10 @@ namespace CellAO.Core.Items
                     "Loaded {0} items in {1}\r",
                     new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
             }
+
+            Console.Write(
+                "Loaded {0} items in {1}\r",
+                new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();
             return ItemList.Count;

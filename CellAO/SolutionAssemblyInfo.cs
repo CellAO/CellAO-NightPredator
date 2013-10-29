@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 21:43
+// Last modified: 2013-10-29 22:27
 // Created:       2013-10-29 19:57
 
 #endregion
@@ -39,7 +39,7 @@ using Utility;
 
 #endregion
 
-[assembly: AssemblyVersion("1.4.1.173")]
-[assembly: AssemblyFileVersion("1.4.1.173")]
+[assembly: AssemblyVersion("1.4.1.191")]
+[assembly: AssemblyFileVersion("1.4.1.191")]
 [assembly: RevisionName("Night Predator")]
 [assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]

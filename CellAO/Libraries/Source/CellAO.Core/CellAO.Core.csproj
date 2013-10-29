@@ -90,7 +90,7 @@
     <Compile Include="Items\ItemLoader.cs" />
     <Compile Include="Items\ItemTemplate.cs" />
     <Compile Include="Nanos\NanoFormula.cs" />
-    <Compile Include="Nanos\NanoHandler.cs" />
+    <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Network\IZoneClient.cs" />
     <Compile Include="Playfields\IPlayfield.cs" />
     <Compile Include="Playfields\IPlayfieldDistrict.cs" />
@@ -145,7 +145,7 @@
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Database\CellAO.Database.csproj">
+    <ProjectReference Include="..\CellAO.Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>

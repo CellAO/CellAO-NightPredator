@@ -27,11 +27,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Created:       2013-10-29 20:50
 
 #endregion
 
-namespace CellAO.Core.Exceptions
+namespace NiceHexOutput
 {
     #region Usings ...
 
@@ -39,57 +39,56 @@ namespace CellAO.Core.Exceptions
 
     #endregion
 
-    /// <summary>
-    /// Character does not exist Exception
-    /// </summary>
-    [Serializable]
-    public class CharacterDoesNotExistException : ApplicationException
+    public static class NiceHexOutput
     {
-        /// <summary>
-        /// Exception handler
-        /// </summary>
-        /// <param name="message">
-        /// Message to log
-        /// </param>
-        public CharacterDoesNotExistException(string message)
-            : base(message)
+        public static string Output(byte[] packet)
         {
-        }
-    }
+            if (packet == null)
+            {
+                return string.Empty;
+            }
+            string outp = "";
+            int counter = 0;
 
-    /// <summary>
-    /// Wrong packet type passed to Vicinity Handler
-    /// </summary>
-    [Serializable]
-    public class WrongPacketTypeException : ApplicationException
-    {
-        /// <summary>
-        /// Exception handler
-        /// </summary>
-        /// <param name="message">
-        /// Message to log
-        /// </param>
-        public WrongPacketTypeException(string message)
-            : base(message)
-        {
-        }
-    }
+            outp = "Packet length: " + packet.Length.ToString() + "\r\n";
 
-    /// <summary>
-    /// Stat does not exist
-    /// </summary>
-    [Serializable]
-    public class StatDoesNotExistException : ApplicationException
-    {
-        /// <summary>
-        /// Exception handler
-        /// </summary>
-        /// <param name="message">
-        /// Message to log
-        /// </param>
-        public StatDoesNotExistException(string message)
-            : base(message)
+            while (counter < packet.Length)
+            {
+                outp = outp + " ";
+                if (packet.Length - counter > 16)
+                {
+                    byte[] temp = new byte[16];
+                    Array.Copy(packet, counter, temp, 0, 16);
+                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
+                    foreach (byte b in temp)
+                    {
+                        outp = outp + ToSafeAscii(b);
+                    }
+                    outp = outp + "\r\n";
+                }
+                else
+                {
+                    byte[] temp = new byte[packet.Length - counter];
+                    Array.Copy(packet, counter, temp, 0, packet.Length - counter);
+                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
+                    foreach (byte b in temp)
+                    {
+                        outp = outp + ToSafeAscii(b);
+                    }
+                    outp = outp + "\r\n";
+                }
+                counter += 16;
+            }
+            return outp;
+        }
+
+        public static char ToSafeAscii(int b)
         {
+            if (b >= 32 && b <= 126)
+            {
+                return (char)b;
+            }
+            return '.';
         }
     }
 }

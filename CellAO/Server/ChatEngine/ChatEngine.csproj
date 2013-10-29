@@ -53,7 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Source\Database\CellAO.Database.csproj">
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>
