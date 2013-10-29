@@ -69,7 +69,7 @@ namespace ZoneEngine
 
             Console.Write("**".PadRight(consoleWidth, '*'));
             CenteredString("", "**");
-            CenteredString(AssemblyInfoclass.Title, "**", ConsoleColor.Blue);
+            CenteredString(AssemblyInfoclass.Title, "**", ConsoleColor.White);
             CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.DarkGreen);
             CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
             CenteredString("", "**");
