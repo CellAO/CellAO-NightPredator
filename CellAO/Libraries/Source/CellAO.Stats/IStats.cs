@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 21:28
+// Last modified: 2013-10-30 22:52
 // Created:       2013-10-30 21:00
 
 #endregion
@@ -35,7 +35,7 @@ namespace CellAO.Stats
 {
     #region Usings ...
 
-    using CellAO.Interfaces;
+    
 
     #endregion
 

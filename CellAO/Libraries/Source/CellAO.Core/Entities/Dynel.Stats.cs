@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:11
+// Last modified: 2013-10-30 22:52
 // Created:       2013-10-30 21:51
 
 #endregion
@@ -35,14 +35,14 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
-    using System;
-
     using CellAO.Stats;
 
     #endregion
 
     public partial class Dynel
     {
+        public IStatList Stats { get; private set; }
+
         private void InitializeStats()
         {
             // Load default values first
@@ -50,9 +50,8 @@ namespace CellAO.Core.Entities
             {
                 stat.BaseValue = (uint)StatNamesDefaults.GetDefault(stat.StatId);
             }
-            
-            this.Stats.Read();
 
+            this.Stats.Read();
         }
     }
 }
