@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 19:24
+// Last modified: 2013-10-30 19:25
 // Created:       2013-10-30 17:25
 
 #endregion
@@ -52,13 +52,25 @@ namespace ZoneEngine
             {
                 ItemLoader.CacheAllItems();
                 Console.WriteLine();
-                NanoLoader.CacheAllNanos();
-                Console.ReadLine();
             }
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("An error occured while loading the items.dat.");
+                Console.WriteLine(e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+                return false;
+            }
+
+            try
+            {
+                NanoLoader.CacheAllNanos();
+                Console.WriteLine();
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("An error occured while loading the nanos.dat.");
                 Console.WriteLine(e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
                 return false;
