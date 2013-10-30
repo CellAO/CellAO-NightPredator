@@ -230,8 +230,9 @@ namespace Extractor_Serializer
                     foundAO = true;
                     Console.WriteLine("Found AO Database on " + AOPath);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     foundAO = false;
                 }
 

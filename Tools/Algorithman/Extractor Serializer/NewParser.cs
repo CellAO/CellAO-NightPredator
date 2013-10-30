@@ -601,7 +601,7 @@ namespace Extractor_Serializer
             bool flag = !this.FunctionSets.ContainsKey(funcNum.ToString());
             if (flag)
             {
-                TextWriter lastitem = new StreamWriter("J:\\lastitem.txt");
+                TextWriter lastitem = new StreamWriter("lastitem.txt");
                 lastitem.WriteLine(NiceHexOutput.Output(this.br.Buffer));
                 lastitem.Close();
                 throw new IndexOutOfRangeException("Not handled function " + funcNum.ToString());

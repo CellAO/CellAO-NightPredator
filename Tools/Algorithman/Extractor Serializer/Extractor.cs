@@ -109,8 +109,7 @@ namespace Extractor_Serializer
                 this.DATs.Add(new bStream(text));
             }
 
-            string path = rdbPath + ((rdbPath.Substring(rdbPath.Length - 1, 1) == "\\") ? string.Empty : "\\")
-                          + "ResourceDatabase.idx";
+            string path = Path.Combine(rdbPath, "ResourceDatabase.idx");
             bStream bStream = new bStream(File.ReadAllBytes(path));
             this.blockOffset = bStream.ReadUInt32_At(12u);
             this.dataFileSize = bStream.ReadUInt32_At(184u);

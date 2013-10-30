@@ -736,7 +736,7 @@ namespace Extractor_Serializer
         private void LoadFunctionSets(int FileVer)
         {
             string left = Main.pvStr(FileVer, ".");
-            cfgFile cfgFile = new cfgFile(Main.AppPath() + "Config\\FunctionSets.cfg");
+            cfgFile cfgFile = new cfgFile(Path.Combine(Main.AppPath(), "Config", "FunctionSets.cfg"));
             SortedList sortedList = new SortedList();
             Regex regex = new Regex("^\\d{2}\\.\\d{2}\\.\\d{2}\\.\\d{2}$");
             cfgFile.cfgSection[] sections = cfgFile.Sections;
@@ -998,7 +998,7 @@ namespace Extractor_Serializer
                 }
             }
             arg_222_0 = true;
-            IL_222:
+        IL_222:
             flag = arg_222_0;
             if (flag)
             {
@@ -1125,7 +1125,7 @@ namespace Extractor_Serializer
                             goto IL_4BF;
                     }
                     continue;
-                    IL_4BF:
+                IL_4BF:
                     flag4 = this.CritError("Invalid KeyNum");
                 }
                 try
@@ -1422,7 +1422,7 @@ namespace Extractor_Serializer
                     num3++;
                 }
                 return;
-                Block_4:
+            Block_4:
                 try
                 {
                     Output.ItemNanoEventAndFunctions(eventNum, list.ToArray());
@@ -1488,13 +1488,13 @@ namespace Extractor_Serializer
                                 }
                             }
                         }
-                        IL_F2:
+                    IL_F2:
                         arg_F3_0 = true;
                         goto IL_F3;
                         goto IL_F2;
                     }
                     goto IL_EF;
-                    IL_F3:
+                IL_F3:
                     bool flag = arg_F3_0;
                     if (flag)
                     {
@@ -1520,7 +1520,7 @@ namespace Extractor_Serializer
                             goto IL_1A1;
                         }
                         goto IL_1A6;
-                        IL_1AA:
+                    IL_1AA:
                         bool arg_1AA_0;
                         flag = arg_1AA_0;
                         if (flag)
@@ -1529,21 +1529,21 @@ namespace Extractor_Serializer
                             num3++;
                         }
                         goto IL_1C0;
-                        IL_1A1:
+                    IL_1A1:
                         if (attrNum == 0)
                         {
                             arg_1AA_0 = true;
                             goto IL_1AA;
                         }
-                        IL_1A6:
+                    IL_1A6:
                         arg_1AA_0 = false;
                         goto IL_1AA;
                     }
-                    IL_1C0:
+                IL_1C0:
                     list.Add(item);
                     num3++;
                     continue;
-                    IL_EF:
+                IL_EF:
                     arg_F3_0 = false;
                     goto IL_F3;
                 }
@@ -1735,21 +1735,21 @@ namespace Extractor_Serializer
                             }
                             goto Block_1;
                         }
-                        IL_142:
+                    IL_142:
                         num7++;
                         continue;
-                        IL_10D:
+                    IL_10D:
                         goto IL_142;
-                        IL_110:
+                    IL_110:
                         list.Add(item);
                         goto IL_142;
-                        IL_11C:
+                    IL_11C:
                         list2.Add(item);
                         goto IL_142;
-                        IL_128:
+                    IL_128:
                         R = this.CritError("Unhandled AtkDef Set: " + Conversions.ToString(value));
                         goto IL_142;
-                        Block_1:
+                    Block_1:
                         goto IL_128;
                     }
                     num3++;
