@@ -45,8 +45,13 @@ namespace CellAO.Core.Entities
     {
         private void InitializeStats()
         {
+            // Load default values first
+            foreach (IStat stat in this.Stats.All)
+            {
+                stat.BaseValue = (uint)StatNamesDefaults.GetDefault(stat.StatId);
+            }
+            
             this.Stats.Read();
-
 
         }
     }

@@ -26,16 +26,22 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 22:37
+// Created:       2013-10-30 21:59
 
 #endregion
 
 namespace CellAO.Stats
 {
+    #region Usings ...
+
+    using System.Collections.Generic;
+
     using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    #endregion
 
     /// <summary>
     /// </summary>
@@ -62,6 +68,8 @@ namespace CellAO.Stats
         /// IStat object
         /// </returns>
         IStat this[string name] { get; }
+
+        List<IStat> All { get; }
 
         Identity Owner { get; }
 

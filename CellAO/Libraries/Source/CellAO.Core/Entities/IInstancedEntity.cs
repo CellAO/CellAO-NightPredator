@@ -35,11 +35,13 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Stats;
 
     #endregion
 
-    public interface IInstancedEntity : IStats, IEntity
+    public interface IInstancedEntity : IStats, IEntity, IDisposable
     {
         bool Starting { get; set; }
 

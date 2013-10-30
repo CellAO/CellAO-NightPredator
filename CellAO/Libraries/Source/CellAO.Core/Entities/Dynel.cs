@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 21:52
+// Last modified: 2013-10-30 22:46
 // Created:       2013-10-30 21:43
 
 #endregion
@@ -35,7 +35,6 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
-    using CellAO.Interfaces;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -44,25 +43,13 @@ namespace CellAO.Core.Entities
 
     public partial class Dynel : INamedEntity
     {
-        public IStatList Stats { get; private set; }
-
-        public Identity Identity { get; private set; }
-
-        public bool Starting { get; set; }
-
-        public bool DoNotDoTimers { get; set; }
-
-        public string Name { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        #region Constructors and Destructors
 
         public Dynel(Identity id)
         {
             this.Starting = true;
             this.DoNotDoTimers = true;
-            
+
             this.Identity = id;
             this.Stats = new Stats(this.Identity);
             this.InitializeStats();
@@ -71,5 +58,42 @@ namespace CellAO.Core.Entities
             this.Starting = false;
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public bool DoNotDoTimers { get; set; }
+
+        public string FirstName { get; set; }
+
+        public Identity Identity { get; private set; }
+
+        public string LastName { get; set; }
+
+        public string Name { get; set; }
+
+        public bool Starting { get; set; }
+
+        public IStatList Stats { get; private set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        public void Dispose(bool disposing)
+        {
+            // Write stats to database
+            this.Stats.Write();
+
+            // Send last farewell to playfield
+            // TODO: Send vanish packet to all in playfield (ranged)
+        }
+
+        #endregion
     }
 }

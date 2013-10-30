@@ -7,6 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEn
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZoneEngine", "Server\ZoneEngine\ZoneEngine.csproj", "{60385925-84F5-4893-A5E0-C8C1D1190790}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoginEngine", "Server\LoginEngine\LoginEngine.csproj", "{CA8044C8-3283-4382-8B47-3CA7972692F9}"
 	ProjectSection(ProjectDependencies) = postProject

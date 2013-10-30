@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 21:28
+// Last modified: 2013-10-30 22:43
 // Created:       2013-10-30 21:00
 
 #endregion
@@ -41,7 +41,6 @@ namespace CellAO.Stats
 
     using CellAO.Core.Exceptions;
     using CellAO.Database.Dao;
-    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -201,7 +200,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly List<Stat> all = new List<Stat>();
+        private readonly List<IStat> all = new List<IStat>();
 
         /// <summary>
         /// </summary>
@@ -4012,7 +4011,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public List<Stat> All
+        public List<IStat> All
         {
             get
             {
