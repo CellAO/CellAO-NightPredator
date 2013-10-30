@@ -50,8 +50,7 @@ namespace ZoneEngine
         {
             try
             {
-                ItemLoader.CacheAllItems();
-                Console.WriteLine();
+                Console.WriteLine("Loaded {0} items", ItemLoader.CacheAllItems());
             }
             catch (Exception e)
             {
@@ -64,7 +63,7 @@ namespace ZoneEngine
 
             try
             {
-                NanoLoader.CacheAllNanos();
+                Console.WriteLine("Loaded {0} nanos", NanoLoader.CacheAllNanos());
                 Console.WriteLine();
             }
             catch (Exception e)
@@ -81,6 +80,7 @@ namespace ZoneEngine
 
         private static bool Initialize()
         {
+            Console.WriteLine();
             if (!LoadItemsAndNanos())
             {
                 return false;
