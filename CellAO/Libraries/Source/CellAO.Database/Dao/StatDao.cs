@@ -138,16 +138,15 @@ namespace CellAO.Database.Dao
 
         public static void BulkReplace(List<DBStats> stats)
         {
+            // Delete all stats before writing
+            DeleteStats(stats[0].type,stats[0].instance);
+
             using (IDbConnection conn = Connector.GetConnection())
             {
                 using (IDbTransaction trans = conn.BeginTransaction())
                 {
                     conn.Execute(
-                        "DELETE FROM stats WHERE type=@type AND instance=@instance",
-                        new { stats[0].type, stats[0].instance },
-                        transaction: trans);
-                    conn.Execute(
-                        "REPLACE INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)",
+                        "INSERT INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)",
                         stats,
                         transaction: trans);
                     trans.Commit();

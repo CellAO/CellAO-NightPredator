@@ -51,6 +51,7 @@ namespace CellAO.Core.Entities
                 stat.BaseValue = (uint)StatNamesDefaults.GetDefault(stat.StatId);
             }
 
+            // Read stats from database
             this.Stats.Read();
         }
     }
