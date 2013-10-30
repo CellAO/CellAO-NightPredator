@@ -10,6 +10,13 @@ namespace Utility
         private static void CenteredString(string text, string boundary, ConsoleColor c = ConsoleColor.Black)
         {
             int consoleWidth = Console.WindowWidth;
+            // Mono "fix"
+            if (consoleWidth == 0)
+            {
+                // Since Console.WindowWidth doesnt work on mono, lets assume 80 chars
+                consoleWidth = 80;
+            }
+
             ConsoleColor oldColor = Console.ForegroundColor;
             int centered = (consoleWidth - text.Length) / 2;
             Console.Write(boundary.PadRight(centered, ' '));
