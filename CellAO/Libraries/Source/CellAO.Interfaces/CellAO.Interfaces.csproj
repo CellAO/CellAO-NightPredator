@@ -60,8 +60,6 @@
     <Compile Include="IPacketReceivingEntity.cs" />
     <Compile Include="IQuaternion.cs" />
     <Compile Include="IRequirements.cs" />
-    <Compile Include="IStat.cs" />
-    <Compile Include="IStatList.cs" />
     <Compile Include="ISummoner.cs" />
     <Compile Include="IUploadedNanos.cs" />
     <Compile Include="IVector3.cs" />

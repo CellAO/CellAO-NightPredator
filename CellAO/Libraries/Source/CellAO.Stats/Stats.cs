@@ -11061,7 +11061,6 @@ namespace CellAO.Stats
         /// </exception>
         public int StatIdByName(string statName)
         {
-            Contract.Requires(statName != null);
             int statid = StatNamesDefaults.GetStatNumber(statName.ToLower());
             foreach (Stat c in this.all)
             {

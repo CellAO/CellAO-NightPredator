@@ -1078,6 +1078,8 @@ namespace CellAO.Stats
             Defaults.Add(1009, 0);
         }
 
+        // TODO: generate the default value list from database, make it depending on breed, so NPCs can have different defaults
+
         /// <summary>
         /// Return Stat's default value
         /// </summary>

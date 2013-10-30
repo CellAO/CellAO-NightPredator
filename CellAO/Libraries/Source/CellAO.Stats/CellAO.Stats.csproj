@@ -42,6 +42,8 @@
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="IStat.cs" />
+    <Compile Include="IStatList.cs" />
     <Compile Include="Stat.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="IStats.cs" />

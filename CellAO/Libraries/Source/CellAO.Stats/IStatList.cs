@@ -31,56 +31,44 @@
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Stats
 {
+    using CellAO.Interfaces;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     /// <summary>
     /// </summary>
-    public interface IStat
+    public interface IStatList : IDatabaseObject
     {
         /// <summary>
+        /// Number-indexed access to Stats List
         /// </summary>
-        int StatId { get; }
-
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        bool AnnounceToPlayfield { get; set; }
-
-        /// <summary>
-        /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        void AffectStats();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
+        /// <param name="index">
+        /// Id of Stat
         /// </param>
         /// <returns>
+        /// IStat object
         /// </returns>
-        uint GetMaxValue(uint old);
+        IStat this[int index] { get; }
 
-        IStatList Stats { get; }
+        /// <summary>
+        /// Name-indexed access to Stats List
+        /// </summary>
+        /// <param name="name">
+        /// Name of the Stat
+        /// </param>
+        /// <returns>
+        /// IStat object
+        /// </returns>
+        IStat this[string name] { get; }
+
+        Identity Owner { get; }
+
+        /// <summary>
+        /// </summary>
+        void ClearModifiers();
+
+        void ClearChangedFlags();
     }
 }

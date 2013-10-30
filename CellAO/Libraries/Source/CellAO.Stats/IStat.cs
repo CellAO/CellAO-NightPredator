@@ -26,47 +26,71 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 22:05
+// Created:       2013-10-30 21:58
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace CellAO.Stats
 {
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    #region Usings ...
+
+    using System;
+
+    #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStatList : IDatabaseObject
+    public interface IStat
     {
         /// <summary>
-        /// Number-indexed access to Stats List
         /// </summary>
-        /// <param name="index">
-        /// Id of Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[int index] { get; }
-
-        /// <summary>
-        /// Name-indexed access to Stats List
-        /// </summary>
-        /// <param name="name">
-        /// Name of the Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[string name] { get; }
-
-        Identity Owner { get; }
+        int StatId { get; }
 
         /// <summary>
         /// </summary>
-        void ClearModifiers();
+        int Value { get; set; }
 
-        void ClearChangedFlags();
+        /// <summary>
+        /// </summary>
+        uint BaseValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int Trickle { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int Modifier { get; set; }
+
+        /// <summary>
+        /// </summary>
+        int PercentageModifier { get; set; }
+
+        /// <summary>
+        /// </summary>
+        bool AnnounceToPlayfield { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="old">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        uint GetMaxValue(uint old);
+
+        IStatList Stats { get; }
+
+        /// <summary>
+        /// </summary>
+        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
+
+        /// <summary>
+        /// </summary>
+        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
+
+        /// <summary>
+        /// </summary>
+        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
     }
 }

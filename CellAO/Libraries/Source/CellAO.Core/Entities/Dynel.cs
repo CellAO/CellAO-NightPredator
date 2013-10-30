@@ -26,20 +26,50 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 21:28
-// Created:       2013-10-30 17:25
+// Last modified: 2013-10-30 21:52
+// Created:       2013-10-30 21:43
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Interfaces;
+    using CellAO.Stats;
 
-using Utility;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
-#endregion
+    #endregion
 
-[assembly: AssemblyVersion("1.4.1.284")]
-[assembly: AssemblyFileVersion("1.4.1.284")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+    public partial class Dynel : INamedEntity
+    {
+        public IStatList Stats { get; private set; }
+
+        public Identity Identity { get; private set; }
+
+        public bool Starting { get; set; }
+
+        public bool DoNotDoTimers { get; set; }
+
+        public string Name { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public Dynel(Identity id)
+        {
+            this.Starting = true;
+            this.DoNotDoTimers = true;
+            
+            this.Identity = id;
+            this.Stats = new Stats(this.Identity);
+            this.InitializeStats();
+
+            this.DoNotDoTimers = false;
+            this.Starting = false;
+        }
+
+    }
+}

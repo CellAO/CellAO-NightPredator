@@ -272,24 +272,6 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public void AffectStats()
-        {
-            foreach (int c in this.affects)
-            {
-                this.Stats[c].CalcTrickle();
-            }
-        }
-
-        /// <summary>
-        /// Calculate trickle value (prototype)
-        /// </summary>
-        public virtual void CalcTrickle()
-        {
-            this.AffectStats();
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="val">
         /// </param>
         /// <returns>
