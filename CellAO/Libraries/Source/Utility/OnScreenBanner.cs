@@ -31,7 +31,7 @@ namespace Utility
             Console.Write(boundary.PadLeft(consoleWidth - (text.Length + centered), ' '));
         }
 
-        public static void PrintCellAOBanner()
+        public static void PrintCellAOBanner(ConsoleColor titleColor)
         {
             int consoleWidth = Console.WindowWidth;
 
@@ -39,8 +39,8 @@ namespace Utility
 
             Console.Write("**".PadRight(consoleWidth, '*'));
             CenteredString("", "**");
-            CenteredString(AssemblyInfoclass.Title, "**", ConsoleColor.White);
-            CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.DarkGreen);
+            CenteredString("CellAO " + AssemblyInfoclass.Title, "**", titleColor);
+            CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.White);
             CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
             CenteredString("", "**");
             Console.Write("**".PadRight(consoleWidth, '*'));

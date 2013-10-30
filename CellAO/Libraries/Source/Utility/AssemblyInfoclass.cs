@@ -54,7 +54,7 @@ namespace Utility
         {
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
                 return assembly.GetName().Version.ToString();
             }
         }
@@ -66,7 +66,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -88,7 +88,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -110,7 +110,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -133,7 +133,7 @@ namespace Utility
             [SecurityCritical]
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.OriginalFilename;
             }
@@ -146,7 +146,7 @@ namespace Utility
             [SecurityCritical]
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.FileName;
             }
@@ -159,7 +159,7 @@ namespace Utility
             [SecurityCritical]
             get
             {
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 return fvi.FileVersion;
             }
@@ -172,7 +172,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -194,7 +194,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -216,7 +216,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -238,7 +238,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
@@ -260,7 +260,7 @@ namespace Utility
             get
             {
                 string result = string.Empty;
-                Assembly assembly = Assembly.GetExecutingAssembly();
+                Assembly assembly = Assembly.GetEntryAssembly();
 
                 if (assembly != null)
                 {
