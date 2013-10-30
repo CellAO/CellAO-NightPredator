@@ -1,0 +1,7 @@
+﻿========================================================
+CellAO copyright 2013 de catre echipa CellAO Dev team
+Folosim licența BSD pentru fisierele noastre Core
+Cell Framework, drepturile de autor sub GPL
+Anarchy Online, drepturile de autor de către Funcom
+Multumim pentru că ati ales CellAO
+========================================================

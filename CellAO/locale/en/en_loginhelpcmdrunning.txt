@@ -1,0 +1,1 @@
+﻿Type running to see if the engine is in running state

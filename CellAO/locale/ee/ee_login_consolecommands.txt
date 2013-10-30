@@ -1,0 +1,1 @@
+﻿Sisesta "start" serveri käivitamiseks, "stop" peatamiseks, "Adduser" <kasutaja> <salasõna> <number of characters> <expansion> <gm level> <e-mail> <eesnimi> <perekonnanimi> konto lisamiseks ja "exit" programmi sulgemiseks.

@@ -1,0 +1,13 @@
+﻿Unknown command
+
+Available commands:
+----------------------
+start - Starts server.
+stop  - Stops server.
+adduser  - Adduser <username> <password> <number of characters> <expansion> <gm> <email>.
+setpass - setpass <username> <new password>.
+running  - get the status of the server
+hash - hash <string>
+exit  - Exits program.
+help - help <command>
+----------------------

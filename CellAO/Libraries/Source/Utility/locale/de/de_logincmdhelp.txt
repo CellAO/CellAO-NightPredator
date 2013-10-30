@@ -1,0 +1,6 @@
+﻿Hier ist eine Liste von Befehlen, die eine Hilfe Inserat haben: (Verwenden Sie Englisch)
+start
+exit
+running
+adduser
+setpass

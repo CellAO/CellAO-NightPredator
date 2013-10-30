@@ -1,0 +1,12 @@
+﻿Unknown command
+
+Available commands:
+----------------------
+start - starts server.
+stop  - stops server.
+check - Checks Database.
+ping - ping the chatserver.
+ls - lists all available scripts.
+running  - get the status of the server
+exit  - exits program.
+----------------------

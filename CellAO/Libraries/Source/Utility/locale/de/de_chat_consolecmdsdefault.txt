@@ -1,0 +1,10 @@
+﻿Unbekannter Befehl
+
+Verfügbare Befehle:
+----------------------
+Start - startet Server.
+Stop - Stoppt Server.
+Exit - Beendet das Programm.
+Running - Status des Servers anzeigen.
+----------------------
+

@@ -1,0 +1,2 @@
+﻿setpass õige kasutus:
+setpass <kasutaja> <uus salasõna>

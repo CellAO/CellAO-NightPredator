@@ -1,0 +1,6 @@
+﻿Here is a list of commands that have a help listing:
+start
+exit
+running
+Adduser
+setpass

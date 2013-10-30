@@ -1,0 +1,9 @@
+﻿Unknown command
+
+Available commands:
+----------------------
+start - starts server.
+stop  - stops server.
+exit  - exits program.
+running  - get the status of the server
+----------------------

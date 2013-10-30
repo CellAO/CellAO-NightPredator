@@ -1,0 +1,7 @@
+﻿============================================================
+CellAO Copyright 2013 durch das CellAO Entwickler-Team
+Die Core-Dateien stehen unter dem Schutz der BSD-Lizenz
+das Cell Framework ist geschützt durch die GPL
+Anarchy Online ist urheberrechtlich geschützt durch Funcom
+Danke, daß Sie CellAO gewählt haben
+============================================================

@@ -1,0 +1,2 @@
+﻿The Correct Syntax for setpass is :
+setpass <account username> <newpass>

@@ -1,0 +1,13 @@
+﻿Tundmatu käsk.
+
+Võimalikud käsud:
+----------------------
+start - Käivita server.
+stop  - Peata server.
+adduser  - Lisa konto (adduser <kasutaja> <salasõna> <number of characters> <expansion> <gm> <e-mail>)
+setpass - Muuda salasõna (setpass <kasutaja> <uus salasõna>)
+running  - Serveri olek.
+hash - hash <tekst>
+exit  - Sulge programm.
+help - help <käsk>
+----------------------

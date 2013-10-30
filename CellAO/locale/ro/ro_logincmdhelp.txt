@@ -1,0 +1,6 @@
+﻿Aici aveti o lista de comenzi care au ajutor suplimentar:
+start
+exit
+running
+Adduser
+setpass

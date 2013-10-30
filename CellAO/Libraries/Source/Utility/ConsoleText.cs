@@ -26,20 +26,60 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:27
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 19:54
+// Created:       2013-10-30 19:48
 
 #endregion
 
-#region Usings ...
+namespace Utility
+{
+    #region Usings ...
 
-using System.Reflection;
+    using System;
+    using System.IO;
 
-using Utility;
+    using Utility.Config;
 
-#endregion
+    #endregion
 
-[assembly: AssemblyVersion("1.4.1.236")]
-[assembly: AssemblyFileVersion("1.4.1.236")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2013 CellAO Team")]
+    /// <summary>
+    /// Test? this is for Console Text Translation...
+    /// </summary>
+    public class ConsoleText
+    {
+        /// <summary>
+        /// </summary>
+        private readonly string Locale = ConfigReadWrite.Instance.CurrentConfig.Locale;
+
+        /// <summary>
+        /// Please do not include language_  in the file name example:  main.txt"
+        /// </summary>
+        /// <param name="fileName">
+        /// </param>
+        public void TextRead(string fileName)
+        {
+            try
+            {
+                StreamReader reader =
+                    File.OpenText(
+                        Path.Combine(
+                            Path.Combine("locale", this.Locale.ToLower()), this.Locale.ToLower() + "_" + fileName));
+                string console_input = null;
+                while ((console_input = reader.ReadLine()) != null)
+                {
+                    Console.WriteLine(console_input);
+                }
+
+                reader.Close();
+            }
+            catch (FileNotFoundException fnfex)
+            {
+                Console.WriteLine(fnfex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+}

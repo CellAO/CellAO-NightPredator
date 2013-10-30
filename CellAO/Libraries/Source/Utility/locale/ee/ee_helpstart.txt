@@ -1,0 +1,1 @@
+﻿Sisesta "start" serveri käivitamiseks.

@@ -1,0 +1,2 @@
+﻿Sintaxa corecta pentru setpass este:
+setpass <nume cont> <parola noua>

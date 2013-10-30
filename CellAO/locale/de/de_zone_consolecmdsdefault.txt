@@ -1,0 +1,11 @@
+﻿Unbekannter Befehl
+
+Verfügbare Befehle:
+----------------------
+Start - startet den Server.
+Stop - Stoppt den Server.
+ping - pingt den Chat-Server.
+ls - listet alle verfügbaren Skripte.
+running - Status des Servers anzeigen.
+EXIT - Verlässt das Programm.
+----------------------

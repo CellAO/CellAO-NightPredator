@@ -1,0 +1,11 @@
+﻿Comanda necunoscuta
+
+Comenzi posibile:
+----------------------
+start - Porneste serverul.
+stop  - Opreste serverul.
+ping - Trimite ping chatserverului.
+ls - Listeaza scripturile posibile.
+running  - Intoarce statusul serverului.
+exit  - Iese din program.
+----------------------

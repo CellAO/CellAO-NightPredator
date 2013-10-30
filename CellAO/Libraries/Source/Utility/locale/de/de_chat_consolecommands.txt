@@ -1,0 +1,1 @@
+﻿Geben Sie "Start", um den Server zu starten, "Stop", um ihn zu stoppen und "exit", um das Programm zu beenden
