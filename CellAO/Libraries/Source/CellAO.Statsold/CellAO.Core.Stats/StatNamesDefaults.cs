@@ -31,7 +31,7 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     #region Usings ...
 

@@ -26,68 +26,26 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 21:28
+// Created:       2013-10-30 21:00
 
 #endregion
 
-namespace CellAO.Core.Stats.SpecialStats
+namespace CellAO.Stats
 {
     #region Usings ...
 
-    using System;
+    using CellAO.Interfaces;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class StatCurrentNano : DynelStat
+    public interface IStats
     {
-        #region Constructors and Destructors
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <param name="defaultValue">
-        /// </param>
-        /// <param name="sendBaseValue">
-        /// </param>
-        /// <param name="dontWrite">
-        /// </param>
-        /// <param name="announce">
-        /// </param>
-        public StatCurrentNano(int number, uint defaultValue, bool sendBaseValue, bool dontWrite, bool announce)
-        {
-            this.StatId = number;
-            this.DefaultValue = defaultValue;
-
-            this.BaseValue = this.DefaultValue;
-            this.SendBaseValue = sendBaseValue;
-            this.DoNotDontWriteToSql = dontWrite;
-            this.AnnounceToPlayfield = announce;
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="val">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public override uint GetMaxValue(uint val)
-        {
-            if (this.Parent is IStats)
-            {
-                IStats c = this.Parent;
-                return (uint)Math.Min(val, c.Stats["MaxNanoEnergy"].Value);
-            }
-
-            return base.GetMaxValue(val);
-        }
+        IStatList Stats { get; }
 
         #endregion
     }

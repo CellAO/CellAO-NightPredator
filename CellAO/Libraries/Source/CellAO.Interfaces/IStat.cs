@@ -80,5 +80,7 @@ namespace CellAO.Interfaces
         /// <returns>
         /// </returns>
         uint GetMaxValue(uint old);
+
+        IStatList Stats { get; }
     }
 }

@@ -41,7 +41,7 @@ namespace CellAO.Core.Items
 
     using CellAO.Core.Actions;
     using CellAO.Core.Events;
-    using CellAO.Core.Stats;
+    using CellAO.Stats;
 
     #endregion
 

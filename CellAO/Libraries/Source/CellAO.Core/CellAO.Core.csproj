@@ -97,30 +97,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\IRequirements.cs" />
     <Compile Include="Requirements\Requirements.cs" />
-    <Compile Include="Stats\DynelStat.cs" />
-    <Compile Include="Stats\DynelStats.cs" />
-    <Compile Include="Stats\IStats.cs" />
-    <Compile Include="Stats\SkillTrickleTable.cs" />
-    <Compile Include="Stats\SkillUpdate.cs" />
-    <Compile Include="Stats\SpecialStats\StatAlienNextXP.cs" />
-    <Compile Include="Stats\SpecialStats\StatCurrentNano.cs" />
-    <Compile Include="Stats\SpecialStats\StatHealDelta.cs" />
-    <Compile Include="Stats\SpecialStats\StatHealInterval.cs" />
-    <Compile Include="Stats\SpecialStats\StatHealth.cs" />
-    <Compile Include="Stats\SpecialStats\StatHitPoints.cs" />
-    <Compile Include="Stats\SpecialStats\StatIP.cs" />
-    <Compile Include="Stats\SpecialStats\StatMaxNanoEnergy.cs" />
-    <Compile Include="Stats\SpecialStats\StatNanoDelta.cs" />
-    <Compile Include="Stats\SpecialStats\StatNanoInterval.cs" />
-    <Compile Include="Stats\SpecialStats\StatNextSK.cs" />
-    <Compile Include="Stats\SpecialStats\StatNextXP.cs" />
-    <Compile Include="Stats\SpecialStats\StatSkill.cs" />
-    <Compile Include="Stats\SpecialStats\StatTitleLevel.cs" />
-    <Compile Include="Stats\SpecialStats\StatWeaponsStyle.cs" />
-    <Compile Include="Stats\SpecialStats\XPTable.cs" />
-    <Compile Include="Stats\StatelStat.cs" />
-    <Compile Include="Stats\StatelStats.cs" />
-    <Compile Include="Stats\StatNamesDefaults.cs" />
     <Compile Include="Vector\Coordinate.cs" />
     <Compile Include="Vector\Quaternion.cs" />
     <Compile Include="Vector\Vector3.cs" />
@@ -148,6 +124,10 @@
     <ProjectReference Include="..\CellAO.Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CellAO.Stats\CellAO.Stats.csproj">
+      <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
+      <Name>CellAO.Stats</Name>
     </ProjectReference>
     <ProjectReference Include="..\Exceptions\Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>

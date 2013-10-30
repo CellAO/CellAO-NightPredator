@@ -26,38 +26,36 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 21:03
+// Last modified: 2013-10-30 21:28
+// Created:       2013-10-30 20:59
 
 #endregion
 
-namespace CellAO.Core.Stats
-{
-    #region Usings ...
+#region Usings ...
 
-    using CellAO.Core.Functions;
-    using CellAO.Interfaces;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-    #endregion
+#endregion
 
-    public interface IStats
-    {
-        #region Public Properties
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 
-        /// <summary>
-        /// </summary>
-        IStatList Stats { get; }
+[assembly: AssemblyTitle("CellAO.Stats")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("CellAO.Stats")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-        /// <summary>
-        /// </summary>
-        /// <param name="aof">
-        /// </param>
-        /// <param name="checkAll">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool CheckRequirements(Functions aof, bool checkAll);
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
 
-        #endregion
-    }
-}
+[assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+
+[assembly: Guid("ca915b95-ae68-43b1-80d6-f04f35a690c2")]

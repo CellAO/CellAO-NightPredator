@@ -33,6 +33,8 @@
 
 namespace CellAO.Interfaces
 {
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     /// <summary>
     /// </summary>
     public interface IStatList : IDatabaseObject
@@ -58,6 +60,8 @@ namespace CellAO.Interfaces
         /// IStat object
         /// </returns>
         IStat this[string name] { get; }
+
+        Identity Owner { get; }
 
         /// <summary>
         /// </summary>

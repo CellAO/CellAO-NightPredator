@@ -31,7 +31,7 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     #region Usings ...
 
@@ -39,10 +39,8 @@ namespace CellAO.Core.Stats
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
-    using CellAO.Core.Entities;
+    
     using CellAO.Core.Exceptions;
-    using CellAO.Core.Stats.SpecialStats;
-    using CellAO.Database.Dao;
     using CellAO.Interfaces;
 
     #endregion
@@ -161,7 +159,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill adventuring = new StatSkill(137, 5, true, false, false);
+        private readonly DynelStat adventuring = new DynelStat(137, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -181,7 +179,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill aimedShot = new StatSkill(151, 5, true, false, false);
+        private readonly DynelStat aimedShot = new DynelStat(151, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -189,7 +187,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatAlienNextXP alienNextXP = new StatAlienNextXP(178, 1500, true, false, false);
+        private readonly DynelStat alienNextXP = new DynelStat(178, 1500, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -269,7 +267,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill assaultRifle = new StatSkill(116, 5, true, false, false);
+        private readonly DynelStat assaultRifle = new DynelStat(116, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -337,7 +335,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill biologicalMetamorphose = new StatSkill(128, 5, true, false, false);
+        private readonly DynelStat biologicalMetamorphose = new DynelStat(128, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -345,15 +343,15 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill bodyDevelopment = new StatSkill(152, 5, true, false, false);
+        private readonly DynelStat bodyDevelopment = new DynelStat(152, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill bow = new StatSkill(111, 5, true, false, false);
+        private readonly DynelStat bow = new DynelStat(111, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill bowSpecialAttack = new StatSkill(121, 5, true, false, false);
+        private readonly DynelStat bowSpecialAttack = new DynelStat(121, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -361,11 +359,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill brawl = new StatSkill(142, 5, true, false, false);
+        private readonly DynelStat brawl = new DynelStat(142, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill breakingEntry = new StatSkill(165, 5, true, false, false);
+        private readonly DynelStat breakingEntry = new DynelStat(165, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -393,7 +391,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill burst = new StatSkill(148, 5, true, false, false);
+        private readonly DynelStat burst = new DynelStat(148, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -501,7 +499,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill chemistry = new StatSkill(163, 5, true, false, false);
+        private readonly DynelStat chemistry = new DynelStat(163, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -585,7 +583,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill closeCombatInitiative = new StatSkill(118, 5, true, false, false);
+        private readonly DynelStat closeCombatInitiative = new DynelStat(118, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -613,11 +611,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill computerLiteracy = new StatSkill(161, 5, true, false, false);
+        private readonly DynelStat computerLiteracy = new DynelStat(161, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill concealment = new StatSkill(164, 5, true, false, false);
+        private readonly DynelStat concealment = new DynelStat(164, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -669,7 +667,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatCurrentNano currentNano = new StatCurrentNano(214, 1, true, false, false);
+        private readonly DynelStat currentNano = new DynelStat(214, 1, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -733,11 +731,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill dimach = new StatSkill(144, 5, true, false, false);
+        private readonly DynelStat dimach = new DynelStat(144, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill disarmTrap = new StatSkill(135, 5, true, false, false);
+        private readonly DynelStat disarmTrap = new DynelStat(135, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -753,7 +751,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill distanceWeaponInitiative = new StatSkill(119, 5, true, false, false);
+        private readonly DynelStat distanceWeaponInitiative = new DynelStat(119, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -773,7 +771,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill dodge = new StatSkill(154, 5, true, false, false);
+        private readonly DynelStat dodge = new DynelStat(154, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -785,19 +783,19 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill driveAir = new StatSkill(139, 5, true, false, false);
+        private readonly DynelStat driveAir = new DynelStat(139, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill driveGround = new StatSkill(166, 5, true, false, false);
+        private readonly DynelStat driveGround = new DynelStat(166, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill driveWater = new StatSkill(117, 5, true, false, false);
+        private readonly DynelStat driveWater = new DynelStat(117, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill duck = new StatSkill(153, 5, true, false, false);
+        private readonly DynelStat duck = new DynelStat(153, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -829,7 +827,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill electricalEngineering = new StatSkill(126, 5, true, false, false);
+        private readonly DynelStat electricalEngineering = new DynelStat(126, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -853,7 +851,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill evade = new StatSkill(155, 5, true, false, false);
+        private readonly DynelStat evade = new DynelStat(155, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -909,7 +907,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill fastAttack = new StatSkill(147, 5, true, false, false);
+        private readonly DynelStat fastAttack = new DynelStat(147, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -921,7 +919,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill fieldQuantumPhysics = new StatSkill(157, 5, true, false, false);
+        private readonly DynelStat fieldQuantumPhysics = new DynelStat(157, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -933,7 +931,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill firstAid = new StatSkill(123, 5, true, false, false);
+        private readonly DynelStat firstAid = new DynelStat(123, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -945,11 +943,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill flingShot = new StatSkill(150, 5, true, false, false);
+        private readonly DynelStat flingShot = new DynelStat(150, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill fullAuto = new StatSkill(167, 5, true, false, false);
+        private readonly DynelStat fullAuto = new DynelStat(167, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -997,7 +995,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill grenade = new StatSkill(109, 5, true, false, false);
+        private readonly DynelStat grenade = new DynelStat(109, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1021,11 +1019,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatHealDelta healDelta = new StatHealDelta(343, 1234567890, true, false, false);
+        private readonly DynelStat healDelta = new DynelStat(343, 1234567890, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatHealInterval healInterval = new StatHealInterval(342, 29, true, false, false);
+        private readonly DynelStat healInterval = new DynelStat(342, 29, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1033,7 +1031,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatHitPoints health = new StatHitPoints(27, 1, true, false, true);
+        private readonly DynelStat health = new DynelStat(27, 1, true, false, true);
 
         /// <summary>
         /// </summary>
@@ -1129,7 +1127,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatIP ip = new StatIP(53, 1500, true, false, false);
+        private readonly DynelStat ip = new DynelStat(53, 1500, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1225,7 +1223,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatHealth life = new StatHealth(1, 1, true, false, false);
+        private readonly DynelStat life = new DynelStat(1, 1, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1249,11 +1247,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill lrEnergyWeapon = new StatSkill(133, 5, true, false, false);
+        private readonly DynelStat lrEnergyWeapon = new DynelStat(133, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill lrMultipleWeapon = new StatSkill(134, 5, true, false, false);
+        private readonly DynelStat lrMultipleWeapon = new DynelStat(134, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1277,7 +1275,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill mapNavigation = new StatSkill(140, 5, true, false, false);
+        private readonly DynelStat mapNavigation = new DynelStat(140, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1285,19 +1283,19 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill martialArts = new StatSkill(100, 5, true, false, false);
+        private readonly DynelStat martialArts = new DynelStat(100, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill materialCreation = new StatSkill(130, 5, true, false, false);
+        private readonly DynelStat materialCreation = new DynelStat(130, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill materialLocation = new StatSkill(131, 5, true, false, false);
+        private readonly DynelStat materialLocation = new DynelStat(131, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill materialMetamorphose = new StatSkill(127, 5, true, false, false);
+        private readonly DynelStat materialMetamorphose = new DynelStat(127, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1317,7 +1315,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatMaxNanoEnergy maxNanoEnergy = new StatMaxNanoEnergy(221, 1, false, false, false);
+        private readonly DynelStat maxNanoEnergy = new DynelStat(221, 1, false, false, false);
 
         /// <summary>
         /// </summary>
@@ -1329,7 +1327,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill mechanicalEngineering = new StatSkill(125, 5, true, false, false);
+        private readonly DynelStat mechanicalEngineering = new DynelStat(125, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1341,11 +1339,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill meleeEnergyWeapon = new StatSkill(104, 5, true, false, false);
+        private readonly DynelStat meleeEnergyWeapon = new DynelStat(104, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill meleeMultiple = new StatSkill(101, 5, true, false, false);
+        private readonly DynelStat meleeMultiple = new DynelStat(101, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1465,7 +1463,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill nanoAC = new StatSkill(168, 5, true, false, false);
+        private readonly DynelStat nanoAC = new DynelStat(168, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1477,11 +1475,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatNanoDelta nanoDelta = new StatNanoDelta(364, 1234567890, true, false, false);
+        private readonly DynelStat nanoDelta = new DynelStat(364, 1234567890, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill nanoEnergyPool = new StatSkill(132, 5, true, false, false);
+        private readonly DynelStat nanoEnergyPool = new DynelStat(132, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1489,7 +1487,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatNanoInterval nanoInterval = new StatNanoInterval(363, 28, true, false, false);
+        private readonly DynelStat nanoInterval = new DynelStat(363, 28, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1497,11 +1495,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill nanoProgramming = new StatSkill(160, 5, true, false, false);
+        private readonly DynelStat nanoProgramming = new DynelStat(160, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill nanoProwessInitiative = new StatSkill(149, 5, true, false, false);
+        private readonly DynelStat nanoProwessInitiative = new DynelStat(149, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1529,11 +1527,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatNextSK nextSK = new StatNextSK(575, 0, true, false, false);
+        private readonly DynelStat nextSK = new DynelStat(575, 0, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatNextXP nextXP = new StatNextXP(350, 1450, true, false, false);
+        private readonly DynelStat nextXP = new DynelStat(350, 1450, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1665,11 +1663,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill onehBluntWeapons = new StatSkill(102, 5, true, false, false);
+        private readonly DynelStat onehBluntWeapons = new DynelStat(102, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill onehEdgedWeapon = new StatSkill(103, 5, true, false, false);
+        private readonly DynelStat onehEdgedWeapon = new DynelStat(103, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1765,7 +1763,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill parry = new StatSkill(145, 5, true, false, false);
+        private readonly DynelStat parry = new DynelStat(145, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1809,7 +1807,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill perception = new StatSkill(136, 5, true, false, false);
+        private readonly DynelStat perception = new DynelStat(136, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -1861,19 +1859,19 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill pharmaceuticals = new StatSkill(159, 5, true, false, false);
+        private readonly DynelStat pharmaceuticals = new DynelStat(159, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill physicalProwessInitiative = new StatSkill(120, 5, true, false, false);
+        private readonly DynelStat physicalProwessInitiative = new DynelStat(120, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill piercing = new StatSkill(106, 5, true, false, false);
+        private readonly DynelStat piercing = new DynelStat(106, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill pistol = new StatSkill(112, 5, true, false, false);
+        private readonly DynelStat pistol = new DynelStat(112, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2005,11 +2003,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill psychologicalModification = new StatSkill(129, 5, true, false, false);
+        private readonly DynelStat psychologicalModification = new DynelStat(129, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill psychology = new StatSkill(162, 5, true, false, false);
+        private readonly DynelStat psychology = new DynelStat(162, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2285,11 +2283,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill rifle = new StatSkill(113, 5, true, false, false);
+        private readonly DynelStat rifle = new DynelStat(113, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill riposte = new StatSkill(143, 5, true, false, false);
+        private readonly DynelStat riposte = new DynelStat(143, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2309,7 +2307,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill runSpeed = new StatSkill(156, 5, true, false, false);
+        private readonly DynelStat runSpeed = new DynelStat(156, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2349,7 +2347,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill senseImprovement = new StatSkill(122, 5, true, false, false);
+        private readonly DynelStat senseImprovement = new DynelStat(122, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2433,7 +2431,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill shotgun = new StatSkill(115, 5, true, false, false);
+        private readonly DynelStat shotgun = new DynelStat(115, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2473,7 +2471,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill sneakAttack = new StatSkill(146, 5, true, false, false);
+        private readonly DynelStat sneakAttack = new DynelStat(146, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2565,11 +2563,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill subMachineGun = new StatSkill(114, 5, true, false, false);
+        private readonly DynelStat subMachineGun = new DynelStat(114, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill swim = new StatSkill(138, 5, true, false, false);
+        private readonly DynelStat swim = new DynelStat(138, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2633,11 +2631,11 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill throwingKnife = new StatSkill(108, 5, true, false, false);
+        private readonly DynelStat throwingKnife = new DynelStat(108, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill thrownGrapplingWeapons = new StatSkill(110, 5, true, false, false);
+        private readonly DynelStat thrownGrapplingWeapons = new DynelStat(110, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2657,7 +2655,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatTitleLevel titleLevel = new StatTitleLevel(37, 1, false, false, false);
+        private readonly DynelStat titleLevel = new DynelStat(37, 1, false, false, false);
 
         /// <summary>
         /// </summary>
@@ -2737,7 +2735,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill treatment = new StatSkill(124, 5, true, false, false);
+        private readonly DynelStat treatment = new DynelStat(124, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2745,15 +2743,15 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill tutoring = new StatSkill(141, 5, true, false, false);
+        private readonly DynelStat tutoring = new DynelStat(141, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill twohBluntWeapons = new StatSkill(107, 5, true, false, false);
+        private readonly DynelStat twohBluntWeapons = new DynelStat(107, 5, true, false, false);
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill twohEdgedWeapons = new StatSkill(105, 5, true, false, false);
+        private readonly DynelStat twohEdgedWeapons = new DynelStat(105, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2857,7 +2855,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private readonly StatSkill weaponSmithing = new StatSkill(158, 5, true, false, false);
+        private readonly DynelStat weaponSmithing = new DynelStat(158, 5, true, false, false);
 
         /// <summary>
         /// </summary>
@@ -2898,7 +2896,7 @@ namespace CellAO.Core.Stats
         /// <param name="parent">
         /// Stat's owner (Character or derived class)
         /// </param>
-        public DynelStats(IInstancedEntity parent)
+        public DynelStats()
         {
             this.all.Add(this.flags);
             this.all.Add(this.life);
@@ -3626,11 +3624,6 @@ namespace CellAO.Core.Stats
             this.psychic.Affects.Add(this.nanoInterval.StatId);
             this.level.Affects.Add(this.ip.StatId);
 
-            foreach (DynelStat c in this.all)
-            {
-                c.SetParent(parent);
-            }
-
             this.expansion.DoNotDontWriteToSql = true;
             this.accountFlags.DoNotDontWriteToSql = true;
             this.playerId.DoNotDontWriteToSql = true;
@@ -3906,7 +3899,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Adventuring
+        public DynelStat Adventuring
         {
             get
             {
@@ -3956,7 +3949,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill AimedShot
+        public DynelStat AimedShot
         {
             get
             {
@@ -3976,7 +3969,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatAlienNextXP AlienNextXP
+        public DynelStat AlienNextXP
         {
             get
             {
@@ -4176,7 +4169,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill AssaultRifle
+        public DynelStat AssaultRifle
         {
             get
             {
@@ -4346,7 +4339,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill BiologicalMetamorphose
+        public DynelStat BiologicalMetamorphose
         {
             get
             {
@@ -4366,7 +4359,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill BodyDevelopment
+        public DynelStat BodyDevelopment
         {
             get
             {
@@ -4376,7 +4369,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Bow
+        public DynelStat Bow
         {
             get
             {
@@ -4386,7 +4379,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill BowSpecialAttack
+        public DynelStat BowSpecialAttack
         {
             get
             {
@@ -4406,7 +4399,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Brawl
+        public DynelStat Brawl
         {
             get
             {
@@ -4416,7 +4409,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill BreakingEntry
+        public DynelStat BreakingEntry
         {
             get
             {
@@ -4486,7 +4479,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Burst
+        public DynelStat Burst
         {
             get
             {
@@ -4756,7 +4749,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Chemistry
+        public DynelStat Chemistry
         {
             get
             {
@@ -4966,7 +4959,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill CloseCombatInitiative
+        public DynelStat CloseCombatInitiative
         {
             get
             {
@@ -5036,7 +5029,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill ComputerLiteracy
+        public DynelStat ComputerLiteracy
         {
             get
             {
@@ -5046,7 +5039,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Concealment
+        public DynelStat Concealment
         {
             get
             {
@@ -5166,7 +5159,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatCurrentNano CurrentNano
+        public DynelStat CurrentNano
         {
             get
             {
@@ -5336,7 +5329,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Dimach
+        public DynelStat Dimach
         {
             get
             {
@@ -5346,7 +5339,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill DisarmTrap
+        public DynelStat DisarmTrap
         {
             get
             {
@@ -5386,7 +5379,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill DistanceWeaponInitiative
+        public DynelStat DistanceWeaponInitiative
         {
             get
             {
@@ -5436,7 +5429,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Dodge
+        public DynelStat Dodge
         {
             get
             {
@@ -5466,7 +5459,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill DriveAir
+        public DynelStat DriveAir
         {
             get
             {
@@ -5476,7 +5469,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill DriveGround
+        public DynelStat DriveGround
         {
             get
             {
@@ -5486,7 +5479,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill DriveWater
+        public DynelStat DriveWater
         {
             get
             {
@@ -5496,7 +5489,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Duck
+        public DynelStat Duck
         {
             get
             {
@@ -5576,7 +5569,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill ElectricalEngineering
+        public DynelStat ElectricalEngineering
         {
             get
             {
@@ -5636,7 +5629,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Evade
+        public DynelStat Evade
         {
             get
             {
@@ -5776,7 +5769,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill FastAttack
+        public DynelStat FastAttack
         {
             get
             {
@@ -5806,7 +5799,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill FieldQuantumPhysics
+        public DynelStat FieldQuantumPhysics
         {
             get
             {
@@ -5836,7 +5829,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill FirstAid
+        public DynelStat FirstAid
         {
             get
             {
@@ -5866,7 +5859,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill FlingShot
+        public DynelStat FlingShot
         {
             get
             {
@@ -5876,7 +5869,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill FullAuto
+        public DynelStat FullAuto
         {
             get
             {
@@ -5996,7 +5989,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Grenade
+        public DynelStat Grenade
         {
             get
             {
@@ -6076,7 +6069,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatHealDelta HealDelta
+        public DynelStat HealDelta
         {
             get
             {
@@ -6086,7 +6079,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatHealInterval HealInterval
+        public DynelStat HealInterval
         {
             get
             {
@@ -6106,7 +6099,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatHitPoints Health
+        public DynelStat Health
         {
             get
             {
@@ -6186,7 +6179,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatIP IP
+        public DynelStat IP
         {
             get
             {
@@ -6456,7 +6449,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill LREnergyWeapon
+        public DynelStat LREnergyWeapon
         {
             get
             {
@@ -6466,7 +6459,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill LRMultipleWeapon
+        public DynelStat LRMultipleWeapon
         {
             get
             {
@@ -6586,7 +6579,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatHealth Life
+        public DynelStat Life
         {
             get
             {
@@ -6696,7 +6689,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MapNavigation
+        public DynelStat MapNavigation
         {
             get
             {
@@ -6716,7 +6709,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MartialArts
+        public DynelStat MartialArts
         {
             get
             {
@@ -6726,7 +6719,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MaterialCreation
+        public DynelStat MaterialCreation
         {
             get
             {
@@ -6736,7 +6729,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MaterialLocation
+        public DynelStat MaterialLocation
         {
             get
             {
@@ -6746,7 +6739,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MaterialMetamorphose
+        public DynelStat MaterialMetamorphose
         {
             get
             {
@@ -6786,7 +6779,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatMaxNanoEnergy MaxNanoEnergy
+        public DynelStat MaxNanoEnergy
         {
             get
             {
@@ -6826,7 +6819,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MechanicalEngineering
+        public DynelStat MechanicalEngineering
         {
             get
             {
@@ -6856,7 +6849,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MeleeEnergyWeapon
+        public DynelStat MeleeEnergyWeapon
         {
             get
             {
@@ -6866,7 +6859,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill MeleeMultiple
+        public DynelStat MeleeMultiple
         {
             get
             {
@@ -7196,7 +7189,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill NanoAC
+        public DynelStat NanoAC
         {
             get
             {
@@ -7226,7 +7219,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatNanoDelta NanoDelta
+        public DynelStat NanoDelta
         {
             get
             {
@@ -7236,7 +7229,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill NanoEnergyPool
+        public DynelStat NanoEnergyPool
         {
             get
             {
@@ -7256,7 +7249,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatNanoInterval NanoInterval
+        public DynelStat NanoInterval
         {
             get
             {
@@ -7276,7 +7269,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill NanoProgramming
+        public DynelStat NanoProgramming
         {
             get
             {
@@ -7286,7 +7279,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill NanoProwessInitiative
+        public DynelStat NanoProwessInitiative
         {
             get
             {
@@ -7356,7 +7349,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatNextSK NextSK
+        public DynelStat NextSK
         {
             get
             {
@@ -7366,7 +7359,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatNextXP NextXP
+        public DynelStat NextXP
         {
             get
             {
@@ -7726,7 +7719,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill OnehBluntWeapons
+        public DynelStat OnehBluntWeapons
         {
             get
             {
@@ -7736,7 +7729,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill OnehEdgedWeapon
+        public DynelStat OnehEdgedWeapon
         {
             get
             {
@@ -7916,7 +7909,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Parry
+        public DynelStat Parry
         {
             get
             {
@@ -8026,7 +8019,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Perception
+        public DynelStat Perception
         {
             get
             {
@@ -8156,7 +8149,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Pharmaceuticals
+        public DynelStat Pharmaceuticals
         {
             get
             {
@@ -8166,7 +8159,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill PhysicalProwessInitiative
+        public DynelStat PhysicalProwessInitiative
         {
             get
             {
@@ -8176,7 +8169,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Piercing
+        public DynelStat Piercing
         {
             get
             {
@@ -8186,7 +8179,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Pistol
+        public DynelStat Pistol
         {
             get
             {
@@ -8516,7 +8509,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill PsychologicalModification
+        public DynelStat PsychologicalModification
         {
             get
             {
@@ -8526,7 +8519,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Psychology
+        public DynelStat Psychology
         {
             get
             {
@@ -9226,7 +9219,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Rifle
+        public DynelStat Rifle
         {
             get
             {
@@ -9236,7 +9229,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Riposte
+        public DynelStat Riposte
         {
             get
             {
@@ -9276,7 +9269,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill RunSpeed
+        public DynelStat RunSpeed
         {
             get
             {
@@ -9386,7 +9379,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill SenseImprovement
+        public DynelStat SenseImprovement
         {
             get
             {
@@ -9596,7 +9589,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Shotgun
+        public DynelStat Shotgun
         {
             get
             {
@@ -9686,7 +9679,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill SneakAttack
+        public DynelStat SneakAttack
         {
             get
             {
@@ -9916,7 +9909,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill SubMachineGun
+        public DynelStat SubMachineGun
         {
             get
             {
@@ -9926,7 +9919,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Swim
+        public DynelStat Swim
         {
             get
             {
@@ -10086,7 +10079,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill ThrowingKnife
+        public DynelStat ThrowingKnife
         {
             get
             {
@@ -10096,7 +10089,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill ThrownGrapplingWeapons
+        public DynelStat ThrownGrapplingWeapons
         {
             get
             {
@@ -10146,7 +10139,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatTitleLevel TitleLevel
+        public DynelStat TitleLevel
         {
             get
             {
@@ -10346,7 +10339,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Treatment
+        public DynelStat Treatment
         {
             get
             {
@@ -10366,7 +10359,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill Tutoring
+        public DynelStat Tutoring
         {
             get
             {
@@ -10376,7 +10369,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill TwohBluntWeapons
+        public DynelStat TwohBluntWeapons
         {
             get
             {
@@ -10386,7 +10379,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill TwohEdgedWeapons
+        public DynelStat TwohEdgedWeapons
         {
             get
             {
@@ -10646,7 +10639,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public StatSkill WeaponSmithing
+        public DynelStat WeaponSmithing
         {
             get
             {

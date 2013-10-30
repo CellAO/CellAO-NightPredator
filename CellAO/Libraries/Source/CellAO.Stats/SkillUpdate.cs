@@ -26,12 +26,12 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 21:28
+// Created:       2013-10-30 21:00
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     #region Usings ...
 

@@ -26,22 +26,19 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Last modified: 2013-10-30 21:33
+// Created:       2013-10-30 21:00
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     #region Usings ...
 
     using System;
     using System.Collections.Generic;
 
-    using CellAO.Core.Entities;
     using CellAO.Interfaces;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
@@ -65,7 +62,7 @@ namespace CellAO.Core.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            DynelStat changedStat, uint valueBeforeChange, uint valueAfterChange, bool announceToPlayfield)
+            Stat changedStat, uint valueBeforeChange, uint valueAfterChange, bool announceToPlayfield)
         {
             this.Stat = changedStat;
             this.OldValue = valueBeforeChange;
@@ -91,28 +88,18 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public IInstancedEntity Parent
-        {
-            get
-            {
-                return this.Stat.Parent;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public DynelStat Stat { get; private set; }
+        public Stat Stat { get; private set; }
 
         #endregion
     }
 
     #endregion
 
-    #region ClassStat  class for one stat
+    #region Stat class for one stat
 
     /// <summary>
     /// </summary>
-    public class DynelStat : IStat
+    public class Stat : IStat
     {
         #region Fields
 
@@ -148,7 +135,7 @@ namespace CellAO.Core.Stats
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        public DynelStat(int number, uint defaultValue, bool sendBaseValue, bool dontWrite, bool announceToPlayfield)
+        public Stat(int number, uint defaultValue, bool sendBaseValue, bool dontWrite, bool announceToPlayfield)
         {
             this.StatId = number;
             this.DefaultValue = defaultValue;
@@ -158,23 +145,21 @@ namespace CellAO.Core.Stats
             this.announceToPlayfield = announceToPlayfield;
         }
 
-        /// <summary>
-        /// </summary>
-        public DynelStat()
-        {
-        }
-
         #endregion
 
         #region Public Events
 
         /// <summary>
         /// </summary>
-        public event EventHandler<StatChangedEventArgs> RaiseAfterStatChangedEvent;
+        public event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
 
         /// <summary>
         /// </summary>
-        public event EventHandler<StatChangedEventArgs> RaiseBeforeStatChangedEvent;
+        public event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
+
+        /// <summary>
+        /// </summary>
+        public event EventHandler<StatChangedEventArgs> CalculateStatEvent;
 
         #endregion
 
@@ -215,10 +200,6 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        public IInstancedEntity Parent { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public bool SendBaseValue
         {
             get
@@ -234,28 +215,7 @@ namespace CellAO.Core.Stats
 
         /// <summary>
         /// </summary>
-        private uint baseValue;
-
-        /// <summary>
-        /// </summary>
-        public uint BaseValue
-        {
-            get
-            {
-                return this.baseValue;
-            }
-
-            set
-            {
-                bool sendit = value != this.baseValue;
-                this.baseValue = value;
-                if (sendit)
-                {
-                    // TODO: Sending the value back to the client/whole playfield
-                    // Stat.Send(this.Parent, this.StatId, value, this.announceToPlayfield);
-                }
-            }
-        }
+        public uint BaseValue { get; set; }
 
         /// <summary>
         /// </summary>
@@ -297,7 +257,6 @@ namespace CellAO.Core.Stats
                 return (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
                     ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-
                 // ReSharper restore PossibleLossOfFraction
             }
 
@@ -315,14 +274,9 @@ namespace CellAO.Core.Stats
         /// </summary>
         public void AffectStats()
         {
-            if (!(this.Parent is ICharacter) && !(this.Parent is INonPlayerCharacter))
-            {
-                return;
-            }
-
             foreach (int c in this.affects)
             {
-                this.Parent.Stats[c].CalcTrickle();
+                this.Stats[c].CalcTrickle();
             }
         }
 
@@ -331,10 +285,7 @@ namespace CellAO.Core.Stats
         /// </summary>
         public virtual void CalcTrickle()
         {
-            if (!this.Parent.Starting)
-            {
-                this.AffectStats();
-            }
+            this.AffectStats();
         }
 
         /// <summary>
@@ -348,13 +299,15 @@ namespace CellAO.Core.Stats
             return val;
         }
 
+        public IStatList Stats { get; private set; }
+
         /// <summary>
         /// </summary>
         /// <param name="value">
         /// </param>
-        public void Set(uint value)
+        public void Set(uint value, bool starting = false)
         {
-            if ((this.Parent == null) || this.Parent.Starting)
+            if (starting)
             {
                 this.BaseValue = value;
                 return;
@@ -368,12 +321,8 @@ namespace CellAO.Core.Stats
                 this.BaseValue = max;
                 this.OnAfterStatChangedEvent(new StatChangedEventArgs(this, oldvalue, max, this.announceToPlayfield));
                 this.Changed = true;
-                this.WriteStatToSql();
 
-                if (!this.Parent.Starting)
-                {
-                    this.AffectStats();
-                }
+                this.OnCalculateStat(new StatChangedEventArgs(this, oldvalue, max, this.announceToPlayfield));
             }
         }
 
@@ -381,46 +330,9 @@ namespace CellAO.Core.Stats
         /// </summary>
         /// <param name="value">
         /// </param>
-        public void Set(int value)
+        public void Set(int value, bool starting = false)
         {
-            this.Set((uint)value);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="parent">
-        /// </param>
-        public void SetParent(IInstancedEntity parent)
-        {
-            this.Parent = parent;
-        }
-
-        /// <summary>
-        /// Write Stat to Sql
-        /// </summary>
-        public void WriteStatToSql()
-        {
-            this.WriteStatToSql(this.Changed);
-        }
-
-        /// <summary>
-        /// Write Stat to Sql
-        /// </summary>
-        /// <param name="doit">
-        /// </param>
-        public void WriteStatToSql(bool doit)
-        {
-            if (this.DoNotDontWriteToSql)
-            {
-                return;
-            }
-
-            if (doit)
-            {
-                Identity id = this.Parent.Identity;
-                // TODO: Write Data object and write routine in CellAO.Database
-                // StatDao.AddStat((int)id.Type, id.Instance, this.StatId, (int)this.baseValue);
-            }
+            this.Set((uint)value, starting);
         }
 
         #endregion
@@ -433,7 +345,7 @@ namespace CellAO.Core.Stats
         /// </param>
         private void OnAfterStatChangedEvent(StatChangedEventArgs e)
         {
-            EventHandler<StatChangedEventArgs> handler = this.RaiseAfterStatChangedEvent;
+            EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
             if (handler != null)
             {
                 handler(this, e);
@@ -446,7 +358,20 @@ namespace CellAO.Core.Stats
         /// </param>
         private void OnBeforeStatChangedEvent(StatChangedEventArgs e)
         {
-            EventHandler<StatChangedEventArgs> handler = this.RaiseBeforeStatChangedEvent;
+            EventHandler<StatChangedEventArgs> handler = this.BeforeStatChangedEvent;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="e">
+        /// </param>
+        private void OnCalculateStat(StatChangedEventArgs e)
+        {
+            EventHandler<StatChangedEventArgs> handler = this.CalculateStatEvent;
             if (handler != null)
             {
                 handler(this, e);

@@ -31,7 +31,7 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     #region Usings ...
 
@@ -162,16 +162,22 @@ namespace CellAO.Core.Stats
             return 0;
         }
 
+        public IStatList Stats { get; private set; }
+
         /// <summary>
         /// Create new Stat and fill with default value
         /// </summary>
+        /// <param name="statList">
+        /// Stat's owning list
+        /// </param>
         /// <param name="statNumber">
         /// Stat's id
         /// </param>
-        public StatelStat(int statNumber)
+        public StatelStat(IStatList statList, int statNumber)
         {
             this.StatId = statNumber;
             this.value = StatNamesDefaults.GetDefault(statNumber);
+            this.Stats = statList;
         }
 
         /// <summary>
@@ -183,10 +189,11 @@ namespace CellAO.Core.Stats
         /// <param name="statValue">
         /// Stat's initial value
         /// </param>
-        public StatelStat(int statNumber, int statValue)
-            : this(statNumber)
+        public StatelStat(IStatList statList, int statNumber, int statValue)
+            : this(statList, statNumber)
         {
             this.value = statValue;
+            this.Stats = statList;
         }
     }
 }

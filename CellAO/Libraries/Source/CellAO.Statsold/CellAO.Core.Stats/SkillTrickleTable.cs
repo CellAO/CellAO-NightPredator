@@ -31,7 +31,7 @@
 
 #endregion
 
-namespace CellAO.Core.Stats
+namespace CellAO.Stats
 {
     /// <summary>
     /// </summary>

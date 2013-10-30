@@ -27,83 +27,25 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-10-29 22:26
-// Created:       2013-10-29 19:57
+// Created:       2013-10-29 21:03
 
 #endregion
 
-namespace CellAO.Core.Stats.SpecialStats
+namespace CellAO.Stats
 {
     #region Usings ...
 
-    using System;
+    using CellAO.Interfaces;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class StatNextSK : DynelStat
+    public interface IStats
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <param name="defaultValue">
-        /// </param>
-        /// <param name="sendBaseValue">
-        /// </param>
-        /// <param name="doNotWrite">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        public StatNextSK(int number, uint defaultValue, bool sendBaseValue, bool doNotWrite, bool announceToPlayfield)
-        {
-            this.StatId = number;
-            this.DefaultValue = defaultValue;
-
-            this.BaseValue = this.DefaultValue;
-            this.SendBaseValue = sendBaseValue;
-            this.DoNotDontWriteToSql = doNotWrite;
-            this.AnnounceToPlayfield = announceToPlayfield;
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        public override int Value
-        {
-            get
-            {
-                int level = this.Parent.Stats["Level"].Value;
-                if (level < 200)
-                {
-                    return 0;
-                }
-
-                return Convert.ToInt32(XPTable.TableShadowLandsSK[level - 200, 2]);
-            }
-
-            set
-            {
-                Set(value);
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
-        {
-            base.CalcTrickle();
-            this.Set(this.Value);
-        }
+        IStatList Stats { get; }
 
         #endregion
     }

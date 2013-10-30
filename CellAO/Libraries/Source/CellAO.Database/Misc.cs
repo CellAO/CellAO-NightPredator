@@ -314,6 +314,7 @@ namespace CellAO.Database
             }
             catch (Exception e)
             {
+                // TODO: Log database error
                 return false;
             }
 

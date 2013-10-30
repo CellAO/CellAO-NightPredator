@@ -35,7 +35,7 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
-    using CellAO.Core.Stats;
+    using CellAO.Stats;
 
     #endregion
 
