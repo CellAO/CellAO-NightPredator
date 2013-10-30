@@ -240,7 +240,7 @@ namespace Extractor_Serializer
                 {
                     try
                     {
-                        AOPath = Path.Combine(AOPath, "cd_image\\data\\db");
+                        AOPath = Path.Combine(AOPath, "cd_image", "data", "db");
                         extractor = new Extractor(AOPath);
                         TextWriter tw2 = new StreamWriter("config.txt", false, Encoding.GetEncoding("windows-1252"));
                         tw2.WriteLine(AOPath);

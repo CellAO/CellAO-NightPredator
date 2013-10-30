@@ -26,12 +26,12 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-29 22:27
-// Created:       2013-10-29 21:26
+// Last modified: 2013-10-30 17:52
+// Created:       2013-10-30 17:51
 
 #endregion
 
-namespace ZoneEngine
+namespace Utility
 {
     #region Usings ...
 
@@ -39,8 +39,6 @@ namespace ZoneEngine
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Security;
-
-    using Utility;
 
     #endregion
 

@@ -40,46 +40,17 @@ namespace ZoneEngine
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
 
+    using Utility;
+
     #endregion
 
     internal class Program
     {
-        private static void CenteredString(string text, string boundary, ConsoleColor c = ConsoleColor.Black)
-        {
-            int consoleWidth = Console.WindowWidth;
-            ConsoleColor oldColor = Console.ForegroundColor;
-            int centered = (consoleWidth - text.Length) / 2;
-            Console.Write(boundary.PadRight(centered, ' '));
-
-            if (c != ConsoleColor.Black)
-            {
-                Console.ForegroundColor = c;
-            }
-
-            Console.Write(text);
-            Console.ForegroundColor = oldColor;
-            Console.Write(boundary.PadLeft(consoleWidth - (text.Length + centered), ' '));
-        }
-
-        private static void PrintCellAOBanner()
-        {
-            int consoleWidth = Console.WindowWidth;
-
-            Console.Clear();
-
-            Console.Write("**".PadRight(consoleWidth, '*'));
-            CenteredString("", "**");
-            CenteredString(AssemblyInfoclass.Title, "**", ConsoleColor.White);
-            CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.DarkGreen);
-            CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
-            CenteredString("", "**");
-            Console.Write("**".PadRight(consoleWidth, '*'));
-        }
 
         private static void Main(string[] args)
         {
 
-            PrintCellAOBanner();
+            OnScreenBanner.PrintCellAOBanner();
 
             ItemLoader.CacheAllItems();
             Console.WriteLine();
