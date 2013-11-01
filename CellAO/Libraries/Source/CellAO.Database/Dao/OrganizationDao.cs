@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:15
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -41,81 +41,145 @@ namespace CellAO.Database.Dao
 
     using Dapper;
 
+    using Utility;
+
     #endregion
 
     public static class OrganizationDao
     {
         public static bool OrgExists(string name)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<int>("SELECT count(*) FROM organizations WHERE Name=@name", new { name })
-                        .Single()
-                        .Equals(1);
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT count(*) FROM organizations WHERE Name=@name", new { name })
+                            .Single()
+                            .Equals(1);
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static bool OrgExists(int orgId)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<int>("SELECT count(*) FROM organizations WHERE ID=@orgId", new { orgId })
-                        .Single()
-                        .Equals(1);
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT count(*) FROM organizations WHERE ID=@orgId", new { orgId })
+                            .Single()
+                            .Equals(1);
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
         {
-            bool canBeCreated = !OrgExists(desiredOrgName);
-            if (canBeCreated)
+            try
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                bool canBeCreated = !OrgExists(desiredOrgName);
+                if (canBeCreated)
                 {
-                    conn.Execute(
-                        "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)",
-                        new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
+                    using (IDbConnection conn = Connector.GetConnection())
+                    {
+                        conn.Execute(
+                            "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)",
+                            new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
+                    }
                 }
+                return canBeCreated;
             }
-            return canBeCreated;
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
         }
 
         public static int GetOrganizationId(string orgName)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName }).Single();
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName })
+                            .Single();
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static int GetGovernmentForm(int orgId)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId }).Single();
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId })
+                            .Single();
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static DBOrganization GetOrganizationData(int orgId)
         {
-            if (!OrgExists(orgId))
+            try
             {
-                return null;
+                if (!OrgExists(orgId))
+                {
+                    return null;
+                }
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId })
+                            .Single();
+                }
             }
-            using (IDbConnection conn = Connector.GetConnection())
+            catch (Exception e)
             {
-                return conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId }).Single();
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static void SetNewPrez(int orgId, int newLeaderId)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute("UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", new { newLeaderId, orgId });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", new { newLeaderId, orgId });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
     }

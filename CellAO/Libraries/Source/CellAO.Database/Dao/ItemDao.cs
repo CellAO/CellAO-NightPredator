@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:15
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -35,11 +35,14 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
 
     using Dapper;
+
+    using Utility;
 
     #endregion
 
@@ -53,10 +56,18 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBItem> GetAll()
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return conn.Query<DBItem>("SELECT * FROM items");
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return conn.Query<DBItem>("SELECT * FROM items");
+                }
             }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+            return new List<DBItem>();
         }
 
         /// <summary>
@@ -71,13 +82,21 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static DBItem ReadItem(int containerType, int containerInstance, int containerPlacement)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBItem>(
-                        "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance AND containerplacement=@containerPlacement",
-                        new { containerType, containerInstance, containerPlacement }).Single();
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBItem>(
+                            "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance AND containerplacement=@containerPlacement",
+                            new { containerType, containerInstance, containerPlacement }).Single();
+                }
             }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+            return null;
         }
 
         /// <summary>
@@ -90,12 +109,20 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBItem> GetAllInContainer(int containerType, int containerInstance)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBItem>(
-                        "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance",
-                        new { containerType, containerInstance });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBItem>(
+                            "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance",
+                            new { containerType, containerInstance });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -105,11 +132,18 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void Save(DBItem item)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "REPLACE INTO items VALUES (@containerType, @containerInstance, @containerPlacement, @lowid, @highid, @quality, @multiplecount)",
-                    new { item });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "REPLACE INTO items VALUES (@containerType, @containerInstance, @containerPlacement, @lowid, @highid, @quality, @multiplecount)",
+                        new { item });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
             }
         }
 
@@ -123,36 +157,42 @@ namespace CellAO.Database.Dao
             {
                 return;
             }
-
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                using (IDbTransaction trans = conn.BeginTransaction())
+                using (IDbConnection conn = Connector.GetConnection())
                 {
-                    conn.Execute(
-                        "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance",
-                        new { items[0].containertype, items[0].containerinstance },
-                        transaction: trans);
-                    foreach (DBItem item in items)
+                    using (IDbTransaction trans = conn.BeginTransaction())
                     {
                         conn.Execute(
-                            "INSERT INTO items (containertype,containerinstance,containerplacement"
-                            + ",lowid,highid,quality,multiplecount) VALUES (@conttype,"
-                            + " @continstance, @contplacement, @low, @high, @ql, @mc)",
-                            new
-                                {
-                                    conttype = item.containertype,
-                                    continstance = item.containerinstance,
-                                    contplacement = item.containerplacement,
-                                    low = item.lowid,
-                                    high = item.highid,
-                                    ql = item.quality,
-                                    mc = item.multiplecount,
-                                },
+                            "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance",
+                            new { items[0].containertype, items[0].containerinstance },
                             transaction: trans);
-                    }
+                        foreach (DBItem item in items)
+                        {
+                            conn.Execute(
+                                "INSERT INTO items (containertype,containerinstance,containerplacement"
+                                + ",lowid,highid,quality,multiplecount) VALUES (@conttype,"
+                                + " @continstance, @contplacement, @low, @high, @ql, @mc)",
+                                new
+                                    {
+                                        conttype = item.containertype,
+                                        continstance = item.containerinstance,
+                                        contplacement = item.containerplacement,
+                                        low = item.lowid,
+                                        high = item.highid,
+                                        ql = item.quality,
+                                        mc = item.multiplecount,
+                                    },
+                                transaction: trans);
+                        }
 
-                    trans.Commit();
+                        trans.Commit();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
             }
         }
 
@@ -166,11 +206,18 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void RemoveItem(int containertype, int containerinstance, int containerplacement)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement",
-                    new { containertype, containerinstance, containerplacement });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement",
+                        new { containertype, containerinstance, containerplacement });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
             }
         }
     }

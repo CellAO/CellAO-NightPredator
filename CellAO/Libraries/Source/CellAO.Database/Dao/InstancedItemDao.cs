@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:15
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -35,10 +35,13 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
     using System.Data;
 
     using Dapper;
+
+    using Utility;
 
     #endregion
 
@@ -52,9 +55,17 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBInstancedItem> GetAll()
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return conn.Query<DBInstancedItem>("SELECT * FROM instanceditems");
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return conn.Query<DBInstancedItem>("SELECT * FROM instanceditems");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -66,9 +77,18 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBInstancedItem> GetById(int itemid)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return conn.Query<DBInstancedItem>("SELECT * FROM instanceditems where id = @id", new { id = itemid });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return conn.Query<DBInstancedItem>(
+                        "SELECT * FROM instanceditems where id = @id", new { id = itemid });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -78,32 +98,40 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void Save(DBInstancedItem item)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
-                    + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
-                    + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
-                    new
-                        {
-                            conttype = item.containertype,
-                            continstance = item.containerinstance,
-                            contplacement = item.containerplacement,
-                            itype = item.itemtype,
-                            iinstance = item.iteminstance,
-                            low = item.lowid,
-                            high = item.highid,
-                            ql = item.quality,
-                            mc = item.multiplecount,
-                            ix = item.x,
-                            iy = item.y,
-                            iz = item.z,
-                            hx = item.headingx,
-                            hy = item.headingy,
-                            hz = item.headingz,
-                            hw = item.headingw,
-                            st = item.stats
-                        });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
+                        + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
+                        + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
+                        new
+                            {
+                                conttype = item.containertype,
+                                continstance = item.containerinstance,
+                                contplacement = item.containerplacement,
+                                itype = item.itemtype,
+                                iinstance = item.iteminstance,
+                                low = item.lowid,
+                                high = item.highid,
+                                ql = item.quality,
+                                mc = item.multiplecount,
+                                ix = item.x,
+                                iy = item.y,
+                                iz = item.z,
+                                hx = item.headingx,
+                                hy = item.headingy,
+                                hz = item.headingz,
+                                hw = item.headingw,
+                                st = item.stats
+                            });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -117,46 +145,53 @@ namespace CellAO.Database.Dao
             {
                 return;
             }
-
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                using (IDbTransaction trans = conn.BeginTransaction())
+                using (IDbConnection conn = Connector.GetConnection())
                 {
-                    conn.Execute(
-                        "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance",
-                        new { items[0].containertype, items[0].containerinstance },
-                        transaction: trans);
-                    foreach (DBInstancedItem item in items)
+                    using (IDbTransaction trans = conn.BeginTransaction())
                     {
                         conn.Execute(
-                            "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
-                            + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
-                            + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
-                            new
-                                {
-                                    conttype = item.containertype,
-                                    continstance = item.containerinstance,
-                                    contplacement = item.containerplacement,
-                                    itype = item.itemtype,
-                                    iinstance = item.iteminstance,
-                                    low = item.lowid,
-                                    high = item.highid,
-                                    ql = item.quality,
-                                    mc = item.multiplecount,
-                                    ix = item.x,
-                                    iy = item.y,
-                                    iz = item.z,
-                                    hx = item.headingx,
-                                    hy = item.headingy,
-                                    hz = item.headingz,
-                                    hw = item.headingw,
-                                    st = item.stats
-                                },
+                            "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance",
+                            new { items[0].containertype, items[0].containerinstance },
                             transaction: trans);
-                    }
+                        foreach (DBInstancedItem item in items)
+                        {
+                            conn.Execute(
+                                "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
+                                + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
+                                + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
+                                new
+                                    {
+                                        conttype = item.containertype,
+                                        continstance = item.containerinstance,
+                                        contplacement = item.containerplacement,
+                                        itype = item.itemtype,
+                                        iinstance = item.iteminstance,
+                                        low = item.lowid,
+                                        high = item.highid,
+                                        ql = item.quality,
+                                        mc = item.multiplecount,
+                                        ix = item.x,
+                                        iy = item.y,
+                                        iz = item.z,
+                                        hx = item.headingx,
+                                        hy = item.headingy,
+                                        hz = item.headingz,
+                                        hw = item.headingw,
+                                        st = item.stats
+                                    },
+                                transaction: trans);
+                        }
 
-                    trans.Commit();
+                        trans.Commit();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -170,12 +205,20 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBInstancedItem> GetAllInContainer(int containertype, int containerinstance)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBInstancedItem>(
-                        "SELECT * FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance",
-                        new { containertype, containerinstance });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBInstancedItem>(
+                            "SELECT * FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance",
+                            new { containertype, containerinstance });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -189,11 +232,19 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void RemoveItem(int containertype, int containerinstance, int containerplacement)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement",
-                    new { containertype, containerinstance, containerplacement });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement",
+                        new { containertype, containerinstance, containerplacement });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
     }

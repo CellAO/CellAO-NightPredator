@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:15
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -35,10 +35,13 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
+    using System;
     using System.Data;
     using System.Linq;
 
     using Dapper;
+
+    using Utility;
 
     #endregion
 
@@ -46,18 +49,35 @@ namespace CellAO.Database.Dao
     {
         public static DBOnline IsOnline(int id)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBOnline>("SELECT Online from characters WHERE id=@charid", new { charid = id }).First();
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBOnline>("SELECT Online from characters WHERE id=@charid", new { charid = id })
+                            .First();
+                }
             }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+            return new DBOnline { Online = 0 };
         }
 
         public static void SetOnline(int id)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute("UPDATE characters SET online=1 WHERE id=@charid", new { charid = id });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters SET online=1 WHERE id=@charid", new { charid = id });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
     }

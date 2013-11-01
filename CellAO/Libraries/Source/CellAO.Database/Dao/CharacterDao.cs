@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:16
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -35,6 +35,7 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -42,6 +43,8 @@ namespace CellAO.Database.Dao
     using CellAO.Database.Entities;
 
     using Dapper;
+
+    using Utility;
 
     #endregion
 
@@ -55,11 +58,19 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBCharacter> GetAll()
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBCharacter>(
-                        "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -71,12 +82,20 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBCharacter>(
-                        "SELECT ID, Username, Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters WHERE Username=@username",
-                        new { username });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT ID, Username, Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters WHERE Username=@username",
+                            new { username });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -88,13 +107,21 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static IEnumerable<DBCharacter> GetById(int characterId)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return
-                    conn.Query<DBCharacter>(
-                        "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
-                        + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id",
-                        new { id = characterId });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
+                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id",
+                            new { id = characterId });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -106,11 +133,20 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static int CharExists(string name)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                int temp =
-                    conn.Query<int>("SELECT ID FROM characters where Name = @charname", new { charname = name }).Count();
-                return temp;
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    int temp =
+                        conn.Query<int>("SELECT ID FROM characters where Name = @charname", new { charname = name })
+                            .Count();
+                    return temp;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -120,34 +156,42 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void AddCharacter(DBCharacter character)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "INSERT INTO characters (Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4"
-                    + ",playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW,Username) VALUES (@Name, @FirstName, "
-                    + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
-                    + "@HeadingZ, @HeadingW, @Online,@username)",
-                    new
-                        {
-                            character.Name,
-                            character.FirstName,
-                            character.LastName,
-                            character.Textures0,
-                            character.Textures1,
-                            character.Textures2,
-                            character.Textures3,
-                            character.Textures4,
-                            character.Playfield,
-                            character.X,
-                            character.Y,
-                            character.Z,
-                            character.HeadingX,
-                            character.HeadingY,
-                            character.HeadingZ,
-                            character.HeadingW,
-                            Online = 0,
-                            username = character.Username
-                        });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "INSERT INTO characters (Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4"
+                        + ",playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW,Username) VALUES (@Name, @FirstName, "
+                        + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
+                        + "@HeadingZ, @HeadingW, @Online,@username)",
+                        new
+                            {
+                                character.Name,
+                                character.FirstName,
+                                character.LastName,
+                                character.Textures0,
+                                character.Textures1,
+                                character.Textures2,
+                                character.Textures3,
+                                character.Textures4,
+                                character.Playfield,
+                                character.X,
+                                character.Y,
+                                character.Z,
+                                character.HeadingX,
+                                character.HeadingY,
+                                character.HeadingZ,
+                                character.HeadingW,
+                                Online = 0,
+                                username = character.Username
+                            });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
@@ -168,11 +212,19 @@ namespace CellAO.Database.Dao
 
         public static void UpdatePosition(DBCharacter db)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "UPDATE characters SET playfield = @Playfield, X = @X, Y = @Y, Z = @Z WHERE id=@Id",
-                    new { db.Playfield, db.X, db.Y, db.Z, db.Id });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "UPDATE characters SET playfield = @Playfield, X = @X, Y = @Y, Z = @Z WHERE id=@Id",
+                        new { db.Playfield, db.X, db.Y, db.Z, db.Id });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 

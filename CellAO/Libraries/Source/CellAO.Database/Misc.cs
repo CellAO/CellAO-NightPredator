@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:54
+// Last modified: 2013-11-01 17:01
 // Created:       2013-11-01 08:17
 
 #endregion
@@ -81,9 +81,9 @@ namespace CellAO.Database
                             "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres, p));
                 }
             }
-                // TODO: Catch
-            catch
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
             }
             return orgMembers;
         }
@@ -92,9 +92,16 @@ namespace CellAO.Database
         /// </summary>
         public static void LogOffAll()
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute("UPDATE characters set Online=0");
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters set Online=0");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
             }
         }
 
@@ -104,9 +111,16 @@ namespace CellAO.Database
         /// </param>
         public static void LogOffCharacter(int characterId)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute("UPDATE characters set Online=0 where id=@charid", new { charid = characterId });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters set Online=0 where id=@charid", new { charid = characterId });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
             }
         }
 

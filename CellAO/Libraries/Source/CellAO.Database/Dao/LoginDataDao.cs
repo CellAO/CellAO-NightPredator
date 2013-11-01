@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 17:17
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -42,65 +42,91 @@ namespace CellAO.Database.Dao
 
     using Dapper;
 
+    using Utility;
+
     #endregion
 
     public static class LoginDataDao
     {
         public static IEnumerable<DBLoginData> GetAll()
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                return conn.Query<DBLoginData>("SELECT * FROM login");
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return conn.Query<DBLoginData>("SELECT * FROM login");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static DBLoginData GetByUsername(string username)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                try
+                using (IDbConnection conn = Connector.GetConnection())
                 {
                     return
                         conn.Query<DBLoginData>("SELECT * FROM login where Username=@user", new { user = username })
                             .First();
                 }
-                catch (Exception)
-                {
-                    return null;
-                }
+            }
+            catch
+            {
+                return null;
             }
         }
 
         public static void WriteLoginData(DBLoginData login)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
-                    new
-                        {
-                            creationdate = DateTime.Now,
-                            email = login.Email,
-                            firstname = login.FirstName,
-                            lastname = login.LastName,
-                            username = login.Username,
-                            password = login.Password,
-                            allowed_characters = login.Allowed_Characters,
-                            flags = login.Flags,
-                            accountflags = login.AccountFlags,
-                            expansions = login.Expansions,
-                            gm = login.GM
-                        });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
+                        new
+                            {
+                                creationdate = DateTime.Now,
+                                email = login.Email,
+                                firstname = login.FirstName,
+                                lastname = login.LastName,
+                                username = login.Username,
+                                password = login.Password,
+                                allowed_characters = login.Allowed_Characters,
+                                flags = login.Flags,
+                                accountflags = login.AccountFlags,
+                                expansions = login.Expansions,
+                                gm = login.GM
+                            });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 
         public static void WriteNewPassword(DBLoginData login)
         {
-            using (IDbConnection conn = Connector.GetConnection())
+            try
             {
-                conn.Execute(
-                    "UPDATE login SET password=@pwd WHERE Username=@user",
-                    new { pwd = login.Password, user = login.Username });
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "UPDATE login SET password=@pwd WHERE Username=@user",
+                        new { pwd = login.Password, user = login.Username });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
     }
