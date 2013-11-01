@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 12:30
+// Last modified: 2013-11-01 16:22
 // Created:       2013-11-01 10:41
 
 #endregion
@@ -47,6 +47,8 @@ namespace CellAO.Core.Inventory
     /// </summary>
     public abstract class BaseInventoryPages : IInventoryPages
     {
+        public IItemContainer Owner { get; private set; }
+
         /// <summary>
         /// </summary>
         public IDictionary<int, IInventoryPage> Pages { get; private set; }
@@ -104,9 +106,9 @@ namespace CellAO.Core.Inventory
         /// </returns>
         public bool Read()
         {
-            foreach (IInventoryPage ip in this.Pages.Values)
+            foreach (IInventoryPage inventoryPage in this.Pages.Values)
             {
-                ip.Read();
+                inventoryPage.Read();
             }
 
             return true;
@@ -118,9 +120,9 @@ namespace CellAO.Core.Inventory
         /// </returns>
         public bool Write()
         {
-            foreach (IInventoryPage ip in this.Pages.Values)
+            foreach (IInventoryPage inventoryPage in this.Pages.Values)
             {
-                ip.Write();
+                inventoryPage.Write();
             }
 
             return true;
@@ -198,7 +200,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="standardpage">
         /// </param>
-        public BaseInventoryPages(int standardpage)
+        public BaseInventoryPages(int standardpage, IItemContainer owner)
             : this()
         {
             this.StandardPage = standardpage;

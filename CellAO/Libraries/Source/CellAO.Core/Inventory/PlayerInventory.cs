@@ -27,24 +27,28 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
 // Last modified: 2013-11-01 16:22
-// Created:       2013-11-01 08:17
+// Created:       2013-11-01 15:46
 
 #endregion
 
-namespace CellAO.Core.InternalMessaging
+namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
-    using CellAO.Core.Network;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
-    public interface IIMSendAOtMessageToClient
+    public class PlayerInventory : UnitInventory
     {
-        IZoneClient client { get; set; }
-
-        Message message { get; set; }
+        public PlayerInventory(IItemContainer owner)
+            : base(owner)
+        {
+            this.StandardPage = (int)IdentityType.Inventory;
+            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
+        }
     }
 }

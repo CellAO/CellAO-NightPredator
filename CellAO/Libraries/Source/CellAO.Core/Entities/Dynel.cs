@@ -26,8 +26,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 21:43
+// Last modified: 2013-11-01 16:22
+// Created:       2013-11-01 08:17
 
 #endregion
 
@@ -35,13 +35,16 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
+    using System;
+
+    using CellAO.Core.Inventory;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
-    public partial class Dynel : INamedEntity
+    public partial class Dynel : INamedEntity, IItemContainer
     {
         #region Constructors and Destructors
 
@@ -54,13 +57,10 @@ namespace CellAO.Core.Entities
             this.Stats = new Stats(this.Identity);
             this.InitializeStats();
 
+            this.BaseInventory = new UnitInventory(this);
+
             this.DoNotDoTimers = false;
             this.Starting = false;
-        }
-
-        private void InitializeInventory()
-        {
-            
         }
 
         #endregion
@@ -98,5 +98,17 @@ namespace CellAO.Core.Entities
         }
 
         #endregion
+
+        public bool Read()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Write()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInventoryPages BaseInventory { get; private set; }
     }
 }

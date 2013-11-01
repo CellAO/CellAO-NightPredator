@@ -99,9 +99,11 @@
     <Compile Include="Inventory\KnuBotTradeInventoryPage.cs" />
     <Compile Include="Inventory\OutgoingTradeInventoryPage.cs" />
     <Compile Include="Inventory\OverflowInventoryPage.cs" />
+    <Compile Include="Inventory\PlayerInventory.cs" />
     <Compile Include="Inventory\PlayerInventoryPage.cs" />
     <Compile Include="Inventory\PlayerShopInventoryPage.cs" />
     <Compile Include="Inventory\SocialArmorInventoryPage.cs" />
+    <Compile Include="Inventory\UnitInventory.cs" />
     <Compile Include="Inventory\WeaponInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
