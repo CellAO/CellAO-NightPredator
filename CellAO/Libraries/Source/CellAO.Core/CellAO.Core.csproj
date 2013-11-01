@@ -83,6 +83,7 @@
     <Compile Include="InternalMessaging\IIMSendAOtMessageToClient.cs" />
     <Compile Include="InternalMessaging\IInternalMessage.cs" />
     <Compile Include="InternalMessaging\IInternalMessageBody.cs" />
+    <Compile Include="Inventory\BackPackInventory.cs" />
     <Compile Include="Inventory\BaseInventory.cs" />
     <Compile Include="Inventory\BaseInventoryPage.cs" />
     <Compile Include="Inventory\IInventoryPage.cs" />
