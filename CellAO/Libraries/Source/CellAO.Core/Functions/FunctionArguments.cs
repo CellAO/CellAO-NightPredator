@@ -82,17 +82,17 @@ namespace CellAO.Core.Functions
             packer.PackArrayHeader(this.Values.Count);
             foreach (object obj in this.Values)
             {
-                if (obj.GetType() == typeof(string))
+                if (obj is string)
                 {
                     string temp = (string)obj;
                     packer.PackString(temp, Encoding.GetEncoding("UTF-8"));
                 }
-                else if (obj.GetType() == typeof(Single))
+                else if (obj is float)
                 {
                     float temp = (Single)obj;
                     packer.Pack<float>(temp);
                 }
-                else if (obj.GetType() == typeof(int))
+                else if (obj is int)
                 {
                     int temp = (Int32)obj;
                     packer.Pack(temp);
@@ -111,25 +111,25 @@ namespace CellAO.Core.Functions
         /// </exception>
         public void UnpackFromMessage(Unpacker unpacker)
         {
-            int numberOfItems = unpacker.Data.Value.AsInt32();
+            int numberOfItems = unpacker.LastReadData.AsInt32();
 
             while (numberOfItems > 0)
             {
                 unpacker.ReadItem();
 
-                if (unpacker.Data.Value.IsTypeOf(typeof(Int32)) == true)
+                if (unpacker.LastReadData.IsTypeOf(typeof(Int32)) == true)
                 {
-                    int temp = unpacker.Data.Value.AsInt32();
+                    int temp = unpacker.LastReadData.AsInt32();
                     this.Values.Add(temp);
                 }
-                else if (unpacker.Data.Value.IsTypeOf(typeof(Single)) == true)
+                else if (unpacker.LastReadData.IsTypeOf(typeof(Single)) == true)
                 {
-                    float temp = unpacker.Data.Value.AsSingle();
+                    float temp = unpacker.LastReadData.AsSingle();
                     this.Values.Add(temp);
                 }
-                else if (unpacker.Data.Value.IsTypeOf(typeof(String)) == true)
+                else if (unpacker.LastReadData.IsTypeOf(typeof(String)) == true)
                 {
-                    string temp = unpacker.Data.Value.AsStringUtf8();
+                    string temp = unpacker.LastReadData.AsStringUtf8();
                     this.Values.Add(temp);
                 }
                 else
