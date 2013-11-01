@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,47 +21,22 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
 namespace CellAO.Interfaces
 {
+    /// <summary>
+    /// </summary>
     public interface IQuaternion
     {
-        /// <summary>
-        /// x component of the Quaternion
-        /// </summary>
-        float xf { get; }
+        #region Public Properties
 
         /// <summary>
-        /// y component of the Quaternion
+        /// Return the Magnitude of the Quaternion
         /// </summary>
-        float yf { get; }
-
-        /// <summary>
-        /// z component of the Quaternion
-        /// </summary>
-        float zf { get; }
-
-        /// <summary>
-        /// w component of the Quaternion
-        /// </summary>
-        float wf { get; }
-
-        double x { get; set; }
-
-        double y { get; set; }
-
-        double z { get; set; }
-
-        double w { get; set; }
-
-        /// <summary>
-        /// Return the yaw/heading of the Quaternion (flight dynamics style). Value 0 - 2pi Radians or 0 to 360 if converted to degrees (North turning clockwise to a complete revolution)
-        /// </summary>
-        double yaw { get; }
+        double magnitude { get; }
 
         /// <summary>
         /// Return the pitch/attitude of the Quaternion (flight dynamics style). Value pi/2 through -pi/2 or 90 to -90 if converted to degrees (90 is nose in the air, 0 is level, -90 is nose to the ground)
@@ -78,26 +49,49 @@ namespace CellAO.Interfaces
         double roll { get; }
 
         /// <summary>
-        /// Return the Magnitude of the Quaternion
         /// </summary>
-        double magnitude { get; }
+        double w { get; set; }
 
         /// <summary>
-        /// Update a Quaternion to a new value using its Components
-        /// </summary>
-        /// <param name="x">
-        /// x component of the Quaternion
-        /// </param>
-        /// <param name="y">
-        /// y component of the Quaternion
-        /// </param>
-        /// <param name="z">
-        /// z component of the Quaternion
-        /// </param>
-        /// <param name="w">
         /// w component of the Quaternion
-        /// </param>
-        void update(double x, double y, double z, double w);
+        /// </summary>
+        float wf { get; }
+
+        /// <summary>
+        /// </summary>
+        double x { get; set; }
+
+        /// <summary>
+        /// x component of the Quaternion
+        /// </summary>
+        float xf { get; }
+
+        /// <summary>
+        /// </summary>
+        double y { get; set; }
+
+        /// <summary>
+        /// Return the yaw/heading of the Quaternion (flight dynamics style). Value 0 - 2pi Radians or 0 to 360 if converted to degrees (North turning clockwise to a complete revolution)
+        /// </summary>
+        double yaw { get; }
+
+        /// <summary>
+        /// y component of the Quaternion
+        /// </summary>
+        float yf { get; }
+
+        /// <summary>
+        /// </summary>
+        double z { get; set; }
+
+        /// <summary>
+        /// z component of the Quaternion
+        /// </summary>
+        float zf { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Return the Conjugate (Spacial Inverse) of the Quaternion
@@ -105,6 +99,16 @@ namespace CellAO.Interfaces
         /// <returns>
         /// </returns>
         IQuaternion Conjugate();
+
+        /// <summary>
+        /// Fill this info in
+        /// </summary>
+        /// <param name="vDirection">
+        /// </param>
+        /// <returns>
+        /// Fill this info in
+        /// </returns>
+        IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection);
 
         /// <summary>
         /// Returns the Hamilton Product of two Quaternions
@@ -124,16 +128,6 @@ namespace CellAO.Interfaces
         IQuaternion Normalize();
 
         /// <summary>
-        /// Fill this info in
-        /// </summary>
-        /// <param name="vDirection">
-        /// </param>
-        /// <returns>
-        /// Fill this info in
-        /// </returns>
-        IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection);
-
-        /// <summary>
         /// Return a Vector rotated around the Quaternion
         /// Note: Only works for Unit Quaternions at present due to lazyness (AO-provided Quaternions are all Unit Quaternions)
         /// </summary>
@@ -150,5 +144,24 @@ namespace CellAO.Interfaces
         /// <returns>
         /// </returns>
         IVector3 VectorRepresentation();
+
+        /// <summary>
+        /// Update a Quaternion to a new value using its Components
+        /// </summary>
+        /// <param name="x">
+        /// x component of the Quaternion
+        /// </param>
+        /// <param name="y">
+        /// y component of the Quaternion
+        /// </param>
+        /// <param name="z">
+        /// z component of the Quaternion
+        /// </param>
+        /// <param name="w">
+        /// w component of the Quaternion
+        /// </param>
+        void update(double x, double y, double z, double w);
+
+        #endregion
     }
 }

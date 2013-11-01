@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:02
 
 #endregion
 
@@ -38,10 +33,6 @@ namespace CellAO.Stats
 
     using System;
     using System.Collections.Generic;
-
-    #endregion
-
-    #region StatChangedEventArgs
 
     #endregion
 
@@ -63,9 +54,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat,
-            uint valueBeforeChange,
-            uint valueAfterChange,
+            Stat changedStat, 
+            uint valueBeforeChange, 
+            uint valueAfterChange, 
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -117,11 +108,11 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private bool sendBaseValue = true;
+        private int percentageModifier = 100; // From Items/Perks/Nanos
 
         /// <summary>
         /// </summary>
-        private int percentageModifier = 100; // From Items/Perks/Nanos
+        private bool sendBaseValue = true;
 
         #endregion
 
@@ -196,7 +187,15 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        public uint BaseValue { get; set; }
+
+        /// <summary>
+        /// </summary>
         public bool Changed { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public uint DefaultValue { get; set; }
 
         /// <summary>
         /// </summary>
@@ -204,26 +203,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public bool SendBaseValue
-        {
-            get
-            {
-                return this.sendBaseValue;
-            }
-
-            set
-            {
-                this.sendBaseValue = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public uint DefaultValue { get; set; }
+        public int Modifier { get; set; }
 
         /// <summary>
         /// </summary>
@@ -242,15 +222,30 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public int Trickle { get; set; }
+        public bool SendBaseValue
+        {
+            get
+            {
+                return this.sendBaseValue;
+            }
 
-        /// <summary>
-        /// </summary>
-        public int Modifier { get; set; }
+            set
+            {
+                this.sendBaseValue = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
         public int StatId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public IStatList Stats { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public int Trickle { get; set; }
 
         /// <summary>
         /// </summary>
@@ -261,6 +256,7 @@ namespace CellAO.Stats
                 return (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
                         ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+
                 // ReSharper restore PossibleLossOfFraction
             }
 
@@ -285,11 +281,11 @@ namespace CellAO.Stats
             return val;
         }
 
-        public IStatList Stats { get; private set; }
-
         /// <summary>
         /// </summary>
         /// <param name="value">
+        /// </param>
+        /// <param name="starting">
         /// </param>
         public void Set(uint value, bool starting = false)
         {
@@ -315,6 +311,8 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         /// <param name="value">
+        /// </param>
+        /// <param name="starting">
         /// </param>
         public void Set(int value, bool starting = false)
         {

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -34,9 +29,9 @@ namespace CellAO.Database
 {
     #region Usings ...
 
-    using System;
     using System.Data;
 
+    using CellAO.Core.Exceptions;
     using CellAO.Interfaces;
 
     using Utility.Config;
@@ -44,72 +39,94 @@ namespace CellAO.Database
     #endregion
 
     /// <summary>
+    /// Main hub for database connections
     /// </summary>
     public static class Connector
     {
-        /// <summary>
-        /// </summary>
-        public static string Sqltype = ConfigReadWrite.Instance.CurrentConfig.SQLType;
+        #region Static Fields
 
         /// <summary>
-        /// only needed once to read this
+        /// Connection string for ms sql
         /// </summary>
-        private static readonly string ConnectionString_MySQL = ConfigReadWrite.Instance.CurrentConfig.MysqlConnection;
+        private static readonly string ConnectionStringMssql = ConfigReadWrite.Instance.CurrentConfig.MsSqlConnection;
 
         /// <summary>
+        /// Connection string for mysql
         /// </summary>
-        private static readonly string ConnectionString_MSSQL = ConfigReadWrite.Instance.CurrentConfig.MsSqlConnection;
+        private static readonly string ConnectionStringMySql = ConfigReadWrite.Instance.CurrentConfig.MysqlConnection;
 
         /// <summary>
+        /// Connection string for Postgresql
         /// </summary>
-        private static readonly string ConnectionString_PostGreSQL =
+        private static readonly string ConnectionStringPostGreSql =
             ConfigReadWrite.Instance.CurrentConfig.PostgreConnection;
 
+        /// <summary>
+        /// Database connector
+        /// </summary>
         private static IDatabaseConnector connector;
+
+        /// <summary>
+        /// Type of SQL from config file
+        /// </summary>
+        private static string sqlType = ConfigReadWrite.Instance.CurrentConfig.SQLType;
+
+        #endregion
 
         // CONNECTION POOLING IS A MUST!!!
         // TODO: Rewrite needed for config.xml, only providing username, password and database. Create connection string via stringbuilders
+
+        #region Public Methods and Operators
+
         /// <summary>
+        /// Get IDbConnection depending on configuration file
         /// </summary>
         /// <returns>
+        /// IDbConnection to the database
         /// </returns>
-        /// <exception cref="Exception">
+        /// <exception cref="DatabaseCouldNotBeDeterminedException">
+        /// Database could not be determined (check config.xml)
+        /// </exception>
+        /// <exception cref="ConnectionStringErrorException">
+        /// Connection could not be established (check config.xml)
         /// </exception>
         public static IDbConnection GetConnection()
         {
             IDbConnection conn = null;
             if (connector == null)
             {
-                if (Sqltype == "MySql")
+                if (sqlType == "MySql")
                 {
-                    connector = new MySQLConnector(ConnectionString_MySQL);
+                    connector = new MySQLConnector(ConnectionStringMySql);
                 }
 
-                if (Sqltype == "MsSql")
+                if (sqlType == "MsSql")
                 {
-                    connector = new MSSqlConnector(ConnectionString_MSSQL);
+                    connector = new MSSqlConnector(ConnectionStringMssql);
                 }
 
-                if (Sqltype == "PostgreSQL")
+                if (sqlType == "PostgreSQL")
                 {
-                    connector = new NpgsqlConnector(ConnectionString_PostGreSQL);
+                    connector = new NpgsqlConnector(ConnectionStringPostGreSql);
                 }
             }
 
             if (connector == null)
             {
-                throw new Exception("Could not determine your database");
+                throw new DatabaseCouldNotBeDeterminedException("Could not determine your database");
             }
 
             conn = connector.GetConnection();
 
             if (conn == null)
             {
-                throw new Exception("ConnectionString error");
+                throw new ConnectionStringErrorException("ConnectionString error");
             }
 
             conn.Open();
             return conn;
         }
+
+        #endregion
     }
 }

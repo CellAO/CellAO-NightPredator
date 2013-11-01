@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:06
 
 #endregion
 
@@ -53,75 +48,7 @@ namespace CellAO.Core.Vector
     /// </summary>
     public class Quaternion : IQuaternion
     {
-        #region Variables
-
-        /// <summary>
-        /// x component of the Quaternion
-        /// </summary>
-        public double x { get; set; }
-
-        /// <summary>
-        /// x component of the Quaternion
-        /// </summary>
-        public float xf
-        {
-            get
-            {
-                return (float)this.x;
-            }
-        }
-
-        /// <summary>
-        /// y component of the Quaternion
-        /// </summary>
-        public double y { get; set; }
-
-        /// <summary>
-        /// y component of the Quaternion
-        /// </summary>
-        public float yf
-        {
-            get
-            {
-                return (float)this.y;
-            }
-        }
-
-        /// <summary>
-        /// z component of the Quaternion
-        /// </summary>
-        public double z { get; set; }
-
-        /// <summary>
-        /// z component of the Quaternion
-        /// </summary>
-        public float zf
-        {
-            get
-            {
-                return (float)this.z;
-            }
-        }
-
-        /// <summary>
-        /// w component of the Quaternion
-        /// </summary>
-        public double w { get; set; }
-
-        /// <summary>
-        /// w component of the Quaternion
-        /// </summary>
-        public float wf
-        {
-            get
-            {
-                return (float)this.w;
-            }
-        }
-
-        #endregion
-
-        #region Constructor
+        #region Constructors and Destructors
 
         /// <summary>
         /// Create a Quaternion from its Components
@@ -186,48 +113,16 @@ namespace CellAO.Core.Vector
 
         #endregion
 
-        #region Methods
+        #region Public Properties
 
         /// <summary>
-        /// Update a Quaternion to a new value using its Components
+        /// Return the Magnitude of the Quaternion
         /// </summary>
-        /// <param name="x">
-        /// x component of the Quaternion
-        /// </param>
-        /// <param name="y">
-        /// y component of the Quaternion
-        /// </param>
-        /// <param name="z">
-        /// z component of the Quaternion
-        /// </param>
-        /// <param name="w">
-        /// w component of the Quaternion
-        /// </param>
-        public void update(double x, double y, double z, double w)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
-        }
-
-        /// <summary>
-        /// Return the yaw/heading of the Quaternion (flight dynamics style). Value 0 - 2pi Radians or 0 to 360 if converted to degrees (North turning clockwise to a complete revolution)
-        /// </summary>
-        public double yaw
+        public double magnitude
         {
             get
             {
-                double _yaw = Math.Atan2(
-                    (2 * this.y * this.w) - (2 * this.x * this.z),
-                    1 - (2 * this.y * this.y) - (2 * this.z * this.z));
-                if (_yaw < 0)
-                {
-                    // So we get a positive number
-                    _yaw += 2 * Math.PI;
-                }
-
-                return _yaw;
+                return Math.Sqrt((this.x * this.x) + (this.y * this.y) + (this.z * this.z) + (this.w * this.w));
             }
         }
 
@@ -240,7 +135,7 @@ namespace CellAO.Core.Vector
             {
                 return -2
                        * Math.Atan2(
-                           (2 * this.x * this.w) - (2 * this.y * this.z),
+                           (2 * this.x * this.w) - (2 * this.y * this.z), 
                            1 - (2 * this.x * this.y) - (2 * this.z * this.z));
             }
         }
@@ -259,15 +154,92 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
-        /// Return the Magnitude of the Quaternion
+        /// w component of the Quaternion
         /// </summary>
-        public double magnitude
+        public double w { get; set; }
+
+        /// <summary>
+        /// w component of the Quaternion
+        /// </summary>
+        public float wf
         {
             get
             {
-                return Math.Sqrt((this.x * this.x) + (this.y * this.y) + (this.z * this.z) + (this.w * this.w));
+                return (float)this.w;
             }
         }
+
+        /// <summary>
+        /// x component of the Quaternion
+        /// </summary>
+        public double x { get; set; }
+
+        /// <summary>
+        /// x component of the Quaternion
+        /// </summary>
+        public float xf
+        {
+            get
+            {
+                return (float)this.x;
+            }
+        }
+
+        /// <summary>
+        /// y component of the Quaternion
+        /// </summary>
+        public double y { get; set; }
+
+        /// <summary>
+        /// Return the yaw/heading of the Quaternion (flight dynamics style). Value 0 - 2pi Radians or 0 to 360 if converted to degrees (North turning clockwise to a complete revolution)
+        /// </summary>
+        public double yaw
+        {
+            get
+            {
+                double _yaw = Math.Atan2(
+                    (2 * this.y * this.w) - (2 * this.x * this.z), 
+                    1 - (2 * this.y * this.y) - (2 * this.z * this.z));
+                if (_yaw < 0)
+                {
+                    // So we get a positive number
+                    _yaw += 2 * Math.PI;
+                }
+
+                return _yaw;
+            }
+        }
+
+        /// <summary>
+        /// y component of the Quaternion
+        /// </summary>
+        public float yf
+        {
+            get
+            {
+                return (float)this.y;
+            }
+        }
+
+        /// <summary>
+        /// z component of the Quaternion
+        /// </summary>
+        public double z { get; set; }
+
+        /// <summary>
+        /// z component of the Quaternion
+        /// </summary>
+        public float zf
+        {
+            get
+            {
+                return (float)this.z;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Return the Conjugate of the Quaternion
@@ -280,16 +252,6 @@ namespace CellAO.Core.Vector
         public static Quaternion Conjugate(Quaternion q1)
         {
             return new Quaternion(-q1.x, -q1.y, -q1.z, q1.w);
-        }
-
-        /// <summary>
-        /// Return the Conjugate (Spacial Inverse) of the Quaternion
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public IQuaternion Conjugate()
-        {
-            return Conjugate(this);
         }
 
         /// <summary>
@@ -314,19 +276,6 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
-        /// Returns the Hamilton Product of two Quaternions
-        /// </summary>
-        /// <param name="vRight">
-        /// Other Quaternion
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public IQuaternion Hamilton(IQuaternion vRight)
-        {
-            return Hamilton(this, vRight);
-        }
-
-        /// <summary>
         /// Return a Normalized Quaternion
         /// </summary>
         /// <param name="q1">
@@ -342,16 +291,46 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
-        /// Return a Normalized Quaternion
+        /// Return a Vector rotated around the Quaternion
+        /// </summary>
+        /// <param name="q1">
+        /// Quaternion
+        /// </param>
+        /// <param name="v2">
+        /// Vector
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IVector3 RotateVector3(IQuaternion q1, IVector3 v2)
+        {
+            Quaternion QuatVect = new Quaternion(v2.x, v2.y, v2.z, 0);
+            Quaternion QuatNorm = (Quaternion)q1.Normalize();
+            Quaternion Result = Hamilton(Hamilton(QuatNorm, QuatVect), QuatNorm.Conjugate());
+            return new Vector3(Result.x, Result.y, Result.z);
+        }
+
+        /// <summary>
+        /// Return a Vector representation of a Quaternion (w is dropped)
+        /// </summary>
+        /// <param name="q1">
+        /// Quaternion
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IVector3 VectorRepresentation(Quaternion q1)
+        {
+            return new Vector3(q1.x, q1.y, q1.z);
+        }
+
+        /// <summary>
+        /// Return the Conjugate (Spacial Inverse) of the Quaternion
         /// </summary>
         /// <returns>
         /// </returns>
-        public IQuaternion Normalize()
+        public IQuaternion Conjugate()
         {
-            return Normalize(this);
+            return Conjugate(this);
         }
-
-        // Create Quat from Vec3
 
         /// <summary>
         /// Fill this info in
@@ -386,30 +365,34 @@ namespace CellAO.Core.Vector
             }
 
             Quaternion qrot = new Quaternion(
-                (float)((mBasis.At(3, 2) - mBasis.At(2, 3)) / dfWScale),
-                (float)((mBasis.At(0, 2) - mBasis.At(2, 0)) / dfWScale),
-                (float)((mBasis.At(1, 0) - mBasis.At(0, 1)) / dfWScale),
+                (float)((mBasis.At(3, 2) - mBasis.At(2, 3)) / dfWScale), 
+                (float)((mBasis.At(0, 2) - mBasis.At(2, 0)) / dfWScale), 
+                (float)((mBasis.At(1, 0) - mBasis.At(0, 1)) / dfWScale), 
                 (float)Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f);
             return qrot;
         }
 
         /// <summary>
-        /// Return a Vector rotated around the Quaternion
+        /// Returns the Hamilton Product of two Quaternions
         /// </summary>
-        /// <param name="q1">
-        /// Quaternion
-        /// </param>
-        /// <param name="v2">
-        /// Vector
+        /// <param name="vRight">
+        /// Other Quaternion
         /// </param>
         /// <returns>
         /// </returns>
-        public static IVector3 RotateVector3(IQuaternion q1, IVector3 v2)
+        public IQuaternion Hamilton(IQuaternion vRight)
         {
-            Quaternion QuatVect = new Quaternion(v2.x, v2.y, v2.z, 0);
-            Quaternion QuatNorm = (Quaternion)q1.Normalize();
-            Quaternion Result = Hamilton(Hamilton(QuatNorm, QuatVect), QuatNorm.Conjugate());
-            return new Vector3(Result.x, Result.y, Result.z);
+            return Hamilton(this, vRight);
+        }
+
+        /// <summary>
+        /// Return a Normalized Quaternion
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public IQuaternion Normalize()
+        {
+            return Normalize(this);
         }
 
         /// <summary>
@@ -429,24 +412,34 @@ namespace CellAO.Core.Vector
         /// <summary>
         /// Return a Vector representation of a Quaternion (w is dropped)
         /// </summary>
-        /// <param name="q1">
-        /// Quaternion
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static IVector3 VectorRepresentation(Quaternion q1)
-        {
-            return new Vector3(q1.x, q1.y, q1.z);
-        }
-
-        /// <summary>
-        /// Return a Vector representation of a Quaternion (w is dropped)
-        /// </summary>
         /// <returns>
         /// </returns>
         public IVector3 VectorRepresentation()
         {
             return VectorRepresentation(this);
+        }
+
+        /// <summary>
+        /// Update a Quaternion to a new value using its Components
+        /// </summary>
+        /// <param name="x">
+        /// x component of the Quaternion
+        /// </param>
+        /// <param name="y">
+        /// y component of the Quaternion
+        /// </param>
+        /// <param name="z">
+        /// z component of the Quaternion
+        /// </param>
+        /// <param name="w">
+        /// w component of the Quaternion
+        /// </param>
+        public void update(double x, double y, double z, double w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
         }
 
         #endregion

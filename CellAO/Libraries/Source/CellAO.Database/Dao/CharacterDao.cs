@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -48,47 +43,50 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Character Data Access Object
     /// </summary>
     public static class CharacterDao
     {
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public static IEnumerable<DBCharacter> GetAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
+        #region Public Methods and Operators
 
         /// <summary>
+        /// Insert a new character
         /// </summary>
-        /// <param name="username">
+        /// <param name="character">
+        /// The DBCharacter object to store
         /// </param>
-        /// <returns>
-        /// </returns>
-        public static IEnumerable<DBCharacter> GetAllForUser(string username)
+        public static void AddCharacter(DBCharacter character)
         {
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT ID, Username, Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters WHERE Username=@username",
-                            new { username });
+                    conn.Execute(
+                        "INSERT INTO characters (Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4"
+                        + ",playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW,Username) VALUES (@Name, @FirstName, "
+                        + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
+                        + "@HeadingZ, @HeadingW, @Online,@username)", 
+                        new
+                        {
+                            character.Name, 
+                            character.FirstName, 
+                            character.LastName, 
+                            character.Textures0, 
+                            character.Textures1, 
+                            character.Textures2, 
+                            character.Textures3, 
+                            character.Textures4, 
+                            character.Playfield, 
+                            character.X, 
+                            character.Y, 
+                            character.Z, 
+                            character.HeadingX, 
+                            character.HeadingY, 
+                            character.HeadingZ, 
+                            character.HeadingW, 
+                            Online = 0, 
+                            username = character.Username
+                        });
                 }
             }
             catch (Exception e)
@@ -99,36 +97,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static IEnumerable<DBCharacter> GetById(int characterId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
-                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id",
-                            new { id = characterId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
+        /// Does the Character exist
         /// </summary>
         /// <param name="name">
+        /// Name of the Character
         /// </param>
         /// <returns>
+        /// returns 1 if it exists
         /// </returns>
         public static int CharExists(string name)
         {
@@ -150,41 +125,20 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Load all Character data
         /// </summary>
-        /// <param name="character">
-        /// </param>
-        public static void AddCharacter(DBCharacter character)
+        /// <returns>
+        /// Collection of DBCharacter
+        /// </returns>
+        public static IEnumerable<DBCharacter> GetAll()
         {
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    conn.Execute(
-                        "INSERT INTO characters (Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4"
-                        + ",playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW,Username) VALUES (@Name, @FirstName, "
-                        + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
-                        + "@HeadingZ, @HeadingW, @Online,@username)",
-                        new
-                        {
-                            character.Name,
-                            character.FirstName,
-                            character.LastName,
-                            character.Textures0,
-                            character.Textures1,
-                            character.Textures2,
-                            character.Textures3,
-                            character.Textures4,
-                            character.Playfield,
-                            character.X,
-                            character.Y,
-                            character.Z,
-                            character.HeadingX,
-                            character.HeadingY,
-                            character.HeadingZ,
-                            character.HeadingW,
-                            Online = 0,
-                            username = character.Username
-                        });
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
                 }
             }
             catch (Exception e)
@@ -194,6 +148,43 @@ namespace CellAO.Database.Dao
             }
         }
 
+        /// <summary>
+        /// Load all characters for a specific user
+        /// </summary>
+        /// <param name="username">
+        /// Name of the user
+        /// </param>
+        /// <returns>
+        /// Collection of DBCharacter
+        /// </returns>
+        public static IEnumerable<DBCharacter> GetAllForUser(string username)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT ID, Username, Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters WHERE Username=@username", 
+                            new { username });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Load a specific Character by name
+        /// </summary>
+        /// <param name="name">
+        /// Name of the Character
+        /// </param>
+        /// <returns>
+        /// DBCharacter object or null
+        /// </returns>
         public static DBCharacter GetByCharName(string name)
         {
             try
@@ -209,15 +200,26 @@ namespace CellAO.Database.Dao
             }
         }
 
-        public static void UpdatePosition(DBCharacter db)
+        /// <summary>
+        /// Load a Character by id
+        /// </summary>
+        /// <param name="characterId">
+        /// Id of the Character
+        /// </param>
+        /// <returns>
+        /// DBCharacter object
+        /// </returns>
+        public static IEnumerable<DBCharacter> GetById(int characterId)
         {
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    conn.Execute(
-                        "UPDATE characters SET playfield = @Playfield, X = @X, Y = @Y, Z = @Z WHERE id=@Id",
-                        new { db.Playfield, db.X, db.Y, db.Z, db.Id });
+                    return
+                        conn.Query<DBCharacter>(
+                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
+                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id", 
+                            new { id = characterId });
                 }
             }
             catch (Exception e)
@@ -227,6 +229,15 @@ namespace CellAO.Database.Dao
             }
         }
 
+        /// <summary>
+        /// Get the name of a character by id
+        /// </summary>
+        /// <param name="characterId">
+        /// Id of the Character
+        /// </param>
+        /// <returns>
+        /// Name of the Character or string.Empty
+        /// </returns>
         public static string GetCharacterNameById(int characterId)
         {
             try
@@ -243,5 +254,31 @@ namespace CellAO.Database.Dao
                 return string.Empty;
             }
         }
+
+        /// <summary>
+        /// Write back the position of the Characer
+        /// </summary>
+        /// <param name="character">
+        /// DBCharacte object
+        /// </param>
+        public static void UpdatePosition(DBCharacter character)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "UPDATE characters SET playfield = @Playfield, X = @X, Y = @Y, Z = @Z WHERE id=@Id", 
+                        new { character.Playfield, character.X, character.Y, character.Z, character.Id });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

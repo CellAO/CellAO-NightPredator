@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -47,6 +42,8 @@ namespace CellAO.Core.Inventory
     /// </summary>
     public class ArmorInventoryPage : BaseInventoryPage, IItemSlotHandler, IItemHotSwapHandler, IEquipmentPage
     {
+        #region Constructors and Destructors
+
         /// <summary>
         /// </summary>
         /// <param name="ownerInstance">
@@ -56,46 +53,100 @@ namespace CellAO.Core.Inventory
         {
         }
 
-        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// </summary>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public void Added(ItemTemplate item)
         {
             throw new NotImplementedException();
         }
 
-        public void Removed(int slot, ItemTemplate item)
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
         {
             throw new NotImplementedException();
         }
 
-        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="templ">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
         {
             throw new NotImplementedException();
         }
 
-        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
         {
             throw new NotImplementedException();
         }
 
-        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Removed(int slot, ItemTemplate item)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="statId">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public int Stat(int statId)
         {
             int value = 0;
@@ -103,7 +154,40 @@ namespace CellAO.Core.Inventory
             {
                 value += item.GetAttribute(statId);
             }
+
             return value;
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slotFrom">
+        /// </param>
+        /// <param name="slotTo">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="receivingPage">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -53,76 +48,7 @@ namespace CellAO.Database
     /// </summary>
     public static class Misc
     {
-        public static List<int> GetOrgMembers(uint orgId)
-        {
-            return GetOrgMembers(orgId, false);
-        }
-
-        public static List<int> GetOrgMembers(uint orgId, bool excludePresident)
-        {
-            List<int> orgMembers = new List<int>();
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    string pres = string.Empty;
-
-                    if (excludePresident)
-                    {
-                        pres =
-                            " AND `ID` NOT IN (SELECT `ID` FROM `characters_stats` WHERE `Stat` = '48' AND `Value` = '0')";
-                    }
-
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("@orgId");
-                    orgMembers.AddRange(
-                        conn.Query<int>(
-                            "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres,
-                            p));
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-            return orgMembers;
-        }
-
-        /// <summary>
-        /// </summary>
-        public static void LogOffAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("UPDATE characters set Online=0");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public static void LogOffCharacter(int characterId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("UPDATE characters set Online=0 where id=@charid", new { charid = characterId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-        }
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -247,7 +173,7 @@ namespace CellAO.Database
                                     if (counter < queries.Length)
                                     {
                                         buf1 = queries[counter].Substring(
-                                            0,
+                                            0, 
                                             queries[counter].ToLower().IndexOf("values"));
                                         buf1 = buf1 + "VALUES ";
                                         StringBuilder Buffer = new StringBuilder(0, 1 * 1024 * 1024);
@@ -340,6 +266,96 @@ namespace CellAO.Database
 
         /// <summary>
         /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static List<int> GetOrgMembers(uint orgId)
+        {
+            return GetOrgMembers(orgId, false);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <param name="excludePresident">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static List<int> GetOrgMembers(uint orgId, bool excludePresident)
+        {
+            List<int> orgMembers = new List<int>();
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    string pres = string.Empty;
+
+                    if (excludePresident)
+                    {
+                        pres =
+                            " AND `ID` NOT IN (SELECT `ID` FROM `characters_stats` WHERE `Stat` = '48' AND `Value` = '0')";
+                    }
+
+                    DynamicParameters p = new DynamicParameters();
+                    p.Add("@orgId");
+                    orgMembers.AddRange(
+                        conn.Query<int>(
+                            "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres, 
+                            p));
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+
+            return orgMembers;
+        }
+
+        /// <summary>
+        /// </summary>
+        public static void LogOffAll()
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters set Online=0");
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        public static void LogOffCharacter(int characterId)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters set Online=0 where id=@charid", new { charid = characterId });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
         /// <param name="conn">
         /// </param>
         /// <param name="fName">
@@ -362,5 +378,7 @@ namespace CellAO.Database
                     throw new Exception("Unknown database type encountered. Check your Config.xml or tell the coders");
             }
         }
+
+        #endregion
     }
 }

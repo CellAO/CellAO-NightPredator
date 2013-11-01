@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:03
 
 #endregion
 
@@ -44,6 +39,13 @@ namespace CellAO.Stats
     /// </summary>
     public static class StatNamesDefaults
     {
+        #region Static Fields
+
+        /// <summary>
+        /// List Stat ID's -> Default values
+        /// </summary>
+        private static readonly Dictionary<int, int> Defaults = new Dictionary<int, int>();
+
         /// <summary>
         /// List Stat ID's -> Names
         /// </summary>
@@ -54,10 +56,9 @@ namespace CellAO.Stats
         /// </summary>
         private static readonly Dictionary<string, int> NumberList = new Dictionary<string, int>();
 
-        /// <summary>
-        /// List Stat ID's -> Default values
-        /// </summary>
-        private static readonly Dictionary<int, int> Defaults = new Dictionary<int, int>();
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Create static list of Stat Names (replaces the XML)
@@ -1077,7 +1078,11 @@ namespace CellAO.Stats
             Defaults.Add(1009, 0);
         }
 
+        #endregion
+
         // TODO: generate the default value list from database, make it depending on breed, so NPCs can have different defaults
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Return Stat's default value
@@ -1092,6 +1097,24 @@ namespace CellAO.Stats
         {
             // Return 1234567890 if nothing else is specified
             return !Defaults.ContainsKey(statId) ? 123456890 : Defaults[statId];
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="index">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="StatDoesNotExistException">
+        /// </exception>
+        public static string GetStatName(int index)
+        {
+            if (NameList.ContainsKey(index))
+            {
+                return NameList[index];
+            }
+
+            throw new StatDoesNotExistException("Stat with id '" + index + "' does not exist");
         }
 
         /// <summary>
@@ -1117,22 +1140,6 @@ namespace CellAO.Stats
             return NumberList[name.ToLower()];
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="StatDoesNotExistException">
-        /// </exception>
-        public static string GetStatName(int index)
-        {
-            if (NameList.ContainsKey(index))
-            {
-                return NameList[index];
-            }
-
-            throw new StatDoesNotExistException("Stat with id '" + index + "' does not exist");
-        }
+        #endregion
     }
 }

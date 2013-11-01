@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:28
+// Last modified: 2013-11-01 21:02
 
 #endregion
 
@@ -156,8 +151,8 @@ namespace Extractor_Serializer
             foreach (int item in items)
             {
                 var fileStream = new FileStream(
-                    path + item.ToString(CultureInfo.InvariantCulture),
-                    FileMode.Create,
+                    path + item.ToString(CultureInfo.InvariantCulture), 
+                    FileMode.Create, 
                     FileAccess.Write);
 
                 byte[] data = extractor.GetRecordData(recordtype, item);
@@ -172,9 +167,87 @@ namespace Extractor_Serializer
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="path">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static string GetVersion(string path)
+        {
+            string aopath = path;
+            try
+            {
+                while (!File.Exists(Path.Combine(aopath, "version.id")))
+                {
+                    aopath = Path.Combine(aopath, "..");
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("File 'version.id' not found.");
+                Console.WriteLine("Plese press <Enter> to exit.");
+                Console.ReadLine();
+                return string.Empty;
+            }
+
+            TextReader tr = new StreamReader(Path.Combine(aopath, "version.id"));
+
+            string line = tr.ReadToEnd().Trim().Trim('\r').Trim('\n');
+            tr.Close();
+            return line;
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool CopyDatafiles()
+        {
+            bool result = true;
+
+            // Presume we are in CellAO/Built/Debug or Release
+            string pathToDatafiles = Path.Combine("..", "..", "Datafiles");
+            if (File.Exists(Path.Combine(pathToDatafiles, "items.dat")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "items.dat"));
+                File.Copy("items.dat", Path.Combine(pathToDatafiles, "items.dat"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old items.dat in the Datafiles folder.");
+                result = false;
+            }
+
+            if (File.Exists(Path.Combine(pathToDatafiles, "nanos.dat")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "nanos.dat"));
+                File.Copy("nanos.dat", Path.Combine(pathToDatafiles, "nanos.dat"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old nanos.dat in the Datafiles folder.");
+                result = false;
+            }
+
+            pathToDatafiles = Path.Combine("..", "..", "Libraries", "Source", "CellAO.Database", "SqlTables");
+            if (File.Exists(Path.Combine(pathToDatafiles, "itemnames.sql")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "itemnames.sql"));
+                File.Copy("itemnames.sql", Path.Combine(pathToDatafiles, "itemnames.sql"));
+            }
+            else
+            {
+                Console.WriteLine("Could not find old itemnames.sql in the SqlTables folder.");
+                result = false;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// The main.
@@ -372,12 +445,13 @@ namespace Extractor_Serializer
 
             int maxnum = 5000;
             string version = GetVersion(AOPath);
-            if (version == "")
+            if (version == string.Empty)
             {
                 return;
             }
+
             byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
-            sm.WriteByte((byte)(versionbuffer.Length));
+            sm.WriteByte((byte)versionbuffer.Length);
             sm.Write(versionbuffer, 0, versionbuffer.Length);
 
             byte[] buffer = BitConverter.GetBytes(maxnum);
@@ -420,7 +494,7 @@ namespace Extractor_Serializer
             List<ItemTemplate> items = new List<ItemTemplate>();
 
             maxnum = 5000;
-            sm.WriteByte((byte)(versionbuffer.Length));
+            sm.WriteByte((byte)versionbuffer.Length);
             sm.Write(versionbuffer, 0, versionbuffer.Length);
 
             buffer = BitConverter.GetBytes(maxnum);
@@ -475,76 +549,12 @@ namespace Extractor_Serializer
                         break;
                     }
                 }
+
                 if (line.Trim() == "2")
                 {
                     break;
                 }
             }
-        }
-
-        private static bool CopyDatafiles()
-        {
-            bool result = true;
-            // Presume we are in CellAO/Built/Debug or Release
-            string pathToDatafiles = Path.Combine("..", "..", "Datafiles");
-            if (File.Exists(Path.Combine(pathToDatafiles, "items.dat")))
-            {
-                File.Delete(Path.Combine(pathToDatafiles, "items.dat"));
-                File.Copy("items.dat", Path.Combine(pathToDatafiles, "items.dat"));
-            }
-            else
-            {
-                Console.WriteLine("Could not find old items.dat in the Datafiles folder.");
-                result = false;
-            }
-
-            if (File.Exists(Path.Combine(pathToDatafiles, "nanos.dat")))
-            {
-                File.Delete(Path.Combine(pathToDatafiles, "nanos.dat"));
-                File.Copy("nanos.dat", Path.Combine(pathToDatafiles, "nanos.dat"));
-            }
-            else
-            {
-                Console.WriteLine("Could not find old nanos.dat in the Datafiles folder.");
-                result = false;
-            }
-
-            pathToDatafiles = Path.Combine("..", "..", "Libraries", "Source", "CellAO.Database", "SqlTables");
-            if (File.Exists(Path.Combine(pathToDatafiles, "itemnames.sql")))
-            {
-                File.Delete(Path.Combine(pathToDatafiles, "itemnames.sql"));
-                File.Copy("itemnames.sql", Path.Combine(pathToDatafiles, "itemnames.sql"));
-            }
-            else
-            {
-                Console.WriteLine("Could not find old itemnames.sql in the SqlTables folder.");
-                result = false;
-            }
-            return result;
-        }
-
-        public static string GetVersion(string path)
-        {
-            string aopath = path;
-            try
-            {
-                while (!File.Exists(Path.Combine(aopath, "version.id")))
-                {
-                    aopath = Path.Combine(aopath, "..");
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("File 'version.id' not found.");
-                Console.WriteLine("Plese press <Enter> to exit.");
-                Console.ReadLine();
-                return "";
-            }
-            TextReader tr = new StreamReader(Path.Combine(aopath, "version.id"));
-
-            string line = tr.ReadToEnd().Trim().Trim('\r').Trim('\n');
-            tr.Close();
-            return line;
         }
 
         #endregion

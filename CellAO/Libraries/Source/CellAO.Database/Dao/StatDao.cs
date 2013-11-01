@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -49,6 +44,108 @@ namespace CellAO.Database.Dao
     /// </summary>
     public static class StatDao
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="type">
+        /// </param>
+        /// <param name="instance">
+        /// </param>
+        /// <param name="num">
+        /// </param>
+        /// <param name="value">
+        /// </param>
+        public static void AddStat(int type, int instance, int num, int value)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute(
+                        "REPLACE INTO stats (type, instance, statid, statvalue) VALUES (@t, @i, @statid, @statvalue)", 
+                        new { t = type, i = instance, statid = num, statvalue = value });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stats">
+        /// </param>
+        public static void BulkReplace(List<DBStats> stats)
+        {
+            try
+            {
+                // Delete all stats before writing
+                DeleteStats(stats[0].type, stats[0].instance);
+
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    using (IDbTransaction trans = conn.BeginTransaction())
+                    {
+                        conn.Execute(
+                            "INSERT INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)", 
+                            stats, 
+                            transaction: trans);
+                        trans.Commit();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="type">
+        /// </param>
+        /// <param name="instance">
+        /// </param>
+        public static void DeleteStats(int type, int instance)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("DELETE FROM stats WHERE type=@type AND instance=@instance", new { type, instance });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        public static void DisbandOrganization(int orgId)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE stats SET statvalue=0 WHERE statid=5 AND statvalue=@orgId", new { orgId });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
         /// <summary>
         /// </summary>
         /// <returns>
@@ -85,7 +182,7 @@ namespace CellAO.Database.Dao
                 {
                     return
                         conn.Query<DBStats>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id",
+                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id", 
                             new { id = characterId });
                 }
             }
@@ -114,7 +211,7 @@ namespace CellAO.Database.Dao
                 {
                     return
                         conn.Query<DBStats>(
-                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance AND statid=@statId)",
+                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance AND statid=@statId)", 
                             new { type, instance, statId }).First();
                 }
             }
@@ -141,7 +238,7 @@ namespace CellAO.Database.Dao
                 {
                     return
                         conn.Query<DBStats>(
-                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance)",
+                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance)", 
                             new { type, instance });
                 }
             }
@@ -152,80 +249,6 @@ namespace CellAO.Database.Dao
             }
         }
 
-        public static void DeleteStats(int type, int instance)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("DELETE FROM stats WHERE type=@type AND instance=@instance", new { type, instance });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static void AddStat(int type, int instance, int num, int value)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "REPLACE INTO stats (type, instance, statid, statvalue) VALUES (@t, @i, @statid, @statvalue)",
-                        new { t = type, i = instance, statid = num, statvalue = value });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static void BulkReplace(List<DBStats> stats)
-        {
-            try
-            {
-                // Delete all stats before writing
-                DeleteStats(stats[0].type, stats[0].instance);
-
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    using (IDbTransaction trans = conn.BeginTransaction())
-                    {
-                        conn.Execute(
-                            "INSERT INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)",
-                            stats,
-                            transaction: trans);
-                        trans.Commit();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static void DisbandOrganization(int orgId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("UPDATE stats SET statvalue=0 WHERE statid=5 AND statvalue=@orgId", new { orgId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
+        #endregion
     }
 }

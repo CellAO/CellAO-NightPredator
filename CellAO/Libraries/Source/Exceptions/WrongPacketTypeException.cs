@@ -21,36 +21,35 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:05
+// Last modified: 2013-11-01 21:02
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace CellAO.Core.Exceptions
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using System;
 
     #endregion
 
     /// <summary>
+    /// Wrong packet type passed to Vicinity Handler
     /// </summary>
-    public class PlayerInventory : UnitInventory
+    [Serializable]
+    public class WrongPacketTypeException : ApplicationException
     {
         #region Constructors and Destructors
 
         /// <summary>
+        /// Exception handler
         /// </summary>
-        /// <param name="owner">
+        /// <param name="message">
+        /// Message to log
         /// </param>
-        public PlayerInventory(IItemContainer owner)
-            : base(owner)
+        public WrongPacketTypeException(string message)
+            : base(message)
         {
-            this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
         }
 
         #endregion

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:28
+// Last modified: 2013-11-01 21:02
 
 #endregion
 
@@ -48,6 +43,7 @@ namespace Utility
         #region Public Properties
 
         /// <summary>
+        /// Returns the Version String
         /// </summary>
         public static string AssemblyVersion
         {
@@ -59,6 +55,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the Company Attribute
         /// </summary>
         public static string Company
         {
@@ -81,6 +78,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the Copyright attribute
         /// </summary>
         public static string Copyright
         {
@@ -103,6 +101,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the File Description Attribute
         /// </summary>
         public static string Description
         {
@@ -114,7 +113,7 @@ namespace Utility
                 if (assembly != null)
                 {
                     object[] customAttributes = assembly.GetCustomAttributes(
-                        typeof(AssemblyDescriptionAttribute),
+                        typeof(AssemblyDescriptionAttribute), 
                         false);
                     if ((customAttributes != null) && (customAttributes.Length > 0))
                     {
@@ -127,6 +126,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the Filename of the assembly
         /// </summary>
         public static string FileName
         {
@@ -140,6 +140,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the path of the assembly
         /// </summary>
         public static string FilePath
         {
@@ -153,6 +154,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the FileVersion attribute
         /// </summary>
         public static string FileVersion
         {
@@ -166,6 +168,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the GUID
         /// </summary>
         public static string Guid
         {
@@ -188,6 +191,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the Product Attribute
         /// </summary>
         public static string Product
         {
@@ -210,6 +214,30 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the revision name
+        /// </summary>
+        public static string RevisionName
+        {
+            get
+            {
+                string result = string.Empty;
+                Assembly assembly = Assembly.GetEntryAssembly();
+
+                if (assembly != null)
+                {
+                    object[] customAttributes = assembly.GetCustomAttributes(typeof(RevisionNameAttribute), false);
+                    if ((customAttributes != null) && (customAttributes.Length > 0))
+                    {
+                        result = ((RevisionNameAttribute)customAttributes[0]).RevisionName;
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns the Title of the assembly
         /// </summary>
         public static string Title
         {
@@ -232,6 +260,7 @@ namespace Utility
         }
 
         /// <summary>
+        /// Returns the Trademark Attribute
         /// </summary>
         public static string Trademark
         {
@@ -254,25 +283,5 @@ namespace Utility
         }
 
         #endregion
-
-        public static string RevisionName
-        {
-            get
-            {
-                string result = string.Empty;
-                Assembly assembly = Assembly.GetEntryAssembly();
-
-                if (assembly != null)
-                {
-                    object[] customAttributes = assembly.GetCustomAttributes(typeof(RevisionNameAttribute), false);
-                    if ((customAttributes != null) && (customAttributes.Length > 0))
-                    {
-                        result = ((RevisionNameAttribute)customAttributes[0]).RevisionName;
-                    }
-                }
-
-                return result;
-            }
-        }
     }
 }

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:06
 
 #endregion
 
@@ -50,10 +45,16 @@ namespace CellAO.Core.Nanos
     /// </summary>
     public class NanoLoader
     {
+        #region Static Fields
+
         /// <summary>
         /// Cache of all item templates
         /// </summary>
         public static Dictionary<int, NanoFormula> NanoList = new Dictionary<int, NanoFormula>();
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Cache all item templates
@@ -120,17 +121,40 @@ namespace CellAO.Core.Nanos
                 }
 
                 Console.Write(
-                    "Loaded {0} nanos in {1}\r",
+                    "Loaded {0} nanos in {1}\r", 
                     new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
             }
 
             Console.Write(
-                "Loaded {0} nanos in {1}\r",
+                "Loaded {0} nanos in {1}\r", 
                 new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();
             return NanoList.Count;
         }
+
+        /// <summary>
+        /// Returns a nano object
+        /// </summary>
+        /// <param name="id">
+        /// ID of the nano
+        /// </param>
+        /// <returns>
+        /// Nano
+        /// </returns>
+        public static NanoFormula GetNano(int id)
+        {
+            if (!NanoList.ContainsKey(id))
+            {
+                throw new ArgumentOutOfRangeException("No NanoFormula found with ID " + id);
+            }
+
+            return NanoList[id];
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// </summary>
@@ -163,23 +187,6 @@ namespace CellAO.Core.Nanos
             Console.Write("\r                                             \r");
         }
 
-        /// <summary>
-        /// Returns a nano object
-        /// </summary>
-        /// <param name="id">
-        /// ID of the nano
-        /// </param>
-        /// <returns>
-        /// Nano
-        /// </returns>
-        public static NanoFormula GetNano(int id)
-        {
-            if (!NanoList.ContainsKey(id))
-            {
-                throw new ArgumentOutOfRangeException("No NanoFormula found with ID " + id);
-            }
-
-            return NanoList[id];
-        }
+        #endregion
     }
 }

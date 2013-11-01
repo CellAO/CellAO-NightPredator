@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:06
 
 #endregion
 
@@ -51,39 +46,7 @@ namespace CellAO.Core.Playfields
     /// </summary>
     public interface IPlayfield
     {
-        /// <summary>
-        /// </summary>
-        IBus PlayfieldBus { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Identity Identity { get; set; }
-
-        /// <summary>
-        /// </summary>
-        HashSet<IInstancedEntity> Entities { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        int NumberOfPlayers();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        int NumberOfDynels();
-
-        /// <summary>
-        /// </summary>
-        List<Functions> EnvironmentFunctions { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool IsInstancedPlayfield();
+        #region Public Properties
 
         /// <summary>
         /// </summary>
@@ -91,19 +54,11 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        float X { get; set; }
+        HashSet<IInstancedEntity> Entities { get; }
 
         /// <summary>
         /// </summary>
-        float Z { get; set; }
-
-        /// <summary>
-        /// </summary>
-        float XScale { get; set; }
-
-        /// <summary>
-        /// </summary>
-        float ZScale { get; set; }
+        List<Functions> EnvironmentFunctions { get; }
 
         /// <summary>
         /// </summary>
@@ -111,11 +66,31 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInstancedEntity FindByIdentity(Identity identity);
+        Identity Identity { get; set; }
+
+        /// <summary>
+        /// </summary>
+        IBus PlayfieldBus { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float X { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float XScale { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float Z { get; set; }
+
+        /// <summary>
+        /// </summary>
+        float ZScale { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -143,12 +118,40 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IInstancedEntity FindByIdentity(Identity identity);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool IsInstancedPlayfield();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        int NumberOfDynels();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        int NumberOfPlayers();
+
+        /// <summary>
+        /// </summary>
         /// <param name="obj">
         /// </param>
         void Publish(object obj);
 
-        /// <summary>
-        /// </summary>
+        #endregion
+
+        // <summary>
+        // </summary>
         /// <param name="sendSCFUs">
         /// </param>
         // TODO: Reactivate

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:06
 
 #endregion
 
@@ -41,82 +36,11 @@ namespace CellAO.Core.Vector
 
     #endregion
 
+    /// <summary>
+    /// </summary>
     public class Coordinate : ICoordinate
     {
-        #region Coordinate Representations
-
-        /// <summary>
-        /// Vector representation of Coordinates
-        /// </summary>
-        public IVector3 coordinate { get; set; }
-
-        /// <summary>
-        /// Quaterion representation of Coordinates (w is 0)
-        /// </summary>
-        public IQuaternion QuatCoordinate
-        {
-            get
-            {
-                return new Quaternion(this.coordinate);
-            }
-
-            set
-            {
-                this.coordinate = value.VectorRepresentation();
-            }
-        }
-
-        /// <summary>
-        /// Component representation of X Coordinate
-        /// </summary>
-        public float x
-        {
-            get
-            {
-                return (float)this.coordinate.x;
-            }
-
-            set
-            {
-                this.coordinate.x = value;
-            }
-        }
-
-        /// <summary>
-        /// Component representation of Y Coordinate
-        /// </summary>
-        public float y
-        {
-            get
-            {
-                return (float)this.coordinate.y;
-            }
-
-            set
-            {
-                this.coordinate.y = value;
-            }
-        }
-
-        /// <summary>
-        /// Component representation of Z Coordinate
-        /// </summary>
-        public float z
-        {
-            get
-            {
-                return (float)this.coordinate.z;
-            }
-
-            set
-            {
-                this.coordinate.z = value;
-            }
-        }
-
-        #endregion
-
-        #region Constructor
+        #region Constructors and Destructors
 
         /// <summary>
         /// Constructor
@@ -181,7 +105,157 @@ namespace CellAO.Core.Vector
 
         #endregion
 
-        #region Update
+        #region Public Properties
+
+        /// <summary>
+        /// Quaterion representation of Coordinates (w is 0)
+        /// </summary>
+        public IQuaternion QuatCoordinate
+        {
+            get
+            {
+                return new Quaternion(this.coordinate);
+            }
+
+            set
+            {
+                this.coordinate = value.VectorRepresentation();
+            }
+        }
+
+        /// <summary>
+        /// Vector representation of Coordinates
+        /// </summary>
+        public IVector3 coordinate { get; set; }
+
+        /// <summary>
+        /// Component representation of X Coordinate
+        /// </summary>
+        public float x
+        {
+            get
+            {
+                return (float)this.coordinate.x;
+            }
+
+            set
+            {
+                this.coordinate.x = value;
+            }
+        }
+
+        /// <summary>
+        /// Component representation of Y Coordinate
+        /// </summary>
+        public float y
+        {
+            get
+            {
+                return (float)this.coordinate.y;
+            }
+
+            set
+            {
+                this.coordinate.y = value;
+            }
+        }
+
+        /// <summary>
+        /// Component representation of Z Coordinate
+        /// </summary>
+        public float z
+        {
+            get
+            {
+                return (float)this.coordinate.z;
+            }
+
+            set
+            {
+                this.coordinate.z = value;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Calculate the Distance between two Coordinates in 2 Dimensions
+        /// </summary>
+        /// <param name="c1">
+        /// Coordinate 1
+        /// </param>
+        /// <param name="c2">
+        /// Coordinate 2
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static double Distance2D(Coordinate c1, Coordinate c2)
+        {
+            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
+
+            return Math.Sqrt((difference.x * difference.x) + (difference.z * difference.z));
+        }
+
+        /// <summary>
+        /// Calculate the Distance between two Coordinates in 3 Dimensions
+        /// </summary>
+        /// <param name="c1">
+        /// Coordinate 1
+        /// </param>
+        /// <param name="c2">
+        /// Coordinate 2
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static double Distance3D(Coordinate c1, Coordinate c2)
+        {
+            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
+
+            return difference.Magnitude;
+        }
+
+        /// <summary>
+        /// Calculate the Distance between two Coordinates in 2 Dimensions
+        /// </summary>
+        /// <param name="c1">
+        /// Other Coordinate
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public double Distance2D(Coordinate c1)
+        {
+            return Distance2D(this, c1);
+        }
+
+        /// <summary>
+        /// Calculate the Distance between two Coordinates in 3 Dimensions
+        /// </summary>
+        /// <param name="c1">
+        /// Other Coordinate
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public double Distance3D(Coordinate c1)
+        {
+            return Distance3D(this, c1);
+        }
+
+        /// <summary>
+        /// Converts the coordinates to a string representation
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(
+                CultureInfo.InvariantCulture, 
+                "{0:F1} {2:F1} y {1:F1}", 
+                this.coordinate.x, 
+                this.coordinate.y, 
+                this.coordinate.z);
+        }
 
         /// <summary>
         /// Update the Coordinate using components
@@ -220,91 +294,6 @@ namespace CellAO.Core.Vector
         public void Update(Coordinate Coordinate)
         {
             this.coordinate = Coordinate.coordinate;
-        }
-
-        #endregion
-
-        #region Distance Calculations
-
-        /// <summary>
-        /// Calculate the Distance between two Coordinates in 3 Dimensions
-        /// </summary>
-        /// <param name="c1">
-        /// Coordinate 1
-        /// </param>
-        /// <param name="c2">
-        /// Coordinate 2
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static double Distance3D(Coordinate c1, Coordinate c2)
-        {
-            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
-
-            return difference.Magnitude;
-        }
-
-        /// <summary>
-        /// Calculate the Distance between two Coordinates in 3 Dimensions
-        /// </summary>
-        /// <param name="c1">
-        /// Other Coordinate
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public double Distance3D(Coordinate c1)
-        {
-            return Distance3D(this, c1);
-        }
-
-        /// <summary>
-        /// Calculate the Distance between two Coordinates in 2 Dimensions
-        /// </summary>
-        /// <param name="c1">
-        /// Coordinate 1
-        /// </param>
-        /// <param name="c2">
-        /// Coordinate 2
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static double Distance2D(Coordinate c1, Coordinate c2)
-        {
-            Vector3 difference = (Vector3)c1.coordinate - (Vector3)c2.coordinate;
-
-            return Math.Sqrt((difference.x * difference.x) + (difference.z * difference.z));
-        }
-
-        /// <summary>
-        /// Calculate the Distance between two Coordinates in 2 Dimensions
-        /// </summary>
-        /// <param name="c1">
-        /// Other Coordinate
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public double Distance2D(Coordinate c1)
-        {
-            return Distance2D(this, c1);
-        }
-
-        #endregion
-
-        #region ToString
-
-        /// <summary>
-        /// Converts the coordinates to a string representation
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public override string ToString()
-        {
-            return string.Format(
-                CultureInfo.InvariantCulture,
-                "{0:F1} {2:F1} y {1:F1}",
-                this.coordinate.x,
-                this.coordinate.y,
-                this.coordinate.z);
         }
 
         #endregion

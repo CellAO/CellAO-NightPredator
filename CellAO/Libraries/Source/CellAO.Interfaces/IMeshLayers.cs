@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -38,8 +33,12 @@ namespace CellAO.Interfaces
 
     #endregion
 
+    /// <summary>
+    /// </summary>
     public interface IMeshLayers
     {
+        #region Public Properties
+
         /// <summary>
         /// </summary>
         SortedList<int, int> Mesh { get; }
@@ -47,6 +46,22 @@ namespace CellAO.Interfaces
         /// <summary>
         /// </summary>
         SortedList<int, int> MeshOverride { get; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="position">
+        /// </param>
+        /// <param name="meshToAdd">
+        /// </param>
+        /// <param name="overridetexture">
+        /// </param>
+        /// <param name="layer">
+        /// </param>
+        void AddMesh(int position, int meshToAdd, int overridetexture, int layer);
 
         /// <summary>
         /// </summary>
@@ -57,6 +72,40 @@ namespace CellAO.Interfaces
         /// <returns>
         /// </returns>
         int Count();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="pos">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IMeshs GetMeshAtPosition(int pos);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="number">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        int GetMeshKey(int number);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        List<IMeshs> GetMeshs();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="position">
+        /// </param>
+        /// <param name="meshToRemove">
+        /// </param>
+        /// <param name="overridetexture">
+        /// </param>
+        /// <param name="layer">
+        /// </param>
+        void RemoveMesh(int position, int meshToRemove, int overridetexture, int layer);
 
         /// <summary>
         /// </summary>
@@ -74,50 +123,6 @@ namespace CellAO.Interfaces
         /// </returns>
         int ReturnOverrideMesh(int number);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int GetMeshKey(int number);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToAdd">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        void AddMesh(int position, int meshToAdd, int overridetexture, int layer);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToRemove">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        void RemoveMesh(int position, int meshToRemove, int overridetexture, int layer);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        List<IMeshs> GetMeshs();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="pos">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IMeshs GetMeshAtPosition(int pos);
+        #endregion
     }
 }

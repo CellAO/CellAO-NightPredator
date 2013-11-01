@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -67,45 +62,14 @@ namespace CellAO.Core.Items
         public int Flags;
 
         /// <summary>
-        /// Item Flags
+        /// Item low ID
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public int CanFlags()
-        {
-            return this.getItemAttribute(30);
-        }
-
-        /// <summary>
-        /// Get item attribute
-        /// </summary>
-        /// <param name="number">
-        /// number of attribute
-        /// </param>
-        /// <returns>
-        /// Value of item attribute
-        /// </returns>
-        public int getItemAttribute(int number)
-        {
-            Contract.Assume(this.Stats != null);
-            if (this.Stats.ContainsKey(number))
-            {
-                return this.Stats[number];
-            }
-
-            // TODO: Might need adjustments for Items
-            return StatNamesDefaults.GetDefault(number);
-        }
+        public int ID;
 
         /// <summary>
         /// Item type
         /// </summary>
         public int ItemType;
-
-        /// <summary>
-        /// Item low ID
-        /// </summary>
-        public int ID;
 
         /// <summary>
         /// Stacked item count
@@ -129,133 +93,31 @@ namespace CellAO.Core.Items
 
         #endregion
 
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        public ItemTemplate()
+        {
+            this.Events = new List<Events>();
+            this.Actions = new List<Actions>();
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// </summary>
+        public List<Actions> Actions { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public List<Events> Events { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanCarry()
-        {
-            return (this.CanFlags() & (1 << 0)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanSit()
-        {
-            return (this.CanFlags() & (1 << 1)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Wearable()
-        {
-            return (this.CanFlags() & (1 << 2)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Useable()
-        {
-            return (this.CanFlags() & (1 << 3)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ConfirmOnUse()
-        {
-            return (this.CanFlags() & (1 << 4)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsConsumable()
-        {
-            return (this.CanFlags() & (1 << 5)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsTutorChip()
-        {
-            return (this.CanFlags() & (1 << 6)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsTutorDevie()
-        {
-            return (this.CanFlags() & (1 << 7)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsLockPicker()
-        {
-            return (this.CanFlags() & (1 << 8)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsStackable()
-        {
-            return (this.CanFlags() & (1 << 9)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool NeedsNoAmmo()
-        {
-            return (this.CanFlags() & (1 << 10)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanBurst()
-        {
-            return (this.CanFlags() & (1 << 11)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanFlingShot()
-        {
-            return (this.CanFlags() & (1 << 12)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanFullAuto()
-        {
-            return (this.CanFlags() & (1 << 13)) > 0;
-        }
 
         /// <summary>
         /// </summary>
@@ -270,54 +132,9 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool CanBow()
+        public bool CanBeAppliedOnFightingTarget()
         {
-            return (this.CanFlags() & (1 << 15)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanThrowAttack()
-        {
-            return (this.CanFlags() & (1 << 16)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanSneakAttack()
-        {
-            return (this.CanFlags() & (1 << 17)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanFastAttack()
-        {
-            return (this.CanFlags() & (1 << 18)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanDisarmTraps()
-        {
-            return (this.CanFlags() & (1 << 19)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool DoesAutoSelect()
-        {
-            return (this.CanFlags() & (1 << 20)) > 0;
+            return (this.CanFlags() & (1 << 31)) > 0;
         }
 
         /// <summary>
@@ -351,54 +168,9 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool CantBeSplit()
+        public bool CanBeAttacked()
         {
-            return (this.CanFlags() & (1 << 24)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanBrawl()
-        {
-            return (this.CanFlags() & (1 << 25)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanDimach()
-        {
-            return (this.CanFlags() & (1 << 26)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool EnablesHandAttractors()
-        {
-            return (this.CanFlags() & (1 << 27)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanBeWornWithSocialArmor()
-        {
-            return (this.CanFlags() & (1 << 28)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool CanParryRiposte()
-        {
-            return (this.CanFlags() & (1 << 29)) > 0;
+            return (this.Flags & (1 << 28)) > 0;
         }
 
         /// <summary>
@@ -414,18 +186,217 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool CanBeAppliedOnFightingTarget()
+        public bool CanBeTemplateItem()
         {
-            return (this.CanFlags() & (1 << 31)) > 0;
+            return (this.Flags & (1 << 3)) > 0;
         }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool IsVisible()
+        public bool CanBeWornWithSocialArmor()
         {
-            return (this.Flags & (1 << 0)) > 0;
+            return (this.CanFlags() & (1 << 28)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanBow()
+        {
+            return (this.CanFlags() & (1 << 15)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanBrawl()
+        {
+            return (this.CanFlags() & (1 << 25)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanBurst()
+        {
+            return (this.CanFlags() & (1 << 11)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanCarry()
+        {
+            return (this.CanFlags() & (1 << 0)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanDimach()
+        {
+            return (this.CanFlags() & (1 << 26)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanDisarmTraps()
+        {
+            return (this.CanFlags() & (1 << 19)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanFastAttack()
+        {
+            return (this.CanFlags() & (1 << 18)) > 0;
+        }
+
+        /// <summary>
+        /// Item Flags
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int CanFlags()
+        {
+            return this.getItemAttribute(30);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanFlingShot()
+        {
+            return (this.CanFlags() & (1 << 12)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanFullAuto()
+        {
+            return (this.CanFlags() & (1 << 13)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanParryRiposte()
+        {
+            return (this.CanFlags() & (1 << 29)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanSit()
+        {
+            return (this.CanFlags() & (1 << 1)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanSneakAttack()
+        {
+            return (this.CanFlags() & (1 << 17)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CanThrowAttack()
+        {
+            return (this.CanFlags() & (1 << 16)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool CantBeSplit()
+        {
+            return (this.CanFlags() & (1 << 24)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool ConfirmOnUse()
+        {
+            return (this.CanFlags() & (1 << 4)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool DoesAutoSelect()
+        {
+            return (this.CanFlags() & (1 << 20)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool EnablesHandAttractors()
+        {
+            return (this.CanFlags() & (1 << 27)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool FallingDisabled()
+        {
+            return (this.Flags & (1 << 29)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool HasAnimation()
+        {
+            return (this.Flags & (1 << 17)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool HasDamage()
+        {
+            return (this.Flags & (1 << 30)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool HasEnergy()
+        {
+            return (this.Flags & (1 << 22)) > 0;
         }
 
         /// <summary>
@@ -450,135 +421,9 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool CanBeTemplateItem()
-        {
-            return (this.Flags & (1 << 3)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool TurnsOnUse()
-        {
-            return (this.Flags & (1 << 4)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
         public bool HasMultipleCount()
         {
             return (this.Flags & (1 << 5)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsLocked()
-        {
-            return (this.Flags & (1 << 6)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsOpen()
-        {
-            return (this.Flags & (1 << 7)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsItemSocialArmor()
-        {
-            return (this.Flags & (1 << 8)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool TellCollision()
-        {
-            return (this.Flags & (1 << 9)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool NoSelectionIndicator()
-        {
-            return (this.Flags & (1 << 10)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool UseEmptyDestruct()
-        {
-            return (this.Flags & (1 << 11)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsStaionary()
-        {
-            return (this.Flags & (1 << 12)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsRepulsive()
-        {
-            return (this.Flags & (1 << 13)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsDefaultTarget()
-        {
-            return (this.Flags & (1 << 14)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool OverrideItemTexture()
-        {
-            return (this.Flags & (1 << 15)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool IsNull()
-        {
-            return (this.Flags & (1 << 16)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool HasAnimation()
-        {
-            return (this.Flags & (1 << 17)) > 0;
         }
 
         /// <summary>
@@ -594,45 +439,9 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool WantsCollision()
-        {
-            return (this.Flags & (1 << 19)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool WantsSignals()
-        {
-            return (this.Flags & (1 << 20)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
         public bool HasSentFirstIIR()
         {
             return (this.Flags & (1 << 21)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool HasEnergy()
-        {
-            return (this.Flags & (1 << 22)) > 0;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool MirrorsInLeftHand()
-        {
-            return (this.Flags & (1 << 23)) > 0;
         }
 
         /// <summary>
@@ -657,9 +466,117 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
+        public bool IsConsumable()
+        {
+            return (this.CanFlags() & (1 << 5)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsDefaultTarget()
+        {
+            return (this.Flags & (1 << 14)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsItemSocialArmor()
+        {
+            return (this.Flags & (1 << 8)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsLockPicker()
+        {
+            return (this.CanFlags() & (1 << 8)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsLocked()
+        {
+            return (this.Flags & (1 << 6)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public bool IsNoDrop()
         {
             return (this.Flags & (1 << 26)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsNull()
+        {
+            return (this.Flags & (1 << 16)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsOpen()
+        {
+            return (this.Flags & (1 << 7)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsRepulsive()
+        {
+            return (this.Flags & (1 << 13)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsStackable()
+        {
+            return (this.CanFlags() & (1 << 9)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsStaionary()
+        {
+            return (this.Flags & (1 << 12)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsTutorChip()
+        {
+            return (this.CanFlags() & (1 << 6)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsTutorDevie()
+        {
+            return (this.CanFlags() & (1 << 7)) > 0;
         }
 
         /// <summary>
@@ -675,27 +592,45 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool CanBeAttacked()
+        public bool IsVisible()
         {
-            return (this.Flags & (1 << 28)) > 0;
+            return (this.Flags & (1 << 0)) > 0;
         }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool FallingDisabled()
+        public bool MirrorsInLeftHand()
         {
-            return (this.Flags & (1 << 29)) > 0;
+            return (this.Flags & (1 << 23)) > 0;
         }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool HasDamage()
+        public bool NeedsNoAmmo()
         {
-            return (this.Flags & (1 << 30)) > 0;
+            return (this.CanFlags() & (1 << 10)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool NoSelectionIndicator()
+        {
+            return (this.Flags & (1 << 10)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool OverrideItemTexture()
+        {
+            return (this.Flags & (1 << 15)) > 0;
         }
 
         /// <summary>
@@ -707,22 +642,90 @@ namespace CellAO.Core.Items
             return (this.Flags & (1 << 31)) > 0;
         }
 
-        #endregion
-
         /// <summary>
         /// </summary>
-        public ItemTemplate()
+        /// <returns>
+        /// </returns>
+        public bool TellCollision()
         {
-            this.Events = new List<Events>();
-            this.Actions = new List<Actions>();
+            return (this.Flags & (1 << 9)) > 0;
         }
 
         /// <summary>
         /// </summary>
-        public List<Events> Events { get; set; }
+        /// <returns>
+        /// </returns>
+        public bool TurnsOnUse()
+        {
+            return (this.Flags & (1 << 4)) > 0;
+        }
 
         /// <summary>
         /// </summary>
-        public List<Actions> Actions { get; set; }
+        /// <returns>
+        /// </returns>
+        public bool UseEmptyDestruct()
+        {
+            return (this.Flags & (1 << 11)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool Useable()
+        {
+            return (this.CanFlags() & (1 << 3)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool WantsCollision()
+        {
+            return (this.Flags & (1 << 19)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool WantsSignals()
+        {
+            return (this.Flags & (1 << 20)) > 0;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool Wearable()
+        {
+            return (this.CanFlags() & (1 << 2)) > 0;
+        }
+
+        /// <summary>
+        /// Get item attribute
+        /// </summary>
+        /// <param name="number">
+        /// number of attribute
+        /// </param>
+        /// <returns>
+        /// Value of item attribute
+        /// </returns>
+        public int getItemAttribute(int number)
+        {
+            Contract.Assume(this.Stats != null);
+            if (this.Stats.ContainsKey(number))
+            {
+                return this.Stats[number];
+            }
+
+            // TODO: Might need adjustments for Items
+            return StatNamesDefaults.GetDefault(number);
+        }
+
+        #endregion
     }
 }

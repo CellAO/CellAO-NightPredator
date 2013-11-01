@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -44,8 +39,129 @@ namespace CellAO.Database.Dao
 
     #endregion
 
+    /// <summary>
+    /// </summary>
     public static class OrganizationDao
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="desiredOrgName">
+        /// </param>
+        /// <param name="creationDate">
+        /// </param>
+        /// <param name="leaderId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
+        {
+            try
+            {
+                bool canBeCreated = !OrgExists(desiredOrgName);
+                if (canBeCreated)
+                {
+                    using (IDbConnection conn = Connector.GetConnection())
+                    {
+                        conn.Execute(
+                            "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)", 
+                            new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
+                    }
+                }
+
+                return canBeCreated;
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static int GetGovernmentForm(int orgId)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId })
+                            .Single();
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static DBOrganization GetOrganizationData(int orgId)
+        {
+            try
+            {
+                if (!OrgExists(orgId))
+                {
+                    return null;
+                }
+
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId })
+                            .Single();
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="orgName">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static int GetOrganizationId(string orgName)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    return
+                        conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName })
+                            .Single();
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="name">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static bool OrgExists(string name)
         {
             try
@@ -65,6 +181,12 @@ namespace CellAO.Database.Dao
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static bool OrgExists(int orgId)
         {
             try
@@ -84,87 +206,12 @@ namespace CellAO.Database.Dao
             }
         }
 
-        public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
-        {
-            try
-            {
-                bool canBeCreated = !OrgExists(desiredOrgName);
-                if (canBeCreated)
-                {
-                    using (IDbConnection conn = Connector.GetConnection())
-                    {
-                        conn.Execute(
-                            "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)",
-                            new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
-                    }
-                }
-                return canBeCreated;
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static int GetOrganizationId(string orgName)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName })
-                            .Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static int GetGovernmentForm(int orgId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId })
-                            .Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        public static DBOrganization GetOrganizationData(int orgId)
-        {
-            try
-            {
-                if (!OrgExists(orgId))
-                {
-                    return null;
-                }
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId })
-                            .Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
+        /// <summary>
+        /// </summary>
+        /// <param name="orgId">
+        /// </param>
+        /// <param name="newLeaderId">
+        /// </param>
         public static void SetNewPrez(int orgId, int newLeaderId)
         {
             try
@@ -172,7 +219,7 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId",
+                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", 
                         new { newLeaderId, orgId });
                 }
             }
@@ -182,5 +229,7 @@ namespace CellAO.Database.Dao
                 throw;
             }
         }
+
+        #endregion
     }
 }

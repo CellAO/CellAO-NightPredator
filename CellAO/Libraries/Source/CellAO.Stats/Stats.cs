@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:28
+// Last modified: 2013-11-01 21:03
 
 #endregion
 
@@ -46,10 +41,6 @@ namespace CellAO.Stats
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using Utility;
-
-    #endregion
-
-    #region Character_Stats holder for Character's stats
 
     #endregion
 
@@ -798,16 +789,6 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         private readonly Stat driveWater = new Stat(117, 5, true, false, false);
-
-        private readonly Identity owner;
-
-        public Identity Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -1760,6 +1741,10 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         private readonly Stat ownedTowers = new Stat(514, 1234567890, false, false, false);
+
+        /// <summary>
+        /// </summary>
+        private readonly Identity owner;
 
         /// <summary>
         /// </summary>
@@ -2909,8 +2894,7 @@ namespace CellAO.Stats
         /// Character_Stats
         /// Class for character's stats
         /// </summary>
-        /// <param name="parent">
-        /// Stat's owner (Character or derived class)
+        /// <param name="owner">
         /// </param>
         public Stats(Identity owner)
         {
@@ -7886,6 +7870,16 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        public Identity Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         public Stat OwnerInstance
         {
             get
@@ -10736,6 +10730,60 @@ namespace CellAO.Stats
 
         #endregion
 
+        #region Explicit Interface Indexers
+
+        /// <summary>
+        /// </summary>
+        /// <param name="index">
+        /// </param>
+        /// <exception cref="StatDoesNotExistException">
+        /// </exception>
+        /// <returns>
+        /// </returns>
+        IStat IStatList.this[int index]
+        {
+            get
+            {
+                foreach (IStat stat in this.all)
+                {
+                    if (stat.StatId == index)
+                    {
+                        return stat;
+                    }
+                }
+
+                throw new StatDoesNotExistException("Stat with Id " + index + " does not exist");
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="name">
+        /// </param>
+        /// <exception cref="StatDoesNotExistException">
+        /// </exception>
+        /// <returns>
+        /// </returns>
+        IStat IStatList.this[string name]
+        {
+            get
+            {
+                int index = StatNamesDefaults.GetStatNumber(name);
+                foreach (IStat stat in this.all)
+                {
+                    if (stat.StatId == index)
+                    {
+                        return stat;
+                    }
+                }
+
+                throw new StatDoesNotExistException(
+                    "huh? Stat with Id " + index + " does not exist, but the name " + name + " exists? CODER ALERT");
+            }
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -10851,8 +10899,39 @@ namespace CellAO.Stats
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool Read(Identity identity)
+        {
+            try
+            {
+                this.ReadStatsfromSql(identity);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.ErrorException(ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool Read()
+        {
+            return this.Read(this.Owner);
+        }
+
+        /// <summary>
         /// Read all stats from Sql
         /// </summary>
+        /// <param name="identity">
+        /// </param>
         public void ReadStatsfromSql(Identity identity)
         {
             foreach (DBStats dbStats in
@@ -11130,85 +11209,9 @@ namespace CellAO.Stats
         }
 
         /// <summary>
-        /// Write all Stats to Sql
         /// </summary>
-        public void WriteStatstoSql()
-        {
-            this.Write();
-        }
-
-        #endregion
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index">
+        /// <param name="identity">
         /// </param>
-        /// <exception cref="StatDoesNotExistException">
-        /// </exception>
-        /// <returns>
-        /// </returns>
-        IStat IStatList.this[int index]
-        {
-            get
-            {
-                foreach (IStat stat in this.all)
-                {
-                    if (stat.StatId == index)
-                    {
-                        return stat;
-                    }
-                }
-
-                throw new StatDoesNotExistException("Stat with Id " + index + " does not exist");
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="name">
-        /// </param>
-        /// <exception cref="StatDoesNotExistException">
-        /// </exception>
-        /// <returns>
-        /// </returns>
-        IStat IStatList.this[string name]
-        {
-            get
-            {
-                int index = StatNamesDefaults.GetStatNumber(name);
-                foreach (IStat stat in this.all)
-                {
-                    if (stat.StatId == index)
-                    {
-                        return stat;
-                    }
-                }
-
-                throw new StatDoesNotExistException(
-                    "huh? Stat with Id " + index + " does not exist, but the name " + name + " exists? CODER ALERT");
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Read(Identity identity)
-        {
-            try
-            {
-                this.ReadStatsfromSql(identity);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogUtil.ErrorException(ex);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         /// <returns>
         /// </returns>
         public bool Write(Identity identity)
@@ -11226,9 +11229,9 @@ namespace CellAO.Stats
                     temp.Add(
                         new DBStats
                         {
-                            statid = stat.StatId,
-                            statvalue = (int)stat.BaseValue,
-                            type = typ,
+                            statid = stat.StatId, 
+                            statvalue = (int)stat.BaseValue, 
+                            type = typ, 
                             instance = inst
                         });
                 }
@@ -11246,15 +11249,24 @@ namespace CellAO.Stats
             return true;
         }
 
-        public bool Read()
-        {
-            return this.Read(this.Owner);
-        }
-
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public bool Write()
         {
             return this.Write(this.Owner);
         }
+
+        /// <summary>
+        /// Write all Stats to Sql
+        /// </summary>
+        public void WriteStatstoSql()
+        {
+            this.Write();
+        }
+
+        #endregion
     }
 
     #endregion

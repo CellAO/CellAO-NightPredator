@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-01 18:27
+// Last modified: 2013-11-01 21:05
 
 #endregion
 
@@ -43,15 +38,46 @@ namespace CellAO.Core.Items
     /// </summary>
     public interface IItem
     {
+        #region Public Properties
+
         /// <summary>
-        /// Quality level of the item
+        /// Item's Flags
         /// </summary>
-        int Quality { get; set; }
+        int Flags { get; }
+
+        /// <summary>
+        /// HighId of the item template
+        /// </summary>
+        int HighID { get; }
 
         /// <summary>
         /// Identity of the item (if it is instanced)
         /// </summary>
         Identity Identity { get; }
+
+        /// <summary>
+        /// LowId of the item template
+        /// </summary>
+        int LowID { get; }
+
+        /// <summary>
+        /// Stacked count of the item
+        /// </summary>
+        int MultipleCount { get; set; }
+
+        /// <summary>
+        /// We Dont Know (TM)
+        /// </summary>
+        int Nothing { get; }
+
+        /// <summary>
+        /// Quality level of the item
+        /// </summary>
+        int Quality { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Get item attribute
@@ -65,6 +91,12 @@ namespace CellAO.Core.Items
         int GetAttribute(int attributeId);
 
         /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        byte[] GetItemAttributes();
+
+        /// <summary>
         /// Set an item attribute
         /// </summary>
         /// <param name="attributeId">
@@ -76,39 +108,10 @@ namespace CellAO.Core.Items
         void SetAttribute(int attributeId, int newValue);
 
         /// <summary>
-        /// LowId of the item template
-        /// </summary>
-        int LowID { get; }
-
-        /// <summary>
-        /// HighId of the item template
-        /// </summary>
-        int HighID { get; }
-
-        /// <summary>
-        /// We Dont Know (TM)
-        /// </summary>
-        int Nothing { get; }
-
-        /// <summary>
-        /// Stacked count of the item
-        /// </summary>
-        int MultipleCount { get; set; }
-
-        /// <summary>
-        /// Item's Flags
-        /// </summary>
-        int Flags { get; }
-
-        /// <summary>
         /// Write item to database
         /// </summary>
         void WriteToDatabase();
 
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        byte[] GetItemAttributes();
+        #endregion
     }
 }
