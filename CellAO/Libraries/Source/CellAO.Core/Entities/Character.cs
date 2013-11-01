@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 19:23
-// Created:       2013-11-01 19:00
+// Last modified: 2013-11-01 19:29
 
 #endregion
 
@@ -49,7 +48,7 @@ namespace CellAO.Core.Entities
 
     #endregion
 
-    public class Character : Dynel, IPacketReceivingEntity, ISummoner, ICharacter
+    public class Character : Dynel, ICharacter
     {
         #region Constructors and Destructors
 
