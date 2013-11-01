@@ -52,6 +52,7 @@
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ConfigReadWrite.cs" />
     <Compile Include="ConsoleText.cs" />
+    <Compile Include="LogUtil.cs" />
     <Compile Include="OnScreenBanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
