@@ -99,6 +99,7 @@
     <Compile Include="Inventory\OutgoingTradeInventoryPage.cs" />
     <Compile Include="Inventory\OverflowInventoryPage.cs" />
     <Compile Include="Inventory\PlayerInventoryPage.cs" />
+    <Compile Include="Inventory\PlayerShopInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
     <Compile Include="Items\IItemNanoEvents.cs" />
