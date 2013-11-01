@@ -95,6 +95,7 @@
     <Compile Include="Inventory\ImplantInventoryPage.cs" />
     <Compile Include="Inventory\IncomingTradeInventoryPage.cs" />
     <Compile Include="Inventory\ItemContainer.cs" />
+    <Compile Include="Inventory\KnuBotTradeInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
     <Compile Include="Items\IItemNanoEvents.cs" />
