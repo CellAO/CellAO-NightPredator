@@ -58,6 +58,11 @@ namespace CellAO.Core.Entities
             this.Starting = false;
         }
 
+        private void InitializeInventory()
+        {
+            
+        }
+
         #endregion
 
         #region Public Properties

@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 10:43
+// Last modified: 2013-11-01 12:30
 // Created:       2013-11-01 10:41
 
 #endregion
@@ -170,6 +170,21 @@ namespace CellAO.Core.Inventory
         public IInventoryPage PageFromSlot(int slotNum)
         {
             throw new NotImplementedException();
+        }
+
+        public int Stat(int statId)
+        {
+            // TODO: Can be optimized, hardcoding the page numbers to be considered equipmentpages
+
+            int value = 0;
+            foreach (IInventoryPage inventoryPage in this.Pages.Values)
+            {
+                if (inventoryPage is IEquipmentPage)
+                {
+                    value += ((IEquipmentPage)inventoryPage).Stat(statId);
+                }
+            }
+            return value;
         }
 
         /// <summary>

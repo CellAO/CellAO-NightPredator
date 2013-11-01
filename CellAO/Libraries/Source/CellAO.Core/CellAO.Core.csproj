@@ -87,6 +87,7 @@
     <Compile Include="Inventory\BackPackInventory.cs" />
     <Compile Include="Inventory\BaseInventory.cs" />
     <Compile Include="Inventory\BaseInventoryPage.cs" />
+    <Compile Include="Inventory\IEquipmentPage.cs" />
     <Compile Include="Inventory\IInventoryPage.cs" />
     <Compile Include="Inventory\IInventoryPages.cs" />
     <Compile Include="Inventory\IItemContainer.cs" />

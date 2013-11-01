@@ -26,7 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 10:59
+// Last modified: 2013-11-01 12:13
 // Created:       2013-11-01 10:59
 
 #endregion
@@ -46,7 +46,7 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public class ImplantInventoryPage : BaseInventoryPage, IItemSlotHandler
+    public class ImplantInventoryPage : BaseInventoryPage, IItemSlotHandler, IEquipmentPage
     {
         /// <summary>
         /// </summary>
@@ -139,6 +139,16 @@ namespace CellAO.Core.Inventory
         public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
         {
             throw new NotImplementedException();
+        }
+
+        public int Stat(int statId)
+        {
+            int value = 0;
+            foreach (IItem item in this.List().Values)
+            {
+                value += item.GetAttribute(statId);
+            }
+            return value;
         }
     }
 }
