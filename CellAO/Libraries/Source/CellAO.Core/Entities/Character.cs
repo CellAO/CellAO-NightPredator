@@ -58,7 +58,6 @@ namespace CellAO.Core.Entities
         public Character(IZoneClient zoneClient, Identity identity)
             : base(identity)
         {
-            this.BaseInventory = new PlayerInventory();
         }
 
         #endregion
