@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\IActions.cs" />
+    <Compile Include="Entities\Character.cs" />
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
     <Compile Include="Entities\ICharacter.cs" />
