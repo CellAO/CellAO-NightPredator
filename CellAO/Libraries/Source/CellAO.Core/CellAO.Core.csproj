@@ -85,7 +85,7 @@
     <Compile Include="InternalMessaging\IInternalMessageBody.cs" />
     <Compile Include="Inventory\ArmorInventoryPage.cs" />
     <Compile Include="Inventory\BackPackInventory.cs" />
-    <Compile Include="Inventory\BaseInventory.cs" />
+    <Compile Include="Inventory\BaseInventoryPages.cs" />
     <Compile Include="Inventory\BaseInventoryPage.cs" />
     <Compile Include="Inventory\IEquipmentPage.cs" />
     <Compile Include="Inventory\IInventoryPage.cs" />
