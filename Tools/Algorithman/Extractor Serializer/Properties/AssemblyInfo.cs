@@ -1,4 +1,6 @@
-﻿#region License
+﻿#region Usings ...
+
+#region License
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
@@ -26,8 +28,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 18:28
 
 #endregion
 
@@ -41,6 +42,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+
+#endregion
 
 [assembly: AssemblyTitle("Extractor Serializer")]
 [assembly: AssemblyDescription("")]

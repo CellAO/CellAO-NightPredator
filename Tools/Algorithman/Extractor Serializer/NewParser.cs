@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 17:25
+// Last modified: 2013-11-01 18:28
 
 #endregion
 
@@ -241,12 +240,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aoi.Attack, aoi.Defend);
                             break;
                         case 6:
-                            {
-                                this.br.Skip(4);
-                                int count = this.br.Read3F1() * 8;
-                                this.br.Skip(count);
-                                break;
-                            }
+                        {
+                            this.br.Skip(4);
+                            int count = this.br.Read3F1() * 8;
+                            this.br.Skip(count);
+                            break;
+                        }
 
                         case 14:
                             this.ParseAnimSoundSet(1, aoi);
@@ -366,12 +365,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aon.Attack, aon.Defend);
                             break;
                         case 6:
-                            {
-                                this.br.Skip(4);
-                                int count = this.br.Read3F1() * 8;
-                                this.br.Skip(count);
-                                break;
-                            }
+                        {
+                            this.br.Skip(4);
+                            int count = this.br.Read3F1() * 8;
+                            this.br.Skip(count);
+                            break;
+                        }
 
                         case 14:
                             this.ParseAnimSoundSet(1, null);

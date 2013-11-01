@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:17
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -90,19 +89,19 @@ namespace CellAO.Database.Dao
                     conn.Execute(
                         "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
                         new
-                            {
-                                creationdate = DateTime.Now,
-                                email = login.Email,
-                                firstname = login.FirstName,
-                                lastname = login.LastName,
-                                username = login.Username,
-                                password = login.Password,
-                                allowed_characters = login.Allowed_Characters,
-                                flags = login.Flags,
-                                accountflags = login.AccountFlags,
-                                expansions = login.Expansions,
-                                gm = login.GM
-                            });
+                        {
+                            creationdate = DateTime.Now,
+                            email = login.Email,
+                            firstname = login.FirstName,
+                            lastname = login.LastName,
+                            username = login.Username,
+                            password = login.Password,
+                            allowed_characters = login.Allowed_Characters,
+                            flags = login.Flags,
+                            accountflags = login.AccountFlags,
+                            expansions = login.Expansions,
+                            gm = login.GM
+                        });
                 }
             }
             catch (Exception e)

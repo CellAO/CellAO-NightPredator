@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:15
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -82,7 +81,8 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     return conn.Query<DBInstancedItem>(
-                        "SELECT * FROM instanceditems where id = @id", new { id = itemid });
+                        "SELECT * FROM instanceditems where id = @id",
+                        new { id = itemid });
                 }
             }
             catch (Exception e)
@@ -107,25 +107,25 @@ namespace CellAO.Database.Dao
                         + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
                         + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
                         new
-                            {
-                                conttype = item.containertype,
-                                continstance = item.containerinstance,
-                                contplacement = item.containerplacement,
-                                itype = item.itemtype,
-                                iinstance = item.iteminstance,
-                                low = item.lowid,
-                                high = item.highid,
-                                ql = item.quality,
-                                mc = item.multiplecount,
-                                ix = item.x,
-                                iy = item.y,
-                                iz = item.z,
-                                hx = item.headingx,
-                                hy = item.headingy,
-                                hz = item.headingz,
-                                hw = item.headingw,
-                                st = item.stats
-                            });
+                        {
+                            conttype = item.containertype,
+                            continstance = item.containerinstance,
+                            contplacement = item.containerplacement,
+                            itype = item.itemtype,
+                            iinstance = item.iteminstance,
+                            low = item.lowid,
+                            high = item.highid,
+                            ql = item.quality,
+                            mc = item.multiplecount,
+                            ix = item.x,
+                            iy = item.y,
+                            iz = item.z,
+                            hx = item.headingx,
+                            hy = item.headingy,
+                            hz = item.headingz,
+                            hw = item.headingw,
+                            st = item.stats
+                        });
                 }
             }
             catch (Exception e)
@@ -162,25 +162,25 @@ namespace CellAO.Database.Dao
                                 + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
                                 + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)",
                                 new
-                                    {
-                                        conttype = item.containertype,
-                                        continstance = item.containerinstance,
-                                        contplacement = item.containerplacement,
-                                        itype = item.itemtype,
-                                        iinstance = item.iteminstance,
-                                        low = item.lowid,
-                                        high = item.highid,
-                                        ql = item.quality,
-                                        mc = item.multiplecount,
-                                        ix = item.x,
-                                        iy = item.y,
-                                        iz = item.z,
-                                        hx = item.headingx,
-                                        hy = item.headingy,
-                                        hz = item.headingz,
-                                        hw = item.headingw,
-                                        st = item.stats
-                                    },
+                                {
+                                    conttype = item.containertype,
+                                    continstance = item.containerinstance,
+                                    contplacement = item.containerplacement,
+                                    itype = item.itemtype,
+                                    iinstance = item.iteminstance,
+                                    low = item.lowid,
+                                    high = item.highid,
+                                    ql = item.quality,
+                                    mc = item.multiplecount,
+                                    ix = item.x,
+                                    iy = item.y,
+                                    iz = item.z,
+                                    hx = item.headingx,
+                                    hy = item.headingy,
+                                    hz = item.headingz,
+                                    hw = item.headingw,
+                                    st = item.stats
+                                },
                                 transaction: trans);
                         }
 

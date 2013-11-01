@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:16
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -166,26 +165,26 @@ namespace CellAO.Database.Dao
                         + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
                         + "@HeadingZ, @HeadingW, @Online,@username)",
                         new
-                            {
-                                character.Name,
-                                character.FirstName,
-                                character.LastName,
-                                character.Textures0,
-                                character.Textures1,
-                                character.Textures2,
-                                character.Textures3,
-                                character.Textures4,
-                                character.Playfield,
-                                character.X,
-                                character.Y,
-                                character.Z,
-                                character.HeadingX,
-                                character.HeadingY,
-                                character.HeadingZ,
-                                character.HeadingW,
-                                Online = 0,
-                                username = character.Username
-                            });
+                        {
+                            character.Name,
+                            character.FirstName,
+                            character.LastName,
+                            character.Textures0,
+                            character.Textures1,
+                            character.Textures2,
+                            character.Textures3,
+                            character.Textures4,
+                            character.Playfield,
+                            character.X,
+                            character.Y,
+                            character.Z,
+                            character.HeadingX,
+                            character.HeadingY,
+                            character.HeadingZ,
+                            character.HeadingW,
+                            Online = 0,
+                            username = character.Username
+                        });
                 }
             }
             catch (Exception e)

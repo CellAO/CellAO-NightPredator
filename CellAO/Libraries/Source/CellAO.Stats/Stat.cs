@@ -26,13 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-10-30 22:52
-// Created:       2013-10-30 21:00
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
 namespace CellAO.Stats
 {
+    #region Usings ...
+
     #region Usings ...
 
     using System;
@@ -41,6 +42,8 @@ namespace CellAO.Stats
     #endregion
 
     #region StatChangedEventArgs
+
+    #endregion
 
     /// <summary>
     /// Event Arguments for changed stats
@@ -60,7 +63,10 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat, uint valueBeforeChange, uint valueAfterChange, bool announceToPlayfield)
+            Stat changedStat,
+            uint valueBeforeChange,
+            uint valueAfterChange,
+            bool announceToPlayfield)
         {
             this.Stat = changedStat;
             this.OldValue = valueBeforeChange;
@@ -254,7 +260,7 @@ namespace CellAO.Stats
             {
                 return (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
-                    ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
                 // ReSharper restore PossibleLossOfFraction
             }
 

@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:01
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -78,7 +77,8 @@ namespace CellAO.Database
                     p.Add("@orgId");
                     orgMembers.AddRange(
                         conn.Query<int>(
-                            "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres, p));
+                            "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres,
+                            p));
                 }
             }
             catch (Exception e)
@@ -247,7 +247,8 @@ namespace CellAO.Database
                                     if (counter < queries.Length)
                                     {
                                         buf1 = queries[counter].Substring(
-                                            0, queries[counter].ToLower().IndexOf("values"));
+                                            0,
+                                            queries[counter].ToLower().IndexOf("values"));
                                         buf1 = buf1 + "VALUES ";
                                         StringBuilder Buffer = new StringBuilder(0, 1 * 1024 * 1024);
                                         while (counter < queries.Length)
@@ -277,7 +278,7 @@ namespace CellAO.Database
                                                         string lp2 =
                                                             Convert.ToInt32(
                                                                 Math.Floor((double)counter / queries.Length * 100))
-                                                                   .ToString();
+                                                                .ToString();
                                                         if (lp2 != lastpercent)
                                                         {
                                                             Console.Write(
@@ -299,7 +300,7 @@ namespace CellAO.Database
                                             Buffer.Clear();
                                             string lp =
                                                 Convert.ToInt32(Math.Floor((double)counter / queries.Length * 100))
-                                                       .ToString();
+                                                    .ToString();
                                             if (lp != lastpercent)
                                             {
                                                 Console.Write(

@@ -26,13 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:55
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:28
 
 #endregion
 
 namespace CellAO.Stats
 {
+    #region Usings ...
+
     #region Usings ...
 
     using System;
@@ -49,6 +50,8 @@ namespace CellAO.Stats
     #endregion
 
     #region Character_Stats holder for Character's stats
+
+    #endregion
 
     /// <summary>
     /// </summary>
@@ -11222,12 +11225,12 @@ namespace CellAO.Stats
                 {
                     temp.Add(
                         new DBStats
-                            {
-                                statid = stat.StatId,
-                                statvalue = (int)stat.BaseValue,
-                                type = typ,
-                                instance = inst
-                            });
+                        {
+                            statid = stat.StatId,
+                            statvalue = (int)stat.BaseValue,
+                            type = typ,
+                            instance = inst
+                        });
                 }
             }
 

@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:15
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -174,15 +173,15 @@ namespace CellAO.Database.Dao
                                 + ",lowid,highid,quality,multiplecount) VALUES (@conttype,"
                                 + " @continstance, @contplacement, @low, @high, @ql, @mc)",
                                 new
-                                    {
-                                        conttype = item.containertype,
-                                        continstance = item.containerinstance,
-                                        contplacement = item.containerplacement,
-                                        low = item.lowid,
-                                        high = item.highid,
-                                        ql = item.quality,
-                                        mc = item.multiplecount,
-                                    },
+                                {
+                                    conttype = item.containertype,
+                                    continstance = item.containerinstance,
+                                    contplacement = item.containerplacement,
+                                    low = item.lowid,
+                                    high = item.highid,
+                                    ql = item.quality,
+                                    mc = item.multiplecount,
+                                },
                                 transaction: trans);
                         }
 

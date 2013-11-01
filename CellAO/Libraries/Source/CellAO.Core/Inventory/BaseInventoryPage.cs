@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:22
-// Created:       2013-11-01 10:47
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -221,33 +220,33 @@ namespace CellAO.Core.Inventory
                 if (kv.Value.Identity.Type != IdentityType.None)
                 {
                     DBInstancedItem dbi = new DBInstancedItem
-                                              {
-                                                  containerinstance = this.Identity.Instance,
-                                                  containertype = (int)this.Identity.Type,
-                                                  containerplacement = kv.Key,
-                                                  itemtype = (int)kv.Value.Identity.Type,
-                                                  iteminstance = kv.Value.Identity.Instance,
-                                                  lowid = kv.Value.LowID,
-                                                  highid = kv.Value.HighID,
-                                                  quality = kv.Value.Quality,
-                                                  multiplecount = kv.Value.MultipleCount,
-                                                  stats = new Binary(kv.Value.GetItemAttributes())
-                                              };
+                                          {
+                                              containerinstance = this.Identity.Instance,
+                                              containertype = (int)this.Identity.Type,
+                                              containerplacement = kv.Key,
+                                              itemtype = (int)kv.Value.Identity.Type,
+                                              iteminstance = kv.Value.Identity.Instance,
+                                              lowid = kv.Value.LowID,
+                                              highid = kv.Value.HighID,
+                                              quality = kv.Value.Quality,
+                                              multiplecount = kv.Value.MultipleCount,
+                                              stats = new Binary(kv.Value.GetItemAttributes())
+                                          };
 
                     DBinstanced.Add(dbi);
                 }
                 else
                 {
                     DBItem dbi = new DBItem
-                                     {
-                                         containerinstance = this.Identity.Instance,
-                                         containertype = (int)this.Identity.Type,
-                                         containerplacement = kv.Key,
-                                         lowid = kv.Value.LowID,
-                                         highid = kv.Value.HighID,
-                                         quality = kv.Value.Quality,
-                                         multiplecount = kv.Value.MultipleCount
-                                     };
+                                 {
+                                     containerinstance = this.Identity.Instance,
+                                     containertype = (int)this.Identity.Type,
+                                     containerplacement = kv.Key,
+                                     lowid = kv.Value.LowID,
+                                     highid = kv.Value.HighID,
+                                     quality = kv.Value.Quality,
+                                     multiplecount = kv.Value.MultipleCount
+                                 };
 
                     DBuninstanced.Add(dbi);
                 }

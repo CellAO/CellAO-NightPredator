@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:23
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -220,7 +219,8 @@ namespace CellAO.Core.Vector
             get
             {
                 double _yaw = Math.Atan2(
-                    (2 * this.y * this.w) - (2 * this.x * this.z), 1 - (2 * this.y * this.y) - (2 * this.z * this.z));
+                    (2 * this.y * this.w) - (2 * this.x * this.z),
+                    1 - (2 * this.y * this.y) - (2 * this.z * this.z));
                 if (_yaw < 0)
                 {
                     // So we get a positive number

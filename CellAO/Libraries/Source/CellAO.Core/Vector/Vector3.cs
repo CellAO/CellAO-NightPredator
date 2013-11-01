@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:23
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -187,7 +186,9 @@ namespace CellAO.Core.Vector
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "value", value, "The magnitude of a Vector must be positive or 0.");
+                        "value",
+                        value,
+                        "The magnitude of a Vector must be positive or 0.");
                 }
                 else if (this.Magnitude == 0)
                 {

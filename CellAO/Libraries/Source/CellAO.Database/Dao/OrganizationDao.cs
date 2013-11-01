@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 17:15
-// Created:       2013-11-01 08:17
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
@@ -173,7 +172,8 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", new { newLeaderId, orgId });
+                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId",
+                        new { newLeaderId, orgId });
                 }
             }
             catch (Exception e)

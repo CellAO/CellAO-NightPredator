@@ -26,8 +26,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:46
-// Created:       2013-11-01 16:29
+// Last modified: 2013-11-01 18:28
 
 #endregion
 
@@ -66,10 +65,10 @@ namespace Utility
             LoggingConfiguration config = LogManager.Configuration ?? new LoggingConfiguration();
 
             var consoleTarget = new ColoredConsoleTarget
-                                    {
-                                        Layout =
-                                            "${processtime} [${level}] ${message} ${exception:format=tostring}"
-                                    };
+                                {
+                                    Layout =
+                                        "${processtime} [${level}] ${message} ${exception:format=tostring}"
+                                };
             config.AddTarget("console", consoleTarget);
 
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, consoleTarget));
@@ -156,7 +155,11 @@ namespace Utility
         }
 
         public static void LogException(
-            Action<string> logger, Exception e, bool addSystemInfo, string msg, params object[] format)
+            Action<string> logger,
+            Exception e,
+            bool addSystemInfo,
+            string msg,
+            params object[] format)
         {
             if (!string.IsNullOrEmpty(msg))
             {
@@ -210,11 +213,10 @@ namespace Utility
 #if DEBUG
             title += " - Debug";
 #else
-			title += " - Release";
+            title += " - Release";
 #endif
             logger(title);
             logger(string.Format("OS: {0} - CLR: {1}", Environment.OSVersion, Environment.Version));
         }
     }
 }
-

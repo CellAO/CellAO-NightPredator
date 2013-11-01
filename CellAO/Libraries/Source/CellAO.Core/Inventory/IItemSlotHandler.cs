@@ -26,13 +26,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-01 16:22
-// Created:       2013-11-01 10:51
+// Last modified: 2013-11-01 18:27
 
 #endregion
 
 namespace CellAO.Core.Inventory
 {
+    #region Usings ...
+
     #region Usings ...
 
     using CellAO.Core.Items;
@@ -41,6 +42,8 @@ namespace CellAO.Core.Inventory
     #endregion
 
     #region Usings ...
+
+    #endregion
 
     #endregion
 
