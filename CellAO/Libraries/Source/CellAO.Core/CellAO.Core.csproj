@@ -49,6 +49,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -83,6 +84,7 @@
     <Compile Include="InternalMessaging\IInternalMessage.cs" />
     <Compile Include="InternalMessaging\IInternalMessageBody.cs" />
     <Compile Include="Inventory\BaseInventory.cs" />
+    <Compile Include="Inventory\BaseInventoryPage.cs" />
     <Compile Include="Inventory\IInventoryPage.cs" />
     <Compile Include="Inventory\IInventoryPages.cs" />
     <Compile Include="Inventory\IItemContainer.cs" />
