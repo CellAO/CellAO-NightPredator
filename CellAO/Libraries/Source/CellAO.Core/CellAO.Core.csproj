@@ -93,6 +93,7 @@
     <Compile Include="Inventory\IItemHotSwapHandler.cs" />
     <Compile Include="Inventory\IItemSlotHandler.cs" />
     <Compile Include="Inventory\ImplantInventoryPage.cs" />
+    <Compile Include="Inventory\IncomingTradeInventoryPage.cs" />
     <Compile Include="Inventory\ItemContainer.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
