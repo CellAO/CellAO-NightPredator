@@ -101,6 +101,7 @@
     <Compile Include="Inventory\PlayerInventoryPage.cs" />
     <Compile Include="Inventory\PlayerShopInventoryPage.cs" />
     <Compile Include="Inventory\SocialArmorInventoryPage.cs" />
+    <Compile Include="Inventory\WeaponInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
     <Compile Include="Items\IItemNanoEvents.cs" />
