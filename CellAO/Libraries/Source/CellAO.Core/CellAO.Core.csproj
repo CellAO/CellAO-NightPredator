@@ -85,6 +85,7 @@
     <Compile Include="Inventory\IInventoryPage.cs" />
     <Compile Include="Inventory\IInventoryPages.cs" />
     <Compile Include="Inventory\IItemContainer.cs" />
+    <Compile Include="Inventory\ItemContainer.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
     <Compile Include="Items\IItemNanoEvents.cs" />

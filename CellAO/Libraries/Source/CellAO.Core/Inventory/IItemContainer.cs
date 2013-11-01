@@ -36,10 +36,11 @@ namespace CellAO.Core.Inventory
     #region Usings ...
 
     using CellAO.Core.Entities;
+    using CellAO.Interfaces;
 
     #endregion
 
-    public interface IItemContainer : IEntity
+    public interface IItemContainer : IEntity, IDatabaseObject
     {
         /// <summary>
         /// The inventory of this Container
