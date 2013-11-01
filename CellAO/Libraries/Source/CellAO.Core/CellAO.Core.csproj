@@ -97,6 +97,7 @@
     <Compile Include="Inventory\ItemContainer.cs" />
     <Compile Include="Inventory\KnuBotTradeInventoryPage.cs" />
     <Compile Include="Inventory\OutgoingTradeInventoryPage.cs" />
+    <Compile Include="Inventory\OverflowInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
     <Compile Include="Items\IItemNanoEvents.cs" />
