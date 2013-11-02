@@ -34,56 +34,69 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Data object for Login data
     /// </summary>
     public class DBLoginData
     {
         #region Public Properties
 
         /// <summary>
+        /// Account flags
         /// </summary>
         public int AccountFlags { get; set; }
 
         /// <summary>
+        /// Number of allowed characters
         /// </summary>
         public int Allowed_Characters { get; set; }
 
         /// <summary>
+        /// Date of account creation
         /// </summary>
         public DateTime CreationDate { get; set; }
 
         /// <summary>
+        /// email address of the account
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
+        /// Enabled Expansions (bitfield)
         /// </summary>
         public int Expansions { get; set; }
 
         /// <summary>
+        /// Account owner first name
         /// </summary>
         public string FirstName { get; set; }
 
         /// <summary>
+        /// Account flags 2
         /// </summary>
         public int Flags { get; set; }
 
         /// <summary>
+        /// GameMaster level 
         /// </summary>
         public int GM { get; set; }
 
         /// <summary>
+        /// Account id
         /// </summary>
         public int ID { get; set; }
 
         /// <summary>
+        /// Account owner last name
         /// </summary>
         public string LastName { get; set; }
 
         /// <summary>
+        /// Password (hash)
         /// </summary>
         public string Password { get; set; }
 
         /// <summary>
+        /// Account username
         /// </summary>
         public string Username { get; set; }
 

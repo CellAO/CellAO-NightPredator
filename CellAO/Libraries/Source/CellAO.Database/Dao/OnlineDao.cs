@@ -40,16 +40,20 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Data access object to check online status of characters
     /// </summary>
     public static class OnlineDao
     {
         #region Public Methods and Operators
 
         /// <summary>
+        /// Check if character (id) is online
         /// </summary>
         /// <param name="id">
+        /// Id of the character
         /// </param>
         /// <returns>
+        /// DBOnline object
         /// </returns>
         public static DBOnline IsOnline(int id)
         {
@@ -71,8 +75,10 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Set online flag in table
         /// </summary>
         /// <param name="id">
+        /// Id of the character
         /// </param>
         public static void SetOnline(int id)
         {

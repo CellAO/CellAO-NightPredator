@@ -28,80 +28,99 @@
 namespace CellAO.Database.Entities
 {
     /// <summary>
+    /// Data object for Character DAO
     /// </summary>
     public class DBCharacter
     {
         #region Public Properties
 
         /// <summary>
+        /// First name of the character
         /// </summary>
         public string FirstName { get; set; }
 
         /// <summary>
+        /// Heading (W)
         /// </summary>
         public float HeadingW { get; set; }
 
         /// <summary>
+        /// Heading (X)
         /// </summary>
         public float HeadingX { get; set; }
 
         /// <summary>
+        /// Heading (Y)
         /// </summary>
         public float HeadingY { get; set; }
 
         /// <summary>
+        /// Heading (Z)
         /// </summary>
         public float HeadingZ { get; set; }
 
         /// <summary>
+        /// Id (instance) of the character
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
+        /// Last name of the character
         /// </summary>
         public string LastName { get; set; }
 
         /// <summary>
+        /// Name of the character
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
+        /// Playfield
         /// </summary>
         public int Playfield { get; set; }
 
         /// <summary>
+        /// Texture #0
         /// </summary>
         public int Textures0 { get; set; }
 
         /// <summary>
+        /// Texture #1
         /// </summary>
         public int Textures1 { get; set; }
 
         /// <summary>
+        /// Texture #2
         /// </summary>
         public int Textures2 { get; set; }
 
         /// <summary>
+        /// Texture #3
         /// </summary>
         public int Textures3 { get; set; }
 
         /// <summary>
+        /// Texture #4
         /// </summary>
         public int Textures4 { get; set; }
 
         /// <summary>
+        /// Username of the character
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
+        /// Coordinates (X)
         /// </summary>
         public float X { get; set; }
 
         /// <summary>
+        /// Coordinates (Y)
         /// </summary>
         public float Y { get; set; }
 
         /// <summary>
+        /// Coordinates (Z)
         /// </summary>
         public float Z { get; set; }
 

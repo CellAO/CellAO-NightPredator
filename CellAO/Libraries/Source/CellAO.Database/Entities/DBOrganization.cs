@@ -28,60 +28,74 @@
 namespace CellAO.Database.Dao
 {
     /// <summary>
+    /// Data object for organization data
     /// </summary>
     public class DBOrganization
     {
         #region Public Properties
 
         /// <summary>
+        /// Organization bank id
         /// </summary>
         public ulong Bank { get; set; }
 
         /// <summary>
+        /// Organization City id
         /// </summary>
         public int CityID { get; set; }
 
         /// <summary>
+        /// Organization commission
         /// </summary>
         public int Commission { get; set; }
 
         /// <summary>
+        /// Id of the organizations contracts
         /// </summary>
         public int ContractsID { get; set; }
 
         /// <summary>
+        /// Description of the organization
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
+        /// Government form
         /// </summary>
         public int GovernmentForm { get; set; }
 
         /// <summary>
+        /// Organizations history
         /// </summary>
         public string History { get; set; }
 
         /// <summary>
+        /// Organization id
         /// </summary>
         public int ID { get; set; }
 
         /// <summary>
+        /// Id of organization President
         /// </summary>
         public int LeaderID { get; set; }
 
         /// <summary>
+        /// Name of the organization
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
+        /// Organization's objective
         /// </summary>
         public string Objective { get; set; }
 
         /// <summary>
+        /// Tax rate
         /// </summary>
         public int Tax { get; set; }
 
         /// <summary>
+        /// Tower field id
         /// </summary>
         public int TowerFieldID { get; set; }
 

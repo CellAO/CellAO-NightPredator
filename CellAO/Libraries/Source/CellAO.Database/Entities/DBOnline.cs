@@ -28,12 +28,14 @@
 namespace CellAO.Database.Dao
 {
     /// <summary>
+    /// Data object for online status
     /// </summary>
     public class DBOnline
     {
         #region Public Properties
 
         /// <summary>
+        /// Online status
         /// </summary>
         public int Online { get; set; }
 

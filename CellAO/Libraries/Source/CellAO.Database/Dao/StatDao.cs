@@ -41,20 +41,26 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Data access object for Stats
     /// </summary>
     public static class StatDao
     {
         #region Public Methods and Operators
 
         /// <summary>
+        /// Add a Stat to table
         /// </summary>
         /// <param name="type">
+        /// Type id of the owner
         /// </param>
         /// <param name="instance">
+        /// Instance of the owner
         /// </param>
         /// <param name="num">
+        /// Stat id number
         /// </param>
         /// <param name="value">
+        /// Value of the stat
         /// </param>
         public static void AddStat(int type, int instance, int num, int value)
         {
@@ -75,8 +81,10 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Bulk insert/replace of stats
         /// </summary>
         /// <param name="stats">
+        /// List of DBStats
         /// </param>
         public static void BulkReplace(List<DBStats> stats)
         {
@@ -105,10 +113,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Delete stats
         /// </summary>
         /// <param name="type">
+        /// Type id of the owner
         /// </param>
         /// <param name="instance">
+        /// Instance of the owner
         /// </param>
         public static void DeleteStats(int type, int instance)
         {
@@ -127,11 +138,14 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Disband an organization
         /// </summary>
         /// <param name="orgId">
+        /// Id of the organization
         /// </param>
         public static void DisbandOrganization(int orgId)
         {
+            // This only takes care of the offline characters. Characters currently online have to be notified as well (setting their stats + message)
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
@@ -147,8 +161,10 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Get all Stats
         /// </summary>
         /// <returns>
+        /// Collection of DBStats
         /// </returns>
         public static IEnumerable<DBStats> GetAll()
         {
@@ -169,39 +185,19 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static IEnumerable<DBStats> GetById(int characterId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBStats>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id", 
-                            new { id = characterId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
+        /// Get one stat from a particular character
         /// </summary>
         /// <param name="type">
+        /// Type id of the character
         /// </param>
         /// <param name="instance">
+        /// instance of the character
         /// </param>
         /// <param name="statId">
+        /// Stat number
         /// </param>
         /// <returns>
+        /// DBStats object
         /// </returns>
         public static DBStats GetById(int type, int instance, int statId)
         {
@@ -223,12 +219,16 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Get list of stats by character type/instance
         /// </summary>
         /// <param name="type">
+        /// Type id of the character
         /// </param>
         /// <param name="instance">
+        /// Instance of the character
         /// </param>
         /// <returns>
+        /// Collection of DBStats
         /// </returns>
         public static IEnumerable<DBStats> GetById(int type, int instance)
         {

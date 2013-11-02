@@ -34,76 +34,94 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Data object for instanced items
     /// </summary>
     public class DBInstancedItem
     {
         #region Public Properties
 
         /// <summary>
+        /// Instance of the container
         /// </summary>
         public int containerinstance { get; set; }
 
         /// <summary>
+        /// Slot inside the container
         /// </summary>
         public int containerplacement { get; set; }
 
         /// <summary>
+        /// Type id of the container
         /// </summary>
         public int containertype { get; set; }
 
         /// <summary>
+        /// Heading (W)
         /// </summary>
         public float headingw { get; set; }
 
         /// <summary>
+        /// Heading (X)
         /// </summary>
         public float headingx { get; set; }
 
         /// <summary>
+        /// heading (Y)
         /// </summary>
         public float headingy { get; set; }
 
         /// <summary>
+        /// Heading (Z)
         /// </summary>
         public float headingz { get; set; }
 
         /// <summary>
+        /// High item Id
         /// </summary>
         public int highid { get; set; }
 
         /// <summary>
+        /// Instance id of the item
         /// </summary>
         public int iteminstance { get; set; }
 
         /// <summary>
+        /// Type id of the instance
         /// </summary>
         public int itemtype { get; set; }
 
         /// <summary>
+        /// Low Item id
         /// </summary>
         public int lowid { get; set; }
 
         /// <summary>
+        /// Multiple count stat
         /// </summary>
         public int multiplecount { get; set; }
 
         /// <summary>
+        /// QL of the Item
         /// </summary>
         public int quality { get; set; }
 
         /// <summary>
+        /// Item's stats
         /// </summary>
         public Binary stats { get; set; }
 
         /// <summary>
+        /// Coordinates (X)
         /// </summary>
         public float x { get; set; }
 
         /// <summary>
+        /// Coordinates (Y)
         /// </summary>
         public float y { get; set; }
 
         /// <summary>
+        /// Coordinates (Z)
         /// </summary>
         public float z { get; set; }
 

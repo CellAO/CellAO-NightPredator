@@ -48,8 +48,10 @@ namespace CellAO.Database.Dao
         #region Public Methods and Operators
 
         /// <summary>
+        /// Get all data from login table
         /// </summary>
         /// <returns>
+        /// Collection of DBLoginData
         /// </returns>
         public static IEnumerable<DBLoginData> GetAll()
         {
@@ -68,10 +70,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Get login data by username
         /// </summary>
         /// <param name="username">
+        /// Name of the user
         /// </param>
         /// <returns>
+        /// DBLogindata object
         /// </returns>
         public static DBLoginData GetByUsername(string username)
         {
@@ -91,8 +96,10 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Write login data to table
         /// </summary>
         /// <param name="login">
+        /// Login data to write
         /// </param>
         public static void WriteLoginData(DBLoginData login)
         {
@@ -126,8 +133,10 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Write new password to table
         /// </summary>
         /// <param name="login">
+        /// DBLoginData object
         /// </param>
         public static void WriteNewPassword(DBLoginData login)
         {

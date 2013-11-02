@@ -28,36 +28,44 @@
 namespace CellAO.Database.Dao
 {
     /// <summary>
+    /// Data object for non instanced items
     /// </summary>
     public class DBItem
     {
         #region Public Properties
 
         /// <summary>
+        /// Instance id of the container
         /// </summary>
         public int containerinstance { get; set; }
 
         /// <summary>
+        /// Slot number inside the container
         /// </summary>
         public int containerplacement { get; set; }
 
         /// <summary>
+        /// Type id of the container
         /// </summary>
         public int containertype { get; set; }
 
         /// <summary>
+        /// High Item id
         /// </summary>
         public int highid { get; set; }
 
         /// <summary>
+        /// Low Item id
         /// </summary>
         public int lowid { get; set; }
 
         /// <summary>
+        /// Multiple count stat
         /// </summary>
         public int multiplecount { get; set; }
 
         /// <summary>
+        /// QL of the item
         /// </summary>
         public int quality { get; set; }
 

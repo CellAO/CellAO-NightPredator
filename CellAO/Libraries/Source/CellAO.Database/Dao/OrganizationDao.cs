@@ -40,20 +40,26 @@ namespace CellAO.Database.Dao
     #endregion
 
     /// <summary>
+    /// Data access object for Organization queries
     /// </summary>
     public static class OrganizationDao
     {
         #region Public Methods and Operators
 
         /// <summary>
+        /// Create a new organization
         /// </summary>
         /// <param name="desiredOrgName">
+        /// Desired organization name
         /// </param>
         /// <param name="creationDate">
+        /// Date of the creation
         /// </param>
         /// <param name="leaderId">
+        /// Id of the president of the new organization
         /// </param>
         /// <returns>
+        /// true if successful
         /// </returns>
         public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
         {
@@ -80,10 +86,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Retreive government form of existing organization
         /// </summary>
         /// <param name="orgId">
+        /// Id of the organization
         /// </param>
         /// <returns>
+        /// Government form as int
         /// </returns>
         public static int GetGovernmentForm(int orgId)
         {
@@ -104,10 +113,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Get data about the organization
         /// </summary>
         /// <param name="orgId">
+        /// Id of the organization
         /// </param>
         /// <returns>
+        /// DBOrganization object
         /// </returns>
         public static DBOrganization GetOrganizationData(int orgId)
         {
@@ -133,10 +145,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Get organization id from name
         /// </summary>
         /// <param name="orgName">
+        /// Name of the organization
         /// </param>
         /// <returns>
+        /// Id of the organization
         /// </returns>
         public static int GetOrganizationId(string orgName)
         {
@@ -157,10 +172,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Check if organization exists
         /// </summary>
         /// <param name="name">
+        /// Name of the organization
         /// </param>
         /// <returns>
+        /// true if the organization exists
         /// </returns>
         public static bool OrgExists(string name)
         {
@@ -182,10 +200,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Check if organization exists
         /// </summary>
         /// <param name="orgId">
+        /// Id of the organization
         /// </param>
         /// <returns>
+        /// true if the organization exists
         /// </returns>
         public static bool OrgExists(int orgId)
         {
@@ -207,10 +228,13 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Elect a new president
         /// </summary>
         /// <param name="orgId">
+        /// Id of the organization
         /// </param>
         /// <param name="newLeaderId">
+        /// Id of the new president
         /// </param>
         public static void SetNewPrez(int orgId, int newLeaderId)
         {

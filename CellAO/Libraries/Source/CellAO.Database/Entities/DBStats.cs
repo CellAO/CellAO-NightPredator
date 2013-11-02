@@ -28,24 +28,29 @@
 namespace CellAO.Database.Dao
 {
     /// <summary>
+    /// Data object for stats
     /// </summary>
     public class DBStats
     {
         #region Public Properties
 
         /// <summary>
+        /// Instance of the stat's owner
         /// </summary>
         public int instance { get; set; }
 
         /// <summary>
+        /// Stat number 
         /// </summary>
         public int statid { get; set; }
 
         /// <summary>
+        /// Stat's value
         /// </summary>
         public int statvalue { get; set; }
 
         /// <summary>
+        /// Type id of the stat's owner
         /// </summary>
         public int type { get; set; }
 
