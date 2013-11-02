@@ -21,18 +21,90 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-02 23:12
 
 #endregion
 
 namespace ChatEngine
 {
+    #region Usings ...
+
+    using System;
+    using System.Threading.Tasks;
+
+    using NBug;
+    using NBug.Properties;
+
+    using NLog;
+
+    using Utility;
+
+    #endregion
+
     /// <summary>
     /// Program class for ChatEngine
     /// </summary>
     internal class Program
     {
+        #region Static Fields
+
+        /// <summary>
+        /// </summary>
+        private static ConsoleText ct = new ConsoleText();
+
+        #endregion
+
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool Initialize()
+        {
+            try
+            {
+                if (!InitializeLogAndBug())
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeLogAndBug()
+        {
+            try
+            {
+                // Setup and enable NLog logging to file
+                LogUtil.SetupConsoleLogging(LogLevel.Debug);
+                LogUtil.SetupFileLogging("${basedir}/LoginEngineLog.txt", LogLevel.Trace);
+
+                // NBug initialization
+                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.Config");
+                Settings.WriteLogToDisk = true;
+                AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
+                TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error occured while initalizing NLog/NBug");
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Entry point
@@ -42,6 +114,18 @@ namespace ChatEngine
         /// </param>
         private static void Main(string[] args)
         {
+            ct = new ConsoleText();
+
+            OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
+
+            Console.WriteLine();
+
+            ct.TextRead("main.txt");
+
+            if (!Initialize())
+            {
+                return;
+            }
         }
 
         #endregion
