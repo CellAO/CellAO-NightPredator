@@ -1,1 +1,0 @@
-﻿Enter "start" to start server, "stop" to stop it, "ping" to ping the chatengine, and "exit" to exit program

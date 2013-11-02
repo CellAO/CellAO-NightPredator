@@ -1,1 +1,0 @@
-﻿Sisesta "start" serveri käivitamiseks, "stop" serveri peatamiseks, "ping" chat serveri pingimiseks ja "exit" programmi sulgemiseks.

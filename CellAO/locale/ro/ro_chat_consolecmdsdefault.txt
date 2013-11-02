@@ -1,9 +1,0 @@
-﻿Comanda necunoscuta
-
-Comenzi posibile:
-----------------------
-start - Porneste serverul.
-stop  - Opreste serverul.
-exit  - Iese din program.
-running  - Intoarce statusul serverului.
-----------------------

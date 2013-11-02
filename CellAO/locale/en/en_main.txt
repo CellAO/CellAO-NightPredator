@@ -1,7 +1,0 @@
-﻿========================================================
-CellAO copyright 2013 by the CellAO Dev team
-We are using BSD Licensing for our Core files
-Cell Framework is copyright under GPL
-Anarchy Online is copyright by Funcom
-Thank you for choosing CellAO
-========================================================

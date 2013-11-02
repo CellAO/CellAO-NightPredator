@@ -1,1 +1,0 @@
-﻿Geben Sie "Start", um Server, starten "Stop", um ihn zu stoppen, "Adduser" <username> <Kennwort> <Anzahl Zeichen> <expansion> <gm level> <email> <FirstName> <LastName > und "exit", um Exit-Programm

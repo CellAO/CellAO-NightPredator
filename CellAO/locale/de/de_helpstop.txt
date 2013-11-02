@@ -1,1 +1,0 @@
-﻿Geben Sie einfach "stop" ein, um den Server zu stoppen
