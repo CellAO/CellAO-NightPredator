@@ -21,72 +21,90 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:30
+// Last modified: 2013-11-03 00:29
 
 #endregion
 
-namespace LoginEngine.MessageHandlers
+namespace ChatEngine.CoreClient
 {
     #region Usings ...
 
-    using System;
-    using System.ComponentModel.Composition;
-    using System.Globalization;
-    using System.Text;
+    using System.Collections.Generic;
 
-    using CellAO.Core.Components;
-
-    using LoginEngine.CoreClient;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class UserLoginHandler : IHandleMessage<UserLoginMessage>
+    public class CharacterBase
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        public uint CharacterId;
+
+        /// <summary>
+        /// </summary>
+        private string characterFirstName;
+
+        /// <summary>
+        /// </summary>
+        private string characterLastName;
+
+        /// <summary>
+        /// </summary>
+        private string characterName;
+
+        /// <summary>
+        /// </summary>
+        private string orgName;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        public CharacterBase(uint characterId)
+        {
+            this.CharacterId = characterId;
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Handle(object sender, Message message)
+        /// <returns>
+        /// </returns>
+        public bool ReadNames()
         {
-            var client = (Client)sender;
-            var userLoginMessage = (UserLoginMessage)message.Body;
-            client.AccountName = userLoginMessage.UserName;
-            client.ClientVersion = userLoginMessage.ClientVersion;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(
-                "Client '" + client.AccountName + "' connected using version '" + client.ClientVersion + "'");
-            Console.ResetColor();
-
-            var salt = new byte[0x20];
-            var rand = new Random();
-
-            rand.NextBytes(salt);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < 32; i++)
+            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
+            if (chars.Count > 0)
             {
-                // 0x00 Breaks Things
-                if (salt[i] == 0)
-                {
-                    salt[i] = 42; // So we change it to something nicer
-                }
+                this.characterName = chars[0].Name;
+                this.characterFirstName = chars[0].FirstName;
+                this.characterLastName = chars[0].LastName;
 
-                sb.Append(salt[i].ToString("x2", CultureInfo.InvariantCulture));
+                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
+                if (clan != null)
+                {
+                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
+                    this.orgName = org.Name;
+                }
+            }
+            else
+            {
+                return false;
             }
 
-            client.ServerSalt = sb.ToString();
-            var serverSaltMessage = new ServerSaltMessage { ServerSalt = salt };
-            client.Send(0x00002B3F, serverSaltMessage);
+            return true;
         }
 
         #endregion

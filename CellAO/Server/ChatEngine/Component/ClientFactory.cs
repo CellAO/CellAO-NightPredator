@@ -21,72 +21,68 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:30
+// Last modified: 2013-11-03 00:29
 
 #endregion
 
-namespace LoginEngine.MessageHandlers
+namespace ChatEngine.Component
 {
     #region Usings ...
 
-    using System;
     using System.ComponentModel.Composition;
-    using System.Globalization;
-    using System.Text;
 
     using CellAO.Core.Components;
 
-    using LoginEngine.CoreClient;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+    using ChatEngine.CoreClient;
+    using ChatEngine.CoreServer;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class UserLoginHandler : IHandleMessage<UserLoginMessage>
+    [Export]
+    public class ClientFactory
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly IBus bus;
+
+        /// <summary>
+        /// </summary>
+        private readonly IMessageSerializer messageSerializer;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageSerializer">
+        /// </param>
+        /// <param name="bus">
+        /// </param>
+        [ImportingConstructor]
+        public ClientFactory(IMessageSerializer messageSerializer, IBus bus)
+        {
+            this.messageSerializer = messageSerializer;
+            this.bus = bus;
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="chatServer">
         /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Handle(object sender, Message message)
+        /// <returns>
+        /// </returns>
+        public Client Create(ChatServer chatServer)
         {
-            var client = (Client)sender;
-            var userLoginMessage = (UserLoginMessage)message.Body;
-            client.AccountName = userLoginMessage.UserName;
-            client.ClientVersion = userLoginMessage.ClientVersion;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(
-                "Client '" + client.AccountName + "' connected using version '" + client.ClientVersion + "'");
-            Console.ResetColor();
-
-            var salt = new byte[0x20];
-            var rand = new Random();
-
-            rand.NextBytes(salt);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < 32; i++)
-            {
-                // 0x00 Breaks Things
-                if (salt[i] == 0)
-                {
-                    salt[i] = 42; // So we change it to something nicer
-                }
-
-                sb.Append(salt[i].ToString("x2", CultureInfo.InvariantCulture));
-            }
-
-            client.ServerSalt = sb.ToString();
-            var serverSaltMessage = new ServerSaltMessage { ServerSalt = salt };
-            client.Send(0x00002B3F, serverSaltMessage);
+            return new Client(chatServer, this.messageSerializer, this.bus);
         }
 
         #endregion

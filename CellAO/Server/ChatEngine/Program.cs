@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 23:12
+// Last modified: 2013-11-03 00:29
 
 #endregion
 
@@ -30,7 +30,12 @@ namespace ChatEngine
     #region Usings ...
 
     using System;
+    using System.Net;
     using System.Threading.Tasks;
+
+    using CellAO.Core.Components;
+
+    using ChatEngine.CoreServer;
 
     using NBug;
     using NBug.Properties;
@@ -38,6 +43,8 @@ namespace ChatEngine
     using NLog;
 
     using Utility;
+
+    using Config = Utility.Config.ConfigReadWrite;
 
     #endregion
 
@@ -50,11 +57,29 @@ namespace ChatEngine
 
         /// <summary>
         /// </summary>
+        private static readonly IContainer Container = new MefContainer();
+
+        /// <summary>
+        /// </summary>
+        private static ChatServer chatServer;
+
+        /// <summary>
+        /// </summary>
         private static ConsoleText ct = new ConsoleText();
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="args">
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// </exception>
+        private static void CommandLoop(string[] args)
+        {
+        }
 
         /// <summary>
         /// </summary>
@@ -64,7 +89,14 @@ namespace ChatEngine
         {
             try
             {
+                chatServer = Container.GetInstance<ChatServer>();
+
                 if (!InitializeLogAndBug())
+                {
+                    return false;
+                }
+
+                if (!InitializeTCP())
                 {
                     return false;
                 }
@@ -107,6 +139,37 @@ namespace ChatEngine
         }
 
         /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeTCP()
+        {
+            int Port = Convert.ToInt32(Config.Instance.CurrentConfig.ChatPort);
+            try
+            {
+                if (Config.Instance.CurrentConfig.ISCommLocalIP == "0.0.0.0")
+                {
+                    chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Any, Port);
+                }
+                else
+                {
+                    chatServer.TcpIP = IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP);
+                }
+
+                chatServer.MaximumPendingConnections = 100;
+            }
+            catch (Exception e)
+            {
+                ct.TextRead("ip_config_parse_error.txt");
+                Console.Write(e.Message);
+                Console.ReadKey();
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Entry point
         /// </summary>
         /// <param name="args">
@@ -126,18 +189,6 @@ namespace ChatEngine
             {
                 return;
             }
-        }
-
-
-        /// <summary>
-        /// </summary>
-        /// <param name="args">
-        /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// </exception>
-        private static void CommandLoop(string[] args)
-        {
-
         }
 
         #endregion

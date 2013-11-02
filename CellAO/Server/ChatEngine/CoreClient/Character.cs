@@ -21,54 +21,56 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:30
+// Last modified: 2013-11-03 00:29
 
 #endregion
 
-namespace LoginEngine.QueryBase
+namespace ChatEngine.CoreClient
 {
-    #region Usings ...
-
-    using System.Collections.Generic;
-
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
-
-    using LoginEngine.Packets;
-
-    #endregion
-
     /// <summary>
+    /// The character.
     /// </summary>
-    public static class CharacterList
+    public class Character : CharacterBase
     {
-        #region Public Methods and Operators
+        #region Constructors and Destructors
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Character"/> class. 
+        /// The character.
         /// </summary>
-        /// <param name="accountName">
+        /// <param name="characterId">
         /// </param>
-        /// <returns>
-        /// </returns>
-        public static List<CharacterEntry> LoadCharacters(string accountName)
+        /// <param name="client">
+        /// </param>
+        public Character(uint characterId, Client client)
+            : base(characterId)
         {
-            var characters = new List<CharacterEntry>();
+            this.Client = client;
 
-            foreach (DBCharacter ch in CharacterDao.GetAllForUser(accountName))
+            if (characterId != 0)
             {
-                var charentry = new CharacterEntry();
-                charentry.Id = ch.Id;
-                charentry.Name = ch.Name;
-                charentry.Playfield = ch.Playfield;
-                charentry.Level = StatDao.GetById(50000, ch.Id, 54).statvalue; // 54 = Level
-                charentry.Breed = StatDao.GetById(50000, ch.Id, 4).statvalue; // 4 = Breed
-                charentry.Gender = StatDao.GetById(50000, ch.Id, 59).statvalue; // 59 = Sex
-                charentry.Profession = StatDao.GetById(50000, ch.Id, 60).statvalue; // 60 = Profession
-                characters.Add(charentry);
             }
-
-            return characters;
         }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="Character"/> class. 
+        /// The ~ character.
+        /// </summary>
+        ~Character()
+        {
+            if (this.CharacterId != 0)
+            {
+            }
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// The client.
+        /// </summary>
+        public Client Client { get; set; }
 
         #endregion
     }

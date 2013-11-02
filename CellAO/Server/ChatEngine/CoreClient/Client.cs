@@ -21,21 +21,24 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:30
+// Last modified: 2013-11-03 00:29
 
 #endregion
 
-namespace LoginEngine.CoreClient
+namespace ChatEngine.CoreClient
 {
     #region Usings ...
 
     using System;
+    using System.Collections.ObjectModel;
     using System.Globalization;
 
     using Cell.Core;
 
     using CellAO.Core.Components;
     using CellAO.Core.EventHandlers.Events;
+
+    using ChatEngine.CoreServer;
 
     using NiceHexOutput;
 
@@ -46,6 +49,7 @@ namespace LoginEngine.CoreClient
     #endregion
 
     /// <summary>
+    /// The client.
     /// </summary>
     public class Client : ClientBase
     {
@@ -56,28 +60,44 @@ namespace LoginEngine.CoreClient
         private readonly IBus bus;
 
         /// <summary>
+        /// Private known clients collection
+        /// </summary>
+        private readonly Collection<uint> knownClients;
+
+        /// <summary>
         /// </summary>
         private readonly IMessageSerializer messageSerializer;
 
         /// <summary>
         /// </summary>
-        private string accountName = string.Empty;
-
-        /// <summary>
-        /// </summary>
-        private string clientVersion = string.Empty;
-
-        /// <summary>
-        /// </summary>
         private ushort packetNumber = 1;
-
-        /// <summary>
-        /// </summary>
-        private string serverSalt = string.Empty;
 
         #endregion
 
         #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Client"/> class. 
+        /// The client.
+        /// </summary>
+        /// <param name="srvr">
+        /// </param>
+        public Client(ChatServer srvr)
+            : base(srvr)
+        {
+            this.Character = new Character(0, null);
+            this.ServerSalt = string.Empty;
+            this.knownClients = new Collection<uint>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Client"/> class. 
+        /// The client.
+        /// </summary>
+        public Client()
+            : base(null)
+        {
+        }
 
         /// <summary>
         /// </summary>
@@ -99,49 +119,25 @@ namespace LoginEngine.CoreClient
         #region Public Properties
 
         /// <summary>
+        /// The character.
         /// </summary>
-        public string AccountName
+        public Character Character { get; set; }
+
+        /// <summary>
+        /// The known clients.
+        /// </summary>
+        public Collection<uint> KnownClients
         {
             get
             {
-                return this.accountName;
-            }
-
-            set
-            {
-                this.accountName = value;
+                return this.knownClients;
             }
         }
 
         /// <summary>
+        /// The server salt.
         /// </summary>
-        public string ClientVersion
-        {
-            get
-            {
-                return this.clientVersion;
-            }
-
-            set
-            {
-                this.clientVersion = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public string ServerSalt
-        {
-            get
-            {
-                return this.serverSalt;
-            }
-
-            set
-            {
-                this.serverSalt = value;
-            }
-        }
+        public string ServerSalt { get; set; }
 
         #endregion
 
@@ -191,39 +187,21 @@ namespace LoginEngine.CoreClient
 
         #endregion
 
+        // NV: Should this be here or inside Character...
+
         #region Methods
 
         /// <summary>
+        /// The get message number.
         /// </summary>
-        /// <param name="segment">
+        /// <param name="packet">
         /// </param>
         /// <returns>
+        /// The get message number.
         /// </returns>
-        protected uint GetMessageNumber(BufferSegment segment)
+        protected ushort GetMessageNumber(byte[] packet)
         {
-            var messageNumberArray = new byte[4];
-            messageNumberArray[3] = segment.SegmentData[16];
-            messageNumberArray[2] = segment.SegmentData[17];
-            messageNumberArray[1] = segment.SegmentData[18];
-            messageNumberArray[0] = segment.SegmentData[19];
-            uint reply = BitConverter.ToUInt32(messageNumberArray, 0);
-            return reply;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="segment">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        protected uint GetMessageNumber(byte[] segment)
-        {
-            var messageNumberArray = new byte[4];
-            messageNumberArray[3] = segment[16];
-            messageNumberArray[2] = segment[17];
-            messageNumberArray[1] = segment[18];
-            messageNumberArray[0] = segment[19];
-            uint reply = BitConverter.ToUInt32(messageNumberArray, 0);
+            ushort reply = BitConverter.ToUInt16(new[] { packet[1], packet[0] }, 0);
             return reply;
         }
 

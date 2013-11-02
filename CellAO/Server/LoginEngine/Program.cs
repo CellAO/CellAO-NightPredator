@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 23:22
+// Last modified: 2013-11-03 00:30
 
 #endregion
 
@@ -320,8 +320,6 @@ namespace LoginEngine
                             break;
                         }
 
-                        
-
                         // sets the password for the given username
                         // Added by Andyzweb
                         // Still TODO add exception and error handling
@@ -354,8 +352,6 @@ namespace LoginEngine
                                 LogUtil.ErrorException(ex);
                             }
                         }
-
-                        
 
                         ct.TextRead("login_consolecmdsdefault.txt");
                         break;
