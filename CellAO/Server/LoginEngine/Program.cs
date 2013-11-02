@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 16:59
+// Last modified: 2013-11-02 23:22
 
 #endregion
 
@@ -104,7 +104,7 @@ namespace LoginEngine
                     processedargs = true;
                 }
 
-                Console.Write("\nServer Command >>");
+                Console.Write(Environment.NewLine + "Server Command >>");
 
                 consoleCommand = Console.ReadLine();
                 string temp = string.Empty;
@@ -181,7 +181,9 @@ namespace LoginEngine
                             if (parts.Length < 9)
                             {
                                 Console.WriteLine(
-                                    "Invalid command syntax.\nPlease use:\nAdduser <username> <password> <number of characters> <expansion> <gm level> <email> <FirstName> <LastName>");
+                                    "Invalid command syntax." + Environment.NewLine + "Please use:"
+                                    + Environment.NewLine
+                                    + "Adduser <username> <password> <number of characters> <expansion> <gm level> <email> <FirstName> <LastName>");
                                 break;
                             }
 
@@ -268,16 +270,16 @@ namespace LoginEngine
 
                             DBLoginData login = new DBLoginData
                                                 {
-                                                    Username = username,
-                                                    AccountFlags = 0,
-                                                    Allowed_Characters = numChars,
-                                                    CreationDate = DateTime.Now,
-                                                    Email = email,
-                                                    Expansions = expansions,
-                                                    FirstName = firstname,
-                                                    LastName = lastname,
-                                                    GM = gm,
-                                                    Flags = 0,
+                                                    Username = username, 
+                                                    AccountFlags = 0, 
+                                                    Allowed_Characters = numChars, 
+                                                    CreationDate = DateTime.Now, 
+                                                    Email = email, 
+                                                    Expansions = expansions, 
+                                                    FirstName = firstname, 
+                                                    LastName = lastname, 
+                                                    GM = gm, 
+                                                    Flags = 0, 
                                                     Password =
                                                         new LoginEncryption().GeneratePasswordHash(
                                                             password)
@@ -289,7 +291,8 @@ namespace LoginEngine
                             catch (Exception ex)
                             {
                                 Console.WriteLine(
-                                    "An error occured while trying to add a new user account:\n{0}",
+                                    "An error occured while trying to add a new user account:" + Environment.NewLine
+                                    + "{0}", 
                                     ex.Message);
                                 break;
                             }
@@ -297,8 +300,6 @@ namespace LoginEngine
                             Console.WriteLine("User added successfully.");
                             break;
                         }
-
-
 
                         // This function just hashes the string you enter using the loginencryption method
                         if (consoleCommand.ToLower().StartsWith("hash"))
@@ -319,9 +320,7 @@ namespace LoginEngine
                             break;
                         }
 
-
-
-                        #region setpass
+                        
 
                         // sets the password for the given username
                         // Added by Andyzweb
@@ -351,12 +350,12 @@ namespace LoginEngine
                                 // yeah this part here, some kind of exception handling for mysql errors
                             catch (Exception ex)
                             {
-                                Console.WriteLine("Could not set new Password\r\n" + ex.Message);
+                                Console.WriteLine("Could not set new Password" + Environment.NewLine + ex.Message);
                                 LogUtil.ErrorException(ex);
                             }
                         }
 
-                        #endregion
+                        
 
                         ct.TextRead("login_consolecmdsdefault.txt");
                         break;
