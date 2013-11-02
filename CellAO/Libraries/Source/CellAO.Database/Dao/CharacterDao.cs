@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:05
+// Last modified: 2013-11-02 16:09
 
 #endregion
 
@@ -120,6 +120,31 @@ namespace CellAO.Database.Dao
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="charid">
+        /// </param>
+        public static void DeleteCharacter(int charid)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    DynamicParameters p = new DynamicParameters();
+                    p.Add("charid", charid);
+                    conn.Execute("DELETE FROM `characters` WHERE ID = @charid", p);
+                    conn.Execute("DELETE FROM `organizations` WHERE ID = @charid", p);
+                    conn.Execute("DELETE FROM `inventory` WHERE ID = @charid", p);
+                }
+
+                StatDao.DeleteStats(50000, charid);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
@@ -252,6 +277,35 @@ namespace CellAO.Database.Dao
             catch
             {
                 return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="userName">
+        /// </param>
+        /// <param name="characterId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool IsCharacterOnAccount(string userName, uint characterId)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    DynamicParameters p = new DynamicParameters();
+                    p.Add("userName", userName);
+                    p.Add("characterId", characterId);
+                    return
+                        conn.Query<int>("SELECT id FROM characters where username=@userName AND id=@characterId", p)
+                            .Count() == 1;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
             }
         }
 

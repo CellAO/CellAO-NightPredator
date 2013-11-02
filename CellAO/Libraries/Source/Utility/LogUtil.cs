@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-02 17:00
 
 #endregion
 
@@ -68,6 +68,17 @@ namespace Utility
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Writes a message into log (debug)
+        /// </summary>
+        /// <param name="msg">
+        /// Message to write
+        /// </param>
+        public static void Debug(string msg)
+        {
+            log.Debug(msg);
+        }
 
         /// <summary>
         /// </summary>
@@ -246,6 +257,44 @@ namespace Utility
             }
 
             logger(temp);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="logLevel">
+        /// </param>
+        public static void SetupConsoleLogging(LogLevel logLevel)
+        {
+            LoggingConfiguration config = LogManager.Configuration ?? new LoggingConfiguration();
+
+            var consoleTarget = new ColoredConsoleTarget
+                                {
+                                    Layout =
+                                        "${processtime} [${level}] ${message} ${exception:format=tostring}"
+                                };
+            config.AddTarget("console", consoleTarget);
+
+            config.LoggingRules.Add(new LoggingRule("*", logLevel, consoleTarget));
+
+            LogManager.Configuration = config;
+            LogManager.EnableLogging();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="fileName">
+        /// </param>
+        /// <param name="logLevel">
+        /// </param>
+        public static void SetupFileLogging(string fileName, LogLevel logLevel)
+        {
+            LoggingConfiguration config = LogManager.Configuration ?? new LoggingConfiguration();
+            var fileTarget = new FileTarget();
+            fileTarget.FileName = fileName;
+            config.AddTarget("logfile", fileTarget);
+            config.LoggingRules.Add(new LoggingRule("*", logLevel, fileTarget));
+            LogManager.Configuration = config;
+            LogManager.EnableLogging();
         }
 
         /// <summary>

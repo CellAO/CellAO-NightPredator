@@ -21,78 +21,72 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 16:59
 
 #endregion
 
-namespace Utility
+namespace LoginEngine.MessageHandlers
 {
     #region Usings ...
 
     using System;
+    using System.ComponentModel.Composition;
+    using System.Globalization;
+    using System.Text;
+
+    using CellAO.Core.Components;
+
+    using LoginEngine.CoreClient;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class OnScreenBanner
+    [Export(typeof(IHandleMessage))]
+    public class UserLoginHandler : IHandleMessage<UserLoginMessage>
     {
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="titleColor">
+        /// <param name="sender">
         /// </param>
-        public static void PrintCellAOBanner(ConsoleColor titleColor)
+        /// <param name="message">
+        /// </param>
+        public void Handle(object sender, Message message)
         {
-            int consoleWidth = Console.WindowWidth;
+            var client = (Client)sender;
+            var userLoginMessage = (UserLoginMessage)message.Body;
+            client.AccountName = userLoginMessage.UserName;
+            client.ClientVersion = userLoginMessage.ClientVersion;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(
+                "Client '" + client.AccountName + "' connected using version '" + client.ClientVersion + "'");
+            Console.ResetColor();
 
-            Console.Clear();
+            var salt = new byte[0x20];
+            var rand = new Random();
 
-            Console.Write("**".PadRight(consoleWidth, '*'));
-            CenteredString(string.Empty, "**");
-            CenteredString("CellAO " + AssemblyInfoclass.Title, "**", titleColor);
-            CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.White);
-            CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
-            CenteredString(string.Empty, "**");
-            Console.Write("**".PadRight(consoleWidth, '*'));
-        }
+            rand.NextBytes(salt);
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// </summary>
-        /// <param name="text">
-        /// </param>
-        /// <param name="boundary">
-        /// </param>
-        /// <param name="c">
-        /// </param>
-        private static void CenteredString(string text, string boundary, ConsoleColor c = ConsoleColor.Black)
-        {
-            int consoleWidth = Console.WindowWidth;
-
-            // Mono "fix"
-            if (consoleWidth == 0)
+            var sb = new StringBuilder();
+            for (int i = 0; i < 32; i++)
             {
-                // Since Console.WindowWidth doesnt work on mono, lets assume 80 chars
-                consoleWidth = 80;
+                // 0x00 Breaks Things
+                if (salt[i] == 0)
+                {
+                    salt[i] = 42; // So we change it to something nicer
+                }
+
+                sb.Append(salt[i].ToString("x2", CultureInfo.InvariantCulture));
             }
 
-            ConsoleColor oldColor = Console.ForegroundColor;
-            int centered = (consoleWidth - text.Length) / 2;
-            Console.Write(boundary.PadRight(centered, ' '));
-
-            if (c != ConsoleColor.Black)
-            {
-                Console.ForegroundColor = c;
-            }
-
-            Console.Write(text);
-            Console.ForegroundColor = oldColor;
-            Console.Write(boundary.PadLeft(consoleWidth - (text.Length + centered), ' '));
+            client.ServerSalt = sb.ToString();
+            var serverSaltMessage = new ServerSaltMessage { ServerSalt = salt };
+            client.Send(0x00002B3F, serverSaltMessage);
         }
 
         #endregion

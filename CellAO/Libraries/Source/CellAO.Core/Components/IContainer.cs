@@ -21,45 +21,52 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 14:57
 
 #endregion
 
-namespace Utility
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    public interface IContainer
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="serviceType">
         /// </param>
-        public RevisionNameAttribute(string name)
-        {
-            this.RevisionName = name;
-        }
-
-        #endregion
-
-        #region Public Properties
+        /// <returns>
+        /// </returns>
+        IEnumerable<object> GetAllInstances(Type serviceType);
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        /// <param name="serviceType">
+        /// </param>
+        /// <param name="key">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        object GetInstance(Type serviceType, string key = null);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="key">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        T GetInstance<T>(string key = null);
 
         #endregion
     }

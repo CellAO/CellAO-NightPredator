@@ -25,41 +25,50 @@
 
 #endregion
 
-namespace Utility
+namespace LoginEngine.QueryBase
 {
     #region Usings ...
 
-    using System;
+    using System.Collections.Generic;
+
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
+    using LoginEngine.Packets;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    public static class CharacterList
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="accountName">
         /// </param>
-        public RevisionNameAttribute(string name)
+        /// <returns>
+        /// </returns>
+        public static List<CharacterEntry> LoadCharacters(string accountName)
         {
-            this.RevisionName = name;
+            var characters = new List<CharacterEntry>();
+
+            foreach (DBCharacter ch in CharacterDao.GetAllForUser(accountName))
+            {
+                var charentry = new CharacterEntry();
+                charentry.Id = ch.Id;
+                charentry.Name = ch.Name;
+                charentry.Playfield = ch.Playfield;
+                charentry.Level = StatDao.GetById(50000, ch.Id, 54).statvalue; // 54 = Level
+                charentry.Breed = StatDao.GetById(50000, ch.Id, 4).statvalue; // 4 = Breed
+                charentry.Gender = StatDao.GetById(50000, ch.Id, 59).statvalue; // 59 = Sex
+                charentry.Profession = StatDao.GetById(50000, ch.Id, 60).statvalue; // 60 = Profession
+                characters.Add(charentry);
+            }
+
+            return characters;
         }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the Revision name
-        /// </summary>
-        public string RevisionName { get; set; }
 
         #endregion
     }

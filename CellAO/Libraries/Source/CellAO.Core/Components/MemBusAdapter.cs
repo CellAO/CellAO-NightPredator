@@ -21,45 +21,75 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 14:58
 
 #endregion
 
-namespace Utility
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
     using System;
+    using System.ComponentModel.Composition;
+
+    using MemBus;
+    using MemBus.Configurators;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export(typeof(IBus))]
+    public class MemBusAdapter : IBus
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly MemBus.IBus memBus;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="iocAdapter">
         /// </param>
-        public RevisionNameAttribute(string name)
+        [ImportingConstructor]
+        public MemBusAdapter(IocAdapter iocAdapter)
         {
-            this.RevisionName = name;
+            this.memBus =
+                BusSetup.StartWith<AsyncConfiguration>()
+                    .Apply<IoCSupport>(s => s.SetAdapter(iocAdapter).SetHandlerInterface(typeof(IHandle<>)))
+                    .Construct();
         }
 
         #endregion
 
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        /// <param name="message">
+        /// </param>
+        public void Publish(object message)
+        {
+            this.memBus.Publish(message);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        public IDisposable Subscribe<T>(Action<T> action)
+        {
+            return this.memBus.Subscribe(action);
+        }
 
         #endregion
     }

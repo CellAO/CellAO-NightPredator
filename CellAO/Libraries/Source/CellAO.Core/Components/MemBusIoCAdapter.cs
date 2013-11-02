@@ -21,45 +21,61 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 14:58
 
 #endregion
 
-namespace Utility
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+
+    using MemBus;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export(typeof(IocAdapter))]
+    public class MemBusIoCAdapter : IocAdapter
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly IContainer container;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="container">
         /// </param>
-        public RevisionNameAttribute(string name)
+        [ImportingConstructor]
+        public MemBusIoCAdapter(IContainer container)
         {
-            this.RevisionName = name;
+            this.container = container;
         }
 
         #endregion
 
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        /// <param name="desiredType">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IEnumerable<object> GetAllInstances(Type desiredType)
+        {
+            return this.container.GetAllInstances(desiredType);
+        }
 
         #endregion
     }

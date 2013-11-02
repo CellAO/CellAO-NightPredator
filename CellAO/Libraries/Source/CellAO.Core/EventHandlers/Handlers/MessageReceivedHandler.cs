@@ -21,46 +21,45 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
-
 #endregion
 
-namespace Utility
+namespace CellAO.Core.EventHandlers.Handlers
 {
     #region Usings ...
 
-    using System;
+    using System.ComponentModel.Composition;
+
+    using CellAO.Core.Components;
+    using CellAO.Core.EventHandlers.Events;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export(typeof(IHandle<MessageReceivedEvent>))]
+    public class MessageReceivedHandler : IHandle<MessageReceivedEvent>
     {
-        #region Constructors and Destructors
+        /// <summary>
+        /// </summary>
+        private readonly IMessagePublisher messagePublisher;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="messagePublisher">
         /// </param>
-        public RevisionNameAttribute(string name)
+        [ImportingConstructor]
+        public MessageReceivedHandler(IMessagePublisher messagePublisher)
         {
-            this.RevisionName = name;
+            this.messagePublisher = messagePublisher;
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
-
-        #endregion
+        /// <param name="obj">
+        /// </param>
+        public void Handle(MessageReceivedEvent obj)
+        {
+            this.messagePublisher.Publish(obj.Sender, obj.Message);
+        }
     }
 }

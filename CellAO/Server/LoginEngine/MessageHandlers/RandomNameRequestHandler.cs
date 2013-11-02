@@ -21,45 +21,54 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 16:59
 
 #endregion
 
-namespace Utility
+namespace LoginEngine.MessageHandlers
 {
     #region Usings ...
 
-    using System;
+    using System.ComponentModel.Composition;
+
+    using CellAO.Core.Components;
+
+    using LoginEngine.CoreClient;
+    using LoginEngine.Packets;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export(typeof(IHandleMessage))]
+    public class RandomNameRequestHandler : IHandleMessage<RandomNameRequestMessage>
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="sender">
         /// </param>
-        public RevisionNameAttribute(string name)
+        /// <param name="message">
+        /// </param>
+        public void Handle(object sender, Message message)
         {
-            this.RevisionName = name;
+            var client = (Client)sender;
+            var randomNameRequestMessage = (RandomNameRequestMessage)message.Body;
+
+            var characterName = new CharacterName();
+            var suggestNameMessage = new SuggestNameMessage
+                                     {
+                                         Name =
+                                             characterName.GetRandomName(
+                                                 randomNameRequestMessage.Profession), 
+                                     };
+
+            client.Send(0x0000FFFF, suggestNameMessage);
         }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the Revision name
-        /// </summary>
-        public string RevisionName { get; set; }
 
         #endregion
     }

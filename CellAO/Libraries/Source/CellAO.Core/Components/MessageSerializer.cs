@@ -21,45 +21,73 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
-
 #endregion
 
-namespace Utility
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
-    using System;
+    using System.ComponentModel.Composition;
+    using System.IO;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export(typeof(IMessageSerializer))]
+    public class MessageSerializer : IMessageSerializer
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly SmokeLounge.AOtomation.Messaging.Serialization.MessageSerializer serializer;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
-        /// </param>
-        public RevisionNameAttribute(string name)
+        public MessageSerializer()
         {
-            this.RevisionName = name;
+            this.serializer = new SmokeLounge.AOtomation.Messaging.Serialization.MessageSerializer();
         }
 
         #endregion
 
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        /// <param name="buffer">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public Message Deserialize(byte[] buffer)
+        {
+            using (var stream = new MemoryStream(buffer))
+            {
+                return this.serializer.Deserialize(stream);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public byte[] Serialize(Message message)
+        {
+            using (var stream = new MemoryStream())
+            {
+                this.serializer.Serialize(stream, message);
+                return stream.ToArray();
+            }
+        }
 
         #endregion
     }

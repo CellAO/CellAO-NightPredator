@@ -25,41 +25,55 @@
 
 #endregion
 
-namespace Utility
+namespace LoginEngine.QueryBase
 {
     #region Usings ...
 
-    using System;
+    using CellAO.Database.Dao;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    public class LoginName
     {
-        #region Constructors and Destructors
+        #region Fields
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
-        /// </param>
-        public RevisionNameAttribute(string name)
-        {
-            this.RevisionName = name;
-        }
+        private string loginN;
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        public string LoginN
+        {
+            get
+            {
+                return this.loginN;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="recvLogin">
+        /// </param>
+        public void GetLoginName(string recvLogin)
+        {
+            this.loginN = null;
+            DBLoginData temp = LoginDataDao.GetByUsername(recvLogin);
+            if (temp != null)
+            {
+                this.loginN = LoginDataDao.GetByUsername(recvLogin).Username;
+            }
+        }
 
         #endregion
     }

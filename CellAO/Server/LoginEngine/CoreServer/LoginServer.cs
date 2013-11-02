@@ -21,31 +21,36 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 16:59
 
 #endregion
 
-namespace Utility.Config
+namespace LoginEngine.CoreServer
 {
     #region Usings ...
 
     using System;
-    using System.IO;
-    using System.Text;
-    using System.Xml.Serialization;
+    using System.ComponentModel.Composition;
+    using System.Net;
+
+    using Cell.Core;
+
+    using LoginEngine.Component;
+
+    using Utility;
 
     #endregion
 
     /// <summary>
-    /// 
     /// </summary>
-    public class ConfigReadWrite
+    [Export]
+    public sealed class LoginServer : ServerBase
     {
         #region Static Fields
 
         /// <summary>
         /// </summary>
-        private static ConfigReadWrite _instance;
+        public static readonly DateTime StartTime;
 
         #endregion
 
@@ -53,7 +58,7 @@ namespace Utility.Config
 
         /// <summary>
         /// </summary>
-        private Config _config;
+        private readonly ClientFactory clientFactory;
 
         #endregion
 
@@ -61,8 +66,20 @@ namespace Utility.Config
 
         /// <summary>
         /// </summary>
-        private ConfigReadWrite()
+        static LoginServer()
         {
+            StartTime = DateTime.Now;
+            LogUtil.Debug("Server is starting at " + StartTime.ToString());
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientfactory">
+        /// </param>
+        [ImportingConstructor]
+        public LoginServer(ClientFactory clientfactory)
+        {
+            this.clientFactory = clientfactory;
         }
 
         #endregion
@@ -70,77 +87,49 @@ namespace Utility.Config
         #region Public Properties
 
         /// <summary>
-        /// 
         /// </summary>
-        public static ConfigReadWrite Instance
+        public static TimeSpan RunTime
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = new ConfigReadWrite();
-                }
-
-                return _instance;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Config CurrentConfig
-        {
-            get
-            {
-                try
-                {
-                    if (this._config == null)
-                    {
-                        this._config =
-                            (Config)
-                                new XmlSerializer(typeof(Config)).Deserialize(
-                                    new MemoryStream(File.ReadAllBytes("Config.xml")));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error parsing configuration: {0}", ex.Message);
-                    this._config = new Config();
-                }
-
-                return this._config;
+                return DateTime.Now - StartTime;
             }
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Methods
 
         /// <summary>
-        /// Saves the current config back to the file
         /// </summary>
-        /// <returns>true, if successful</returns>
-        public bool SaveConfig()
+        /// <returns>
+        /// </returns>
+        protected override IClient CreateClient()
         {
-            if (this._config == null)
-            {
-                return false;
-            }
+            return this.clientFactory.Create(this);
+        }
 
-            try
-            {
-                XmlSerializer ser = new XmlSerializer(typeof(Config));
-                MemoryStream ms = new MemoryStream();
-                ser.Serialize(ms, this._config);
-                File.WriteAllText("config.xml", Encoding.UTF8.GetString(ms.GetBuffer()));
-            }
-            catch
-            {
-                return false;
-            }
+        /// <summary>
+        /// </summary>
+        /// <param name="num_bytes">
+        /// </param>
+        /// <param name="buf">
+        /// </param>
+        /// <param name="ip">
+        /// </param>
+        protected override void OnReceiveUDP(int num_bytes, byte[] buf, IPEndPoint ip)
+        {
+        }
 
-            return true;
+        /// <summary>
+        /// </summary>
+        /// <param name="clientIP">
+        /// </param>
+        /// <param name="num_bytes">
+        /// </param>
+        protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
+        {
+            Console.WriteLine("Sending to " + clientIP.Address);
         }
 
         #endregion

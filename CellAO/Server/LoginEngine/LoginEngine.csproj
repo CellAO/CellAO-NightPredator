@@ -44,7 +44,11 @@
       <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Messaging" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,13 +59,47 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BigInteger.cs" />
+    <Compile Include="CoreClient\Client.cs" />
+    <Compile Include="Component\ClientFactory.cs" />
+    <Compile Include="LoginEncryption.cs" />
+    <Compile Include="CoreServer\LoginServer.cs" />
+    <Compile Include="MessageHandlers\CreateCharacterHandler.cs" />
+    <Compile Include="MessageHandlers\DeleteCharacterHandler.cs" />
+    <Compile Include="MessageHandlers\RandomNameRequestHandler.cs" />
+    <Compile Include="MessageHandlers\SelectCharacterHandler.cs" />
+    <Compile Include="MessageHandlers\UserCredentialsHandler.cs" />
+    <Compile Include="MessageHandlers\UserLoginHandler.cs" />
+    <Compile Include="Packets\CharacterEntry.cs" />
+    <Compile Include="Packets\CharacterName.cs" />
+    <Compile Include="Packets\CheckLogin.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryBase\CharacterList.cs" />
+    <Compile Include="QueryBase\LoginFlags.cs" />
+    <Compile Include="QueryBase\LoginName.cs" />
+    <Compile Include="QueryBase\LoginPasswd.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+      <Name>SmokeLounge.AOtomation.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
+      <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
+      <Name>Cell.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
+      <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
+      <Name>CellAO.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
+      <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
+      <Name>NiceHexOutput</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
@@ -79,11 +117,16 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="..\..\Config\NBug.LoginEngine.config">
+      <Link>NBug.LoginEngine.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

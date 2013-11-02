@@ -21,39 +21,33 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 14:58
 
 #endregion
 
-namespace Utility.Config
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
     using System;
-    using System.IO;
-    using System.Text;
-    using System.Xml.Serialization;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.Linq;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
-    /// 
     /// </summary>
-    public class ConfigReadWrite
+    [Export(typeof(IMessagePublisher))]
+    public class MessagePublisher : IMessagePublisher
     {
-        #region Static Fields
-
-        /// <summary>
-        /// </summary>
-        private static ConfigReadWrite _instance;
-
-        #endregion
-
         #region Fields
 
         /// <summary>
         /// </summary>
-        private Config _config;
+        private readonly Dictionary<Type, IList<IHandleMessage>> messageHandlers;
 
         #endregion
 
@@ -61,55 +55,38 @@ namespace Utility.Config
 
         /// <summary>
         /// </summary>
-        private ConfigReadWrite()
+        /// <param name="messageHandlers">
+        /// </param>
+        [ImportingConstructor]
+        public MessagePublisher([ImportMany] IEnumerable<IHandleMessage> messageHandlers)
         {
-        }
+            this.messageHandlers = new Dictionary<Type, IList<IHandleMessage>>();
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static ConfigReadWrite Instance
-        {
-            get
+            foreach (IHandleMessage messageHandler in messageHandlers)
             {
-                if (_instance == null)
+                Type handlerInterface =
+                    messageHandler.GetType()
+                        .GetInterfaces()
+                        .FirstOrDefault(i => typeof(IHandleMessage).IsAssignableFrom(i) && i.IsGenericType);
+                if (handlerInterface == null)
                 {
-                    _instance = new ConfigReadWrite();
+                    continue;
                 }
 
-                return _instance;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Config CurrentConfig
-        {
-            get
-            {
-                try
+                Type arg = handlerInterface.GetGenericArguments().FirstOrDefault();
+                if (arg == null)
                 {
-                    if (this._config == null)
-                    {
-                        this._config =
-                            (Config)
-                                new XmlSerializer(typeof(Config)).Deserialize(
-                                    new MemoryStream(File.ReadAllBytes("Config.xml")));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error parsing configuration: {0}", ex.Message);
-                    this._config = new Config();
+                    continue;
                 }
 
-                return this._config;
+                IList<IHandleMessage> handlers;
+                if (this.messageHandlers.TryGetValue(arg, out handlers) == false)
+                {
+                    handlers = new List<IHandleMessage>();
+                    this.messageHandlers.Add(arg, handlers);
+                }
+
+                handlers.Add(messageHandler);
             }
         }
 
@@ -118,29 +95,23 @@ namespace Utility.Config
         #region Public Methods and Operators
 
         /// <summary>
-        /// Saves the current config back to the file
         /// </summary>
-        /// <returns>true, if successful</returns>
-        public bool SaveConfig()
+        /// <param name="sender">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        public void Publish(object sender, Message message)
         {
-            if (this._config == null)
+            IList<IHandleMessage> handlers;
+            if (this.messageHandlers.TryGetValue(message.Body.GetType(), out handlers) == false)
             {
-                return false;
+                return;
             }
 
-            try
+            foreach (IHandleMessage handler in handlers)
             {
-                XmlSerializer ser = new XmlSerializer(typeof(Config));
-                MemoryStream ms = new MemoryStream();
-                ser.Serialize(ms, this._config);
-                File.WriteAllText("config.xml", Encoding.UTF8.GetString(ms.GetBuffer()));
+                handler.Handle(sender, message);
             }
-            catch
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion

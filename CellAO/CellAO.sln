@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Config\Config.xml = Config\Config.xml
 		Datafiles\items.dat = Datafiles\items.dat
 		Datafiles\nanos.dat = Datafiles\nanos.dat
+		Config\NBug.LoginEngine.config = Config\NBug.LoginEngine.config
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject

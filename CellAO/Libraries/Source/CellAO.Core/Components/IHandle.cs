@@ -21,45 +21,25 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 14:57
 
 #endregion
 
-namespace Utility
+namespace CellAO.Core.Components
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    /// <typeparam name="T">
+    /// </typeparam>
+    public interface IHandle<in T>
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="obj">
         /// </param>
-        public RevisionNameAttribute(string name)
-        {
-            this.RevisionName = name;
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the Revision name
-        /// </summary>
-        public string RevisionName { get; set; }
+        void Handle(T obj);
 
         #endregion
     }

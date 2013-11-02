@@ -29,37 +29,32 @@ namespace Utility
 {
     #region Usings ...
 
-    using System;
+    using System.Text.RegularExpressions;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    public static class TestEmailRegex
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="emailAddress">
         /// </param>
-        public RevisionNameAttribute(string name)
+        /// <returns>
+        /// </returns>
+        public static bool TestEmail(string emailAddress)
         {
-            this.RevisionName = name;
+            const string PatternStrict =
+                @"^(([^<>()[\]\\.,;:\s@\""]+" + @"(\.[^<>()[\]\\.,;:\s@\""]+)*)|(\"".+\""))@"
+                + @"((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" + @"\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+"
+                + @"[a-zA-Z]{2,}))$";
+
+            var reStrict = new Regex(PatternStrict);
+            return reStrict.IsMatch(emailAddress);
         }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the Revision name
-        /// </summary>
-        public string RevisionName { get; set; }
 
         #endregion
     }

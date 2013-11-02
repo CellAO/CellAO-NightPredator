@@ -48,6 +48,7 @@
       <HintPath>..\..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Numerics" />
@@ -66,6 +67,17 @@
     </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\IActions.cs" />
+    <Compile Include="Components\IBus.cs" />
+    <Compile Include="Components\IContainer.cs" />
+    <Compile Include="Components\IHandle.cs" />
+    <Compile Include="Components\IHandleMessage.cs" />
+    <Compile Include="Components\IMessagePublisher.cs" />
+    <Compile Include="Components\IMessageSerializer.cs" />
+    <Compile Include="Components\MefContainer.cs" />
+    <Compile Include="Components\MemBusAdapter.cs" />
+    <Compile Include="Components\MemBusIoCAdapter.cs" />
+    <Compile Include="Components\MessagePublisher.cs" />
+    <Compile Include="Components\MessageSerializer.cs" />
     <Compile Include="Entities\Character.cs" />
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
@@ -75,6 +87,8 @@
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />
     <Compile Include="Entities\INonPlayerCharacter.cs" />
+    <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
+    <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />
     <Compile Include="Events\IEvents.cs" />
     <Compile Include="Functions\Constants.cs" />

@@ -21,45 +21,69 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-02 16:59
 
 #endregion
 
-namespace Utility
+namespace LoginEngine.Component
 {
     #region Usings ...
 
-    using System;
+    using System.ComponentModel.Composition;
+
+    using CellAO.Core.Components;
+
+    using LoginEngine.CoreClient;
+    using LoginEngine.CoreServer;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    [Export]
+    public class ClientFactory
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly IBus bus;
+
+        /// <summary>
+        /// </summary>
+        private readonly IMessageSerializer messageSerializer;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="messageSerializer">
         /// </param>
-        public RevisionNameAttribute(string name)
+        /// <param name="bus">
+        /// </param>
+        [ImportingConstructor]
+        public ClientFactory(IMessageSerializer messageSerializer, IBus bus)
         {
-            this.RevisionName = name;
+            this.messageSerializer = messageSerializer;
+            this.bus = bus;
         }
 
         #endregion
 
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        /// <param name="loginServer">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public Client Create(LoginServer loginServer)
+        {
+            return new Client(loginServer, this.messageSerializer, this.bus);
+        }
 
         #endregion
     }

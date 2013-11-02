@@ -21,35 +21,44 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
-
 #endregion
 
-namespace Utility
+namespace CellAO.Core.EventHandlers.Events
 {
     #region Usings ...
 
-    using System;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
-    /// Revision name attribute (name of the release)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class RevisionNameAttribute : Attribute
+    public class MessageReceivedEvent
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly Message message;
+
+        /// <summary>
+        /// </summary>
+        private readonly object sender;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
-        /// <param name="name">
-        /// Revision name
+        /// <param name="sender">
         /// </param>
-        public RevisionNameAttribute(string name)
+        /// <param name="message">
+        /// </param>
+        public MessageReceivedEvent(object sender, Message message)
         {
-            this.RevisionName = name;
+            this.sender = sender;
+            this.message = message;
         }
 
         #endregion
@@ -57,9 +66,24 @@ namespace Utility
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the Revision name
         /// </summary>
-        public string RevisionName { get; set; }
+        public Message Message
+        {
+            get
+            {
+                return this.message;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public object Sender
+        {
+            get
+            {
+                return this.sender;
+            }
+        }
 
         #endregion
     }
