@@ -87,10 +87,10 @@ namespace ChatEngine
             {
                 // Setup and enable NLog logging to file
                 LogUtil.SetupConsoleLogging(LogLevel.Debug);
-                LogUtil.SetupFileLogging("${basedir}/LoginEngineLog.txt", LogLevel.Trace);
+                LogUtil.SetupFileLogging("${basedir}/ChatEngineLog.txt", LogLevel.Trace);
 
                 // NBug initialization
-                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.Config");
+                SettingsOverride.LoadCustomSettings("NBug.ChatEngine.Config");
                 Settings.WriteLogToDisk = true;
                 AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
                 TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
@@ -126,6 +126,18 @@ namespace ChatEngine
             {
                 return;
             }
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <param name="args">
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// </exception>
+        private static void CommandLoop(string[] args)
+        {
+
         }
 
         #endregion
