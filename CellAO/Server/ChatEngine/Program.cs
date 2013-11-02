@@ -116,7 +116,7 @@ namespace ChatEngine
         {
             ct = new ConsoleText();
 
-            OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
+            OnScreenBanner.PrintCellAOBanner(ConsoleColor.Yellow);
 
             Console.WriteLine();
 

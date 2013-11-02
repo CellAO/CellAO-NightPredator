@@ -108,9 +108,8 @@ namespace LoginEngine
 
                 consoleCommand = Console.ReadLine();
                 string temp = string.Empty;
-                while (temp != consoleCommand)
+                while (consoleCommand.IndexOf("  ") > -1)
                 {
-                    temp = consoleCommand;
                     consoleCommand = consoleCommand.Replace("  ", " ");
                 }
 
@@ -269,16 +268,16 @@ namespace LoginEngine
 
                             DBLoginData login = new DBLoginData
                                                 {
-                                                    Username = username, 
-                                                    AccountFlags = 0, 
-                                                    Allowed_Characters = numChars, 
-                                                    CreationDate = DateTime.Now, 
-                                                    Email = email, 
-                                                    Expansions = expansions, 
-                                                    FirstName = firstname, 
-                                                    LastName = lastname, 
-                                                    GM = gm, 
-                                                    Flags = 0, 
+                                                    Username = username,
+                                                    AccountFlags = 0,
+                                                    Allowed_Characters = numChars,
+                                                    CreationDate = DateTime.Now,
+                                                    Email = email,
+                                                    Expansions = expansions,
+                                                    FirstName = firstname,
+                                                    LastName = lastname,
+                                                    GM = gm,
+                                                    Flags = 0,
                                                     Password =
                                                         new LoginEncryption().GeneratePasswordHash(
                                                             password)
@@ -290,7 +289,7 @@ namespace LoginEngine
                             catch (Exception ex)
                             {
                                 Console.WriteLine(
-                                    "An error occured while trying to add a new user account:\n{0}", 
+                                    "An error occured while trying to add a new user account:\n{0}",
                                     ex.Message);
                                 break;
                             }
@@ -299,7 +298,7 @@ namespace LoginEngine
                             break;
                         }
 
-                        
+
 
                         // This function just hashes the string you enter using the loginencryption method
                         if (consoleCommand.ToLower().StartsWith("hash"))
@@ -320,7 +319,7 @@ namespace LoginEngine
                             break;
                         }
 
-                        
+
 
                         #region setpass
 
@@ -348,7 +347,7 @@ namespace LoginEngine
                                 LoginDataDao.WriteNewPassword(
                                     new DBLoginData { Username = username, Password = hashed });
                             }
-                                
+
                                 // yeah this part here, some kind of exception handling for mysql errors
                             catch (Exception ex)
                             {
@@ -437,7 +436,7 @@ namespace LoginEngine
         {
             ct = new ConsoleText();
 
-            OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
+            OnScreenBanner.PrintCellAOBanner(ConsoleColor.Red);
 
             Console.WriteLine();
 
