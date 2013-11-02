@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-02 11:24
 
 #endregion
 
@@ -34,6 +34,7 @@ namespace Utility
     #endregion
 
     /// <summary>
+    /// Revision name attribute (name of the release)
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly)]
     public class RevisionNameAttribute : Attribute
@@ -41,8 +42,10 @@ namespace Utility
         #region Constructors and Destructors
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="RevisionNameAttribute"/> class.
         /// </summary>
         /// <param name="name">
+        /// Revision name
         /// </param>
         public RevisionNameAttribute(string name)
         {
@@ -54,6 +57,7 @@ namespace Utility
         #region Public Properties
 
         /// <summary>
+        /// Gets or sets the Revision name
         /// </summary>
         public string RevisionName { get; set; }
 

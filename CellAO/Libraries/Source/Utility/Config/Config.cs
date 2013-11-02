@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-02 11:29
 
 #endregion
 
@@ -96,7 +96,7 @@ namespace Utility.Config
         connectionString, 
 
         /// <summary>
-        /// 
+        /// ISComm local IP address?
         /// </summary>
         ISCommLocalIP, 
 
@@ -123,91 +123,87 @@ namespace Utility.Config
         #region Public Properties
 
         /// <summary>
-        /// Gets or Sets Chat server IP
+        /// Gets or sets Chat server IP
         /// </summary>
         public string ChatIP { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Chat Port
+        /// Gets or sets the Chat Port
         /// </summary>
         public int ChatPort { get; set; }
 
         /// <summary>
-        /// Gets or Sets Communication Port for Communicating between Zone and Chat Engines.
+        /// Gets or sets Communication Port for Communicating between Zone and Chat Engines.
         /// </summary>
         public int CommPort { get; set; }
 
         /// <summary>
-        /// Local ISComm IP address
+        /// Gets or sets Local ISComm IP address
         /// </summary>
         public string ISCommLocalIP { get; set; }
 
         /// <summary>
-        /// Gets or Sets IP to listen
+        /// Gets or sets IP to listen
         /// </summary>
         public string ListenIP { get; set; }
 
         /// <summary>
-        /// Gets or Sets your Locale language
+        /// Gets or sets your Locale language
         /// </summary>
         public string Locale { get; set; }
 
         /// <summary>
-        /// turns on or off the chat logging
+        /// Gets or sets a value indicating whether to enable chat logging
         /// </summary>
         public bool LogChat { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Login Port
+        /// Gets or sets the Login Port
         /// </summary>
         public int LoginPort { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Motd for Chat Server
+        /// Gets or sets the Motd for Chat Server
         /// </summary>
         public string Motd { get; set; }
 
         /// <summary>
-        /// </summary>
-        /// <summery>
         /// Gets or sets the MsSQL Connection String...
-        /// </summery>
+        /// </summary>
         public string MsSqlConnection { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Mysql Connection String...
+        /// Gets or sets the Mysql Connection String...
         /// </summary>
         public string MysqlConnection { get; set; }
 
         /// <summary>
-        /// </summary>
-        /// <summery>
         /// Gets or sets the  PostgreSQL Connection String..
-        /// </summery>
+        /// </summary>
         public string PostgreConnection { get; set; }
 
         /// <summary>
-        /// Gets or Sets Your SQL Type
+        /// Gets or sets Your SQL Type
         /// </summary>
         public string SQLType { get; set; }
 
         /// <summary>
-        /// Turns on or off Sql Logging
+        /// Gets or sets a value indicating whether to enable Sql Logging
         /// </summary>
         public bool SqlLog { get; set; }
 
         /// <summary>
-        /// Gets or Sets the UsePassword
+        /// Gets or sets a value indicating whether to use the Password
         /// </summary>
         public bool UsePassword { get; set; }
 
         /// <summary>
-        /// Gets or Sets Zone server IP
+        /// Gets or sets Zone server IP
         /// </summary>
         public string ZoneIP { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Zone Port
+        /// Gets or sets the Zone Port
         /// </summary>
         public int ZonePort { get; set; }
 

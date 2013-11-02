@@ -43,7 +43,7 @@ namespace Utility
         #region Public Properties
 
         /// <summary>
-        /// Returns the Version String
+        /// Gets the Version String
         /// </summary>
         public static string AssemblyVersion
         {
@@ -55,7 +55,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Company Attribute
+        /// Gets the Company Attribute
         /// </summary>
         public static string Company
         {
@@ -78,7 +78,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Copyright attribute
+        /// Gets the Copyright attribute
         /// </summary>
         public static string Copyright
         {
@@ -101,7 +101,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the File Description Attribute
+        /// Gets the File Description Attribute
         /// </summary>
         public static string Description
         {
@@ -126,7 +126,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Filename of the assembly
+        /// Gets the Filename of the assembly
         /// </summary>
         public static string FileName
         {
@@ -140,7 +140,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the path of the assembly
+        /// Gets the path of the assembly
         /// </summary>
         public static string FilePath
         {
@@ -154,7 +154,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the FileVersion attribute
+        /// Gets the FileVersion attribute
         /// </summary>
         public static string FileVersion
         {
@@ -168,7 +168,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the GUID
+        /// Gets the GUID
         /// </summary>
         public static string Guid
         {
@@ -191,7 +191,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Product Attribute
+        /// Gets the Product Attribute
         /// </summary>
         public static string Product
         {
@@ -214,7 +214,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the revision name
+        /// Gets the revision name
         /// </summary>
         public static string RevisionName
         {
@@ -237,7 +237,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Title of the assembly
+        /// Gets the Title of the assembly
         /// </summary>
         public static string Title
         {
@@ -260,7 +260,7 @@ namespace Utility
         }
 
         /// <summary>
-        /// Returns the Trademark Attribute
+        /// Gets the Trademark Attribute
         /// </summary>
         public static string Trademark
         {
