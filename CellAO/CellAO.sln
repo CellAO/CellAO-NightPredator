@@ -30,8 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Libraries\Source\Utility\Utility.csproj", "{CB56F285-02AE-4816-9E8A-EC69991400E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLounge.AOtomation.Messaging", "..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj", "{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4E4DA273-F44E-4CCF-BED5-C21784477F8F}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -58,6 +56,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiceHexOutput", "Libraries\Source\NiceHexOutput\NiceHexOutput.csproj", "{2EA014B6-1118-4AD0-8602-33D476EFDD24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Stats", "Libraries\Source\CellAO.Stats\CellAO.Stats.csproj", "{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLounge.AOtomation.Messaging", "Libraries\Source\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj", "{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,20 +143,6 @@ Global
 		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Release|x64.ActiveCfg = Release|Any CPU
 		{CB56F285-02AE-4816-9E8A-EC69991400E5}.Release|x86.ActiveCfg = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Itanium.ActiveCfg = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Itanium.ActiveCfg = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x64.ActiveCfg = Release|Any CPU
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x86.ActiveCfg = Release|Any CPU
 		{8AEF23B2-9E44-40A1-A74E-CF7348B45B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8AEF23B2-9E44-40A1-A74E-CF7348B45B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AEF23B2-9E44-40A1-A74E-CF7348B45B62}.Debug|Itanium.ActiveCfg = Debug|Any CPU
@@ -283,6 +269,20 @@ Global
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Release|x64.ActiveCfg = Release|Any CPU
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x64.ActiveCfg = Release|Any CPU
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -290,7 +290,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{63D6C409-58EB-4033-87E0-E0DDA6594075} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{CB56F285-02AE-4816-9E8A-EC69991400E5} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
-		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{8AEF23B2-9E44-40A1-A74E-CF7348B45B62} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{71AB07AD-4D94-4693-8560-47862E5B6E61} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{DDD3B520-1F43-4EEF-A2A9-FC621424090A} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
@@ -299,12 +298,13 @@ Global
 		{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2EA014B6-1118-4AD0-8602-33D476EFDD24} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal

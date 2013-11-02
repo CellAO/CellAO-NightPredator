@@ -128,7 +128,7 @@
     <Folder Include="InstancedEntities\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+    <ProjectReference Include="..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
       <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>

@@ -66,10 +66,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
-      <Name>SmokeLounge.AOtomation.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cell.Core\Cell.Core.csproj">
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
