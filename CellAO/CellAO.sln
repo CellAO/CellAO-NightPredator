@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Stats", "Libraries\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLounge.AOtomation.Messaging", "Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj", "{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Communication", "Libraries\Source\CellAO.Communication\CellAO.Communication.csproj", "{55F93BC4-61C6-42F3-A8CB-788221059917}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -286,6 +288,20 @@ Global
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x64.ActiveCfg = Release|Any CPU
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}.Release|x86.ActiveCfg = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|x64.ActiveCfg = Release|Any CPU
+		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -302,12 +318,13 @@ Global
 		{2EA014B6-1118-4AD0-8602-33D476EFDD24} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{55F93BC4-61C6-42F3-A8CB-788221059917} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal
