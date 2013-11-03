@@ -25,6 +25,7 @@
   <!-- This area is for Locale Settings, en = english, gr = german, ro = Romanian more languages will be supported later, Default = en-->
   <Locale>en</Locale>
   <!-- IRC Config-->
+  <UseIRCRelay>true</UseIRCRelay>
   <IRCServer>irc.darkkittenstudio.com</IRCServer>
   <RelayBotNick>CellAO</RelayBotNick>
   <RelayBotIdent>CellAO</RelayBotIdent>
