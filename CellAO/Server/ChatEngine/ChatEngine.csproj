@@ -37,11 +37,11 @@
     <ApplicationIcon>chat.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="IrcDotNet">
+      <HintPath>..\..\packages\IrcDotNet.0.4.1\lib\net40\IrcDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="NBug">
       <HintPath>..\..\packages\NBug.1.1.1\lib\net40-client\NBug.dll</HintPath>
-    </Reference>
-    <Reference Include="NetIrc2">
-      <HintPath>..\..\packages\NetIrc2.1.0.0.0\lib\NetIrc2.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\..\packages\NLog.2.1.0\lib\net40\NLog.dll</HintPath>
@@ -64,6 +64,7 @@
     <Compile Include="CoreClient\CharacterBase.cs" />
     <Compile Include="CoreClient\Client.cs" />
     <Compile Include="CoreServer\ChatServer.cs" />
+    <Compile Include="IRCRelay\IRCRelay.cs" />
     <Compile Include="Lists\BuddyList.cs" />
     <Compile Include="Lists\BuddyListEntry.cs" />
     <Compile Include="Lists\ChannelsEntry.cs" />

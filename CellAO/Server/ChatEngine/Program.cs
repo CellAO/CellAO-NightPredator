@@ -123,6 +123,12 @@ namespace ChatEngine
                             Console.ResetColor();
                             break;
                         }
+                        if (Config.Instance.CurrentConfig.UseIRCRelay == true)
+                        {
+                            //Call the IRC Bot stuff here..
+                            chatServer.Start(TCPEnable, UDPEnable);
+                            break;
+                        }
 
                         chatServer.Start(TCPEnable, UDPEnable);
                         break;
