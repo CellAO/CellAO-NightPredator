@@ -32,6 +32,8 @@
 
 namespace ChatEngine.IRCRelay.Common
 {
+    using IrcDotNet;
+
     #region Usings ...
 
     using System;

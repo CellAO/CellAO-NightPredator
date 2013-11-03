@@ -64,7 +64,12 @@
     <Compile Include="CoreClient\CharacterBase.cs" />
     <Compile Include="CoreClient\Client.cs" />
     <Compile Include="CoreServer\ChatServer.cs" />
-    <Compile Include="IRCRelay\IRCRelay.cs" />
+    <Compile Include="IRCRelay\Common\BasicIrcBot.cs" />
+    <Compile Include="IRCRelay\Common\ConsoleUtilities.cs" />
+    <Compile Include="IRCRelay\Common\InvalidCommandParametersException.cs" />
+    <Compile Include="IRCRelay\Common\IrcBot.cs" />
+    <Compile Include="IRCRelay\Common\IrcBotException.cs" />
+    <Compile Include="IRCRelay\Common\IrcBotUtilities.cs" />
     <Compile Include="Lists\BuddyList.cs" />
     <Compile Include="Lists\BuddyListEntry.cs" />
     <Compile Include="Lists\ChannelsEntry.cs" />
@@ -115,6 +120,26 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\Common\BasicIrcBot.cs" />
+    <Compile Include="Samples\Common\ConsoleUtilities.cs" />
+    <Compile Include="Samples\Common\InvalidCommandParametersException.cs" />
+    <Compile Include="Samples\Common\IrcBot.cs" />
+    <Compile Include="Samples\Common\IrcBotException.cs" />
+    <Compile Include="Samples\Common\IrcBotUtilities.cs" />
+    <Compile Include="Samples\Common\ProgramInfo.cs" />
+    <Compile Include="Samples\Common\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\Common\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChain.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChainNode.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChainTextBot.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Program.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\TwitterBot\Program.cs" />
+    <Compile Include="Samples\TwitterBot\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\TwitterBot\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\TwitterBot\TwitterBot.cs" />
+    <Compile Include="Samples\TwitterBot\TwitterBotUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
@@ -143,6 +168,12 @@
       <Link>Config.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Samples\Common\Common.csproj" />
+    <Content Include="Samples\IrcDotNet-Samples.sln" />
+    <Content Include="Samples\MarkovChainTextBot\MarkovChainTextBot.csproj" />
+    <Content Include="Samples\MarkovChainTextBot\MarkovChainTextBot.csproj.user" />
+    <Content Include="Samples\TwitterBot\TwitterBot.csproj" />
+    <Content Include="Samples\TwitterBot\TwitterBot.csproj.user" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="chat.ico" />
@@ -153,10 +184,24 @@
       <Link>NBug.ChatEngine.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="App_Readme\IrcDotNet.authors.md" />
+    <None Include="App_Readme\IrcDotNet.license.md" />
+    <None Include="App_Readme\IrcDotNet.readme.md" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Samples\IrcDotNet-Samples.suo" />
+    <None Include="Samples\MarkovChainTextBot\app.config" />
+    <None Include="Samples\MarkovChainTextBot\README.md" />
+    <None Include="Samples\README.md" />
+    <None Include="Samples\TwitterBot\app.config" />
+    <None Include="Samples\TwitterBot\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\Common\Properties\Resources.resx" />
+    <EmbeddedResource Include="Samples\MarkovChainTextBot\Properties\Resources.resx" />
+    <EmbeddedResource Include="Samples\TwitterBot\Properties\Resources.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
