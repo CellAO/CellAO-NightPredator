@@ -24,4 +24,9 @@
   <PostgreConnection>Server=localhost;User Id=cellaodbuser;Password=password;Database=cellao</PostgreConnection>
   <!-- This area is for Locale Settings, en = english, gr = german, ro = Romanian more languages will be supported later, Default = en-->
   <Locale>en</Locale>
+  <!-- IRC Config-->
+  <IRCServer>irc.darkkittenstudio.com</IRCServer>
+  <RelayBotNick>CellAO</RelayBotNick>
+  <RelayBotIdent>CellAO</RelayBotIdent>
+  <IRCChannel>#CellAO</IRCChannel>
 </Config>

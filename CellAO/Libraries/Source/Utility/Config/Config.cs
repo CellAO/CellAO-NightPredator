@@ -109,6 +109,26 @@ namespace Utility.Config
         /// Locale language selection for you, en = english , gr = german, more languages as we go
         /// </summary>
         Locale, 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        
+        IRCServer,
+        /// <summary>
+        /// 
+        /// </summary>
+        RelayBotNick,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        RelayBotIdent,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IRCChannel
     }
 
     #endregion
@@ -206,6 +226,27 @@ namespace Utility.Config
         /// Gets or sets the Zone Port
         /// </summary>
         public int ZonePort { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IRCServer { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RelayBotNick { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RelayBotIdent { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IRCChannel { get; set; }
+
 
         #endregion
     }
