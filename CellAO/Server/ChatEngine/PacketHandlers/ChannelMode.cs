@@ -25,86 +25,83 @@
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
-    using System.Collections.Generic;
+    using System;
 
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
+    using ChatEngine.CoreClient;
 
     #endregion
 
     /// <summary>
+    /// The channel mode.
     /// </summary>
-    public class CharacterBase
+    public class ChannelMode
     {
         #region Fields
 
         /// <summary>
+        /// Argument 1
         /// </summary>
-        public uint CharacterId;
+        private ushort arg1;
 
         /// <summary>
+        /// Argument 2
         /// </summary>
-        public string characterFirstName;
+        private ushort arg2;
 
         /// <summary>
+        /// Argument 3
         /// </summary>
-        public string characterLastName;
+        private ushort arg3;
 
         /// <summary>
+        /// Argument 4
         /// </summary>
-        public string characterName;
+        private ushort arg4;
 
         /// <summary>
+        /// Channel ID
         /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
+        private byte[] channelId = new byte[] { };
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
+        /// Read Channel Mode packet
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ReadNames()
+        /// <param name="client">
+        /// Client sending
+        /// </param>
+        /// <param name="packet">
+        /// packet data
+        /// </param>
+        public void Read(Client client, byte[] packet)
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+            PacketReader reader = new PacketReader(ref packet);
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
+            reader.ReadUInt16(); // Packet ID
+            reader.ReadUInt16(); // Data length
+            this.channelId = reader.ReadBytes(5);
+            this.arg1 = reader.ReadUInt16();
+            this.arg2 = reader.ReadUInt16();
+            this.arg3 = reader.ReadUInt16();
+            this.arg4 = reader.ReadUInt16();
+            client.Server.Debug(
+                client, 
+                "{0} >> ChannelMode: Channel: {1} {2} Arg1: {3} Arg2: {4} Arg3: {5} Arg4: {6}", 
+                client.Character.characterName, 
+                this.channelId[0], 
+                BitConverter.ToUInt32(this.channelId, 1), 
+                this.arg1, 
+                this.arg2, 
+                this.arg3, 
+                this.arg4);
+            reader.Finish();
         }
 
         #endregion

@@ -1,0 +1,197 @@
+﻿#region License
+
+// Copyright (c) 2005-2013, CellAO Team
+// 
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// Last modified: 2013-11-03 10:59
+
+#endregion
+
+namespace ChatEngine.Lists
+{
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+
+    #endregion
+
+    /// <summary>
+    /// The channels.
+    /// </summary>
+    public static class ChatChannels
+    {
+        #region Static Fields
+
+        /// <summary>
+        /// The channel names.
+        /// </summary>
+        public static readonly List<ChannelsEntry> ChannelNames = new List<ChannelsEntry>
+                                                                  {
+                                                                      new ChannelsEntry(
+                                                                          "Global", 
+                                                                          0x0400002328, 
+                                                                          0x8044), 
+                                                                      new ChannelsEntry(
+                                                                          "CellAO News", 
+                                                                          0x0c000007d0, 
+                                                                          0x8044)
+                
+                                                                      // need to change the flags soo only GMs can broadcast to this channel..
+                                                                  };
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="teamID">
+        /// </param>
+        /// <param name="teamMemberIds">
+        /// </param>
+        public static void CreateTeamChannel(int teamID, uint[] teamMemberIds)
+        {
+            ChannelsEntry channelsEntry = new ChannelsEntry();
+        }
+
+        /// <summary>
+        /// Get the channel entry
+        /// </summary>
+        /// <param name="packet">
+        /// The packet.
+        /// </param>
+        /// <returns>
+        /// Returns ChannelsEntry or null
+        /// </returns>
+        public static ChannelsEntry GetChannel(byte[] packet)
+        {
+            byte[] temp = new byte[8];
+            Array.Copy(packet, 4, temp, 0, 5);
+
+            ulong chanid = BitConverter.ToUInt64(temp, 0);
+
+            foreach (ChannelsEntry ce in ChannelNames)
+            {
+                if (ce.Id != chanid)
+                {
+                    continue;
+                }
+
+                return ce;
+            }
+
+            return null;
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// </summary>
+    public enum ChannelType : ulong
+    {
+        /// <summary>
+        /// </summary>
+        Unknown = 0, 
+
+        /// <summary>
+        /// </summary>
+        Admin = 1, 
+
+        /// <summary>
+        /// </summary>
+        Team = 2 | 0x80, 
+
+        /// <summary>
+        /// </summary>
+        Organization = 3, 
+
+        /// <summary>
+        /// </summary>
+        Leaders = 4, 
+
+        /// <summary>
+        /// </summary>
+        GM = 5, 
+
+        /// <summary>
+        /// </summary>
+        Shopping = 6 | 0x80, 
+
+        /// <summary>
+        /// </summary>
+        General = 7 | 0x80, 
+
+        /// <summary>
+        /// </summary>
+        Towers = 10, 
+
+        /// <summary>
+        /// </summary>
+        Announcements = 12, 
+
+        /// <summary>
+        /// </summary>
+        Raid = 15 | 0x80, 
+
+        /// <summary>
+        /// </summary>
+        Battlestation = 16 | 0x80
+    }
+
+    /// <summary>
+    /// </summary>
+    public enum ChannelFlags : uint
+    {
+        /// <summary>
+        /// </summary>
+        None = 0, 
+
+        /// <summary>
+        /// </summary>
+        CantIgnore = 0x1, 
+
+        /// <summary>
+        /// </summary>
+        CantSend = 0x2, 
+
+        /// <summary>
+        /// </summary>
+        NoInternational = 0x10, 
+
+        /// <summary>
+        /// </summary>
+        NoVoice = 0x20, 
+
+        /// <summary>
+        /// </summary>
+        SendCriteria = 0x40, 
+
+        /// <summary>
+        /// </summary>
+        GroupOnName = 0x80, 
+
+        /// <summary>
+        /// </summary>
+        Muted = 0x1000000, 
+    }
+}

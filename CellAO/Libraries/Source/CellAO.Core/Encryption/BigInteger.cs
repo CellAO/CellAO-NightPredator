@@ -37,7 +37,7 @@ using System;
 
 #endregion
 
-namespace LoginEngine
+namespace AO.Core.Encryption
 {
     /// <summary>
     /// </summary>

@@ -56,19 +56,63 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Component\ClientFactory.cs" />
+    <Compile Include="ChatLogger.cs" />
     <Compile Include="CoreClient\Character.cs" />
     <Compile Include="CoreClient\CharacterBase.cs" />
     <Compile Include="CoreClient\Client.cs" />
     <Compile Include="CoreServer\ChatServer.cs" />
+    <Compile Include="Lists\BuddyList.cs" />
+    <Compile Include="Lists\BuddyListEntry.cs" />
+    <Compile Include="Lists\ChannelsEntry.cs" />
+    <Compile Include="Lists\ChatChannels.cs" />
+    <Compile Include="PacketHandlers\Authenticate.cs" />
+    <Compile Include="PacketHandlers\AuthenticateBot.cs" />
+    <Compile Include="PacketHandlers\BuddyAdd.cs" />
+    <Compile Include="PacketHandlers\BuddyRemove.cs" />
+    <Compile Include="PacketHandlers\ChannelDataSet.cs" />
+    <Compile Include="PacketHandlers\ChannelMessage.cs" />
+    <Compile Include="PacketHandlers\ChannelMode.cs" />
+    <Compile Include="PacketHandlers\ChatCommand.cs" />
+    <Compile Include="PacketHandlers\LoginCharacter.cs" />
+    <Compile Include="PacketHandlers\OnlineStatus.cs" />
+    <Compile Include="PacketHandlers\PlayerNameLookup.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupInvitePlayer.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupJoin.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupKickEveryone.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupKickPlayer.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupLeave.cs" />
+    <Compile Include="PacketHandlers\PrivateGroupMessage.cs" />
+    <Compile Include="PacketHandlers\Tell.cs" />
+    <Compile Include="PacketIO.cs" />
+    <Compile Include="Packets\AccountCharacterList.cs" />
+    <Compile Include="Packets\AuthenticationSeed.cs" />
+    <Compile Include="Packets\BuddyOnlineStatus.cs" />
+    <Compile Include="Packets\BuddyRemoved.cs" />
+    <Compile Include="Packets\ChannelJoin.cs" />
+    <Compile Include="Packets\ChannelLeave.cs" />
+    <Compile Include="Packets\ChannelMessage.cs" />
+    <Compile Include="Packets\ClientModeGet.cs" />
+    <Compile Include="Packets\ClientModeSet.cs" />
+    <Compile Include="Packets\LoginError.cs" />
+    <Compile Include="Packets\LoginOK.cs" />
+    <Compile Include="Packets\MsgAnonymousVicinity.cs" />
+    <Compile Include="Packets\MsgPredefined.cs" />
+    <Compile Include="Packets\MsgPrivateGroup.cs" />
+    <Compile Include="Packets\MsgSystem.cs" />
+    <Compile Include="Packets\MsgVicinity.cs" />
+    <Compile Include="Packets\NameLookupResult.cs" />
+    <Compile Include="Packets\PlayerIDUnknown.cs" />
+    <Compile Include="Packets\PlayerName.cs" />
+    <Compile Include="Packets\PrivateGroupInvitation.cs" />
+    <Compile Include="Packets\PrivateGroupKicked.cs" />
+    <Compile Include="Packets\PrivateGroupMessage.cs" />
+    <Compile Include="Packets\PrivateGroupPlayerJoined.cs" />
+    <Compile Include="Packets\PrivateGroupPlayerLeft.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
-      <Name>SmokeLounge.AOtomation.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>

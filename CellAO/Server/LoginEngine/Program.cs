@@ -34,6 +34,8 @@ namespace LoginEngine
     using System.Net;
     using System.Threading.Tasks;
 
+    using AO.Core.Encryption;
+
     using CellAO.Core.Components;
     using CellAO.Database.Dao;
 
@@ -107,7 +109,7 @@ namespace LoginEngine
                 Console.Write(Environment.NewLine + "Server Command >>");
 
                 consoleCommand = Console.ReadLine();
-                string temp = string.Empty;
+
                 while (consoleCommand.IndexOf("  ") > -1)
                 {
                     consoleCommand = consoleCommand.Replace("  ", " ");

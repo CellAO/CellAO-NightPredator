@@ -25,86 +25,58 @@
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
-
-    using System.Collections.Generic;
 
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
 
+    using ChatEngine.CoreClient;
+    using ChatEngine.Packets;
+
     #endregion
 
     /// <summary>
+    /// The player name lookup.
     /// </summary>
-    public class CharacterBase
+    public class PlayerNameLookup
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        public uint CharacterId;
-
-        /// <summary>
-        /// </summary>
-        public string characterFirstName;
-
-        /// <summary>
-        /// </summary>
-        public string characterLastName;
-
-        /// <summary>
-        /// </summary>
-        public string characterName;
-
-        /// <summary>
-        /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
+        /// Read and send back Player name lookup packet
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ReadNames()
+        /// <param name="client">
+        /// Client sending
+        /// </param>
+        /// <param name="packet">
+        /// Packet data
+        /// </param>
+        public static void Read(Client client, byte[] packet)
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+            PacketReader reader = new PacketReader(ref packet);
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
+            reader.ReadUInt16(); // packet ID
+            reader.ReadUInt16(); // data length
+            uint playerId = uint.MaxValue;
+            string playerName = reader.ReadString();
+            client.Server.Debug(
+                client, 
+                "{0} >> PlayerNameLookup: PlayerName: {1}", 
+                client.Character.characterName, 
+                playerName);
+            reader.Finish();
+
+            DBCharacter character = CharacterDao.GetByCharName(playerName);
+            if (character != null)
             {
-                return false;
+                playerId = (uint)character.Id;
             }
 
-            return true;
+            byte[] namelookup = NameLookupResult.Create(playerId, playerName);
+            client.Send(namelookup);
+            client.KnownClients.Add(playerId);
         }
 
         #endregion

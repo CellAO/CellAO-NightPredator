@@ -25,86 +25,40 @@
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
+    using ChatEngine.CoreClient;
 
     #endregion
 
     /// <summary>
+    /// The authenticate bot.
     /// </summary>
-    public class CharacterBase
+    public static class AuthenticateBot
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        public uint CharacterId;
-
-        /// <summary>
-        /// </summary>
-        public string characterFirstName;
-
-        /// <summary>
-        /// </summary>
-        public string characterLastName;
-
-        /// <summary>
-        /// </summary>
-        public string characterName;
-
-        /// <summary>
-        /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
+        /// The read.
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ReadNames()
+        /// <param name="client">
+        /// </param>
+        /// <param name="packet">
+        /// </param>
+        public static void Read(Client client, byte[] packet)
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+            PacketReader reader = new PacketReader(ref packet);
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
-            {
-                return false;
-            }
+            reader.ReadUInt16(); // Packet ID
+            reader.ReadUInt16(); // Data length
 
-            return true;
+            uint unknown = reader.ReadUInt32(); // ?
+            string username = reader.ReadString();
+            string password = reader.ReadString();
+
+            reader.Finish();
         }
 
         #endregion

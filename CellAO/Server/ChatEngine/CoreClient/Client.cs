@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:29
+// Last modified: 2013-11-03 10:58
 
 #endregion
 
@@ -30,19 +30,13 @@ namespace ChatEngine.CoreClient
     #region Usings ...
 
     using System;
-    using System.Collections.ObjectModel;
-    using System.Globalization;
+    using System.Collections.Generic;
 
     using Cell.Core;
-
-    using CellAO.Core.Components;
-    using CellAO.Core.EventHandlers.Events;
 
     using ChatEngine.CoreServer;
 
     using NiceHexOutput;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Utility;
 
@@ -56,17 +50,9 @@ namespace ChatEngine.CoreClient
         #region Fields
 
         /// <summary>
-        /// </summary>
-        private readonly IBus bus;
-
-        /// <summary>
         /// Private known clients collection
         /// </summary>
-        private readonly Collection<uint> knownClients;
-
-        /// <summary>
-        /// </summary>
-        private readonly IMessageSerializer messageSerializer;
+        private readonly List<uint> knownClients;
 
         /// <summary>
         /// </summary>
@@ -87,7 +73,7 @@ namespace ChatEngine.CoreClient
         {
             this.Character = new Character(0, null);
             this.ServerSalt = string.Empty;
-            this.knownClients = new Collection<uint>();
+            this.knownClients = new List<uint>();
         }
 
         /// <summary>
@@ -97,21 +83,6 @@ namespace ChatEngine.CoreClient
         public Client()
             : base(null)
         {
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="server">
-        /// </param>
-        /// <param name="messageSerializer">
-        /// </param>
-        /// <param name="bus">
-        /// </param>
-        public Client(ServerBase server, IMessageSerializer messageSerializer, IBus bus)
-            : base(server)
-        {
-            this.messageSerializer = messageSerializer;
-            this.bus = bus;
         }
 
         #endregion
@@ -126,7 +97,7 @@ namespace ChatEngine.CoreClient
         /// <summary>
         /// The known clients.
         /// </summary>
-        public Collection<uint> KnownClients
+        public List<uint> KnownClients
         {
             get
             {
@@ -145,44 +116,37 @@ namespace ChatEngine.CoreClient
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public ChatServer ChatServer()
+        {
+            return this.Server as ChatServer;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="receiver">
         /// </param>
-        /// <param name="messageBody">
+        /// <param name="packetBytes">
         /// </param>
-        public void Send(int receiver, MessageBody messageBody)
+        public void Send(int receiver, byte[] packetBytes)
         {
-            // TODO: Investigate if reciever is a timestamp
-            var message = new Message
-                          {
-                              Body = messageBody, 
-                              Header =
-                                  new Header
-                                  {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = 0x00000001, 
-                                      Receiver = receiver
-                                  }
-                          };
-            byte[] buffer = this.messageSerializer.Serialize(message);
-
-            buffer[0] = BitConverter.GetBytes(this.packetNumber)[0];
-            buffer[1] = BitConverter.GetBytes(this.packetNumber)[1];
+            packetBytes[0] = BitConverter.GetBytes(this.packetNumber)[0];
+            packetBytes[1] = BitConverter.GetBytes(this.packetNumber)[1];
             this.packetNumber++;
 
 #if DEBUG
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(NiceHexOutput.Output(buffer));
+            Console.WriteLine(NiceHexOutput.Output(packetBytes));
             Console.ResetColor();
-            LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(buffer));
+            LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(packetBytes));
 #endif
-            if (buffer.Length % 4 > 0)
+            if (packetBytes.Length % 4 > 0)
             {
-                Array.Resize(ref buffer, buffer.Length + (4 - (buffer.Length % 4)));
+                Array.Resize(ref packetBytes, packetBytes.Length + (4 - (packetBytes.Length % 4)));
             }
 
-            this.Send(buffer);
+            this.Send(packetBytes);
         }
 
         #endregion
@@ -213,47 +177,6 @@ namespace ChatEngine.CoreClient
         /// </returns>
         protected override bool OnReceive(BufferSegment buffer)
         {
-            Message message = null;
-
-            var packet = new byte[this._remainingLength];
-            Array.Copy(buffer.SegmentData, packet, this._remainingLength);
-
-#if DEBUG
-            Console.WriteLine("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-            Console.WriteLine(NiceHexOutput.Output(packet));
-            LogUtil.Debug("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-            LogUtil.Debug(NiceHexOutput.Output(packet));
-#endif
-
-            this._remainingLength = 0;
-            try
-            {
-                message = this.messageSerializer.Deserialize(packet);
-            }
-            catch (Exception)
-            {
-                uint messageNumber = this.GetMessageNumber(packet);
-                this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
-                    messageNumber.ToString(CultureInfo.InvariantCulture));
-                return false;
-            }
-
-            buffer.IncrementUsage();
-
-            if (message == null)
-            {
-                uint messageNumber = this.GetMessageNumber(packet);
-                this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
-                    messageNumber.ToString(CultureInfo.InvariantCulture));
-                return false;
-            }
-
-            this.bus.Publish(new MessageReceivedEvent(this, message));
-
             return true;
         }
 

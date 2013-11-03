@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:29
+// Last modified: 2013-11-03 10:58
 
 #endregion
 
@@ -79,6 +79,92 @@ namespace ChatEngine
         /// </exception>
         private static void CommandLoop(string[] args)
         {
+            // Hard coded, because we only use TCP connections
+            const bool TCPEnable = true;
+            const bool UDPEnable = false;
+
+            bool processedargs = false;
+
+            string consoleCommand;
+
+            while (true)
+            {
+                if (!processedargs)
+                {
+                    if (args.Length == 1)
+                    {
+                        if (args[0].ToLower() == "/autostart")
+                        {
+                            ct.TextRead("autostart.txt");
+                            chatServer.Start(TCPEnable, UDPEnable);
+                        }
+
+                        processedargs = true;
+                    }
+                }
+
+                Console.Write(Environment.NewLine + "Server Command >>");
+
+                consoleCommand = Console.ReadLine();
+
+                while (consoleCommand.IndexOf("  ") > -1)
+                {
+                    consoleCommand = consoleCommand.Replace("  ", " ");
+                }
+
+                consoleCommand = consoleCommand.Trim();
+                switch (consoleCommand.ToLower())
+                {
+                    case "start":
+                        if (chatServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            ct.TextRead("chatisrunning.txt");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        chatServer.Start(TCPEnable, UDPEnable);
+                        break;
+                    case "stop":
+                        if (!chatServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            ct.TextRead("chatisnotrunning.txt");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        chatServer.Stop();
+                        break;
+                    case "exit":
+                        return;
+                    case "running":
+                        if (chatServer.IsRunning)
+                        {
+                            // Console.WriteLine("Login Server is running");
+                            ct.TextRead("chatisrunning.txt");
+                            break;
+                        }
+
+                        // Console.WriteLine("Login Server not running");
+                        ct.TextRead("chatisnotrunning.txt");
+                        break;
+
+                    case "help":
+                        ct.TextRead("chatcmdhelp.txt");
+                        break;
+                    case "help start":
+                        ct.TextRead("helpstart.txt");
+                        break;
+                    case "help exit":
+                        ct.TextRead("helpstop.txt");
+                        break;
+                    case "help running":
+                        ct.TextRead("chathelpcmdrunning.txt");
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -101,8 +187,10 @@ namespace ChatEngine
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
                 return false;
             }
 
@@ -147,13 +235,13 @@ namespace ChatEngine
             int Port = Convert.ToInt32(Config.Instance.CurrentConfig.ChatPort);
             try
             {
-                if (Config.Instance.CurrentConfig.ISCommLocalIP == "0.0.0.0")
+                if (Config.Instance.CurrentConfig.ChatIP == "0.0.0.0")
                 {
                     chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Any, Port);
                 }
                 else
                 {
-                    chatServer.TcpIP = IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP);
+                    chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ChatIP), Port);
                 }
 
                 chatServer.MaximumPendingConnections = 100;
@@ -189,6 +277,8 @@ namespace ChatEngine
             {
                 return;
             }
+
+            CommandLoop(args);
         }
 
         #endregion

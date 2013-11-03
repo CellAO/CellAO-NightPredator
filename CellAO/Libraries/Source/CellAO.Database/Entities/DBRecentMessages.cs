@@ -21,73 +21,25 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-03 11:00
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace CellAO.Database.Entities
 {
-    #region Usings ...
-
-    using CellAO.Database.Dao;
-
-    #endregion
-
     /// <summary>
-    /// The character.
     /// </summary>
-    public class Character : CharacterBase
+    public class DBRecentMessages
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Character"/> class. 
-        /// The character.
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public Character(uint characterId, Client client)
-            : base(characterId)
-        {
-            this.Client = client;
-
-            if (characterId != 0)
-            {
-                this.characterName = CharacterDao.GetCharacterNameById((int)characterId);
-            }
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="Character"/> class. 
-        /// The ~ character.
-        /// </summary>
-        ~Character()
-        {
-            if (this.CharacterId != 0)
-            {
-            }
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
-        /// The client.
         /// </summary>
-        public Client Client { get; set; }
+        public int PlayerID { get; set; }
 
         /// <summary>
         /// </summary>
-        public int orgId
-        {
-            get
-            {
-                return StatDao.GetById(50000, (int)this.CharacterId, 5).statvalue;
-            }
-        }
+        public int ReceivedID { get; set; }
 
         #endregion
     }

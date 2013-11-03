@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\IActions.cs" />
+    <Compile Include="Encryption\BigInteger.cs" />
     <Compile Include="Components\IBus.cs" />
     <Compile Include="Components\IContainer.cs" />
     <Compile Include="Components\IHandle.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\ItemLoader.cs" />
     <Compile Include="Items\ItemTemplate.cs" />
+    <Compile Include="Encryption\LoginEncryption.cs" />
     <Compile Include="Nanos\NanoFormula.cs" />
     <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Network\IZoneClient.cs" />

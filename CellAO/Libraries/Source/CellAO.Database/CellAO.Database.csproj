@@ -63,19 +63,23 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Connector.cs" />
+    <Compile Include="Dao\BuddyListDao.cs" />
     <Compile Include="Dao\CharacterDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
     <Compile Include="Dao\LoginDataDao.cs" />
     <Compile Include="Dao\OnlineDao.cs" />
     <Compile Include="Dao\OrganizationDao.cs" />
+    <Compile Include="Dao\RecentMessagesDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
+    <Compile Include="Entities\DBBuddyListEntry.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />
     <Compile Include="Entities\DBItem.cs" />
     <Compile Include="Entities\DBLoginData.cs" />
     <Compile Include="Entities\DBOnline.cs" />
     <Compile Include="Entities\DBOrganization.cs" />
+    <Compile Include="Entities\DBRecentMessages.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
@@ -100,7 +104,13 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="SqlTables\buddylist.sql">
+      <SubType>Component</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\receivedmsgs.sql" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="SqlTables\bank.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

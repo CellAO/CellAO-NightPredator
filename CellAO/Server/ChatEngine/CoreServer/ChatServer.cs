@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:29
+// Last modified: 2013-11-03 10:58
 
 #endregion
 
@@ -30,6 +30,7 @@ namespace ChatEngine.CoreServer
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Net;
 
     using Cell.Core;
@@ -43,99 +44,11 @@ namespace ChatEngine.CoreServer
     /// </summary>
     public class ChatServer : ServerBase
     {
-        #region Public Properties
+        #region Fields
 
         /// <summary>
-        /// The maximum pending connections.
         /// </summary>
-        public override int MaximumPendingConnections
-        {
-            get
-            {
-                return base.MaximumPendingConnections;
-            }
-
-            set
-            {
-                base.MaximumPendingConnections = value;
-            }
-        }
-
-        /// <summary>
-        /// The tcp ip.
-        /// </summary>
-        public override IPAddress TcpIP
-        {
-            get
-            {
-                return base.TcpIP;
-            }
-
-            set
-            {
-                base.TcpIP = value;
-            }
-        }
-
-        /// <summary>
-        /// The tcp port.
-        /// </summary>
-        public override int TcpPort
-        {
-            get
-            {
-                return base.TcpPort;
-            }
-
-            set
-            {
-                base.TcpPort = value;
-            }
-        }
-
-        /// <summary>
-        /// The udp ip.
-        /// </summary>
-        public override IPAddress UdpIP
-        {
-            get
-            {
-                return base.UdpIP;
-            }
-
-            set
-            {
-                base.UdpIP = value;
-            }
-        }
-
-        /// <summary>
-        /// The udp port.
-        /// </summary>
-        public override int UdpPort
-        {
-            get
-            {
-                return base.UdpPort;
-            }
-
-            set
-            {
-                base.UdpPort = value;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The stop.
-        /// </summary>
-        public override void Stop()
-        {
-            base.Stop();
-        }
+        public Dictionary<uint, Client> ConnectedClients = new Dictionary<uint, Client>();
 
         #endregion
 

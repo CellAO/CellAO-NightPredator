@@ -21,91 +21,48 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-03 10:59
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.Lists
 {
-    #region Usings ...
+    /// <summary>
+    /// The buddy list entry.
+    /// </summary>
+    public class BuddyListEntry
+    {
+        #region Public Properties
 
-    using System.Collections.Generic;
+        /// <summary>
+        /// The buddy id.
+        /// </summary>
+        public uint BuddyId { get; set; }
 
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
+        /// <summary>
+        /// The player id.
+        /// </summary>
+        public uint PlayerId { get; set; }
 
-    #endregion
+        #endregion
+    }
 
     /// <summary>
+    /// The recent msgs entry.
     /// </summary>
-    public class CharacterBase
+    public class RecentMsgsEntry
     {
-        #region Fields
+        #region Public Properties
 
         /// <summary>
+        /// The player id.
         /// </summary>
-        public uint CharacterId;
+        public uint PlayerId { get; set; }
 
         /// <summary>
+        /// The received id.
         /// </summary>
-        public string characterFirstName;
-
-        /// <summary>
-        /// </summary>
-        public string characterLastName;
-
-        /// <summary>
-        /// </summary>
-        public string characterName;
-
-        /// <summary>
-        /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ReadNames()
-        {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
-
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
-        }
+        public uint ReceivedId { get; set; }
 
         #endregion
     }

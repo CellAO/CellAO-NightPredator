@@ -25,86 +25,33 @@
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
+    using ChatEngine.CoreClient;
 
     #endregion
 
     /// <summary>
+    /// The private group kick everyone.
     /// </summary>
-    public class CharacterBase
+    internal static class PrivateGroupKickEveryone
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        public uint CharacterId;
-
-        /// <summary>
-        /// </summary>
-        public string characterFirstName;
-
-        /// <summary>
-        /// </summary>
-        public string characterLastName;
-
-        /// <summary>
-        /// </summary>
-        public string characterName;
-
-        /// <summary>
-        /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
+        /// The read.
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool ReadNames()
+        /// <param name="client">
+        /// </param>
+        /// <param name="packet">
+        /// </param>
+        public static void Read(Client client, ref byte[] packet)
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+            client.Server.Debug(client, "{0} >> PrivGrpKickEveryone", client.Character.characterName);
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
+            // this packet should have no data
         }
 
         #endregion

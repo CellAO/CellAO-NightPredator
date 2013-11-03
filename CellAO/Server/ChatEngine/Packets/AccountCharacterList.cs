@@ -25,70 +25,12 @@
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.Packets
 {
-    #region Usings ...
-
-    using CellAO.Database.Dao;
-
-    #endregion
-
     /// <summary>
-    /// The character.
+    /// The account character list.
     /// </summary>
-    public class Character : CharacterBase
+    public class AccountCharacterList
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Character"/> class. 
-        /// The character.
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public Character(uint characterId, Client client)
-            : base(characterId)
-        {
-            this.Client = client;
-
-            if (characterId != 0)
-            {
-                this.characterName = CharacterDao.GetCharacterNameById((int)characterId);
-            }
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="Character"/> class. 
-        /// The ~ character.
-        /// </summary>
-        ~Character()
-        {
-            if (this.CharacterId != 0)
-            {
-            }
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// The client.
-        /// </summary>
-        public Client Client { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int orgId
-        {
-            get
-            {
-                return StatDao.GetById(50000, (int)this.CharacterId, 5).statvalue;
-            }
-        }
-
-        #endregion
     }
 }

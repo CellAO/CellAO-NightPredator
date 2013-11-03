@@ -21,11 +21,11 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-03 10:59
 
 #endregion
 
-namespace ChatEngine.CoreClient
+namespace ChatEngine.Lists
 {
     #region Usings ...
 
@@ -37,74 +37,40 @@ namespace ChatEngine.CoreClient
     #endregion
 
     /// <summary>
+    /// Buddy List
     /// </summary>
-    public class CharacterBase
+    public static class BuddyList
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        public uint CharacterId;
-
-        /// <summary>
-        /// </summary>
-        public string characterFirstName;
-
-        /// <summary>
-        /// </summary>
-        public string characterLastName;
-
-        /// <summary>
-        /// </summary>
-        public string characterName;
-
-        /// <summary>
-        /// </summary>
-        public string orgName;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="characterId">
-        /// </param>
-        public CharacterBase(uint characterId)
-        {
-            this.CharacterId = characterId;
-        }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
+        /// The load buddy list.
         /// </summary>
+        /// <param name="charId">
+        /// The char Id.
+        /// </param>
         /// <returns>
+        /// Buddy list
         /// </returns>
-        public bool ReadNames()
+        public static IEnumerable<DBBuddyListEntry> LoadBuddyList(int charId)
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
-            {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+            return BuddyListDao.LoadBuddyList(charId);
+        }
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
-                if (clan != null)
-                {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
-                    this.orgName = org.Name;
-                }
-            }
-            else
-            {
-                return false;
-            }
+        // LoadRecentMsgsList unused?
 
-            return true;
+        /// <summary>
+        /// The load recent msgs list.
+        /// </summary>
+        /// <param name="charId">
+        /// The char Id.
+        /// </param>
+        /// <returns>
+        /// List of received messages
+        /// </returns>
+        public static IEnumerable<DBRecentMessages> LoadRecentMsgsList(uint charId)
+        {
+            return RecentMessagesDao.LoadRecentMessageses((int)charId);
         }
 
         #endregion

@@ -21,68 +21,54 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 00:29
+// Last modified: 2013-11-03 10:58
 
 #endregion
 
-namespace ChatEngine.Component
+namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
-    using CellAO.Core.Components;
-
     using ChatEngine.CoreClient;
-    using ChatEngine.CoreServer;
 
     #endregion
 
     /// <summary>
+    /// The private group kick player.
     /// </summary>
-    [Export]
-    public class ClientFactory
+    public class PrivateGroupKickPlayer
     {
         #region Fields
 
         /// <summary>
+        /// The playerId.
         /// </summary>
-        private readonly IBus bus;
-
-        /// <summary>
-        /// </summary>
-        private readonly IMessageSerializer messageSerializer;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageSerializer">
-        /// </param>
-        /// <param name="bus">
-        /// </param>
-        [ImportingConstructor]
-        public ClientFactory(IMessageSerializer messageSerializer, IBus bus)
-        {
-            this.messageSerializer = messageSerializer;
-            this.bus = bus;
-        }
+        private uint playerId;
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
+        /// The read.
         /// </summary>
-        /// <param name="chatServer">
+        /// <param name="client">
         /// </param>
-        /// <returns>
-        /// </returns>
-        public Client Create(ChatServer chatServer)
+        /// <param name="packet">
+        /// </param>
+        public void Read(Client client, byte[] packet)
         {
-            return new Client(chatServer, this.messageSerializer, this.bus);
+            PacketReader reader = new PacketReader(ref packet);
+
+            reader.ReadUInt16(); // Packet ID
+            reader.ReadUInt16(); // Data length
+            this.playerId = reader.ReadUInt32();
+            client.Server.Debug(
+                client, 
+                "{0} >> PrivGrpKickPlayer: PlayerID: {1}", 
+                client.Character.characterName, 
+                this.playerId);
+            reader.Finish();
         }
 
         #endregion

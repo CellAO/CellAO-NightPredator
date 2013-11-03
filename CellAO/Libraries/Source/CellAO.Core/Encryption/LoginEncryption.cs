@@ -28,7 +28,7 @@
 
 #pragma warning disable 0162 // Suppresses "Unreachable code detected" error when disabling login checking
 
-namespace LoginEngine
+namespace AO.Core.Encryption
 {
     #region Usings ...
 

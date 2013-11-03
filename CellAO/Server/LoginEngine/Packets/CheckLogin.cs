@@ -31,6 +31,8 @@ namespace LoginEngine.Packets
 
     using System;
 
+    using AO.Core.Encryption;
+
     using LoginEngine.CoreClient;
     using LoginEngine.QueryBase;
 
