@@ -29,4 +29,5 @@
   <RelayBotNick>CellAO</RelayBotNick>
   <RelayBotIdent>CellAO</RelayBotIdent>
   <IRCChannel>#CellAO</IRCChannel>
+  <RelayIngameChannel>CellAO-Relay</RelayIngameChannel>
 </Config>

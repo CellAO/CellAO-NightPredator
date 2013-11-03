@@ -128,7 +128,13 @@ namespace Utility.Config
         /// <summary>
         /// 
         /// </summary>
-        IRCChannel
+        IRCChannel,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        RelayIngameChannel
+        
     }
 
     #endregion
@@ -247,6 +253,10 @@ namespace Utility.Config
         /// </summary>
         public string IRCChannel { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RelayIngameChannel { get; set; }
 
         #endregion
     }
