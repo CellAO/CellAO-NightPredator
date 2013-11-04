@@ -44,11 +44,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Common\BasicIrcBot.cs" />
+    <Compile Include="Common\ConsoleUtilities.cs" />
+    <Compile Include="Common\InvalidCommandParametersException.cs" />
+    <Compile Include="Common\IrcBot.cs" />
+    <Compile Include="Common\IrcBotException.cs" />
+    <Compile Include="Common\IrcBotUtilities.cs" />
+    <Compile Include="Common\ProgramInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelayBot.cs" />
+    <Compile Include="Samples\Common\BasicIrcBot.cs" />
+    <Compile Include="Samples\Common\ConsoleUtilities.cs" />
+    <Compile Include="Samples\Common\InvalidCommandParametersException.cs" />
+    <Compile Include="Samples\Common\IrcBot.cs" />
+    <Compile Include="Samples\Common\IrcBotException.cs" />
+    <Compile Include="Samples\Common\IrcBotUtilities.cs" />
+    <Compile Include="Samples\Common\ProgramInfo.cs" />
+    <Compile Include="Samples\Common\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\Common\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChain.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChainNode.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\MarkovChainTextBot.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Program.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\MarkovChainTextBot\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\TwitterBot\Program.cs" />
+    <Compile Include="Samples\TwitterBot\Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\TwitterBot\Properties\Resources.Designer.cs" />
+    <Compile Include="Samples\TwitterBot\TwitterBot.cs" />
+    <Compile Include="Samples\TwitterBot\TwitterBotUser.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Readme\IrcDotNet.authors.md" />
+    <None Include="App_Readme\IrcDotNet.license.md" />
+    <None Include="App_Readme\IrcDotNet.readme.md" />
     <None Include="packages.config" />
+    <None Include="Samples\IrcDotNet-Samples.suo" />
+    <None Include="Samples\MarkovChainTextBot\app.config" />
+    <None Include="Samples\MarkovChainTextBot\README.md" />
+    <None Include="Samples\README.md" />
+    <None Include="Samples\TwitterBot\app.config" />
+    <None Include="Samples\TwitterBot\README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Samples\Common\Common.csproj" />
+    <Content Include="Samples\IrcDotNet-Samples.sln" />
+    <Content Include="Samples\MarkovChainTextBot\MarkovChainTextBot.csproj" />
+    <Content Include="Samples\MarkovChainTextBot\MarkovChainTextBot.csproj.user" />
+    <Content Include="Samples\TwitterBot\TwitterBot.csproj" />
+    <Content Include="Samples\TwitterBot\TwitterBot.csproj.user" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Samples\Common\Properties\Resources.resx" />
+    <EmbeddedResource Include="Samples\MarkovChainTextBot\Properties\Resources.resx" />
+    <EmbeddedResource Include="Samples\TwitterBot\Properties\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
+      <Name>Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

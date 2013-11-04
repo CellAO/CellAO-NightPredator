@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20827.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEngine\ChatEngine.csproj", "{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CA8044C8-3283-4382-8B47-3CA7972692F9} = {CA8044C8-3283-4382-8B47-3CA7972692F9}
@@ -63,6 +65,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLounge.AOtomation.Messaging", "Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj", "{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Communication", "Libraries\Source\CellAO.Communication\CellAO.Communication.csproj", "{55F93BC4-61C6-42F3-A8CB-788221059917}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Relay", "Libraries\Source\CellAO.Relay\CellAO.Relay.csproj", "{DACC0F79-8061-4707-AC22-06FDB315A55C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -302,6 +306,20 @@ Global
 		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|x64.ActiveCfg = Release|Any CPU
 		{55F93BC4-61C6-42F3-A8CB-788221059917}.Release|x86.ActiveCfg = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|x64.ActiveCfg = Release|Any CPU
+		{DACC0F79-8061-4707-AC22-06FDB315A55C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -319,12 +337,13 @@ Global
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{55F93BC4-61C6-42F3-A8CB-788221059917} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{DACC0F79-8061-4707-AC22-06FDB315A55C} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_UpdateAssemblyVersion = True
 		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
 	EndGlobalSection
 EndGlobal
