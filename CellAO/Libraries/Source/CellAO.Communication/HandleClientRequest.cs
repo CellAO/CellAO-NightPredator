@@ -23,7 +23,12 @@ namespace CellAO.Communication
             this.clientSocket = clientConnected;
         }
 
-        public delegate void MessageReceivedHandler(OnMessageArgs onMessageArgs);
+        private object streamLockWrite = new object();
+
+        private object streamLockRead = new object();
+
+
+        public delegate void MessageReceivedHandler(HandleClientRequest request, OnMessageArgs onMessageArgs);
 
         public delegate void ConnectHandler();
 
@@ -57,40 +62,58 @@ namespace CellAO.Communication
 
         public void ReadCallBack(IAsyncResult asyncResult)
         {
-            try
+            lock (streamLockRead)
             {
-                NetworkStream network = clientSocket.GetStream();
-                int read = network.EndRead(asyncResult);
-                if (read == 0)
+                try
                 {
-                    network.Close();
-                    clientSocket.Close();
-                    OnDisconnect();
+                    NetworkStream network = clientSocket.GetStream();
+                    int read = network.EndRead(asyncResult);
+                    if (read == 0)
+                    {
+                        network.Close();
+                        clientSocket.Close();
+                        OnDisconnect();
+                        return;
+                    }
+
+                    MemoryStream memoryStream = new MemoryStream(asyncResult.AsyncState as byte[]);
+
+                    MessagePackSerializer<OnMessageArgs> messagePackSerializer =
+                        MessagePackSerializer.Create<OnMessageArgs>();
+
+                    OnMessageArgs args = messagePackSerializer.Unpack(memoryStream);
+
+                    MessageReceived(this, args);
+
+                }
+                catch (Exception e)
+                {
+                    LogUtil.ErrorException(e);
                     return;
                 }
+            }
+            this.WaitForRequest();
+        }
 
-                MemoryStream memoryStream = new MemoryStream(asyncResult.AsyncState as byte[]);
-
+        public void SendData(OnMessageArgs args)
+        {
+            lock (streamLockWrite)
+            {
                 MessagePackSerializer<OnMessageArgs> messagePackSerializer =
                     MessagePackSerializer.Create<OnMessageArgs>();
 
-                OnMessageArgs args = messagePackSerializer.Unpack(memoryStream);
+                byte[] data = messagePackSerializer.PackSingleObject(args);
 
-                MessageReceived(args);
-
-                args.IsProtocolPacket = true;
-
-                byte[] buffer = messagePackSerializer.PackSingleObject(args);
-                network.Write(buffer, 0, buffer.Length);
-                network.Flush();
-
+                if (networkStream == null)
+                {
+                    throw new NullReferenceException("Network stream gone away!");
+                }
+                if (networkStream.CanWrite)
+                {
+                    networkStream.Write(data, 0, data.Length);
+                    networkStream.Flush();
+                }
             }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                return;
-            }
-            this.WaitForRequest();
         }
     }
 }

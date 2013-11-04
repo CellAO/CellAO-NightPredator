@@ -120,6 +120,10 @@
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Communication\CellAO.Communication.csproj">
+      <Project>{55f93bc4-61c6-42f3-a8cb-788221059917}</Project>
+      <Name>CellAO.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
       <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
       <Name>CellAO.Core</Name>

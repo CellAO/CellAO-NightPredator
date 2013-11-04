@@ -30,11 +30,10 @@ namespace CellAO.Communication.Server
     using System;
     using System.Net;
     using System.Net.Sockets;
-    using System.Security.AccessControl;
 
     using Utility;
 
-    public class Server
+    public class ZoneComServer
     {
         private IPAddress address;
 
@@ -44,7 +43,7 @@ namespace CellAO.Communication.Server
 
         private TcpListener listener;
 
-        public Server(IPAddress ipAddress, int ipPort)
+        public ZoneComServer(IPAddress ipAddress, int ipPort)
         {
             this.address = ipAddress;
             this.port = ipPort;
@@ -54,7 +53,7 @@ namespace CellAO.Communication.Server
 
         public void StartServer()
         {
-            this.listener=new TcpListener(localEndPoint);
+            this.listener = new TcpListener(localEndPoint);
             this.listener.Start();
             WaitForClientConnect();
         }
@@ -64,7 +63,7 @@ namespace CellAO.Communication.Server
             listener.BeginAcceptTcpClient(new System.AsyncCallback(OnClientConnect), new object());
         }
 
-        public delegate void MessageReceivedHandler(OnMessageArgs onMessageArgs);
+        public delegate void MessageReceivedHandler(HandleClientRequest request, OnMessageArgs onMessageArgs);
 
         public delegate void ConnectHandler();
 
@@ -73,6 +72,12 @@ namespace CellAO.Communication.Server
         public event MessageReceivedHandler MessageReceived;
         public event ConnectHandler OnConnect;
         public event DisconnectHandler OnDisconnect;
+
+        private object streamLockWrite = new object();
+
+        private object streamLockRead = new object();
+
+
 
         private void OnClientConnect(IAsyncResult asyncResult)
         {
@@ -85,7 +90,7 @@ namespace CellAO.Communication.Server
                 clientRequest.OnDisconnect += this.ClientDisconncted;
                 clientRequest.MessageReceived += this.ClientMessage;
                 clientRequest.StartClient();
-                
+
             }
             catch (Exception e)
             {
@@ -104,9 +109,9 @@ namespace CellAO.Communication.Server
             this.OnDisconnect();
         }
 
-        private void ClientMessage(OnMessageArgs onMessageArgs)
+        private void ClientMessage(HandleClientRequest request, OnMessageArgs onMessageArgs)
         {
-            this.MessageReceived(onMessageArgs);
+            this.MessageReceived(request, onMessageArgs);
         }
     }
 

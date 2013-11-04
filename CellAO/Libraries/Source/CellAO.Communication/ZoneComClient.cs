@@ -25,7 +25,7 @@
 
 #endregion
 
-namespace CellAO.Communication.Client
+namespace CellAO.Communication
 {
     using System;
     using System.IO;
@@ -37,11 +37,15 @@ namespace CellAO.Communication.Client
 
     using Utility;
 
-    public class Client
+    public class ZoneComClient
     {
         TcpClient clientSocket = new TcpClient();
 
         private NetworkStream serverStream;
+
+        private object streamLockWrite = new object();
+
+        private object streamLockRead = new object();
 
         public void ConnectToServer(IPAddress address, int port)
         {
@@ -58,13 +62,16 @@ namespace CellAO.Communication.Client
         }
         public void SendData(OnMessageArgs arg)
         {
-            MessagePackSerializer<OnMessageArgs> messagePackSerializer = MessagePackSerializer.Create<OnMessageArgs>();
+            lock (this.streamLockWrite)
+            {
+                MessagePackSerializer<OnMessageArgs> messagePackSerializer =
+                    MessagePackSerializer.Create<OnMessageArgs>();
 
-            byte[] buffer = messagePackSerializer.PackSingleObject(arg);
-            NetworkStream serStream = clientSocket.GetStream();
-            serStream.Write(buffer, 0, buffer.Length);
-            serStream.Flush();
-
+                byte[] buffer = messagePackSerializer.PackSingleObject(arg);
+                NetworkStream serStream = clientSocket.GetStream();
+                serStream.Write(buffer, 0, buffer.Length);
+                serStream.Flush();
+            }
         }
 
         public void CloseConnection()
@@ -85,33 +92,39 @@ namespace CellAO.Communication.Client
 
         private void ReadCallBack(IAsyncResult asyncResult)
         {
-            NetworkStream netstream = clientSocket.GetStream();
-            try
+            lock (streamLockRead)
             {
-                int read = netstream.EndRead(asyncResult);
-                if (read == 0)
+                try
                 {
+                    NetworkStream netstream = clientSocket.GetStream();
+                    int read = netstream.EndRead(asyncResult);
+                    if (read == 0)
+                    {
+                        serverStream.Close();
+                        OnDisconnect();
+                        clientSocket.Close();
+                        return;
+                    }
+
+                    MemoryStream memoryStream = new MemoryStream(asyncResult.AsyncState as byte[]);
+
+                    MessagePackSerializer<OnMessageArgs> messagePackSerializer =
+                        MessagePackSerializer.Create<OnMessageArgs>();
+
+                    OnMessageArgs args = messagePackSerializer.Unpack(memoryStream);
+
+                    MessageReceived(args);
+
+
+                }
+                catch (Exception e)
+                {
+                    LogUtil.ErrorException(e);
                     serverStream.Close();
-                    OnDisconnect();
                     clientSocket.Close();
+                    OnDisconnect();
                     return;
                 }
-
-                MemoryStream memoryStream = new MemoryStream(asyncResult.AsyncState as byte[]);
-
-                MessagePackSerializer<OnMessageArgs> messagePackSerializer =
-                    MessagePackSerializer.Create<OnMessageArgs>();
-
-                OnMessageArgs args = messagePackSerializer.Unpack(memoryStream);
-
-                MessageReceived(args);
-
-
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
             }
             this.WaitForRequest();
 

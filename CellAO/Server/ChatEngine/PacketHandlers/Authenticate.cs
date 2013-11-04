@@ -36,6 +36,8 @@ namespace ChatEngine.PacketHandlers
 
     using AO.Core.Encryption;
 
+    using CellAO.Communication;
+
     using ChatEngine.CoreClient;
     using ChatEngine.Lists;
     using ChatEngine.Packets;
@@ -90,7 +92,7 @@ namespace ChatEngine.PacketHandlers
                 client.Server.DisconnectClient(client);
                 byte[] invalid = BitConverter.GetBytes(characterId);
 
-                ZoneCom.Client.SendMessage(99, invalid);
+                ZoneCom.SendMessage(99, invalid);
                 return;
             }
 
