@@ -37,9 +37,6 @@
     <ApplicationIcon>chat.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IrcDotNet">
-      <HintPath>..\..\packages\IrcDotNet.0.4.1\lib\net40\IrcDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="NBug">
       <HintPath>..\..\packages\NBug.1.1.1\lib\net40-client\NBug.dll</HintPath>
     </Reference>
