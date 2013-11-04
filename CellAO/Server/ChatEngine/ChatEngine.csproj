@@ -129,6 +129,10 @@
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Relay\CellAO.Relay.csproj">
+      <Project>{dacc0f79-8061-4707-ac22-06fdb315a55c}</Project>
+      <Name>CellAO.Relay</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
       <Name>NiceHexOutput</Name>
