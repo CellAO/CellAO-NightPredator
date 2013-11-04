@@ -91,19 +91,19 @@ namespace CellAO.Relay
 
         protected override void InitializeChatCommandProcessors()
         {
-            //base.InitializeChatCommandProcessors();
+            base.InitializeChatCommandProcessors();
 
-            //this.ChatCommandProcessors.Add("lusers", ProcessChatCommandListUsers);
-            //this.ChatCommandProcessors.Add("login", ProcessChatCommandLogIn);
-            //this.ChatCommandProcessors.Add("logout", ProcessChatCommandLogOut);
-            //this.ChatCommandProcessors.Add("send", ProcessChatCommandSend);
+            this.ChatCommandProcessors.Add("lusers", ProcessChatCommandListUsers);
+            this.ChatCommandProcessors.Add("login", ProcessChatCommandLogIn);
+            this.ChatCommandProcessors.Add("logout", ProcessChatCommandLogOut);
+            this.ChatCommandProcessors.Add("send", ProcessChatCommandSend);
             //this.ChatCommandProcessors.Add("home", ProcessChatCommandHome);
             //this.ChatCommandProcessors.Add("mentions", ProcessChatCommandMentions);
         }
 
         protected override void InitializeCommandProcessors()
         {
-            // base.InitializeCommandProcessors();
+             base.InitializeCommandProcessors();
         }
 
         protected override void OnChannelMessageReceived(IrcChannel channel, IrcMessageEventArgs e)
@@ -118,7 +118,7 @@ namespace CellAO.Relay
 
         protected override void OnChannelUserJoined(IrcChannel channel, IrcChannelUserEventArgs e)
         {
-            //SendGreeting(channel.Client.LocalUser, e.ChannelUser.User);
+            this.SendGreeting(channel.Client.LocalUser, e.ChannelUser.User);
         }
 
         protected override void OnChannelUserLeft(IrcChannel channel, IrcChannelUserEventArgs e)
@@ -161,14 +161,14 @@ namespace CellAO.Relay
             //
         }
 
-        private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
-        {
+        //private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
+       // {
             //var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
             //if (twitterUser == null)
             //    throw new InvalidOperationException(string.Format(
             //        "User '{0}' is not logged in to Twitter.", ircUser.NickName));
             //return twitterUser;
-        }
+        //}
 
         private void ProcessChatCommandHome(
             IrcClient client,
@@ -329,16 +329,16 @@ namespace CellAO.Relay
 
         private void SendGreeting(IrcLocalUser localUser, IIrcMessageTarget target)
         {
-            //localUser.SendNotice(target, "This is the {0}, welcome.", ProgramInfo.AssemblyTitle);
-            //localUser.SendNotice(target, "Message me with '.help' for instructions on how to use me.");
+            localUser.SendNotice(target, "This is the {0}, welcome.", ProgramInfo.AssemblyTitle);
+            localUser.SendNotice(target, "Message me with '.help' for instructions on how to use me.");
             //localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
         }
 
-        private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
-        {
+       // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
+       // {
             //client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
             //    SanitizeTextForIrc(tweet.Text));
-        }
+       // }
 
         #endregion
     }
