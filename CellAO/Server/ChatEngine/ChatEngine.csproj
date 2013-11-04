@@ -64,12 +64,6 @@
     <Compile Include="CoreClient\CharacterBase.cs" />
     <Compile Include="CoreClient\Client.cs" />
     <Compile Include="CoreServer\ChatServer.cs" />
-    <Compile Include="IRCRelay\Common\BasicIrcBot.cs" />
-    <Compile Include="IRCRelay\Common\ConsoleUtilities.cs" />
-    <Compile Include="IRCRelay\Common\InvalidCommandParametersException.cs" />
-    <Compile Include="IRCRelay\Common\IrcBot.cs" />
-    <Compile Include="IRCRelay\Common\IrcBotException.cs" />
-    <Compile Include="IRCRelay\Common\IrcBotUtilities.cs" />
     <Compile Include="Lists\BuddyList.cs" />
     <Compile Include="Lists\BuddyListEntry.cs" />
     <Compile Include="Lists\ChannelsEntry.cs" />
