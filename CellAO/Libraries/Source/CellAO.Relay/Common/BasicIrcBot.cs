@@ -32,6 +32,8 @@
 
 namespace CellAO.Relay.Common
 {
+    using IrcDotNet;
+
     #region Usings ...
 
     using System;
