@@ -40,6 +40,8 @@ namespace CellAO.Relay.Common
     using System.Collections.Generic;
     using System.Linq;
 
+    using Config = Utility.Config;
+
     #endregion
 
     // Provides access to basic commands for controlling an IRC bot.

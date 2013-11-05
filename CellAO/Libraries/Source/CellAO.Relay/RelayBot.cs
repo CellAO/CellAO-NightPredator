@@ -143,7 +143,7 @@ namespace CellAO.Relay
 
         protected override void OnLocalUserJoinedChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
         {
-            //SendGreeting(localUser, e.Channel);
+            this.SendGreeting(localUser, e.Channel);
         }
 
         protected override void OnLocalUserLeftChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
