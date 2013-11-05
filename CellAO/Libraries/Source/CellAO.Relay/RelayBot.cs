@@ -97,8 +97,8 @@ namespace CellAO.Relay
             this.ChatCommandProcessors.Add("login", ProcessChatCommandLogIn);
             this.ChatCommandProcessors.Add("logout", ProcessChatCommandLogOut);
             this.ChatCommandProcessors.Add("send", ProcessChatCommandSend);
-            //this.ChatCommandProcessors.Add("home", ProcessChatCommandHome);
-            //this.ChatCommandProcessors.Add("mentions", ProcessChatCommandMentions);
+            this.ChatCommandProcessors.Add("home", ProcessChatCommandHome);
+            this.ChatCommandProcessors.Add("mentions", ProcessChatCommandMentions);
         }
 
         protected override void InitializeCommandProcessors()
