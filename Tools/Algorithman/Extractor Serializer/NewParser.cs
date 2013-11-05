@@ -46,7 +46,7 @@ namespace Extractor_Serializer
     #endregion
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Parser for serialized items of the RDB
     /// </summary>
     public class NewParser
     {

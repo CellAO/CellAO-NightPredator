@@ -35,6 +35,8 @@ namespace CellAO.Communication
 
     using CellAO.Communication.Server;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -73,13 +75,13 @@ namespace CellAO.Communication
         /// </param>
         /// <param name="args">
         /// </param>
-        public delegate void OnServerMessageReceived(HandleClientRequest request, OnMessageArgs args);
+        public delegate void OnReceivedMessageFromClient(HandleClientRequest request, OnMessageArgs args);
 
         /// <summary>
         /// </summary>
         /// <param name="args">
         /// </param>
-        public delegate void OnClientMessageReceived(OnMessageArgs args);
+        public delegate void OnReceivedMessageFromServer(OnMessageArgs args);
 
         #endregion
 
@@ -87,11 +89,11 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        public static event OnClientMessageReceived ClientMessageReceived;
+        public static event OnReceivedMessageFromServer ReceivedMessageFromServer;
 
         /// <summary>
         /// </summary>
-        public static event OnServerMessageReceived ServerMessageReceived;
+        public static event OnReceivedMessageFromClient ReceivedMessageFromClient;
 
         #endregion
 
@@ -163,9 +165,9 @@ namespace CellAO.Communication
             request.SendData(args);
         }
 
-        public delegate void OnConnectedToServer();
+        public delegate void OnClientConnectedToServer();
 
-        public static event OnConnectedToServer ConnectedToServer;
+        public static event OnClientConnectedToServer ClientConnectedToServer;
 
         /// <summary>
         /// </summary>
@@ -173,28 +175,30 @@ namespace CellAO.Communication
         /// </param>
         /// <param name="port">
         /// </param>
-        public static void StartClient(IPAddress address, int port, OnClientMessageReceived received)
+        public static void StartClient(IPAddress address, int port, OnReceivedMessageFromServer received)
         {
             if (isServer == true)
             {
+                LogUtil.Debug("ZoneCom already initialized as Server.");
                 return;
             }
 
             if (isServer == false)
             {
-                Console.WriteLine("Already initialized as Client");
+                LogUtil.Debug("ZoneCom already initialized as Client.");
+                return;
             }
             if (received != null)
             {
-                ClientMessageReceived += received;
+                ReceivedMessageFromServer += received;
                 serverIP = address;
                 serverPort = port;
             }
 
 
             client = new ZoneComClient();
-            client.OnConnect += ServerConnected;
-            client.OnDisconnect += ServerDisconnected;
+            client.OnConnect += ClientToServerConnected;
+            client.OnDisconnect += ClientToServerDisconnected;
             client.MessageReceived += client_MessageReceived;
             try
             {
@@ -202,19 +206,20 @@ namespace CellAO.Communication
             }
             catch (Exception)
             {
-                ServerDisconnected();
+                ClientToServerDisconnected();
+                return;
             }
             isServer = false;
         }
 
         private static void connectedToServer_r()
         {
-            ConnectedToServer();
+            ClientConnectedToServer();
         }
 
         static void client_MessageReceived(OnMessageArgs onMessageArgs)
         {
-            ClientMessageReceived(onMessageArgs);
+            ReceivedMessageFromServer(onMessageArgs);
         }
 
         /// <summary>
@@ -223,7 +228,7 @@ namespace CellAO.Communication
         /// </param>
         /// <param name="port">
         /// </param>
-        public static void StartServer(IPAddress address, int port, OnServerMessageReceived received)
+        public static void StartServer(IPAddress address, int port, OnReceivedMessageFromClient received)
         {
             if (isServer == true)
             {
@@ -234,19 +239,26 @@ namespace CellAO.Communication
             {
                 Console.WriteLine("Already initialized as Server");
             }
-            ServerMessageReceived += received;
+            ReceivedMessageFromClient += received;
             server = new ZoneComServer(address, port);
-            server.OnConnect += ClientConnected;
-            server.OnDisconnect += ClientDisconnected;
+            server.OnConnect += ServerToClientConnected;
+            server.OnDisconnect += ServerToClientDisconnected;
             server.MessageReceived += server_MessageReceived;
-
-            server.StartServer();
+            try
+            {
+                server.StartServer();
+            }
+            catch (Exception)
+            {
+                ServerToClientDisconnected();
+                return;
+            }
             isServer = true;
         }
 
         static void server_MessageReceived(HandleClientRequest request, OnMessageArgs onMessageArgs)
         {
-            ServerMessageReceived(request, onMessageArgs);
+            ReceivedMessageFromClient(request, onMessageArgs);
         }
 
         #endregion
@@ -255,24 +267,25 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private static void ClientConnected()
+        private static void ServerToClientConnected()
         {
             isLinkedWithClient = true;
+            
         }
 
         /// <summary>
         /// </summary>
-        private static void ClientDisconnected()
+        private static void ServerToClientDisconnected()
         {
             isLinkedWithClient = false;
         }
 
         /// <summary>
         /// </summary>
-        private static void ServerConnected()
+        private static void ClientToServerConnected()
         {
             isLinkedWithServer = true;
-            ConnectedToServer();
+            ClientConnectedToServer();
         }
 
         private static IPAddress serverIP;
@@ -281,7 +294,7 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private static void ServerDisconnected()
+        private static void ClientToServerDisconnected()
         {
             isLinkedWithServer = false;
             isServer = null;
