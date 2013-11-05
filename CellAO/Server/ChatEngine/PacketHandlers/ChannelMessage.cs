@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-05 19:15
 
 #endregion
 
@@ -54,21 +54,18 @@ namespace ChatEngine.PacketHandlers
         /// </param>
         public static void Read(Client client, byte[] packet)
         {
-            // TODO: Fix this mess.
-            ushort data_length = BitConverter.ToUInt16(new[] { packet[3], packet[2] }, 0);
+
             byte[] sender_ID = BitConverter.GetBytes(client.Character.CharacterId);
             Array.Reverse(sender_ID);
-            MemoryStream m_stream = new MemoryStream();
-            m_stream.Write(packet, 0, 9);
-            m_stream.Write(sender_ID, 0, 4);
-            m_stream.Write(packet, 9, packet.Length - 9);
-            m_stream.Capacity = (int)m_stream.Length;
-            byte[] message = m_stream.GetBuffer();
-            byte[] new_length = BitConverter.GetBytes(message.Length - 4);
-            message[2] = new_length[1];
-            message[3] = new_length[0];
-            m_stream.Close();
-            m_stream.Dispose();
+
+            byte[] newpacket = new byte[packet.Length+4];
+
+            Array.Copy(packet, 0, newpacket, 0, 9);
+            Array.Copy(sender_ID, 0, newpacket, 9, 4);
+            Array.Copy(packet, 9, newpacket, 13, packet.Length - 9);
+            newpacket[2] = (byte)(packet.Length >> 8);
+            newpacket[3] = (byte)packet.Length;
+
 
             foreach (Client m_client in client.ChatServer().ConnectedClients.Values)
             {
@@ -80,7 +77,7 @@ namespace ChatEngine.PacketHandlers
                     m_client.KnownClients.Add(client.Character.CharacterId);
                 }
 
-                m_client.Send(message);
+                m_client.Send(newpacket);
             }
 
             PacketReader reader = new PacketReader(ref packet);
