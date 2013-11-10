@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MsgPack">
+    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -47,6 +48,9 @@
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Messages\DynamicMessage.cs" />
+    <Compile Include="Messages\IMessageData.cs" />
+    <Compile Include="Messages\MessageBase.cs" />
     <Compile Include="ZoneComClient.cs" />
     <Compile Include="HandleClientRequest.cs" />
     <Compile Include="OnMessageArgs.cs" />
@@ -54,15 +58,14 @@
     <Compile Include="ZoneCom.cs" />
     <Compile Include="ZoneComServer.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
