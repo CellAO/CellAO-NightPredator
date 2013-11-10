@@ -48,6 +48,7 @@
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ISComV2Client\ISComV2ClientBase.cs" />
     <Compile Include="Messages\DynamicMessage.cs" />
     <Compile Include="Messages\IMessageData.cs" />
     <Compile Include="Messages\MessageBase.cs" />
@@ -62,6 +63,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Cell.Core\Cell.Core.csproj">
+      <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
+      <Name>Cell.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cell.Util\Cell.Util.csproj">
+      <Project>{77d1aef7-aa59-4b5a-b114-e0c1ebe1b3c9}</Project>
+      <Name>Cell.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
