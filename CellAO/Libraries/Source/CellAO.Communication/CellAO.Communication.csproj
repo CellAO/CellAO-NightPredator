@@ -53,6 +53,7 @@
     <Compile Include="Messages\DynamicMessage.cs" />
     <Compile Include="Messages\IMessageData.cs" />
     <Compile Include="Messages\MessageBase.cs" />
+    <Compile Include="Messages\Playfields.cs" />
     <Compile Include="ZoneComClient.cs" />
     <Compile Include="HandleClientRequest.cs" />
     <Compile Include="OnMessageArgs.cs" />
