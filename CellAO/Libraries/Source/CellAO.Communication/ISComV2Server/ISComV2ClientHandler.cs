@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 19:51
+// Last modified: 2013-11-11 20:39
 
 #endregion
 
@@ -33,7 +33,11 @@ namespace CellAO.Communication.ISComV2Server
 
     using Cell.Core;
 
+    using CellAO.Communication.Messages;
+
     using MemBus;
+
+    using MsgPack.Serialization;
 
     using NiceHexOutput;
 
@@ -114,6 +118,32 @@ namespace CellAO.Communication.ISComV2Server
         public int GetID()
         {
             return this.ID;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dataObject">
+        /// </param>
+        public void Send(DynamicMessage dataObject)
+        {
+            MessagePackSerializer<object> serializer = MessagePackSerializer.Create<object>();
+            byte[] data = serializer.PackSingleObject(dataObject);
+            byte[] header = new byte[8];
+            BitConverter.GetBytes(0x00ff55aa).CopyTo(header, 0);
+            BitConverter.GetBytes(data.Length).CopyTo(header, 4);
+            this.Send(header);
+            this.Send(data);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        public void Send(MessageBase message)
+        {
+            var temp = new DynamicMessage();
+            temp.DataObject = message;
+            this.Send(temp);
         }
 
         #endregion

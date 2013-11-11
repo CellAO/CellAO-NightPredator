@@ -35,8 +35,12 @@ namespace CellAO.Communication.ISComV2Server
 
     using Cell.Core;
 
+    using CellAO.Communication.Messages;
+
     using MemBus;
     using MemBus.Configurators;
+
+    using MsgPack.Serialization;
 
     #endregion
 
@@ -89,10 +93,26 @@ namespace CellAO.Communication.ISComV2Server
                 this.lastClientNumber++;
                 temp = new ISComV2ClientHandler(this, this.bus, this.lastClientNumber);
                 this.clients.Add(temp);
+                ((ISComV2ClientHandler)temp).DataReceived += ISComV2Server_DataReceived;
             }
 
             return temp;
         }
+
+        void ISComV2Server_DataReceived(ISComV2ClientHandler client, byte[] dataBytes)
+        {
+            if (DataReceived != null)
+            {
+                var ser = MessagePackSerializer.Create<DynamicMessage>();
+                DynamicMessage result = ser.UnpackSingleObject(dataBytes);
+
+                this.DataReceived(client, result);
+            }
+        }
+
+        public delegate void DataReceivedHandler(IClient client, DynamicMessage messageObject);
+
+        public event DataReceivedHandler DataReceived;
 
         /// <summary>
         /// </summary>

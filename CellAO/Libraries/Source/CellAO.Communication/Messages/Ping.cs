@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 19:51
+// Last modified: 2013-11-11 20:42
 
 #endregion
 
@@ -35,7 +35,7 @@ namespace CellAO.Communication.Messages
 
         /// <summary>
         /// </summary>
-        public byte dummy = 0;
+        public string dummy = "0";
 
         #endregion
     }

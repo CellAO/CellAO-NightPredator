@@ -39,14 +39,7 @@ namespace CellAO.Communication.Messages
     /// </summary>
     public class MessageBase : IMessageData
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        public ISComV2ClientHandler client = null;
-
-        #endregion
-
+        
         #region Public Methods and Operators
 
         /// <summary>

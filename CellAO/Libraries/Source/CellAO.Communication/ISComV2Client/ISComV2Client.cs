@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 19:50
+// Last modified: 2013-11-11 20:45
 
 #endregion
 
@@ -144,11 +144,26 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         /// <param name="dataObject">
         /// </param>
-        public void Send(object dataObject)
+        public void Send(DynamicMessage dataObject)
         {
             MessagePackSerializer<object> serializer = MessagePackSerializer.Create<object>();
             byte[] data = serializer.PackSingleObject(dataObject);
+            byte[] header = new byte[8];
+            BitConverter.GetBytes(0x00ff55aa).CopyTo(header, 0);
+            BitConverter.GetBytes(data.Length).CopyTo(header, 4);
+            this.clientBase.Send(header);
             this.clientBase.Send(data);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dataObject">
+        /// </param>
+        public void Send(MessageBase dataObject)
+        {
+            var temp = new DynamicMessage();
+            temp.DataObject = dataObject;
+            this.Send(temp);
         }
 
         #endregion
