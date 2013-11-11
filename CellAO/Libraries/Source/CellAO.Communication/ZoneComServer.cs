@@ -21,28 +21,62 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 12:45
+// Last modified: 2013-11-11 19:51
 
 #endregion
 
 namespace CellAO.Communication.Server
 {
+    #region Usings ...
+
     using System;
     using System.Net;
     using System.Net.Sockets;
 
     using Utility;
 
+    #endregion
+
+    /// <summary>
+    /// </summary>
     public class ZoneComServer
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
         private IPAddress address;
 
-        private int port;
-
-        private IPEndPoint localEndPoint;
-
+        /// <summary>
+        /// </summary>
         private TcpListener listener;
 
+        /// <summary>
+        /// </summary>
+        private IPEndPoint localEndPoint;
+
+        /// <summary>
+        /// </summary>
+        private int port;
+
+        /// <summary>
+        /// </summary>
+        private object streamLockRead = new object();
+
+        /// <summary>
+        /// </summary>
+        private object streamLockWrite = new object();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ipAddress">
+        /// </param>
+        /// <param name="ipPort">
+        /// </param>
         public ZoneComServer(IPAddress ipAddress, int ipPort)
         {
             this.address = ipAddress;
@@ -51,68 +85,115 @@ namespace CellAO.Communication.Server
             this.localEndPoint = new IPEndPoint(this.address, this.port);
         }
 
-        public void StartServer()
-        {
-            this.listener = new TcpListener(localEndPoint);
-            this.listener.Start();
-            WaitForClientConnect();
-        }
+        #endregion
 
-        private void WaitForClientConnect()
-        {
-            listener.BeginAcceptTcpClient(new System.AsyncCallback(OnClientConnect), new object());
-        }
+        #region Delegates
 
-        public delegate void MessageReceivedHandler(HandleClientRequest request, OnMessageArgs onMessageArgs);
-
+        /// <summary>
+        /// </summary>
         public delegate void ConnectHandler();
 
+        /// <summary>
+        /// </summary>
         public delegate void DisconnectHandler();
 
+        /// <summary>
+        /// </summary>
+        /// <param name="request">
+        /// </param>
+        /// <param name="onMessageArgs">
+        /// </param>
+        public delegate void MessageReceivedHandler(HandleClientRequest request, OnMessageArgs onMessageArgs);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// </summary>
         public event MessageReceivedHandler MessageReceived;
+
+        /// <summary>
+        /// </summary>
         public event ConnectHandler OnConnect;
+
+        /// <summary>
+        /// </summary>
         public event DisconnectHandler OnDisconnect;
 
-        private object streamLockWrite = new object();
+        #endregion
 
-        private object streamLockRead = new object();
+        #region Public Methods and Operators
 
-
-
-        private void OnClientConnect(IAsyncResult asyncResult)
+        /// <summary>
+        /// </summary>
+        public void StartServer()
         {
-            try
-            {
-                TcpClient clientSocket = default(TcpClient);
-                clientSocket = listener.EndAcceptTcpClient(asyncResult);
-                HandleClientRequest clientRequest = new HandleClientRequest(clientSocket);
-                clientRequest.OnConnect += this.ClientConnected;
-                clientRequest.OnDisconnect += this.ClientDisconncted;
-                clientRequest.MessageReceived += this.ClientMessage;
-                clientRequest.StartClient();
-
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
+            this.listener = new TcpListener(this.localEndPoint);
+            this.listener.Start();
             this.WaitForClientConnect();
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
         private void ClientConnected()
         {
             this.OnConnect();
         }
 
+        /// <summary>
+        /// </summary>
         private void ClientDisconncted()
         {
             this.OnDisconnect();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="request">
+        /// </param>
+        /// <param name="onMessageArgs">
+        /// </param>
         private void ClientMessage(HandleClientRequest request, OnMessageArgs onMessageArgs)
         {
             this.MessageReceived(request, onMessageArgs);
         }
-    }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="asyncResult">
+        /// </param>
+        private void OnClientConnect(IAsyncResult asyncResult)
+        {
+            try
+            {
+                TcpClient clientSocket = default(TcpClient);
+                clientSocket = this.listener.EndAcceptTcpClient(asyncResult);
+                HandleClientRequest clientRequest = new HandleClientRequest(clientSocket);
+                clientRequest.OnConnect += this.ClientConnected;
+                clientRequest.OnDisconnect += this.ClientDisconncted;
+                clientRequest.MessageReceived += this.ClientMessage;
+                clientRequest.StartClient();
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+
+            this.WaitForClientConnect();
+        }
+
+        /// <summary>
+        /// </summary>
+        private void WaitForClientConnect()
+        {
+            this.listener.BeginAcceptTcpClient(new AsyncCallback(this.OnClientConnect), new object());
+        }
+
+        #endregion
+    }
 }

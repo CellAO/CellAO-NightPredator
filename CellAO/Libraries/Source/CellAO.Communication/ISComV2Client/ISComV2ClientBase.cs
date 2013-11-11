@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-10 19:20
+// Last modified: 2013-11-11 19:50
 
 #endregion
 
@@ -465,7 +465,7 @@ namespace CellAO.Communication.ISComV2Client
                     this.DataReceived(dataBytes);
                 }
 
-                if (expectedLength + 8 <= this.ReceivedBytes)
+                if (expectedLength + 8 <= this._remainingLength)
                 {
                     // If we have received a full packet frame
                     // then move the remaining data to a new buffer (with offset 0)
@@ -473,7 +473,6 @@ namespace CellAO.Communication.ISComV2Client
                     // Then do the whole thing again
                     this._remainingLength -= expectedLength + 8;
                     this._offset += expectedLength + 8;
-                    this._bytesReceived -= (uint)(expectedLength + 8);
                 }
             }
         }
@@ -557,6 +556,7 @@ namespace CellAO.Communication.ISComV2Client
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
+
                 // Error occurred, need proper handler
             }
             finally

@@ -25,36 +25,17 @@
 
 #endregion
 
-namespace CellAO.Communication
+namespace CellAO.Communication.Messages
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
     /// <summary>
     /// </summary>
-    [Serializable]
-    public class OnMessageArgs
+    public class Ping : MessageBase
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        public byte[] Data;
-
-        /// <summary>
-        /// </summary>
-        public byte ID;
-
-        /// <summary>
-        /// </summary>
-        public bool IsProtocolPacket;
-
-        /// <summary>
-        /// </summary>
-        public short Length;
+        public byte dummy = 0;
 
         #endregion
     }

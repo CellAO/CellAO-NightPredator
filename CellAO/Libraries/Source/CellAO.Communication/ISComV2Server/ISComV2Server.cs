@@ -25,107 +25,100 @@
 
 #endregion
 
-namespace CellAO.Communication.Messages
+namespace CellAO.Communication.ISComV2Server
 {
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.Net;
 
-    using MsgPack;
-    using MsgPack.Serialization;
+    using Cell.Core;
+
+    using MemBus;
+    using MemBus.Configurators;
 
     #endregion
 
     /// <summary>
-    /// Message object with dynamic content
     /// </summary>
-    public class DynamicMessage : IPackable, IUnpackable
+    public class ISComV2Server : ServerBase
     {
         #region Fields
 
         /// <summary>
-        /// The message data
         /// </summary>
-        private MessageBase dataObject;
+        public int lastClientNumber = 0;
 
         /// <summary>
-        /// Type name of the dataObject
         /// </summary>
-        private string typeName;
+        private readonly IBus bus;
+
+        /// <summary>
+        /// </summary>
+        private Dictionary<int, IClient> clientDictionary = new Dictionary<int, IClient>();
+
+        /// <summary>
+        /// </summary>
+        private HashSet<IClient> clients = new HashSet<IClient>();
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// Holds the actual data object (MessageBase or any derived objects)
-        /// </summary>
-        public MessageBase DataObject
-        {
-            get
-            {
-                return this.dataObject;
-            }
-
-            set
-            {
-                this.dataObject = value;
-                this.typeName = value.GetType().ToString();
-            }
-        }
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        public string TypeName
+        public ISComV2Server()
         {
-            get
-            {
-                return this.typeName;
-            }
-
-            set
-            {
-                this.typeName = value;
-            }
+            this.bus = BusSetup.StartWith<AsyncConfiguration>().Construct();
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Methods
 
         /// <summary>
         /// </summary>
-        /// <param name="packer">
-        /// </param>
-        /// <param name="options">
-        /// </param>
-        public void PackToMessage(Packer packer, PackingOptions options)
+        /// <returns>
+        /// </returns>
+        protected override IClient CreateClient()
         {
-            // Serialize type name of the data object
-            packer.Pack(this.typeName);
+            IClient temp;
+            lock (this.clients)
+            {
+                this.lastClientNumber++;
+                temp = new ISComV2ClientHandler(this, this.bus, this.lastClientNumber);
+                this.clients.Add(temp);
+            }
 
-            // Serialize the data object itself as a byte array
-            packer.Pack(this.dataObject.GetData());
+            return temp;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="unpacker">
+        /// <param name="num_bytes">
         /// </param>
-        public void UnpackFromMessage(Unpacker unpacker)
+        /// <param name="buf">
+        /// </param>
+        /// <param name="ip">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected override void OnReceiveUDP(int num_bytes, byte[] buf, IPEndPoint ip)
         {
-            // Read the type name
-            this.typeName = unpacker.LastReadData.AsString();
+            throw new NotImplementedException();
+        }
 
-            // Read the data object as byte array
-            byte[] temp;
-            unpacker.ReadBinary(out temp);
-
-            // Create a message serializer object
-            IMessagePackSingleObjectSerializer ser = MessagePackSerializer.Create(Type.GetType(this.typeName));
-
-            // Unpack the message's data object
-            this.dataObject = (MessageBase)ser.UnpackSingleObject(temp);
+        /// <summary>
+        /// </summary>
+        /// <param name="clientIP">
+        /// </param>
+        /// <param name="num_bytes">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
+        {
         }
 
         #endregion

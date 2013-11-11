@@ -21,45 +21,111 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 12:45
+// Last modified: 2013-11-11 19:51
 
 #endregion
 
 namespace CellAO.Communication
 {
+    #region Usings ...
+
     using System;
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
-    using System.Security.Permissions;
 
     using MsgPack.Serialization;
 
     using Utility;
 
+    #endregion
+
+    /// <summary>
+    /// </summary>
     public class ZoneComClient
     {
-        TcpClient clientSocket = new TcpClient();
+        #region Fields
 
+        /// <summary>
+        /// </summary>
+        private TcpClient clientSocket = new TcpClient();
+
+        /// <summary>
+        /// </summary>
         private NetworkStream serverStream;
 
-        private object streamLockWrite = new object();
-
+        /// <summary>
+        /// </summary>
         private object streamLockRead = new object();
 
-        public void ConnectToServer(IPAddress address, int port)
+        /// <summary>
+        /// </summary>
+        private object streamLockWrite = new object();
+
+        #endregion
+
+        #region Delegates
+
+        /// <summary>
+        /// </summary>
+        public delegate void ConnectHandler();
+
+        /// <summary>
+        /// </summary>
+        public delegate void DisconnectHandler();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="onMessageArgs">
+        /// </param>
+        public delegate void MessageReceivedHandler(OnMessageArgs onMessageArgs);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// </summary>
+        public event MessageReceivedHandler MessageReceived;
+
+        /// <summary>
+        /// </summary>
+        public event ConnectHandler OnConnect;
+
+        /// <summary>
+        /// </summary>
+        public event DisconnectHandler OnDisconnect;
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        public void CloseConnection()
         {
-            clientSocket.Connect(address, port);
-            serverStream = clientSocket.GetStream();
-            WaitForRequest();
-            OnConnect();
+            this.clientSocket.Close();
+            this.OnDisconnect();
         }
 
-        public void WaitForRequest()
+        /// <summary>
+        /// </summary>
+        /// <param name="address">
+        /// </param>
+        /// <param name="port">
+        /// </param>
+        public void ConnectToServer(IPAddress address, int port)
         {
-            byte[] buffer = new byte[clientSocket.ReceiveBufferSize];
-            serverStream.BeginRead(buffer, 0, buffer.Length, ReadCallBack, buffer);
+            this.clientSocket.Connect(address, port);
+            this.serverStream = this.clientSocket.GetStream();
+            this.WaitForRequest();
+            this.OnConnect();
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="arg">
+        /// </param>
         public void SendData(OnMessageArgs arg)
         {
             lock (this.streamLockWrite)
@@ -68,41 +134,41 @@ namespace CellAO.Communication
                     MessagePackSerializer.Create<OnMessageArgs>();
 
                 byte[] buffer = messagePackSerializer.PackSingleObject(arg);
-                NetworkStream serStream = clientSocket.GetStream();
+                NetworkStream serStream = this.clientSocket.GetStream();
                 serStream.Write(buffer, 0, buffer.Length);
                 serStream.Flush();
             }
         }
 
-        public void CloseConnection()
+        /// <summary>
+        /// </summary>
+        public void WaitForRequest()
         {
-            clientSocket.Close();
-            OnDisconnect();
+            byte[] buffer = new byte[this.clientSocket.ReceiveBufferSize];
+            this.serverStream.BeginRead(buffer, 0, buffer.Length, this.ReadCallBack, buffer);
         }
 
-        public delegate void MessageReceivedHandler(OnMessageArgs onMessageArgs);
+        #endregion
 
-        public delegate void ConnectHandler();
+        #region Methods
 
-        public delegate void DisconnectHandler();
-
-        public event MessageReceivedHandler MessageReceived;
-        public event ConnectHandler OnConnect;
-        public event DisconnectHandler OnDisconnect;
-
+        /// <summary>
+        /// </summary>
+        /// <param name="asyncResult">
+        /// </param>
         private void ReadCallBack(IAsyncResult asyncResult)
         {
-            lock (streamLockRead)
+            lock (this.streamLockRead)
             {
                 try
                 {
-                    NetworkStream netstream = clientSocket.GetStream();
+                    NetworkStream netstream = this.clientSocket.GetStream();
                     int read = netstream.EndRead(asyncResult);
                     if (read == 0)
                     {
-                        serverStream.Close();
-                        OnDisconnect();
-                        clientSocket.Close();
+                        this.serverStream.Close();
+                        this.OnDisconnect();
+                        this.clientSocket.Close();
                         return;
                     }
 
@@ -113,22 +179,21 @@ namespace CellAO.Communication
 
                     OnMessageArgs args = messagePackSerializer.Unpack(memoryStream);
 
-                    MessageReceived(args);
-
-
+                    this.MessageReceived(args);
                 }
                 catch (Exception e)
                 {
                     LogUtil.ErrorException(e);
-                    serverStream.Close();
-                    clientSocket.Close();
-                    OnDisconnect();
+                    this.serverStream.Close();
+                    this.clientSocket.Close();
+                    this.OnDisconnect();
                     return;
                 }
             }
-            this.WaitForRequest();
 
+            this.WaitForRequest();
         }
 
+        #endregion
     }
 }
