@@ -21,51 +21,56 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-12 22:00
+// Last modified: 2013-11-12 20:06
 
 #endregion
 
-namespace ChatEngine.Packets
+namespace ChatEngine.Channels
 {
     #region Usings ...
 
     using System;
 
-    using ChatEngine.Channels;
-
     #endregion
 
     /// <summary>
-    /// The channel message.
     /// </summary>
-    public static class ChannelMessage
+    [Flags]
+    public enum ChannelFlags : uint
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        None = 0, 
 
         /// <summary>
-        /// The create.
+        /// Can not be ignored
         /// </summary>
-        /// <param name="channelId">
-        /// </param>
-        /// <param name="playerid">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        /// <param name="blob">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static byte[] Create(ChannelBase channel, uint playerid, string message, string blob)
-        {
-            PacketWriter writer = new PacketWriter(65);
-            writer.WriteByte((byte)channel.channelType);
-            writer.WriteUInt32(channel.ChannelId);
-            writer.WriteUInt32(playerid);
-            writer.WriteString(message);
-            writer.WriteString(blob);
-            return writer.Finish();
-        }
+        CantIgnore = 0x1, 
 
-        #endregion
+        /// <summary>
+        /// Can not send on channel
+        /// </summary>
+        CantSend = 0x2, 
+
+        /// <summary>
+        /// </summary>
+        NoInternational = 0x10, 
+
+        /// <summary>
+        /// No Voice blobs
+        /// </summary>
+        NoVoice = 0x20, 
+
+        /// <summary>
+        /// </summary>
+        SendCriteria = 0x40, 
+
+        /// <summary>
+        /// </summary>
+        GroupOnName = 0x80, 
+
+        /// <summary>
+        /// </summary>
+        Muted = 0x1000000, 
     }
 }

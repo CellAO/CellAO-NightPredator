@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:59
+// Last modified: 2013-11-12 22:17
 
 #endregion
 
@@ -103,95 +103,5 @@ namespace ChatEngine.Lists
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// </summary>
-    public enum ChannelType : ulong
-    {
-        /// <summary>
-        /// </summary>
-        Unknown = 0, 
-
-        /// <summary>
-        /// </summary>
-        Admin = 1, 
-
-        /// <summary>
-        /// </summary>
-        Team = 2 | 0x80, 
-
-        /// <summary>
-        /// </summary>
-        Organization = 3, 
-
-        /// <summary>
-        /// </summary>
-        Leaders = 4, 
-
-        /// <summary>
-        /// </summary>
-        GM = 5, 
-
-        /// <summary>
-        /// </summary>
-        Shopping = 6 | 0x80, 
-
-        /// <summary>
-        /// </summary>
-        General = 7 | 0x80, 
-
-        /// <summary>
-        /// </summary>
-        Towers = 10, 
-
-        /// <summary>
-        /// </summary>
-        Announcements = 12, 
-
-        /// <summary>
-        /// </summary>
-        Raid = 15 | 0x80, 
-
-        /// <summary>
-        /// </summary>
-        Battlestation = 16 | 0x80
-    }
-
-    /// <summary>
-    /// </summary>
-    public enum ChannelFlags : uint
-    {
-        /// <summary>
-        /// </summary>
-        None = 0, 
-
-        /// <summary>
-        /// </summary>
-        CantIgnore = 0x1, 
-
-        /// <summary>
-        /// </summary>
-        CantSend = 0x2, 
-
-        /// <summary>
-        /// </summary>
-        NoInternational = 0x10, 
-
-        /// <summary>
-        /// </summary>
-        NoVoice = 0x20, 
-
-        /// <summary>
-        /// </summary>
-        SendCriteria = 0x40, 
-
-        /// <summary>
-        /// </summary>
-        GroupOnName = 0x80, 
-
-        /// <summary>
-        /// </summary>
-        Muted = 0x1000000, 
     }
 }

@@ -56,6 +56,9 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Channels\ChannelBase.cs" />
+    <Compile Include="Channels\ChannelFlags.cs" />
+    <Compile Include="Channels\ChannelType.cs" />
     <Compile Include="ChatLogger.cs" />
     <Compile Include="CoreClient\Character.cs" />
     <Compile Include="CoreClient\CharacterBase.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Packets\ClientModeSet.cs" />
     <Compile Include="Packets\LoginError.cs" />
     <Compile Include="Packets\LoginOK.cs" />
+    <Compile Include="Packets\MessageType.cs" />
     <Compile Include="Packets\MsgAnonymousVicinity.cs" />
     <Compile Include="Packets\MsgPredefined.cs" />
     <Compile Include="Packets\MsgPrivateGroup.cs" />

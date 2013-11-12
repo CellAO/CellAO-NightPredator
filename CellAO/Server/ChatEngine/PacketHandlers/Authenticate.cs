@@ -38,6 +38,7 @@ namespace ChatEngine.PacketHandlers
 
     using CellAO.Communication;
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
     using ChatEngine.Lists;
     using ChatEngine.Packets;

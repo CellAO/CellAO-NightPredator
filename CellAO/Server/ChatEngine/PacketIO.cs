@@ -31,6 +31,7 @@ namespace ChatEngine
 
     using System;
     using System.Collections.Generic;
+    using System.Data.Odbc;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -89,7 +90,7 @@ namespace ChatEngine
             this._packet.AddRange(BitConverter.GetBytes((ushort)IPAddress.HostToNetworkOrder((short)this._data.Count)));
             this._packet.AddRange(this._data);
             return this._packet.ToArray();
-        }
+        } 
 
         /// <summary>
         /// </summary>
