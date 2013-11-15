@@ -59,6 +59,7 @@
     <Compile Include="Channels\ChannelBase.cs" />
     <Compile Include="Channels\ChannelFlags.cs" />
     <Compile Include="Channels\ChannelType.cs" />
+    <Compile Include="Channels\IChannelBase.cs" />
     <Compile Include="ChatLogger.cs" />
     <Compile Include="CoreClient\Character.cs" />
     <Compile Include="CoreClient\CharacterBase.cs" />

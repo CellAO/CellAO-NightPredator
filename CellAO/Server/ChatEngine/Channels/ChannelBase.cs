@@ -40,13 +40,13 @@ namespace ChatEngine.Channels
 
     /// <summary>
     /// </summary>
-    public class ChannelBase
+    public class ChannelBase : IChannelBase
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        public uint ChannelId = 0;
+        public uint ChannelId { get; private set; }
 
         /// <summary>
         /// </summary>
