@@ -31,6 +31,8 @@ namespace ChatEngine.CoreServer
 
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.Composition;
     using System.Linq;
     using System.Net;
 
@@ -73,6 +75,7 @@ namespace ChatEngine.CoreServer
             this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 1, "Shopping 1-50"));
             this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 2, "Shopping 51-150"));
             this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 3, "Shopping 151-220"));
+            this.ClientConnected += OnClientConnected;
         }
 
         #endregion
@@ -94,7 +97,7 @@ namespace ChatEngine.CoreServer
         /// </summary>
         /// <param name="client">
         /// </param>
-        protected void OnClientConnected(ClientBase client)
+        protected void OnClientConnected(IClient client)
         {
             Client client1 = (Client)client;
 

@@ -21,16 +21,71 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 00:16
 
 #endregion
 
 namespace ChatEngine.Packets
 {
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
+    #endregion
+
     /// <summary>
     /// The account character list.
     /// </summary>
-    public class AccountCharacterList
+    public static class AccountCharacterList
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="username">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static byte[] Create(string username)
+        {
+            PacketWriter writer = new PacketWriter(0x07);
+            IEnumerable<DBCharacter> chars = CharacterDao.GetAllForUser(username);
+
+            byte[] numberOfCharacters = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)chars.Count()));
+            writer.WriteBytes(numberOfCharacters);
+            foreach (DBCharacter character in chars)
+            {
+                writer.WriteUInt32((UInt32)character.Id);
+            }
+
+            writer.WriteBytes(numberOfCharacters);
+            foreach (DBCharacter character in chars)
+            {
+                writer.WriteString(character.Name);
+            }
+
+            writer.WriteBytes(numberOfCharacters);
+            foreach (DBCharacter character in chars)
+            {
+                writer.WriteUInt32((UInt32)StatDao.GetById(50000, character.Id, 54).statvalue);
+            }
+
+            writer.WriteBytes(numberOfCharacters);
+            foreach (DBCharacter character in chars)
+            {
+                // TODO: Find out what to put in here, for now lets go with 0x00000000
+                writer.WriteUInt32(0);
+            }
+
+            return writer.Finish();
+        }
+
+        #endregion
     }
 }

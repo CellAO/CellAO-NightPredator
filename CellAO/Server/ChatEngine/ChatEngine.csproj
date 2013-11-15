@@ -119,7 +119,7 @@
     <Compile Include="Packets\PrivateGroupMessage.cs" />
     <Compile Include="Packets\PrivateGroupPlayerJoined.cs" />
     <Compile Include="Packets\PrivateGroupPlayerLeft.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="CoreClient\Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

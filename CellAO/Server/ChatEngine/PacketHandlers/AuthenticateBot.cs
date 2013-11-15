@@ -29,7 +29,24 @@ namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
+    using System;
+    using System.IO;
+    using System.Net;
+    using System.Text;
+
+    using AO.Core.Encryption;
+
+    using CellAO.Communication;
+
+    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
+    using ChatEngine.Lists;
+    using ChatEngine.Packets;
+
+    using NiceHexOutput;
+
+    using Utility;
+    using Utility.Config;
 
     #endregion
 
@@ -49,16 +66,49 @@ namespace ChatEngine.PacketHandlers
         /// </param>
         public static void Read(Client client, byte[] packet)
         {
-            PacketReader reader = new PacketReader(ref packet);
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(NiceHexOutput.Output(packet));
+            Console.ResetColor();
+            LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
+#endif
 
-            reader.ReadUInt16(); // Packet ID
-            reader.ReadUInt16(); // Data length
+            MemoryStream m_stream = new MemoryStream(packet);
+            BinaryReader m_reader = new BinaryReader(m_stream);
 
-            uint unknown = reader.ReadUInt32(); // ?
-            string username = reader.ReadString();
-            string password = reader.ReadString();
+            // now we should do password check and then send OK or Error
+            // sending OK now
+            m_stream.Position = 8;
 
-            reader.Finish();
+            short userNameLength = IPAddress.NetworkToHostOrder(m_reader.ReadInt16());
+            string userName = Encoding.ASCII.GetString(m_reader.ReadBytes(userNameLength));
+            short loginKeyLength = IPAddress.NetworkToHostOrder(m_reader.ReadInt16());
+            string loginKey = Encoding.ASCII.GetString(m_reader.ReadBytes(loginKeyLength));
+
+
+            LoginEncryption loginEncryption = new LoginEncryption();
+
+            if (loginEncryption.IsValidLogin(loginKey, client.ServerSalt, userName))
+            {
+                byte[] chars = AccountCharacterList.Create(userName);
+#if DEBUG
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(NiceHexOutput.Output(chars));
+                Console.ResetColor();
+                LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(chars));
+#endif
+                client.Send(chars);
+            }
+            else
+            {
+                byte[] loginerr = LoginError.Create();
+                client.Send(loginerr);
+                client.Server.DisconnectClient(client);
+                
+                return;
+            }
+
+
         }
 
         #endregion

@@ -136,7 +136,7 @@ namespace ChatEngine
                             Console.WriteLine("Starting RelayBot.  Version {0}", ProgramInfo.AssemblyVersion);
                             //Call the IRC Bot stuff here..
                             IrcBot ircbot = new RelayBot();
-                            ircbot.Run();
+                            // ircbot.Run();
                             chatServer.Start(TCPEnable, UDPEnable);
                             break;
                         }
@@ -192,7 +192,7 @@ namespace ChatEngine
         {
             try
             {
-                chatServer = Container.GetInstance<ChatServer>();
+                chatServer = new ChatServer();
 
                 if (!InitializeLogAndBug())
                 {

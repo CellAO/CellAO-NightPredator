@@ -50,7 +50,7 @@ namespace ChatEngine
         /// </param>
         /// <param name="messageNumber">
         /// </param>
-        public void Parse(Client client, byte[] packet, ushort messageNumber)
+        public bool Parse(Client client, byte[] packet, ushort messageNumber)
         {
             switch (messageNumber)
             {
@@ -126,8 +126,10 @@ namespace ChatEngine
                     break;
                 default:
                     client.Server.Warning(client, "Client sent unknown message {0}", messageNumber.ToString());
-                    break;
+                    return false;
+
             }
+            return true;
         }
 
         #endregion

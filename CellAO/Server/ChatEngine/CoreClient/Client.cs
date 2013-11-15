@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 22:32
+// Last modified: 2013-11-15 22:44
 
 #endregion
 
@@ -144,7 +144,7 @@ namespace ChatEngine.CoreClient
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(NiceHexOutput.Output(packetBytes));
             Console.ResetColor();
-            LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(packetBytes));
+            LogUtil.Debug("\r\nSent:\r\n" + NiceHexOutput.Output(packetBytes));
 #endif
             if (packetBytes.Length % 4 > 0)
             {
@@ -182,6 +182,22 @@ namespace ChatEngine.CoreClient
         /// </returns>
         protected override bool OnReceive(BufferSegment buffer)
         {
+            if (this._remainingLength > 4)
+            {
+                byte[] packet = new byte[this._remainingLength];
+                Array.Copy(buffer.SegmentData, 0, packet, 0, this._remainingLength);
+#if DEBUG
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(NiceHexOutput.Output(packet));
+                Console.ResetColor();
+                LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
+#endif
+                ushort messageNumber = this.GetMessageNumber(packet);
+                Parser parser = new Parser();
+                return parser.Parse(this, packet, messageNumber);
+            }
+
+            // TODO: check what needs to be done if no suitable packet was found
             return true;
         }
 
