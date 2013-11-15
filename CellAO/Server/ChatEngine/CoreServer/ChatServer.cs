@@ -31,6 +31,7 @@ namespace ChatEngine.CoreServer
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
 
     using Cell.Core;
@@ -50,6 +51,11 @@ namespace ChatEngine.CoreServer
         /// <summary>
         /// </summary>
         public HashSet<ChannelBase> Channels = new HashSet<ChannelBase>();
+
+        public List<ChannelBase> ChannelsByType<T>()
+        {
+            return Channels.Where(x => x is T).ToList();
+        }
 
         /// <summary>
         /// </summary>

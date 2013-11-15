@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-15 22:30
 
 #endregion
 
@@ -38,6 +38,18 @@ namespace ChatEngine.CoreClient
     /// </summary>
     public class Character : CharacterBase
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private int characterGMLevel = -1;
+
+        /// <summary>
+        /// </summary>
+        private int characterSide = -1;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -73,6 +85,36 @@ namespace ChatEngine.CoreClient
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// </summary>
+        public int CharacterGMLevel
+        {
+            get
+            {
+                if (this.characterGMLevel == -1)
+                {
+                    this.characterGMLevel = LoginDataDao.GetByCharacterId((int)this.CharacterId).GM;
+                }
+
+                return this.characterGMLevel;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public int CharacterSide
+        {
+            get
+            {
+                if (this.characterSide == -1)
+                {
+                    this.characterSide = StatDao.GetById(50000, (int)this.CharacterId, 33).statvalue;
+                }
+
+                return this.characterSide;
+            }
+        }
 
         /// <summary>
         /// The client.

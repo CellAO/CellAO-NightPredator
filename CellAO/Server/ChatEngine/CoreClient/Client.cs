@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-15 22:32
 
 #endregion
 
@@ -34,6 +34,7 @@ namespace ChatEngine.CoreClient
 
     using Cell.Core;
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreServer;
 
     using NiceHexOutput;
@@ -48,6 +49,10 @@ namespace ChatEngine.CoreClient
     public class Client : ClientBase
     {
         #region Fields
+
+        /// <summary>
+        /// </summary>
+        public HashSet<ChannelBase> Channels = new HashSet<ChannelBase>();
 
         /// <summary>
         /// Private known clients collection

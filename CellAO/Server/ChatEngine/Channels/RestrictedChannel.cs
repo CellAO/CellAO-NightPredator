@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 22:00
+// Last modified: 2013-11-15 22:29
 
 #endregion
 
@@ -30,8 +30,6 @@ namespace ChatEngine.Channels
     #region Usings ...
 
     using Cell.Core;
-
-    using CellAO.Database.Dao;
 
     using ChatEngine.CoreClient;
 
@@ -153,7 +151,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckAdvisorStatus(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Advisor;
+            return client.Character.CharacterSide == (int)Side.Advisor;
         }
 
         /// <summary>
@@ -164,7 +162,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckClanStatus(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Clan;
+            return client.Character.CharacterSide == (int)Side.Clan;
         }
 
         /// <summary>
@@ -175,7 +173,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckGmStatus(Client client)
         {
-            return LoginDataDao.GetByCharacterId((int)client.Character.CharacterId).GM > 0;
+            return client.Character.CharacterGMLevel > 0;
         }
 
         /// <summary>
@@ -186,7 +184,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckGuardianStatus(Client client)
         {
-            return (LoginDataDao.GetByCharacterId((int)client.Character.CharacterId).GM & 0x08) == 0x08;
+            return client.Character.CharacterSide == (int)Side.Guardian;
         }
 
         /// <summary>
@@ -197,7 +195,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckMixedRestriction(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Mixed;
+            return client.Character.CharacterSide == (int)Side.Mixed;
         }
 
         /// <summary>
@@ -208,7 +206,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckMonsterRestriction(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Monster;
+            return client.Character.CharacterSide == (int)Side.Monster;
         }
 
         /// <summary>
@@ -219,7 +217,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckNeutralRestriction(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Neutral;
+            return client.Character.CharacterSide == (int)Side.Neutral;
         }
 
         /// <summary>
@@ -230,7 +228,7 @@ namespace ChatEngine.Channels
         /// </returns>
         private bool CheckOmniRestriction(Client client)
         {
-            return StatDao.GetById(50000, (int)client.Character.CharacterId, 33).statvalue == (int)Side.Omni;
+            return client.Character.CharacterSide == (int)Side.Omni;
         }
 
         #endregion

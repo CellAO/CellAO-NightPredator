@@ -106,6 +106,7 @@ namespace ChatEngine.Channels
                 if (!this.clients.Contains(client))
                 {
                     this.clients.Add(client);
+                    ((Client)client).Channels.Add(this);
 
                     // TODO: Send feedback to client?
                     return true;

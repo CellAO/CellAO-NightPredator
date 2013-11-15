@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-15 22:34
 
 #endregion
 
@@ -29,7 +29,9 @@ namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
+    using ChatEngine.CoreServer;
 
     #endregion
 
@@ -62,6 +64,32 @@ namespace ChatEngine.PacketHandlers
                 client.Character.characterName, 
                 playerId);
             reader.Finish();
+
+            // Automatically add client to its appropriate channels
+            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<GlobalChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<RestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<LevelRestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<TeamChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<OrganizationChannel>())
+            {
+                channel.AddClient(client);
+            }
         }
 
         #endregion
