@@ -62,6 +62,8 @@
     <Compile Include="Channels\GlobalChannel.cs" />
     <Compile Include="Channels\IChannelBase.cs" />
     <Compile Include="Channels\OrganizationChannel.cs" />
+    <Compile Include="Channels\RaidChannel.cs" />
+    <Compile Include="Channels\TeamChannel.cs" />
     <Compile Include="ChatLogger.cs" />
     <Compile Include="CoreClient\Character.cs" />
     <Compile Include="CoreClient\CharacterBase.cs" />
