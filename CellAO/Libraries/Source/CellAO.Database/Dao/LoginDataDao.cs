@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 12:29
+// Last modified: 2013-11-15 21:41
 
 #endregion
 
@@ -33,6 +33,8 @@ namespace CellAO.Database.Dao
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+
+    using CellAO.Database.Entities;
 
     using Dapper;
 
@@ -65,6 +67,40 @@ namespace CellAO.Database.Dao
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="charId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static DBLoginData GetByCharacterId(int charId)
+        {
+            DBCharacter character = null;
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    character = CharacterDao.GetById(charId).First();
+                    DynamicParameters p = new DynamicParameters();
+                    p.Add("username", character.Username);
+                    return conn.Query<DBLoginData>("SELECT * FROM login WHERE Username=@username", p).First();
+                }
+            }
+            catch (Exception)
+            {
+                if (character == null)
+                {
+                    LogUtil.Debug("No character " + charId + " in database. huh?");
+                }
+                else
+                {
+                    LogUtil.Debug("No Account found for Character " + character.Name + " (" + character.Id + ")");
+                }
+
                 throw;
             }
         }

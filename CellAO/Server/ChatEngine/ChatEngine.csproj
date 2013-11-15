@@ -59,8 +59,10 @@
     <Compile Include="Channels\ChannelBase.cs" />
     <Compile Include="Channels\ChannelFlags.cs" />
     <Compile Include="Channels\ChannelType.cs" />
+    <Compile Include="Channels\RestrictedChannel.cs" />
     <Compile Include="Channels\GlobalChannel.cs" />
     <Compile Include="Channels\IChannelBase.cs" />
+    <Compile Include="Channels\LevelRestrictedChannel.cs" />
     <Compile Include="Channels\OrganizationChannel.cs" />
     <Compile Include="Channels\RaidChannel.cs" />
     <Compile Include="Channels\TeamChannel.cs" />
@@ -122,6 +124,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+      <Name>SmokeLounge.AOtomation.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
@@ -141,6 +147,10 @@
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Relay\CellAO.Relay.csproj">
       <Project>{dacc0f79-8061-4707-ac22-06fdb315a55c}</Project>
       <Name>CellAO.Relay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Stats\CellAO.Stats.csproj">
+      <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
+      <Name>CellAO.Stats</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>

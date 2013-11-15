@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 18:04
+// Last modified: 2013-11-15 21:21
 
 #endregion
 
@@ -45,11 +45,11 @@ namespace ChatEngine.Channels
 
         /// <summary>
         /// </summary>
-        private ChannelFlags channelFlags;
+        public string ChannelName;
 
         /// <summary>
         /// </summary>
-        private string channelName;
+        private ChannelFlags channelFlags;
 
         /// <summary>
         /// </summary>
@@ -74,7 +74,7 @@ namespace ChatEngine.Channels
             this.channelFlags = flags;
             this.channelType = type;
             this.ChannelId = id;
-            this.channelName = name;
+            this.ChannelName = name;
         }
 
         #endregion

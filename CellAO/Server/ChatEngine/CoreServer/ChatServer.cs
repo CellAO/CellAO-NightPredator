@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-15 19:18
 
 #endregion
 
@@ -35,6 +35,7 @@ namespace ChatEngine.CoreServer
 
     using Cell.Core;
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
 
     #endregion
@@ -48,7 +49,25 @@ namespace ChatEngine.CoreServer
 
         /// <summary>
         /// </summary>
+        public HashSet<ChannelBase> Channels = new HashSet<ChannelBase>();
+
+        /// <summary>
+        /// </summary>
         public Dictionary<uint, Client> ConnectedClients = new Dictionary<uint, Client>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        public ChatServer()
+        {
+            this.Channels.Add(new GlobalChannel(ChannelFlags.None, ChannelType.General, 1, "Global"));
+            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 1, "Shopping 1-50"));
+            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 2, "Shopping 51-150"));
+            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 3, "Shopping 151-220"));
+        }
 
         #endregion
 
