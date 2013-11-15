@@ -88,16 +88,6 @@ namespace ChatEngine.Channels
 
         /// <summary>
         /// </summary>
-        public ulong FullId
-        {
-            get
-            {
-                return (ulong)this.channelType | (this.ChannelId << 8);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         public ChannelType channelType { get; private set; }
 
         #endregion
