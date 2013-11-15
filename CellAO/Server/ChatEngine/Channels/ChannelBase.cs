@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-12 22:19
+// Last modified: 2013-11-15 18:04
 
 #endregion
 
@@ -29,7 +29,6 @@ namespace ChatEngine.Channels
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
 
     using Cell.Core;
@@ -40,13 +39,9 @@ namespace ChatEngine.Channels
 
     /// <summary>
     /// </summary>
-    public class ChannelBase : IChannelBase
+    public class ChannelBase
     {
         #region Fields
-
-        /// <summary>
-        /// </summary>
-        public uint ChannelId { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -88,7 +83,11 @@ namespace ChatEngine.Channels
 
         /// <summary>
         /// </summary>
-        public ChannelType channelType { get; private set; }
+        public virtual uint ChannelId { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public virtual ChannelType channelType { get; private set; }
 
         #endregion
 
@@ -102,12 +101,15 @@ namespace ChatEngine.Channels
         /// </returns>
         public virtual bool AddClient(IClient client)
         {
-            if (!this.clients.Contains(client))
+            lock (this.clients)
             {
-                this.clients.Add(client);
+                if (!this.clients.Contains(client))
+                {
+                    this.clients.Add(client);
 
-                // TODO: Send feedback to client?
-                return true;
+                    // TODO: Send feedback to client?
+                    return true;
+                }
             }
 
             return false;
