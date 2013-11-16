@@ -456,10 +456,12 @@ namespace ZoneEngine
             {
                 Console.WriteLine("Error occurred while initializing. Please check the log file.");
                 Console.ReadLine();
-                return;
+            }
+            else
+            {
+                CommandLoop(args);
             }
 
-            CommandLoop(args);
 
             // NLog<->Mono lockup fix
             LogManager.Configuration = null;
