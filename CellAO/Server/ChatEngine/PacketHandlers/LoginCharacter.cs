@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:35
+// Last modified: 2013-11-16 09:45
 
 #endregion
 
@@ -36,7 +36,6 @@ namespace ChatEngine.PacketHandlers
 
     using ChatEngine.Channels;
     using ChatEngine.CoreClient;
-    using ChatEngine.CoreServer;
     using ChatEngine.Packets;
 
     using Utility;
@@ -85,31 +84,7 @@ namespace ChatEngine.PacketHandlers
             client.Character.characterFirstName = character.FirstName;
             client.Character.characterLastName = character.LastName;
 
-            // Automatically add client to its appropriate channels
-            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<GlobalChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<RestrictedChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<LevelRestrictedChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<TeamChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<OrganizationChannel>())
-            {
-                channel.AddClient(client);
-            }
+            client.ChatServer().AddClientToChannels(client);
 
             if (client.IsBot)
             {

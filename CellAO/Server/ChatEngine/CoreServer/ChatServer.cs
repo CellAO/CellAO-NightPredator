@@ -216,5 +216,34 @@ namespace ChatEngine.CoreServer
         }
 
         #endregion
+
+        internal void AddClientToChannels(Client client)
+        {
+            // Automatically add client to its appropriate channels
+            foreach (ChannelBase channel in ChannelsByType<GlobalChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ChannelsByType<RestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ChannelsByType<LevelRestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ChannelsByType<TeamChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in ChannelsByType<OrganizationChannel>())
+            {
+                channel.AddClient(client);
+            }
+        }
     }
 }

@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:35
+// Last modified: 2013-11-16 09:45
 
 #endregion
 
@@ -38,9 +38,7 @@ namespace ChatEngine.PacketHandlers
 
     using CellAO.Communication;
 
-    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
-    using ChatEngine.Lists;
     using ChatEngine.Packets;
 
     using Utility;
@@ -125,49 +123,7 @@ namespace ChatEngine.PacketHandlers
                 string.Empty);
             client.Send(anonv);
 
-            // tell client to join channel "Global"
-            // hardcoded right now
-            foreach (ChannelsEntry channel in ChatChannels.ChannelNames)
-            {
-                byte[] chanGlobal = ChannelJoin.Create(
-                    channel.Id, 
-                    channel.Name, 
-                    channel.ChannelMode, 
-                    new byte[] { 0x00, 0x00 });
-                client.Send(chanGlobal);
-            }
-
-            // First Attempt at Guild Channel....
-            // This code is completly untested however if it works
-            // we will have to add some what for you to join GuildChat on creation of guild
-            // and when you join a guild...  this just connects you to it if you already exist in a guild
-            // at character login.. enjoy hope it works.. I cant seem to test it my computer wont let me install the sql tables atm..
-
-            if (client.Character.orgId == 0)
-            {
-            }
-            else
-            {
-                ulong channelBuffer = (ulong)ChannelType.Organization << 32;
-                channelBuffer |= (uint)client.Character.orgId;
-
-                byte[] guildChannel = ChannelJoin.Create(
-                    channelBuffer, 
-                    client.Character.orgName, 
-                    0x8044, 
-                    new byte[] { 0x00, 0x00 });
-                client.Send(guildChannel);
-            }
-
-            // Do Not Delete this just yet!
-            // byte[] chn_global = new Packets.ChannelJoin().Create
-            // (
-            // new byte[] { 0x04, 0x00, 0x00, 0x23, 0x28 },
-            // "Global",
-            // 0x8044,
-            // new byte[] { 0x00, 0x00 }
-            // );
-            // client.Send(chn_global);
+            client.ChatServer().AddClientToChannels(client);
         }
 
         #endregion

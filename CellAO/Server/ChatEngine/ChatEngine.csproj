@@ -73,8 +73,6 @@
     <Compile Include="CoreServer\ChatServer.cs" />
     <Compile Include="Lists\BuddyList.cs" />
     <Compile Include="Lists\BuddyListEntry.cs" />
-    <Compile Include="Lists\ChannelsEntry.cs" />
-    <Compile Include="Lists\ChatChannels.cs" />
     <Compile Include="PacketHandlers\Authenticate.cs" />
     <Compile Include="PacketHandlers\AuthenticateBot.cs" />
     <Compile Include="PacketHandlers\BuddyAdd.cs" />
