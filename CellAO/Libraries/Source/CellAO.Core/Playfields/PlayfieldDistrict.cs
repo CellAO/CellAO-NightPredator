@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:06
+// Last modified: 2013-11-16 16:07
 
 #endregion
 
@@ -29,25 +29,25 @@ namespace CellAO.Core.Playfields
 {
     /// <summary>
     /// </summary>
-    public interface IPlayfieldDistrict
+    public class PlayfieldDistrict
     {
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        int MaxLevel { get; set; }
+        public int MaxLevel { get; set; }
 
         /// <summary>
         /// </summary>
-        int MinLevel { get; set; }
+        public int MinLevel { get; set; }
 
         /// <summary>
         /// </summary>
-        string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// </summary>
-        int SuppressionGas { get; set; }
+        public int SuppressionGas { get; set; }
 
         #endregion
     }

@@ -37,6 +37,10 @@
     <ApplicationIcon>zone.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MemBus, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NBug">
       <HintPath>..\..\packages\NBug.1.1.1\lib\net40-client\NBug.dll</HintPath>
@@ -58,6 +62,8 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Component\ClientFactory.cs" />
+    <Compile Include="Core\Playfields\Playfield.cs" />
+    <Compile Include="Core\Playfields\Playfields.cs" />
     <Compile Include="Core\ZoneClient.cs" />
     <Compile Include="Core\ZoneServer.cs" />
     <Compile Include="Program.cs" />
@@ -86,6 +92,10 @@
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
+      <Name>CellAO.Enums</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>

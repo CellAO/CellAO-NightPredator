@@ -29,6 +29,6 @@
   <IRCServer>irc.darkkittenstudio.com</IRCServer>
   <RelayBotNick>CellAO</RelayBotNick>
   <RelayBotIdent>CellAO</RelayBotIdent>
-  <IRCChannel>#CellAO</IRCChannel>
+  <IRCChannel>#CellAORelay</IRCChannel>
   <RelayIngameChannel>CellAO-Relay</RelayIngameChannel>
 </Config>

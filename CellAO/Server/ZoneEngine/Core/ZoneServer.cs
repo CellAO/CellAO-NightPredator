@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 15:14
+// Last modified: 2013-11-16 16:29
 
 #endregion
 
@@ -49,6 +49,10 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
+        public HashSet<ZoneClient> Clients = new HashSet<ZoneClient>();
+
+        /// <summary>
+        /// </summary>
         public int Id;
 
         /// <summary>
@@ -56,9 +60,8 @@ namespace ZoneEngine.Core
         private readonly ClientFactory clientFactory;
 
         #endregion
-        public HashSet<ZoneClient> Clients = new HashSet<ZoneClient>();
 
-            #region Constructors and Destructors
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>

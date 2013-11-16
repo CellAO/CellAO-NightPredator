@@ -50,7 +50,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        List<IPlayfieldDistrict> Districts { get; }
+        List<PlayfieldDistrict> Districts { get; }
 
         /// <summary>
         /// </summary>

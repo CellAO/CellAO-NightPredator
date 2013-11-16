@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 15:03
+// Last modified: 2013-11-16 16:29
 
 #endregion
 
@@ -29,7 +29,7 @@
 
 namespace ZoneEngine.Script
 {
-    using ZoneEngine.Core;
+    #region Usings ...
 
     #region Usings ...
 
@@ -49,6 +49,10 @@ namespace ZoneEngine.Script
     using Microsoft.CSharp;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using ZoneEngine.Core;
+
+    #endregion
 
     #endregion
 

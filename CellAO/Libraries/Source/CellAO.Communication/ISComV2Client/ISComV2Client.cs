@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 20:45
+// Last modified: 2013-11-16 17:36
 
 #endregion
 
@@ -53,6 +53,14 @@ namespace CellAO.Communication.ISComV2Client
 
         /// <summary>
         /// </summary>
+        private bool closing = false;
+
+        /// <summary>
+        /// </summary>
+        private Thread connectorThread;
+
+        /// <summary>
+        /// </summary>
         private IPAddress serverAddress;
 
         /// <summary>
@@ -69,6 +77,8 @@ namespace CellAO.Communication.ISComV2Client
         {
             this.clientBase.ReceivedData += this.clientBase_ReceivedData;
             this.clientBase.Disconnected += this.clientBase_Disconnected;
+
+            this.connectorThread = new Thread(new ThreadStart(this.Connector));
         }
 
         #endregion
@@ -122,13 +132,10 @@ namespace CellAO.Communication.ISComV2Client
         {
             try
             {
-                this.clientBase.Connect(address, port);
                 this.serverAddress = address;
                 this.serverPort = port;
-                if (this.OnConnect != null)
-                {
-                    this.OnConnect();
-                }
+                this.connectorThread = new Thread(new ThreadStart(this.Connector));
+                this.connectorThread.Start();
 
                 return true;
             }
@@ -166,39 +173,68 @@ namespace CellAO.Communication.ISComV2Client
             this.Send(temp);
         }
 
+        /// <summary>
+        /// </summary>
+        public void ShutDown()
+        {
+            LogUtil.Debug("Shutting down ISCom");
+            this.closing = true;
+            while (this.connectorThread.IsAlive)
+            {
+                Thread.Sleep(1000);
+            }
+        }
+
         #endregion
 
         #region Methods
 
         /// <summary>
         /// </summary>
+        private void Connector()
+        {
+            Ping ping = new Ping();
+            while (!this.closing)
+            {
+                if (this.serverAddress == null)
+                {
+                    continue;
+                }
+
+                if (!this.clientBase.IsConnected)
+                {
+                    LogUtil.Debug("Trying to connect to ChatEngine...");
+
+                    // this.Connect(serverAddress, serverPort);
+                    try
+                    {
+                        this.clientBase.Connect(this.serverAddress, this.serverPort);
+                        if (this.OnConnect != null)
+                        {
+                            this.OnConnect();
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                Thread.Sleep(5000);
+                this.Send(ping);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         private void clientBase_Disconnected()
         {
-            int retries = 0;
-
             if (this.serverAddress == null)
             {
                 LogUtil.Debug("Could not reconnect to ChatEngine (no server address found)");
                 return;
             }
 
-            while (retries < 10)
-            {
-                LogUtil.Debug("Trying to reconnect to ChatEngine");
-                if (this.Connect(this.serverAddress, this.serverPort))
-                {
-                    return;
-                }
-
-                Thread.Sleep(2000);
-                retries++;
-            }
-
-            LogUtil.Debug("Could not reconnect to ChatEngine");
-            if (this.ReallyDisconnected != null)
-            {
-                this.ReallyDisconnected();
-            }
+            LogUtil.Debug("Trying to reconnect to ChatEngine");
         }
 
         /// <summary>

@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 16:00
+// Last modified: 2013-11-16 16:28
 
 #endregion
 
@@ -34,6 +34,8 @@ namespace ZoneEngine
     using System.Net;
     using System.Threading.Tasks;
 
+    using CellAO.Communication.ISComV2Client;
+    using CellAO.Communication.Messages;
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
@@ -62,6 +64,8 @@ namespace ZoneEngine
         /// <summary>
         /// </summary>
         public static readonly IContainer Container = new MefContainer();
+
+        public static ISComV2Client ISComClient;
 
         /// <summary>
         /// </summary>
@@ -267,6 +271,11 @@ namespace ZoneEngine
                 return false;
             }
 
+            if (!ISComInitialization())
+            {
+                return false;
+            }
+
             if (!InizializeTCPIP())
             {
                 return false;
@@ -288,6 +297,27 @@ namespace ZoneEngine
 
             Console.ForegroundColor = ConsoleColor.White;
 
+            return true;
+        }
+
+        private static bool ISComInitialization()
+        {
+            int port;
+            IPAddress chatEngineIp ;try
+            {
+                ISComClient = new ISComV2Client();
+                chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
+                port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            try
+            {
+                ISComClient.Connect(chatEngineIp, port);
+            }
+            catch { return true; }
             return true;
         }
 
@@ -445,6 +475,8 @@ namespace ZoneEngine
             // TODO: Cache neccessary statels
             // TODO: Cache Vendors
 
+            //Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
+            
             csc.AddScriptMembers();
             zoneServer.Start(true, false);
         }

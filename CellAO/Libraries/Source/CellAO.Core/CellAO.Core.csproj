@@ -132,7 +132,7 @@
     <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Network\IZoneClient.cs" />
     <Compile Include="Playfields\IPlayfield.cs" />
-    <Compile Include="Playfields\IPlayfieldDistrict.cs" />
+    <Compile Include="Playfields\PlayfieldDistrict.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\IRequirements.cs" />
     <Compile Include="Requirements\Requirements.cs" />
