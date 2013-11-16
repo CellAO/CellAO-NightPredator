@@ -450,6 +450,9 @@ namespace LoginEngine
             }
 
             CommandLoop(args);
+            
+            // NLog<->Mono lockup fix
+            LogManager.Configuration = null;
         }
 
         #endregion

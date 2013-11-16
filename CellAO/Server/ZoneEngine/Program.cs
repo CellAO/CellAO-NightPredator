@@ -35,6 +35,8 @@ namespace ZoneEngine
     using CellAO.Core.Nanos;
     using CellAO.Database;
 
+    using NLog;
+
     using Utility;
 
     #endregion
@@ -143,6 +145,9 @@ namespace ZoneEngine
             }
 
             Console.ReadLine();
+            
+            // NLog<->Mono lockup fix
+            LogManager.Configuration = null;
         }
 
         #endregion
