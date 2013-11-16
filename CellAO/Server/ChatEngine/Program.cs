@@ -33,6 +33,7 @@ namespace ChatEngine
     using System.Net;
     using System.Threading.Tasks;
 
+    using CellAO.Communication.ISComV2Server;
     using CellAO.Core.Components;
 
     using ChatEngine.CoreServer;
@@ -70,6 +71,8 @@ namespace ChatEngine
         /// <summary>
         /// </summary>
         private static ConsoleText ct = new ConsoleText();
+
+        public static ISComV2Server ISCom;
 
         #endregion
 
@@ -202,6 +205,11 @@ namespace ChatEngine
                 {
                     return false;
                 }
+
+                if (!InitializeISCom())
+                {
+                    return false;
+                }
             }
             catch (Exception e)
             {
@@ -210,6 +218,29 @@ namespace ChatEngine
                 return false;
             }
 
+            return true;
+        }
+
+        private static bool InitializeISCom()
+        {
+            try
+            {
+                ISCom = new ISComV2Server();
+                if (Config.Instance.CurrentConfig.ListenIP == "0.0.0.0")
+                {
+                    ISCom.TcpEndPoint = new IPEndPoint(IPAddress.Any, Config.Instance.CurrentConfig.CommPort);
+                }
+                else
+                {
+                    ISCom.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), Config.Instance.CurrentConfig.CommPort);
+                }
+
+                ISCom.Start(true, false);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -291,10 +322,12 @@ namespace ChatEngine
 
             if (!Initialize())
             {
+                Console.WriteLine("Error occured while initilizing. Please check in log.");
                 return;
             }
 
             CommandLoop(args);
+            LogManager.Configuration = null;
         }
 
         #endregion
