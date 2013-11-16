@@ -95,9 +95,6 @@ namespace ChatEngine.PacketHandlers
                 return;
             }
 
-            // server welcome message
-            string motd = ConfigReadWrite.Instance.CurrentConfig.Motd;
-
             // save characters ID in client - note, this is usually 0 if it is a chat client connecting
             client.Character = new Character(characterId, client);
 
