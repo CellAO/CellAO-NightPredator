@@ -76,40 +76,40 @@ namespace ZoneEngine.Script
             bool argumentsok = true;
             for (int argcounter = 0; argcounter < typeList.Count; argcounter++)
             {
-                if (typeList.ElementAt(argcounter) == typeof(string))
+                if (typeList.ElementAt(argcounter).FullName == typeof(string).FullName)
                 {
                     continue;
                 }
 
-                if (typeList.ElementAt(argcounter) == typeof(int))
-                {
-                    int temp;
-                    argumentsok &= int.TryParse(args[argcounter + 1], out temp);
-                    continue;
-                }
-
-                if (typeList.ElementAt(argcounter) == typeof(Int32))
+                if (typeList.ElementAt(argcounter).FullName == typeof(int).FullName)
                 {
                     int temp;
                     argumentsok &= int.TryParse(args[argcounter + 1], out temp);
                     continue;
                 }
 
-                if (typeList.ElementAt(argcounter) == typeof(bool))
+                if (typeList.ElementAt(argcounter).FullName == typeof(Int32).FullName)
+                {
+                    int temp;
+                    argumentsok &= int.TryParse(args[argcounter + 1], out temp);
+                    continue;
+                }
+
+                if (typeList.ElementAt(argcounter).FullName == typeof(bool).FullName)
                 {
                     bool temp;
                     argumentsok &= bool.TryParse(args[argcounter + 1], out temp);
                     continue;
                 }
 
-                if (typeList.ElementAt(argcounter) == typeof(uint))
+                if (typeList.ElementAt(argcounter).FullName == typeof(uint).FullName)
                 {
                     uint temp;
                     argumentsok &= uint.TryParse(args[argcounter + 1], out temp);
                     continue;
                 }
 
-                if (typeList.ElementAt(argcounter) == typeof(float))
+                if (typeList.ElementAt(argcounter).FullName == typeof(float).FullName)
                 {
                     float temp;
                     argumentsok &= float.TryParse(

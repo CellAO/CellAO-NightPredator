@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 16:29
+// Last modified: 2013-11-16 18:35
 
 #endregion
 
@@ -96,7 +96,7 @@ namespace ZoneEngine.Script
                                                     GenerateExecutable = false, 
                                                     IncludeDebugInformation = true, 
                                                     OutputAssembly = "Scripts.dll", 
-                                                    
+
                                                     // TODO: Figure out how to parse the file and return the usings, then load those.
                                                     ReferencedAssemblies =
                                                     {
@@ -240,23 +240,27 @@ namespace ZoneEngine.Script
             {
                 foreach (Type t in assembly.GetTypes())
                 {
-                    if (t.GetInterface("IAOScript") != null)
+                    // returns all public types in the asembly
+                    foreach (Type iface in t.GetInterfaces())
                     {
-                        if (t.Name != "IAOScript")
+                        if (iface.FullName == typeof(IAOScript).FullName)
                         {
-                            foreach (MemberInfo mi in t.GetMembers())
+                            if (t.Name != "IAOScript")
                             {
-                                if ((mi.Name == "GetType") || (mi.Name == ".ctor") || (mi.Name == "GetHashCode")
-                                    || (mi.Name == "ToString") || (mi.Name == "Equals"))
+                                foreach (MemberInfo mi in t.GetMembers())
                                 {
-                                    continue;
-                                }
-
-                                if (mi.MemberType == MemberTypes.Method)
-                                {
-                                    if (!this.scriptList.ContainsKey(t.Namespace + "." + t.Name + ":" + mi.Name))
+                                    if ((mi.Name == "GetType") || (mi.Name == ".ctor") || (mi.Name == "GetHashCode")
+                                        || (mi.Name == "ToString") || (mi.Name == "Equals"))
                                     {
-                                        this.scriptList.Add(t.Namespace + "." + t.Name + ":" + mi.Name, t);
+                                        continue;
+                                    }
+
+                                    if (mi.MemberType == MemberTypes.Method)
+                                    {
+                                        if (!this.scriptList.ContainsKey(t.Namespace + "." + t.Name + ":" + mi.Name))
+                                        {
+                                            this.scriptList.Add(t.Namespace + "." + t.Name + ":" + mi.Name, t);
+                                        }
                                     }
                                 }
                             }
@@ -586,7 +590,7 @@ namespace ZoneEngine.Script
                 // returns all public types in the asembly
                 foreach (Type iface in type.GetInterfaces())
                 {
-                    if (iface == typeof(IAOScript))
+                    if (iface.FullName == typeof(IAOScript).FullName)
                     {
                         // yay, we found a script interface, lets create it and run it!
                         // Get the constructor for the current type
