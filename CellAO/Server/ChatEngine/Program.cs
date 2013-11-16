@@ -226,7 +226,7 @@ namespace ChatEngine
                 LogUtil.SetupFileLogging("${basedir}/ChatEngineLog.txt", LogLevel.Trace);
 
                 // NBug initialization
-                SettingsOverride.LoadCustomSettings("NBug.ChatEngine.Config");
+                SettingsOverride.LoadCustomSettings("NBug.ChatEngine.config");
                 Settings.WriteLogToDisk = true;
                 AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
                 TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
