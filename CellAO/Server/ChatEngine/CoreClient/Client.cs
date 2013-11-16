@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 22:44
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -53,6 +53,10 @@ namespace ChatEngine.CoreClient
         /// <summary>
         /// </summary>
         public HashSet<ChannelBase> Channels = new HashSet<ChannelBase>();
+
+        /// <summary>
+        /// </summary>
+        public bool IsBot = false;
 
         /// <summary>
         /// Private known clients collection

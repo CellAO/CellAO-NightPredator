@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 19:18
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -31,15 +31,17 @@ namespace ChatEngine.CoreServer
 
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.Composition;
     using System.Linq;
     using System.Net;
 
     using Cell.Core;
 
+    using CellAO.Database.Dao;
+
     using ChatEngine.Channels;
     using ChatEngine.CoreClient;
+
+    using Utility.Config;
 
     #endregion
 
@@ -54,14 +56,13 @@ namespace ChatEngine.CoreServer
         /// </summary>
         public HashSet<ChannelBase> Channels = new HashSet<ChannelBase>();
 
-        public List<ChannelBase> ChannelsByType<T>()
-        {
-            return Channels.Where(x => x is T).ToList();
-        }
-
         /// <summary>
         /// </summary>
         public Dictionary<uint, Client> ConnectedClients = new Dictionary<uint, Client>();
+
+        /// <summary>
+        /// </summary>
+        public string MessageOfTheDay = string.Empty;
 
         #endregion
 
@@ -72,15 +73,73 @@ namespace ChatEngine.CoreServer
         public ChatServer()
         {
             this.Channels.Add(new GlobalChannel(ChannelFlags.None, ChannelType.General, 1, "Global"));
-            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 1, "Shopping 1-50"));
-            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 2, "Shopping 51-150"));
-            this.Channels.Add(new GlobalChannel(ChannelFlags.NoVoice, ChannelType.Shopping, 3, "Shopping 151-220"));
-            this.ClientConnected += OnClientConnected;
+            this.Channels.Add(new LevelRestrictedChannel(1, 1, 50));
+            this.Channels.Add(new LevelRestrictedChannel(1, 51, 150));
+            this.Channels.Add(new LevelRestrictedChannel(1, 151, 220));
+
+            this.ClientConnected += this.OnClientConnected;
+            this.ClientDisconnected += this.OnClientDisconnect;
+
+            // server welcome message
+            this.MessageOfTheDay = ConfigReadWrite.Instance.CurrentConfig.Motd;
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        public List<ChannelBase> ChannelsByType<T>()
+        {
+            return this.Channels.Where(x => x is T).ToList();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="forced">
+        /// </param>
+        public void OnClientDisconnect(IClient client, bool forced)
+        {
+            Client cl = (Client)client;
+            if (cl.Character.CharacterId != 0)
+            {
+                OnlineDao.SetOffline((int)cl.Character.CharacterId);
+                this.ConnectedClients.Remove(cl.Character.CharacterId);
+            }
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="packet">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal ChannelBase GetChannel(byte[] packet)
+        {
+            byte channelType = packet[4];
+            uint chanid = (uint)IPAddress.NetworkToHostOrder((int)BitConverter.ToUInt32(packet, 5));
+
+            foreach (ChannelBase ce in this.Channels)
+            {
+                if ((ce.ChannelId == chanid) && ((byte)ce.channelType == channelType))
+                {
+                    return ce;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// The create client.

@@ -21,12 +21,20 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:59
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
 namespace ChatEngine.Packets
 {
+    #region Usings ...
+
+    using System;
+
+    using ChatEngine.Channels;
+
+    #endregion
+
     /// <summary>
     /// The channel join.
     /// </summary>
@@ -54,6 +62,36 @@ namespace ChatEngine.Packets
             writer.WriteString(channelname);
             writer.WriteUInt32(flags);
             writer.WriteBytes(otherdata);
+            return writer.Finish();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channelType">
+        /// </param>
+        /// <param name="channelId">
+        /// </param>
+        /// <param name="channelName">
+        /// </param>
+        /// <param name="flags">
+        /// </param>
+        /// <param name="otherData">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static byte[] Create(
+            ChannelType channelType, 
+            uint channelId, 
+            string channelName, 
+            ChannelFlags flags, 
+            byte[] otherData)
+        {
+            PacketWriter writer = new PacketWriter(60);
+            writer.WriteByte((byte)channelType);
+            writer.WriteUInt32(channelId);
+            writer.WriteString(channelName);
+            writer.WriteUInt32((UInt32)flags);
+            writer.WriteBytes(otherData);
             return writer.Finish();
         }
 

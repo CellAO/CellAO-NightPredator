@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 00:16
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
@@ -79,8 +79,7 @@ namespace ChatEngine.Packets
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                // TODO: Find out what to put in here, for now lets go with 0x00000000
-                writer.WriteUInt32(0);
+                writer.WriteUInt32((UInt32)OnlineDao.IsOnline(character.Id).Online);
             }
 
             return writer.Finish();

@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-05 19:15
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -30,10 +30,9 @@ namespace ChatEngine.PacketHandlers
     #region Usings ...
 
     using System;
-    using System.IO;
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
-    using ChatEngine.Lists;
     using ChatEngine.Packets;
 
     #endregion
@@ -54,30 +53,33 @@ namespace ChatEngine.PacketHandlers
         /// </param>
         public static void Read(Client client, byte[] packet)
         {
+            byte[] senderId = BitConverter.GetBytes(client.Character.CharacterId);
+            Array.Reverse(senderId);
 
-            byte[] sender_ID = BitConverter.GetBytes(client.Character.CharacterId);
-            Array.Reverse(sender_ID);
-
-            byte[] newpacket = new byte[packet.Length+4];
+            byte[] newpacket = new byte[packet.Length + 4];
 
             Array.Copy(packet, 0, newpacket, 0, 9);
-            Array.Copy(sender_ID, 0, newpacket, 9, 4);
+            Array.Copy(senderId, 0, newpacket, 9, 4);
             Array.Copy(packet, 9, newpacket, 13, packet.Length - 9);
             newpacket[2] = (byte)(packet.Length >> 8);
             newpacket[3] = (byte)packet.Length;
 
+            ChannelBase channel = client.ChatServer().GetChannel(packet);
 
-            foreach (Client m_client in client.ChatServer().ConnectedClients.Values)
+            foreach (Client recipient in client.ChatServer().ConnectedClients.Values)
             {
-                if (!m_client.KnownClients.Contains(client.Character.CharacterId)
-                    && (m_client.Character.CharacterId != client.Character.CharacterId))
+                if (recipient.Channels.Contains(channel))
                 {
-                    byte[] pname = PlayerName.New(client, client.Character.CharacterId);
-                    m_client.Send(pname);
-                    m_client.KnownClients.Add(client.Character.CharacterId);
-                }
+                    if (!recipient.KnownClients.Contains(client.Character.CharacterId)
+                        && (recipient.Character.CharacterId != client.Character.CharacterId))
+                    {
+                        byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
+                        recipient.Send(pname);
+                        recipient.KnownClients.Add(client.Character.CharacterId);
+                    }
 
-                m_client.Send(newpacket);
+                    recipient.Send(newpacket);
+                }
             }
 
             PacketReader reader = new PacketReader(ref packet);
@@ -87,7 +89,8 @@ namespace ChatEngine.PacketHandlers
             reader.ReadUInt16();
             reader.ReadByte();
             string text = reader.ReadString();
-            string channelName = ChatChannels.GetChannel(packet).Name;
+            string channelName = channel.ChannelName;
+
             ChatLogger.WriteString(channelName, text, client.Character.characterName);
         }
 

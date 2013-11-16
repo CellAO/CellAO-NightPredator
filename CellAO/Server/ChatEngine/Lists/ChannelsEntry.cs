@@ -21,18 +21,12 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:59
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
 namespace ChatEngine.Lists
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
     /// <summary>
     /// The channels entry.
     /// </summary>

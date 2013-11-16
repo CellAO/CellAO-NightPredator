@@ -13,7 +13,7 @@
   <LogChat>false</LogChat>
   <!-- Server MOTD -->
   <!-- {0} will be replaced with Cellao Name and Version eg Yalm 1.3.2.267 -->
-  <Motd>Welcome to CellAO {0}, you Visit our Forums at http://www.aocell.co</Motd>
+  <Motd>Welcome to CellAO {0}, please visit our Forums at http://www.aocell.info</Motd>
   <!-- Set this to true if you want to use encrypted passwords with your server you will need to supply each user the launcher we have created -->
   <UsePassword>false</UsePassword>
   <!-- Choose your SQL Databse Type here, MySql, MsSql, PostgreSQL-->

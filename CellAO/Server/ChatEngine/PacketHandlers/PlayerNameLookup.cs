@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
@@ -76,6 +76,11 @@ namespace ChatEngine.PacketHandlers
 
             byte[] namelookup = NameLookupResult.Create(playerId, playerName);
             client.Send(namelookup);
+            client.Send(
+                BuddyOnlineStatus.Create(
+                    playerId, 
+                    (uint)OnlineDao.IsOnline((int)playerId).Online, 
+                    new byte[] { 0x00, 0x01, 0x00 }));
             client.KnownClients.Add(playerId);
         }
 

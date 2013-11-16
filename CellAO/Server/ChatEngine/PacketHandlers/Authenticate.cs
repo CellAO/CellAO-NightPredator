@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -113,13 +113,15 @@ namespace ChatEngine.PacketHandlers
             client.KnownClients.Add(client.Character.CharacterId);
 
             // and give client its own name lookup
-            byte[] pname = PlayerName.New(client, client.Character.CharacterId);
+            byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
             client.Send(pname);
 
             // send server welcome message to client
             byte[] anonv = MsgAnonymousVicinity.Create(
                 string.Empty, 
-                string.Format(motd, AssemblyInfoclass.Description + " " + AssemblyInfoclass.AssemblyVersion), 
+                string.Format(
+                    client.ChatServer().MessageOfTheDay, 
+                    AssemblyInfoclass.RevisionName + " " + AssemblyInfoclass.AssemblyVersion), 
                 string.Empty);
             client.Send(anonv);
 

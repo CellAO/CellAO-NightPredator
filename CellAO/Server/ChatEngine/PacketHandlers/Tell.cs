@@ -21,13 +21,15 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
 namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
+
+    using CellAO.Database.Dao;
 
     using ChatEngine.CoreClient;
     using ChatEngine.Packets;
@@ -65,9 +67,16 @@ namespace ChatEngine.PacketHandlers
                 Client tellClient = (Client)client.ChatServer().ConnectedClients[playerId];
                 if (!tellClient.KnownClients.Contains(client.Character.CharacterId))
                 {
-                    byte[] pname = PlayerName.New(client, client.Character.CharacterId);
+                    byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
                     tellClient.Send(pname);
                     tellClient.KnownClients.Add(client.Character.CharacterId);
+
+                    // TODO: Check if status bytes are correct even for offline chars
+                    client.Send(
+                        BuddyOnlineStatus.Create(
+                            (uint)tellClient.Character.CharacterId, 
+                            (uint)OnlineDao.IsOnline((int)tellClient.Character.CharacterId).Online, 
+                            new byte[] { 0x00, 0x01, 0x00 }));
                 }
 
                 byte[] pgroup = MsgPrivateGroup.Create(client.Character.CharacterId, message, string.Empty);

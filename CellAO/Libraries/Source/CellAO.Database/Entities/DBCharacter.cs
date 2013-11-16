@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:05
+// Last modified: 2013-11-16 07:35
 
 #endregion
 
@@ -73,6 +73,10 @@ namespace CellAO.Database.Entities
         /// Name of the character
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int Online { get; set; }
 
         /// <summary>
         /// Playfield

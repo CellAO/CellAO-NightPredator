@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -50,6 +50,8 @@ namespace ChatEngine
         /// </param>
         /// <param name="messageNumber">
         /// </param>
+        /// <returns>
+        /// </returns>
         public bool Parse(Client client, byte[] packet, ushort messageNumber)
         {
             switch (messageNumber)
@@ -127,8 +129,8 @@ namespace ChatEngine
                 default:
                     client.Server.Warning(client, "Client sent unknown message {0}", messageNumber.ToString());
                     return false;
-
             }
+
             return true;
         }
 

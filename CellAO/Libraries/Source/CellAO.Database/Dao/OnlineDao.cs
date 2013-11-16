@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:05
+// Last modified: 2013-11-16 07:47
 
 #endregion
 
@@ -72,6 +72,26 @@ namespace CellAO.Database.Dao
             }
 
             return new DBOnline { Online = 0 };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// </param>
+        public static void SetOffline(int id)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE characters SET online=0 WHERE id=@charid", new { charid = id });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                throw;
+            }
         }
 
         /// <summary>

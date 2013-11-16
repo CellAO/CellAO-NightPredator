@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:59
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
@@ -50,12 +50,11 @@ namespace ChatEngine.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static byte[] New(Client client, uint id)
+        public static byte[] Create(Client client, uint id)
         {
-            Client tmpClient = (Client)client.ChatServer().ConnectedClients[id];
             PacketWriter writer = new PacketWriter(20);
             writer.WriteUInt32(id);
-            writer.WriteString(tmpClient.Character.characterName);
+            writer.WriteString(client.Character.characterName);
             return writer.Finish();
         }
 

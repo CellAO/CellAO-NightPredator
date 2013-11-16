@@ -21,15 +21,13 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-12 22:00
+// Last modified: 2013-11-16 09:36
 
 #endregion
 
 namespace ChatEngine.Packets
 {
     #region Usings ...
-
-    using System;
 
     using ChatEngine.Channels;
 
@@ -45,7 +43,7 @@ namespace ChatEngine.Packets
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="channelId">
+        /// <param name="channel">
         /// </param>
         /// <param name="playerid">
         /// </param>

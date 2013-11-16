@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-03 10:58
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -36,17 +36,12 @@ namespace ChatEngine.PacketHandlers
 
     using AO.Core.Encryption;
 
-    using CellAO.Communication;
-
-    using ChatEngine.Channels;
     using ChatEngine.CoreClient;
-    using ChatEngine.Lists;
     using ChatEngine.Packets;
 
     using NiceHexOutput;
 
     using Utility;
-    using Utility.Config;
 
     #endregion
 
@@ -85,11 +80,11 @@ namespace ChatEngine.PacketHandlers
             short loginKeyLength = IPAddress.NetworkToHostOrder(m_reader.ReadInt16());
             string loginKey = Encoding.ASCII.GetString(m_reader.ReadBytes(loginKeyLength));
 
-
             LoginEncryption loginEncryption = new LoginEncryption();
 
             if (loginEncryption.IsValidLogin(loginKey, client.ServerSalt, userName))
             {
+                client.IsBot = true;
                 byte[] chars = AccountCharacterList.Create(userName);
 #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -104,11 +99,7 @@ namespace ChatEngine.PacketHandlers
                 byte[] loginerr = LoginError.Create();
                 client.Send(loginerr);
                 client.Server.DisconnectClient(client);
-                
-                return;
             }
-
-
         }
 
         #endregion

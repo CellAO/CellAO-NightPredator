@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-15 22:34
+// Last modified: 2013-11-16 09:35
 
 #endregion
 
@@ -29,9 +29,17 @@ namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
+    using System.Linq;
+
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
     using ChatEngine.Channels;
     using ChatEngine.CoreClient;
     using ChatEngine.CoreServer;
+    using ChatEngine.Packets;
+
+    using Utility;
 
     #endregion
 
@@ -65,6 +73,18 @@ namespace ChatEngine.PacketHandlers
                 playerId);
             reader.Finish();
 
+            if (client.IsBot)
+            {
+                OnlineDao.SetOnline((int)playerId);
+            }
+
+            DBCharacter character = CharacterDao.GetById((int)playerId).First();
+
+            client.Character.CharacterId = playerId;
+            client.Character.characterName = character.Name;
+            client.Character.characterFirstName = character.FirstName;
+            client.Character.characterLastName = character.LastName;
+
             // Automatically add client to its appropriate channels
             foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<GlobalChannel>())
             {
@@ -89,6 +109,43 @@ namespace ChatEngine.PacketHandlers
             foreach (ChannelBase channel in ((ChatServer)client.Server).ChannelsByType<OrganizationChannel>())
             {
                 channel.AddClient(client);
+            }
+
+            if (client.IsBot)
+            {
+                // and give client its own name lookup
+                byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
+                client.Send(pname);
+
+                // send server welcome message to client
+                byte[] anonv = MsgAnonymousVicinity.Create(
+                    string.Empty, 
+                    string.Format(
+                        client.ChatServer().MessageOfTheDay, 
+                        AssemblyInfoclass.RevisionName + " " + AssemblyInfoclass.AssemblyVersion), 
+                    string.Empty);
+                client.Send(anonv);
+
+                // TODO: Add Buddies List/BuddyOnlineStatus messages
+
+                foreach (ChannelBase channel in client.Channels)
+                {
+                    byte[] channelJoin = ChannelJoin.Create(
+                        channel.channelType, 
+                        channel.ChannelId, 
+                        channel.ChannelName, 
+                        channel.channelFlags, 
+                        new byte[] { 0x00, 0x00 });
+                    client.Send(channelJoin);
+                }
+
+                if (!client.ChatServer().ConnectedClients.ContainsKey(client.Character.CharacterId))
+                {
+                    client.ChatServer().ConnectedClients.Add(client.Character.CharacterId, client);
+                }
+
+                // add yourself to that list
+                client.KnownClients.Add(client.Character.CharacterId);
             }
         }
 
