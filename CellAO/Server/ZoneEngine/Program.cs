@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 15:21
+// Last modified: 2013-11-16 16:00
 
 #endregion
 
@@ -30,15 +30,22 @@ namespace ZoneEngine
     #region Usings ...
 
     using System;
+    using System.IO;
+    using System.Net;
+    using System.Threading.Tasks;
 
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Database;
 
+    using NBug;
+    using NBug.Properties;
+
     using NLog;
 
     using Utility;
+    using Utility.Config;
 
     using ZoneEngine.Core;
     using ZoneEngine.Script;
@@ -63,6 +70,10 @@ namespace ZoneEngine
         /// <summary>
         /// </summary>
         public static ZoneServer zoneServer;
+
+        /// <summary>
+        /// </summary>
+        private static ConsoleText ct;
 
         #endregion
 
@@ -98,6 +109,144 @@ namespace ZoneEngine
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="args">
+        /// </param>
+        private static void CommandLoop(string[] args)
+        {
+            bool processedargs = false;
+            ct.TextRead("zone_consolecommands.txt");
+            while (true)
+            {
+                if (!processedargs)
+                {
+                    if (args.Length == 1)
+                    {
+                        if (args[0].ToLower() == "/autostart")
+                        {
+                            ct.TextRead("autostart.txt");
+                            csc.Compile(false);
+                            StartTheServer();
+                        }
+                    }
+
+                    processedargs = true;
+                }
+
+                Console.Write("\nServer Command >>");
+                string consoleCommand = Console.ReadLine();
+                switch (consoleCommand.ToLower())
+                {
+                    case "start":
+                        if (zoneServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Zone Server is already running");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        // TODO: Add Sql Check.
+                        csc.Compile(false);
+                        StartTheServer();
+                        break;
+                    case "startm": // Multiple dll compile
+                        if (zoneServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Zone Server is already running");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        // TODO: Add Sql Check.
+                        csc.Compile(true);
+                        StartTheServer();
+                        break;
+                    case "stop":
+                        if (!zoneServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Zone Server is not running");
+                            Console.ResetColor();
+                            break;
+                        }
+
+                        zoneServer.Stop();
+                        break;
+                    case "check":
+                    case "updatedb":
+                        CheckDatabase();
+                        break;
+                    case "exit":
+                    case "quit":
+                        if (zoneServer.IsRunning)
+                        {
+                            zoneServer.Stop();
+                        }
+
+                        return;
+
+                    case "ls": // list all available scripts, dont remove it since it does what it should
+                        Console.WriteLine("Available scripts");
+
+                        /* Old Lua way
+                        string[] files = Directory.GetFiles("Scripts");*/
+                        string[] files = Directory.GetFiles("Scripts\\", "*.cs", SearchOption.AllDirectories);
+                        if (files.Length == 0)
+                        {
+                            Console.WriteLine("No scripts were found.");
+                            break;
+                        }
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        foreach (string s in files)
+                        {
+                            Console.WriteLine(s);
+                        }
+
+                        Console.ResetColor();
+                        break;
+                    case "ping":
+
+                        // ChatCom.Server.Ping();
+                        Console.WriteLine("Ping is disabled till we can fix it");
+                        break;
+                    case "running":
+                        if (zoneServer.IsRunning)
+                        {
+                            Console.WriteLine("Zone Server is Running");
+                            break;
+                        }
+
+                        Console.WriteLine("Zone Server not Running");
+                        break;
+                    case "online":
+                        if (zoneServer.IsRunning)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+
+                            // TODO: Check all clients inside playfields
+                            lock (zoneServer.Clients)
+                            {
+                                foreach (ZoneClient c in zoneServer.Clients)
+                                {
+                                    Console.WriteLine("Character " + c.Character.Name + " online");
+                                }
+                            }
+
+                            Console.ResetColor();
+                        }
+
+                        break;
+                    default:
+                        ct.TextRead("zone_consolecmdsdefault.txt");
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Initializing methods go here
         /// </summary>
         /// <returns>
@@ -108,7 +257,17 @@ namespace ZoneEngine
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
 
+            if (!InitializeLogAndBug())
+            {
+                return false;
+            }
+
             if (!CheckZoneServerCreation())
+            {
+                return false;
+            }
+
+            if (!InizializeTCPIP())
             {
                 return false;
             }
@@ -136,6 +295,35 @@ namespace ZoneEngine
         /// </summary>
         /// <returns>
         /// </returns>
+        private static bool InitializeLogAndBug()
+        {
+            try
+            {
+                // Setup and enable NLog logging to file
+                LogUtil.SetupConsoleLogging(LogLevel.Debug);
+                LogUtil.SetupFileLogging("${basedir}/LoginEngineLog.txt", LogLevel.Trace);
+
+                // NBug initialization
+                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.Config");
+                Settings.WriteLogToDisk = true;
+                AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
+                TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error occured while initalizing NLog/NBug");
+                Console.WriteLine(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         private static bool InitializeScriptCompiler()
         {
             try
@@ -144,6 +332,37 @@ namespace ZoneEngine
             }
             catch (Exception)
             {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InizializeTCPIP()
+        {
+            int Port = Convert.ToInt32(ConfigReadWrite.Instance.CurrentConfig.ZonePort);
+            try
+            {
+                if (ConfigReadWrite.Instance.CurrentConfig.ListenIP == "0.0.0.0")
+                {
+                    zoneServer.TcpEndPoint = new IPEndPoint(IPAddress.Any, Port);
+                }
+                else
+                {
+                    zoneServer.TcpIP = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ListenIP);
+                }
+
+                zoneServer.MaximumPendingConnections = 100;
+            }
+            catch (Exception e)
+            {
+                ct.TextRead("ip_config_parse_error.txt");
+                Console.Write(e.Message);
+                Console.ReadKey();
                 return false;
             }
 
@@ -196,7 +415,7 @@ namespace ZoneEngine
         /// </param>
         private static void Main(string[] args)
         {
-            ConsoleText ct = new ConsoleText();
+            ct = new ConsoleText();
 
             OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
 
@@ -210,10 +429,24 @@ namespace ZoneEngine
                 return;
             }
 
-            Console.ReadLine();
+            CommandLoop(args);
 
             // NLog<->Mono lockup fix
             LogManager.Configuration = null;
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void StartTheServer()
+        {
+            // TODO: Read playfield data, check which playfields have to be created, and create them
+            // TODO: Cache neccessary Spawns and Mobs
+            // TODO: Cache neccessary Doors
+            // TODO: Cache neccessary statels
+            // TODO: Cache Vendors
+
+            csc.AddScriptMembers();
+            zoneServer.Start(true, false);
         }
 
         #endregion

@@ -30,6 +30,7 @@ namespace ZoneEngine.Core
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Net;
 
@@ -55,8 +56,9 @@ namespace ZoneEngine.Core
         private readonly ClientFactory clientFactory;
 
         #endregion
+        public HashSet<ZoneClient> Clients = new HashSet<ZoneClient>();
 
-        #region Constructors and Destructors
+            #region Constructors and Destructors
 
         /// <summary>
         /// </summary>

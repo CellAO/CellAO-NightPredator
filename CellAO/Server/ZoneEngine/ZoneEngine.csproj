@@ -105,6 +105,9 @@
       <Link>Config.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\dummy.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="zone.ico" />
   </ItemGroup>
   <ItemGroup>
