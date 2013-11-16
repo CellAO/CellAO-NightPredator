@@ -251,13 +251,13 @@ namespace ChatEngine
             int Port = Convert.ToInt32(Config.Instance.CurrentConfig.ChatPort);
             try
             {
-                if (Config.Instance.CurrentConfig.ChatIP == "0.0.0.0")
+                if (Config.Instance.CurrentConfig.ListenIP == "0.0.0.0")
                 {
                     chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Any, Port);
                 }
                 else
                 {
-                    chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ChatIP), Port);
+                    chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), Port);
                 }
 
                 chatServer.MaximumPendingConnections = 100;

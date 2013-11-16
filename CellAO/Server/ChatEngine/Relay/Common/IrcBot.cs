@@ -248,6 +248,7 @@ namespace ChatEngine.Relay.Common
         /// </summary>
         public virtual void Run()
         {
+            this.isRunning = true;
         }
 
         /// <summary>
