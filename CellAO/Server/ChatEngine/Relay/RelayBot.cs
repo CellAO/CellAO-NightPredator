@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,8 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-04 3:42 PM
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -41,54 +36,69 @@ namespace Chatengine.Relay
     using ChatEngine.CoreServer;
     using ChatEngine.Relay.Common;
 
-    using Microsoft.SqlServer.Server;
+    using IrcDotNet;
 
     using Utility;
 
     using Config = Utility.Config.ConfigReadWrite;
 
-    using IrcDotNet;
-
     #endregion
 
+    /// <summary>
+    /// </summary>
     public class RelayBot : BasicIrcBot
     {
         // List of all currently logged-in Twitter users.
-        //private List<CellAOUsers> cellaoUsers;
+        // private List<CellAOUsers> cellaoUsers;
 
         #region Fields
 
+        /// <summary>
+        /// </summary>
+        private readonly string ircchannel = Config.Instance.CurrentConfig.IRCChannel;
+
+        /// <summary>
+        /// </summary>
         private readonly string nickname = Config.Instance.CurrentConfig.RelayBotNick;
 
+        /// <summary>
+        /// </summary>
         private readonly string realname = Config.Instance.CurrentConfig.RelayBotNick;
 
+        /// <summary>
+        /// </summary>
         private readonly string username = Config.Instance.CurrentConfig.RelayBotIdent;
 
-        private readonly string ircchannel = Config.Instance.CurrentConfig.IRCChannel;
+        /// <summary>
+        /// </summary>
+        private IrcClient client = null;
 
         #endregion
 
         #region Constructors and Destructors
-        private IrcClient client = null;
 
+        /// <summary>
+        /// </summary>
         public RelayBot()
             : base()
         {
-            //this.cellaoUsers = new List<CellAOUsers>();
+            // this.cellaoUsers = new List<CellAOUsers>();
         }
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// </summary>
         public override IrcRegistrationInfo RegistrationInfo
         {
             get
             {
                 return new IrcUserRegistrationInfo()
                        {
-                           NickName = this.nickname,
-                           UserName = this.username,
+                           NickName = this.nickname, 
+                           UserName = this.username, 
                            RealName = this.realname
                        };
             }
@@ -96,242 +106,423 @@ namespace Chatengine.Relay
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="chatServer">
+        /// </param>
+        public void Run(ChatServer chatServer)
+        {
+            this.Run();
+            if (Config.Instance.CurrentConfig.UseIRCRelay)
+            {
+                // Find ingame channel to relay
+                string temp = Config.Instance.CurrentConfig.RelayIngameChannel;
+                this.RelayedChannel = chatServer.Channels.Where(x => x.ChannelName == temp).FirstOrDefault();
+                if (this.RelayedChannel == null)
+                {
+                    LogUtil.Debug("Could not find ChatEngine Channel '" + temp + "'");
+                    return;
+                }
+
+                this.RelayedChannel.OnChannelMessage += this.RelayedChannel_OnChannelMessage;
+
+                // Found ingame channel, now connect to IRC
+                this.Connect(Config.Instance.CurrentConfig.IRCServer, this.RegistrationInfo);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
+        /// <summary>
+        /// </summary>
+        protected override void InitializeChatCommandProcessors()
+        {
+            base.InitializeChatCommandProcessors();
+
+            this.ChatCommandProcessors.Add("lusers", this.ProcessChatCommandListUsers);
+            this.ChatCommandProcessors.Add("login", this.ProcessChatCommandLogIn);
+            this.ChatCommandProcessors.Add("logout", this.ProcessChatCommandLogOut);
+            this.ChatCommandProcessors.Add("send", this.ProcessChatCommandSend);
+            this.ChatCommandProcessors.Add("home", this.ProcessChatCommandHome);
+            this.ChatCommandProcessors.Add("mentions", this.ProcessChatCommandMentions);
+        }
+
+        /// <summary>
+        /// </summary>
+        protected override void InitializeCommandProcessors()
+        {
+            base.InitializeCommandProcessors();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnChannelMessageReceived(IrcChannel channel, IrcMessageEventArgs e)
+        {
+            this.RelayedChannel.ChannelMessage(this.nickname + "-" + e.Source.Name, e.Text);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnChannelNoticeReceived(IrcChannel channel, IrcMessageEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnChannelUserJoined(IrcChannel channel, IrcChannelUserEventArgs e)
+        {
+            this.SendGreeting(channel.Client.LocalUser, e.ChannelUser.User);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnChannelUserLeft(IrcChannel channel, IrcChannelUserEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        protected override void OnClientConnect(IrcClient client)
+        {
+            this.client = client;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        protected override void OnClientDisconnect(IrcClient client)
+        {
+            this.client = null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        protected override void OnClientRegistered(IrcClient client)
+        {
+            client.ListChannels(Config.Instance.CurrentConfig.IRCChannel);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnLocalUserJoinedChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
+        {
+            this.SendGreeting(localUser, e.Channel);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnLocalUserLeftChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnLocalUserMessageReceived(IrcLocalUser localUser, IrcMessageEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected override void OnLocalUserNoticeReceived(IrcLocalUser localUser, IrcMessageEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected override void client_ChannelListReceived(object sender, IrcChannelListReceivedEventArgs e)
         {
             if (e.Channels.Count > 0)
             {
                 foreach (IrcChannelInfo channelInfo in e.Channels)
                 {
-                    this.client.Channels.Join(new string[] { channelInfo.Name });
+                    this.client.Channels.Join(new[] { channelInfo.Name });
                 }
             }
         }
 
-        protected override void InitializeChatCommandProcessors()
-        {
-            base.InitializeChatCommandProcessors();
-
-            this.ChatCommandProcessors.Add("lusers", ProcessChatCommandListUsers);
-            this.ChatCommandProcessors.Add("login", ProcessChatCommandLogIn);
-            this.ChatCommandProcessors.Add("logout", ProcessChatCommandLogOut);
-            this.ChatCommandProcessors.Add("send", ProcessChatCommandSend);
-            this.ChatCommandProcessors.Add("home", ProcessChatCommandHome);
-            this.ChatCommandProcessors.Add("mentions", ProcessChatCommandMentions);
-        }
-
-        protected override void InitializeCommandProcessors()
-        {
-            base.InitializeCommandProcessors();
-        }
-
-        protected override void OnChannelMessageReceived(IrcChannel channel, IrcMessageEventArgs e)
-        {
-            RelayedChannel.ChannelMessage(this.nickname+"-"+e.Source.Name,e.Text);
-        }
-
-        protected override void OnChannelNoticeReceived(IrcChannel channel, IrcMessageEventArgs e)
-        {
-            //
-        }
-
-        protected override void OnChannelUserJoined(IrcChannel channel, IrcChannelUserEventArgs e)
-        {
-            this.SendGreeting(channel.Client.LocalUser, e.ChannelUser.User);
-        }
-
-        protected override void OnChannelUserLeft(IrcChannel channel, IrcChannelUserEventArgs e)
-        {
-            //
-        }
-
-        protected override void OnClientConnect(IrcClient client)
-        {
-            this.client = client;
-        }
-
-        protected override void OnClientDisconnect(IrcClient client)
-        {
-            this.client = null;
-        }
-
-        protected override void OnClientRegistered(IrcClient client)
-        {
-            client.ListChannels(Config.Instance.CurrentConfig.IRCChannel);
-        }
-
-        protected override void OnLocalUserJoinedChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
-        {
-            this.SendGreeting(localUser, e.Channel);
-        }
-
-        protected override void OnLocalUserLeftChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
-        {
-            //
-        }
-
-        protected override void OnLocalUserMessageReceived(IrcLocalUser localUser, IrcMessageEventArgs e)
-        {
-            //
-        }
-
-        protected override void OnLocalUserNoticeReceived(IrcLocalUser localUser, IrcMessageEventArgs e)
-        {
-            //
-        }
-
-        
-
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandHome(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //var sourceUser = (IrcUser)source;
-            //var twitterBotUser = GetTwitterBotUser(sourceUser);
+            // var sourceUser = (IrcUser)source;
+            // var twitterBotUser = GetTwitterBotUser(sourceUser);
 
-            //if (parameters.Count != 0)
-            //    throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 0)
+            // throw new InvalidCommandParametersException(1);
 
             //// List tweets on Home timeline of user.
-            //var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //client.LocalUser.SendMessage(replyTargets, "Recent tweets on home timeline of '{0}':",
-            //    twitterBotUser.TwitterUser.ScreenName);
-            //foreach (var tweet in twitterBotUser.ListTweetsOnHomeTimeline())
-            //{
-            //    SendTweetInfo(client, replyTargets, tweet);
-            //}
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // client.LocalUser.SendMessage(replyTargets, "Recent tweets on home timeline of '{0}':",
+            // twitterBotUser.TwitterUser.ScreenName);
+            // foreach (var tweet in twitterBotUser.ListTweetsOnHomeTimeline())
+            // {
+            // SendTweetInfo(client, replyTargets, tweet);
+            // }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandListUsers(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //var sourceUser = (IrcUser)source;
+            // var sourceUser = (IrcUser)source;
 
-            //if (parameters.Count != 0)
-            //    throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 0)
+            // throw new InvalidCommandParametersException(1);
 
             //// List all currently logged-in twitter users.
-            //var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //client.LocalUser.SendMessage(replyTargets, "Currently logged-in Twitter users ({0}):",
-            //    this.cellaoUsers.Count);
-            //foreach (var tu in this.cellaoUsers)
-            //{
-            //    //client.LocalUser.SendMessage(replyTargets, "{0} / {1} ({2} @ {3})",
-            //       // tu.TwitterUser.ScreenName, tu.TwitterUser.Name, tu.IrcUser.NickName, tu.IrcUser.Client.ServerName);
-            //}
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // client.LocalUser.SendMessage(replyTargets, "Currently logged-in Twitter users ({0}):",
+            // this.cellaoUsers.Count);
+            // foreach (var tu in this.cellaoUsers)
+            // {
+            // //client.LocalUser.SendMessage(replyTargets, "{0} / {1} ({2} @ {3})",
+            // // tu.TwitterUser.ScreenName, tu.TwitterUser.Name, tu.IrcUser.NickName, tu.IrcUser.Client.ServerName);
+            // }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandLogIn(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //    var sourceUser = (IrcUser)source;
-            //    var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
-            //    if (twitterUser != null)
-            //        throw new InvalidOperationException(string.Format(
-            //            "User '{0}' is already logged in to Twitter as {1}.", sourceUser.NickName,
-            //            twitterUser.TwitterUser.ScreenName));
+            // var sourceUser = (IrcUser)source;
+            // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
+            // if (twitterUser != null)
+            // throw new InvalidOperationException(string.Format(
+            // "User '{0}' is already logged in to Twitter as {1}.", sourceUser.NickName,
+            // twitterUser.TwitterUser.ScreenName));
 
-            //    if (parameters.Count != 2)
-            //        throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 2)
+            // throw new InvalidCommandParametersException(1);
 
-            //    // Create new Twitter user and log in to service.
-            //    var twitterBotUser = new TwitterBotUser(sourceUser);
-            //    var success = twitterBotUser.LogIn(parameters[0], parameters[1]);
+            // // Create new Twitter user and log in to service.
+            // var twitterBotUser = new TwitterBotUser(sourceUser);
+            // var success = twitterBotUser.LogIn(parameters[0], parameters[1]);
 
-            //    var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //    if (success)
-            //    {
-            //        // Log-in succeeded.
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // if (success)
+            // {
+            // // Log-in succeeded.
 
-            //        this.twitterUsers.Add(twitterBotUser);
+            // this.twitterUsers.Add(twitterBotUser);
 
-            //        client.LocalUser.SendMessage(replyTargets, "You are now logged in as {0} / '{1}'.",
-            //            twitterBotUser.TwitterUser.ScreenName, twitterBotUser.TwitterUser.Name);
-            //    }
-            //    else
-            //    {
-            //        // Log-in failed.
+            // client.LocalUser.SendMessage(replyTargets, "You are now logged in as {0} / '{1}'.",
+            // twitterBotUser.TwitterUser.ScreenName, twitterBotUser.TwitterUser.Name);
+            // }
+            // else
+            // {
+            // // Log-in failed.
 
-            //        client.LocalUser.SendMessage(replyTargets, "Invalid log-in username/password.");
-            //    }
+            // client.LocalUser.SendMessage(replyTargets, "Invalid log-in username/password.");
+            // }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandLogOut(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //var sourceUser = (IrcUser)source;
-            //var twitterBotUser = GetTwitterBotUser(sourceUser);
+            // var sourceUser = (IrcUser)source;
+            // var twitterBotUser = GetTwitterBotUser(sourceUser);
 
-            //if (parameters.Count != 0)
-            //    throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 0)
+            // throw new InvalidCommandParametersException(1);
 
             //// Log out Twitter user.
-            //twitterBotUser.LogOut();
-            //this.twitterUsers.Remove(twitterBotUser);
+            // twitterBotUser.LogOut();
+            // this.twitterUsers.Remove(twitterBotUser);
 
-            //var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //client.LocalUser.SendMessage(replyTargets, "You are now logged out.");
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // client.LocalUser.SendMessage(replyTargets, "You are now logged out.");
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandMentions(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //var sourceUser = (IrcUser)source;
-            //var twitterBotUser = GetTwitterBotUser(sourceUser);
+            // var sourceUser = (IrcUser)source;
+            // var twitterBotUser = GetTwitterBotUser(sourceUser);
 
-            //if (parameters.Count != 0)
-            //    throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 0)
+            // throw new InvalidCommandParametersException(1);
 
             //// List tweets on Home timeline of user.
-            //var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //client.LocalUser.SendMessage(replyTargets, "Recent tweets mentioning '{0}':",
-            //    twitterBotUser.TwitterUser.ScreenName);
-            //foreach (var tweet in twitterBotUser.ListTweetsMentioningMe())
-            //{
-            //    SendTweetInfo(client, replyTargets, tweet);
-            //}
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // client.LocalUser.SendMessage(replyTargets, "Recent tweets mentioning '{0}':",
+            // twitterBotUser.TwitterUser.ScreenName);
+            // foreach (var tweet in twitterBotUser.ListTweetsMentioningMe())
+            // {
+            // SendTweetInfo(client, replyTargets, tweet);
+            // }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandSend(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
-            //var sourceUser = (IrcUser)source;
-            //var twitterBotUser = GetTwitterBotUser(sourceUser);
+            // var sourceUser = (IrcUser)source;
+            // var twitterBotUser = GetTwitterBotUser(sourceUser);
 
-            //if (parameters.Count != 1)
-            //    throw new InvalidCommandParametersException(1);
+            // if (parameters.Count != 1)
+            // throw new InvalidCommandParametersException(1);
 
             //// Send tweet from user.
-            //var tweetStatus = twitterBotUser.SendTweet(parameters[0].TrimStart());
-            //var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            //client.LocalUser.SendMessage(replyTargets, "Tweet sent by {0} at {1}.", tweetStatus.User.ScreenName,
-            //    tweetStatus.CreatedDate.ToLongTimeString());
+            // var tweetStatus = twitterBotUser.SendTweet(parameters[0].TrimStart());
+            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            // client.LocalUser.SendMessage(replyTargets, "Tweet sent by {0} at {1}.", tweetStatus.User.ScreenName,
+            // tweetStatus.CreatedDate.ToLongTimeString());
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="playerName">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        private void RelayedChannel_OnChannelMessage(string playerName, string text)
+        {
+            this.client.LocalUser.SendMessage(this.ircchannel, "[" + playerName + "] " + text);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="value">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private string SanitizeTextForIrc(string value)
         {
             var sb = new StringBuilder(value);
@@ -340,51 +531,26 @@ namespace Chatengine.Relay
             return sb.ToString();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="target">
+        /// </param>
         private void SendGreeting(IrcLocalUser localUser, IIrcMessageTarget target)
         {
             localUser.SendNotice(target, "This is the {0}, welcome.", ProgramInfo.AssemblyTitle);
             localUser.SendNotice(target, "Message me with '.help' for instructions on how to use me.");
-            //localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
-        }
 
-        // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
-        // {
-        //client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
-        //    SanitizeTextForIrc(tweet.Text));
-        // }
+            // localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
+        }
 
         #endregion
 
-        public void Run(ChatServer chatServer)
-        {
-            base.Run();
-            if (Config.Instance.CurrentConfig.UseIRCRelay)
-            {
-                // Find ingame channel to relay
-                string temp = Config.Instance.CurrentConfig.RelayIngameChannel;
-                RelayedChannel = chatServer.Channels.Where(x => x.ChannelName == temp).FirstOrDefault();
-                if (RelayedChannel == null)
-                {
-                    LogUtil.Debug("Could not find ChatEngine Channel '" + temp + "'");
-                    return;
-                }
-                RelayedChannel.OnChannelMessage += RelayedChannel_OnChannelMessage;
-
-                // Found ingame channel, now connect to IRC
-                this.Connect(Config.Instance.CurrentConfig.IRCServer, this.RegistrationInfo);
-                
-
-                
-
-            }
-
-        }
-
-        void RelayedChannel_OnChannelMessage(string playerName, string text)
-        {
-            this.client.LocalUser.SendMessage(ircchannel,"["+playerName+"] "+text);
-        }
-
-        
+        // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
+        // {
+        // client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
+        // SanitizeTextForIrc(tweet.Text));
+        // }
     }
 }

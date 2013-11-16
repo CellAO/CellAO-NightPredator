@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-02 17:00
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -113,28 +113,28 @@ namespace Utility.Config
         /// <summary>
         /// 
         /// </summary>
-        
-        IRCServer,
-        /// <summary>
-        /// 
-        /// </summary>
-        RelayBotNick,
+        IRCServer, 
 
         /// <summary>
         /// 
         /// </summary>
-        RelayBotIdent,
+        RelayBotNick, 
 
         /// <summary>
         /// 
         /// </summary>
-        IRCChannel,
+        RelayBotIdent, 
 
         /// <summary>
         /// 
         /// </summary>
-        RelayIngameChannel,
-        
+        IRCChannel, 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        RelayIngameChannel, 
+
         /// <summary>
         /// 
         /// </summary>
@@ -166,6 +166,16 @@ namespace Utility.Config
         /// Gets or sets Communication Port for Communicating between Zone and Chat Engines.
         /// </summary>
         public int CommPort { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IRCChannel { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string IRCServer { get; set; }
 
         /// <summary>
         /// Gets or sets Local ISComm IP address
@@ -213,6 +223,21 @@ namespace Utility.Config
         public string PostgreConnection { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string RelayBotIdent { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RelayBotNick { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RelayIngameChannel { get; set; }
+
+        /// <summary>
         /// Gets or sets Your SQL Type
         /// </summary>
         public string SQLType { get; set; }
@@ -221,6 +246,11 @@ namespace Utility.Config
         /// Gets or sets a value indicating whether to enable Sql Logging
         /// </summary>
         public bool SqlLog { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool UseIRCRelay { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use the Password
@@ -236,36 +266,6 @@ namespace Utility.Config
         /// Gets or sets the Zone Port
         /// </summary>
         public int ZonePort { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string IRCServer { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public string RelayBotNick { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string RelayBotIdent { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string IRCChannel { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string RelayIngameChannel { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool UseIRCRelay { get; set; }
 
         #endregion
     }

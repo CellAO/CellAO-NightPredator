@@ -21,15 +21,13 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 19:51
+// Last modified: 2013-11-16 19:01
 
 #endregion
 
 namespace CellAO.Communication.Messages
 {
     #region Usings ...
-
-    using CellAO.Communication.ISComV2Server;
 
     using MsgPack.Serialization;
 
@@ -39,7 +37,6 @@ namespace CellAO.Communication.Messages
     /// </summary>
     public class MessageBase : IMessageData
     {
-        
         #region Public Methods and Operators
 
         /// <summary>

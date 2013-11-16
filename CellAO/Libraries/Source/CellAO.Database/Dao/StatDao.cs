@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 10:27
+// Last modified: 2013-11-16 19:03
 
 #endregion
 
@@ -214,6 +214,7 @@ namespace CellAO.Database.Dao
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
+
                 // Log and return an empty stat entry
                 // TODO: Get a DEFAULT value for the stat
                 return new DBStats { type = type, instance = instance, statid = statId, statvalue = 0 };

@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-11 19:51
+// Last modified: 2013-11-16 19:01
 
 #endregion
 
@@ -79,6 +79,26 @@ namespace CellAO.Communication.ISComV2Server
 
         #endregion
 
+        #region Delegates
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="messageObject">
+        /// </param>
+        public delegate void DataReceivedHandler(IClient client, DynamicMessage messageObject);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// </summary>
+        public event DataReceivedHandler DataReceived;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -93,26 +113,11 @@ namespace CellAO.Communication.ISComV2Server
                 this.lastClientNumber++;
                 temp = new ISComV2ClientHandler(this, this.bus, this.lastClientNumber);
                 this.clients.Add(temp);
-                ((ISComV2ClientHandler)temp).DataReceived += ISComV2Server_DataReceived;
+                ((ISComV2ClientHandler)temp).DataReceived += this.ISComV2Server_DataReceived;
             }
 
             return temp;
         }
-
-        void ISComV2Server_DataReceived(ISComV2ClientHandler client, byte[] dataBytes)
-        {
-            if (DataReceived != null)
-            {
-                var ser = MessagePackSerializer.Create<DynamicMessage>();
-                DynamicMessage result = ser.UnpackSingleObject(dataBytes);
-
-                this.DataReceived(client, result);
-            }
-        }
-
-        public delegate void DataReceivedHandler(IClient client, DynamicMessage messageObject);
-
-        public event DataReceivedHandler DataReceived;
 
         /// <summary>
         /// </summary>
@@ -139,6 +144,23 @@ namespace CellAO.Communication.ISComV2Server
         /// </exception>
         protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
         {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="dataBytes">
+        /// </param>
+        private void ISComV2Server_DataReceived(ISComV2ClientHandler client, byte[] dataBytes)
+        {
+            if (this.DataReceived != null)
+            {
+                MessagePackSerializer<DynamicMessage> ser = MessagePackSerializer.Create<DynamicMessage>();
+                DynamicMessage result = ser.UnpackSingleObject(dataBytes);
+
+                this.DataReceived(client, result);
+            }
         }
 
         #endregion

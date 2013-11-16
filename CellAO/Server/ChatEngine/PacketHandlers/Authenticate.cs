@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:45
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -42,7 +42,6 @@ namespace ChatEngine.PacketHandlers
     using ChatEngine.Packets;
 
     using Utility;
-    using Utility.Config;
 
     #endregion
 

@@ -21,6 +21,8 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// Last modified: 2013-11-16 19:02
+
 #endregion
 
 namespace CellAO.Core.EventHandlers.Handlers
@@ -39,9 +41,15 @@ namespace CellAO.Core.EventHandlers.Handlers
     [Export(typeof(IHandle<MessageReceivedEvent>))]
     public class MessageReceivedHandler : IHandle<MessageReceivedEvent>
     {
+        #region Fields
+
         /// <summary>
         /// </summary>
         private readonly IMessagePublisher messagePublisher;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
@@ -53,6 +61,10 @@ namespace CellAO.Core.EventHandlers.Handlers
             this.messagePublisher = messagePublisher;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
         /// </summary>
         /// <param name="obj">
@@ -61,5 +73,7 @@ namespace CellAO.Core.EventHandlers.Handlers
         {
             this.messagePublisher.Publish(obj.Sender, obj.Message);
         }
+
+        #endregion
     }
 }

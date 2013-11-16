@@ -21,17 +21,13 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 11:11
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
 namespace ChatEngine.Relay.Common
 {
     #region Usings ...
-
-    #region Usings ...
-
-    #endregion
 
     using System;
     using System.Collections.Generic;
@@ -276,7 +272,7 @@ namespace ChatEngine.Relay.Common
             client.Connected += this.IrcClient_Connected;
             client.Disconnected += this.IrcClient_Disconnected;
             client.Registered += this.IrcClient_Registered;
-            client.ChannelListReceived += client_ChannelListReceived;
+            client.ChannelListReceived += this.client_ChannelListReceived;
 
             // Wait until connection has succeeded or timed out.
             using (var connectedEvent = new ManualResetEventSlim(false))
@@ -296,8 +292,6 @@ namespace ChatEngine.Relay.Common
 
             Console.Out.WriteLine("Now connected to '{0}'.", server);
         }
-
-        protected abstract void client_ChannelListReceived(object sender, IrcChannelListReceivedEventArgs e);
 
         /// <summary>
         /// </summary>
@@ -461,6 +455,14 @@ namespace ChatEngine.Relay.Common
         /// <param name="e">
         /// </param>
         protected abstract void OnLocalUserNoticeReceived(IrcLocalUser localUser, IrcMessageEventArgs e);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        protected abstract void client_ChannelListReceived(object sender, IrcChannelListReceivedEventArgs e);
 
         /// <summary>
         /// </summary>

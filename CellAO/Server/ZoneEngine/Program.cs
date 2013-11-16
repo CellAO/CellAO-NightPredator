@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 16:28
+// Last modified: 2013-11-16 19:08
 
 #endregion
 
@@ -35,7 +35,6 @@ namespace ZoneEngine
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Client;
-    using CellAO.Communication.Messages;
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
@@ -59,14 +58,16 @@ namespace ZoneEngine
     /// </summary>
     internal class Program
     {
-        #region Static Fields
-
         // TODO: Find out why the MEFs are not working under MONO 2.10
+
+        #region Static Fields
 
         /// <summary>
         /// </summary>
         public static readonly IContainer Container = new MefContainer();
 
+        /// <summary>
+        /// </summary>
         public static ISComV2Client ISComClient;
 
         /// <summary>
@@ -253,6 +254,37 @@ namespace ZoneEngine
         }
 
         /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool ISComInitialization()
+        {
+            int port;
+            IPAddress chatEngineIp;
+            try
+            {
+                ISComClient = new ISComV2Client();
+                chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
+                port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            try
+            {
+                ISComClient.Connect(chatEngineIp, port);
+            }
+            catch
+            {
+                return true;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Initializing methods go here
         /// </summary>
         /// <returns>
@@ -299,27 +331,6 @@ namespace ZoneEngine
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            return true;
-        }
-
-        private static bool ISComInitialization()
-        {
-            int port;
-            IPAddress chatEngineIp ;try
-            {
-                ISComClient = new ISComV2Client();
-                chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
-                port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            try
-            {
-                ISComClient.Connect(chatEngineIp, port);
-            }
-            catch { return true; }
             return true;
         }
 
@@ -464,7 +475,6 @@ namespace ZoneEngine
                 CommandLoop(args);
             }
 
-
             // NLog<->Mono lockup fix
             LogManager.Configuration = null;
         }
@@ -479,8 +489,8 @@ namespace ZoneEngine
             // TODO: Cache neccessary statels
             // TODO: Cache Vendors
 
-            //Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
-            
+            // Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
+
             csc.AddScriptMembers();
             zoneServer.Start(true, false);
         }

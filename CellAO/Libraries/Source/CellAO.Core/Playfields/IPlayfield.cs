@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:06
+// Last modified: 2013-11-16 19:02
 
 #endregion
 
@@ -152,7 +152,7 @@ namespace CellAO.Core.Playfields
 
         // <summary>
         // </summary>
-        /// <param name="sendSCFUs">
+        // <param name="sendSCFUs">
         /// </param>
         // TODO: Reactivate
         // void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs);

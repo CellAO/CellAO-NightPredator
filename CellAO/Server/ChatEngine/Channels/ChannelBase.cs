@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 11:05
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -34,8 +34,6 @@ namespace ChatEngine.Channels
     using Cell.Core;
 
     using ChatEngine.CoreClient;
-
-    using Utility;
 
     #endregion
 
@@ -143,9 +141,9 @@ namespace ChatEngine.Channels
                 {
                     this.clients.Add(client);
                     ((Client)client).Channels.Add(this);
-                    if (OnClientJoinChannel != null)
+                    if (this.OnClientJoinChannel != null)
                     {
-                        OnClientJoinChannel(((Client)client).Character.characterName);
+                        this.OnClientJoinChannel(((Client)client).Character.characterName);
                     }
 
                     // TODO: Send feedback to client?
@@ -175,20 +173,25 @@ namespace ChatEngine.Channels
             {
                 client.Send(channelMessageBytes);
             }
-            if (OnChannelMessage != null)
+
+            if (this.OnChannelMessage != null)
             {
-                OnChannelMessage(sourceClient.Character.characterName, text);
+                this.OnChannelMessage(sourceClient.Character.characterName, text);
             }
         }
 
         // The IRC Relay version
+        /// <summary>
+        /// </summary>
+        /// <param name="nameTag">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        /// <param name="blob">
+        /// </param>
         public void ChannelMessage(string nameTag, string text, string blob = "")
         {
-            byte[] channelMessageBytes = Packets.ChannelMessage.Create(
-                this,
-                0,
-                "["+nameTag+"] "+text,
-                blob);
+            byte[] channelMessageBytes = Packets.ChannelMessage.Create(this, 0, "[" + nameTag + "] " + text, blob);
             foreach (IClient client in this.clients)
             {
                 client.Send(channelMessageBytes);
@@ -219,10 +222,11 @@ namespace ChatEngine.Channels
             {
                 this.clients.Remove(client);
 
-                if (OnClientLeaveChannel != null)
+                if (this.OnClientLeaveChannel != null)
                 {
-                    OnClientLeaveChannel(((Client)client).Character.characterName);
+                    this.OnClientLeaveChannel(((Client)client).Character.characterName);
                 }
+
                 // TODO: Send feedback to client
                 return true;
             }
@@ -232,12 +236,22 @@ namespace ChatEngine.Channels
 
         #endregion
 
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterName">
+        /// </param>
+        /// <param name="text">
+        /// </param>
         internal void ChannelMessageToIRC(string characterName, string text)
         {
-            if (OnChannelMessage != null)
+            if (this.OnChannelMessage != null)
             {
-                OnChannelMessage(characterName, text);
+                this.OnChannelMessage(characterName, text);
             }
         }
+
+        #endregion
     }
 }

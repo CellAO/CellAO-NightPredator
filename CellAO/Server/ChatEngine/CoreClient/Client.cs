@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:35
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -160,9 +160,22 @@ namespace ChatEngine.CoreClient
 
         #endregion
 
-        // NV: Should this be here or inside Character...
-
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="characterName">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        internal void ChannelMessageReceived(ChannelBase channel, string characterName, string text)
+        {
+            channel.ChannelMessageToIRC(characterName, text);
+        }
+
+        // NV: Should this be here or inside Character...
 
         /// <summary>
         /// The get message number.
@@ -201,16 +214,10 @@ namespace ChatEngine.CoreClient
                 return parser.Parse(this, packet, messageNumber);
             }
 
-            
             // TODO: check what needs to be done if no suitable packet was found
             return true;
         }
 
         #endregion
-
-        internal void ChannelMessageReceived(ChannelBase channel, string characterName, string text)
-        {
-            channel.ChannelMessageToIRC(characterName, text);
-        }
     }
 }

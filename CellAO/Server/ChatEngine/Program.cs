@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:36
+// Last modified: 2013-11-16 19:07
 
 #endregion
 
@@ -62,6 +62,10 @@ namespace ChatEngine
 
         /// <summary>
         /// </summary>
+        public static ISComV2Server ISCom;
+
+        /// <summary>
+        /// </summary>
         private static readonly IContainer Container = new MefContainer();
 
         /// <summary>
@@ -71,8 +75,6 @@ namespace ChatEngine
         /// <summary>
         /// </summary>
         private static ConsoleText ct = new ConsoleText();
-
-        public static ISComV2Server ISCom;
 
         #endregion
 
@@ -219,6 +221,10 @@ namespace ChatEngine
             return true;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         private static bool InitializeISCom()
         {
             try
@@ -230,7 +236,9 @@ namespace ChatEngine
                 }
                 else
                 {
-                    ISCom.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), Config.Instance.CurrentConfig.CommPort);
+                    ISCom.TcpEndPoint = new IPEndPoint(
+                        IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), 
+                        Config.Instance.CurrentConfig.CommPort);
                 }
 
                 ISCom.Start(true, false);
@@ -239,6 +247,7 @@ namespace ChatEngine
             {
                 return false;
             }
+
             return true;
         }
 
@@ -286,7 +295,9 @@ namespace ChatEngine
                 }
                 else
                 {
-                    chatServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), Port);
+                    chatServer.TcpEndPoint = new IPEndPoint(
+                        IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), 
+                        Port);
                 }
 
                 chatServer.MaximumPendingConnections = 100;
