@@ -21,90 +21,94 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-16 15:14
 
 #endregion
 
-namespace NiceHexOutput
+namespace ZoneEngine.Core
 {
     #region Usings ...
 
     using System;
+    using System.ComponentModel.Composition;
+    using System.Net;
+
+    using Cell.Core;
+
+    using ZoneEngine.Component;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class NiceHexOutput
+    [Export]
+    public class ZoneServer : ServerBase
     {
-        #region Public Methods and Operators
+        #region Fields
 
         /// <summary>
         /// </summary>
-        /// <param name="packet">
+        public int Id;
+
+        /// <summary>
+        /// </summary>
+        private readonly ClientFactory clientFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientFactory">
         /// </param>
+        [ImportingConstructor]
+        public ZoneServer(ClientFactory clientFactory)
+        {
+            this.clientFactory = clientFactory;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
-        public static string Output(byte[] packet)
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected override IClient CreateClient()
         {
-            if (packet == null)
-            {
-                return string.Empty;
-            }
-
-            string outp = string.Empty;
-            int counter = 0;
-
-            outp = "Packet length: " + packet.Length + Environment.NewLine;
-
-            while (counter < packet.Length)
-            {
-                outp = outp + " ";
-                if (packet.Length - counter > 16)
-                {
-                    byte[] temp = new byte[16];
-                    Array.Copy(packet, counter, temp, 0, 16);
-                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
-                    foreach (byte b in temp)
-                    {
-                        outp = outp + ToSafeAscii(b);
-                    }
-
-                    outp = outp + Environment.NewLine;
-                }
-                else
-                {
-                    byte[] temp = new byte[packet.Length - counter];
-                    Array.Copy(packet, counter, temp, 0, packet.Length - counter);
-                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
-                    foreach (byte b in temp)
-                    {
-                        outp = outp + ToSafeAscii(b);
-                    }
-
-                    outp = outp + Environment.NewLine;
-                }
-
-                counter += 16;
-            }
-
-            return outp;
+            throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="b">
+        /// <param name="num_bytes">
         /// </param>
-        /// <returns>
-        /// </returns>
-        public static char ToSafeAscii(int b)
+        /// <param name="buf">
+        /// </param>
+        /// <param name="ip">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected override void OnReceiveUDP(int num_bytes, byte[] buf, IPEndPoint ip)
         {
-            if (b >= 32 && b <= 126)
-            {
-                return (char)b;
-            }
+            throw new NotImplementedException();
+        }
 
-            return '.';
+        /// <summary>
+        /// </summary>
+        /// <param name="clientIP">
+        /// </param>
+        /// <param name="num_bytes">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

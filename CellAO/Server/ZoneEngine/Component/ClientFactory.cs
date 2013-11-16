@@ -21,90 +21,67 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-16 15:03
 
 #endregion
 
-namespace NiceHexOutput
+namespace ZoneEngine.Component
 {
     #region Usings ...
 
-    using System;
+    using System.ComponentModel.Composition;
+
+    using CellAO.Core.Components;
+
+    using ZoneEngine.Core;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class NiceHexOutput
+    [Export]
+    public class ClientFactory
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly IBus bus;
+
+        /// <summary>
+        /// </summary>
+        private readonly IMessageSerializer messageSerializer;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageSerializer">
+        /// </param>
+        /// <param name="bus">
+        /// </param>
+        [ImportingConstructor]
+        public ClientFactory(IMessageSerializer messageSerializer, IBus bus)
+        {
+            this.messageSerializer = messageSerializer;
+            this.bus = bus;
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="packet">
+        /// <param name="server">
         /// </param>
         /// <returns>
         /// </returns>
-        public static string Output(byte[] packet)
+        public ZoneClient Create(ZoneServer server)
         {
-            if (packet == null)
-            {
-                return string.Empty;
-            }
-
-            string outp = string.Empty;
-            int counter = 0;
-
-            outp = "Packet length: " + packet.Length + Environment.NewLine;
-
-            while (counter < packet.Length)
-            {
-                outp = outp + " ";
-                if (packet.Length - counter > 16)
-                {
-                    byte[] temp = new byte[16];
-                    Array.Copy(packet, counter, temp, 0, 16);
-                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
-                    foreach (byte b in temp)
-                    {
-                        outp = outp + ToSafeAscii(b);
-                    }
-
-                    outp = outp + Environment.NewLine;
-                }
-                else
-                {
-                    byte[] temp = new byte[packet.Length - counter];
-                    Array.Copy(packet, counter, temp, 0, packet.Length - counter);
-                    outp = outp + BitConverter.ToString(temp).Replace("-", " ").PadRight(52);
-                    foreach (byte b in temp)
-                    {
-                        outp = outp + ToSafeAscii(b);
-                    }
-
-                    outp = outp + Environment.NewLine;
-                }
-
-                counter += 16;
-            }
-
-            return outp;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="b">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static char ToSafeAscii(int b)
-        {
-            if (b >= 32 && b <= 126)
-            {
-                return (char)b;
-            }
-
-            return '.';
+            return new ZoneClient(server, this.messageSerializer, this.bus);
         }
 
         #endregion

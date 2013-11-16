@@ -133,7 +133,7 @@ namespace ChatEngine
 
                         if (Config.Instance.CurrentConfig.UseIRCRelay == true)
                         {
-                            Console.WriteLine("Starting RelayBot.  Version {0}", ProgramInfo.AssemblyVersion);
+                            Console.WriteLine("Starting RelayBot. Version {0}", ProgramInfo.AssemblyVersion);
 
                             // Call the IRC Bot stuff here..
                             RelayBot ircbot = new RelayBot();
@@ -161,12 +161,10 @@ namespace ChatEngine
                     case "running":
                         if (chatServer.IsRunning)
                         {
-                            // Console.WriteLine("Login Server is running");
                             ct.TextRead("chatisrunning.txt");
                             break;
                         }
 
-                        // Console.WriteLine("Login Server not running");
                         ct.TextRead("chatisnotrunning.txt");
                         break;
 

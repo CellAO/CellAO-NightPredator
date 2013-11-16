@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-01 21:02
+// Last modified: 2013-11-16 15:21
 
 #endregion
 
@@ -31,6 +31,7 @@ namespace ZoneEngine
 
     using System;
 
+    using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Database;
@@ -39,6 +40,9 @@ namespace ZoneEngine
 
     using Utility;
 
+    using ZoneEngine.Core;
+    using ZoneEngine.Script;
+
     #endregion
 
     /// <summary>
@@ -46,6 +50,22 @@ namespace ZoneEngine
     /// </summary>
     internal class Program
     {
+        #region Static Fields
+
+        /// <summary>
+        /// </summary>
+        public static readonly IContainer Container = new MefContainer();
+
+        /// <summary>
+        /// </summary>
+        public static ScriptCompiler csc;
+
+        /// <summary>
+        /// </summary>
+        public static ZoneServer zoneServer;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -60,6 +80,24 @@ namespace ZoneEngine
         }
 
         /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool CheckZoneServerCreation()
+        {
+            try
+            {
+                zoneServer = Container.GetInstance<ZoneServer>();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Initializing methods go here
         /// </summary>
         /// <returns>
@@ -70,9 +108,17 @@ namespace ZoneEngine
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
 
-            if (!CheckDatabase())
+            if (!CheckZoneServerCreation())
             {
                 return false;
+            }
+
+            if (!InitializeScriptCompiler())
+            {
+                if (!CheckDatabase())
+                {
+                    return false;
+                }
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -82,6 +128,24 @@ namespace ZoneEngine
             }
 
             Console.ForegroundColor = ConsoleColor.White;
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeScriptCompiler()
+        {
+            try
+            {
+                csc = new ScriptCompiler();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -141,11 +205,13 @@ namespace ZoneEngine
 
             if (!Initialize())
             {
+                Console.WriteLine("Error occurred while initializing. Please check the log file.");
+                Console.ReadLine();
                 return;
             }
 
             Console.ReadLine();
-            
+
             // NLog<->Mono lockup fix
             LogManager.Configuration = null;
         }
