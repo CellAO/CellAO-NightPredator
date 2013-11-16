@@ -74,7 +74,7 @@ namespace ChatEngine.Channels
                     this.OnCheckRestriction += this.CheckClanStatus;
                     break;
                 case Side.Gm:
-                    this.ChannelName = "Suiv's Channel";
+                    this.ChannelName = "Suiv's Playground";
                     this.OnCheckRestriction += this.CheckGmStatus;
                     break;
                 case Side.Guardian:

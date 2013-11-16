@@ -243,7 +243,7 @@ namespace CellAO.Database.Dao
                     return
                         conn.Query<DBCharacter>(
                             "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
-                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters where id = @id", 
+                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW, UserName FROM characters where id = @id", 
                             new { id = characterId });
                 }
             }

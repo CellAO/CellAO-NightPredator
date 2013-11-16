@@ -41,6 +41,8 @@ namespace ChatEngine.CoreServer
     using ChatEngine.Channels;
     using ChatEngine.CoreClient;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     using Utility.Config;
 
     #endregion
@@ -76,8 +78,12 @@ namespace ChatEngine.CoreServer
             this.Channels.Add(new LevelRestrictedChannel(1, 1, 50));
             this.Channels.Add(new LevelRestrictedChannel(1, 51, 150));
             this.Channels.Add(new LevelRestrictedChannel(1, 151, 220));
+            this.Channels.Add(new RestrictedChannel(Side.Gm, ChannelFlags.None, ChannelType.GM));
+            this.Channels.Add(new RestrictedChannel(Side.Clan, ChannelFlags.None, ChannelType.General));
+            this.Channels.Add(new RestrictedChannel(Side.Omni, ChannelFlags.None, ChannelType.General));
+            this.Channels.Add(new RestrictedChannel(Side.Neutral, ChannelFlags.None, ChannelType.General));
 
-            this.ClientConnected += this.OnClientConnected;
+            this.ClientConnected += this.ClientConnectedToChat;
             this.ClientDisconnected += this.OnClientDisconnect;
 
             // server welcome message
@@ -156,7 +162,7 @@ namespace ChatEngine.CoreServer
         /// </summary>
         /// <param name="client">
         /// </param>
-        protected void OnClientConnected(IClient client)
+        protected void ClientConnectedToChat(IClient client)
         {
             Client client1 = (Client)client;
 
