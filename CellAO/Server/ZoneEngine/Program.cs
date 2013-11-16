@@ -334,7 +334,7 @@ namespace ZoneEngine
                 LogUtil.SetupFileLogging("${basedir}/LoginEngineLog.txt", LogLevel.Trace);
 
                 // NBug initialization
-                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.Config");
+                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.config");
                 Settings.WriteLogToDisk = true;
                 AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
                 TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
