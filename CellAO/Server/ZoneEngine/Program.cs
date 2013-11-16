@@ -61,6 +61,8 @@ namespace ZoneEngine
     {
         #region Static Fields
 
+        // TODO: Find out why the MEFs are not working under MONO 2.10
+
         /// <summary>
         /// </summary>
         public static readonly IContainer Container = new MefContainer();
