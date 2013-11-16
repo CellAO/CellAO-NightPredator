@@ -201,10 +201,16 @@ namespace ChatEngine.CoreClient
                 return parser.Parse(this, packet, messageNumber);
             }
 
+            
             // TODO: check what needs to be done if no suitable packet was found
             return true;
         }
 
         #endregion
+
+        internal void ChannelMessageReceived(ChannelBase channel, string characterName, string text)
+        {
+            channel.ChannelMessageToIRC(characterName, text);
+        }
     }
 }

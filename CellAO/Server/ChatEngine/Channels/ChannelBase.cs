@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:35
+// Last modified: 2013-11-16 11:05
 
 #endregion
 
@@ -34,6 +34,8 @@ namespace ChatEngine.Channels
     using Cell.Core;
 
     using ChatEngine.CoreClient;
+
+    using Utility;
 
     #endregion
 
@@ -79,6 +81,40 @@ namespace ChatEngine.Channels
 
         #endregion
 
+        #region Delegates
+
+        /// <summary>
+        /// </summary>
+        /// <param name="playerName">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        public delegate void ChannelMessageEvent(string playerName, string text);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="playerName">
+        /// </param>
+        public delegate void ClientJoinEvent(string playerName);
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// </summary>
+        public event ChannelMessageEvent OnChannelMessage;
+
+        /// <summary>
+        /// </summary>
+        public event ClientJoinEvent OnClientJoinChannel;
+
+        /// <summary>
+        /// </summary>
+        public event ClientJoinEvent OnClientLeaveChannel;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -107,6 +143,10 @@ namespace ChatEngine.Channels
                 {
                     this.clients.Add(client);
                     ((Client)client).Channels.Add(this);
+                    if (OnClientJoinChannel != null)
+                    {
+                        OnClientJoinChannel(((Client)client).Character.characterName);
+                    }
 
                     // TODO: Send feedback to client?
                     return true;
@@ -130,6 +170,24 @@ namespace ChatEngine.Channels
                 this, 
                 sourceClient.Character.CharacterId, 
                 text, 
+                blob);
+            foreach (IClient client in this.clients)
+            {
+                client.Send(channelMessageBytes);
+            }
+            if (OnChannelMessage != null)
+            {
+                OnChannelMessage(sourceClient.Character.characterName, text);
+            }
+        }
+
+        // The IRC Relay version
+        public void ChannelMessage(string nameTag, string text, string blob = "")
+        {
+            byte[] channelMessageBytes = Packets.ChannelMessage.Create(
+                this,
+                0,
+                "["+nameTag+"] "+text,
                 blob);
             foreach (IClient client in this.clients)
             {
@@ -161,6 +219,10 @@ namespace ChatEngine.Channels
             {
                 this.clients.Remove(client);
 
+                if (OnClientLeaveChannel != null)
+                {
+                    OnClientLeaveChannel(((Client)client).Character.characterName);
+                }
                 // TODO: Send feedback to client
                 return true;
             }
@@ -169,5 +231,13 @@ namespace ChatEngine.Channels
         }
 
         #endregion
+
+        internal void ChannelMessageToIRC(string characterName, string text)
+        {
+            if (OnChannelMessage != null)
+            {
+                OnChannelMessage(characterName, text);
+            }
+        }
     }
 }

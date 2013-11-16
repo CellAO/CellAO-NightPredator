@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CellAO.Relay.Properties {
+namespace ChatEngine.Properties {
     using System;
     
     

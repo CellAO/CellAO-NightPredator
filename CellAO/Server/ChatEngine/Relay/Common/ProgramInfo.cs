@@ -26,73 +26,49 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-04 3:39 PM
+// Last modified: 2013-11-04 3:42 PM
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
     #region Usings ...
 
     using System;
-    using System.Diagnostics;
     using System.Reflection;
 
     #endregion
 
-    public class InvalidCommandParametersException : Exception
+    public static class ProgramInfo
     {
-        #region Constructors and Destructors
-
-        public InvalidCommandParametersException(int minParameters, int? maxParameters = null)
-            : base()
-        {
-            Debug.Assert(minParameters >= 0, "minParameters must be at least zero.");
-            Debug.Assert(
-                maxParameters == null || maxParameters >= minParameters,
-                "maxParameters must be at least minParameters.");
-
-            this.MinParameters = minParameters;
-            this.MaxParameters = maxParameters ?? minParameters;
-        }
-
-        #endregion
-
         #region Public Properties
 
-        public int MaxParameters { get; private set; }
-
-        public override string Message
+        public static string AssemblyCopyright
         {
             get
             {
-                throw new NotSupportedException();
+                return
+                    ((AssemblyCopyrightAttribute)
+                        Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)[0])
+                        .Copyright;
             }
         }
 
-        public int MinParameters { get; private set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public string GetMessage(string command)
+        public static string AssemblyTitle
         {
-            if (this.MinParameters == 0 && this.MaxParameters == 0)
+            get
             {
-                return string.Format(Properties.Resources.MessageCommandTakesNoParams, command);
+                return
+                    ((AssemblyTitleAttribute)
+                        Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
             }
-            else if (this.MinParameters == this.MaxParameters)
+        }
+
+        public static Version AssemblyVersion
+        {
+            get
             {
-                return string.Format(Properties.Resources.MessageCommandTakesXParams, command, this.MinParameters);
-            }
-            else
-            {
-                return string.Format(
-                    Properties.Resources.MessageCommandTakesXToYParams,
-                    command,
-                    this.MinParameters,
-                    this.MaxParameters);
+                return Assembly.GetEntryAssembly().GetName().Version;
             }
         }
 

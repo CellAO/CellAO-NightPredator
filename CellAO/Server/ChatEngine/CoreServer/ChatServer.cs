@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:35
+// Last modified: 2013-11-16 11:22
 
 #endregion
 
@@ -74,14 +74,30 @@ namespace ChatEngine.CoreServer
         /// </summary>
         public ChatServer()
         {
+            // Global channel
             this.Channels.Add(new GlobalChannel(ChannelFlags.None, ChannelType.General, 1, "Global"));
+
+            // Shopping channels (at the moment just level restricted, no sides)
             this.Channels.Add(new LevelRestrictedChannel(1, 1, 50));
-            this.Channels.Add(new LevelRestrictedChannel(1, 51, 150));
-            this.Channels.Add(new LevelRestrictedChannel(1, 151, 220));
+            this.Channels.Add(new LevelRestrictedChannel(2, 51, 150));
+            this.Channels.Add(new LevelRestrictedChannel(3, 151, 220));
+
+            // Restricted channels (GM, sided channels)
             this.Channels.Add(new RestrictedChannel(Side.Gm, ChannelFlags.None, ChannelType.GM));
             this.Channels.Add(new RestrictedChannel(Side.Clan, ChannelFlags.None, ChannelType.General));
             this.Channels.Add(new RestrictedChannel(Side.Omni, ChannelFlags.None, ChannelType.General));
             this.Channels.Add(new RestrictedChannel(Side.Neutral, ChannelFlags.None, ChannelType.General));
+
+            // Add a relay channel if needed
+            if (ConfigReadWrite.Instance.CurrentConfig.UseIRCRelay)
+            {
+                this.Channels.Add(
+                    new GlobalChannel(
+                        ChannelFlags.None, 
+                        ChannelType.General, 
+                        5, 
+                        ConfigReadWrite.Instance.CurrentConfig.RelayIngameChannel));
+            }
 
             this.ClientConnected += this.ClientConnectedToChat;
             this.ClientDisconnected += this.OnClientDisconnect;
@@ -127,6 +143,39 @@ namespace ChatEngine.CoreServer
 
         /// <summary>
         /// </summary>
+        /// <param name="client">
+        /// </param>
+        internal void AddClientToChannels(Client client)
+        {
+            // Automatically add client to its appropriate channels
+            foreach (ChannelBase channel in this.ChannelsByType<GlobalChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in this.ChannelsByType<RestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in this.ChannelsByType<LevelRestrictedChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in this.ChannelsByType<TeamChannel>())
+            {
+                channel.AddClient(client);
+            }
+
+            foreach (ChannelBase channel in this.ChannelsByType<OrganizationChannel>())
+            {
+                channel.AddClient(client);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="packet">
         /// </param>
         /// <returns>
@@ -145,16 +194,6 @@ namespace ChatEngine.CoreServer
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// The create client.
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        protected override IClient CreateClient()
-        {
-            return new Client(this);
         }
 
         /// <summary>
@@ -198,6 +237,16 @@ namespace ChatEngine.CoreServer
         }
 
         /// <summary>
+        /// The create client.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        protected override IClient CreateClient()
+        {
+            return new Client(this);
+        }
+
+        /// <summary>
         /// The on receive udp.
         /// </summary>
         /// <param name="num_bytes">
@@ -222,34 +271,5 @@ namespace ChatEngine.CoreServer
         }
 
         #endregion
-
-        internal void AddClientToChannels(Client client)
-        {
-            // Automatically add client to its appropriate channels
-            foreach (ChannelBase channel in ChannelsByType<GlobalChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ChannelsByType<RestrictedChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ChannelsByType<LevelRestrictedChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ChannelsByType<TeamChannel>())
-            {
-                channel.AddClient(client);
-            }
-
-            foreach (ChannelBase channel in ChannelsByType<OrganizationChannel>())
-            {
-                channel.AddClient(client);
-            }
-        }
     }
 }

@@ -34,10 +34,12 @@ namespace ChatEngine
     using System.Threading.Tasks;
 
     using CellAO.Core.Components;
-    using CellAO.Relay;
-    using CellAO.Relay.Common;
 
     using ChatEngine.CoreServer;
+
+    using Chatengine.Relay;
+
+    using ChatEngine.Relay.Common;
 
     using NBug;
     using NBug.Properties;
@@ -131,9 +133,9 @@ namespace ChatEngine
                             Console.WriteLine("Starting RelayBot.  Version {0}", ProgramInfo.AssemblyVersion);
 
                             // Call the IRC Bot stuff here..
-                            IrcBot ircbot = new RelayBot();
+                            RelayBot ircbot = new RelayBot();
 
-                            // ircbot.Run();
+                            ircbot.Run(chatServer);
                             chatServer.Start(TCPEnable, UDPEnable);
                             break;
                         }

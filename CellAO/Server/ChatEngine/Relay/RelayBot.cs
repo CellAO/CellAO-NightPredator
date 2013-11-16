@@ -30,14 +30,20 @@
 
 #endregion
 
-namespace CellAO.Relay
+namespace Chatengine.Relay
 {
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
-    using CellAO.Relay.Common;
+    using ChatEngine.CoreServer;
+    using ChatEngine.Relay.Common;
+
+    using Microsoft.SqlServer.Server;
+
+    using Utility;
 
     using Config = Utility.Config.ConfigReadWrite;
 
@@ -58,9 +64,12 @@ namespace CellAO.Relay
 
         private readonly string username = Config.Instance.CurrentConfig.RelayBotIdent;
 
+        private readonly string ircchannel = Config.Instance.CurrentConfig.IRCChannel;
+
         #endregion
 
         #region Constructors and Destructors
+        private IrcClient client = null;
 
         public RelayBot()
             : base()
@@ -89,6 +98,17 @@ namespace CellAO.Relay
 
         #region Methods
 
+        protected override void client_ChannelListReceived(object sender, IrcChannelListReceivedEventArgs e)
+        {
+            if (e.Channels.Count > 0)
+            {
+                foreach (IrcChannelInfo channelInfo in e.Channels)
+                {
+                    this.client.Channels.Join(new string[] { channelInfo.Name });
+                }
+            }
+        }
+
         protected override void InitializeChatCommandProcessors()
         {
             base.InitializeChatCommandProcessors();
@@ -103,12 +123,12 @@ namespace CellAO.Relay
 
         protected override void InitializeCommandProcessors()
         {
-             base.InitializeCommandProcessors();
+            base.InitializeCommandProcessors();
         }
 
         protected override void OnChannelMessageReceived(IrcChannel channel, IrcMessageEventArgs e)
         {
-            //
+            RelayedChannel.ChannelMessage(this.nickname+"-"+e.Source.Name,e.Text);
         }
 
         protected override void OnChannelNoticeReceived(IrcChannel channel, IrcMessageEventArgs e)
@@ -128,17 +148,17 @@ namespace CellAO.Relay
 
         protected override void OnClientConnect(IrcClient client)
         {
-            //
+            this.client = client;
         }
 
         protected override void OnClientDisconnect(IrcClient client)
         {
-            //
+            this.client = null;
         }
 
         protected override void OnClientRegistered(IrcClient client)
         {
-            //
+            client.ListChannels(Config.Instance.CurrentConfig.IRCChannel);
         }
 
         protected override void OnLocalUserJoinedChannel(IrcLocalUser localUser, IrcChannelEventArgs e)
@@ -161,14 +181,7 @@ namespace CellAO.Relay
             //
         }
 
-        //private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
-       // {
-            //var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
-            //if (twitterUser == null)
-            //    throw new InvalidOperationException(string.Format(
-            //        "User '{0}' is not logged in to Twitter.", ircUser.NickName));
-            //return twitterUser;
-        //}
+        
 
         private void ProcessChatCommandHome(
             IrcClient client,
@@ -334,12 +347,44 @@ namespace CellAO.Relay
             //localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
         }
 
-       // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
-       // {
-            //client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
-            //    SanitizeTextForIrc(tweet.Text));
-       // }
+        // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
+        // {
+        //client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
+        //    SanitizeTextForIrc(tweet.Text));
+        // }
 
         #endregion
+
+        public void Run(ChatServer chatServer)
+        {
+            base.Run();
+            if (Config.Instance.CurrentConfig.UseIRCRelay)
+            {
+                // Find ingame channel to relay
+                string temp = Config.Instance.CurrentConfig.RelayIngameChannel;
+                RelayedChannel = chatServer.Channels.Where(x => x.ChannelName == temp).FirstOrDefault();
+                if (RelayedChannel == null)
+                {
+                    LogUtil.Debug("Could not find ChatEngine Channel '" + temp + "'");
+                    return;
+                }
+                RelayedChannel.OnChannelMessage += RelayedChannel_OnChannelMessage;
+
+                // Found ingame channel, now connect to IRC
+                this.Connect(Config.Instance.CurrentConfig.IRCServer, this.RegistrationInfo);
+                
+
+                
+
+            }
+
+        }
+
+        void RelayedChannel_OnChannelMessage(string playerName, string text)
+        {
+            this.client.LocalUser.SendMessage(ircchannel,"["+playerName+"] "+text);
+        }
+
+        
     }
 }

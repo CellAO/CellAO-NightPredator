@@ -21,7 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// Last modified: 2013-11-16 09:36
+// Last modified: 2013-11-16 12:12
 
 #endregion
 
@@ -34,6 +34,8 @@ namespace ChatEngine.PacketHandlers
 
     using ChatEngine.CoreClient;
     using ChatEngine.Packets;
+
+    using Utility.Config;
 
     #endregion
 
@@ -61,6 +63,21 @@ namespace ChatEngine.PacketHandlers
             reader.ReadUInt16(); // data length
             uint playerId = uint.MaxValue;
             string playerName = reader.ReadString();
+            if (playerName == string.Empty)
+            {
+                return;
+            }
+
+            if (playerName == ConfigReadWrite.Instance.CurrentConfig.RelayBotNick)
+            {
+                byte[] botlookup = NameLookupResult.Create(
+                    0x80000000, 
+                    ConfigReadWrite.Instance.CurrentConfig.RelayBotNick);
+                client.Send(botlookup);
+                client.Send(BuddyOnlineStatus.Create(0x80000000, 1, new byte[] { 0x00, 0x01, 0x00 }));
+                return;
+            }
+
             client.Server.Debug(
                 client, 
                 "{0} >> PlayerNameLookup: PlayerName: {1}", 

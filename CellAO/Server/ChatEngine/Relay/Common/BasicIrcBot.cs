@@ -30,8 +30,9 @@
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
+
     using IrcDotNet;
 
     #region Usings ...

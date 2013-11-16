@@ -82,6 +82,7 @@ namespace ChatEngine.PacketHandlers
                 }
             }
 
+
             PacketReader reader = new PacketReader(ref packet);
             reader.ReadUInt16();
             reader.ReadUInt16();
@@ -91,6 +92,7 @@ namespace ChatEngine.PacketHandlers
             string text = reader.ReadString();
             string channelName = channel.ChannelName;
 
+            client.ChannelMessageReceived(channel, client.Character.characterName, text);
             ChatLogger.WriteString(channelName, text, client.Character.characterName);
         }
 

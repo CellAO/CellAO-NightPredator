@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2013, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,16 +21,17 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
-// Last modified: 2013-11-04 3:40 PM
+// Last modified: 2013-11-16 11:11
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
-    using IrcDotNet;
+    #region Usings ...
 
     #region Usings ...
+
+    #endregion
 
     using System;
     using System.Collections.Generic;
@@ -43,13 +40,24 @@ namespace CellAO.Relay.Common
     using System.Text.RegularExpressions;
     using System.Threading;
 
+    using ChatEngine.Channels;
+    using ChatEngine.Properties;
+
+    using IrcDotNet;
+
+    using Config = Utility.Config.ConfigReadWrite;
+
     #endregion
 
     // Provides core functionality for an IRC bot that operates via multiple clients.
+    /// <summary>
+    /// </summary>
     public abstract class IrcBot : IDisposable
     {
         #region Constants
 
+        /// <summary>
+        /// </summary>
         private const int clientQuitTimeout = 1000;
 
         #endregion
@@ -58,35 +66,55 @@ namespace CellAO.Relay.Common
 
         #region Static Fields
 
+        /// <summary>
+        /// </summary>
         private static readonly Regex commandPartsSplitRegex = new Regex("(?<! /.*) ", RegexOptions.None);
 
         #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        public ChannelBase RelayedChannel = null;
 
         // Dictionary of all chat command processors, keyed by name.
 
         // Internal and exposable collection of all clients that communicate individually with servers.
 
-        #region Fields
-
+        /// <summary>
+        /// </summary>
         private Collection<IrcClient> allClients;
 
+        /// <summary>
+        /// </summary>
         private ReadOnlyCollection<IrcClient> allClientsReadOnly;
 
+        /// <summary>
+        /// </summary>
         private IDictionary<string, ChatCommandProcessor> chatCommandProcessors;
 
         // Dictionary of all command processors, keyed by name.
+        /// <summary>
+        /// </summary>
         private IDictionary<string, CommandProcessor> commandProcessors;
 
         // True if the read loop is currently active, false if ready to terminate.
 
+        /// <summary>
+        /// </summary>
         private bool isDisposed = false;
 
+        /// <summary>
+        /// </summary>
         private bool isRunning;
 
         #endregion
 
         #region Constructors and Destructors
 
+        /// <summary>
+        /// </summary>
         public IrcBot()
         {
             this.isRunning = false;
@@ -100,6 +128,8 @@ namespace CellAO.Relay.Common
             this.InitializeChatCommandProcessors();
         }
 
+        /// <summary>
+        /// </summary>
         ~IrcBot()
         {
             this.Dispose(false);
@@ -109,19 +139,39 @@ namespace CellAO.Relay.Common
 
         #region Delegates
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         protected delegate void ChatCommandProcessor(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         protected delegate void CommandProcessor(string command, IList<string> parameters);
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>
+        /// </summary>
         public ReadOnlyCollection<IrcClient> Clients
         {
             get
@@ -130,6 +180,8 @@ namespace CellAO.Relay.Common
             }
         }
 
+        /// <summary>
+        /// </summary>
         public virtual string QuitMessage
         {
             get
@@ -142,6 +194,8 @@ namespace CellAO.Relay.Common
 
         #region Properties
 
+        /// <summary>
+        /// </summary>
         protected IDictionary<string, ChatCommandProcessor> ChatCommandProcessors
         {
             get
@@ -150,6 +204,8 @@ namespace CellAO.Relay.Common
             }
         }
 
+        /// <summary>
+        /// </summary>
         protected IDictionary<string, CommandProcessor> CommandProcessors
         {
             get
@@ -162,11 +218,15 @@ namespace CellAO.Relay.Common
 
         #region Public Methods and Operators
 
+        /// <summary>
+        /// </summary>
+        /// <param name="server">
+        /// </param>
         public void Disconnect(string server)
         {
             // Disconnect IRC client that is connected to given server.
-            var client = this.GetClientFromServerNameMask(server);
-            var serverName = client.ServerName;
+            IrcClient client = this.GetClientFromServerNameMask(server);
+            string serverName = client.ServerName;
             client.Quit(clientQuitTimeout, this.QuitMessage);
             client.Dispose();
 
@@ -176,36 +236,22 @@ namespace CellAO.Relay.Common
             Console.Out.WriteLine("Disconnected from '{0}'.", serverName);
         }
 
+        /// <summary>
+        /// </summary>
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        public void Run()
+        /// <summary>
+        /// </summary>
+        public virtual void Run()
         {
-            // Read commands from stdin until bot terminates.
-            this.isRunning = true;
-            while (this.isRunning)
-            {
-                Console.Write("> ");
-                string line = Console.ReadLine();
-                if (line == null)
-                {
-                    break;
-                }
-                if (line.Length == 0)
-                {
-                    continue;
-                }
-
-                string[] parts = line.Split(' ');
-                string command = parts[0].ToLower();
-                string[] parameters = parts.Skip(1).ToArray();
-                this.ReadCommand(command, parameters);
-            }
         }
 
+        /// <summary>
+        /// </summary>
         public void Stop()
         {
             this.isRunning = false;
@@ -215,6 +261,12 @@ namespace CellAO.Relay.Common
 
         #region Methods
 
+        /// <summary>
+        /// </summary>
+        /// <param name="server">
+        /// </param>
+        /// <param name="registrationInfo">
+        /// </param>
         protected void Connect(string server, IrcRegistrationInfo registrationInfo)
         {
             // Create new IRC client and connect to given server.
@@ -223,6 +275,7 @@ namespace CellAO.Relay.Common
             client.Connected += this.IrcClient_Connected;
             client.Disconnected += this.IrcClient_Disconnected;
             client.Registered += this.IrcClient_Registered;
+            client.ChannelListReceived += client_ChannelListReceived;
 
             // Wait until connection has succeeded or timed out.
             using (var connectedEvent = new ManualResetEventSlim(false))
@@ -243,6 +296,12 @@ namespace CellAO.Relay.Common
             Console.Out.WriteLine("Now connected to '{0}'.", server);
         }
 
+        protected abstract void client_ChannelListReceived(object sender, IrcChannelListReceivedEventArgs e);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="disposing">
+        /// </param>
         protected void Dispose(bool disposing)
         {
             if (!this.isDisposed)
@@ -250,7 +309,7 @@ namespace CellAO.Relay.Common
                 if (disposing)
                 {
                     // Disconnect each client gracefully.
-                    foreach (var client in this.allClients)
+                    foreach (IrcClient client in this.allClients)
                     {
                         if (client != null)
                         {
@@ -260,26 +319,46 @@ namespace CellAO.Relay.Common
                     }
                 }
             }
+
             this.isDisposed = true;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="serverNameMask">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="IrcBotException">
+        /// </exception>
         protected IrcClient GetClientFromServerNameMask(string serverNameMask)
         {
-            var client =
+            IrcClient client =
                 this.Clients.SingleOrDefault(
                     c => c.ServerName != null && Regex.IsMatch(c.ServerName, serverNameMask, RegexOptions.IgnoreCase));
             if (client == null)
             {
                 throw new IrcBotException(
-                    IrcBotExceptionType.NoConnection,
-                    string.Format(Properties.Resources.MessageBotNoConnection, serverNameMask));
+                    IrcBotExceptionType.NoConnection, 
+                    string.Format(Resources.MessageBotNoConnection, serverNameMask));
             }
+
             return client;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <returns>
+        /// </returns>
         protected IList<IIrcMessageTarget> GetDefaultReplyTarget(
-            IrcClient client,
-            IIrcMessageSource source,
+            IrcClient client, 
+            IIrcMessageSource source, 
             IList<IIrcMessageTarget> targets)
         {
             if (targets.Contains(client.LocalUser) && source is IIrcMessageTarget)
@@ -292,32 +371,102 @@ namespace CellAO.Relay.Common
             }
         }
 
+        /// <summary>
+        /// </summary>
         protected abstract void InitializeChatCommandProcessors();
 
+        /// <summary>
+        /// </summary>
         protected abstract void InitializeCommandProcessors();
 
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnChannelMessageReceived(IrcChannel channel, IrcMessageEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnChannelNoticeReceived(IrcChannel channel, IrcMessageEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnChannelUserJoined(IrcChannel channel, IrcChannelUserEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnChannelUserLeft(IrcChannel channel, IrcChannelUserEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
         protected abstract void OnClientConnect(IrcClient client);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
         protected abstract void OnClientDisconnect(IrcClient client);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
         protected abstract void OnClientRegistered(IrcClient client);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnLocalUserJoinedChannel(IrcLocalUser localUser, IrcChannelEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnLocalUserLeftChannel(IrcLocalUser localUser, IrcChannelEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnLocalUserMessageReceived(IrcLocalUser localUser, IrcMessageEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="localUser">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         protected abstract void OnLocalUserNoticeReceived(IrcLocalUser localUser, IrcMessageEventArgs e);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Channel_MessageReceived(object sender, IrcMessageEventArgs e)
         {
             var channel = (IrcChannel)sender;
@@ -334,6 +483,12 @@ namespace CellAO.Relay.Common
             this.OnChannelMessageReceived(channel, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Channel_NoticeReceived(object sender, IrcMessageEventArgs e)
         {
             var channel = (IrcChannel)sender;
@@ -341,6 +496,12 @@ namespace CellAO.Relay.Common
             this.OnChannelNoticeReceived(channel, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Channel_UserJoined(object sender, IrcChannelUserEventArgs e)
         {
             var channel = (IrcChannel)sender;
@@ -348,6 +509,12 @@ namespace CellAO.Relay.Common
             this.OnChannelUserLeft(channel, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Channel_UserLeft(object sender, IrcChannelUserEventArgs e)
         {
             var channel = (IrcChannel)sender;
@@ -355,6 +522,12 @@ namespace CellAO.Relay.Common
             this.OnChannelUserJoined(channel, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Connected(object sender, EventArgs e)
         {
             var client = (IrcClient)sender;
@@ -362,6 +535,12 @@ namespace CellAO.Relay.Common
             this.OnClientConnect(client);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Disconnected(object sender, EventArgs e)
         {
             var client = (IrcClient)sender;
@@ -369,6 +548,12 @@ namespace CellAO.Relay.Common
             this.OnClientDisconnect(client);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_LocalUser_JoinedChannel(object sender, IrcChannelEventArgs e)
         {
             var localUser = (IrcLocalUser)sender;
@@ -381,6 +566,12 @@ namespace CellAO.Relay.Common
             this.OnLocalUserJoinedChannel(localUser, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_LocalUser_LeftChannel(object sender, IrcChannelEventArgs e)
         {
             var localUser = (IrcLocalUser)sender;
@@ -393,6 +584,12 @@ namespace CellAO.Relay.Common
             this.OnLocalUserJoinedChannel(localUser, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_LocalUser_MessageReceived(object sender, IrcMessageEventArgs e)
         {
             var localUser = (IrcLocalUser)sender;
@@ -409,6 +606,12 @@ namespace CellAO.Relay.Common
             this.OnLocalUserMessageReceived(localUser, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_LocalUser_NoticeReceived(object sender, IrcMessageEventArgs e)
         {
             var localUser = (IrcLocalUser)sender;
@@ -416,6 +619,12 @@ namespace CellAO.Relay.Common
             this.OnLocalUserNoticeReceived(localUser, e);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
         private void IrcClient_Registered(object sender, EventArgs e)
         {
             var client = (IrcClient)sender;
@@ -430,10 +639,18 @@ namespace CellAO.Relay.Common
             this.OnClientRegistered(client);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="eventArgs">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private bool ReadChatCommand(IrcClient client, IrcMessageEventArgs eventArgs)
         {
             // Check if given message represents chat command.
-            var line = eventArgs.Text;
+            string line = eventArgs.Text;
             if (line.Length > 1 && line.StartsWith("."))
             {
                 // Process command.
@@ -443,17 +660,30 @@ namespace CellAO.Relay.Common
                 this.ReadChatCommand(client, eventArgs.Source, eventArgs.Targets, command, parameters);
                 return true;
             }
+
             return false;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ReadChatCommand(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             string[] parameters)
         {
-            var defaultReplyTarget = this.GetDefaultReplyTarget(client, source, targets);
+            IList<IIrcMessageTarget> defaultReplyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
             ChatCommandProcessor processor;
             if (this.chatCommandProcessors.TryGetValue(command, out processor))
@@ -471,9 +701,9 @@ namespace CellAO.Relay.Common
                     if (source is IIrcMessageTarget)
                     {
                         client.LocalUser.SendNotice(
-                            defaultReplyTarget,
-                            "Error processing '{0}' command: {1}",
-                            command,
+                            defaultReplyTarget, 
+                            "Error processing '{0}' command: {1}", 
+                            command, 
                             ex.Message);
                     }
                 }
@@ -487,6 +717,12 @@ namespace CellAO.Relay.Common
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ReadCommand(string command, IList<string> parameters)
         {
             CommandProcessor processor;

@@ -30,56 +30,30 @@
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using IrcDotNet;
+    using System;
 
     #endregion
 
-    public static class IrcBotUtilities
+    public class IrcBotException : Exception
     {
-        #region Public Methods and Operators
+        #region Constructors and Destructors
 
-        public static void SendMessage(
-            this IrcLocalUser localUser,
-            IIrcMessageTarget target,
-            string format,
-            params object[] args)
+        public IrcBotException(IrcBotExceptionType type, string message)
+            : base(message)
         {
-            SendMessage(localUser, new[] { target }, format, args);
-        }
-
-        public static void SendMessage(
-            this IrcLocalUser localUser,
-            IList<IIrcMessageTarget> targets,
-            string format,
-            params object[] args)
-        {
-            localUser.SendMessage(targets, string.Format(format, args));
-        }
-
-        public static void SendNotice(
-            this IrcLocalUser localUser,
-            IIrcMessageTarget target,
-            string format,
-            params object[] args)
-        {
-            SendNotice(localUser, new[] { target }, format, args);
-        }
-
-        public static void SendNotice(
-            this IrcLocalUser localUser,
-            IList<IIrcMessageTarget> targets,
-            string format,
-            params object[] args)
-        {
-            localUser.SendNotice(targets, string.Format(format, args));
         }
 
         #endregion
+    }
+
+    public enum IrcBotExceptionType
+    {
+        Unknown,
+
+        NoConnection,
     }
 }

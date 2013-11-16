@@ -26,50 +26,58 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-04 3:42 PM
+// Last modified: 2013-11-04 3:41 PM
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
     #region Usings ...
 
-    using System;
-    using System.Reflection;
+    using System.Collections.Generic;
+
+    using IrcDotNet;
 
     #endregion
 
-    public static class ProgramInfo
+    public static class IrcBotUtilities
     {
-        #region Public Properties
+        #region Public Methods and Operators
 
-        public static string AssemblyCopyright
+        public static void SendMessage(
+            this IrcLocalUser localUser,
+            IIrcMessageTarget target,
+            string format,
+            params object[] args)
         {
-            get
-            {
-                return
-                    ((AssemblyCopyrightAttribute)
-                        Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false)[0])
-                        .Copyright;
-            }
+            SendMessage(localUser, new[] { target }, format, args);
         }
 
-        public static string AssemblyTitle
+        public static void SendMessage(
+            this IrcLocalUser localUser,
+            IList<IIrcMessageTarget> targets,
+            string format,
+            params object[] args)
         {
-            get
-            {
-                return
-                    ((AssemblyTitleAttribute)
-                        Assembly.GetEntryAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false)[0]).Title;
-            }
+            localUser.SendMessage(targets, string.Format(format, args));
         }
 
-        public static Version AssemblyVersion
+        public static void SendNotice(
+            this IrcLocalUser localUser,
+            IIrcMessageTarget target,
+            string format,
+            params object[] args)
         {
-            get
-            {
-                return Assembly.GetEntryAssembly().GetName().Version;
-            }
+            SendNotice(localUser, new[] { target }, format, args);
+        }
+
+        public static void SendNotice(
+            this IrcLocalUser localUser,
+            IList<IIrcMessageTarget> targets,
+            string format,
+            params object[] args)
+        {
+            localUser.SendNotice(targets, string.Format(format, args));
         }
 
         #endregion

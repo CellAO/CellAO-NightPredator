@@ -26,11 +26,11 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
-// Last modified: 2013-11-04 3:41 PM
+// Last modified: 2013-11-04 3:39 PM
 
 #endregion
 
-namespace CellAO.Relay.Common
+namespace ChatEngine.Relay.Common
 {
     #region Usings ...
 
@@ -38,22 +38,23 @@ namespace CellAO.Relay.Common
 
     #endregion
 
-    public class IrcBotException : Exception
+    public static class ConsoleUtilities
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
-        public IrcBotException(IrcBotExceptionType type, string message)
-            : base(message)
+        public static void UseTextColour(ConsoleColor colour, Action action)
         {
+            ConsoleColor prevForegroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = colour;
+            action();
+            Console.ForegroundColor = prevForegroundColor;
+        }
+
+        public static void WriteError(string message, params string[] args)
+        {
+            UseTextColour(ConsoleColor.Red, () => Console.Error.WriteLine(message, args));
         }
 
         #endregion
-    }
-
-    public enum IrcBotExceptionType
-    {
-        Unknown,
-
-        NoConnection,
     }
 }
