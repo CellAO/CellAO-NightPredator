@@ -101,14 +101,14 @@ namespace ZoneEngine.Core.PacketHandlers
                     client.SendChatText("Current Rank Structure: " + GetRankList(governingForm));
                     break;
 
-                    #region /org contract
+                    
 
                 case 3:
 
                     // org contract
                     break;
 
-                    #endregion
+                    
 
                     #region unknown org command 4
 
@@ -261,13 +261,10 @@ namespace ZoneEngine.Core.PacketHandlers
                     // some arg in CmdByte. No idea what it is
 
                     // create the target namespace t_promote
-                    IInstancedEntity toPromote = null;
-                    string promoteSql = string.Empty;
+                    Character toPromote = null;
                     int targetOldRank = -1;
-                    int targetNewRank = -1;
-                    int newPresRank = -1;
-                    int oldPresRank = 0;
-                    toPromote = client.Playfield.FindByIdentity(message.Target);
+                    int targetNewRank;
+                    toPromote = client.Playfield.FindByIdentity<Character>(message.Target);
                     if (toPromote != null)
                     {
                         // First we check if target is in the same org as you
@@ -279,18 +276,18 @@ namespace ZoneEngine.Core.PacketHandlers
                         }
 
                         // Target is in same org, are you eligible to promote?  Promoter Rank has to be TargetRank-2 or == 0
-                        if ((client.Character.Stats["ClanLevel"].Value == (toPromote.Stats["ClanLevel"].Value - 2))
-                            || (client.Character.Stats["ClanLevel"].Value == 0))
+                        if ((client.Character.Stats[StatIds.clanlevel].Value
+                             == (toPromote.Stats[StatIds.clanlevel].Value - 2))
+                            || (client.Character.Stats[StatIds.clanlevel].Value == 0))
                         {
                             // Promoter is eligible. Start the process
 
                             // First we get the details about the org itself
                             DBOrganization orgPromote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats["Clan"].BaseValue);
+                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
 
                             int promoteGovForm = -1;
                             string promotedToRank = string.Empty;
-                            string demotedFromRank = string.Empty;
 
                             if (orgPromote != null)
                             {
@@ -310,7 +307,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                     client.SendChatText(
                                         "You've passed leadership of the organization to: "
                                         + (toPromote as Character).Name);
-                                    ((toPromote as Character).Client as ZoneClient).SendChatText(
+                                    toPromote.Client.SendChatText(
                                         "You've been promoted to the rank of " + promotedToRank + " by "
                                         + client.Character.Name);
                                 }
@@ -320,10 +317,10 @@ namespace ZoneEngine.Core.PacketHandlers
                                     targetOldRank = toPromote.Stats["ClanLevel"].Value;
                                     targetNewRank = targetOldRank - 1;
                                     promotedToRank = GetRank(promoteGovForm, (uint)targetNewRank);
-                                    toPromote.Stats["ClanLevel"].Value = targetNewRank;
+                                    toPromote.Stats[StatIds.clanlevel].Value = targetNewRank;
                                     client.SendChatText(
                                         "You've promoted " + (toPromote as Character).Name + " to " + promotedToRank);
-                                    ((toPromote as Character).Client as ZoneClient).SendChatText(
+                                    toPromote.Client.SendChatText(
                                         "You've been promoted to the rank of " + promotedToRank + " by "
                                         + client.Character.Name);
                                 }
@@ -353,15 +350,14 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     // demote target player
                     // create the target namespace t_demote
-                    IInstancedEntity toDemote = null;
-                    string demoteSql = string.Empty;
+                    Character toDemote = null;
                     int targetCurRank = -1;
                     int targetNewerRank = -1;
-                    toDemote = client.Character.Playfield.FindByIdentity(message.Target);
+                    toDemote = client.Character.Playfield.FindByIdentity<Character>(message.Target);
                     if (toDemote != null)
                     {
                         // First we check if target is in the same org as you
-                        if (toDemote.Stats["Clan"].BaseValue != client.Character.Stats["Clan"].BaseValue)
+                        if (toDemote.Stats[StatIds.clan].BaseValue != client.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // not in same org
                             client.SendChatText("Target is not in your organization!");
@@ -369,14 +365,15 @@ namespace ZoneEngine.Core.PacketHandlers
                         }
 
                         // Target is in same org, are you eligible to demote?  Promoter Rank has to be TargetRank-2 or == 0
-                        if ((client.Character.Stats["ClanLevel"].Value <= (toDemote.Stats["ClanLevel"].Value - 2))
-                            || (client.Character.Stats["ClanLevel"].Value == 0))
+                        if ((client.Character.Stats[StatIds.clanlevel].Value
+                             <= (toDemote.Stats[StatIds.clanlevel].Value - 2))
+                            || (client.Character.Stats[StatIds.clanlevel].Value == 0))
                         {
                             // Promoter is eligible. Start the process
 
                             // First we get the details about the org itself
                             DBOrganization orgDemote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats["Clan"].BaseValue);
+                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
                             int demoteGovForm = -1;
                             string demotedToRank = string.Empty;
                             if (orgDemote == null)
@@ -398,7 +395,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             toDemote.Stats["ClanLevel"].Value = targetNewerRank;
                             client.SendChatText(
                                 "You've demoted " + (toDemote as Character).Name + " to " + demotedToRank);
-                            ((toDemote as Character).Client as ZoneClient).SendChatText(
+                            toDemote.Client.SendChatText(
                                 "You've been demoted to the rank of " + demotedToRank + " by " + client.Character.Name);
                             break;
                         }
@@ -431,7 +428,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // <name> is CmdStr
 
                     // create the t_player Client namespace, using CmdStr to find character id, in replacement of target.Instance
-                    uint kickedFrom = client.Character.Stats["Clan"].BaseValue;
+                    uint kickedFrom = client.Character.Stats[StatIds.clan].BaseValue;
                     DBCharacter kickChar = CharacterDao.GetByCharName(message.CommandArgs);
                     if (kickChar == null)
                     {
@@ -449,8 +446,8 @@ namespace ZoneEngine.Core.PacketHandlers
                     {
                         // Check if CmdStr is actually part of the org
 
-                        uint kickeeOrgId = targetPlayer.Stats["Clan"].BaseValue;
-                        if (kickeeOrgId != client.Character.Stats["Clan"].BaseValue)
+                        uint kickeeOrgId = targetPlayer.Stats[StatIds.clan].BaseValue;
+                        if (kickeeOrgId != client.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // Not part of Org. break out.
                             client.SendChatText(message.CommandArgs + "is not a member of your organization!");
@@ -491,26 +488,27 @@ namespace ZoneEngine.Core.PacketHandlers
                     {
                         var inviteMessage = new OrgInviteMessage
                                             {
-                                                Identity = tPlayer.Identity,
-                                                Unknown = 0x00,
-                                                Unknown1 = 0x00000000,
-                                                Unknown2 = 0x00000000,
+                                                Identity = tPlayer.Identity, 
+                                                Unknown = 0x00, 
+                                                Unknown1 = 0x00000000, 
+                                                Unknown2 = 0x00000000, 
                                                 Organization =
                                                     new Identity
                                                     {
-                                                        Type = IdentityType.Organization,
+                                                        Type = IdentityType.Organization, 
                                                         Instance =
                                                             (int)
                                                             client.Character.Stats[
                                                                 (int)StatIds.clan].Value
-                                                    },
-                                                OrganizationName = client.Character.OrganizationName,
+                                                    }, 
+                                                OrganizationName = client.Character.OrganizationName, 
                                                 Unknown3 = 0x00000000
                                             };
 
                         tPlayer.Client.SendCompressed(inviteMessage);
                     }
                 }
+
                     break;
 
                     #endregion
@@ -519,14 +517,13 @@ namespace ZoneEngine.Core.PacketHandlers
 
                 case 15:
                 {
-                 
-                        // target.Instance holds the OrgID of the Org wishing to be joined.
-                        var orgIdtoJoin = message.Target.Instance;
-                        var gov_form = OrganizationDao.GetGovernmentForm(orgIdtoJoin);
+                    // target.Instance holds the OrgID of the Org wishing to be joined.
+                    int orgIdtoJoin = message.Target.Instance;
+                    int gov_form = OrganizationDao.GetGovernmentForm(orgIdtoJoin);
 
-                        // Make sure the order of these next two lines is not swapped -NV
-                        client.Character.Stats[StatIds.clanlevel].Value=GetLowestRank(gov_form);
-                        client.Character.Stats[StatIds.clan].Value = orgIdtoJoin;
+                    // Make sure the order of these next two lines is not swapped -NV
+                    client.Character.Stats[StatIds.clanlevel].Value = GetLowestRank(gov_form);
+                    client.Character.Stats[StatIds.clan].Value = orgIdtoJoin;
                 }
 
                     break;
@@ -537,32 +534,26 @@ namespace ZoneEngine.Core.PacketHandlers
 
                 case 16:
 
-                    /*
                     // org leave
                     // TODO: Disband org if it was leader that left org. -Suiv-
                     // I don't think a Disband happens if leader leaves. I don't think leader -can- leave without passing lead to another
                     // Something worth testing on Testlive perhaps ~Chaz
                     // Just because something happens on TL, doesnt mean its a good idea. Really tbh id prefer it if you had to explicitly type /org disband to disband rather than /org leave doing it... -NV
                     // Agreeing with NV.  Org Leader can't leave without passing lead on.  org disband requires /org disband to specifically be issued, with a Yes/No box.
-                    var LeaveSql = "SELECT * FROM organizations WHERE ID = " + client.Character.OrgId;
-                    var govern_form = 0;
-                    dt = ms.ReadDatatable(LeaveSql);
-                    if (dt.Rows.Count > 0)
-                    {
-                        govern_form = (Int32)dt.Rows[0]["GovernmentForm"];
-                    }
 
-                    if ((client.Character.Stats.ClanLevel.Value == 0) && (govern_form != 4))
+                    int govern_form = OrganizationDao.GetGovernmentForm(client.Character.Stats[StatIds.clan].Value);
+
+                    if ((client.Character.Stats[StatIds.clanlevel].Value == 0) && (govern_form != 4))
                     {
                         client.SendChatText(
                             "Organization Leader cannot leave organization without Disbanding or Passing Leadership!");
                     }
                     else
                     {
-                        client.Character.OrgId = 0;
+                        client.Character.Stats[StatIds.clan].Value = 0;
                         client.SendChatText("You left the guild");
                     }
-                    */
+
                     break;
 
                     #endregion

@@ -125,6 +125,16 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        T FindByIdentity<T>(Identity identity) where T : Character;
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         bool IsInstancedPlayfield();
