@@ -34,6 +34,7 @@ namespace ZoneEngine.Core
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -53,6 +54,8 @@ namespace ZoneEngine.Core
         /// <summary>
         /// </summary>
         private readonly ZoneServer server;
+
+        public Playfield Playfield;
 
         /// <summary>
         /// </summary>

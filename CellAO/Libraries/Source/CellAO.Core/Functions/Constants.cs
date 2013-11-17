@@ -26,6 +26,372 @@
 
 namespace CellAO.Core.Functions
 {
+    #region Usings ...
+
+    using System;
+
+    #endregion
+
+    /// <summary>
+    /// </summary>
+    public enum ActionType : int
+    {
+        /// <summary>
+        /// </summary>
+        AimedShot = 21, 
+
+        /// <summary>
+        /// </summary>
+        AMS = 12, 
+
+        /// <summary>
+        /// </summary>
+        Any = 0, 
+
+        /// <summary>
+        /// </summary>
+        Attack = 11, 
+
+        /// <summary>
+        /// </summary>
+        Burst = 22, 
+
+        /// <summary>
+        /// </summary>
+        Close = 102, 
+
+        /// <summary>
+        /// </summary>
+        CombatIdle = 16, 
+
+        /// <summary>
+        /// </summary>
+        CombatIdleEnd = 27, 
+
+        /// <summary>
+        /// </summary>
+        CombatIdleStart = 26, 
+
+        /// <summary>
+        /// </summary>
+        Crawl = 20, 
+
+        /// <summary>
+        /// </summary>
+        DMS = 13, 
+
+        /// <summary>
+        /// </summary>
+        DoubleAttack = 14, 
+
+        /// <summary>
+        /// </summary>
+        Drop = 2, 
+
+        /// <summary>
+        /// </summary>
+        FastAttack = 25, 
+
+        /// <summary>
+        /// </summary>
+        FlingShot = 28, 
+
+        /// <summary>
+        /// </summary>
+        FullAuto = 23, 
+
+        /// <summary>
+        /// </summary>
+        Get = 1, 
+
+        /// <summary>
+        /// </summary>
+        Idle = 15, 
+
+        /// <summary>
+        /// </summary>
+        Impact = 31, 
+
+        /// <summary>
+        /// </summary>
+        LeftAttack = 24, 
+
+        /// <summary>
+        /// </summary>
+        LeftFoot = 33, 
+
+        /// <summary>
+        /// </summary>
+        Open = 100, 
+
+        /// <summary>
+        /// </summary>
+        PlayShiftRequirements = 136, 
+
+        /// <summary>
+        /// </summary>
+        Repair = 4, 
+
+        /// <summary>
+        /// </summary>
+        RightFoot = 34, 
+
+        /// <summary>
+        /// </summary>
+        Run = 18, 
+
+        /// <summary>
+        /// </summary>
+        Sneak = 19, 
+
+        /// <summary>
+        /// </summary>
+        SneakAttack = 29, 
+
+        /// <summary>
+        /// </summary>
+        Split = 10, 
+
+        /// <summary>
+        /// </summary>
+        Terminate = 30, 
+
+        /// <summary>
+        /// </summary>
+        ToRemove = 7, 
+
+        /// <summary>
+        /// </summary>
+        ToTriggerTargetInVicinity = 111, 
+
+        /// <summary>
+        /// </summary>
+        ToUnwield = 9, 
+
+        /// <summary>
+        /// </summary>
+        ToUse = 3, 
+
+        /// <summary>
+        /// </summary>
+        ToWear = 6, 
+
+        /// <summary>
+        /// </summary>
+        ToWield = 8, 
+
+        /// <summary>
+        /// </summary>
+        UseItemOnCharacter = 32, 
+
+        /// <summary>
+        /// </summary>
+        UseItemOnItem = 5, 
+
+        /// <summary>
+        /// </summary>
+        Walk = 17
+    }
+
+    /// <summary>
+    /// </summary>
+    public enum ArmorSlots : int
+    {
+        /// <summary>
+        /// </summary>
+        Back = 3, 
+
+        /// <summary>
+        /// </summary>
+        Chest = 5, 
+
+        /// <summary>
+        /// </summary>
+        Feet = 14, 
+
+        /// <summary>
+        /// </summary>
+        Hands = 8, 
+
+        /// <summary>
+        /// </summary>
+        Head = 2, 
+
+        /// <summary>
+        /// </summary>
+        LeftArm = 9, 
+
+        /// <summary>
+        /// </summary>
+        LeftFinger = 15, 
+
+        /// <summary>
+        /// </summary>
+        LeftShoulder = 6, 
+
+        /// <summary>
+        /// </summary>
+        LeftWrist = 12, 
+
+        /// <summary>
+        /// </summary>
+        Legs = 11, 
+
+        /// <summary>
+        /// </summary>
+        Neck = 1, 
+
+        /// <summary>
+        /// </summary>
+        RightArm = 7, 
+
+        /// <summary>
+        /// </summary>
+        RightFinger = 13, 
+
+        /// <summary>
+        /// </summary>
+        RightShoulder = 4, 
+
+        /// <summary>
+        /// </summary>
+        RightWrist = 10
+    }
+
+    /// <summary>
+    /// </summary>
+    [Flags]
+    public enum CanFlags : uint
+    {
+        /// <summary>
+        /// </summary>
+        AimedShot = 0x1 << 14, 
+
+        /// <summary>
+        /// </summary>
+        ApplyOnFightingTarget = (uint)0x1 << 31, 
+
+        /// <summary>
+        /// </summary>
+        ApplyOnFriendly = 0x1 << 21, 
+
+        /// <summary>
+        /// </summary>
+        ApplyOnHostile = 0x1 << 22, 
+
+        /// <summary>
+        /// </summary>
+        ApplyOnSelf = 0x1 << 23, 
+
+        /// <summary>
+        /// </summary>
+        AutoSelect = 0x1 << 20, 
+
+        /// <summary>
+        /// </summary>
+        Bow = 0x1 << 15, 
+
+        /// <summary>
+        /// </summary>
+        Brawl = 0x1 << 25, 
+
+        /// <summary>
+        /// </summary>
+        BreakAndEnter = 0x1 << 8, 
+
+        /// <summary>
+        /// </summary>
+        Burst = 0x1 << 11, 
+
+        /// <summary>
+        /// </summary>
+        CanBeParriedRiposted = 0x1 << 30, 
+
+        /// <summary>
+        /// </summary>
+        CanBeWornWithSocialArmor = 0x1 << 28, 
+
+        /// <summary>
+        /// </summary>
+        CanParryRiposte = 0x1 << 29, 
+
+        /// <summary>
+        /// </summary>
+        CantSplit = 0x1 << 24, 
+
+        /// <summary>
+        /// </summary>
+        Carry = 0x1 << 0, 
+
+        /// <summary>
+        /// </summary>
+        ConfirmUse = 0x1 << 4, 
+
+        /// <summary>
+        /// </summary>
+        Consume = 0x1 << 5, 
+
+        /// <summary>
+        /// </summary>
+        Dimach = 0x1 << 26, 
+
+        /// <summary>
+        /// </summary>
+        DisarmTraps = 0x1 << 19, 
+
+        /// <summary>
+        /// </summary>
+        EnableHandAttractors = 0x1 << 27, 
+
+        /// <summary>
+        /// </summary>
+        FastAttack = 0x1 << 18, 
+
+        /// <summary>
+        /// </summary>
+        FlingShot = 0x1 << 12, 
+
+        /// <summary>
+        /// </summary>
+        FullAuto = 0x1 << 13, 
+
+        /// <summary>
+        /// </summary>
+        NoAmmo = 0x1 << 10, 
+
+        /// <summary>
+        /// </summary>
+        Sit = 0x1 << 1, 
+
+        /// <summary>
+        /// </summary>
+        SneakAttack = 0x1 << 17, 
+
+        /// <summary>
+        /// </summary>
+        Stackable = 0x1 << 9, 
+
+        /// <summary>
+        /// </summary>
+        ThrowAttack = 0x1 << 16, 
+
+        /// <summary>
+        /// </summary>
+        TutorChip = 0x1 << 6, 
+
+        /// <summary>
+        /// </summary>
+        TutorDevice = 0x1 << 7, 
+
+        /// <summary>
+        /// </summary>
+        Use = 0x1 << 3, 
+
+        /// <summary>
+        /// </summary>
+        Wear = 0x1 << 2
+    }
+
     /// <summary>
     /// Static class with constants
     /// </summary>
@@ -34,437 +400,6 @@ namespace CellAO.Core.Functions
         #region Constants
 
         /// <summary>
-        /// Action aimed shot
-        /// </summary>
-        public const int ActionTypeaimedshot = 21;
-
-        /// <summary>
-        /// Action AMS
-        /// </summary>
-        public const int ActionTypeams = 12;
-
-        /// <summary>
-        /// Action any
-        /// </summary>
-        public const int ActionTypeany = 0;
-
-        /// <summary>
-        /// Action attack
-        /// </summary>
-        public const int ActionTypeattack = 11;
-
-        /// <summary>
-        /// Action burst
-        /// </summary>
-        public const int ActionTypeburst = 22;
-
-        /// <summary>
-        /// Action close
-        /// </summary>
-        public const int ActionTypeclose = 102;
-
-        /// <summary>
-        /// Action combat idle
-        /// </summary>
-        public const int ActionTypecombatidle = 16;
-
-        /// <summary>
-        /// Action combat idle end
-        /// </summary>
-        public const int ActionTypecombatidleend = 27;
-
-        /// <summary>
-        /// Action combat idle start
-        /// </summary>
-        public const int ActionTypecombatidlestart = 26;
-
-        /// <summary>
-        /// Action crawl
-        /// </summary>
-        public const int ActionTypecrawl = 20;
-
-        /// <summary>
-        /// Action DMS
-        /// </summary>
-        public const int ActionTypedms = 13;
-
-        /// <summary>
-        /// Action double attack
-        /// </summary>
-        public const int ActionTypedoubleattack = 14;
-
-        /// <summary>
-        /// Action drop
-        /// </summary>
-        public const int ActionTypedrop = 2;
-
-        /// <summary>
-        /// Action fast attack
-        /// </summary>
-        public const int ActionTypefastattack = 25;
-
-        /// <summary>
-        /// Action fling shot
-        /// </summary>
-        public const int ActionTypeflingshot = 28;
-
-        /// <summary>
-        /// Action full auto
-        /// </summary>
-        public const int ActionTypefullauto = 23;
-
-        /// <summary>
-        /// Action get
-        /// </summary>
-        public const int ActionTypeget = 1;
-
-        /// <summary>
-        /// Action idle
-        /// </summary>
-        public const int ActionTypeidle = 15;
-
-        /// <summary>
-        /// Action impact
-        /// </summary>
-        public const int ActionTypeimpact = 31;
-
-        /// <summary>
-        /// Action left attack ??
-        /// </summary>
-        public const int ActionTypeleftattack = 24;
-
-        /// <summary>
-        /// Action left foot ??
-        /// </summary>
-        public const int ActionTypeleftfoot = 33;
-
-        /// <summary>
-        /// Action open
-        /// </summary>
-        public const int ActionTypeopen = 100;
-
-        /// <summary>
-        /// Action playshift reqs
-        /// </summary>
-        public const int ActionTypeplayshiftrequirements = 136;
-
-        /// <summary>
-        /// Action repair
-        /// </summary>
-        public const int ActionTyperepair = 4;
-
-        /// <summary>
-        /// Action right foot ??
-        /// </summary>
-        public const int ActionTyperightfoot = 34;
-
-        /// <summary>
-        /// Action run
-        /// </summary>
-        public const int ActionTyperun = 18;
-
-        /// <summary>
-        /// Action sneak
-        /// </summary>
-        public const int ActionTypesneak = 19;
-
-        /// <summary>
-        /// Action sneak attack
-        /// </summary>
-        public const int ActionTypesneakattack = 29;
-
-        /// <summary>
-        /// Action split
-        /// </summary>
-        public const int ActionTypesplit = 10;
-
-        /// <summary>
-        /// Action terminate
-        /// </summary>
-        public const int ActionTypeterminate = 30;
-
-        /// <summary>
-        /// Action to remove
-        /// </summary>
-        public const int ActionTypetoremove = 7;
-
-        /// <summary>
-        /// Action trigger target in vicinity
-        /// </summary>
-        public const int ActionTypetotriggertargetinvicinity = 111;
-
-        /// <summary>
-        /// Action to unwield
-        /// </summary>
-        public const int ActionTypetounwield = 9;
-
-        /// <summary>
-        /// Action touse
-        /// </summary>
-        public const int ActionTypetouse = 3;
-
-        /// <summary>
-        /// Action to wear
-        /// </summary>
-        public const int ActionTypetowear = 6;
-
-        /// <summary>
-        /// Action to wield
-        /// </summary>
-        public const int ActionTypetowield = 8;
-
-        /// <summary>
-        /// Action use item on character
-        /// </summary>
-        public const int ActionTypeuseitemoncharacter = 32;
-
-        /// <summary>
-        /// Action use item on item
-        /// </summary>
-        public const int ActionTypeuseitemonitem = 5;
-
-        /// <summary>
-        /// Action walk
-        /// </summary>
-        public const int ActionTypewalk = 17;
-
-        /// <summary>
-        /// Back slot
-        /// </summary>
-        public const int ArmorslotBack = 3;
-
-        /// <summary>
-        /// Chest slot
-        /// </summary>
-        public const int ArmorslotChest = 5;
-
-        /// <summary>
-        /// Feet slot
-        /// </summary>
-        public const int ArmorslotFeet = 14;
-
-        /// <summary>
-        /// Hand slot
-        /// </summary>
-        public const int ArmorslotHands = 8;
-
-        /// <summary>
-        /// Head slot
-        /// </summary>
-        public const int ArmorslotHead = 2;
-
-        /// <summary>
-        /// Left arm slot
-        /// </summary>
-        public const int ArmorslotLeftarm = 9;
-
-        /// <summary>
-        /// Left finger slot
-        /// </summary>
-        public const int ArmorslotLeftfinger = 15;
-
-        /// <summary>
-        /// Left shoulder slot
-        /// </summary>
-        public const int ArmorslotLeftshoulder = 6;
-
-        /// <summary>
-        /// Left wrist slot
-        /// </summary>
-        public const int ArmorslotLeftwrist = 12;
-
-        /// <summary>
-        /// Leg slot
-        /// </summary>
-        public const int ArmorslotLegs = 11;
-
-        /// <summary>
-        /// Neck slot
-        /// </summary>
-        public const int ArmorslotNeck = 1;
-
-        /// <summary>
-        /// Right arm slot
-        /// </summary>
-        public const int ArmorslotRightarm = 7;
-
-        /// <summary>
-        /// Right finger slot
-        /// </summary>
-        public const int ArmorslotRightfinger = 13;
-
-        /// <summary>
-        /// Right shoulder slot
-        /// </summary>
-        public const int ArmorslotRightshoulder = 4;
-
-        /// <summary>
-        /// Right wrist slot
-        /// </summary>
-        public const int ArmorslotRightwrist = 10;
-
-        /// <summary>
-        /// Aimed Shot available
-        /// </summary>
-        public const int CanflagAimedshot = 0x1 << 14;
-
-        /// <summary>
-        /// Can be applied on fighting target
-        /// </summary>
-        public const int CanflagApplyonfightingtarget = 0x1 << 31;
-
-        /// <summary>
-        /// Can be applied on friendlies
-        /// </summary>
-        public const int CanflagApplyonfriendly = 0x1 << 21;
-
-        /// <summary>
-        /// Can be applied on hostiles
-        /// </summary>
-        public const int CanflagApplyonhostile = 0x1 << 22;
-
-        /// <summary>
-        /// Can be applied on self
-        /// </summary>
-        public const int CanflagApplyonself = 0x1 << 23;
-
-        /// <summary>
-        /// Dunno
-        /// </summary>
-        public const int CanflagAutoselect = 0x1 << 20;
-
-        /// <summary>
-        /// Bow Attack
-        /// </summary>
-        public const int CanflagBow = 0x1 << 15;
-
-        /// <summary>
-        /// Brawl available
-        /// </summary>
-        public const int CanflagBrawl = 0x1 << 25;
-
-        /// <summary>
-        /// Can be 'breakandentered'
-        /// </summary>
-        public const int CanflagBreakandenter = 0x1 << 8;
-
-        /// <summary>
-        /// Burst available
-        /// </summary>
-        public const int CanflagBurst = 0x1 << 11;
-
-        /// <summary>
-        /// Can be parried/riposted
-        /// </summary>
-        public const int CanflagCanbeparriedriposted = 0x1 << 30;
-
-        /// <summary>
-        /// Can be worn with social armor
-        /// </summary>
-        public const int CanflagCanbewornwithsocialarmor = 0x1 << 28;
-
-        /// <summary>
-        /// Parry/Riposte available
-        /// </summary>
-        public const int CanflagCanparryriposte = 0x1 << 29;
-
-        /// <summary>
-        /// Can't be split
-        /// </summary>
-        public const int CanflagCantsplit = 0x1 << 24;
-
-        /// <summary>
-        /// Item can be carried
-        /// </summary>
-        public const int CanflagCarry = 0x1 << 0;
-
-        /// <summary>
-        /// Use of item has to be confirmed
-        /// </summary>
-        public const int CanflagConfirmuse = 0x1 << 4;
-
-        /// <summary>
-        /// Item is consumed on use
-        /// </summary>
-        public const int CanflagConsume = 0x1 << 5;
-
-        /// <summary>
-        /// Dimach available
-        /// </summary>
-        public const int CanflagDimach = 0x1 << 26;
-
-        /// <summary>
-        /// Can disarm traps
-        /// </summary>
-        public const int CanflagDisarmtraps = 0x1 << 19;
-
-        /// <summary>
-        /// Enable Hand attractors
-        /// </summary>
-        public const int CanflagEnablehandattractors = 0x1 << 27;
-
-        /// <summary>
-        /// Fast attack available
-        /// </summary>
-        public const int CanflagFastattack = 0x1 << 18;
-
-        /// <summary>
-        /// Flingshot available
-        /// </summary>
-        public const int CanflagFlingshot = 0x1 << 12;
-
-        /// <summary>
-        /// FullAuto available
-        /// </summary>
-        public const int CanflagFullauto = 0x1 << 13;
-
-        /// <summary>
-        /// No Ammo used
-        /// </summary>
-        public const int CanflagNoammo = 0x1 << 10;
-
-        /// <summary>
-        /// Character/NPC can sit?
-        /// </summary>
-        public const int CanflagSit = 0x1 << 1;
-
-        /// <summary>
-        /// Sneak attack available
-        /// </summary>
-        public const int CanflagSneakattack = 0x1 << 17;
-
-        /// <summary>
-        /// Stackable
-        /// </summary>
-        public const int CanflagStackable = 0x1 << 9;
-
-        /// <summary>
-        /// Throw Attack
-        /// </summary>
-        public const int CanflagThrowattack = 0x1 << 16;
-
-        /// <summary>
-        /// Is tutorchip
-        /// </summary>
-        public const int CanflagTutorchip = 0x1 << 6;
-
-        /// <summary>
-        /// Is Tutordevice
-        /// </summary>
-        public const int CanflagTutordevice = 0x1 << 7;
-
-        /// <summary>
-        /// Item/Dynel/Statel can be used
-        /// </summary>
-        public const int CanflagUse = 0x1 << 3;
-
-        /// <summary>
-        /// Item can be worn
-        /// </summary>
-        public const int CanflagWear = 0x1 << 2;
-
-        /// <summary>
-        /// Event type on activate
         /// </summary>
         public const int EventtypeOnActivate = 10;
 

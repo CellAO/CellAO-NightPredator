@@ -322,6 +322,28 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="q">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static implicit operator SmokeLounge.AOtomation.Messaging.GameData.Quaternion(Quaternion q)
+        {
+            return new SmokeLounge.AOtomation.Messaging.GameData.Quaternion() { X = q.xf, Y = q.yf, Z = q.zf, W = q.wf };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="q">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static implicit operator Quaternion(SmokeLounge.AOtomation.Messaging.GameData.Quaternion q)
+        {
+            return new Quaternion(q.X, q.Y, q.Z, q.W);
+        }
+
+        /// <summary>
         /// Return the Conjugate (Spacial Inverse) of the Quaternion
         /// </summary>
         /// <returns>

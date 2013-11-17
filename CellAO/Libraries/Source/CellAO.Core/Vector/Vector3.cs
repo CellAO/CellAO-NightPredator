@@ -366,6 +366,33 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="c">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static implicit operator SmokeLounge.AOtomation.Messaging.GameData.Vector3(Vector3 c)
+        {
+            return new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
+                   {
+                       X = (float)c.x, 
+                       Y = (float)c.y, 
+                       Z = (float)c.z
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="c">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static implicit operator Vector3(SmokeLounge.AOtomation.Messaging.GameData.Vector3 c)
+        {
+            return new Vector3(c.X, c.Y, c.Z);
+        }
+
+        /// <summary>
         /// Operator !=
         /// </summary>
         /// <param name="v1">Vector 1</param>
