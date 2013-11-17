@@ -14,3 +14,4 @@ Bugtracker: [buggy.aocell.info](http://buggy.aocell.info)
 
 Installation instructions follow soon.
 
+[Stats and enum infos](/CellAO/Documentation/Index.md)
