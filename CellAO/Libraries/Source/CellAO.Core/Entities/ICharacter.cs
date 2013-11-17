@@ -34,11 +34,16 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Inventory;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Textures;
+    using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -59,7 +64,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        ICoordinate Coordinates { get; set; }
+        Coordinate Coordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -76,7 +81,7 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// Caching Mesh layer structure
         /// </summary>
-        IMeshLayers MeshLayer { get; }
+        MeshLayers MeshLayer { get; }
 
         /// <summary>
         /// </summary>
@@ -113,7 +118,7 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// Caching Mesh layer for social tab items
         /// </summary>
-        IMeshLayers SocialMeshLayer { get; }
+        MeshLayers SocialMeshLayer { get; }
 
         /// <summary>
         /// Uploaded Nanos list

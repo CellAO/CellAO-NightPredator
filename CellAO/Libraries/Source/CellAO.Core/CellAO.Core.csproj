@@ -88,6 +88,7 @@
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />
     <Compile Include="Entities\INonPlayerCharacter.cs" />
+    <Compile Include="Entities\ITargetingEntity.cs" />
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
     <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Items\ItemLoader.cs" />
     <Compile Include="Items\ItemTemplate.cs" />
     <Compile Include="Encryption\LoginEncryption.cs" />
+    <Compile Include="Nanos\AONano.cs" />
     <Compile Include="Nanos\NanoFormula.cs" />
     <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Network\IZoneClient.cs" />
@@ -136,6 +138,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\IRequirements.cs" />
     <Compile Include="Requirements\Requirements.cs" />
+    <Compile Include="Textures\AOMeshs.cs" />
+    <Compile Include="Textures\AOTextures.cs" />
+    <Compile Include="Textures\MeshLayers.cs" />
     <Compile Include="Vector\Coordinate.cs" />
     <Compile Include="Vector\Quaternion.cs" />
     <Compile Include="Vector\Vector3.cs" />

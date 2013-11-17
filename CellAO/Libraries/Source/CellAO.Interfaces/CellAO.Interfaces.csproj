@@ -55,7 +55,6 @@
     <Compile Include="IDatabaseConnector.cs" />
     <Compile Include="IDatabaseObject.cs" />
     <Compile Include="IFunctionArguments.cs" />
-    <Compile Include="IMeshLayers.cs" />
     <Compile Include="IMeshs.cs" />
     <Compile Include="IPacketReceivingEntity.cs" />
     <Compile Include="IQuaternion.cs" />

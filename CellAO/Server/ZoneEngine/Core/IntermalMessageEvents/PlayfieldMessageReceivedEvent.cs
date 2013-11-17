@@ -24,103 +24,67 @@
 
 #endregion
 
-namespace CellAO.Interfaces
+namespace ZoneEngine.Core.InternalMessageEvents
 {
     #region Usings ...
 
-    using System.Collections.Generic;
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IMeshLayers
+    public class PlayfieldMessageReceivedEvent
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private readonly InternalMessage message;
+
+        /// <summary>
+        /// </summary>
+        private readonly object sender;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        public PlayfieldMessageReceivedEvent(object sender, InternalMessage message)
+        {
+            this.sender = sender;
+            this.message = message;
+        }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        SortedList<int, int> Mesh { get; }
+        public InternalMessage Message
+        {
+            get
+            {
+                return this.message;
+            }
+        }
 
         /// <summary>
         /// </summary>
-        SortedList<int, int> MeshOverride { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToAdd">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        void AddMesh(int position, int meshToAdd, int overridetexture, int layer);
-
-        /// <summary>
-        /// </summary>
-        void Clear();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        int Count();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="pos">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IMeshs GetMeshAtPosition(int pos);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int GetMeshKey(int number);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        List<IMeshs> GetMeshs();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToRemove">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        void RemoveMesh(int position, int meshToRemove, int overridetexture, int layer);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int ReturnMesh(int number);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int ReturnOverrideMesh(int number);
+        public object Sender
+        {
+            get
+            {
+                return this.sender;
+            }
+        }
 
         #endregion
     }

@@ -39,12 +39,19 @@ namespace CellAO.Core.Playfields
     using CellAO.Interfaces;
 
     using MemBus;
+    using MemBus.Configurators;
     using MemBus.Support;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using Utility;
 
     using ZoneEngine.Core;
+    using ZoneEngine.Core.Functions;
+    using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.Packets;
 
     #endregion
 
@@ -86,22 +93,19 @@ namespace CellAO.Core.Playfields
         {
             this.server = zoneServer;
 
-            // TODO: Redo the internal messages
-
-            /*
             this.playfieldBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
             this.memBusDisposeContainer.Add(
-                this.playfieldBus.Subscribe<IMSendAOtMessageToClient>(SendAOtMessageToClient));
+                this.playfieldBus.Subscribe<IMSendAOtomationMessageToClient>(SendAOtomationMessageToClient));
             this.memBusDisposeContainer.Add(
-                this.playfieldBus.Subscribe<IMSendAOtMessageToPlayfield>(this.SendAOtMessageToPlayfield));
+                this.playfieldBus.Subscribe<IMSendAOtomationMessageToPlayfield>(this.SendAOtomationMessageToPlayfield));
             this.memBusDisposeContainer.Add(
-                this.playfieldBus.Subscribe<IMSendAOtMessageToPlayfieldOthers>(this.SendAOtMessageToPlayfieldOthers));
+                this.playfieldBus.Subscribe<IMSendAOtomationMessageToPlayfieldOthers>(
+                    this.SendAOtomationMessageToPlayfieldOthers));
             this.memBusDisposeContainer.Add(
-                this.playfieldBus.Subscribe<IMSendAOtMessageBodyToClient>(this.SendAOtMessageBodyToClient));
+                this.playfieldBus.Subscribe<IMSendAOtomationMessageBodyToClient>(this.SendAOtomationMessageBodyToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
             this.Entities = new HashSet<IInstancedEntity>();
-             */
         }
 
         /// <summary>
@@ -188,6 +192,16 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="clientMessage">
+        /// </param>
+        public static void SendAOtomationMessageToClient(IMSendAOtomationMessageToClient clientMessage)
+        {
+            LogUtil.Debug(clientMessage.message.Body.GetType().ToString());
+            clientMessage.client.SendCompressed(clientMessage.message.Body);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="message">
         /// </param>
         /// <exception cref="NotImplementedException">
@@ -246,6 +260,68 @@ namespace CellAO.Core.Playfields
                     (entity as Character).Client.Server.DisconnectClient((entity as Character).Client);
                 }
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="imExecuteFunction">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void ExecuteFunction(IMExecuteFunction imExecuteFunction)
+        {
+            var user = (ITargetingEntity)this.FindNamedEntityByIdentity(imExecuteFunction.User);
+            INamedEntity target;
+
+            // TODO: Go over the targets, they can return item templates, inventory entries etc too
+            switch (imExecuteFunction.Function.Target)
+            {
+                case 1:
+                    target = (INamedEntity)user;
+                    break;
+                case 2:
+                    throw new NotImplementedException("Target Wearer not implemented yet");
+                    break;
+                case 3:
+                    target = this.FindNamedEntityByIdentity(user.SelectedTarget);
+                    break;
+                case 14:
+                    target = this.FindNamedEntityByIdentity(user.FightingTarget);
+                    break;
+                case 19: // Perhaps (if issued from a item) its the item itself
+                    target = (INamedEntity)user;
+                    break;
+                case 23:
+                    target = this.FindNamedEntityByIdentity(user.SelectedTarget);
+                    break;
+                case 26:
+                    target = (INamedEntity)user;
+                    break;
+                case 100:
+                    target = (INamedEntity)user;
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        "Unknown target encountered: Target#:" + imExecuteFunction.Function.Target);
+            }
+
+            if (target == null)
+            {
+                var temp = user as Character;
+                if (temp != null)
+                {
+                    temp.Client.SendCompressed(
+                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                    return;
+                }
+            }
+
+            FunctionCollection.Instance.CallFunction(
+                imExecuteFunction.Function.FunctionType, 
+                (INamedEntity)user, 
+                (INamedEntity)user, 
+                target, 
+                imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
         /// <summary>
@@ -332,6 +408,71 @@ namespace CellAO.Core.Playfields
         public void Publish(object obj)
         {
             this.playfieldBus.Publish(obj);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="msg">
+        /// </param>
+        public void SendAOtMessageBodyToClient(IMSendAOtomationMessageBodyToClient msg)
+        {
+            msg.client.SendCompressed(msg.Body);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="msg">
+        /// </param>
+        public void SendAOtomationMessageBodyToClient(IMSendAOtomationMessageBodyToClient msg)
+        {
+            msg.client.SendCompressed(msg.Body);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientMessage">
+        /// </param>
+        public void SendAOtomationMessageToPlayfield(IMSendAOtomationMessageToPlayfield clientMessage)
+        {
+            this.Announce(clientMessage.Body);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientMessage">
+        /// </param>
+        public void SendAOtomationMessageToPlayfieldOthers(IMSendAOtomationMessageToPlayfieldOthers clientMessage)
+        {
+            this.AnnounceOthers(clientMessage.Body, clientMessage.Identity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendSCFUs">
+        /// </param>
+        public void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs)
+        {
+            Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
+            foreach (IEntity entity in this.Entities)
+            {
+                if (entity.Identity != dontSendTo)
+                {
+                    if (entity.Identity.Type == IdentityType.CanbeAffected)
+                    {
+                        var temp = entity as INamedEntity;
+                        if (temp != null)
+                        {
+                            // TODO: make it NPC-safe
+                            SimpleCharFullUpdateMessage simpleCharFullUpdate =
+                                SimpleCharFullUpdate.ConstructMessage((Character)temp);
+                            sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
+
+                            var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
+                            sendSCFUs.toClient.SendCompressed(charInPlay);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

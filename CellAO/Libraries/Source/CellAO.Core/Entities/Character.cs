@@ -34,11 +34,16 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Inventory;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Textures;
+    using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -46,6 +51,32 @@ namespace CellAO.Core.Entities
     /// </summary>
     public class Character : Dynel, ICharacter
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        public string OrganizationName = string.Empty;
+
+        /// <summary>
+        /// </summary>
+        public Dictionary<int, int> SocialTab = new Dictionary<int, int>();
+
+        /// <summary>
+        /// </summary>
+        public List<AOTextures> Textures = new List<AOTextures>();
+
+        /// <summary>
+        /// Caching Mesh layer structure
+        /// </summary>
+        private MeshLayers meshLayer = new MeshLayers();
+
+        /// <summary>
+        /// Caching Mesh layer for social tab items
+        /// </summary>
+        private MeshLayers socialMeshLayer = new MeshLayers();
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -73,7 +104,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public ICoordinate Coordinates { get; set; }
+        public Coordinate Coordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -89,7 +120,18 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public IMeshLayers MeshLayer { get; private set; }
+        public MeshLayers MeshLayer
+        {
+            get
+            {
+                return this.meshLayer;
+            }
+
+            private set
+            {
+                this.meshLayer = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -121,7 +163,18 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public IMeshLayers SocialMeshLayer { get; private set; }
+        public MeshLayers SocialMeshLayer
+        {
+            get
+            {
+                return this.socialMeshLayer;
+            }
+
+            private set
+            {
+                this.socialMeshLayer = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
