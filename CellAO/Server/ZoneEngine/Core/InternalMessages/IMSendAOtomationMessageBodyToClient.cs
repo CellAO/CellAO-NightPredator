@@ -21,6 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 #endregion
 
 namespace ZoneEngine.Core.InternalMessages
@@ -37,12 +38,16 @@ namespace ZoneEngine.Core.InternalMessages
     /// </summary>
     public class IMSendAOtomationMessageBodyToClient : InternalMessageBody
     {
-        /// <summary>
-        /// </summary>
-        public IZoneClient client;
+        #region Fields
 
         /// <summary>
         /// </summary>
         public MessageBody Body;
+
+        /// <summary>
+        /// </summary>
+        public IZoneClient client;
+
+        #endregion
     }
 }

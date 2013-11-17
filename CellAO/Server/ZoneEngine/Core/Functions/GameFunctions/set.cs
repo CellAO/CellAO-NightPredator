@@ -24,100 +24,100 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
     using CellAO.Core.Entities;
+    using CellAO.Stats;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public abstract class FunctionPrototype
+    internal class Function_set : FunctionPrototype
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        private string functionName = string.Empty;
+        public new string FunctionName = "set";
 
         /// <summary>
         /// </summary>
-        private int functionNumber = -1;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public string FunctionName
-        {
-            get
-            {
-                return this.functionName;
-            }
-
-            set
-            {
-                this.functionName = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public int FunctionNumber
-        {
-            get
-            {
-                return this.functionNumber;
-            }
-
-            set
-            {
-                this.functionNumber = value;
-            }
-        }
+        public new int FunctionNumber = 53026;
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
-        /// Locks function targets and executes the function
         /// </summary>
         /// <param name="self">
-        /// Dynel (Character or NPC)
         /// </param>
         /// <param name="caller">
-        /// Caller of the function
         /// </param>
         /// <param name="target">
-        /// Target of the Function (Dynel or Statel)
         /// </param>
         /// <param name="arguments">
-        /// Function Arguments
         /// </param>
         /// <returns>
         /// </returns>
-        public abstract bool Execute(
+        public override bool Execute(
             INamedEntity self, 
             INamedEntity caller, 
             IInstancedEntity target, 
-            object[] arguments);
+            object[] arguments)
+        {
+            lock (target)
+            {
+                return this.FunctionExecute(self, caller, target, arguments);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Self">
+        /// </param>
+        /// <param name="Caller">
+        /// </param>
+        /// <param name="Target">
+        /// </param>
+        /// <param name="Arguments">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool FunctionExecute(INamedEntity Self, INamedEntity Caller, IInstancedEntity Target, object[] Arguments)
+        {
+            int statNumber = (int)Arguments[0];
+            int statValue = (int)Arguments[1];
+            IStats tempTarget = Target;
+            if (tempTarget != null)
+            {
+                tempTarget.Stats[statNumber].Value = statValue;
+                return true;
+            }
+
+            return false;
+        }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public abstract string ReturnName();
+        public override string ReturnName()
+        {
+            return this.FunctionName;
+        }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public abstract int ReturnNumber();
+        public override int ReturnNumber()
+        {
+            return this.FunctionNumber;
+        }
 
         #endregion
     }

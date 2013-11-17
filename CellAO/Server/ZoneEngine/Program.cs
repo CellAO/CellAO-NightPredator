@@ -48,6 +48,7 @@ namespace ZoneEngine
     using Utility.Config;
 
     using ZoneEngine.Core;
+    using ZoneEngine.Core.Functions;
     using ZoneEngine.Script;
 
     #endregion
@@ -294,6 +295,11 @@ namespace ZoneEngine
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
 
+            if (!InitializeGameFunctions())
+            {
+                return false;
+            }
+
             if (!InitializeLogAndBug())
             {
                 return false;
@@ -329,6 +335,28 @@ namespace ZoneEngine
             }
 
             Console.ForegroundColor = ConsoleColor.White;
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeGameFunctions()
+        {
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(
+                    "{0} Game functions loaded", 
+                    FunctionCollection.Instance.NumberofRegisteredFunctions());
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+                return false;
+            }
 
             return true;
         }

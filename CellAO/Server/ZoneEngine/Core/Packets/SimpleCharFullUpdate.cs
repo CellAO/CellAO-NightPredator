@@ -21,6 +21,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 #endregion
 
 namespace ZoneEngine.Core.Packets
@@ -30,8 +31,6 @@ namespace ZoneEngine.Core.Packets
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using AO.Core;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Nanos;
@@ -213,10 +212,10 @@ namespace ZoneEngine.Core.Packets
             {
                 scfu.Flags |= SimpleCharFullUpdateFlags.HasFightingTarget;
                 scfu.FightingTarget = new Identity
-                {
-                    Type = character.FightingTarget.Type,
-                    Instance = character.FightingTarget.Instance
-                };
+                                      {
+                                          Type = character.FightingTarget.Type, 
+                                          Instance = character.FightingTarget.Instance
+                                      };
             }
 
             // Coordinates
@@ -225,22 +224,22 @@ namespace ZoneEngine.Core.Packets
             // Heading Data
             scfu.Flags |= SimpleCharFullUpdateFlags.HasHeading;
             scfu.Heading = new SmokeLounge.AOtomation.Messaging.GameData.Quaternion
-            {
-                W = charHeading.wf,
-                X = charHeading.xf,
-                Y = charHeading.yf,
-                Z = charHeading.zf
-            };
+                           {
+                               W = charHeading.wf, 
+                               X = charHeading.xf, 
+                               Y = charHeading.yf, 
+                               Z = charHeading.zf
+                           };
 
             // Race
             scfu.Appearance = new Appearance
-            {
-                Side = (Side)sideValue,
-                Fatness = (Fatness)fatValue,
-                Breed = (Breed)breedValue,
-                Gender = (Gender)sexValue,
-                Race = raceValue
-            }; // appearance
+                              {
+                                  Side = (Side)sideValue, 
+                                  Fatness = (Fatness)fatValue, 
+                                  Breed = (Breed)breedValue, 
+                                  Gender = (Gender)sexValue, 
+                                  Race = raceValue
+                              }; // appearance
 
             // Name
             scfu.Name = charName;
@@ -329,12 +328,12 @@ namespace ZoneEngine.Core.Packets
 
             // 42 bytes long
             scfu.Unknown1 = new byte[]
-                                {
-                                    0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 
-                                    (byte)currentMovementMode, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 
-                                    0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-                                    0x00, 0x00, 0x00, 0x00, 0x00
-                                };
+                            {
+                                0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 
+                                (byte)currentMovementMode, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 
+                                0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                                0x00, 0x00, 0x00, 0x00
+                            };
 
             if (headMeshValue != 0)
             {
@@ -350,14 +349,14 @@ namespace ZoneEngine.Core.Packets
             }
 
             scfu.ActiveNanos = (from nano in nanos
-                                select
-                                    new ActiveNano
-                                    {
-                                        NanoId = nano.ID,
-                                        NanoInstance = nano.Instance,
-                                        Time1 = nano.Time1,
-                                        Time2 = nano.Time2
-                                    }).ToArray();
+                select
+                    new ActiveNano
+                    {
+                        NanoId = nano.ID, 
+                        NanoInstance = nano.Instance, 
+                        Time1 = nano.Time1, 
+                        Time2 = nano.Time2
+                    }).ToArray();
 
             // Texture/Cloth Data
             var scfuTextures = new List<Texture>();
@@ -404,14 +403,14 @@ namespace ZoneEngine.Core.Packets
             // # Meshs
             // ############
             scfu.Meshes = (from aoMesh in meshs
-                           select
-                               new Mesh
-                               {
-                                   Position = (byte)aoMesh.Position,
-                                   Id = (uint)aoMesh.Mesh,
-                                   OverrideTextureId = aoMesh.OverrideTexture,
-                                   Layer = (byte)aoMesh.Layer
-                               }).ToArray();
+                select
+                    new Mesh
+                    {
+                        Position = (byte)aoMesh.Position, 
+                        Id = (uint)aoMesh.Mesh, 
+                        OverrideTextureId = aoMesh.OverrideTexture, 
+                        Layer = (byte)aoMesh.Layer
+                    }).ToArray();
 
             // End Meshs
             scfu.Flags2 = 0; // packetFlags2

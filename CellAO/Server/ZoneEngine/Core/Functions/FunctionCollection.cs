@@ -149,7 +149,7 @@ namespace ZoneEngine.Core.Functions
                 {
                     if (t.IsClass)
                     {
-                        if (t.Namespace == "ZoneEngine.Functions")
+                        if (t.Namespace == "ZoneEngine.Core.Functions.GameFunctions")
                         {
                             if ((t.Name != "FunctionPrototype") && (t.Name != "FunctionCollection"))
                             {

@@ -68,6 +68,7 @@
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
+    <Compile Include="Core\Functions\GameFunctions\set.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomatinMessageToPlayfieldOthers.cs" />
