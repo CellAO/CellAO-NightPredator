@@ -35,6 +35,10 @@ namespace ZoneEngine.Core
 
     using Cell.Core;
 
+    using CellAO.Core.Playfields;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     using ZoneEngine.Component;
 
     #endregion
@@ -58,6 +62,10 @@ namespace ZoneEngine.Core
         /// </summary>
         private readonly ClientFactory clientFactory;
 
+        /// <summary>
+        /// </summary>
+        private readonly List<IPlayfield> playfields = new List<IPlayfield>();
+
         #endregion
 
         #region Constructors and Destructors
@@ -74,6 +82,31 @@ namespace ZoneEngine.Core
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IPlayfield PlayfieldById(int id)
+        {
+            // TODO: This needs to be changed to check for whole Identity
+            foreach (IPlayfield pf in this.playfields)
+            {
+                if (pf.Identity.Instance == id)
+                {
+                    return pf;
+                }
+            }
+
+            this.CreatePlayfield(new Identity { Instance = id });
+            return this.PlayfieldById(id);
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -84,7 +117,20 @@ namespace ZoneEngine.Core
         /// </exception>
         protected override IClient CreateClient()
         {
-            throw new NotImplementedException();
+            return this.clientFactory.Create(this);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="playfieldIdentity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        protected IPlayfield CreatePlayfield(Identity playfieldIdentity)
+        {
+            var temp = new Playfield(this, playfieldIdentity);
+            this.playfields.Add(temp);
+            return temp;
         }
 
         /// <summary>

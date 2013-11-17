@@ -39,6 +39,14 @@ namespace CellAO.Core.Vector
     /// </summary>
     public class Coordinate : ICoordinate
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        public Vector3 coordinate;
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -107,6 +115,22 @@ namespace CellAO.Core.Vector
         #region Public Properties
 
         /// <summary>
+        /// Vector representation of Coordinates
+        /// </summary>
+        public IVector3 CoordinateI
+        {
+            get
+            {
+                return this.coordinate;
+            }
+
+            set
+            {
+                this.coordinate = (Vector3)value;
+            }
+        }
+
+        /// <summary>
         /// Quaterion representation of Coordinates (w is 0)
         /// </summary>
         public IQuaternion QuatCoordinate
@@ -118,14 +142,9 @@ namespace CellAO.Core.Vector
 
             set
             {
-                this.coordinate = value.VectorRepresentation();
+                this.CoordinateI = value.VectorRepresentation();
             }
         }
-
-        /// <summary>
-        /// Vector representation of Coordinates
-        /// </summary>
-        public IVector3 coordinate { get; set; }
 
         /// <summary>
         /// Component representation of X Coordinate

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Districts Playfield="120">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="100">
+    <Name>NO FIGHT</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="25">
+    <Name>FIGHT</Name>
+  </DistrictInfo>
+</Districts>

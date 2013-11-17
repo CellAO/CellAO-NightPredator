@@ -30,6 +30,7 @@ namespace CellAO.Core.Entities
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Network;
@@ -85,6 +86,9 @@ namespace CellAO.Core.Entities
         public Character(IZoneClient zoneClient, Identity identity)
             : base(identity)
         {
+            this.Client = zoneClient;
+            this.ActiveNanos = new List<IActiveNano>();
+            this.UploadedNanos = new List<IUploadedNanos>();
         }
 
         #endregion
@@ -146,7 +150,7 @@ namespace CellAO.Core.Entities
                 }
                 catch (Exception)
                 {
-                    return "";
+                    return string.Empty;
                 }
             }
         }
@@ -204,7 +208,18 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void CalculateSkills()
         {
-            throw new NotImplementedException();
+            // TODO: Reintroduce skill calculation (walk inventory and active nanos)
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="nanoId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool HasNano(int nanoId)
+        {
+            return this.UploadedNanos.Any(x => x.NanoId == nanoId);
         }
 
         /// <summary>
@@ -217,7 +232,13 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void Send(MessageBody messageBody, bool announceToPlayfield)
         {
-            throw new NotImplementedException();
+            if (!announceToPlayfield)
+            {
+                this.Send(messageBody);
+                return;
+            }
+
+            this.Playfield.Announce(messageBody);
         }
 
         /// <summary>
@@ -251,6 +272,19 @@ namespace CellAO.Core.Entities
         public void WriteStats()
         {
             throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        internal void Send(MessageBody messageBody)
+        {
+            this.Client.SendCompressed(messageBody);
         }
 
         #endregion

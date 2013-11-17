@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Walls NumWalls="1">
+  <Wall NumPoints="2">
+    <Point DestPF="0" DestIdx="0" Flags="40" X="190.8577" Y="0.01403135" Z="289.2621" />
+    <Point DestPF="0" DestIdx="0" Flags="40" X="184.5559" Y="0.00595182" Z="289.2762" />
+  </Wall>
+</Walls>

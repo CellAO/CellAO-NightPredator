@@ -1,0 +1,246 @@
+<?xml version="1.0"?>
+<Districts Playfield="320">
+  <DistrictInfo MinLevel="1" MaxLevel="1" SuppressionGas="75">
+    <Name>militaryot_hallway_w_cells</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_wc</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_kitchen</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_rest_rooms</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_locker</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_computer_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_communications_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_cells</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_elevator</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_stair</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_eating_facilities</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_meeting_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_shelf_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_large_empty_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_hq_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_computer_mainframe</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_energy_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_air_monitoring_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_showers</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_high_security_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_sleeping_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_entrance_area</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_practice_range</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_op_room</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_sick_bay</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_hq_room2</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_docking_area</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_one</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_double_oppo</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_tripple</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_quad</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_double_l</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>militaryot_endblock_one_bigger</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>military_ot_entrance</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>ot_outpost_entrance</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>otstronghold_entrance</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_filledroom</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l_w_midend_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l_uends_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l_all_ends_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l_w_end_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_t_w_end_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_t_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_x_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_straight_l</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_filledroom</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_xs_xfanroom</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_puterroom1</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_puterroom2</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_strange_l_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_x_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_t_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_1_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_smallx_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_1_w_ends_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_1_s_ends_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_smallt_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_l</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_l_w_end</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_storageroom</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_l_big</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_l_big_w_end</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>sew_strange_x</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>cor_l</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom1</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom2</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom3</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom4</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom5</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>omni_startroom6</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>midtech_bossroom1</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>midtech_bossroom2</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh1</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh2</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh3</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh4</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh5</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh6</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh7</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>mid_mh8</Name>
+  </DistrictInfo>
+</Districts>

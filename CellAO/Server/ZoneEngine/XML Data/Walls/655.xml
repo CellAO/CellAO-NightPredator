@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Walls NumWalls="1">
+  <Wall NumPoints="15">
+    <Point DestPF="0" DestIdx="0" Flags="0" X="3392.5" Y="0" Z="207.4074" />
+    <Point DestPF="6550" DestIdx="2" Flags="0" X="3514.4" Y="0" Z="207.2" />
+    <Point DestPF="0" DestIdx="0" Flags="128" X="4928.5" Y="0" Z="207.2" />
+    <Point DestPF="0" DestIdx="0" Flags="128" X="4930.314" Y="41.54459" Z="1067.611" />
+    <Point DestPF="625" DestIdx="5" Flags="0" X="4933.049" Y="23.69543" Z="2195.754" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="4870.318" Y="9.288443" Z="2198.449" />
+    <Point DestPF="635" DestIdx="7" Flags="128" X="3992.182" Y="0" Z="2205.819" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="3895.961" Y="10.82529" Z="2259.43" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="3900.73" Y="16.4415" Z="2844.677" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="3650.479" Y="0" Z="2844.08" />
+    <Point DestPF="760" DestIdx="3" Flags="128" X="1764.057" Y="0" Z="2844.557" />
+    <Point DestPF="0" DestIdx="0" Flags="128" X="200.0683" Y="0" Z="2844.696" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="199.3786" Y="0" Z="934.5917" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="199.6921" Y="15.44599" Z="204.2325" />
+    <Point DestPF="670" DestIdx="4" Flags="128" X="2763.452" Y="0" Z="193.4185" />
+  </Wall>
+</Walls>

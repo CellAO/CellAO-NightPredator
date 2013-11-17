@@ -344,15 +344,24 @@ namespace CellAO.Core.Playfields
             return null;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
         public T FindByIdentity<T>(Identity identity) where T : Character
         {
-            foreach (var entity in Entities.Where(x => x is T))
+            foreach (IInstancedEntity entity in this.Entities.Where(x => x is T))
             {
                 if (entity.Identity == identity)
                 {
                     return (T)entity;
                 }
             }
+
             return null;
         }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Districts Playfield="125">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Mantis Hive District</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Smugglers Den District</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Mantis Den District</Name>
+  </DistrictInfo>
+</Districts>

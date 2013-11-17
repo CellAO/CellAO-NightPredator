@@ -34,7 +34,7 @@ namespace CellAO.Interfaces
 
         /// <summary>
         /// </summary>
-        IVector3 coordinate { get; set; }
+        IVector3 CoordinateI { get; set; }
 
         #endregion
     }

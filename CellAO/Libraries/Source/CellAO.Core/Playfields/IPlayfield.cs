@@ -158,12 +158,5 @@ namespace CellAO.Core.Playfields
         void Publish(object obj);
 
         #endregion
-
-        // <summary>
-        // </summary>
-        // <param name="sendSCFUs">
-        // </param>
-        // TODO: Reactivate
-        // void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs);
     }
 }

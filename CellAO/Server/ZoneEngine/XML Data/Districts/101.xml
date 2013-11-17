@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<Districts Playfield="101">
+  <DistrictInfo MinLevel="0" MaxLevel="0" SuppressionGas="75">
+    <Name>DoorDistrict</Name>
+  </DistrictInfo>
+</Districts>

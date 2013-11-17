@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Districts Playfield="800">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Borderland</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>The forest no</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>Borealis</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>The waterfalls</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>The forest</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="3" MaxLevel="6" SuppressionGas="75">
+    <Name>Forest</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="5" MaxLevel="15" SuppressionGas="75">
+    <Name>Mutant Village</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>The waterfront</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>Pentors Peak</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="10" SuppressionGas="75">
+    <Name>The Omtar</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>Bunta </Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="15" SuppressionGas="75">
+    <Name>The Dish</Name>
+  </DistrictInfo>
+</Districts>

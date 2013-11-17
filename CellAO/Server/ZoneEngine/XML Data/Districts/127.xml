@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Districts Playfield="127">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Abandoned Mall</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Condemned Subway</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Fractured Sewers</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Sewer Nucleus</Name>
+  </DistrictInfo>
+</Districts>

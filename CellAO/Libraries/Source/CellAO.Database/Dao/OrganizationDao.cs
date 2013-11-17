@@ -138,6 +138,7 @@ namespace CellAO.Database.Dao
             }
             catch (Exception e)
             {
+                LogUtil.Debug("Searched for org id:" + orgId);
                 LogUtil.ErrorException(e);
                 throw;
             }
@@ -213,10 +214,7 @@ namespace CellAO.Database.Dao
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    return
-                        conn.Query<int>("SELECT count(*) FROM organizations WHERE ID=@orgId", new { orgId })
-                            .Single()
-                            .Equals(1);
+                    return conn.Query("SELECT ID FROM organizations WHERE ID=@orgId", new { orgId }).Any();
                 }
             }
             catch (Exception e)

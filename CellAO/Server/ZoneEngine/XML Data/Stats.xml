@@ -1,0 +1,2835 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Stats>
+  <Stat id="0" Name="Flags">
+    <FullName />
+    <Default>8917569</Default>
+  </Stat>
+  <Stat id="1" Name="Life">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="2" Name="VolumeMass">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="3" Name="AttackSpeed">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="4" Name="Breed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="5" Name="Clan">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="6" Name="Team">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="7" Name="State">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="8" Name="TimeExist">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="9" Name="MapFlags">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="10" Name="ProfessionLevel">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="11" Name="PreviousHealth">
+    <FullName />
+    <Default>50</Default>
+  </Stat>
+  <Stat id="12" Name="Mesh">
+    <FullName />
+    <Default>17530</Default>
+  </Stat>
+  <Stat id="13" Name="Anim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="14" Name="Name">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="15" Name="Info">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="16" Name="Strength">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="17" Name="Agility">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="18" Name="Stamina">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="19" Name="Intelligence">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="20" Name="Sense">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="21" Name="Psychic">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="22" Name="AMS">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="23" Name="StaticInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="24" Name="MaxMass">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="25" Name="StaticType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="26" Name="Energy">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="27" Name="Health">
+    <FullName />
+    <Default>50</Default>
+  </Stat>
+  <Stat id="28" Name="Height">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="29" Name="DMS">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="30" Name="Can">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="31" Name="Face">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="32" Name="HairMesh">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="33" Name="Side">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="34" Name="DeadTimer">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="35" Name="AccessCount">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="36" Name="AttackCount">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="37" Name="TitleLevel">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="38" Name="BackMesh">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="39" Name="ShoulderMeshHolder">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="40" Name="AlienXP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="41" Name="FabricType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="42" Name="CATMesh">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="43" Name="ParentType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="44" Name="ParentInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="45" Name="BeltSlots">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="46" Name="BandolierSlots">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="47" Name="Fatness">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="48" Name="ClanLevel">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="49" Name="InsuranceTime">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="50" Name="InventoryTimeout">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="51" Name="AggDef">
+    <FullName />
+    <Default>100</Default>
+  </Stat>
+  <Stat id="52" Name="XP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="53" Name="IP">
+    <FullName />
+    <Default>1500</Default>
+  </Stat>
+  <Stat id="54" Name="Level">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="55" Name="InventoryId">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="56" Name="TimeSinceCreation">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="57" Name="LastXP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="58" Name="Age">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="59" Name="Sex">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="60" Name="Profession">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="61" Name="Cash">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="62" Name="Alignment">
+    <FullName>Clan Tokens</FullName>
+    <Default>0</Default>
+  </Stat>
+  <Stat id="63" Name="Attitude">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="64" Name="HeadMesh">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="65" Name="MissionBits5">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="66" Name="MissionBits6">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="67" Name="MissionBits7">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="68" Name="VeteranPoints">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="69" Name="MonthsPaid">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="70" Name="SpeedPenalty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="71" Name="TotalMass">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="72" Name="ItemType">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="73" Name="RepairDifficulty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="74" Name="Price">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="75" Name="MetaType">
+    <FullName>Omni-Tek Tokens</FullName>
+    <Default>0</Default>
+  </Stat>
+  <Stat id="76" Name="ItemClass">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="77" Name="RepairSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="78" Name="CurrentMass">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="79" Name="Icon">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="80" Name="PrimaryItemType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="81" Name="PrimaryItemInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="82" Name="SecondaryItemType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="83" Name="SecondaryItemInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="84" Name="UserType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="85" Name="UserInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="86" Name="AreaType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="87" Name="AreaInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="88" Name="DefaultPos">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="89" Name="Race">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="90" Name="ProjectileAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="91" Name="MeleeAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="92" Name="EnergyAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="93" Name="ChemicalAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="94" Name="RadiationAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="95" Name="ColdAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="96" Name="PoisonAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="97" Name="FireAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="98" Name="StateAction">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="99" Name="ItemAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="100" Name="MartialArts">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="101" Name="MeleeMultiple">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="102" Name="1hBluntWeapons">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="103" Name="1hEdgedWeapon">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="104" Name="MeleeEnergyWeapon">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="105" Name="2hEdgedWeapons">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="106" Name="Piercing">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="107" Name="2hBluntWeapons">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="108" Name="ThrowingKnife">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="109" Name="Grenade">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="110" Name="ThrownGrapplingWeapons">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="111" Name="Bow">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="112" Name="Pistol">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="113" Name="Rifle">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="114" Name="SubMachineGun">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="115" Name="Shotgun">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="116" Name="AssaultRifle">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="117" Name="DriveWater">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="118" Name="CloseCombatInitiative">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="119" Name="DistanceWeaponInitiative">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="120" Name="PhysicalProwessInitiative">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="121" Name="BowSpecialAttack">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="122" Name="SenseImprovement">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="123" Name="FirstAid">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="124" Name="Treatment">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="125" Name="MechanicalEngineering">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="126" Name="ElectricalEngineering">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="127" Name="MaterialMetamorphose">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="128" Name="BiologicalMetamorphose">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="129" Name="PsychologicalModification">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="130" Name="MaterialCreation">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="131" Name="MaterialLocation">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="132" Name="NanoEnergyPool">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="133" Name="LR_EnergyWeapon">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="134" Name="LR_MultipleWeapon">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="135" Name="DisarmTrap">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="136" Name="Perception">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="137" Name="Adventuring">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="138" Name="Swim">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="139" Name="DriveAir">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="140" Name="MapNavigation">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="141" Name="Tutoring">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="142" Name="Brawl">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="143" Name="Riposte">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="144" Name="Dimach">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="145" Name="Parry">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="146" Name="SneakAttack">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="147" Name="FastAttack">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="148" Name="Burst">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="149" Name="NanoProwessInitiative">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="150" Name="FlingShot">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="151" Name="AimedShot">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="152" Name="BodyDevelopment">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="153" Name="Duck">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="154" Name="Dodge">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="155" Name="Evade">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="156" Name="RunSpeed">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="157" Name="FieldQuantumPhysics">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="158" Name="WeaponSmithing">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="159" Name="Pharmaceuticals">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="160" Name="NanoProgramming">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="161" Name="ComputerLiteracy">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="162" Name="Psychology">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="163" Name="Chemistry">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="164" Name="Concealment">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="165" Name="BreakingEntry">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="166" Name="DriveGround">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="167" Name="FullAuto">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="168" Name="NanoAC">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="169" Name="AlienLevel">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="170" Name="HealthChangeBest">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="171" Name="HealthChangeWorst">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="172" Name="HealthChange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="173" Name="CurrentMovementMode">
+    <FullName />
+    <Default>3</Default>
+  </Stat>
+  <Stat id="174" Name="PrevMovementMode">
+    <FullName />
+    <Default>3</Default>
+  </Stat>
+  <Stat id="175" Name="AutoLockTimeDefault">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="176" Name="AutoUnlockTimeDefault">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="177" Name="MoreFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="178" Name="AlienNextXP">
+    <FullName />
+    <Default>1500</Default>
+  </Stat>
+  <Stat id="179" Name="NPCFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="180" Name="CurrentNCU">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="181" Name="MaxNCU">
+    <FullName />
+    <Default>8</Default>
+  </Stat>
+  <Stat id="182" Name="Specialization">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="183" Name="EffectIcon">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="184" Name="BuildingType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="185" Name="BuildingInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="186" Name="CardOwnerType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="187" Name="CardOwnerInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="188" Name="BuildingComplexInst">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="189" Name="ExitInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="190" Name="NextDoorInBuilding">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="191" Name="LastConcretePlayfieldInstance">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="192" Name="ExtenalPlayfieldInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="193" Name="ExtenalDoorInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="194" Name="InPlay">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="195" Name="AccessKey">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="196" Name="PetMaster">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="197" Name="OrientationMode">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="198" Name="SessionTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="199" Name="RP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="200" Name="Conformity">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="201" Name="Aggressiveness">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="202" Name="Stability">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="203" Name="Extroverty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="204" Name="BreedHostility">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="205" Name="ReflectProjectileAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="206" Name="ReflectMeleeAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="207" Name="ReflectEnergyAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="208" Name="ReflectChemicalAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="39" Name="WeaponMeshHolder">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="210" Name="RechargeDelay">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="211" Name="EquipDelay">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="212" Name="MaxEnergy">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="213" Name="TeamSide">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="214" Name="CurrentNano">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="215" Name="GmLevel">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="216" Name="ReflectRadiationAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="217" Name="ReflectColdAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="218" Name="ReflectNanoAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="219" Name="ReflectFireAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="220" Name="CurrBodyLocation">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="221" Name="maxMaxNanoEnergyEnergy">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="222" Name="AccumulatedDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="223" Name="CanChangeClothes">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="224" Name="Features">
+    <FullName />
+    <Default>6</Default>
+  </Stat>
+  <Stat id="225" Name="ReflectPoisonAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="226" Name="ShieldProjectileAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="227" Name="ShieldMeleeAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="228" Name="ShieldEnergyAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="229" Name="ShieldChemicalAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="230" Name="ShieldRadiationAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="231" Name="ShieldColdAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="232" Name="ShieldNanoAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="233" Name="ShieldFireAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="234" Name="ShieldPoisonAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="235" Name="BerserkMode">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="236" Name="InsurancePercentage">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="237" Name="ChangeSideCount">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="238" Name="AbsorbProjectileAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="239" Name="AbsorbMeleeAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="240" Name="AbsorbEnergyAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="241" Name="AbsorbChemicalAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="242" Name="AbsorbRadiationAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="243" Name="AbsorbColdAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="244" Name="AbsorbFireAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="245" Name="AbsorbPoisonAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="246" Name="AbsorbNanoAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="247" Name="TemporarySkillReduction">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="248" Name="BirthDate">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="249" Name="LastSaved">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="250" Name="SoundVolume">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="251" Name="PetCounter">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="252" Name="MeetersWalked">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="253" Name="QuestLevelsSolved">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="254" Name="MonsterLevelsKilled">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="255" Name="PvPLevelsKilled">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="256" Name="MissionBits1">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="257" Name="MissionBits2">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="258" Name="AccessGrant">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="259" Name="DoorFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="260" Name="ClanHierarchy">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="261" Name="QuestStat">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="262" Name="ClientActivated">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="263" Name="PersonalResearchLevel">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="264" Name="GlobalResearchLevel">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="265" Name="PersonalResearchGoal">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="266" Name="GlobalResearchGoal">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="267" Name="TurnSpeed">
+    <FullName />
+    <Default>40000</Default>
+  </Stat>
+  <Stat id="268" Name="LiquidType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="269" Name="GatherSound">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="270" Name="CastSound">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="271" Name="TravelSound">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="272" Name="HitSound">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="273" Name="SecondaryItemTemplate">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="274" Name="EquippedWeapons">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="275" Name="XPKillRange">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="276" Name="AMSModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="277" Name="DMSModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="278" Name="ProjectileDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="279" Name="MeleeDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="280" Name="EnergyDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="281" Name="ChemicalDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="282" Name="RadiationDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="283" Name="ItemHateValue">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="284" Name="DamageBonus">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="285" Name="MaxDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="286" Name="MinDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="287" Name="AttackRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="288" Name="HateValueModifyer">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="289" Name="TrapDifficulty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="290" Name="StatOne">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="291" Name="NumAttackEffects">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="292" Name="DefaultAttackType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="293" Name="ItemSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="294" Name="ItemDelay">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="295" Name="ItemOpposedSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="296" Name="ItemSIS">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="297" Name="InteractionRadius">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="298" Name="Placement">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="299" Name="LockDifficulty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="300" Name="Members">
+    <FullName />
+    <Default>999</Default>
+  </Stat>
+  <Stat id="301" Name="MinMembers">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="302" Name="ClanPrice">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="303" Name="MissionBits3">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="304" Name="ClanType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="305" Name="ClanInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="306" Name="VoteCount">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="307" Name="MemberType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="308" Name="MemberInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="309" Name="GlobalClanType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="310" Name="GlobalClanInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="311" Name="ColdDamageModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="312" Name="ClanUpkeepInterval">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="313" Name="TimeSinceUpkeep">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="314" Name="ClanFinalized">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="315" Name="NanoDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="316" Name="FireDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="317" Name="PoisonDamageModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="318" Name="NPCostModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="319" Name="XPModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="320" Name="BreedLimit">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="321" Name="GenderLimit">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="322" Name="LevelLimit">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="323" Name="PlayerKilling">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="324" Name="TeamAllowed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="325" Name="WeaponDisallowedType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="326" Name="WeaponDisallowedInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="327" Name="Taboo">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="328" Name="Compulsion">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="329" Name="SkillDisabled">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="330" Name="ClanItemType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="331" Name="ClanItemInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="332" Name="DebuffFormula">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="333" Name="PvP_Rating">
+    <FullName />
+    <Default>1300</Default>
+  </Stat>
+  <Stat id="334" Name="SavedXP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="335" Name="DoorBlockTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="336" Name="OverrideTexture">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="337" Name="OverrideMaterial">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="338" Name="DeathReason">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="339" Name="DamageOverrideType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="340" Name="BrainType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="341" Name="XPBonus">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="342" Name="HealInterval">
+    <FullName />
+    <Default>29</Default>
+  </Stat>
+  <Stat id="343" Name="HealDelta">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="344" Name="MonsterTexture">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="345" Name="HasAlwaysLootable">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="346" Name="TradeLimit">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="347" Name="FaceTexture">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="348" Name="SpecialCondition">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="349" Name="AutoAttackFlags">
+    <FullName />
+    <Default>5</Default>
+  </Stat>
+  <Stat id="350" Name="NextXP">
+    <FullName />
+    <Default>1450</Default>
+  </Stat>
+  <Stat id="351" Name="TeleportPauseMilliSeconds">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="352" Name="SISCap">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="353" Name="AnimSet">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="354" Name="AttackType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="355" Name="NanoFocusLevel">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="356" Name="NPCHash">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="357" Name="CollisionRadius">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="358" Name="OuterRadius">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="359" Name="MonsterData">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="360" Name="MonsterScale">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="361" Name="HitEffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="362" Name="ResurrectDest">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="363" Name="NanoInterval">
+    <FullName />
+    <Default>28</Default>
+  </Stat>
+  <Stat id="364" Name="NanoDelta">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="365" Name="ReclaimItem">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="366" Name="GatherEffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="367" Name="VisualBreed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="368" Name="VisualProfession">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="369" Name="VisualSex">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="370" Name="RitualTargetInst">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="371" Name="SkillTimeOnSelectedTarget">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="372" Name="LastSaveXP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="373" Name="ExtendedTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="374" Name="BurstRecharge">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="375" Name="FullAutoRecharge">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="376" Name="GatherAbstractAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="377" Name="CastTargetAbstractAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="378" Name="CastSelfAbstractAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="379" Name="CriticalIncrease">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="380" Name="RangeIncreaserWeapon">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="381" Name="RangeIncreaserNF">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="382" Name="SkillLockModifier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="383" Name="InterruptModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="384" Name="ACGEntranceStyles">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="385" Name="ChanceOfBreakOnSpellAttack">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="386" Name="ChanceOfBreakOnDebuff">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="387" Name="DieAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="388" Name="TowerType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="389" Name="Expansion">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="390" Name="LowresMesh">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="391" Name="CriticalDecrease">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="392" Name="OldTimeExist">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="393" Name="ResistModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="394" Name="ChestFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="395" Name="PrimaryTemplateID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="396" Name="NumberOfItems">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="397" Name="SelectedTargetType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="398" Name="Corpse_Hash">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="399" Name="AmmoName">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="400" Name="Rotation">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="401" Name="CATAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="402" Name="CATAnimFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="403" Name="DisplayCATAnim">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="404" Name="DisplayCATMesh">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="405" Name="School">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="406" Name="NanoSpeed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="407" Name="NanoPoints">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="408" Name="TrainSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="409" Name="TrainSkillCost">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="410" Name="IsFightingMe">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="411" Name="NextFormula">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="412" Name="MultipleCount">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="413" Name="EffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="414" Name="ImpactEffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="415" Name="CorpseType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="416" Name="CorpseInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="417" Name="CorpseAnimKey">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="418" Name="UnarmedTemplateInstance">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="419" Name="TracerEffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="420" Name="AmmoType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="421" Name="CharRadius">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="422" Name="ChanceOfUse">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="423" Name="CurrentState">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="424" Name="ArmourType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="425" Name="RestModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="426" Name="BuyModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="427" Name="SellModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="428" Name="CastEffectType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="429" Name="NPCBrainState">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="430" Name="WaitState">
+    <FullName />
+    <Default>2</Default>
+  </Stat>
+  <Stat id="431" Name="SelectedTarget">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="432" Name="MissionBits4">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="433" Name="OwnerInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="434" Name="CharState">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="435" Name="ReadOnly">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="436" Name="DamageType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="437" Name="CollideCheckInterval">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="438" Name="PlayfieldType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="439" Name="NPCCommand">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="440" Name="InitiativeType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="441" Name="CharTmp1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="442" Name="CharTmp2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="443" Name="CharTmp3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="444" Name="CharTmp4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="445" Name="NPCCommandArg">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="446" Name="NameTemplate">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="447" Name="DesiredTargetDistance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="448" Name="VicinityRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="449" Name="NPCIsSurrendering">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="450" Name="StateMachine">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="451" Name="NPCSurrenderInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="452" Name="NPCHasPatrolList">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="453" Name="NPCVicinityChars">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="454" Name="ProximityRangeOutdoors">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="455" Name="NPCFamily">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="456" Name="CommandRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="457" Name="NPCHatelistSize">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="458" Name="NPCNumPets">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="459" Name="ODMinSizeAdd">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="460" Name="EffectRed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="461" Name="EffectGreen">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="462" Name="EffectBlue">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="463" Name="ODMaxSizeAdd">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="464" Name="DurationModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="465" Name="NPCCryForHelpRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="466" Name="LOSHeight">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="467" Name="PetReq1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="468" Name="PetReq2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="469" Name="PetReq3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="470" Name="MapOptions">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="471" Name="MapAreaPart1">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="472" Name="MapAreaPart2">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="473" Name="FixtureFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="474" Name="FallDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="475" Name="ReflectReturnedProjectileAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="476" Name="ReflectReturnedMeleeAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="477" Name="ReflectReturnedEnergyAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="478" Name="ReflectReturnedChemicalAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="479" Name="ReflectReturnedRadiationAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="480" Name="ReflectReturnedColdAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="481" Name="ReflectReturnedNanoAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="482" Name="ReflectReturnedFireAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="483" Name="ReflectReturnedPoisonAC">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="484" Name="ProximityRangeIndoors">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="485" Name="PetReqVal1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="486" Name="PetReqVal2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="487" Name="PetReqVal3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="488" Name="TargetFacing">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="489" Name="Backstab">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="490" Name="OriginatorType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="491" Name="QuestInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="492" Name="QuestIndex1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="493" Name="QuestIndex2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="494" Name="QuestIndex3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="495" Name="QuestIndex4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="496" Name="QuestIndex5">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="497" Name="QTDungeonInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="498" Name="QTNumMonsters">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="499" Name="QTKilledMonsters">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="500" Name="AnimPos">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="501" Name="AnimPlay">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="502" Name="AnimSpeed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="503" Name="QTKillNumMonsterID1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="504" Name="QTKillNumMonsterCount1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="505" Name="QTKillNumMonsterID2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="506" Name="QTKillNumMonsterCount2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="507" Name="QTKillNumMonsterID3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="508" Name="QTKillNumMonsterCount3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="509" Name="QuestIndex0">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="510" Name="QuestTimeout">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="511" Name="Tower_NPCHash">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="512" Name="PetType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="513" Name="OnTowerCreation">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="514" Name="OwnedTowers">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="515" Name="TowerInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="516" Name="AttackShield">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="517" Name="SpecialAttackShield">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="518" Name="NPCVicinityPlayers">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="519" Name="NPCUseFightModeRegenRate">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="520" Name="Rnd">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="521" Name="SocialStatus">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="522" Name="LastRnd">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="523" Name="ItemDelayCap">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="524" Name="RechargeDelayCap">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="525" Name="PercentRemainingHealth">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="526" Name="PercentRemainingNano">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="527" Name="TargetDistance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="528" Name="TeamCloseness">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="529" Name="NumberOnHateList">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="530" Name="ConditionState">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="531" Name="ExpansionPlayfield">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="532" Name="ShadowBreed">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="533" Name="NPCFovStatus">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="534" Name="DudChance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="535" Name="HealMultiplier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="536" Name="NanoDamageMultiplier">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="537" Name="NanoVulnerability">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="538" Name="AmsCap">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="539" Name="ProcInitiative1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="540" Name="ProcInitiative2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="541" Name="ProcInitiative3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="542" Name="ProcInitiative4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="543" Name="FactionModifier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="544" Name="MissionBits8">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="545" Name="MissionBits9">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="546" Name="StackingLine2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="547" Name="StackingLine3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="548" Name="StackingLine4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="549" Name="StackingLine5">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="550" Name="StackingLine6">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="551" Name="StackingOrder">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="552" Name="ProcNano1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="553" Name="ProcNano2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="554" Name="ProcNano3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="555" Name="ProcNano4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="556" Name="ProcChance1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="557" Name="ProcChance2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="558" Name="ProcChance3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="559" Name="ProcChance4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="560" Name="OTArmedForces">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="561" Name="ClanSentinels">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="562" Name="OTMed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="563" Name="ClanGaia">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="564" Name="OTTrans">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="565" Name="ClanVanguards">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="566" Name="GOS">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="567" Name="OTFollowers">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="568" Name="OTOperator">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="569" Name="OTUnredeemed">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="570" Name="ClanDevoted">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="571" Name="ClanConserver">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="572" Name="ClanRedeemed">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="573" Name="SK">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="574" Name="LastSK">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="575" Name="NextSK">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="576" Name="PlayerOptions">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="577" Name="LastPerkResetTime">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="578" Name="CurrentTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="579" Name="ShadowBreedTemplate">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="580" Name="NPCVicinityFamily">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="581" Name="NPCScriptAMSScale">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="582" Name="ApartmentsAllowed">
+    <FullName />
+    <Default>1</Default>
+  </Stat>
+  <Stat id="583" Name="ApartmentsOwned">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="584" Name="ApartmentAccessCard">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="585" Name="MapAreaPart3">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="586" Name="MapAreaPart4">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="587" Name="NumberOfTeamMembers">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="588" Name="ActionCategory">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="589" Name="CurrentPlayfield">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="590" Name="DistrictNano">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="591" Name="DistrictNanoInterval">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="592" Name="UnsavedXP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="593" Name="RegainXPPercentage">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="594" Name="TempSaveTeamID">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="595" Name="TempSavePlayfield">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="596" Name="TempSaveX">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="597" Name="TempSaveY">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="598" Name="ExtendedFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="599" Name="ShopPrice">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="600" Name="NewbieHP">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="601" Name="HPLevelUp">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="602" Name="HPPerSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="603" Name="NewbieNP">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="604" Name="NPLevelUp">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="605" Name="NPPerSkill">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="606" Name="MaxShopItems">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="607" Name="PlayerID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="608" Name="ShopRent">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="609" Name="SynergyHash">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="610" Name="ShopFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="611" Name="ShopLastUsed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="612" Name="ShopType">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="613" Name="LockDownTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="614" Name="LeaderLockDownTime">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="615" Name="InvadersKilled">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="616" Name="KilledByInvaders">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="617" Name="MissionBits10">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="618" Name="MissionBits11">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="619" Name="MissionBits12">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="620" Name="HouseTemplate">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="621" Name="PercentFireDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="622" Name="PercentColdDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="623" Name="PercentMeleeDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="624" Name="PercentProjectileDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="625" Name="PercentPoisonDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="626" Name="PercentRadiationDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="627" Name="PercentEnergyDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="628" Name="PercentChemicalDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="629" Name="TotalDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="630" Name="TrackProjectileDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="631" Name="TrackMeleeDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="632" Name="TrackEnergyDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="633" Name="TrackChemicalDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="634" Name="TrackRadiationDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="635" Name="TrackColdDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="636" Name="TrackPoisonDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="637" Name="TrackFireDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="638" Name="NPCSpellArg1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="639" Name="NPCSpellRet1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="640" Name="CityInstance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="641" Name="DistanceToSpawnpoint">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="642" Name="CityTerminalRechargePercent">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="649" Name="UnreadMailCount">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="650" Name="LastMailCheckTime">
+    <FullName />
+    <Default>1283065897</Default>
+  </Stat>
+  <Stat id="651" Name="AdvantageHash1">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="652" Name="AdvantageHash2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="653" Name="AdvantageHash3">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="654" Name="AdvantageHash4">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="655" Name="AdvantageHash5">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="656" Name="ShopIndex">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="657" Name="ShopID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="658" Name="IsVehicle">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="659" Name="DamageToNano">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="660" Name="AccountFlags">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="661" Name="DamageToNanoMultiplier">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="662" Name="MechData">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="664" Name="VehicleAC">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="665" Name="VehicleDamage">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="666" Name="VehicleHealth">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="667" Name="VehicleSpeed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="668" Name="BattlestationSide">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="669" Name="VP">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="670" Name="BattlestationRep">
+    <FullName />
+    <Default>10</Default>
+  </Stat>
+  <Stat id="671" Name="PetState">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="672" Name="PaidPoints">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="673" Name="VisualFlags">
+    <FullName />
+    <Default>31</Default>
+  </Stat>
+  <Stat id="674" Name="PVPDuelKills">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="675" Name="PVPDuelDeaths">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="676" Name="PVPProfessionDuelKills">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="677" Name="PVPProfessionDuelDeaths">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="678" Name="PVPRankedSoloKills">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="679" Name="PVPRankedSoloDeaths">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="680" Name="PVPRankedTeamKills">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="681" Name="PVPRankedTeamDeaths">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="682" Name="PVPSoloScore">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="683" Name="PVPTeamScore">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="684" Name="PVPDuelScore">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="700" Name="ACGItemSeed">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="701" Name="ACGItemLevel">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="702" Name="ACGItemTemplateID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="703" Name="ACGItemTemplateID2">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="704" Name="ACGItemCategoryID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="768" Name="HasKnubotData">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="800" Name="QuestBoothDifficulty">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="801" Name="QuestASMinimumRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="802" Name="QuestASMaximumRange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="888" Name="VisualLODLevel">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="889" Name="TargetDistanceChange">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="900" Name="TideRequiredDynelID">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="999" Name="StreamCheckMagic">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="1001" Name="Type">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="1002" Name="Instance">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+  <Stat id="1003" Name="WeaponStyle">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1004" Name="ShoulderMeshRight">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1005" Name="ShoulderMeshLeft">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1006" Name="WeaponMeshRight">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1007" Name="WeaponMeshLeft">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1008" Name="OverrideTextureHead">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1009" Name="OverrideTextureWeaponRight">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1010" Name="OverrideTextureWeaponLeft">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1011" Name="OverrideTextureShoulderpadRight">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1012" Name="OverrideTextureShoulderpadLeft">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1013" Name="OverrideTextureBack">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1014" Name="OverrideTextureAttractor">
+    <FullName />
+    <Default>0</Default>
+  </Stat>
+  <Stat id="20000" Name="originalHeadMesh">
+    <Fullname/>
+    <Default>0</Default>
+  </Stat>
+  <Stat id="20001" Name="AttractorMesh">
+    <Fullname/>
+    <Default>0</Default>
+  </Stat>
+  <Stat id="1234567890" Name="NoStatValue">
+    <FullName />
+    <Default>1234567890</Default>
+  </Stat>
+</Stats>

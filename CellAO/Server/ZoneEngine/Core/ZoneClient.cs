@@ -29,16 +29,30 @@ namespace ZoneEngine.Core
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
 
     using Cell.Core;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.EventHandlers.Events;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
 
+    using NiceHexOutput;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using Utility;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
@@ -50,13 +64,19 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private readonly ZoneServer server;
+        public IPlayfield Playfield;
 
-        public Playfield Playfield;
+        /// <summary>
+        /// </summary>
+        private readonly ZoneServer server;
 
         /// <summary>
         /// </summary>
         private IBus bus;
+
+        /// <summary>
+        /// </summary>
+        private Character character;
 
         /// <summary>
         /// </summary>
@@ -69,16 +89,6 @@ namespace ZoneEngine.Core
         #endregion
 
         #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="server">
-        /// </param>
-        public ZoneClient(ServerBase server)
-            : base(server)
-        {
-            this.server = (ZoneServer)server;
-        }
 
         /// <summary>
         /// </summary>
@@ -98,9 +108,65 @@ namespace ZoneEngine.Core
 
         #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// </summary>
+        public ICharacter Character
+        {
+            get
+            {
+                return this.character;
+            }
+
+            set
+            {
+                this.character = (Character)value;
+            }
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
-        public ICharacter Character { get; set; }
+        /// <summary>
+        /// </summary>
+        /// <param name="charId">
+        /// </param>
+        /// <exception cref="Exception">
+        /// </exception>
+        public void CreateCharacter(int charId)
+        {
+            this.character = new Character(this, new Identity { Type = IdentityType.CanbeAffected, Instance = charId });
+            IEnumerable<DBCharacter> daochar = CharacterDao.GetById(charId);
+            if (daochar.Count() == 0)
+            {
+                throw new Exception("Character " + charId.ToString() + " not found.");
+            }
+
+            if (daochar.Count() > 1)
+            {
+                throw new Exception(
+                    daochar.Count().ToString() + " Characters with id " + charId.ToString()
+                    + " found??? Check Database setup!");
+            }
+
+            DBCharacter character = daochar.First();
+            this.character.Name = character.Name;
+            this.character.LastName = character.LastName;
+            this.character.FirstName = character.FirstName;
+            this.character.Coordinates = new Coordinate(character.X, character.Y, character.Z);
+            this.character.Heading = new Quaternion(
+                character.HeadingX, 
+                character.HeadingY, 
+                character.HeadingZ, 
+                character.HeadingW);
+            this.character.Playfield = this.server.PlayfieldById(character.Playfield);
+            this.Playfield = this.character.Playfield;
+            this.Playfield.Entities.Add(this.character);
+            this.character.Stats.Read();
+            this.character.BaseInventory.Read();
+        }
 
         /// <summary>
         /// </summary>
@@ -160,9 +226,76 @@ namespace ZoneEngine.Core
             this.Send(buffer);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        public void SendInitiateCompressionMessage(MessageBody messageBody)
+        {
+            // TODO: Investigate if reciever is a timestamp
+            var message = new Message
+                          {
+                              Body = messageBody, 
+                              Header =
+                                  new Header
+                                  {
+                                      MessageId = 0xdfdf, 
+                                      PacketType = messageBody.PacketType, 
+                                      Unknown = 0x0001, 
+                                      Sender = 0x03000000, 
+                                      Receiver = this.character.Identity.Instance
+                                  }
+                          };
+            byte[] buffer = this.messageSerializer.Serialize(message);
+
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(NiceHexOutput.Output(buffer));
+            Console.ResetColor();
+            LogUtil.Debug(NiceHexOutput.Output(buffer));
+#endif
+            this.packetNumber = 1;
+
+            this.Send(buffer);
+        }
+
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="segment">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        protected uint GetMessageNumber(BufferSegment segment)
+        {
+            var messageNumberArray = new byte[4];
+            messageNumberArray[3] = segment.SegmentData[16];
+            messageNumberArray[2] = segment.SegmentData[17];
+            messageNumberArray[1] = segment.SegmentData[18];
+            messageNumberArray[0] = segment.SegmentData[19];
+            uint reply = BitConverter.ToUInt32(messageNumberArray, 0);
+            return reply;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="segment">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        protected uint GetMessageNumber(byte[] segment)
+        {
+            var messageNumberArray = new byte[4];
+            messageNumberArray[3] = segment[16];
+            messageNumberArray[2] = segment[17];
+            messageNumberArray[1] = segment[18];
+            messageNumberArray[0] = segment[19];
+            uint reply = BitConverter.ToUInt32(messageNumberArray, 0);
+            return reply;
+        }
 
         /// <summary>
         /// </summary>
@@ -174,7 +307,48 @@ namespace ZoneEngine.Core
         /// </exception>
         protected override bool OnReceive(BufferSegment buffer)
         {
-            throw new NotImplementedException();
+            Message message = null;
+
+            var packet = new byte[this._remainingLength];
+            Array.Copy(buffer.SegmentData, packet, this._remainingLength);
+
+#if DEBUG
+            Console.WriteLine("Receiving");
+            Console.WriteLine("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
+            Console.WriteLine(NiceHexOutput.Output(packet));
+            LogUtil.Debug("\r\nReceived: \r\n" + NiceHexOutput.Output(packet));
+#endif
+            this._remainingLength = 0;
+            try
+            {
+                message = this.messageSerializer.Deserialize(packet);
+            }
+            catch (Exception)
+            {
+                uint messageNumber = this.GetMessageNumber(packet);
+                this.Server.Warning(
+                    this, 
+                    "Client sent malformed message {0}", 
+                    messageNumber.ToString(CultureInfo.InvariantCulture));
+                this.server.Warning(this, NiceHexOutput.Output(packet));
+                return false;
+            }
+
+            buffer.IncrementUsage();
+
+            if (message == null)
+            {
+                uint messageNumber = this.GetMessageNumber(packet);
+                this.Server.Warning(
+                    this, 
+                    "Client sent unknown message {0}", 
+                    messageNumber.ToString(CultureInfo.InvariantCulture));
+                return false;
+            }
+
+            this.bus.Publish(new MessageReceivedEvent(this, message));
+
+            return true;
         }
 
         #endregion

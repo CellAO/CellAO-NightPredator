@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<Districts Playfield="505">
+  <DistrictInfo MinLevel="60" MaxLevel="74" SuppressionGas="75">
+    <Name>Bones Monsterlair</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="26" MaxLevel="74" SuppressionGas="75">
+    <Name>Hammerbeast Breeding Grounds</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="82" SuppressionGas="75">
+    <Name>Oasis</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="89" SuppressionGas="75">
+    <Name>Central Desert Volcano Camp</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="85" SuppressionGas="75">
+    <Name>Central Desert North Camp</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="85" SuppressionGas="75">
+    <Name>Central Desert South Camp</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="96" MaxLevel="126" SuppressionGas="75">
+    <Name>Rocky Depression</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="60" MaxLevel="90" SuppressionGas="75">
+    <Name>Anun Feeding Pit</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Border District</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="65" MaxLevel="90" SuppressionGas="75">
+    <Name>Nanofreak Hellpit</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="171" MaxLevel="184" SuppressionGas="75">
+    <Name>Main Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="171" MaxLevel="184" SuppressionGas="75">
+    <Name>Minor Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Terraforming Plant</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Terraforming Plant Landing Pad</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="85" SuppressionGas="75">
+    <Name>Area Around Terraforming Plant</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="76" MaxLevel="98" SuppressionGas="75">
+    <Name>New Mantis Hive</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Northern Knight Fort</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>South Knight Fort</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Camelot</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Three Brothers Meditation Spot</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Three Brothers Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="101" MaxLevel="108" SuppressionGas="75">
+    <Name>Slaughter Area Near Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="60" MaxLevel="90" SuppressionGas="75">
+    <Name>Western Desert</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="55" MaxLevel="140" SuppressionGas="75">
+    <Name>Central Desert</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="50" MaxLevel="60" SuppressionGas="75">
+    <Name>Desert Slaughter Area</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Central Desert Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="53" MaxLevel="67" SuppressionGas="75">
+    <Name>Tri-Tunnel Road Section</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Near Anun Slaughter Region</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="40" MaxLevel="70" SuppressionGas="75">
+    <Name>South Desert</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>SW Border Barrier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>NW Border Barrier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>NE Border Barrier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>SE Border Barrier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>S Border Barrier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Area Around Main Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Area Around Minor Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Area Around Camelot</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Area Around North Knight Fort</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Area Around South Knight Fort</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="52" MaxLevel="66" SuppressionGas="75">
+    <Name>East Desert</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="49" MaxLevel="56" SuppressionGas="75">
+    <Name>Waylander Arch</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>East Split Falls Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Dreadfire Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>East Falls Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Dual Falls Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Norhern Lava Flow</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>NW Falls Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="41" MaxLevel="67" SuppressionGas="75">
+    <Name>SW Low Plateau</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="65" MaxLevel="80" SuppressionGas="75">
+    <Name>SE Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="82" SuppressionGas="75">
+    <Name>W Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>NW Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="53" MaxLevel="125" SuppressionGas="75">
+    <Name>Cyborg Enclave</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="65" MaxLevel="70" SuppressionGas="75">
+    <Name>N Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="85" SuppressionGas="75">
+    <Name>NE Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="60" MaxLevel="80" SuppressionGas="75">
+    <Name>NE Mountains</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>NE Slaugher Area</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="90" MaxLevel="127" SuppressionGas="75">
+    <Name>Central Desert Mountains</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="50" MaxLevel="65" SuppressionGas="75">
+    <Name>South Desert Mountain</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="48" MaxLevel="70" SuppressionGas="75">
+    <Name>Rocky Outcrop</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="49" MaxLevel="56" SuppressionGas="75">
+    <Name>Waylander Hills</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="30" MaxLevel="65" SuppressionGas="75">
+    <Name>South Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="32" MaxLevel="65" SuppressionGas="75">
+    <Name>Far Southeast Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="65" MaxLevel="89" SuppressionGas="75">
+    <Name>Central Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>Central Northeast Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="44" MaxLevel="85" SuppressionGas="75">
+    <Name>Central Northwest Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="68" MaxLevel="77" SuppressionGas="75">
+    <Name>Small Central Desert Clan Camp</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="55" MaxLevel="64" SuppressionGas="75">
+    <Name>Omni Camp Near Camelot</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="40" MaxLevel="70" SuppressionGas="75">
+    <Name>Clan Prisoners</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>Northeast Barren Lands</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="65" MaxLevel="89" SuppressionGas="75">
+    <Name>North of Main Omni Base</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Crystal Forge Volcano</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="85" SuppressionGas="75">
+    <Name>Griffon Frontier</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>Draught</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="61" MaxLevel="82" SuppressionGas="75">
+    <Name>Dome Ore</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="50" MaxLevel="75" SuppressionGas="75">
+    <Name>Waylander Mines</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>City 1 Avalon North West</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>City 1 Avalon North East</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>City 1 Avalon middle</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>City 1 avalon south east</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="45" MaxLevel="90" SuppressionGas="75">
+    <Name>City 1avalon west</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>City 2 avalon west</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>City 2 avalon south</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>city 2 avalon south east</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>cith 2 avalon north east</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="80" MaxLevel="110" SuppressionGas="75">
+    <Name>city 2 avalon north</Name>
+  </DistrictInfo>
+</Districts>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Walls NumWalls="1">
+  <Wall NumPoints="8">
+    <Point DestPF="0" DestIdx="0" Flags="0" X="84.9" Y="115" Z="85" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="119" Y="115" Z="85" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="119" Y="115" Z="154.9" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="107" Y="115" Z="154.9" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="107" Y="115" Z="161" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="103.6" Y="115" Z="161" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="103.6" Y="115" Z="154.9" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="84.9" Y="115" Z="154.9" />
+  </Wall>
+</Walls>

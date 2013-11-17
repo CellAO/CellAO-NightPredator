@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Root>
+  <PlayField NumLines="2">
+    <Line ID="1">
+      <Start X="347.4183" Y="353.9938" Z="395.424" />
+      <End X="347.415" Y="353.9957" Z="403.7047" />
+    </Line>
+    <Line ID="2">
+      <Start X="269.1848" Y="282.8" Z="398.395" />
+      <End X="269.1928" Y="282.8015" Z="400.2749" />
+    </Line>
+  </PlayField>
+</Root>

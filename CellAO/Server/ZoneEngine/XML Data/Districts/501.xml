@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Districts Playfield="501">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>District</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Ceremony Hall</Name>
+  </DistrictInfo>
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>Parnassos Ocean</Name>
+  </DistrictInfo>
+</Districts>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<Districts Playfield="109">
+  <DistrictInfo MinLevel="1" MaxLevel="200" SuppressionGas="75">
+    <Name>District</Name>
+  </DistrictInfo>
+</Districts>

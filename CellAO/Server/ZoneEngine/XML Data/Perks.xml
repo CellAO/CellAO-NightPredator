@@ -1,0 +1,995 @@
+<?xml version="1.0"?>
+<Perks xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Perk PacketID="1250" AOID="247748" Name="Alien Technology Expertise 1" />
+  <Perk PacketID="1251" AOID="247749" Name="Alien Technology Expertise 1" />
+  <Perk PacketID="1252" AOID="247750" Name="Alien Technology Expertise 1" />
+  <Perk PacketID="0130" AOID="211135" Name="Ambidextrous 1" />
+  <Perk PacketID="0131" AOID="211136" Name="Ambidextrous 2" />
+  <Perk PacketID="0132" AOID="211137" Name="Ambidextrous 3" />
+  <Perk PacketID="0133" AOID="211138" Name="Ambidextrous 4" />
+  <Perk PacketID="0134" AOID="212177" Name="Ambidextrous 5" />
+  <Perk PacketID="1290" AOID="252492" Name="Atrox Primary Genome 1" />
+  <Perk PacketID="1291" AOID="252493" Name="Atrox Primary Genome 2" />
+  <Perk PacketID="1292" AOID="252494" Name="Atrox Primary Genome 3" />
+  <Perk PacketID="1293" AOID="252495" Name="Atrox Primary Genome 4" />
+  <Perk PacketID="1294" AOID="252496" Name="Atrox Primary Genome 5" />
+  <Perk PacketID="1295" AOID="252497" Name="Atrox Primary Genome 6" />
+  <Perk PacketID="1296" AOID="252498" Name="Atrox Primary Genome 7" />
+  <Perk PacketID="1297" AOID="252499" Name="Atrox Primary Genome 8" />
+  <Perk PacketID="1298" AOID="252500" Name="Atrox Primary Genome 9" />
+  <Perk PacketID="1299" AOID="252501" Name="Atrox Primary Genome 10" />
+  <Perk PacketID="1300" AOID="252512" Name="Atrox Secondary Genome 1" />
+  <Perk PacketID="1301" AOID="252513" Name="Atrox Secondary Genome 2" />
+  <Perk PacketID="1302" AOID="252514" Name="Atrox Secondary Genome 3" />
+  <Perk PacketID="1303" AOID="252515" Name="Atrox Secondary Genome 4" />
+  <Perk PacketID="1304" AOID="252516" Name="Atrox Secondary Genome 5" />
+  <Perk PacketID="1305" AOID="252517" Name="Atrox Secondary Genome 6" />
+  <Perk PacketID="1306" AOID="252518" Name="Atrox Secondary Genome 7" />
+  <Perk PacketID="1307" AOID="252519" Name="Atrox Secondary Genome 8" />
+  <Perk PacketID="1308" AOID="252520" Name="Atrox Secondary Genome 9" />
+  <Perk PacketID="1309" AOID="252521" Name="Atrox Secondary Genome 10" />
+  <Perk PacketID="0240" AOID="211748" Name="Cartographer 1" />
+  <Perk PacketID="0241" AOID="211749" Name="Cartographer 2" />
+  <Perk PacketID="0242" AOID="211750" Name="Cartographer 3" />
+  <Perk PacketID="0243" AOID="211751" Name="Cartographer 4" />
+  <Perk PacketID="0244" AOID="211752" Name="Cartographer 5" />
+  <Perk PacketID="1170" AOID="253108" Name="Champion of Heavy Artillery 1" />
+  <Perk PacketID="1171" AOID="253109" Name="Champion of Heavy Artillery 2" />
+  <Perk PacketID="1172" AOID="253110" Name="Champion of Heavy Artillery 3" />
+  <Perk PacketID="1173" AOID="253111" Name="Champion of Heavy Artillery 4" />
+  <Perk PacketID="1174" AOID="253112" Name="Champion of Heavy Artillery 5" />
+  <Perk PacketID="1175" AOID="253113" Name="Champion of Heavy Artillery 6" />
+  <Perk PacketID="1176" AOID="253114" Name="Champion of Heavy Artillery 7" />
+  <Perk PacketID="1177" AOID="253115" Name="Champion of Heavy Artillery 8" />
+  <Perk PacketID="1178" AOID="253116" Name="Champion of Heavy Artillery 9" />
+  <Perk PacketID="1179" AOID="253117" Name="Champion of Heavy Artillery 10" />
+  <Perk PacketID="1140" AOID="253064" Name="Champion of Heavy Infantry 1" />
+  <Perk PacketID="1141" AOID="253065" Name="Champion of Heavy Infantry 2" />
+  <Perk PacketID="1142" AOID="253066" Name="Champion of Heavy Infantry 3" />
+  <Perk PacketID="1143" AOID="253067" Name="Champion of Heavy Infantry 4" />
+  <Perk PacketID="1144" AOID="253068" Name="Champion of Heavy Infantry 5" />
+  <Perk PacketID="1145" AOID="253069" Name="Champion of Heavy Infantry 6" />
+  <Perk PacketID="1146" AOID="253070" Name="Champion of Heavy Infantry 7" />
+  <Perk PacketID="1147" AOID="253071" Name="Champion of Heavy Infantry 8" />
+  <Perk PacketID="1148" AOID="253072" Name="Champion of Heavy Infantry 9" />
+  <Perk PacketID="1149" AOID="253073" Name="Champion of Heavy Infantry 10" />
+  <Perk PacketID="1160" AOID="253093" Name="Champion of Light Artillery 1" />
+  <Perk PacketID="1161" AOID="253094" Name="Champion of Light Artillery 2" />
+  <Perk PacketID="1162" AOID="253095" Name="Champion of Light Artillery 3" />
+  <Perk PacketID="1163" AOID="253096" Name="Champion of Light Artillery 4" />
+  <Perk PacketID="1164" AOID="253097" Name="Champion of Light Artillery 5" />
+  <Perk PacketID="1165" AOID="253098" Name="Champion of Light Artillery 6" />
+  <Perk PacketID="1166" AOID="253099" Name="Champion of Light Artillery 7" />
+  <Perk PacketID="1167" AOID="253100" Name="Champion of Light Artillery 8" />
+  <Perk PacketID="1168" AOID="253101" Name="Champion of Light Artillery 9" />
+  <Perk PacketID="1169" AOID="253102" Name="Champion of Light Artillery 10" />
+  <Perk PacketID="1150" AOID="253079" Name="Champion of Light Infantry 1" />
+  <Perk PacketID="1151" AOID="253080" Name="Champion of Light Infantry 2" />
+  <Perk PacketID="1152" AOID="253081" Name="Champion of Light Infantry 3" />
+  <Perk PacketID="1153" AOID="253082" Name="Champion of Light Infantry 4" />
+  <Perk PacketID="1154" AOID="253083" Name="Champion of Light Infantry 5" />
+  <Perk PacketID="1155" AOID="253084" Name="Champion of Light Infantry 6" />
+  <Perk PacketID="1156" AOID="253085" Name="Champion of Light Infantry 7" />
+  <Perk PacketID="1157" AOID="253086" Name="Champion of Light Infantry 8" />
+  <Perk PacketID="1158" AOID="253087" Name="Champion of Light Infantry 9" />
+  <Perk PacketID="1159" AOID="253088" Name="Champion of Light Infantry 10" />
+  <Perk PacketID="1180" AOID="253123" Name="Champion of Nano Combat 1" />
+  <Perk PacketID="1181" AOID="253124" Name="Champion of Nano Combat 2" />
+  <Perk PacketID="1182" AOID="253125" Name="Champion of Nano Combat 3" />
+  <Perk PacketID="1183" AOID="253126" Name="Champion of Nano Combat 4" />
+  <Perk PacketID="1184" AOID="253127" Name="Champion of Nano Combat 5" />
+  <Perk PacketID="1185" AOID="253128" Name="Champion of Nano Combat 6" />
+  <Perk PacketID="1186" AOID="253129" Name="Champion of Nano Combat 7" />
+  <Perk PacketID="1187" AOID="253130" Name="Champion of Nano Combat 8" />
+  <Perk PacketID="1188" AOID="253131" Name="Champion of Nano Combat 9" />
+  <Perk PacketID="1189" AOID="253132" Name="Champion of Nano Combat 10" />
+  <Perk PacketID="1270" AOID="253140" Name="Combat Knowledge 1" />
+  <Perk PacketID="1271" AOID="253141" Name="Combat Knowledge 2" />
+  <Perk PacketID="1272" AOID="253142" Name="Combat Knowledge 3" />
+  <Perk PacketID="1273" AOID="253143" Name="Combat Knowledge 4" />
+  <Perk PacketID="1274" AOID="253144" Name="Combat Knowledge 5" />
+  <Perk PacketID="1275" AOID="253145" Name="Combat Knowledge 6" />
+  <Perk PacketID="1276" AOID="253146" Name="Combat Knowledge 7" />
+  <Perk PacketID="1277" AOID="253147" Name="Combat Knowledge 8" />
+  <Perk PacketID="0330" AOID="211793" Name="Enhance DNA 1" />
+  <Perk PacketID="0331" AOID="211794" Name="Enhance DNA 2" />
+  <Perk PacketID="0332" AOID="211795" Name="Enhance DNA 3" />
+  <Perk PacketID="0333" AOID="211796" Name="Enhance DNA 4" />
+  <Perk PacketID="0334" AOID="211797" Name="Enhance DNA 5" />
+  <Perk PacketID="0335" AOID="211798" Name="Enhance DNA 6" />
+  <Perk PacketID="0336" AOID="211799" Name="Enhance DNA 7" />
+  <Perk PacketID="0337" AOID="211800" Name="Enhance DNA 8" />
+  <Perk PacketID="0338" AOID="211801" Name="Enhance DNA 9" />
+  <Perk PacketID="0339" AOID="211802" Name="Enhance DNA 10" />
+  <Perk PacketID="0340" AOID="211051" Name="Enhance Health 1" />
+  <Perk PacketID="0341" AOID="211052" Name="Enhance Health 2" />
+  <Perk PacketID="0342" AOID="211053" Name="Enhance Health 3" />
+  <Perk PacketID="0343" AOID="211054" Name="Enhance Health 4" />
+  <Perk PacketID="0344" AOID="211055" Name="Enhance Health 5" />
+  <Perk PacketID="0345" AOID="211056" Name="Enhance Health 6" />
+  <Perk PacketID="0346" AOID="212180" Name="Enhance Health 7" />
+  <Perk PacketID="0350" AOID="211059" Name="Enhance Nano 1" />
+  <Perk PacketID="0351" AOID="211060" Name="Enhance Nano 2" />
+  <Perk PacketID="0352" AOID="211061" Name="Enhance Nano 3" />
+  <Perk PacketID="0353" AOID="211062" Name="Enhance Nano 4" />
+  <Perk PacketID="0354" AOID="211063" Name="Enhance Nano 5" />
+  <Perk PacketID="0355" AOID="211064" Name="Enhance Nano 6" />
+  <Perk PacketID="0356" AOID="212183" Name="Enhance Nano 7" />
+  <Perk PacketID="0380" AOID="211812" Name="Explorer 1" />
+  <Perk PacketID="0381" AOID="211813" Name="Explorer 2" />
+  <Perk PacketID="0382" AOID="211814" Name="Explorer 3" />
+  <Perk PacketID="0383" AOID="211815" Name="Explorer 4" />
+  <Perk PacketID="0400" AOID="211819" Name="First Aid 1" />
+  <Perk PacketID="0401" AOID="211820" Name="First Aid 2" />
+  <Perk PacketID="0402" AOID="211821" Name="First Aid 3" />
+  <Perk PacketID="0403" AOID="211822" Name="First Aid 4" />
+  <Perk PacketID="0430" AOID="211853" Name="Freak Strength 1" />
+  <Perk PacketID="0431" AOID="211854" Name="Freak Strength 2" />
+  <Perk PacketID="0432" AOID="211855" Name="Freak Strength 3" />
+  <Perk PacketID="0460" AOID="211866" Name="Genius 1" />
+  <Perk PacketID="0461" AOID="211867" Name="Genius 2" />
+  <Perk PacketID="0462" AOID="211868" Name="Genius 3" />
+  <Perk PacketID="0510" AOID="211901" Name="Kung-Fu Master 1" />
+  <Perk PacketID="0511" AOID="211902" Name="Kung-Fu Master 2" />
+  <Perk PacketID="0512" AOID="211903" Name="Kung-Fu Master 3" />
+  <Perk PacketID="0513" AOID="211904" Name="Kung-Fu Master 4" />
+  <Perk PacketID="0514" AOID="211905" Name="Kung-Fu Master 5" />
+  <Perk PacketID="0850" AOID="211070" Name="Motorist 1" />
+  <Perk PacketID="0851" AOID="211067" Name="Motorist 2" />
+  <Perk PacketID="0852" AOID="211068" Name="Motorist 3" />
+  <Perk PacketID="0853" AOID="211069" Name="Motorist 4" />
+  <Perk PacketID="0570" AOID="211116" Name="NCU Extensions 1" />
+  <Perk PacketID="0571" AOID="211117" Name="NCU Extensions 2" />
+  <Perk PacketID="0572" AOID="211118" Name="NCU Extensions 3" />
+  <Perk PacketID="0573" AOID="211119" Name="NCU Extensions 4" />
+  <Perk PacketID="0574" AOID="211120" Name="NCU Extensions 5" />
+  <Perk PacketID="0575" AOID="211121" Name="NCU Extensions 6" />
+  <Perk PacketID="0576" AOID="211122" Name="NCU Extensions 7" />
+  <Perk PacketID="0577" AOID="212187" Name="NCU Extensions 8" />
+  <Perk PacketID="1200" AOID="252387" Name="Nanomorph 1" />
+  <Perk PacketID="1201" AOID="252388" Name="Nanomorph 2" />
+  <Perk PacketID="1202" AOID="252389" Name="Nanomorph 3" />
+  <Perk PacketID="1203" AOID="252390" Name="Nanomorph 4" />
+  <Perk PacketID="1204" AOID="252391" Name="Nanomorph 5" />
+  <Perk PacketID="1205" AOID="252392" Name="Nanomorph 6" />
+  <Perk PacketID="1206" AOID="252393" Name="Nanomorph 7" />
+  <Perk PacketID="1207" AOID="252394" Name="Nanomorph 8" />
+  <Perk PacketID="1208" AOID="252395" Name="Nanomorph 9" />
+  <Perk PacketID="1209" AOID="252396" Name="Nanomorph 10" />
+  <Perk PacketID="0580" AOID="212133" Name="Notum Repulsor 1" />
+  <Perk PacketID="0581" AOID="212134" Name="Notum Repulsor 2" />
+  <Perk PacketID="0582" AOID="212135" Name="Notum Repulsor 3" />
+  <Perk PacketID="0583" AOID="212136" Name="Notum Repulsor 4" />
+  <Perk PacketID="0584" AOID="212137" Name="Notum Repulsor 5" />
+  <Perk PacketID="0585" AOID="212138" Name="Notum Repulsor 6" />
+  <Perk PacketID="0586" AOID="212139" Name="Notum Repulsor 7" />
+  <Perk PacketID="0587" AOID="212140" Name="Notum Repulsor 8" />
+  <Perk PacketID="1240" AOID="252479" Name="Opportunist 1" />
+  <Perk PacketID="1241" AOID="252480" Name="Opportunist 2" />
+  <Perk PacketID="1242" AOID="252481" Name="Opportunist 3" />
+  <Perk PacketID="1243" AOID="252482" Name="Opportunist 4" />
+  <Perk PacketID="1244" AOID="252483" Name="Opportunist 5" />
+  <Perk PacketID="1245" AOID="252484" Name="Opportunist 6" />
+  <Perk PacketID="0820" AOID="211072" Name="Training Seminar 1" />
+  <Perk PacketID="0821" AOID="211073" Name="Training Seminar 2" />
+  <Perk PacketID="0822" AOID="211074" Name="Training Seminar 3" />
+  <Perk PacketID="0823" AOID="212190" Name="Training Seminar 4" />
+  <Perk PacketID="1310" AOID="252527" Name="Opifex Primary Genome 1" />
+  <Perk PacketID="1311" AOID="252528" Name="Opifex Primary Genome 2" />
+  <Perk PacketID="1312" AOID="252529" Name="Opifex Primary Genome 3" />
+  <Perk PacketID="1313" AOID="252530" Name="Opifex Primary Genome 4" />
+  <Perk PacketID="1314" AOID="252531" Name="Opifex Primary Genome 5" />
+  <Perk PacketID="1315" AOID="252532" Name="Opifex Primary Genome 6" />
+  <Perk PacketID="1316" AOID="252533" Name="Opifex Primary Genome 7" />
+  <Perk PacketID="1317" AOID="252534" Name="Opifex Primary Genome 8" />
+  <Perk PacketID="1318" AOID="252535" Name="Opifex Primary Genome 9" />
+  <Perk PacketID="1319" AOID="252536" Name="Opifex Primary Genome 10" />
+  <Perk PacketID="1320" AOID="252542" Name="Opifex Secondary Genome 1" />
+  <Perk PacketID="1321" AOID="252543" Name="Opifex Secondary Genome 2" />
+  <Perk PacketID="1322" AOID="252544" Name="Opifex Secondary Genome 3" />
+  <Perk PacketID="1323" AOID="252545" Name="Opifex Secondary Genome 4" />
+  <Perk PacketID="1324" AOID="252546" Name="Opifex Secondary Genome 5" />
+  <Perk PacketID="1325" AOID="252547" Name="Opifex Secondary Genome 6" />
+  <Perk PacketID="1326" AOID="252548" Name="Opifex Secondary Genome 7" />
+  <Perk PacketID="1327" AOID="252549" Name="Opifex Secondary Genome 8" />
+  <Perk PacketID="1328" AOID="252550" Name="Opifex Secondary Genome 9" />
+  <Perk PacketID="1329" AOID="252551" Name="Opifex Secondary Genome 10" />
+  <Perk PacketID="1330" AOID="252560" Name="Nanobreed Primary Genome 1" />
+  <Perk PacketID="1331" AOID="252561" Name="Nanobreed Primary Genome 2" />
+  <Perk PacketID="1332" AOID="252562" Name="Nanobreed Primary Genome 3" />
+  <Perk PacketID="1333" AOID="252563" Name="Nanobreed Primary Genome 4" />
+  <Perk PacketID="1334" AOID="252564" Name="Nanobreed Primary Genome 5" />
+  <Perk PacketID="1335" AOID="252565" Name="Nanobreed Primary Genome 6" />
+  <Perk PacketID="1336" AOID="252566" Name="Nanobreed Primary Genome 7" />
+  <Perk PacketID="1337" AOID="252567" Name="Nanobreed Primary Genome 8" />
+  <Perk PacketID="1338" AOID="252568" Name="Nanobreed Primary Genome 9" />
+  <Perk PacketID="1339" AOID="252569" Name="Nanobreed Primary Genome 10" />
+  <Perk PacketID="1340" AOID="253018" Name="Nanobreed Secondary Genome 1" />
+  <Perk PacketID="1341" AOID="253019" Name="Nanobreed Secondary Genome 2" />
+  <Perk PacketID="1342" AOID="253020" Name="Nanobreed Secondary Genome 3" />
+  <Perk PacketID="1343" AOID="253021" Name="Nanobreed Secondary Genome 4" />
+  <Perk PacketID="1344" AOID="253022" Name="Nanobreed Secondary Genome 5" />
+  <Perk PacketID="1345" AOID="253023" Name="Nanobreed Secondary Genome 6" />
+  <Perk PacketID="1346" AOID="253024" Name="Nanobreed Secondary Genome 7" />
+  <Perk PacketID="1347" AOID="253025" Name="Nanobreed Secondary Genome 8" />
+  <Perk PacketID="1348" AOID="253026" Name="Nanobreed Secondary Genome 9" />
+  <Perk PacketID="1349" AOID="253027" Name="Nanobreed Secondary Genome 10" />
+  <Perk PacketID="1350" AOID="253034" Name="Solitus Alpha Genome 1" />
+  <Perk PacketID="1351" AOID="253035" Name="Solitus Alpha Genome 2" />
+  <Perk PacketID="1352" AOID="253036" Name="Solitus Alpha Genome 3" />
+  <Perk PacketID="1353" AOID="253037" Name="Solitus Alpha Genome 4" />
+  <Perk PacketID="1354" AOID="253038" Name="Solitus Alpha Genome 5" />
+  <Perk PacketID="1355" AOID="253039" Name="Solitus Alpha Genome 6" />
+  <Perk PacketID="1356" AOID="253040" Name="Solitus Alpha Genome 7" />
+  <Perk PacketID="1357" AOID="253041" Name="Solitus Alpha Genome 8" />
+  <Perk PacketID="1358" AOID="253042" Name="Solitus Alpha Genome 9" />
+  <Perk PacketID="1359" AOID="253043" Name="Solitus Alpha Genome 10" />
+  <Perk PacketID="1360" AOID="253049" Name="Solitus Beta Genome 1" />
+  <Perk PacketID="1361" AOID="253050" Name="Solitus Beta Genome 2" />
+  <Perk PacketID="1362" AOID="253051" Name="Solitus Beta Genome 3" />
+  <Perk PacketID="1363" AOID="253052" Name="Solitus Beta Genome 4" />
+  <Perk PacketID="1364" AOID="253053" Name="Solitus Beta Genome 5" />
+  <Perk PacketID="1365" AOID="253054" Name="Solitus Beta Genome 6" />
+  <Perk PacketID="1366" AOID="253055" Name="Solitus Beta Genome 7" />
+  <Perk PacketID="1367" AOID="253056" Name="Solitus Beta Genome 8" />
+  <Perk PacketID="1368" AOID="253057" Name="Solitus Beta Genome 9" />
+  <Perk PacketID="1369" AOID="253058" Name="Solitus Beta Genome 10" />
+  <Perk PacketID="0500" AOID="211891" Name="Infantry 1" />
+  <Perk PacketID="0501" AOID="211892" Name="Infantry 2" />
+  <Perk PacketID="0502" AOID="211893" Name="Infantry 3" />
+  <Perk PacketID="0503" AOID="211894" Name="Infantry 4" />
+  <Perk PacketID="0504" AOID="211895" Name="Infantry 5" />
+  <Perk PacketID="0505" AOID="211896" Name="Infantry 6" />
+  <Perk PacketID="0506" AOID="211897" Name="Infantry 7" />
+  <Perk PacketID="0507" AOID="216627" Name="Infantry 8" />
+  <Perk PacketID="0508" AOID="216628" Name="Infantry 9" />
+  <Perk PacketID="0509" AOID="216629" Name="Infantry 10" />
+  <Perk PacketID="0540" AOID="211926" Name="Mountaineer 1" />
+  <Perk PacketID="0541" AOID="211927" Name="Mountaineer 2" />
+  <Perk PacketID="0542" AOID="211928" Name="Mountaineer 3" />
+  <Perk PacketID="0543" AOID="211929" Name="Mountaineer 4" />
+  <Perk PacketID="0544" AOID="211930" Name="Mountaineer 5" />
+  <Perk PacketID="0550" AOID="211931" Name="Nano Doctorate 1" />
+  <Perk PacketID="0551" AOID="211932" Name="Nano Doctorate 2" />
+  <Perk PacketID="0552" AOID="211933" Name="Nano Doctorate 3" />
+  <Perk PacketID="0553" AOID="211934" Name="Nano Doctorate 4" />
+  <Perk PacketID="0554" AOID="211935" Name="Nano Doctorate 5" />
+  <Perk PacketID="0555" AOID="211936" Name="Nano Doctorate 6" />
+  <Perk PacketID="0556" AOID="211937" Name="Nano Doctorate 7" />
+  <Perk PacketID="0557" AOID="229958" Name="Nano Doctorate 8" />
+  <Perk PacketID="0558" AOID="229959" Name="Nano Doctorate 9" />
+  <Perk PacketID="0559" AOID="229960" Name="Nano Doctorate 10" />
+  <Perk PacketID="0650" AOID="211987" Name="Power Up 1" />
+  <Perk PacketID="0651" AOID="213398" Name="Power Up 2" />
+  <Perk PacketID="0652" AOID="213399" Name="Power Up 3" />
+  <Perk PacketID="0653" AOID="213400" Name="Power Up 4" />
+  <Perk PacketID="0654" AOID="213401" Name="Power Up 5" />
+  <Perk PacketID="0655" AOID="213402" Name="Power Up 6" />
+  <Perk PacketID="0656" AOID="213403" Name="Power Up 7" />
+  <Perk PacketID="0657" AOID="213404" Name="Power Up 8" />
+  <Perk PacketID="0658" AOID="213409" Name="Power Up 9" />
+  <Perk PacketID="0659" AOID="213410" Name="Power Up 10" />
+  <Perk PacketID="1190" AOID="252356" Name="Ranger 1" />
+  <Perk PacketID="1191" AOID="252357" Name="Ranger 2" />
+  <Perk PacketID="1192" AOID="252358" Name="Ranger 3" />
+  <Perk PacketID="1193" AOID="252359" Name="Ranger 4" />
+  <Perk PacketID="1194" AOID="252360" Name="Ranger 5" />
+  <Perk PacketID="1195" AOID="252361" Name="Ranger 6" />
+  <Perk PacketID="1196" AOID="254415" Name="Ranger 7" />
+  <Perk PacketID="1197" AOID="254416" Name="Ranger 8" />
+  <Perk PacketID="1198" AOID="254417" Name="Ranger 9" />
+  <Perk PacketID="1199" AOID="254418" Name="Ranger 10" />
+  <Perk PacketID="1230" AOID="252463" Name="The Unknown Factor 1" />
+  <Perk PacketID="1231" AOID="252464" Name="The Unknown Factor 2" />
+  <Perk PacketID="1232" AOID="252465" Name="The Unknown Factor 3" />
+  <Perk PacketID="1233" AOID="252466" Name="The Unknown Factor 4" />
+  <Perk PacketID="1234" AOID="252467" Name="The Unknown Factor 5" />
+  <Perk PacketID="1235" AOID="252468" Name="The Unknown Factor 6" />
+  <Perk PacketID="1236" AOID="252469" Name="The Unknown Factor 7" />
+  <Perk PacketID="1237" AOID="252470" Name="The Unknown Factor 8" />
+  <Perk PacketID="0140" AOID="210842" Name="Assassin 1" />
+  <Perk PacketID="0141" AOID="210843" Name="Assassin 2" />
+  <Perk PacketID="0142" AOID="210844" Name="Assassin 3" />
+  <Perk PacketID="0143" AOID="210845" Name="Assassin 4" />
+  <Perk PacketID="0144" AOID="210846" Name="Assassin 5" />
+  <Perk PacketID="0145" AOID="210847" Name="Assassin 6" />
+  <Perk PacketID="0146" AOID="210848" Name="Assassin 7" />
+  <Perk PacketID="0147" AOID="210849" Name="Assassin 8" />
+  <Perk PacketID="0148" AOID="210850" Name="Assassin 9" />
+  <Perk PacketID="0149" AOID="210851" Name="Assassin 10" />
+  <Perk PacketID="0180" AOID="211692" Name="Black Ops 1" />
+  <Perk PacketID="0181" AOID="211693" Name="Black Ops 2" />
+  <Perk PacketID="0182" AOID="211694" Name="Black Ops 3" />
+  <Perk PacketID="0183" AOID="211695" Name="Black Ops 4" />
+  <Perk PacketID="0184" AOID="211696" Name="Black Ops 5" />
+  <Perk PacketID="0185" AOID="211697" Name="Black Ops 6" />
+  <Perk PacketID="0186" AOID="211698" Name="Black Ops 7" />
+  <Perk PacketID="0187" AOID="211699" Name="Black Ops 8" />
+  <Perk PacketID="0188" AOID="211700" Name="Black Ops 9" />
+  <Perk PacketID="0189" AOID="211701" Name="Black Ops 10" />
+  <Perk PacketID="1090" AOID="251285" Name="Made 1" />
+  <Perk PacketID="1091" AOID="251286" Name="Made 2" />
+  <Perk PacketID="1092" AOID="251287" Name="Made 3" />
+  <Perk PacketID="1093" AOID="251288" Name="Made 4" />
+  <Perk PacketID="1094" AOID="251289" Name="Made 5" />
+  <Perk PacketID="1095" AOID="251290" Name="Made 6" />
+  <Perk PacketID="1096" AOID="251291" Name="Made 7" />
+  <Perk PacketID="1097" AOID="251292" Name="Made 8" />
+  <Perk PacketID="1098" AOID="251293" Name="Made 9" />
+  <Perk PacketID="1099" AOID="251294" Name="Made 10" />
+  <Perk PacketID="0660" AOID="211997" Name="Shadowsneak 1" />
+  <Perk PacketID="0661" AOID="211998" Name="Shadowsneak 2" />
+  <Perk PacketID="0662" AOID="211999" Name="Shadowsneak 3" />
+  <Perk PacketID="0663" AOID="212000" Name="Shadowsneak 4" />
+  <Perk PacketID="0664" AOID="212001" Name="Shadowsneak 5" />
+  <Perk PacketID="0665" AOID="212002" Name="Shadowsneak 6" />
+  <Perk PacketID="0666" AOID="212003" Name="Shadowsneak 7" />
+  <Perk PacketID="0667" AOID="212004" Name="Shadowsneak 8" />
+  <Perk PacketID="0668" AOID="212005" Name="Shadowsneak 9" />
+  <Perk PacketID="0669" AOID="212006" Name="Shadowsneak 10" />
+  <Perk PacketID="0680" AOID="212013" Name="Sharpshooter 1" />
+  <Perk PacketID="0681" AOID="212014" Name="Sharpshooter 2" />
+  <Perk PacketID="0682" AOID="212015" Name="Sharpshooter 3" />
+  <Perk PacketID="0683" AOID="212016" Name="Sharpshooter 4" />
+  <Perk PacketID="0684" AOID="212017" Name="Sharpshooter 5" />
+  <Perk PacketID="0685" AOID="212018" Name="Sharpshooter 6" />
+  <Perk PacketID="0200" AOID="211712" Name="Blunt Mastery 1" />
+  <Perk PacketID="0201" AOID="211713" Name="Blunt Mastery 2" />
+  <Perk PacketID="0202" AOID="211714" Name="Blunt Mastery 3" />
+  <Perk PacketID="0203" AOID="211715" Name="Blunt Mastery 4" />
+  <Perk PacketID="0204" AOID="225939" Name="Blunt Mastery 5" />
+  <Perk PacketID="0205" AOID="225940" Name="Blunt Mastery 6" />
+  <Perk PacketID="0206" AOID="225941" Name="Blunt Mastery 7" />
+  <Perk PacketID="0207" AOID="225942" Name="Blunt Mastery 8" />
+  <Perk PacketID="0208" AOID="225943" Name="Blunt Mastery 9" />
+  <Perk PacketID="0209" AOID="225944" Name="Blunt Mastery 10" />
+  <Perk PacketID="0600" AOID="211947" Name="Notum Source 1" />
+  <Perk PacketID="0601" AOID="211948" Name="Notum Source 2" />
+  <Perk PacketID="0602" AOID="211949" Name="Notum Source 3" />
+  <Perk PacketID="0603" AOID="211950" Name="Notum Source 4" />
+  <Perk PacketID="0604" AOID="211951" Name="Notum Source 5" />
+  <Perk PacketID="0605" AOID="211952" Name="Notum Source 6" />
+  <Perk PacketID="0606" AOID="211953" Name="Notum Source 7" />
+  <Perk PacketID="0607" AOID="211954" Name="Notum Source 8" />
+  <Perk PacketID="0608" AOID="211955" Name="Notum Source 9" />
+  <Perk PacketID="0609" AOID="211956" Name="Notum Source 10" />
+  <Perk PacketID="0640" AOID="211977" Name="Pistol Mastery 1" />
+  <Perk PacketID="0641" AOID="211978" Name="Pistol Mastery 2" />
+  <Perk PacketID="0642" AOID="211979" Name="Pistol Mastery 3" />
+  <Perk PacketID="0643" AOID="211980" Name="Pistol Mastery 4" />
+  <Perk PacketID="0644" AOID="211981" Name="Pistol Mastery 5" />
+  <Perk PacketID="0645" AOID="216630" Name="Pistol Mastery 6" />
+  <Perk PacketID="0646" AOID="216631" Name="Pistol Mastery 7" />
+  <Perk PacketID="0647" AOID="216632" Name="Pistol Mastery 8" />
+  <Perk PacketID="0648" AOID="216633" Name="Pistol Mastery 9" />
+  <Perk PacketID="0649" AOID="216634" Name="Pistol Mastery 10" />
+  <Perk PacketID="0760" AOID="212107" Name="Starfall 1" />
+  <Perk PacketID="0761" AOID="212108" Name="Starfall 2" />
+  <Perk PacketID="0762" AOID="212109" Name="Starfall 3" />
+  <Perk PacketID="0763" AOID="212110" Name="Starfall 4" />
+  <Perk PacketID="0764" AOID="212111" Name="Starfall 5" />
+  <Perk PacketID="0765" AOID="212112" Name="Starfall 6" />
+  <Perk PacketID="0766" AOID="212113" Name="Starfall 7" />
+  <Perk PacketID="0767" AOID="212114" Name="Starfall 8" />
+  <Perk PacketID="0768" AOID="212115" Name="Starfall 9" />
+  <Perk PacketID="0769" AOID="212116" Name="Starfall 10" />
+  <Perk PacketID="0780" AOID="212079" Name="Theoretical Research 1" />
+  <Perk PacketID="0781" AOID="212080" Name="Theoretical Research 2" />
+  <Perk PacketID="0782" AOID="212081" Name="Theoretical Research 3" />
+  <Perk PacketID="0783" AOID="212082" Name="Theoretical Research 4" />
+  <Perk PacketID="0784" AOID="212083" Name="Theoretical Research 5" />
+  <Perk PacketID="0785" AOID="212084" Name="Theoretical Research 6" />
+  <Perk PacketID="0786" AOID="212085" Name="Theoretical Research 7" />
+  <Perk PacketID="0787" AOID="212086" Name="Theoretical Research 8" />
+  <Perk PacketID="0788" AOID="212087" Name="Theoretical Research 9" />
+  <Perk PacketID="0789" AOID="212088" Name="Theoretical Research 10" />
+  <Perk PacketID="1120" AOID="252301" Name="Ancient Knowledge 1" />
+  <Perk PacketID="1121" AOID="252302" Name="Ancient Knowledge 2" />
+  <Perk PacketID="1122" AOID="252303" Name="Ancient Knowledge 3" />
+  <Perk PacketID="1123" AOID="252304" Name="Ancient Knowledge 4" />
+  <Perk PacketID="1124" AOID="252305" Name="Ancient Knowledge 5" />
+  <Perk PacketID="1125" AOID="252306" Name="Ancient Knowledge 6" />
+  <Perk PacketID="1126" AOID="252307" Name="Ancient Knowledge 7" />
+  <Perk PacketID="1127" AOID="252308" Name="Ancient Knowledge 8" />
+  <Perk PacketID="1128" AOID="252309" Name="Ancient Knowledge 9" />
+  <Perk PacketID="1129" AOID="252310" Name="Ancient Knowledge 10" />
+  <Perk PacketID="0250" AOID="211753" Name="Channel Rage 1" />
+  <Perk PacketID="0251" AOID="211754" Name="Channel Rage 2" />
+  <Perk PacketID="0252" AOID="211755" Name="Channel Rage 3" />
+  <Perk PacketID="0253" AOID="211756" Name="Channel Rage 4" />
+  <Perk PacketID="0254" AOID="211757" Name="Channel Rage 5" />
+  <Perk PacketID="0255" AOID="211758" Name="Channel Rage 6" />
+  <Perk PacketID="0256" AOID="211759" Name="Channel Rage 7" />
+  <Perk PacketID="0257" AOID="211760" Name="Channel Rage 8" />
+  <Perk PacketID="0258" AOID="211761" Name="Channel Rage 9" />
+  <Perk PacketID="0259" AOID="211762" Name="Channel Rage 10" />
+  <Perk PacketID="0720" AOID="211125" Name="Soothing Spirits 1" />
+  <Perk PacketID="0721" AOID="211126" Name="Soothing Spirits 2" />
+  <Perk PacketID="0722" AOID="211127" Name="Soothing Spirits 3" />
+  <Perk PacketID="0723" AOID="211128" Name="Soothing Spirits 4" />
+  <Perk PacketID="0724" AOID="211129" Name="Soothing Spirits 5" />
+  <Perk PacketID="0725" AOID="211130" Name="Soothing Spirits 6" />
+  <Perk PacketID="0726" AOID="211131" Name="Soothing Spirits 7" />
+  <Perk PacketID="0727" AOID="211132" Name="Soothing Spirits 8" />
+  <Perk PacketID="0728" AOID="211133" Name="Soothing Spirits 9" />
+  <Perk PacketID="0729" AOID="212189" Name="Soothing Spirits 10" />
+  <Perk PacketID="0110" AOID="211655" Name="Acrobat 1" />
+  <Perk PacketID="0111" AOID="211656" Name="Acrobat 2" />
+  <Perk PacketID="0112" AOID="211657" Name="Acrobat 3" />
+  <Perk PacketID="0113" AOID="211658" Name="Acrobat 4" />
+  <Perk PacketID="0170" AOID="211666" Name="Bio Shielding 1" />
+  <Perk PacketID="0171" AOID="211667" Name="Bio Shielding 2" />
+  <Perk PacketID="0172" AOID="211668" Name="Bio Shielding 3" />
+  <Perk PacketID="0173" AOID="211669" Name="Bio Shielding 4" />
+  <Perk PacketID="0174" AOID="211670" Name="Bio Shielding 5" />
+  <Perk PacketID="0175" AOID="211671" Name="Bio Shielding 6" />
+  <Perk PacketID="0176" AOID="211672" Name="Bio Shielding 7" />
+  <Perk PacketID="0177" AOID="211673" Name="Bio Shielding 8" />
+  <Perk PacketID="0178" AOID="211674" Name="Bio Shielding 9" />
+  <Perk PacketID="0179" AOID="211675" Name="Bio Shielding 10" />
+  <Perk PacketID="1210" AOID="252403" Name="Counterweight 1" />
+  <Perk PacketID="1211" AOID="252404" Name="Counterweight 2" />
+  <Perk PacketID="1212" AOID="252405" Name="Counterweight 3" />
+  <Perk PacketID="1213" AOID="252406" Name="Counterweight 4" />
+  <Perk PacketID="1214" AOID="252407" Name="Counterweight 5" />
+  <Perk PacketID="1215" AOID="252408" Name="Counterweight 6" />
+  <Perk PacketID="0320" AOID="211660" Name="Edged Mastery 1" />
+  <Perk PacketID="0321" AOID="211661" Name="Edged Mastery 2" />
+  <Perk PacketID="0322" AOID="211662" Name="Edged Mastery 3" />
+  <Perk PacketID="0323" AOID="211663" Name="Edged Mastery 4" />
+  <Perk PacketID="0324" AOID="211664" Name="Edged Mastery 5" />
+  <Perk PacketID="0325" AOID="211665" Name="Edged Mastery 6" />
+  <Perk PacketID="0326" AOID="212173" Name="Edged Mastery 7" />
+  <Perk PacketID="0327" AOID="212174" Name="Edged Mastery 8" />
+  <Perk PacketID="0328" AOID="212175" Name="Edged Mastery 9" />
+  <Perk PacketID="0329" AOID="212176" Name="Edged Mastery 10" />
+  <Perk PacketID="0440" AOID="212123" Name="Spatial Displacement 1" />
+  <Perk PacketID="0441" AOID="212124" Name="Spatial Displacement 2" />
+  <Perk PacketID="0442" AOID="212125" Name="Spatial Displacement 3" />
+  <Perk PacketID="0443" AOID="212126" Name="Spatial Displacement 4" />
+  <Perk PacketID="0444" AOID="212127" Name="Spatial Displacement 5" />
+  <Perk PacketID="0445" AOID="212128" Name="Spatial Displacement 6" />
+  <Perk PacketID="0446" AOID="212129" Name="Spatial Displacement 7" />
+  <Perk PacketID="0447" AOID="212130" Name="Spatial Displacement 8" />
+  <Perk PacketID="0448" AOID="212131" Name="Spatial Displacement 9" />
+  <Perk PacketID="0449" AOID="212132" Name="Spatial Displacement 10" />
+  <Perk PacketID="0390" AOID="211816" Name="Ferocity of Nature 1" />
+  <Perk PacketID="0391" AOID="211817" Name="Ferocity of Nature 2" />
+  <Perk PacketID="0392" AOID="211818" Name="Ferocity of Nature 3" />
+  <Perk PacketID="0920" AOID="281534" Name="Lightstalker 1" />
+  <Perk PacketID="0921" AOID="281535" Name="Lightstalker 2" />
+  <Perk PacketID="0922" AOID="281536" Name="Lightstalker 3" />
+  <Perk PacketID="0923" AOID="281537" Name="Lightstalker 4" />
+  <Perk PacketID="0924" AOID="281538" Name="Lightstalker 5" />
+  <Perk PacketID="0925" AOID="281539" Name="Lightstalker 6" />
+  <Perk PacketID="0610" AOID="212141" Name="Outdoorsman 1" />
+  <Perk PacketID="0611" AOID="212142" Name="Outdoorsman 2" />
+  <Perk PacketID="0612" AOID="212143" Name="Outdoorsman 3" />
+  <Perk PacketID="0670" AOID="212007" Name="Shadowstalker 1" />
+  <Perk PacketID="0671" AOID="212008" Name="Shadowstalker 2" />
+  <Perk PacketID="0672" AOID="212009" Name="Shadowstalker 3" />
+  <Perk PacketID="0673" AOID="212010" Name="Shadowstalker 4" />
+  <Perk PacketID="0674" AOID="212011" Name="Shadowstalker 5" />
+  <Perk PacketID="0675" AOID="212012" Name="Shadowstalker 6" />
+  <Perk PacketID="1080" AOID="251244" Name="The Call 1" />
+  <Perk PacketID="1081" AOID="251245" Name="The Call 2" />
+  <Perk PacketID="1082" AOID="251246" Name="The Call 3" />
+  <Perk PacketID="1083" AOID="251247" Name="The Call 4" />
+  <Perk PacketID="1084" AOID="251248" Name="The Call 5" />
+  <Perk PacketID="1085" AOID="251249" Name="The Call 6" />
+  <Perk PacketID="1086" AOID="251250" Name="The Call 7" />
+  <Perk PacketID="1087" AOID="251251" Name="The Call 8" />
+  <Perk PacketID="1088" AOID="251252" Name="The Call 9" />
+  <Perk PacketID="1089" AOID="251253" Name="The Call 10" />
+  <Perk PacketID="0120" AOID="211676" Name="Alchemist 1" />
+  <Perk PacketID="0121" AOID="211677" Name="Alchemist 2" />
+  <Perk PacketID="0122" AOID="211678" Name="Alchemist 3" />
+  <Perk PacketID="0123" AOID="211679" Name="Alchemist 4" />
+  <Perk PacketID="0124" AOID="211680" Name="Alchemist 5" />
+  <Perk PacketID="0125" AOID="211681" Name="Alchemist 6" />
+  <Perk PacketID="1220" AOID="252448" Name="Illogical Patterns 1" />
+  <Perk PacketID="1221" AOID="252449" Name="Illogical Patterns 2" />
+  <Perk PacketID="1222" AOID="252450" Name="Illogical Patterns 3" />
+  <Perk PacketID="1223" AOID="252451" Name="Illogical Patterns 4" />
+  <Perk PacketID="1224" AOID="252452" Name="Illogical Patterns 5" />
+  <Perk PacketID="1225" AOID="252453" Name="Illogical Patterns 6" />
+  <Perk PacketID="1226" AOID="252454" Name="Illogical Patterns 7" />
+  <Perk PacketID="1227" AOID="252455" Name="Illogical Patterns 8" />
+  <Perk PacketID="0700" AOID="216635" Name="Shotgun Mastery 1" />
+  <Perk PacketID="0701" AOID="216636" Name="Shotgun Mastery 2" />
+  <Perk PacketID="0702" AOID="216637" Name="Shotgun Mastery 3" />
+  <Perk PacketID="0703" AOID="216638" Name="Shotgun Mastery 4" />
+  <Perk PacketID="0704" AOID="216639" Name="Shotgun Mastery 5" />
+  <Perk PacketID="0705" AOID="216640" Name="Shotgun Mastery 6" />
+  <Perk PacketID="0706" AOID="216641" Name="Shotgun Mastery 7" />
+  <Perk PacketID="0707" AOID="216642" Name="Shotgun Mastery 8" />
+  <Perk PacketID="0708" AOID="216643" Name="Shotgun Mastery 9" />
+  <Perk PacketID="0709" AOID="216644" Name="Shotgun Mastery 10" />
+  <Perk PacketID="0800" AOID="212093" Name="Tinkerer 1" />
+  <Perk PacketID="0801" AOID="212094" Name="Tinkerer 2" />
+  <Perk PacketID="0802" AOID="212095" Name="Tinkerer 3" />
+  <Perk PacketID="0803" AOID="212096" Name="Tinkerer 4" />
+  <Perk PacketID="1110" AOID="251906" Name="Creative Mind 1" />
+  <Perk PacketID="1111" AOID="251907" Name="Creative Mind 2" />
+  <Perk PacketID="1112" AOID="251908" Name="Creative Mind 3" />
+  <Perk PacketID="1113" AOID="251909" Name="Creative Mind 4" />
+  <Perk PacketID="1114" AOID="251910" Name="Creative Mind 5" />
+  <Perk PacketID="1115" AOID="251911" Name="Creative Mind 6" />
+  <Perk PacketID="1116" AOID="251912" Name="Creative Mind 7" />
+  <Perk PacketID="1117" AOID="251913" Name="Creative Mind 8" />
+  <Perk PacketID="1118" AOID="251914" Name="Creative Mind 9" />
+  <Perk PacketID="1119" AOID="251915" Name="Creative Mind 10" />
+  <Perk PacketID="0860" AOID="211823" Name="Demolitions 1" />
+  <Perk PacketID="0861" AOID="211824" Name="Demolitions 2" />
+  <Perk PacketID="0862" AOID="211825" Name="Demolitions 3" />
+  <Perk PacketID="0863" AOID="211826" Name="Demolitions 4" />
+  <Perk PacketID="0864" AOID="211827" Name="Demolitions 5" />
+  <Perk PacketID="0865" AOID="211828" Name="Demolitions 6" />
+  <Perk PacketID="0866" AOID="211829" Name="Demolitions 7" />
+  <Perk PacketID="0867" AOID="211830" Name="Demolitions 8" />
+  <Perk PacketID="0868" AOID="211831" Name="Demolitions 9" />
+  <Perk PacketID="0869" AOID="211832" Name="Demolitions 10" />
+  <Perk PacketID="0450" AOID="211856" Name="Gadgeteer 1" />
+  <Perk PacketID="0451" AOID="211857" Name="Gadgeteer 2" />
+  <Perk PacketID="0452" AOID="211858" Name="Gadgeteer 3" />
+  <Perk PacketID="0453" AOID="211859" Name="Gadgeteer 4" />
+  <Perk PacketID="0454" AOID="211860" Name="Gadgeteer 5" />
+  <Perk PacketID="0455" AOID="211861" Name="Gadgeteer 6" />
+  <Perk PacketID="0456" AOID="211862" Name="Gadgeteer 7" />
+  <Perk PacketID="0457" AOID="211863" Name="Gadgeteer 8" />
+  <Perk PacketID="0458" AOID="211864" Name="Gadgeteer 9" />
+  <Perk PacketID="0459" AOID="211865" Name="Gadgeteer 10" />
+  <Perk PacketID="0530" AOID="211916" Name="Mechanic 1" />
+  <Perk PacketID="0531" AOID="211917" Name="Mechanic 2" />
+  <Perk PacketID="0532" AOID="211918" Name="Mechanic 3" />
+  <Perk PacketID="0533" AOID="211919" Name="Mechanic 4" />
+  <Perk PacketID="0534" AOID="211920" Name="Mechanic 5" />
+  <Perk PacketID="0535" AOID="211921" Name="Mechanic 6" />
+  <Perk PacketID="0536" AOID="211922" Name="Mechanic 7" />
+  <Perk PacketID="0537" AOID="211923" Name="Mechanic 8" />
+  <Perk PacketID="0538" AOID="211924" Name="Mechanic 9" />
+  <Perk PacketID="0539" AOID="211925" Name="Mechanic 10" />
+  <Perk PacketID="0270" AOID="211763" Name="Colossal Health 1" />
+  <Perk PacketID="0271" AOID="211764" Name="Colossal Health 2" />
+  <Perk PacketID="0272" AOID="211765" Name="Colossal Health 3" />
+  <Perk PacketID="0273" AOID="211766" Name="Colossal Health 4" />
+  <Perk PacketID="0274" AOID="211767" Name="Colossal Health 5" />
+  <Perk PacketID="0275" AOID="211768" Name="Colossal Health 6" />
+  <Perk PacketID="0276" AOID="211769" Name="Colossal Health 7" />
+  <Perk PacketID="0277" AOID="211770" Name="Colossal Health 8" />
+  <Perk PacketID="0278" AOID="211771" Name="Colossal Health 9" />
+  <Perk PacketID="0279" AOID="211772" Name="Colossal Health 10" />
+  <Perk PacketID="0710" AOID="212019" Name="SMG Mastery 1" />
+  <Perk PacketID="0711" AOID="212020" Name="SMG Mastery 2" />
+  <Perk PacketID="0712" AOID="212021" Name="SMG Mastery 3" />
+  <Perk PacketID="0713" AOID="212022" Name="SMG Mastery 4" />
+  <Perk PacketID="0714" AOID="212023" Name="SMG Mastery 5" />
+  <Perk PacketID="0715" AOID="212024" Name="SMG Mastery 6" />
+  <Perk PacketID="0716" AOID="212025" Name="SMG Mastery 7" />
+  <Perk PacketID="0717" AOID="212026" Name="SMG Mastery 8" />
+  <Perk PacketID="0718" AOID="212027" Name="SMG Mastery 9" />
+  <Perk PacketID="0719" AOID="212028" Name="SMG Mastery 10" />
+  <Perk PacketID="0480" AOID="211873" Name="Heavy Ranged 1" />
+  <Perk PacketID="0481" AOID="211874" Name="Heavy Ranged 2" />
+  <Perk PacketID="0482" AOID="211875" Name="Heavy Ranged 3" />
+  <Perk PacketID="0483" AOID="211876" Name="Heavy Ranged 4" />
+  <Perk PacketID="0484" AOID="211877" Name="Heavy Ranged 5" />
+  <Perk PacketID="0485" AOID="211878" Name="Heavy Ranged 6" />
+  <Perk PacketID="0486" AOID="211879" Name="Heavy Ranged 7" />
+  <Perk PacketID="0487" AOID="211880" Name="Heavy Ranged 8" />
+  <Perk PacketID="1020" AOID="248165" Name="Power In Numbers 1" />
+  <Perk PacketID="1021" AOID="248166" Name="Power In Numbers 2" />
+  <Perk PacketID="1022" AOID="248167" Name="Power In Numbers 3" />
+  <Perk PacketID="1023" AOID="248168" Name="Power In Numbers 4" />
+  <Perk PacketID="1024" AOID="248169" Name="Power In Numbers 5" />
+  <Perk PacketID="1025" AOID="248170" Name="Power In Numbers 6" />
+  <Perk PacketID="1026" AOID="248171" Name="Power In Numbers 7" />
+  <Perk PacketID="1027" AOID="248172" Name="Power In Numbers 8" />
+  <Perk PacketID="1028" AOID="248173" Name="Power In Numbers 9" />
+  <Perk PacketID="1029" AOID="248174" Name="Power In Numbers 10" />
+  <Perk PacketID="0730" AOID="212029" Name="Special Forces 1" />
+  <Perk PacketID="0731" AOID="212030" Name="Special Forces 2" />
+  <Perk PacketID="0732" AOID="212031" Name="Special Forces 3" />
+  <Perk PacketID="0733" AOID="212032" Name="Special Forces 4" />
+  <Perk PacketID="0734" AOID="212033" Name="Special Forces 5" />
+  <Perk PacketID="0735" AOID="212034" Name="Special Forces 6" />
+  <Perk PacketID="0736" AOID="212035" Name="Special Forces 7" />
+  <Perk PacketID="0737" AOID="212036" Name="Special Forces 8" />
+  <Perk PacketID="0738" AOID="212037" Name="Special Forces 9" />
+  <Perk PacketID="0739" AOID="212038" Name="Special Forces 10" />
+  <Perk PacketID="0890" AOID="225946" Name="Reaver 1" />
+  <Perk PacketID="0891" AOID="225947" Name="Reaver 2" />
+  <Perk PacketID="0892" AOID="225948" Name="Reaver 3" />
+  <Perk PacketID="0893" AOID="225949" Name="Reaver 4" />
+  <Perk PacketID="0894" AOID="225950" Name="Reaver 5" />
+  <Perk PacketID="0895" AOID="225951" Name="Reaver 6" />
+  <Perk PacketID="0896" AOID="225952" Name="Reaver 7" />
+  <Perk PacketID="0897" AOID="225953" Name="Reaver 8" />
+  <Perk PacketID="0898" AOID="225954" Name="Reaver 9" />
+  <Perk PacketID="0899" AOID="225955" Name="Reaver 10" />
+  <Perk PacketID="0160" AOID="212161" Name="Aura of Revival 1" />
+  <Perk PacketID="0161" AOID="212164" Name="Aura of Revival 2" />
+  <Perk PacketID="0162" AOID="212165" Name="Aura of Revival 3" />
+  <Perk PacketID="0163" AOID="212166" Name="Aura of Revival 4" />
+  <Perk PacketID="0164" AOID="212167" Name="Aura of Revival 5" />
+  <Perk PacketID="0165" AOID="212168" Name="Aura of Revival 6" />
+  <Perk PacketID="0166" AOID="212169" Name="Aura of Revival 7" />
+  <Perk PacketID="0167" AOID="212170" Name="Aura of Revival 8" />
+  <Perk PacketID="0168" AOID="212171" Name="Aura of Revival 9" />
+  <Perk PacketID="0169" AOID="212172" Name="Aura of Revival 10" />
+  <Perk PacketID="0190" AOID="211702" Name="Blessing 1" />
+  <Perk PacketID="0191" AOID="211703" Name="Blessing 2" />
+  <Perk PacketID="0192" AOID="211704" Name="Blessing 3" />
+  <Perk PacketID="0193" AOID="211705" Name="Blessing 4" />
+  <Perk PacketID="0194" AOID="211706" Name="Blessing 5" />
+  <Perk PacketID="0195" AOID="211707" Name="Blessing 6" />
+  <Perk PacketID="0196" AOID="211708" Name="Blessing 7" />
+  <Perk PacketID="0197" AOID="211709" Name="Blessing 8" />
+  <Perk PacketID="0198" AOID="211710" Name="Blessing 9" />
+  <Perk PacketID="0199" AOID="211711" Name="Blessing 10" />
+  <Perk PacketID="1130" AOID="252332" Name="Crusade 1" />
+  <Perk PacketID="1131" AOID="252333" Name="Crusade 2" />
+  <Perk PacketID="1132" AOID="252334" Name="Crusade 3" />
+  <Perk PacketID="1133" AOID="252335" Name="Crusade 4" />
+  <Perk PacketID="1134" AOID="252336" Name="Crusade 5" />
+  <Perk PacketID="1135" AOID="252337" Name="Crusade 6" />
+  <Perk PacketID="1136" AOID="252338" Name="Crusade 7" />
+  <Perk PacketID="1137" AOID="252339" Name="Crusade 8" />
+  <Perk PacketID="1138" AOID="252340" Name="Crusade 9" />
+  <Perk PacketID="1139" AOID="252341" Name="Crusade 10" />
+  <Perk PacketID="0490" AOID="211881" Name="Holy Mark 1" />
+  <Perk PacketID="0491" AOID="211882" Name="Holy Mark 2" />
+  <Perk PacketID="0492" AOID="211883" Name="Holy Mark 3" />
+  <Perk PacketID="0493" AOID="211884" Name="Holy Mark 4" />
+  <Perk PacketID="0494" AOID="211885" Name="Holy Mark 5" />
+  <Perk PacketID="0495" AOID="211886" Name="Holy Mark 6" />
+  <Perk PacketID="0496" AOID="211887" Name="Holy Mark 7" />
+  <Perk PacketID="0497" AOID="211888" Name="Holy Mark 8" />
+  <Perk PacketID="0498" AOID="211889" Name="Holy Mark 9" />
+  <Perk PacketID="0499" AOID="211890" Name="Holy Mark 10" />
+  <Perk PacketID="0770" AOID="212069" Name="Street Samurai 1" />
+  <Perk PacketID="0771" AOID="212070" Name="Street Samurai 2" />
+  <Perk PacketID="0772" AOID="212071" Name="Street Samurai 3" />
+  <Perk PacketID="0773" AOID="212072" Name="Street Samurai 4" />
+  <Perk PacketID="0774" AOID="212073" Name="Street Samurai 5" />
+  <Perk PacketID="0775" AOID="212074" Name="Street Samurai 6" />
+  <Perk PacketID="0776" AOID="212075" Name="Street Samurai 7" />
+  <Perk PacketID="0777" AOID="212076" Name="Street Samurai 8" />
+  <Perk PacketID="0778" AOID="212077" Name="Street Samurai 9" />
+  <Perk PacketID="0779" AOID="212078" Name="Street Samurai 10" />
+  <Perk PacketID="0230" AOID="211738" Name="Careful in Battle 1" />
+  <Perk PacketID="0231" AOID="211739" Name="Careful in Battle 2" />
+  <Perk PacketID="0232" AOID="211740" Name="Careful in Battle 3" />
+  <Perk PacketID="0233" AOID="211741" Name="Careful in Battle 4" />
+  <Perk PacketID="0234" AOID="211742" Name="Careful in Battle 5" />
+  <Perk PacketID="0235" AOID="211743" Name="Careful in Battle 6" />
+  <Perk PacketID="0236" AOID="211744" Name="Careful in Battle 7" />
+  <Perk PacketID="0237" AOID="211745" Name="Careful in Battle 8" />
+  <Perk PacketID="0238" AOID="211746" Name="Careful in Battle 9" />
+  <Perk PacketID="0239" AOID="211747" Name="Careful in Battle 10" />
+  <Perk PacketID="0870" AOID="211967" Name="Piercing Mastery 1" />
+  <Perk PacketID="0871" AOID="211968" Name="Piercing Mastery 2" />
+  <Perk PacketID="0872" AOID="211969" Name="Piercing Mastery 3" />
+  <Perk PacketID="0873" AOID="211970" Name="Piercing Mastery 4" />
+  <Perk PacketID="0874" AOID="211971" Name="Piercing Mastery 5" />
+  <Perk PacketID="0875" AOID="211972" Name="Piercing Mastery 6" />
+  <Perk PacketID="0876" AOID="211973" Name="Piercing Mastery 7" />
+  <Perk PacketID="0877" AOID="211974" Name="Piercing Mastery 8" />
+  <Perk PacketID="0878" AOID="211975" Name="Piercing Mastery 9" />
+  <Perk PacketID="0879" AOID="211976" Name="Piercing Mastery 10" />
+  <Perk PacketID="0880" AOID="212144" Name="Shade Touch 1" />
+  <Perk PacketID="0881" AOID="212145" Name="Shade Touch 2" />
+  <Perk PacketID="0882" AOID="212146" Name="Shade Touch 3" />
+  <Perk PacketID="0883" AOID="212147" Name="Shade Touch 4" />
+  <Perk PacketID="0884" AOID="212148" Name="Shade Touch 5" />
+  <Perk PacketID="0885" AOID="212149" Name="Shade Touch 6" />
+  <Perk PacketID="0886" AOID="212150" Name="Shade Touch 7" />
+  <Perk PacketID="1000" AOID="248115" Name="Shadow 1" />
+  <Perk PacketID="1001" AOID="248116" Name="Shadow 2" />
+  <Perk PacketID="1002" AOID="248117" Name="Shadow 3" />
+  <Perk PacketID="1003" AOID="248118" Name="Shadow 4" />
+  <Perk PacketID="1004" AOID="248119" Name="Shadow 5" />
+  <Perk PacketID="1005" AOID="248120" Name="Shadow 6" />
+  <Perk PacketID="1006" AOID="248121" Name="Shadow 7" />
+  <Perk PacketID="1007" AOID="248122" Name="Shadow 8" />
+  <Perk PacketID="1008" AOID="248123" Name="Shadow 9" />
+  <Perk PacketID="1009" AOID="248124" Name="Shadow 10" />
+  <Perk PacketID="0630" AOID="212049" Name="Spirit Phylactery 1" />
+  <Perk PacketID="0631" AOID="212050" Name="Spirit Phylactery 2" />
+  <Perk PacketID="0632" AOID="212051" Name="Spirit Phylactery 3" />
+  <Perk PacketID="0633" AOID="212052" Name="Spirit Phylactery 4" />
+  <Perk PacketID="0634" AOID="212053" Name="Spirit Phylactery 5" />
+  <Perk PacketID="0635" AOID="212054" Name="Spirit Phylactery 6" />
+  <Perk PacketID="0636" AOID="212055" Name="Spirit Phylactery 7" />
+  <Perk PacketID="0637" AOID="212056" Name="Spirit Phylactery 8" />
+  <Perk PacketID="0638" AOID="212057" Name="Spirit Phylactery 9" />
+  <Perk PacketID="0639" AOID="212058" Name="Spirit Phylactery 10" />
+  <Perk PacketID="0690" AOID="212151" Name="Sublime Rapport 1" />
+  <Perk PacketID="0691" AOID="212152" Name="Sublime Rapport 2" />
+  <Perk PacketID="0692" AOID="212153" Name="Sublime Rapport 3" />
+  <Perk PacketID="0693" AOID="212154" Name="Sublime Rapport 4" />
+  <Perk PacketID="0694" AOID="212155" Name="Sublime Rapport 5" />
+  <Perk PacketID="0695" AOID="212156" Name="Sublime Rapport 6" />
+  <Perk PacketID="0696" AOID="212157" Name="Sublime Rapport 7" />
+  <Perk PacketID="0697" AOID="212158" Name="Sublime Rapport 8" />
+  <Perk PacketID="0698" AOID="212159" Name="Sublime Rapport 9" />
+  <Perk PacketID="0699" AOID="212160" Name="Sublime Rapport 10" />
+  <Perk PacketID="0810" AOID="212097" Name="Totemic Rites 1" />
+  <Perk PacketID="0811" AOID="212098" Name="Totemic Rites 2" />
+  <Perk PacketID="0812" AOID="212099" Name="Totemic Rites 3" />
+  <Perk PacketID="0813" AOID="212100" Name="Totemic Rites 4" />
+  <Perk PacketID="0814" AOID="212101" Name="Totemic Rites 5" />
+  <Perk PacketID="0815" AOID="212102" Name="Totemic Rites 6" />
+  <Perk PacketID="0816" AOID="212103" Name="Totemic Rites 7" />
+  <Perk PacketID="0817" AOID="212104" Name="Totemic Rites 8" />
+  <Perk PacketID="0818" AOID="212105" Name="Totemic Rites 9" />
+  <Perk PacketID="0819" AOID="212106" Name="Totemic Rites 10" />
+  <Perk PacketID="1050" AOID="248967" Name="Dark Kin 1" />
+  <Perk PacketID="1051" AOID="248968" Name="Dark Kin 2" />
+  <Perk PacketID="1052" AOID="248969" Name="Dark Kin 3" />
+  <Perk PacketID="1053" AOID="248970" Name="Dark Kin 4" />
+  <Perk PacketID="1054" AOID="248971" Name="Dark Kin 5" />
+  <Perk PacketID="1055" AOID="248972" Name="Dark Kin 6" />
+  <Perk PacketID="1056" AOID="248973" Name="Dark Kin 7" />
+  <Perk PacketID="1057" AOID="248974" Name="Dark Kin 8" />
+  <Perk PacketID="1058" AOID="248975" Name="Dark Kin 9" />
+  <Perk PacketID="1059" AOID="248976" Name="Dark Kin 10" />
+  <Perk PacketID="0910" AOID="239812" Name="Defensive Stance 1" />
+  <Perk PacketID="0911" AOID="239813" Name="Defensive Stance 2" />
+  <Perk PacketID="0912" AOID="239814" Name="Defensive Stance 3" />
+  <Perk PacketID="0913" AOID="239815" Name="Defensive Stance 4" />
+  <Perk PacketID="0914" AOID="239816" Name="Defensive Stance 5" />
+  <Perk PacketID="0915" AOID="239817" Name="Defensive Stance 6" />
+  <Perk PacketID="0916" AOID="239818" Name="Defensive Stance 7" />
+  <Perk PacketID="0917" AOID="239819" Name="Defensive Stance 8" />
+  <Perk PacketID="0918" AOID="239820" Name="Defensive Stance 9" />
+  <Perk PacketID="0919" AOID="239821" Name="Defensive Stance 10" />
+  <Perk PacketID="0470" AOID="211869" Name="Grid NCU Extension 1" />
+  <Perk PacketID="0471" AOID="211870" Name="Grid NCU Extension 2" />
+  <Perk PacketID="0472" AOID="211871" Name="Grid NCU Extension 3" />
+  <Perk PacketID="0473" AOID="211872" Name="Grid NCU Extension 4" />
+  <Perk PacketID="0930" AOID="283677" Name="Hit and Run 1" />
+  <Perk PacketID="0931" AOID="283678" Name="Hit and Run 2" />
+  <Perk PacketID="0932" AOID="283679" Name="Hit and Run 3" />
+  <Perk PacketID="0933" AOID="283680" Name="Hit and Run 4" />
+  <Perk PacketID="0934" AOID="283681" Name="Hit and Run 5" />
+  <Perk PacketID="0935" AOID="283682" Name="Hit and Run 6" />
+  <Perk PacketID="0790" AOID="212089" Name="Thief 1" />
+  <Perk PacketID="0791" AOID="212090" Name="Thief 2" />
+  <Perk PacketID="0792" AOID="212091" Name="Thief 3" />
+  <Perk PacketID="0793" AOID="212092" Name="Thief 4" />
+  <Perk PacketID="0840" AOID="223610" Name="Worm ICE 1" />
+  <Perk PacketID="0841" AOID="223611" Name="Worm ICE 2" />
+  <Perk PacketID="0842" AOID="223612" Name="Worm ICE 3" />
+  <Perk PacketID="0843" AOID="223613" Name="Worm ICE 4" />
+  <Perk PacketID="0844" AOID="223614" Name="Worm ICE 5" />
+  <Perk PacketID="0845" AOID="223615" Name="Worm ICE 6" />
+  <Perk PacketID="0846" AOID="223616" Name="Worm ICE 7" />
+  <Perk PacketID="0847" AOID="223617" Name="Worm ICE 8" />
+  <Perk PacketID="0848" AOID="223618" Name="Worm ICE 9" />
+  <Perk PacketID="0849" AOID="223619" Name="Worm ICE 10" />
+  <Perk PacketID="0100" AOID="210830" Name="Accumulator 1" />
+  <Perk PacketID="0101" AOID="210831" Name="Accumulator 2" />
+  <Perk PacketID="0102" AOID="210832" Name="Accumulator 3" />
+  <Perk PacketID="0103" AOID="210833" Name="Accumulator 4" />
+  <Perk PacketID="0104" AOID="210834" Name="Accumulator 5" />
+  <Perk PacketID="0105" AOID="210835" Name="Accumulator 6" />
+  <Perk PacketID="0106" AOID="210836" Name="Accumulator 7" />
+  <Perk PacketID="0107" AOID="210837" Name="Accumulator 8" />
+  <Perk PacketID="0108" AOID="210838" Name="Accumulator 9" />
+  <Perk PacketID="0109" AOID="210839" Name="Accumulator 10" />
+  <Perk PacketID="0310" AOID="211773" Name="Distill Life 1" />
+  <Perk PacketID="0311" AOID="211774" Name="Distill Life 2" />
+  <Perk PacketID="0312" AOID="211775" Name="Distill Life 3" />
+  <Perk PacketID="0313" AOID="211776" Name="Distill Life 4" />
+  <Perk PacketID="0314" AOID="211777" Name="Distill Life 5" />
+  <Perk PacketID="0315" AOID="211778" Name="Distill Life 6" />
+  <Perk PacketID="0316" AOID="211779" Name="Distill Life 7" />
+  <Perk PacketID="0317" AOID="211780" Name="Distill Life 8" />
+  <Perk PacketID="0318" AOID="211781" Name="Distill Life 9" />
+  <Perk PacketID="0319" AOID="211782" Name="Distill Life 10" />
+  <Perk PacketID="1030" AOID="248245" Name="Volunteer 1" />
+  <Perk PacketID="1031" AOID="248246" Name="Volunteer 2" />
+  <Perk PacketID="1032" AOID="248247" Name="Volunteer 3" />
+  <Perk PacketID="1033" AOID="248248" Name="Volunteer 4" />
+  <Perk PacketID="1034" AOID="248249" Name="Volunteer 5" />
+  <Perk PacketID="1035" AOID="248250" Name="Volunteer 6" />
+  <Perk PacketID="1036" AOID="248251" Name="Volunteer 7" />
+  <Perk PacketID="1037" AOID="248252" Name="Volunteer 8" />
+  <Perk PacketID="1038" AOID="248253" Name="Volunteer 9" />
+  <Perk PacketID="1039" AOID="248254" Name="Volunteer 10" />
+  <Perk PacketID="0150" AOID="211682" Name="Assault Force Medic 1" />
+  <Perk PacketID="0151" AOID="211683" Name="Assault Force Medic 2" />
+  <Perk PacketID="0152" AOID="211684" Name="Assault Force Medic 3" />
+  <Perk PacketID="0153" AOID="211685" Name="Assault Force Medic 4" />
+  <Perk PacketID="0154" AOID="211686" Name="Assault Force Medic 5" />
+  <Perk PacketID="0155" AOID="211687" Name="Assault Force Medic 6" />
+  <Perk PacketID="0156" AOID="211688" Name="Assault Force Medic 7" />
+  <Perk PacketID="0157" AOID="211689" Name="Assault Force Medic 8" />
+  <Perk PacketID="0158" AOID="211690" Name="Assault Force Medic 9" />
+  <Perk PacketID="0159" AOID="211691" Name="Assault Force Medic 10" />
+  <Perk PacketID="1010" AOID="248130" Name="Embrace 1" />
+  <Perk PacketID="1011" AOID="248131" Name="Embrace 2" />
+  <Perk PacketID="1012" AOID="248132" Name="Embrace 3" />
+  <Perk PacketID="1013" AOID="248133" Name="Embrace 4" />
+  <Perk PacketID="1014" AOID="248134" Name="Embrace 5" />
+  <Perk PacketID="1015" AOID="248135" Name="Embrace 6" />
+  <Perk PacketID="1016" AOID="248136" Name="Embrace 7" />
+  <Perk PacketID="1017" AOID="248137" Name="Embrace 8" />
+  <Perk PacketID="1018" AOID="248138" Name="Embrace 9" />
+  <Perk PacketID="1019" AOID="248139" Name="Embrace 10" />
+  <Perk PacketID="0560" AOID="211941" Name="Nano Surgeon 1" />
+  <Perk PacketID="0561" AOID="211942" Name="Nano Surgeon 2" />
+  <Perk PacketID="0562" AOID="211943" Name="Nano Surgeon 3" />
+  <Perk PacketID="0563" AOID="211944" Name="Nano Surgeon 4" />
+  <Perk PacketID="0564" AOID="211945" Name="Nano Surgeon 5" />
+  <Perk PacketID="0565" AOID="211946" Name="Nano Surgeon 6" />
+  <Perk PacketID="0740" AOID="212039" Name="Specialist Healer 1" />
+  <Perk PacketID="0741" AOID="212040" Name="Specialist Healer 2" />
+  <Perk PacketID="0742" AOID="212041" Name="Specialist Healer 3" />
+  <Perk PacketID="0743" AOID="212042" Name="Specialist Healer 4" />
+  <Perk PacketID="0744" AOID="212043" Name="Specialist Healer 5" />
+  <Perk PacketID="0745" AOID="212044" Name="Specialist Healer 6" />
+  <Perk PacketID="0746" AOID="212045" Name="Specialist Healer 7" />
+  <Perk PacketID="0747" AOID="212046" Name="Specialist Healer 8" />
+  <Perk PacketID="0748" AOID="212047" Name="Specialist Healer 9" />
+  <Perk PacketID="0749" AOID="212048" Name="Specialist Healer 10" />
+  <Perk PacketID="0210" AOID="211722" Name="Brawler 1" />
+  <Perk PacketID="0211" AOID="211723" Name="Brawler 2" />
+  <Perk PacketID="0212" AOID="211724" Name="Brawler 3" />
+  <Perk PacketID="0213" AOID="211725" Name="Brawler 4" />
+  <Perk PacketID="0214" AOID="211726" Name="Brawler 5" />
+  <Perk PacketID="0215" AOID="211727" Name="Brawler 6" />
+  <Perk PacketID="0900" AOID="225960" Name="Bone Crusher 1" />
+  <Perk PacketID="0901" AOID="225961" Name="Bone Crusher 2" />
+  <Perk PacketID="0902" AOID="225962" Name="Bone Crusher 3" />
+  <Perk PacketID="0903" AOID="225963" Name="Bone Crusher 4" />
+  <Perk PacketID="0904" AOID="225964" Name="Bone Crusher 5" />
+  <Perk PacketID="0905" AOID="225965" Name="Bone Crusher 6" />
+  <Perk PacketID="0906" AOID="225966" Name="Bone Crusher 7" />
+  <Perk PacketID="0907" AOID="225967" Name="Bone Crusher 8" />
+  <Perk PacketID="0908" AOID="225968" Name="Bone Crusher 9" />
+  <Perk PacketID="0909" AOID="225969" Name="Bone Crusher 10" />
+  <Perk PacketID="0420" AOID="211843" Name="Form of Troll 1" />
+  <Perk PacketID="0421" AOID="211844" Name="Form of Troll 2" />
+  <Perk PacketID="0422" AOID="211845" Name="Form of Troll 3" />
+  <Perk PacketID="0423" AOID="211846" Name="Form of Troll 4" />
+  <Perk PacketID="0424" AOID="211847" Name="Form of Troll 5" />
+  <Perk PacketID="0425" AOID="211848" Name="Form of Troll 6" />
+  <Perk PacketID="0426" AOID="211849" Name="Form of Troll 7" />
+  <Perk PacketID="0427" AOID="211850" Name="Form of Troll 8" />
+  <Perk PacketID="0428" AOID="211851" Name="Form of Troll 9" />
+  <Perk PacketID="0429" AOID="211852" Name="Form of Troll 10" />
+  <Perk PacketID="0520" AOID="211906" Name="Manners of Mongo 1" />
+  <Perk PacketID="0521" AOID="211907" Name="Manners of Mongo 2" />
+  <Perk PacketID="0522" AOID="211908" Name="Manners of Mongo 3" />
+  <Perk PacketID="0523" AOID="211909" Name="Manners of Mongo 4" />
+  <Perk PacketID="0524" AOID="211910" Name="Manners of Mongo 5" />
+  <Perk PacketID="0525" AOID="211911" Name="Manners of Mongo 6" />
+  <Perk PacketID="0526" AOID="211912" Name="Manners of Mongo 7" />
+  <Perk PacketID="0527" AOID="211913" Name="Manners of Mongo 8" />
+  <Perk PacketID="0528" AOID="211914" Name="Manners of Mongo 9" />
+  <Perk PacketID="0529" AOID="211915" Name="Manners of Mongo 10" />
+  <Perk PacketID="1070" AOID="251205" Name="Mutate 1" />
+  <Perk PacketID="1071" AOID="251206" Name="Mutate 2" />
+  <Perk PacketID="1072" AOID="251207" Name="Mutate 3" />
+  <Perk PacketID="1073" AOID="251208" Name="Mutate 4" />
+  <Perk PacketID="1074" AOID="251209" Name="Mutate 5" />
+  <Perk PacketID="1075" AOID="251210" Name="Mutate 6" />
+  <Perk PacketID="1076" AOID="251211" Name="Mutate 7" />
+  <Perk PacketID="1077" AOID="251212" Name="Mutate 8" />
+  <Perk PacketID="1078" AOID="251213" Name="Mutate 9" />
+  <Perk PacketID="1079" AOID="251214" Name="Mutate 10" />
+  <Perk PacketID="0220" AOID="211728" Name="Bureaucratic Shuffle 1" />
+  <Perk PacketID="0221" AOID="211729" Name="Bureaucratic Shuffle 2" />
+  <Perk PacketID="0222" AOID="211730" Name="Bureaucratic Shuffle 3" />
+  <Perk PacketID="0223" AOID="211731" Name="Bureaucratic Shuffle 4" />
+  <Perk PacketID="0224" AOID="211732" Name="Bureaucratic Shuffle 5" />
+  <Perk PacketID="0225" AOID="211733" Name="Bureaucratic Shuffle 6" />
+  <Perk PacketID="0226" AOID="211734" Name="Bureaucratic Shuffle 7" />
+  <Perk PacketID="0227" AOID="211735" Name="Bureaucratic Shuffle 8" />
+  <Perk PacketID="0228" AOID="211736" Name="Bureaucratic Shuffle 9" />
+  <Perk PacketID="0229" AOID="211737" Name="Bureaucratic Shuffle 10" />
+  <Perk PacketID="0280" AOID="210931" Name="Commanding Presence 1" />
+  <Perk PacketID="0281" AOID="210932" Name="Commanding Presence 2" />
+  <Perk PacketID="0282" AOID="210933" Name="Commanding Presence 3" />
+  <Perk PacketID="0283" AOID="210934" Name="Commanding Presence 4" />
+  <Perk PacketID="0284" AOID="210935" Name="Commanding Presence 5" />
+  <Perk PacketID="0285" AOID="210936" Name="Commanding Presence 6" />
+  <Perk PacketID="0286" AOID="210937" Name="Commanding Presence 7" />
+  <Perk PacketID="0287" AOID="210938" Name="Commanding Presence 8" />
+  <Perk PacketID="0288" AOID="210939" Name="Commanding Presence 9" />
+  <Perk PacketID="0289" AOID="210940" Name="Commanding Presence 10" />
+  <Perk PacketID="0290" AOID="223630" Name="Directorship 1" />
+  <Perk PacketID="0291" AOID="223631" Name="Directorship 2" />
+  <Perk PacketID="0292" AOID="223632" Name="Directorship 3" />
+  <Perk PacketID="0293" AOID="223633" Name="Directorship 4" />
+  <Perk PacketID="0294" AOID="223634" Name="Directorship 5" />
+  <Perk PacketID="0295" AOID="223635" Name="Directorship 6" />
+  <Perk PacketID="0296" AOID="223636" Name="Directorship 7" />
+  <Perk PacketID="0297" AOID="223637" Name="Directorship 8" />
+  <Perk PacketID="0298" AOID="223638" Name="Directorship 9" />
+  <Perk PacketID="0299" AOID="223639" Name="Directorship 10" />
+  <Perk PacketID="0620" AOID="236593" Name="Insurance Agent 1" />
+  <Perk PacketID="0621" AOID="236594" Name="Insurance Agent 2" />
+  <Perk PacketID="0622" AOID="236595" Name="Insurance Agent 3" />
+  <Perk PacketID="0623" AOID="236596" Name="Insurance Agent 4" />
+  <Perk PacketID="0624" AOID="236597" Name="Insurance Agent 5" />
+  <Perk PacketID="1100" AOID="251790" Name="Loophole 1" />
+  <Perk PacketID="1101" AOID="251791" Name="Loophole 2" />
+  <Perk PacketID="1102" AOID="251792" Name="Loophole 3" />
+  <Perk PacketID="1103" AOID="251793" Name="Loophole 4" />
+  <Perk PacketID="1104" AOID="251794" Name="Loophole 5" />
+  <Perk PacketID="1105" AOID="251795" Name="Loophole 6" />
+  <Perk PacketID="1106" AOID="251796" Name="Loophole 7" />
+  <Perk PacketID="1107" AOID="251797" Name="Loophole 8" />
+  <Perk PacketID="1108" AOID="251798" Name="Loophole 9" />
+  <Perk PacketID="1109" AOID="251799" Name="Loophole 10" />
+  <Perk PacketID="0300" AOID="211783" Name="Disharmony 1" />
+  <Perk PacketID="0301" AOID="211784" Name="Disharmony 2" />
+  <Perk PacketID="0302" AOID="211785" Name="Disharmony 3" />
+  <Perk PacketID="0303" AOID="211786" Name="Disharmony 4" />
+  <Perk PacketID="0304" AOID="211787" Name="Disharmony 5" />
+  <Perk PacketID="0305" AOID="211788" Name="Disharmony 6" />
+  <Perk PacketID="0306" AOID="211789" Name="Disharmony 7" />
+  <Perk PacketID="0307" AOID="211790" Name="Disharmony 8" />
+  <Perk PacketID="0308" AOID="211791" Name="Disharmony 9" />
+  <Perk PacketID="0309" AOID="211792" Name="Disharmony 10" />
+  <Perk PacketID="0750" AOID="212059" Name="Spiritual Master 1" />
+  <Perk PacketID="0751" AOID="212060" Name="Spiritual Master 2" />
+  <Perk PacketID="0752" AOID="212061" Name="Spiritual Master 3" />
+  <Perk PacketID="0753" AOID="212062" Name="Spiritual Master 4" />
+  <Perk PacketID="0754" AOID="212063" Name="Spiritual Master 5" />
+  <Perk PacketID="0755" AOID="212064" Name="Spiritual Master 6" />
+  <Perk PacketID="0756" AOID="212065" Name="Spiritual Master 7" />
+  <Perk PacketID="0757" AOID="212066" Name="Spiritual Master 8" />
+  <Perk PacketID="0758" AOID="212067" Name="Spiritual Master 9" />
+  <Perk PacketID="0759" AOID="212068" Name="Spiritual Master 10" />
+  <Perk PacketID="0830" AOID="211080" Name="Unstunnable 1" />
+  <Perk PacketID="0831" AOID="211077" Name="Unstunnable 2" />
+  <Perk PacketID="0832" AOID="211078" Name="Unstunnable 3" />
+  <Perk PacketID="0833" AOID="211079" Name="Unstunnable 4" />
+  <Perk PacketID="1040" AOID="248731" Name="Xuyun 1" />
+  <Perk PacketID="1041" AOID="248732" Name="Xuyun 2" />
+  <Perk PacketID="1042" AOID="248733" Name="Xuyun 3" />
+  <Perk PacketID="1043" AOID="248734" Name="Xuyun 4" />
+  <Perk PacketID="1044" AOID="248735" Name="Xuyun 5" />
+  <Perk PacketID="1045" AOID="248736" Name="Xuyun 6" />
+  <Perk PacketID="1046" AOID="248737" Name="Xuyun 7" />
+  <Perk PacketID="1047" AOID="248738" Name="Xuyun 8" />
+  <Perk PacketID="1048" AOID="248739" Name="Xuyun 9" />
+  <Perk PacketID="1049" AOID="248740" Name="Xuyun 10" />
+  <Perk PacketID="1060" AOID="250663" Name="Ancient Matrix 1" />
+  <Perk PacketID="1061" AOID="250664" Name="Ancient Matrix 2" />
+  <Perk PacketID="1062" AOID="250665" Name="Ancient Matrix 3" />
+  <Perk PacketID="1063" AOID="250666" Name="Ancient Matrix 4" />
+  <Perk PacketID="1064" AOID="250667" Name="Ancient Matrix 5" />
+  <Perk PacketID="1065" AOID="250668" Name="Ancient Matrix 6" />
+  <Perk PacketID="1066" AOID="250669" Name="Ancient Matrix 7" />
+  <Perk PacketID="1067" AOID="250670" Name="Ancient Matrix 8" />
+  <Perk PacketID="1068" AOID="250671" Name="Ancient Matrix 9" />
+  <Perk PacketID="1069" AOID="250672" Name="Ancient Matrix 10" />
+  <Perk PacketID="0260" AOID="211043" Name="Channeling of Notum 1" />
+  <Perk PacketID="0261" AOID="211044" Name="Channeling of Notum 2" />
+  <Perk PacketID="0262" AOID="211045" Name="Channeling of Notum 3" />
+  <Perk PacketID="0263" AOID="211046" Name="Channeling of Notum 4" />
+  <Perk PacketID="0360" AOID="212117" Name="Enhanced Nano Damage 1" />
+  <Perk PacketID="0361" AOID="212118" Name="Enhanced Nano Damage 2" />
+  <Perk PacketID="0362" AOID="212119" Name="Enhanced Nano Damage 3" />
+  <Perk PacketID="0363" AOID="212120" Name="Enhanced Nano Damage 4" />
+  <Perk PacketID="0364" AOID="212121" Name="Enhanced Nano Damage 5" />
+  <Perk PacketID="0365" AOID="212122" Name="Enhanced Nano Damage 6" />
+  <Perk PacketID="0370" AOID="211809" Name="Essence of Notum 1" />
+  <Perk PacketID="0371" AOID="211810" Name="Essence of Notum 2" />
+  <Perk PacketID="0372" AOID="211811" Name="Essence of Notum 3" />
+  <Perk PacketID="0590" AOID="223600" Name="Notum Siphon 1" />
+  <Perk PacketID="0591" AOID="223601" Name="Notum Siphon 2" />
+  <Perk PacketID="0592" AOID="223602" Name="Notum Siphon 3" />
+  <Perk PacketID="0593" AOID="223603" Name="Notum Siphon 4" />
+  <Perk PacketID="0594" AOID="223604" Name="Notum Siphon 5" />
+  <Perk PacketID="0595" AOID="223605" Name="Notum Siphon 6" />
+  <Perk PacketID="0596" AOID="223606" Name="Notum Siphon 7" />
+  <Perk PacketID="0597" AOID="223607" Name="Notum Siphon 8" />
+  <Perk PacketID="0598" AOID="223608" Name="Notum Siphon 9" />
+  <Perk PacketID="0599" AOID="223609" Name="Notum Siphon 10" />
+</Perks>

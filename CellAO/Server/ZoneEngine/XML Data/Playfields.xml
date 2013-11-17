@@ -1,0 +1,1803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Playfields>
+  <Playfield id="100" expansion="0" disabled="false" x="100000" xscale="1.0000" z="100000" zscale="1.0000">
+    <Name>Needed PF-stuff</Name>
+  </Playfield>
+  <Playfield id="101" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Default Door Links</Name>
+  </Playfield>
+  <Playfield id="102" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Monster and NPC dependencies</Name>
+  </Playfield>
+  <Playfield id="103" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Shop and Item Dependencies</Name>
+  </Playfield>
+  <Playfield id="104" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>One Template PF</Name>
+  </Playfield>
+  <Playfield id="105" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Morten gfx fixes</Name>
+  </Playfield>
+  <Playfield id="107" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>AI graphics dependency</Name>
+  </Playfield>
+  <Playfield id="109" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>LE dependencies</Name>
+  </Playfield>
+  <Playfield id="110" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dependency EP1 Mons</Name>
+  </Playfield>
+  <Playfield id="111" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>RK Quick Export Dependancy</Name>
+  </Playfield>
+  <Playfield id="120" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Camelot</Name>
+  </Playfield>
+  <Playfield id="124" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Assembly Hall</Name>
+  </Playfield>
+  <Playfield id="125" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Smuggler's Rearranged</Name>
+  </Playfield>
+  <Playfield id="127" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Condemned Subway (dng)</Name>
+  </Playfield>
+  <Playfield id="128" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Subway Junction (dng)</Name>
+  </Playfield>
+  <Playfield id="152" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>TheGrid2(dng)</Name>
+  </Playfield>
+  <Playfield id="320" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>AutocontentMidtech(dung)</Name>
+  </Playfield>
+  <Playfield id="321" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>AutocontentHITech(dung)</Name>
+  </Playfield>
+  <Playfield id="322" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Autocontentdungcave(dung)</Name>
+  </Playfield>
+  <Playfield id="324" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>AutocontentClan(dung)</Name>
+  </Playfield>
+  <Playfield id="331" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ACD tarm (dng)</Name>
+  </Playfield>
+  <Playfield id="341" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ACD Grey Caves-Mines dng</Name>
+  </Playfield>
+  <Playfield id="346" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ACD Omnilab (dng)</Name>
+  </Playfield>
+  <Playfield id="351" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ACD Subway - Ventil (dng)</Name>
+  </Playfield>
+  <Playfield id="362" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SL ACG(dng)</Name>
+  </Playfield>
+  <Playfield id="382" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Alien ACG (dng)</Name>
+  </Playfield>
+  <Playfield id="386" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Alien Mothership (dng)</Name>
+  </Playfield>
+  <Playfield id="500" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Parnassos</Name>
+  </Playfield>
+  <Playfield id="501" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Parnassos Island of Ceremony</Name>
+  </Playfield>
+  <Playfield id="505" expansion="0" disabled="false" x="35214" xscale="1.00000" z="44566" zscale="1.00000">
+    <Name>Avalon</Name>
+  </Playfield>
+  <Playfield id="540" expansion="0" disabled="false" x="39621" xscale="1.00000" z="40670" zscale="1.00000">
+    <Name>Old Athen</Name>
+  </Playfield>
+  <Playfield id="545" expansion="0" disabled="false" x="39122" xscale="1.00000" z="40646" zscale="1.00000">
+    <Name>West Athens</Name>
+  </Playfield>
+  <Playfield id="550" expansion="0" disabled="false" x="37085" xscale="1.00000" z="39823" zscale="1.00000">
+    <Name>Athen Shire</Name>
+  </Playfield>
+  <Playfield id="551" expansion="0" disabled="false" x="37078" xscale="1.00000" z="41004" zscale="1.00000">
+    <Name>Wailing Wastes</Name>
+  </Playfield>
+  <Playfield id="556" expansion="0" disabled="false" x="38546" xscale="1.00000" z="25028" zscale="1.00000">
+    <Name>Coast of Peace</Name>
+  </Playfield>
+  <Playfield id="560" expansion="0" disabled="false" x="41975" xscale="1.00000" z="45030" zscale="1.00000">
+    <Name>Mort</Name>
+  </Playfield>
+  <Playfield id="565" expansion="0" disabled="false" x="41959" xscale="1.00000" z="42152" zscale="1.00000">
+    <Name>Newland Desert</Name>
+  </Playfield>
+  <Playfield id="566" expansion="0" disabled="false" x="42862" xscale="1.00000" z="42389" zscale="1.00000">
+    <Name>Newland City</Name>
+  </Playfield>
+  <Playfield id="567" expansion="0" disabled="false" x="41950" xscale="1.00000" z="42166" zscale="1.00000">
+    <Name>Newland</Name>
+  </Playfield>
+  <Playfield id="570" expansion="0" disabled="false" x="45486" xscale="1.00000" z="45364" zscale="1.00000">
+    <Name>The Perpetual Wastelands</Name>
+  </Playfield>
+  <Playfield id="585" expansion="0" disabled="false" x="39721" xscale="1.00000" z="39418" zscale="1.00000">
+    <Name>Aegean</Name>
+  </Playfield>
+  <Playfield id="586" expansion="0" disabled="false" x="39743" xscale="1.00000" z="40342" zscale="1.00000">
+    <Name>Wartorn Valley</Name>
+  </Playfield>
+  <Playfield id="590" expansion="0" disabled="false" x="42836" xscale="1.00000" z="36053" zscale="1.00000">
+    <Name>Central Artery Valley</Name>
+  </Playfield>
+  <Playfield id="595" expansion="0" disabled="false" x="46219" xscale="1.00000" z="35172" zscale="1.00000">
+    <Name>Deep Artery Valley</Name>
+  </Playfield>
+  <Playfield id="600" expansion="0" disabled="false" x="41975" xscale="1.00000" z="39148" zscale="1.00000">
+    <Name>Varmint Woods</Name>
+  </Playfield>
+  <Playfield id="605" expansion="0" disabled="false" x="46248" xscale="1.00000" z="32165" zscale="1.00000">
+    <Name>Belial Forest</Name>
+  </Playfield>
+  <Playfield id="610" expansion="0" disabled="false" x="42839" xscale="1.00000" z="33283" zscale="1.00000">
+    <Name>Southern Artery Valley</Name>
+  </Playfield>
+  <Playfield id="615" expansion="0" disabled="false" x="46680" xscale="1.00000" z="24729" zscale="1.00000">
+    <Name>Southern Fouls Hills</Name>
+  </Playfield>
+  <Playfield id="620" expansion="0" disabled="false" x="46689" xscale="1.00000" z="27892" zscale="1.00000">
+    <Name>Eastern Fouls Plains</Name>
+  </Playfield>
+  <Playfield id="625" expansion="0" disabled="false" x="41891" xscale="1.00000" z="30614" zscale="1.00000">
+    <Name>Milky Way</Name>
+  </Playfield>
+  <Playfield id="630" expansion="0" disabled="false" x="43499" xscale="1.00000" z="27918" zscale="1.00000">
+    <Name>Pleasant Meadows</Name>
+  </Playfield>
+  <Playfield id="635" expansion="0" disabled="false" x="40889" xscale="1.00000" z="33041" zscale="1.00000">
+    <Name>Stret East Bank GOLD</Name>
+  </Playfield>
+  <Playfield id="640" expansion="0" disabled="false" x="47921" xscale="1.00000" z="39716" zscale="1.00000">
+    <Name>Tir</Name>
+  </Playfield>
+  <Playfield id="641" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Arena</Name>
+  </Playfield>
+  <Playfield id="646" expansion="0" disabled="false" x="46178" xscale="1.00000" z="39071" zscale="1.00000">
+    <Name>Tir County</Name>
+  </Playfield>
+  <Playfield id="647" expansion="0" disabled="false" x="46175" xscale="1.00000" z="39073" zscale="1.00000">
+    <Name>Greater Tir County</Name>
+  </Playfield>
+  <Playfield id="650" expansion="0" disabled="false" x="40866" xscale="1.00000" z="36044" zscale="1.00000">
+    <Name>Upper Stret East Bank</Name>
+  </Playfield>
+  <Playfield id="655" expansion="0" disabled="false" x="37182" xscale="1.00000" z="31311" zscale="1.00000">
+    <Name>Andromeda</Name>
+  </Playfield>
+  <Playfield id="656" expansion="0" disabled="false" x="38546" xscale="1.00000" z="25028" zscale="1.00000">
+    <Name>Coast of Tranquility</Name>
+  </Playfield>
+  <Playfield id="665" expansion="0" disabled="false" x="31002" xscale="1.00000" z="29384" zscale="1.00000">
+    <Name>Broken Shores</Name>
+  </Playfield>
+  <Playfield id="670" expansion="0" disabled="false" x="37169" xscale="1.00000" z="27031" zscale="1.00000">
+    <Name>Clondyke</Name>
+  </Playfield>
+  <Playfield id="685" expansion="0" disabled="false" x="34495" xscale="1.00000" z="29814" zscale="1.00000">
+    <Name>Galway County</Name>
+  </Playfield>
+  <Playfield id="687" expansion="0" disabled="false" x="34518" xscale="1.00000" z="29814" zscale="1.00000">
+    <Name>Galway Shire</Name>
+  </Playfield>
+  <Playfield id="695" expansion="0" disabled="false" x="39962" xscale="1.00000" z="27028" zscale="1.00000">
+    <Name>Lush Fields</Name>
+  </Playfield>
+  <Playfield id="696" expansion="0" disabled="false" x="41950" xscale="1.00000" z="27705" zscale="1.00000">
+    <Name>Mutant Domain</Name>
+  </Playfield>
+  <Playfield id="700" expansion="0" disabled="false" x="43204" xscale="1.00000" z="27102" zscale="1.00000">
+    <Name>Omni1-HEADQUARTER</Name>
+  </Playfield>
+  <Playfield id="705" expansion="0" disabled="false" x="43756" xscale="1.00000" z="26526" zscale="1.00000">
+    <Name>Omni1 Entertainment</Name>
+  </Playfield>
+  <Playfield id="706" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni Entertainment Arena</Name>
+  </Playfield>
+  <Playfield id="710" expansion="0" disabled="false" x="43308" xscale="1.00000" z="27595" zscale="1.00000">
+    <Name>Omni-1 Trade</Name>
+  </Playfield>
+  <Playfield id="716" expansion="0" disabled="false" x="44526" xscale="1.00000" z="24729" zscale="1.00000">
+    <Name>Omni Forest</Name>
+  </Playfield>
+  <Playfield id="717" expansion="0" disabled="false" x="44526" xscale="1.00000" z="24729" zscale="1.00000">
+    <Name>Greater Omni Forest</Name>
+  </Playfield>
+  <Playfield id="730" expansion="0" disabled="false" x="34049" xscale="1.00000" z="30363" zscale="1.00000">
+    <Name>Rome Park</Name>
+  </Playfield>
+  <Playfield id="735" expansion="0" disabled="false" x="33917" xscale="1.00000" z="30370" zscale="1.00000">
+    <Name>Rome Blue</Name>
+  </Playfield>
+  <Playfield id="740" expansion="0" disabled="false" x="33837" xscale="1.00000" z="30358" zscale="1.00000">
+    <Name>Rome Green</Name>
+  </Playfield>
+  <Playfield id="750" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Reck</Name>
+  </Playfield>
+  <Playfield id="760" expansion="0" disabled="false" x="38486" xscale="1.00000" z="33943" zscale="1.00000">
+    <Name>4 Holes</Name>
+  </Playfield>
+  <Playfield id="790" expansion="0" disabled="false" x="38062" xscale="1.00000" z="36352" zscale="1.00000">
+    <Name>Stret West Bank</Name>
+  </Playfield>
+  <Playfield id="791" expansion="0" disabled="false" x="38081" xscale="1.00000" z="37660" zscale="1.00000">
+    <Name>Holes in the Wall</Name>
+  </Playfield>
+  <Playfield id="795" expansion="0" disabled="false" x="33860" xscale="1.00000" z="39227" zscale="1.00000">
+    <Name>The Longest Road</Name>
+  </Playfield>
+  <Playfield id="800" expansion="0" disabled="false" x="37107" xscale="1.00000" z="38360" zscale="1.00000">
+    <Name>Borealis</Name>
+  </Playfield>
+  <Playfield id="896" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Character Creation Lab Dng</Name>
+  </Playfield>
+  <Playfield id="950" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni Training</Name>
+  </Playfield>
+  <Playfield id="952" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Training</Name>
+  </Playfield>
+  <Playfield id="953" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Backyard</Name>
+  </Playfield>
+  <Playfield id="954" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Training</Name>
+  </Playfield>
+  <Playfield id="955" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Backyard</Name>
+  </Playfield>
+  <Playfield id="1001" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Senitel rec_centre (wine) GOLD</Name>
+  </Playfield>
+  <Playfield id="1002" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>medical/eating (wine) GOLD</Name>
+  </Playfield>
+  <Playfield id="1003" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Wine hq (wine) GOLD</Name>
+  </Playfield>
+  <Playfield id="1004" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>barracks (wine) GOLD</Name>
+  </Playfield>
+  <Playfield id="1005" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>storage (wine) GOLD</Name>
+  </Playfield>
+  <Playfield id="1011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>2HO HQ (streteast) GOLD</Name>
+  </Playfield>
+  <Playfield id="1012" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>2HO satellite (streteast) GOLD</Name>
+  </Playfield>
+  <Playfield id="1021" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>OMni barracks (USEB) GOLD</Name>
+  </Playfield>
+  <Playfield id="1031" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Avalon omni barracks</Name>
+  </Playfield>
+  <Playfield id="1136" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Mir shop clan</Name>
+  </Playfield>
+  <Playfield id="1137" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>mir shop omni</Name>
+  </Playfield>
+  <Playfield id="1180" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_clan_basic</Name>
+  </Playfield>
+  <Playfield id="1181" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_clan_advanced</Name>
+  </Playfield>
+  <Playfield id="1182" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_clan_sup</Name>
+  </Playfield>
+  <Playfield id="1183" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_omni_basic</Name>
+  </Playfield>
+  <Playfield id="1184" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_omni_advanced</Name>
+  </Playfield>
+  <Playfield id="1185" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_omni_sup</Name>
+  </Playfield>
+  <Playfield id="1186" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_neut_basic</Name>
+  </Playfield>
+  <Playfield id="1187" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ord_smarket_neut_advanced</Name>
+  </Playfield>
+  <Playfield id="1189" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>spec_smarket_clan_advanced</Name>
+  </Playfield>
+  <Playfield id="1190" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>spec_smarket_clan_sup</Name>
+  </Playfield>
+  <Playfield id="1191" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>spec_smarket_omni_advanced</Name>
+  </Playfield>
+  <Playfield id="1192" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>spec_smarket_omni_sup</Name>
+  </Playfield>
+  <Playfield id="1193" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>spec_smarket_neut_basic</Name>
+  </Playfield>
+  <Playfield id="1211" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>basicomniapartment dng</Name>
+  </Playfield>
+  <Playfield id="1231" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Small Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1232" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Medium Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1233" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Big Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1241" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Small Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1242" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Medium Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1243" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Big Clan Apartment</Name>
+  </Playfield>
+  <Playfield id="1251" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni Small Guild</Name>
+  </Playfield>
+  <Playfield id="1321" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding2 dng</Name>
+  </Playfield>
+  <Playfield id="1322" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding1 dng</Name>
+  </Playfield>
+  <Playfield id="1323" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding9 dng</Name>
+  </Playfield>
+  <Playfield id="1324" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding11 dng</Name>
+  </Playfield>
+  <Playfield id="1325" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding12 dng</Name>
+  </Playfield>
+  <Playfield id="1326" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding3</Name>
+  </Playfield>
+  <Playfield id="1327" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding_pod4 dng</Name>
+  </Playfield>
+  <Playfield id="1328" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding5 dng</Name>
+  </Playfield>
+  <Playfield id="1329" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding6 dng</Name>
+  </Playfield>
+  <Playfield id="1330" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>tir clanbuilding7 dng</Name>
+  </Playfield>
+  <Playfield id="1404" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Temple of Home</Name>
+  </Playfield>
+  <Playfield id="1405" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clanapartment</Name>
+  </Playfield>
+  <Playfield id="1406" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omniapartment</Name>
+  </Playfield>
+  <Playfield id="1407" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neutralapartment</Name>
+  </Playfield>
+  <Playfield id="1410" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>items</Name>
+  </Playfield>
+  <Playfield id="1421" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>avalon_building3 dng</Name>
+  </Playfield>
+  <Playfield id="1422" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>avalon_building4 dng</Name>
+  </Playfield>
+  <Playfield id="1423" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>avalon_building5</Name>
+  </Playfield>
+  <Playfield id="1424" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>avalon_building2 dng</Name>
+  </Playfield>
+  <Playfield id="1426" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Registration dng</Name>
+  </Playfield>
+  <Playfield id="1427" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni registration dng</Name>
+  </Playfield>
+  <Playfield id="1428" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral organisation dng</Name>
+  </Playfield>
+  <Playfield id="1501" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_06</Name>
+  </Playfield>
+  <Playfield id="1502" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_02</Name>
+  </Playfield>
+  <Playfield id="1503" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_04</Name>
+  </Playfield>
+  <Playfield id="1504" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_07</Name>
+  </Playfield>
+  <Playfield id="1505" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_08</Name>
+  </Playfield>
+  <Playfield id="1506" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building_09</Name>
+  </Playfield>
+  <Playfield id="1507" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omnimine_hq_building10</Name>
+  </Playfield>
+  <Playfield id="1510" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Insurance building</Name>
+  </Playfield>
+  <Playfield id="1511" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Mission building</Name>
+  </Playfield>
+  <Playfield id="1601" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>athens_clanhouse1 VP dng</Name>
+  </Playfield>
+  <Playfield id="1602" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>athens_clanhouse3 VP dng</Name>
+  </Playfield>
+  <Playfield id="1603" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>athens_clanhouse4 VP dng</Name>
+  </Playfield>
+  <Playfield id="1604" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>athens_clanhouse12 VP dng</Name>
+  </Playfield>
+  <Playfield id="1611" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Swamp_house01 VP dng</Name>
+  </Playfield>
+  <Playfield id="1612" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Swamp_house02</Name>
+  </Playfield>
+  <Playfield id="1613" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>swamp_house03 VP dng</Name>
+  </Playfield>
+  <Playfield id="1614" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Swamp_house04 VP dng</Name>
+  </Playfield>
+  <Playfield id="1621" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_01 VP dng</Name>
+  </Playfield>
+  <Playfield id="1622" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_02 VP dng</Name>
+  </Playfield>
+  <Playfield id="1623" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_03 VP dng</Name>
+  </Playfield>
+  <Playfield id="1624" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_04 VP dng</Name>
+  </Playfield>
+  <Playfield id="1625" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_05 VP dng</Name>
+  </Playfield>
+  <Playfield id="1626" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_06 VP dng</Name>
+  </Playfield>
+  <Playfield id="1627" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>wood_shack_07 VP dng</Name>
+  </Playfield>
+  <Playfield id="1641" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building1 VP dng</Name>
+  </Playfield>
+  <Playfield id="1642" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building2 VP dng</Name>
+  </Playfield>
+  <Playfield id="1643" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building3 VP dng</Name>
+  </Playfield>
+  <Playfield id="1644" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building4 VP dng</Name>
+  </Playfield>
+  <Playfield id="1645" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building5 VP dng</Name>
+  </Playfield>
+  <Playfield id="1646" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building6 VP dng</Name>
+  </Playfield>
+  <Playfield id="1647" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_building7 VP dng</Name>
+  </Playfield>
+  <Playfield id="1648" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>lowtech_waterwell VP dng</Name>
+  </Playfield>
+  <Playfield id="1651" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rome_shopbuilding1 VP dng</Name>
+  </Playfield>
+  <Playfield id="1652" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rome_simplebuilding VP dng</Name>
+  </Playfield>
+  <Playfield id="1653" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rome_simplebuilding1 VP dng</Name>
+  </Playfield>
+  <Playfield id="1661" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rhino_house1 VP dng</Name>
+  </Playfield>
+  <Playfield id="1662" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rhino_house2 VP dng</Name>
+  </Playfield>
+  <Playfield id="1663" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>rhino_house3 VP dng</Name>
+  </Playfield>
+  <Playfield id="1671" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>reck_trading_outpost_bunker1 VP</Name>
+  </Playfield>
+  <Playfield id="1672" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>reck_trading_outpost_bunker2 VP</Name>
+  </Playfield>
+  <Playfield id="1673" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>reck_trading_outpost_bunker3 VP</Name>
+  </Playfield>
+  <Playfield id="1674" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>reck_trading_outpost_bunker4 VP</Name>
+  </Playfield>
+  <Playfield id="1675" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>reck_trading_outpost_bunker5 VP</Name>
+  </Playfield>
+  <Playfield id="1701" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Home VP dng 1 medium</Name>
+  </Playfield>
+  <Playfield id="1702" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Home VP dng 2 big</Name>
+  </Playfield>
+  <Playfield id="1703" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Home VP dng 3 small</Name>
+  </Playfield>
+  <Playfield id="1711" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Factory VP dng barracks</Name>
+  </Playfield>
+  <Playfield id="1712" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Factory VP dng factory</Name>
+  </Playfield>
+  <Playfield id="1721" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>LD VP dng 1</Name>
+  </Playfield>
+  <Playfield id="1722" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>LD VP dng 2</Name>
+  </Playfield>
+  <Playfield id="1741" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>enigma_tree01</Name>
+  </Playfield>
+  <Playfield id="1742" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>enigma_tree02</Name>
+  </Playfield>
+  <Playfield id="1743" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>enigma_tree03</Name>
+  </Playfield>
+  <Playfield id="1826" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dancing Atrox Bar</Name>
+  </Playfield>
+  <Playfield id="1827" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni Military Barracks</Name>
+  </Playfield>
+  <Playfield id="1833" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dng: Cyborg Barracks</Name>
+  </Playfield>
+  <Playfield id="1836" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Baboons Nightclub</Name>
+  </Playfield>
+  <Playfield id="1840" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rompa Bar</Name>
+  </Playfield>
+  <Playfield id="1846" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>McRiid's Office</Name>
+  </Playfield>
+  <Playfield id="1862" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Smugglers Den</Name>
+  </Playfield>
+  <Playfield id="1866" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The HQ of Omni-Mine</Name>
+  </Playfield>
+  <Playfield id="1886" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Versailles Tower</Name>
+  </Playfield>
+  <Playfield id="1887" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Treepine Hut</Name>
+  </Playfield>
+  <Playfield id="1891" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Happy Rebel Inn</Name>
+  </Playfield>
+  <Playfield id="1892" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Enjoy it While it Lasts</Name>
+  </Playfield>
+  <Playfield id="1893" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Cup</Name>
+  </Playfield>
+  <Playfield id="1894" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Registration Office</Name>
+  </Playfield>
+  <Playfield id="1901" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neutral Organisation Office</Name>
+  </Playfield>
+  <Playfield id="1902" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neuters 'R' Us</Name>
+  </Playfield>
+  <Playfield id="1913" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Reet Retreat (dng)</Name>
+  </Playfield>
+  <Playfield id="1931" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dng: Temple of Three Winds</Name>
+  </Playfield>
+  <Playfield id="1933" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dng: Steps of Madness</Name>
+  </Playfield>
+  <Playfield id="1941" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Bio MARE</Name>
+  </Playfield>
+  <Playfield id="1943" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dng: High Level ToTW</Name>
+  </Playfield>
+  <Playfield id="2001" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2002" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2003" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_pharmasist_shop</Name>
+  </Playfield>
+  <Playfield id="2004" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_clothes_shop</Name>
+  </Playfield>
+  <Playfield id="2005" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2006" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_basic_nano_shop</Name>
+  </Playfield>
+  <Playfield id="2010" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_advanced_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_advanced_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2012" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_advanced_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2013" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_advanced_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2014" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_advanced_nano_shop</Name>
+  </Playfield>
+  <Playfield id="2020" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_sup_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2021" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_sup_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2022" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_sup_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2023" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_sup_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2024" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>clan_sup_nano_shop</Name>
+  </Playfield>
+  <Playfield id="2030" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_basic_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2031" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_basic_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2032" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_basic_pharmacist</Name>
+  </Playfield>
+  <Playfield id="2033" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_basic_clothes_shop</Name>
+  </Playfield>
+  <Playfield id="2034" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_basic_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2040" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_advanced_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2041" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_advanced_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2042" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_advanced_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2043" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_advanced_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2050" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_sup_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2051" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_sup_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2052" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_sup_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2053" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>omni_sup_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2060" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_basic_weapon _shop</Name>
+  </Playfield>
+  <Playfield id="2061" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_basic_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2062" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_basic_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2063" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_basic_clothes_shop</Name>
+  </Playfield>
+  <Playfield id="2064" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_basic_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2070" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_advanced_weapons_shop</Name>
+  </Playfield>
+  <Playfield id="2071" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_advanced_armor_shop</Name>
+  </Playfield>
+  <Playfield id="2072" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_advanced_pharmacist_shop</Name>
+  </Playfield>
+  <Playfield id="2073" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>neut_advanced_implants_shop</Name>
+  </Playfield>
+  <Playfield id="2096" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>4holes Fashion</Name>
+  </Playfield>
+  <Playfield id="3000" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3001" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3002" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3003" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3004" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3005" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3006" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3007" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3008" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3009" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3010" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 11</Name>
+  </Playfield>
+  <Playfield id="3011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 12</Name>
+  </Playfield>
+  <Playfield id="3012" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 13</Name>
+  </Playfield>
+  <Playfield id="3013" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 14</Name>
+  </Playfield>
+  <Playfield id="3014" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 15</Name>
+  </Playfield>
+  <Playfield id="3015" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 16</Name>
+  </Playfield>
+  <Playfield id="3016" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 17</Name>
+  </Playfield>
+  <Playfield id="3017" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 18</Name>
+  </Playfield>
+  <Playfield id="3018" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 19</Name>
+  </Playfield>
+  <Playfield id="3019" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Entertainment Backyard 20</Name>
+  </Playfield>
+  <Playfield id="3020" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3021" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3022" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3023" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3024" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3025" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3026" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3027" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3028" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3029" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3030" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 11</Name>
+  </Playfield>
+  <Playfield id="3031" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 12</Name>
+  </Playfield>
+  <Playfield id="3032" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 13</Name>
+  </Playfield>
+  <Playfield id="3033" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 14</Name>
+  </Playfield>
+  <Playfield id="3034" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 15</Name>
+  </Playfield>
+  <Playfield id="3035" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 16</Name>
+  </Playfield>
+  <Playfield id="3036" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 17</Name>
+  </Playfield>
+  <Playfield id="3037" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 18</Name>
+  </Playfield>
+  <Playfield id="3038" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 19</Name>
+  </Playfield>
+  <Playfield id="3039" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni-1 Trade Backyard 20</Name>
+  </Playfield>
+  <Playfield id="3040" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3041" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3042" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3043" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3044" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3045" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3046" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3047" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3048" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3049" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Blue Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3050" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3051" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3052" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3053" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3054" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3055" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3056" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3057" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3058" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3059" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rome Green Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3060" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3061" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3062" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3063" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3064" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3065" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3066" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3067" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3068" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3069" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3070" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 11</Name>
+  </Playfield>
+  <Playfield id="3071" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Newland Backyard 12</Name>
+  </Playfield>
+  <Playfield id="3080" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3081" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3082" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3083" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3084" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3085" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3086" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3087" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3088" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3089" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Borealis Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3100" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3101" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3102" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3103" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3104" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3105" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3106" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3107" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3108" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3109" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3110" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 11</Name>
+  </Playfield>
+  <Playfield id="3111" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 12</Name>
+  </Playfield>
+  <Playfield id="3112" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 13</Name>
+  </Playfield>
+  <Playfield id="3113" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 14</Name>
+  </Playfield>
+  <Playfield id="3114" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 15</Name>
+  </Playfield>
+  <Playfield id="3115" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 16</Name>
+  </Playfield>
+  <Playfield id="3116" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 17</Name>
+  </Playfield>
+  <Playfield id="3117" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Backyard 18</Name>
+  </Playfield>
+  <Playfield id="3120" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3121" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3122" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3123" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3124" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3125" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3126" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3127" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3128" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3129" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 10</Name>
+  </Playfield>
+  <Playfield id="3130" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 11</Name>
+  </Playfield>
+  <Playfield id="3131" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 12</Name>
+  </Playfield>
+  <Playfield id="3132" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 13</Name>
+  </Playfield>
+  <Playfield id="3133" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 14</Name>
+  </Playfield>
+  <Playfield id="3134" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 15</Name>
+  </Playfield>
+  <Playfield id="3135" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 16</Name>
+  </Playfield>
+  <Playfield id="3136" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 17</Name>
+  </Playfield>
+  <Playfield id="3137" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 18</Name>
+  </Playfield>
+  <Playfield id="3138" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 19</Name>
+  </Playfield>
+  <Playfield id="3139" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Old Athen Backyard 20</Name>
+  </Playfield>
+  <Playfield id="3140" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 1</Name>
+  </Playfield>
+  <Playfield id="3141" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 2</Name>
+  </Playfield>
+  <Playfield id="3142" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 3</Name>
+  </Playfield>
+  <Playfield id="3143" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 4</Name>
+  </Playfield>
+  <Playfield id="3144" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 5</Name>
+  </Playfield>
+  <Playfield id="3145" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 6</Name>
+  </Playfield>
+  <Playfield id="3146" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 7</Name>
+  </Playfield>
+  <Playfield id="3147" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 8</Name>
+  </Playfield>
+  <Playfield id="3148" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 9</Name>
+  </Playfield>
+  <Playfield id="3149" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Athen Backyard 10</Name>
+  </Playfield>
+  <Playfield id="4001" expansion="0" disabled="false" x="32276" xscale="1.00000" z="26220" zscale="1.00000">
+    <Name>Jobe Research</Name>
+  </Playfield>
+  <Playfield id="4003" expansion="0" disabled="false" x="37107" xscale="1.00000" z="38360" zscale="1.00000">
+    <Name>Burning Marshes</Name>
+  </Playfield>
+  <Playfield id="4005" expansion="0" disabled="false" x="32603" xscale="0.86614" z="42790" zscale="0.97726">
+    <Name>Burning Marshes</Name>
+  </Playfield>
+  <Playfield id="4006" expansion="0" disabled="false" x="31344" xscale="1.00000" z="39608" zscale="1.00000">
+    <Name>Penumbra</Name>
+  </Playfield>
+  <Playfield id="4010" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden of Redeemed Main</Name>
+  </Playfield>
+  <Playfield id="4011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden_of_unredeemed</Name>
+  </Playfield>
+  <Playfield id="4102" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Beer And Booze (dng)</Name>
+  </Playfield>
+  <Playfield id="4107" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Fixer Grid (dng</Name>
+  </Playfield>
+  <Playfield id="4121" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Will To Fight</Name>
+  </Playfield>
+  <Playfield id="4211" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Acheron</Name>
+  </Playfield>
+  <Playfield id="4212" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Letha_scheol_red</Name>
+  </Playfield>
+  <Playfield id="4213" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Styx_ado_red</Name>
+  </Playfield>
+  <Playfield id="4214" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Eridan</Name>
+  </Playfield>
+  <Playfield id="4215" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Phlegethas1</Name>
+  </Playfield>
+  <Playfield id="4220" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Acheron (Unre)</Name>
+  </Playfield>
+  <Playfield id="4221" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Letha_scheol_unre</Name>
+  </Playfield>
+  <Playfield id="4222" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Styx_ado_unre</Name>
+  </Playfield>
+  <Playfield id="4223" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Eridan (Unre)</Name>
+  </Playfield>
+  <Playfield id="4224" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Maze_Phlegethas1 (Unre)</Name>
+  </Playfield>
+  <Playfield id="4310" expansion="0" disabled="false" x="32321" xscale="0.96614" z="26244" zscale="0.97726">
+    <Name>Nascense Frontier</Name>
+  </Playfield>
+  <Playfield id="4311" expansion="0" disabled="false" x="32321" xscale="0.96614" z="26244" zscale="0.97726">
+    <Name>Nascense Wilds</Name>
+  </Playfield>
+  <Playfield id="4312" expansion="0" disabled="false" x="32321" xscale="0.96614" z="26244" zscale="0.97726">
+    <Name>Nascense Swamp</Name>
+  </Playfield>
+  <Playfield id="4313" expansion="0" disabled="false" x="32030" xscale="1.00000" z="25559" zscale="1.00000">
+    <Name>Nascense Training Ground</Name>
+  </Playfield>
+  <Playfield id="4314" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Harbour Gateway (dng)</Name>
+  </Playfield>
+  <Playfield id="4315" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Market Gateway (dng)</Name>
+  </Playfield>
+  <Playfield id="4316" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Plaza Gateway (dng)</Name>
+  </Playfield>
+  <Playfield id="4318" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Nascense Portal</Name>
+  </Playfield>
+  <Playfield id="4320" expansion="0" disabled="false" x="31377" xscale="1.00000" z="39557" zscale="1.00000">
+    <Name>Penumbra Forest</Name>
+  </Playfield>
+  <Playfield id="4321" expansion="0" disabled="false" x="31303" xscale="1.00000" z="39573" zscale="1.00000">
+    <Name>Penumbra Valley</Name>
+  </Playfield>
+  <Playfield id="4322" expansion="0" disabled="false" x="31344" xscale="1.00000" z="39597" zscale="1.00000">
+    <Name>Penumbra Hollows</Name>
+  </Playfield>
+  <Playfield id="4324" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Penumbra Transit (dng)</Name>
+  </Playfield>
+  <Playfield id="4327" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Apartment Normal (dng)</Name>
+  </Playfield>
+  <Playfield id="4328" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Pandemonium Caina</Name>
+  </Playfield>
+  <Playfield id="4329" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Pandemonium Antenora</Name>
+  </Playfield>
+  <Playfield id="4330" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Pandemonium Ptolemea</Name>
+  </Playfield>
+  <Playfield id="4331" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Pandemonium Judecca</Name>
+  </Playfield>
+  <Playfield id="4334" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Rubi-Ka Rumble (dng)</Name>
+  </Playfield>
+  <Playfield id="4336" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Alappaa</Name>
+  </Playfield>
+  <Playfield id="4337" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Albtraum</Name>
+  </Playfield>
+  <Playfield id="4341" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Basic Omni org hq</Name>
+  </Playfield>
+  <Playfield id="4342" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Basic Clan org hq</Name>
+  </Playfield>
+  <Playfield id="4343" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Basic Neutral org hq</Name>
+  </Playfield>
+  <Playfield id="4344" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Advanced Omni org hq</Name>
+  </Playfield>
+  <Playfield id="4345" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Advanced Clan org hq</Name>
+  </Playfield>
+  <Playfield id="4346" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Advanced Neutral org hq</Name>
+  </Playfield>
+  <Playfield id="4347" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Superior Omni org hq</Name>
+  </Playfield>
+  <Playfield id="4348" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Superior Clan org hq</Name>
+  </Playfield>
+  <Playfield id="4349" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Superior Neutral org hq</Name>
+  </Playfield>
+  <Playfield id="4350" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>...remember rule no. 1</Name>
+  </Playfield>
+  <Playfield id="4351" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Swimming Pool</Name>
+  </Playfield>
+  <Playfield id="4352" expansion="0" disabled="true" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Market</Name>
+  </Playfield>
+  <Playfield id="4354" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Uncle Bazzits Workshop (Dng)</Name>
+  </Playfield>
+  <Playfield id="4355" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Basic Player Market (Dng)</Name>
+  </Playfield>
+  <Playfield id="4356" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Advanced Player Market [dng]</Name>
+  </Playfield>
+  <Playfield id="4357" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Superior Player Market [dng]</Name>
+  </Playfield>
+  <Playfield id="4360" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clinique Plastique</Name>
+  </Playfield>
+  <Playfield id="4363" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Tir Night Club (dng)</Name>
+  </Playfield>
+  <Playfield id="4364" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unicorn Outpost</Name>
+  </Playfield>
+  <Playfield id="4365" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sector 13</Name>
+  </Playfield>
+  <Playfield id="4366" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sector 28</Name>
+  </Playfield>
+  <Playfield id="4367" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sector 35</Name>
+  </Playfield>
+  <Playfield id="4368" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unicorn Outpost - Lower level</Name>
+  </Playfield>
+  <Playfield id="4370" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>new alien</Name>
+  </Playfield>
+  <Playfield id="4374" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sector 10</Name>
+  </Playfield>
+  <Playfield id="4376" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ICC Assembly Hall (dng)</Name>
+  </Playfield>
+  <Playfield id="4380" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 20-49</Name>
+  </Playfield>
+  <Playfield id="4381" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 50-74</Name>
+  </Playfield>
+  <Playfield id="4382" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 75-99</Name>
+  </Playfield>
+  <Playfield id="4383" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 100-124</Name>
+  </Playfield>
+  <Playfield id="4384" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 125-149</Name>
+  </Playfield>
+  <Playfield id="4385" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 150-174</Name>
+  </Playfield>
+  <Playfield id="4386" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 175-199</Name>
+  </Playfield>
+  <Playfield id="4387" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 200-209</Name>
+  </Playfield>
+  <Playfield id="4388" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Battle Station 210-220</Name>
+  </Playfield>
+  <Playfield id="4504" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>West Buggy (DONT DELETE)</Name>
+  </Playfield>
+  <Playfield id="4505" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>South Buggy (DONT DELETE)</Name>
+  </Playfield>
+  <Playfield id="4524" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Elysium_pre-split</Name>
+  </Playfield>
+  <Playfield id="4525" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe</Name>
+  </Playfield>
+  <Playfield id="4526" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe_pre-split</Name>
+  </Playfield>
+  <Playfield id="4530" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Platform</Name>
+  </Playfield>
+  <Playfield id="4531" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Harbor</Name>
+  </Playfield>
+  <Playfield id="4532" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Market</Name>
+  </Playfield>
+  <Playfield id="4533" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Plaza</Name>
+  </Playfield>
+  <Playfield id="4534" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Jobe Apartment</Name>
+  </Playfield>
+  <Playfield id="4540" expansion="0" disabled="false" x="31709" xscale="1.00000" z="28136" zscale="1.00000">
+    <Name>South of Elysium</Name>
+  </Playfield>
+  <Playfield id="4541" expansion="0" disabled="false" x="31716" xscale="1.00000" z="28920" zscale="1.00000">
+    <Name>West of Elysium</Name>
+  </Playfield>
+  <Playfield id="4542" expansion="0" disabled="false" x="32472" xscale="1.00000" z="29198" zscale="1.00000">
+    <Name>Central Elysium</Name>
+  </Playfield>
+  <Playfield id="4543" expansion="0" disabled="false" x="33358" xscale="1.00000" z="29062" zscale="1.00000">
+    <Name>East of Elysium</Name>
+  </Playfield>
+  <Playfield id="4544" expansion="0" disabled="false" x="31987" xscale="1.00000" z="30605" zscale="1.00000">
+    <Name>North of Elysium</Name>
+  </Playfield>
+  <Playfield id="4561" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Arrival Hall Gateway (dng)</Name>
+  </Playfield>
+  <Playfield id="4563" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Hardware Dimension - Basic</Name>
+  </Playfield>
+  <Playfield id="4564" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Hardware Dimension - Advanced</Name>
+  </Playfield>
+  <Playfield id="4565" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Hardware Dimenion - Superior</Name>
+  </Playfield>
+  <Playfield id="4567" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dimensional Shift - Basic</Name>
+  </Playfield>
+  <Playfield id="4568" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dimensional Shift - Advanced</Name>
+  </Playfield>
+  <Playfield id="4569" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dimensional Shift - Superior</Name>
+  </Playfield>
+  <Playfield id="4571" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Heavenly Business - Basic</Name>
+  </Playfield>
+  <Playfield id="4572" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Heavenly Business - Advanced</Name>
+  </Playfield>
+  <Playfield id="4573" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Heavenly Business - Superior</Name>
+  </Playfield>
+  <Playfield id="4575" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>IPS Interior - Basic</Name>
+  </Playfield>
+  <Playfield id="4576" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>IPS Interior - Advanced</Name>
+  </Playfield>
+  <Playfield id="4577" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>IPS Interior - Superior</Name>
+  </Playfield>
+  <Playfield id="4582" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>ICC Shuttleport</Name>
+  </Playfield>
+  <Playfield id="4604" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Arrival_hall</Name>
+  </Playfield>
+  <Playfield id="4605" expansion="0" disabled="false" x="32560" xscale="0.86614" z="42798" zscale="0.97726">
+    <Name>Inferno</Name>
+  </Playfield>
+  <Playfield id="4621" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Redeemed Temple (Elysium)</Name>
+  </Playfield>
+  <Playfield id="4622" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unredeemed Temple (ELysium)</Name>
+  </Playfield>
+  <Playfield id="4623" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Redeemed Temple (Scheol)</Name>
+  </Playfield>
+  <Playfield id="4624" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unredeemed Temple (Scheol)</Name>
+  </Playfield>
+  <Playfield id="4625" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Redeemed Temple (Adonis)</Name>
+  </Playfield>
+  <Playfield id="4626" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unredeemed Temple (Adonis)</Name>
+  </Playfield>
+  <Playfield id="4627" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Redeemed Temple (Penumbra)</Name>
+  </Playfield>
+  <Playfield id="4628" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unredeemed Temple (Penumbra)</Name>
+  </Playfield>
+  <Playfield id="4629" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Redeemed Temple (Inferno)</Name>
+  </Playfield>
+  <Playfield id="4630" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.000000">
+    <Name>Unredeemed Temple (Inferno)</Name>
+  </Playfield>
+  <Playfield id="4676" expansion="0" disabled="false" x="31437" xscale="1.00000" z="27438" zscale="1.00000">
+    <Name>Garden of Redeemed Nascense</Name>
+  </Playfield>
+  <Playfield id="4677" expansion="0" disabled="false" x="34032" xscale="1.00000" z="27359" zscale="1.00000">
+    <Name>Garden_of_unredeemed Nascense</Name>
+  </Playfield>
+  <Playfield id="4678" expansion="0" disabled="false" x="34703" xscale="1.00000" z="28254" zscale="1.00000">
+    <Name>Garden of Redeemed Elysium</Name>
+  </Playfield>
+  <Playfield id="4679" expansion="0" disabled="false" x="31238" xscale="1.00000" z="31251" zscale="1.00000">
+    <Name>Garden of Redeemed Elysium2</Name>
+  </Playfield>
+  <Playfield id="4680" expansion="0" disabled="false" x="30924" xscale="1.00000" z="29396" zscale="1.00000">
+    <Name>Garden_of_unredeemed Elysium</Name>
+  </Playfield>
+  <Playfield id="4681" expansion="0" disabled="false" x="34701" xscale="1.00000" z="31237" zscale="1.00000">
+    <Name>Garden_of_unredeemed Elysium2</Name>
+  </Playfield>
+  <Playfield id="4682" expansion="0" disabled="false" x="31149" xscale="1.00000" z="33219" zscale="1.00000">
+    <Name>Garden of Redeemed Scheol</Name>
+  </Playfield>
+  <Playfield id="4683" expansion="0" disabled="false" x="34175" xscale="1.00000" z="33176" zscale="1.00000">
+    <Name>Garden_of_unredeemed Scheol</Name>
+  </Playfield>
+  <Playfield id="4684" expansion="0" disabled="false" x="34881" xscale="1.00000" z="36164" zscale="1.00000">
+    <Name>Garden of Redeemed Adonis</Name>
+  </Playfield>
+  <Playfield id="4685" expansion="0" disabled="false" x="34519" xscale="1.00000" z="37164" zscale="1.00000">
+    <Name>Garden of Redeemed Adonis2</Name>
+  </Playfield>
+  <Playfield id="4686" expansion="0" disabled="false" x="31106" xscale="1.00000" z="37228" zscale="1.00000">
+    <Name>Garden_of_unredeemed Adonis</Name>
+  </Playfield>
+  <Playfield id="4687" expansion="0" disabled="false" x="30867" xscale="1.00000" z="38311" zscale="1.00000">
+    <Name>Garden_of_unredeemed Adonis2</Name>
+  </Playfield>
+  <Playfield id="4688" expansion="0" disabled="false" x="34164" xscale="1.00000" z="39484" zscale="1.00000">
+    <Name>Garden of Redeemed Penumbra</Name>
+  </Playfield>
+  <Playfield id="4689" expansion="0" disabled="false" x="35225" xscale="1.00000" z="40721" zscale="1.00000">
+    <Name>Garden of Redeemed Penumbra2</Name>
+  </Playfield>
+  <Playfield id="4690" expansion="0" disabled="false" x="31050" xscale="1.00000" z="39794" zscale="1.00000">
+    <Name>Garden_of_unredeemed Penumbra</Name>
+  </Playfield>
+  <Playfield id="4691" expansion="0" disabled="false" x="30948" xscale="1.00000" z="41509" zscale="1.00000">
+    <Name>Garden_of_unredeemed Penumbra2</Name>
+  </Playfield>
+  <Playfield id="4692" expansion="0" disabled="false" x="31724" xscale="1.00000" z="42506" zscale="1.00000">
+    <Name>Garden of Redeemed Inferno</Name>
+  </Playfield>
+  <Playfield id="4693" expansion="0" disabled="false" x="33394" xscale="1.00000" z="45481" zscale="1.00000">
+    <Name>Garden of Redeemed Inferno2</Name>
+  </Playfield>
+  <Playfield id="4694" expansion="0" disabled="false" x="34698" xscale="1.00000" z="41935" zscale="1.00000">
+    <Name>Garden_of_unredeemed Inferno</Name>
+  </Playfield>
+  <Playfield id="4695" expansion="0" disabled="false" x="35696" xscale="1.00000" z="44073" zscale="1.00000">
+    <Name>Garden_of_unredeemed Inferno2</Name>
+  </Playfield>
+  <Playfield id="4696" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden of Redeemed Pandemonium</Name>
+  </Playfield>
+  <Playfield id="4697" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden of unredeemed Pandemonium</Name>
+  </Playfield>
+  <Playfield id="4698" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden of Redeemed Scheol2</Name>
+  </Playfield>
+  <Playfield id="4699" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Garden_of_unredeemed Scheol2</Name>
+  </Playfield>
+  <Playfield id="4704" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Booster Shop (dungeon)</Name>
+  </Playfield>
+  <Playfield id="4805" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Crypt of Home</Name>
+  </Playfield>
+  <Playfield id="4833" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.000000">
+    <Name>Teleport Tower</Name>
+  </Playfield>
+  <Playfield id="4872" expansion="0" disabled="false" x="31279" xscale="1.00000" z="35698" zscale="1.00000">
+    <Name>Adonis City</Name>
+  </Playfield>
+  <Playfield id="4873" expansion="0" disabled="false" x="31279" xscale="1.00000" z="35698" zscale="1.00000">
+    <Name>Adonis Abyss</Name>
+  </Playfield>
+  <Playfield id="4877" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Adonis Hallway</Name>
+  </Playfield>
+  <Playfield id="4880" expansion="0" disabled="false" x="31734" xscale="1.05000" z="32520" zscale="1.00000">
+    <Name>Upper Scheol</Name>
+  </Playfield>
+  <Playfield id="4881" expansion="0" disabled="false" x="31740" xscale="1.05000" z="33753" zscale="1.00000">
+    <Name>Lower Scheol</Name>
+  </Playfield>
+  <Playfield id="4885" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Shadow Crypt</Name>
+  </Playfield>
+  <Playfield id="4894" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Coast of Harmony</Name>
+  </Playfield>
+  <Playfield id="4898" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Broken Shores AI movie</Name>
+  </Playfield>
+  <Playfield id="4899" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Broken Shores AI Demo</Name>
+  </Playfield>
+  <Playfield id="6003" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Dig Site</Name>
+  </Playfield>  
+  <Playfield id="6011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Arid Rift</Name>
+  </Playfield>
+  <Playfield id="6012" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Neretva Canyon</Name>
+  </Playfield>
+  <Playfield id="6013" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Central Gateway</Name>
+  </Playfield>
+  <Playfield id="6014" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Inside The Ruin</Name>
+  </Playfield>
+  <Playfield id="6015" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Elder Hall</Name>
+  </Playfield>
+  <Playfield id="6017" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Teachers Chamber</Name>
+  </Playfield>
+  <Playfield id="6020" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Xan Hub Tower Room 1</Name>
+  </Playfield>
+  <Playfield id="6021" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Xan Tower</Name>
+  </Playfield>
+  <Playfield id="6022" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area X</Name>
+  </Playfield>
+  <Playfield id="6024" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sealed Antechamber(dng)</Name>
+  </Playfield>
+  <Playfield id="6041" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Inside The Ruin</Name>
+  </Playfield>
+  <Playfield id="6055" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Inside The Machine</Name>
+  </Playfield>  
+  <Playfield id="6056" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dust Brigade Research Facility</Name>
+  </Playfield>
+  <Playfield id="6057" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dust Brigade Research Facility 2</Name>
+  </Playfield>
+  <Playfield id="6060" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Profspecroom</Name>
+  </Playfield>
+  <Playfield id="6061" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Engineers Dugout</Name>
+  </Playfield>
+  <Playfield id="4335" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dark Ruins</Name>
+  </Playfield>
+  <Playfield id="4389" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Caina</Name>
+  </Playfield>
+  <Playfield id="4390" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Ptolemea</Name>
+  </Playfield>
+  <Playfield id="4391" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Judecca</Name>
+  </Playfield>
+  <Playfield id="4468" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sector 7</Name>
+  </Playfield>
+  <Playfield id="6001" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6002" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sunrise Station</Name>
+  </Playfield>
+  <Playfield id="6007" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Unicorn Defence Hub</Name>
+  </Playfield>
+  <Playfield id="6010" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Serenity Islands</Name>
+  </Playfield>
+  <Playfield id="6035" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dark Ruins</Name>
+  </Playfield>
+  <Playfield id="6036" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Dark Ruins</Name>
+  </Playfield>
+  <Playfield id="6050" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Serenity Islands</Name>
+  </Playfield>
+  <Playfield id="6051" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Serenity Islands</Name>
+  </Playfield>
+  <Playfield id="6071" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>The Grind</Name>
+  </Playfield>
+  <Playfield id="6101" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Three Craters West</Name>
+  </Playfield>
+  <Playfield id="6102" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Three Craters East</Name>
+  </Playfield>
+  <Playfield id="6104" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6111" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6112" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6113" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6115" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6121" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6123" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6125" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6127" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6129" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6131" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6133" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Sauna</Name>
+  </Playfield>
+  <Playfield id="6211" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="6300" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6301" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6302" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6303" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6304" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6305" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6306" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>SBC-Xpm Site Alpha-Romeo 29</Name>
+  </Playfield>
+  <Playfield id="6550" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Uturn Canyon</Name>
+  </Playfield>
+  <Playfield id="6551" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Uturn Forest</Name>
+  </Playfield>
+  <Playfield id="7010" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>DOJA Research</Name>
+  </Playfield>
+  <Playfield id="7011" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Omni Tek Agency</Name>
+  </Playfield>
+  <Playfield id="7012" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Clan Quest HQ</Name>
+  </Playfield>
+  <Playfield id="7013" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Antiques and more</Name>
+  </Playfield>
+  <Playfield id="7015" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="7051" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="7054" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="7092" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="8002" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Phasefront Racetrack</Name>
+  </Playfield>
+  <Playfield id="8004" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Area</Name>
+  </Playfield>
+  <Playfield id="8006" expansion="0" disabled="false" x="100000" xscale="1.00000" z="100000" zscale="1.00000">
+    <Name>Generetic Corp. Offices</Name>
+  </Playfield>
+</Playfields>

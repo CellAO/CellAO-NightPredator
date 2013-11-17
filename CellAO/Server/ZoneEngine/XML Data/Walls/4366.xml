@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Walls NumWalls="7">
+  <Wall NumPoints="7">
+    <Point DestPF="0" DestIdx="0" Flags="26" X="495.7137" Y="4.450305" Z="414.4928" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="497.4857" Y="5.44272" Z="419.1571" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="487.1668" Y="36.23528" Z="418.5451" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="483.0215" Y="35.83764" Z="420.2835" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="478.8734" Y="36.38538" Z="421.6302" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="469.3467" Y="5.169262" Z="421.8287" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="469.1834" Y="6.619111" Z="424.0322" />
+  </Wall>
+  <Wall NumPoints="9">
+    <Point DestPF="0" DestIdx="0" Flags="26" X="231.6274" Y="26.90024" Z="322.3057" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="234.1151" Y="28.6999" Z="335.002" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="233.9438" Y="32.20005" Z="336.6321" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="234.7618" Y="33.49989" Z="340.7764" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="235.8141" Y="32.74416" Z="344.7" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="236.5382" Y="22.90022" Z="349.7436" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="240.9038" Y="32.48861" Z="381.6942" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="226.652" Y="22.26585" Z="381.8506" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="238.1049" Y="35.12799" Z="354.4969" />
+  </Wall>
+  <Wall NumPoints="4">
+    <Point DestPF="0" DestIdx="0" Flags="26" X="276.2" Y="20.1" Z="463.9485" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="280.3" Y="21.86742" Z="477.8" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="281.9295" Y="34.30091" Z="483.6102" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="285.4061" Y="25.1" Z="499.7648" />
+  </Wall>
+  <Wall NumPoints="5">
+    <Point DestPF="0" DestIdx="0" Flags="26" X="225.043" Y="25" Z="66.65679" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="229.6576" Y="24.9996" Z="96.29966" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="231.9136" Y="38.5856" Z="103.6487" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="233.1583" Y="25.39929" Z="110.0424" />
+    <Point DestPF="0" DestIdx="0" Flags="26" X="241.9725" Y="28.2" Z="134.8484" />
+  </Wall>
+  <Wall NumPoints="5">
+    <Point DestPF="0" DestIdx="0" Flags="0" X="211.0919" Y="12.16716" Z="64.6363" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="209.4152" Y="6.663069" Z="73.2716" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="213.4874" Y="4.029718" Z="82.75788" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="221.3863" Y="4" Z="94.3181" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="231.6972" Y="4" Z="95.67188" />
+  </Wall>
+  <Wall NumPoints="8">
+    <Point DestPF="0" DestIdx="0" Flags="0" X="547.7794" Y="4.029297" Z="83.81844" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="554.9157" Y="4.029297" Z="83.07919" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="553.1751" Y="4.029297" Z="75.96362" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="553.881" Y="4.029297" Z="70.25115" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="565.3622" Y="4.029297" Z="68.55901" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="567.2665" Y="4.029297" Z="90.86477" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="558.2335" Y="4.029297" Z="98.85375" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="546.0068" Y="4.029297" Z="100.6007" />
+  </Wall>
+  <Wall NumPoints="5">
+    <Point DestPF="0" DestIdx="0" Flags="0" X="471.8505" Y="9.415934" Z="424.6786" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="477.6999" Y="8" Z="423.1778" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="479.1226" Y="8" Z="421.1053" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="476.1644" Y="8" Z="419.719" />
+    <Point DestPF="0" DestIdx="0" Flags="0" X="470.6646" Y="8.696384" Z="419.6483" />
+  </Wall>
+</Walls>

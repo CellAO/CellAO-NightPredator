@@ -101,24 +101,16 @@ namespace ZoneEngine.Core.PacketHandlers
                     client.SendChatText("Current Rank Structure: " + GetRankList(governingForm));
                     break;
 
-                    
-
                 case 3:
 
                     // org contract
                     break;
 
-                    
-
-                    #region unknown org command 4
-
                 case 4:
                     Console.WriteLine("Case 4 Started");
                     break;
 
-                    #endregion
-
-                    #region /org info
+                    
 
                 case 5:
                 {
@@ -209,7 +201,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    #endregion
+                    
 
                     #region /org disband
 
