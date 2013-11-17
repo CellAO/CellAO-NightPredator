@@ -79,8 +79,13 @@
     <Compile Include="Core\InternalMessages\InternalMessage.cs" />
     <Compile Include="Core\InternalMessages\InternalMessageBody.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
+    <Compile Include="Core\Packets\AddTemplate.cs" />
+    <Compile Include="Core\Packets\AppearanceUpdate.cs" />
+    <Compile Include="Core\Packets\ChatServerInfo.cs" />
+    <Compile Include="Core\Packets\PlayfieldAnarchyF.cs" />
     <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
+    <Compile Include="Core\Packets\Stat.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />
     <Compile Include="Core\Playfields\Playfields.cs" />
     <Compile Include="Core\ZoneClient.cs" />
