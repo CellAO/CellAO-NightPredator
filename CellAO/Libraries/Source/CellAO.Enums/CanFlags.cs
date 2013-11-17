@@ -35,50 +35,134 @@ namespace CellAO.Enums
     /// <summary>
     /// </summary>
     [Flags]
-    public enum Expansions : int
+    public enum CanFlags : uint
     {
         /// <summary>
         /// </summary>
-        AlienInvasion = 0x1 << 3, 
+        AimedShot = 0x1 << 14, 
 
         /// <summary>
         /// </summary>
-        AlienInvasionPreOrder = 1 << 4, 
+        ApplyOnFightingTarget = (uint)0x1 << 31, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXan = 0x1 << 7, 
+        ApplyOnFriendly = 0x1 << 21, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXanPreOrder = 1 << 8, 
+        ApplyOnHostile = 0x1 << 22, 
 
         /// <summary>
         /// </summary>
-        LostEden = 0x1 << 5, 
+        ApplyOnSelf = 0x1 << 23, 
 
         /// <summary>
         /// </summary>
-        LostEdenPreOrder = 0x1 << 6, 
+        AutoSelect = 0x1 << 20, 
 
         /// <summary>
         /// </summary>
-        NotumWars = 0x1 << 0, 
+        Bow = 0x1 << 15, 
 
         /// <summary>
         /// </summary>
-        ShadowLands = 0x1 << 1, 
+        Brawl = 0x1 << 25, 
 
         /// <summary>
         /// </summary>
-        ShadowLandsPreOrder = 0x1 << 2, 
+        BreakAndEnter = 0x1 << 8, 
 
         /// <summary>
         /// </summary>
-        Mail = 0x1 << 9, 
+        Burst = 0x1 << 11, 
 
         /// <summary>
         /// </summary>
-        PMVObsidianEdition = 0x1 << 10
+        CanBeParriedRiposted = 0x1 << 30, 
+
+        /// <summary>
+        /// </summary>
+        CanBeWornWithSocialArmor = 0x1 << 28, 
+
+        /// <summary>
+        /// </summary>
+        CanParryRiposte = 0x1 << 29, 
+
+        /// <summary>
+        /// </summary>
+        CantSplit = 0x1 << 24, 
+
+        /// <summary>
+        /// </summary>
+        Carry = 0x1 << 0, 
+
+        /// <summary>
+        /// </summary>
+        ConfirmUse = 0x1 << 4, 
+
+        /// <summary>
+        /// </summary>
+        Consume = 0x1 << 5, 
+
+        /// <summary>
+        /// </summary>
+        Dimach = 0x1 << 26, 
+
+        /// <summary>
+        /// </summary>
+        DisarmTraps = 0x1 << 19, 
+
+        /// <summary>
+        /// </summary>
+        EnableHandAttractors = 0x1 << 27, 
+
+        /// <summary>
+        /// </summary>
+        FastAttack = 0x1 << 18, 
+
+        /// <summary>
+        /// </summary>
+        FlingShot = 0x1 << 12, 
+
+        /// <summary>
+        /// </summary>
+        FullAuto = 0x1 << 13, 
+
+        /// <summary>
+        /// </summary>
+        NoAmmo = 0x1 << 10, 
+
+        /// <summary>
+        /// </summary>
+        Sit = 0x1 << 1, 
+
+        /// <summary>
+        /// </summary>
+        SneakAttack = 0x1 << 17, 
+
+        /// <summary>
+        /// </summary>
+        Stackable = 0x1 << 9, 
+
+        /// <summary>
+        /// </summary>
+        ThrowAttack = 0x1 << 16, 
+
+        /// <summary>
+        /// </summary>
+        TutorChip = 0x1 << 6, 
+
+        /// <summary>
+        /// </summary>
+        TutorDevice = 0x1 << 7, 
+
+        /// <summary>
+        /// </summary>
+        Use = 0x1 << 3, 
+
+        /// <summary>
+        /// </summary>
+        Wear = 0x1 << 2
     }
 }

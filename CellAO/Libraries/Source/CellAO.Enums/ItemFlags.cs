@@ -35,50 +35,134 @@ namespace CellAO.Enums
     /// <summary>
     /// </summary>
     [Flags]
-    public enum Expansions : int
+    public enum ItemFlags : int
     {
         /// <summary>
         /// </summary>
-        AlienInvasion = 0x1 << 3, 
+        CanBeAttacked = 0x1 << 28, 
 
         /// <summary>
         /// </summary>
-        AlienInvasionPreOrder = 1 << 4, 
+        CanBeTemplateItem = 0x1 << 3, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXan = 0x1 << 7, 
+        DefaultTarget = 0x1 << 14, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXanPreOrder = 1 << 8, 
+        DisableFalling = 0x1 << 29, 
 
         /// <summary>
         /// </summary>
-        LostEden = 0x1 << 5, 
+        DisableStatelCollision = 0x1 << 31, 
 
         /// <summary>
         /// </summary>
-        LostEdenPreOrder = 0x1 << 6, 
+        HasAnimation = 0x1 << 17, 
 
         /// <summary>
         /// </summary>
-        NotumWars = 0x1 << 0, 
+        HasDamage = 0x1 << 30, 
 
         /// <summary>
         /// </summary>
-        ShadowLands = 0x1 << 1, 
+        HasEnergy = 0x1 << 22, 
 
         /// <summary>
         /// </summary>
-        ShadowLandsPreOrder = 0x1 << 2, 
+        HasMultiplecount = 0x1 << 5, 
 
         /// <summary>
         /// </summary>
-        Mail = 0x1 << 9, 
+        HasRotation = 0x1 << 18, 
 
         /// <summary>
         /// </summary>
-        PMVObsidianEdition = 0x1 << 10
+        HasSentFirstIir = 0x1 << 21, 
+
+        /// <summary>
+        /// </summary>
+        IllegalClan = 0x1 << 24, 
+
+        /// <summary>
+        /// </summary>
+        IllegalOmni = 0x1 << 25, 
+
+        /// <summary>
+        /// </summary>
+        ItemSocialArmour = 0x1 << 8, 
+
+        /// <summary>
+        /// </summary>
+        ItemTextureOverride = 0x1 << 15, 
+
+        /// <summary>
+        /// </summary>
+        Locked = 0x1 << 6, 
+
+        /// <summary>
+        /// </summary>
+        MirrorInLeftHand = 0x1 << 23, 
+
+        /// <summary>
+        /// </summary>
+        ModifiedDescription = 0x1 << 1, 
+
+        /// <summary>
+        /// </summary>
+        ModifiedName = 0x1 << 2, 
+
+        /// <summary>
+        /// </summary>
+        NoDrop = 0x1 << 26, 
+
+        /// <summary>
+        /// </summary>
+        NoSelectionIndicator = 0x1 << 10, 
+
+        /// <summary>
+        /// </summary>
+        Null = 0x1 << 16, 
+
+        /// <summary>
+        /// </summary>
+        Open = 0x1 << 7, 
+
+        /// <summary>
+        /// </summary>
+        Repulsive = 0x1 << 13, 
+
+        /// <summary>
+        /// </summary>
+        Stationary = 0x1 << 12, 
+
+        /// <summary>
+        /// </summary>
+        TellCollision = 0x1 << 9, 
+
+        /// <summary>
+        /// </summary>
+        TurnOnUse = 0x1 << 4, 
+
+        /// <summary>
+        /// </summary>
+        Unique = 0x1 << 27, 
+
+        /// <summary>
+        /// </summary>
+        UseEmptyDestruct = 0x1 << 11, 
+
+        /// <summary>
+        /// </summary>
+        Visible = 0x1 << 0, 
+
+        /// <summary>
+        /// </summary>
+        WantCollision = 0x1 << 19, 
+
+        /// <summary>
+        /// </summary>
+        WantSignals = 0x1 << 20, 
     }
 }

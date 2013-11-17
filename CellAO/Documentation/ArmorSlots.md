@@ -1,5 +1,5 @@
 # Armor slots #
-`CellAO.Core.Functions.ArmorSlots`   : `Int32`  
+`CellAO.Enums.ArmorSlots`   : `Int32`  
 
 ----------
 
@@ -39,6 +39,6 @@
 
 *Copyright © 2013 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.619 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.624 - Night Predator*
 
 

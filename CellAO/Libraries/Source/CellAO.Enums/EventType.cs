@@ -26,59 +26,108 @@
 
 namespace CellAO.Enums
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
     /// <summary>
     /// </summary>
-    [Flags]
-    public enum Expansions : int
+    public enum EventType : int
     {
         /// <summary>
         /// </summary>
-        AlienInvasion = 0x1 << 3, 
+        OnActivate = 10, 
 
         /// <summary>
         /// </summary>
-        AlienInvasionPreOrder = 1 << 4, 
+        OnClose = 19, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXan = 0x1 << 7, 
+        OnCollide = 22, 
 
         /// <summary>
         /// </summary>
-        LegacyOfTheXanPreOrder = 1 << 8, 
+        OnCreate = 7, 
 
         /// <summary>
         /// </summary>
-        LostEden = 0x1 << 5, 
+        OnEffects = 8, 
 
         /// <summary>
         /// </summary>
-        LostEdenPreOrder = 0x1 << 6, 
+        OnEndCollide = 23, 
 
         /// <summary>
         /// </summary>
-        NotumWars = 0x1 << 0, 
+        OnEndEffect = 13, 
 
         /// <summary>
         /// </summary>
-        ShadowLands = 0x1 << 1, 
+        OnEnemyInVicinity = 25, 
 
         /// <summary>
         /// </summary>
-        ShadowLandsPreOrder = 0x1 << 2, 
+        OnEnter = 16, 
 
         /// <summary>
         /// </summary>
-        Mail = 0x1 << 9, 
+        OnFailure = 27, 
 
         /// <summary>
         /// </summary>
-        PMVObsidianEdition = 0x1 << 10
+        OnFriendlyInVicinity = 24, 
+
+        /// <summary>
+        /// </summary>
+        OnHit = 5, 
+
+        /// <summary>
+        /// </summary>
+        OnOpen = 18, 
+
+        /// <summary>
+        /// </summary>
+        OnRepair = 1, 
+
+        /// <summary>
+        /// </summary>
+        OnRun = 9, 
+
+        /// <summary>
+        /// </summary>
+        OnStartEffect = 12, 
+
+        /// <summary>
+        /// </summary>
+        OnTargetInVicinity = 3, 
+
+        /// <summary>
+        /// </summary>
+        OnTerminate = 20, 
+
+        /// <summary>
+        /// </summary>
+        OnTrade = 37, 
+
+        /// <summary>
+        /// </summary>
+        OnUseItemOn = 4, 
+
+        /// <summary>
+        /// </summary>
+        OnUse = 0, 
+
+        /// <summary>
+        /// </summary>
+        OnUseFailed = 15, 
+
+        /// <summary>
+        /// </summary>
+        OnWear = 14, 
+
+        /// <summary>
+        /// </summary>
+        OnWield = 2, 
+
+        /// <summary>
+        /// </summary>
+        PersonalModifier = 26
     }
 }

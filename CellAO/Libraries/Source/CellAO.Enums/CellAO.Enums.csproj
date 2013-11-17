@@ -42,10 +42,21 @@
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActionType.cs" />
+    <Compile Include="ArmorSlots.cs" />
+    <Compile Include="CanFlags.cs" />
+    <Compile Include="EventType.cs" />
     <Compile Include="Expansions.cs" />
+    <Compile Include="FunctionType.cs" />
+    <Compile Include="ImplantSlots.cs" />
     <Compile Include="InventoryError.cs" />
+    <Compile Include="ItemFlags.cs" />
+    <Compile Include="ItemTarget.cs" />
+    <Compile Include="ItemType.cs" />
     <Compile Include="MoveModes.cs" />
+    <Compile Include="Operator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WeaponSlots.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utility\Utility.csproj">

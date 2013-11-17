@@ -24,42 +24,70 @@
 
 #endregion
 
-namespace CellAO.Core.Functions
+namespace CellAO.Enums
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
-
-    
-
-    #region Requirement Check constants
-
     /// <summary>
-    /// Enumeration of the different checking types
-    /// doCheckReqs = full requirement check
-    /// dontCheckReqs = dont do any requirement check
-    /// doEquipCheckReqs = do checks needed while loading inventory at character load (Breed check, Profession check etc)
     /// </summary>
-    public enum CheckReqs
+    public enum ArmorSlots : int
     {
         /// <summary>
-        /// Do a full requirement check
         /// </summary>
-        doCheckReqs, 
+        Back = 3, 
 
         /// <summary>
-        /// Dont do requirement check
         /// </summary>
-        dontCheckReqs, 
+        Chest = 5, 
 
         /// <summary>
-        /// do checks needed while loading inventory at character load (Breed check, Profession check etc)
         /// </summary>
-        doEquipCheckReqs
+        Feet = 14, 
+
+        /// <summary>
+        /// </summary>
+        Hands = 8, 
+
+        /// <summary>
+        /// </summary>
+        Head = 2, 
+
+        /// <summary>
+        /// </summary>
+        LeftArm = 9, 
+
+        /// <summary>
+        /// </summary>
+        LeftFinger = 15, 
+
+        /// <summary>
+        /// </summary>
+        LeftShoulder = 6, 
+
+        /// <summary>
+        /// </summary>
+        LeftWrist = 12, 
+
+        /// <summary>
+        /// </summary>
+        Legs = 11, 
+
+        /// <summary>
+        /// </summary>
+        Neck = 1, 
+
+        /// <summary>
+        /// </summary>
+        RightArm = 7, 
+
+        /// <summary>
+        /// </summary>
+        RightFinger = 13, 
+
+        /// <summary>
+        /// </summary>
+        RightShoulder = 4, 
+
+        /// <summary>
+        /// </summary>
+        RightWrist = 10
     }
-
-    #endregion
 }

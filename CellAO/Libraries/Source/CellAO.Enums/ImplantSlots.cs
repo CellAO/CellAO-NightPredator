@@ -24,42 +24,62 @@
 
 #endregion
 
-namespace CellAO.Core.Functions
+namespace CellAO.Enums
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
-
-    
-
-    #region Requirement Check constants
-
     /// <summary>
-    /// Enumeration of the different checking types
-    /// doCheckReqs = full requirement check
-    /// dontCheckReqs = dont do any requirement check
-    /// doEquipCheckReqs = do checks needed while loading inventory at character load (Breed check, Profession check etc)
     /// </summary>
-    public enum CheckReqs
+    public enum ImplantSlots
     {
         /// <summary>
-        /// Do a full requirement check
         /// </summary>
-        doCheckReqs, 
+        Chest = 5, 
 
         /// <summary>
-        /// Dont do requirement check
         /// </summary>
-        dontCheckReqs, 
+        Ears = 3, 
 
         /// <summary>
-        /// do checks needed while loading inventory at character load (Breed check, Profession check etc)
         /// </summary>
-        doEquipCheckReqs
+        Eyes = 1, 
+
+        /// <summary>
+        /// </summary>
+        Feet = 13, 
+
+        /// <summary>
+        /// </summary>
+        Head = 2, 
+
+        /// <summary>
+        /// </summary>
+        Leftarm = 6, 
+
+        /// <summary>
+        /// </summary>
+        Lefthand = 12, 
+
+        /// <summary>
+        /// </summary>
+        Leftwrist = 9, 
+
+        /// <summary>
+        /// </summary>
+        Legs = 11, 
+
+        /// <summary>
+        /// </summary>
+        Rightarm = 4, 
+
+        /// <summary>
+        /// </summary>
+        Righthand = 10, 
+
+        /// <summary>
+        /// </summary>
+        Rightwrist = 7, 
+
+        /// <summary>
+        /// </summary>
+        Waist = 8, 
     }
-
-    #endregion
 }

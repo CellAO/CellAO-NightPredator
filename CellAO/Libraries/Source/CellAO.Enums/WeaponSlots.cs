@@ -24,42 +24,70 @@
 
 #endregion
 
-namespace CellAO.Core.Functions
+namespace CellAO.Enums
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
-
-    
-
-    #region Requirement Check constants
-
     /// <summary>
-    /// Enumeration of the different checking types
-    /// doCheckReqs = full requirement check
-    /// dontCheckReqs = dont do any requirement check
-    /// doEquipCheckReqs = do checks needed while loading inventory at character load (Breed check, Profession check etc)
     /// </summary>
-    public enum CheckReqs
+    public enum WeaponSlots : int
     {
         /// <summary>
-        /// Do a full requirement check
         /// </summary>
-        doCheckReqs, 
+        Belt = 7, 
 
         /// <summary>
-        /// Dont do requirement check
         /// </summary>
-        dontCheckReqs, 
+        Hud1 = 1, 
 
         /// <summary>
-        /// do checks needed while loading inventory at character load (Breed check, Profession check etc)
         /// </summary>
-        doEquipCheckReqs
+        Hud2 = 15, 
+
+        /// <summary>
+        /// </summary>
+        Hud3 = 2, 
+
+        /// <summary>
+        /// </summary>
+        LeftHand = 8, 
+
+        /// <summary>
+        /// </summary>
+        Ncu1 = 9, 
+
+        /// <summary>
+        /// </summary>
+        Ncu2 = 10, 
+
+        /// <summary>
+        /// </summary>
+        Ncu3 = 11, 
+
+        /// <summary>
+        /// </summary>
+        Ncu4 = 12, 
+
+        /// <summary>
+        /// </summary>
+        Ncu5 = 13, 
+
+        /// <summary>
+        /// </summary>
+        Ncu6 = 14, 
+
+        /// <summary>
+        /// </summary>
+        Righthand = 6, 
+
+        /// <summary>
+        /// </summary>
+        Util1 = 3, 
+
+        /// <summary>
+        /// </summary>
+        Util2 = 4, 
+
+        /// <summary>
+        /// </summary>
+        Util3 = 5, 
     }
-
-    #endregion
 }

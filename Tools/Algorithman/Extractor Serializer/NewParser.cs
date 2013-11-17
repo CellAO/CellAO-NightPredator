@@ -39,6 +39,7 @@ namespace Extractor_Serializer
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     using NiceHexOutput;
 
@@ -893,7 +894,7 @@ namespace Extractor_Serializer
                     aof.Target = 255;
                     aof.TickCount = 1;
                     aof.TickInterval = 0;
-                    aof.FunctionType = Constants.FunctiontypeShophash;
+                    aof.FunctionType = (int)FunctionType.Shophash;
                     aoe.Functions.Add(aof);
 
                     num3++;

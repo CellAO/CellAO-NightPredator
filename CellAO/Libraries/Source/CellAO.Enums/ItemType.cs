@@ -24,42 +24,42 @@
 
 #endregion
 
-namespace CellAO.Core.Functions
+namespace CellAO.Enums
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
-
-    
-
-    #region Requirement Check constants
-
     /// <summary>
-    /// Enumeration of the different checking types
-    /// doCheckReqs = full requirement check
-    /// dontCheckReqs = dont do any requirement check
-    /// doEquipCheckReqs = do checks needed while loading inventory at character load (Breed check, Profession check etc)
     /// </summary>
-    public enum CheckReqs
+    public enum ItemType : int
     {
         /// <summary>
-        /// Do a full requirement check
         /// </summary>
-        doCheckReqs, 
+        Armor = 2, 
 
         /// <summary>
-        /// Dont do requirement check
         /// </summary>
-        dontCheckReqs, 
+        Implant = 3, 
 
         /// <summary>
-        /// do checks needed while loading inventory at character load (Breed check, Profession check etc)
         /// </summary>
-        doEquipCheckReqs
+        Misc = 0, 
+
+        /// <summary>
+        /// </summary>
+        Npc = 4, 
+
+        /// <summary>
+        /// </summary>
+        Spirit = 5, 
+
+        /// <summary>
+        /// </summary>
+        Tower = 7, 
+
+        /// <summary>
+        /// </summary>
+        Utility = 6, 
+
+        /// <summary>
+        /// </summary>
+        Weapon = 1, 
     }
-
-    #endregion
 }

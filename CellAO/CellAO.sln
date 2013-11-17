@@ -74,10 +74,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentations", "Documenta
 		Documentation\ActionTypes.md = Documentation\ActionTypes.md
 		Documentation\ArmorSlots.md = Documentation\ArmorSlots.md
 		Documentation\CanFlags.md = Documentation\CanFlags.md
+		Documentation\EventTypes.md = Documentation\EventTypes.md
+		Documentation\FunctionTypes.md = Documentation\FunctionTypes.md
+		Documentation\ImplantSlots.md = Documentation\ImplantSlots.md
 		Documentation\Index.md = Documentation\Index.md
 		Documentation\InventoryError.md = Documentation\InventoryError.md
 		Documentation\MoveModes.md = Documentation\MoveModes.md
+		Documentation\Operator.md = Documentation\Operator.md
 		Documentation\Stats.md = Documentation\Stats.md
+		Documentation\WeaponSlots.md = Documentation\WeaponSlots.md
 	EndProjectSection
 EndProject
 Global

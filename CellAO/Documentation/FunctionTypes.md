@@ -1,4 +1,4 @@
-# Action Types #
+# Function Types #
 `CellAO.Enums.ActionType`   : `Int32`  
 
 ----------
