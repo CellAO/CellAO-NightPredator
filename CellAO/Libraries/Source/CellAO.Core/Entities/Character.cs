@@ -36,6 +36,7 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Playfields;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
@@ -52,10 +53,6 @@ namespace CellAO.Core.Entities
     public class Character : Dynel, ICharacter
     {
         #region Fields
-
-        /// <summary>
-        /// </summary>
-        public string OrganizationName = string.Empty;
 
         /// <summary>
         /// </summary>
@@ -136,6 +133,23 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public MoveModes MoveMode { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public string OrganizationName
+        {
+            get
+            {
+                try
+                {
+                    return OrganizationDao.GetOrganizationData(this.Stats["Clan"].Value).Name;
+                }
+                catch (Exception)
+                {
+                    return "";
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>

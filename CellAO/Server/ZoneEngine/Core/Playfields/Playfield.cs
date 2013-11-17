@@ -30,6 +30,7 @@ namespace CellAO.Core.Playfields
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Cell.Core;
 
@@ -340,6 +341,18 @@ namespace CellAO.Core.Playfields
                 }
             }
 
+            return null;
+        }
+
+        public T FindByIdentity<T>(Identity identity) where T : Character
+        {
+            foreach (var entity in Entities.Where(x => x is T))
+            {
+                if (entity.Identity == identity)
+                {
+                    return (T)entity;
+                }
+            }
             return null;
         }
 

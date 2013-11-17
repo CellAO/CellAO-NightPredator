@@ -26,6 +26,10 @@
 
 namespace CellAO.Stats
 {
+    using System.Linq;
+
+    using CellAO.Enums;
+
     #region Usings ...
 
     #region Usings ...
@@ -10752,6 +10756,14 @@ namespace CellAO.Stats
                 }
 
                 throw new StatDoesNotExistException("Stat with Id " + index + " does not exist");
+            }
+        }
+
+        IStat IStatList.this[StatIds i]
+        {
+            get
+            {
+                return this.all.Single(x => x.StatId == (int)i);
             }
         }
 

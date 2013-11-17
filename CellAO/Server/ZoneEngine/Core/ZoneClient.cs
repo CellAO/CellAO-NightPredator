@@ -34,6 +34,7 @@ namespace ZoneEngine.Core
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Network;
     using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -43,13 +44,9 @@ namespace ZoneEngine.Core
 
     /// <summary>
     /// </summary>
-    public class ZoneClient : ClientBase
+    public class ZoneClient : ClientBase, IZoneClient
     {
         #region Fields
-
-        /// <summary>
-        /// </summary>
-        public Character Character;
 
         /// <summary>
         /// </summary>
@@ -102,6 +99,8 @@ namespace ZoneEngine.Core
         #endregion
 
         #region Public Methods and Operators
+
+        public ICharacter Character { get; set; }
 
         /// <summary>
         /// </summary>

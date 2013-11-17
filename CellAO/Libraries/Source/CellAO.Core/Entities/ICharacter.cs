@@ -91,6 +91,10 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        string OrganizationName { get; }
+
+        /// <summary>
+        /// </summary>
         /// <exception cref="NotImplementedException">
         /// </exception>
         IPlayfield Playfield { get; set; }

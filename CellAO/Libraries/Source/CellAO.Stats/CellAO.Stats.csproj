@@ -61,6 +61,10 @@
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
+      <Name>CellAO.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>

@@ -56,6 +56,7 @@
     <Compile Include="MoveModes.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatIds.cs" />
     <Compile Include="WeaponSlots.cs" />
   </ItemGroup>
   <ItemGroup>

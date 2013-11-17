@@ -30,6 +30,7 @@ namespace CellAO.Stats
 
     using System.Collections.Generic;
 
+    using CellAO.Enums;
     using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -64,6 +65,14 @@ namespace CellAO.Stats
         /// IStat object
         /// </returns>
         IStat this[int index] { get; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="i">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IStat this[StatIds i] { get; }
 
         /// <summary>
         /// Name-indexed access to Stats List

@@ -28,6 +28,7 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
+    using CellAO.Enums;
     using CellAO.Stats;
 
     #endregion
@@ -41,6 +42,24 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public IStatList Stats { get; private set; }
+
+        #endregion
+
+        #region Public Indexers
+
+        /// <summary>
+        /// </summary>
+        /// <param name="i">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IStat this[StatIds i]
+        {
+            get
+            {
+                return this.Stats[(int)i];
+            }
+        }
 
         #endregion
 

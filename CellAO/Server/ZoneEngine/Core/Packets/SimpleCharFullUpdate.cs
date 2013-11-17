@@ -427,7 +427,7 @@ namespace ZoneEngine.Core.Packets
         /// </returns>
         public static SimpleCharFullUpdateMessage ConstructMessage(ZoneClient client)
         {
-            return ConstructMessage(client.Character);
+            return ConstructMessage((Character)client.Character);
         }
 
         /// <summary>
