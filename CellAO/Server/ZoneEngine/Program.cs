@@ -297,40 +297,66 @@ namespace ZoneEngine
 
             if (!InitializeGameFunctions())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error in Gamefunction initialization");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
             if (!InitializeLogAndBug())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error while initializing NLog/NBug");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
             if (!CheckZoneServerCreation())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error while creating ZoneServer instance");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
             if (!ISComInitialization())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error initializing ISCom");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
             if (!InizializeTCPIP())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error initializing TCP/IP setup");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
             if (!InitializeScriptCompiler())
             {
-                if (!CheckDatabase())
-                {
-                    return false;
-                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error while creating ScriptCompiler instance");
+                Console.ForegroundColor = ConsoleColor.White;
+                return false;
+            }
+
+            if (!CheckDatabase())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error while initializing database");
+                Console.ForegroundColor = ConsoleColor.White;
+                return false;
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
             if (!LoadItemsAndNanos())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error while loading Items/Nanos");
+                Console.ForegroundColor = ConsoleColor.White;
                 return false;
             }
 
