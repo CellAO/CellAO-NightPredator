@@ -41,6 +41,8 @@ namespace Extractor_Serializer
     using CellAO.Core.Requirements;
     using CellAO.Enums;
 
+    using MsgPack;
+
     using NiceHexOutput;
 
     #endregion
@@ -826,7 +828,8 @@ namespace Extractor_Serializer
                 R = false;
                 foreach (object oo in this.ParseArgs(func.FunctionType, ref R))
                 {
-                    func.Arguments.Values.Add(oo);
+                    var x = MessagePackObject.FromObject(oo);
+                    func.Arguments.Values.Add(x);
                 }
 
                 list.Add(func);

@@ -44,7 +44,7 @@ namespace CellAO.Interfaces
         /// <summary>
         /// The function's arguments
         /// </summary>
-        List<object> Values { get; set; }
+        List<MessagePackObject> Values { get; set; }
 
         #endregion
 

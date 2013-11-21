@@ -36,6 +36,8 @@ namespace ZoneEngine.Core.Functions
 
     using CellAO.Core.Entities;
 
+    using MsgPack;
+
     #endregion
 
     /// <summary>
@@ -101,7 +103,7 @@ namespace ZoneEngine.Core.Functions
             INamedEntity self, 
             INamedEntity caller, 
             IInstancedEntity target, 
-            object[] arguments)
+            MessagePackObject[] arguments)
         {
             FunctionPrototype func = this.GetFunctionByNumber(functionNumber);
             return func.Execute(self, caller, target, arguments);

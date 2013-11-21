@@ -51,7 +51,7 @@ namespace CellAO.Core.Functions
         /// </summary>
         public FunctionArguments()
         {
-            this.Values = new List<object>();
+            this.Values = new List<MessagePackObject>();
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// The function's arguments
         /// </summary>
-        public List<object> Values { get; set; }
+        public List<MessagePackObject> Values { get; set; }
 
         #endregion
 
@@ -79,21 +79,21 @@ namespace CellAO.Core.Functions
         public void PackToMessage(Packer packer, PackingOptions options)
         {
             packer.PackArrayHeader(this.Values.Count);
-            foreach (object obj in this.Values)
+            foreach (MessagePackObject obj in this.Values)
             {
-                if (obj is string)
+                if (obj.IsTypeOf(typeof(string))==true)
                 {
-                    string temp = (string)obj;
+                    string temp = obj.AsStringUtf8();
                     packer.PackString(temp, Encoding.GetEncoding("UTF-8"));
                 }
-                else if (obj is float)
+                else if (obj.IsTypeOf(typeof(Single))==true)
                 {
-                    float temp = (Single)obj;
+                    Single temp = obj.AsSingle();
                     packer.Pack<float>(temp);
                 }
-                else if (obj is int)
+                else if (obj.IsTypeOf(typeof(int))==true)
                 {
-                    int temp = (Int32)obj;
+                    int temp = obj.AsInt32();
                     packer.Pack(temp);
                 }
             }
@@ -115,7 +115,7 @@ namespace CellAO.Core.Functions
             while (numberOfItems > 0)
             {
                 unpacker.ReadItem();
-
+                
                 if (unpacker.LastReadData.IsTypeOf(typeof(Int32)) == true)
                 {
                     int temp = unpacker.LastReadData.AsInt32();
@@ -126,7 +126,7 @@ namespace CellAO.Core.Functions
                     float temp = unpacker.LastReadData.AsSingle();
                     this.Values.Add(temp);
                 }
-                else if (unpacker.LastReadData.IsTypeOf(typeof(String)) == true)
+                else if (unpacker.LastReadData.IsTypeOf(typeof(string)) == true)
                 {
                     string temp = unpacker.LastReadData.AsStringUtf8();
                     this.Values.Add(temp);

@@ -31,6 +31,8 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     using CellAO.Core.Entities;
     using CellAO.Stats;
 
+    using MsgPack;
+
     #endregion
 
     /// <summary>
@@ -67,7 +69,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             INamedEntity self, 
             INamedEntity caller, 
             IInstancedEntity target, 
-            object[] arguments)
+            MessagePackObject[] arguments)
         {
             lock (target)
             {
@@ -87,10 +89,14 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// </param>
         /// <returns>
         /// </returns>
-        public bool FunctionExecute(INamedEntity Self, INamedEntity Caller, IInstancedEntity Target, object[] Arguments)
+        public bool FunctionExecute(
+            INamedEntity Self, 
+            INamedEntity Caller, 
+            IInstancedEntity Target, 
+            MessagePackObject[] Arguments)
         {
-            int statNumber = (int)Arguments[0];
-            int statValue = (int)Arguments[1];
+            int statNumber = Arguments[0].AsInt32();
+            int statValue = Arguments[1].AsInt32();
             IStats tempTarget = Target;
             if (tempTarget != null)
             {
