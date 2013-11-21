@@ -109,6 +109,9 @@
       <SubType>Component</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SqlTables\login.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SqlTables\receivedmsgs.sql" />
   </ItemGroup>
   <ItemGroup>
