@@ -33,6 +33,7 @@ namespace CellAO.Core.Components
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
     using System.Linq;
+    using System.Reflection;
 
     #endregion
 
@@ -136,8 +137,20 @@ namespace CellAO.Core.Components
         /// </returns>
         private CompositionContainer Initialize()
         {
-            var catalog =
-                new AggregateCatalog(AppDomain.CurrentDomain.GetAssemblies().Select(x => new AssemblyCatalog(x)));
+            var catalog = new AggregateCatalog();
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    var assemblyCatalog = new AssemblyCatalog(assembly);
+                    var assemblyParts = assemblyCatalog.Parts.ToArray();
+                    catalog.Catalogs.Add(assemblyCatalog);
+                }
+                catch (Exception)
+                {
+                    // Dont catch not importable assemblies errors
+                }
+            }
             var container = new CompositionContainer(catalog);
             var batch = new CompositionBatch();
             batch.AddExportedValue<IContainer>(this);
