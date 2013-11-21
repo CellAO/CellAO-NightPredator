@@ -55,7 +55,7 @@ namespace CellAO.Database
         /// </returns>
         public static bool CheckDatabase()
         {
-            string applicationFolder = Path.Combine(Directory.GetCurrentDirectory(), "SQLTables");
+            string applicationFolder = Path.Combine(Directory.GetCurrentDirectory(), "SqlTables");
             string[] files = Directory.GetFiles(applicationFolder, "*.sql", SearchOption.TopDirectoryOnly);
 
             string errorMessage = string.Empty;
