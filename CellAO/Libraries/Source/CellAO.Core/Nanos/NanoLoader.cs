@@ -78,35 +78,42 @@ namespace CellAO.Core.Nanos
             DateTime _now = DateTime.Now;
             NanoList = new Dictionary<int, NanoFormula>();
             Stream sf = new FileStream(fname, FileMode.Open);
-            MemoryStream ms = new MemoryStream();
+            MemoryStream memoryStream = new MemoryStream();
 
-            ZOutputStream sm = new ZOutputStream(ms);
+            ZOutputStream sm = new ZOutputStream(memoryStream);
             CopyStream(sf, sm);
 
-            ms.Seek(0, SeekOrigin.Begin);
-            BinaryReader br = new BinaryReader(ms);
-            byte versionlength = (byte)ms.ReadByte();
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            BinaryReader br = new BinaryReader(memoryStream);
+            byte versionlength = (byte)memoryStream.ReadByte();
             char[] version = new char[versionlength];
             version = br.ReadChars(versionlength);
 
             // TODO: Check version and print a warning if not same as config.xml's
             Console.WriteLine("Reading Nanos (" + new string(version) + "):");
 
-            MessagePackSerializer<List<NanoFormula>> bf = MessagePackSerializer.Create<List<NanoFormula>>();
+            MessagePackSerializer<NanoFormula> messagePackSerializer = MessagePackSerializer.Create<NanoFormula>();
 
             byte[] buffer = new byte[4];
-            ms.Read(buffer, 0, 4);
+            memoryStream.Read(buffer, 0, 4);
             int packaged = BitConverter.ToInt32(buffer, 0);
 
             while (true)
             {
-                List<NanoFormula> templist;
                 try
                 {
-                    templist = bf.Unpack(ms);
-                    foreach (NanoFormula nf in templist)
+                    List<NanoFormula> templist = new List<NanoFormula>();
+
+                    for (int i = packaged; i > 0; i++)
                     {
-                        NanoList.Add(nf.ID, nf);
+                        NanoFormula nanoFormula = messagePackSerializer.Unpack(memoryStream);
+                        templist.Add(nanoFormula);
+                        if (nanoFormula == null)
+                        {
+                            break;
+                        }
+
+                        NanoList.Add(nanoFormula.ID, nanoFormula);
                     }
 
                     if (templist.Count != packaged)

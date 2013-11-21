@@ -76,6 +76,7 @@ namespace Extractor_Serializer
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     using CellAO.Core.Items;
@@ -438,7 +439,7 @@ namespace Extractor_Serializer
 
             var ds = new ZOutputStream(sf, zlibConst.Z_BEST_COMPRESSION);
             var sm = new MemoryStream();
-            MessagePackSerializer<List<NanoFormula>> bf = MessagePackSerializer.Create<List<NanoFormula>>();
+            MessagePackSerializer<NanoFormula> bf = MessagePackSerializer.Create<NanoFormula>();
 
             var nanoList2 = new List<NanoFormula>();
 
@@ -461,13 +462,20 @@ namespace Extractor_Serializer
                 nanoList2.Add(nanos);
                 if (nanoList2.Count == maxnum)
                 {
-                    bf.Pack(sm, nanoList2);
+                    for (int i = nanoList2.Count; i > 0; i--)
+                    {
+                        bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
+                    }
+                    
                     sm.Flush();
                     nanoList2.Clear();
                 }
             }
 
-            bf.Pack(sm, nanoList2);
+            for (int i = nanoList2.Count; i > 0; i--)
+            {
+                bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
+            }
             sm.Seek(0, SeekOrigin.Begin);
             CopyStream(sm, ds);
             sm.Close();
@@ -488,7 +496,7 @@ namespace Extractor_Serializer
 
             ds = new ZOutputStream(sf, zlibConst.Z_BEST_COMPRESSION);
             sm = new MemoryStream();
-            MessagePackSerializer<List<ItemTemplate>> bf2 = MessagePackSerializer.Create<List<ItemTemplate>>();
+            MessagePackSerializer<ItemTemplate> bf2 = MessagePackSerializer.Create<ItemTemplate>();
 
             List<ItemTemplate> items = new List<ItemTemplate>();
 
@@ -504,13 +512,20 @@ namespace Extractor_Serializer
                 items.Add(it);
                 if (items.Count == maxnum)
                 {
-                    bf2.Pack(sm, items);
+                    for (int i = items.Count; i > 0; i--)
+                    {
+                        bf2.Pack(sm, items.ElementAt(items.Count - i));
+                    }
+
                     sm.Flush();
                     items.Clear();
                 }
             }
 
-            bf2.Pack(sm, items);
+            for (int i = items.Count; i > 0; i--)
+            {
+                bf2.Pack(sm, items.ElementAt(items.Count - i));
+            }
             sm.Seek(0, SeekOrigin.Begin);
             CopyStream(sm, ds);
             sm.Close();

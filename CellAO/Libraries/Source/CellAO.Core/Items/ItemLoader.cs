@@ -91,8 +91,7 @@ namespace CellAO.Core.Items
             version = binaryReader.ReadChars(versionlength);
 
             // TODO: Check version and print a warning if not same as config.xml's
-            MessagePackSerializer<List<ItemTemplate>> messagePackSerializer =
-                MessagePackSerializer.Create<List<ItemTemplate>>();
+            MessagePackSerializer<ItemTemplate> messagePackSerializer = MessagePackSerializer.Create<ItemTemplate>();
 
             var buffer = new byte[4];
             memoryStream.Read(buffer, 0, 4);
@@ -102,9 +101,16 @@ namespace CellAO.Core.Items
             {
                 try
                 {
-                    List<ItemTemplate> templates = messagePackSerializer.Unpack(memoryStream);
-                    foreach (ItemTemplate template in templates)
+                    List<ItemTemplate> templates = new List<ItemTemplate>();
+                    for (int i = packaged; i > 0; i--)
                     {
+                        ItemTemplate template = messagePackSerializer.Unpack(memoryStream);
+                        templates.Add(template);
+                        if (template == null)
+                        {
+                            break;
+                        }
+
                         ItemList.Add(template.ID, template);
                     }
 
