@@ -831,18 +831,8 @@ namespace Extractor_Serializer
                 R = false;
                 foreach (object oo in this.ParseArgs(func.FunctionType, ref R))
                 {
-                    if (oo is string)
-                    {
-                        LogUtil.Debug("Got string...");
-                        var x = MessagePackObject.FromObject(Encoding.GetEncoding("UTF-8").GetBytes(oo as string));
-                        func.Arguments.Values.Add(x);
-                    }
-                    else
-                    {
-                        var x = MessagePackObject.FromObject(oo);
-                        func.Arguments.Values.Add(x);
-                    }
-                }
+                    var x = MessagePackObject.FromObject(oo);
+                    func.Arguments.Values.Add(x);                }
 
                 list.Add(func);
                 num3++;

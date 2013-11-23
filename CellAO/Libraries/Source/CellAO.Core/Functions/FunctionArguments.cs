@@ -31,7 +31,6 @@ namespace CellAO.Core.Functions
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-    using System.Text;
 
     using CellAO.Interfaces;
 
@@ -81,17 +80,17 @@ namespace CellAO.Core.Functions
             packer.PackArrayHeader(this.Values.Count);
             foreach (MessagePackObject obj in this.Values)
             {
-                if (obj.IsTypeOf(typeof(string))==true)
+                if (obj.IsTypeOf(typeof(string)) == true)
                 {
                     string temp = obj.AsStringUtf8();
-                    packer.PackBinary(Encoding.GetEncoding("UTF-8").GetBytes(temp));
+                    packer.PackString(temp);
                 }
-                else if (obj.IsTypeOf(typeof(Single))==true)
+                else if (obj.IsTypeOf(typeof(Single)) == true)
                 {
-                    Single temp = obj.AsSingle();
+                    float temp = obj.AsSingle();
                     packer.Pack<float>(temp);
                 }
-                else if (obj.IsTypeOf(typeof(int))==true)
+                else if (obj.IsTypeOf(typeof(int)) == true)
                 {
                     int temp = obj.AsInt32();
                     packer.Pack(temp);
@@ -115,7 +114,7 @@ namespace CellAO.Core.Functions
             while (numberOfItems > 0)
             {
                 unpacker.ReadItem();
-                
+
                 if (unpacker.LastReadData.IsTypeOf(typeof(Int32)) == true)
                 {
                     int temp = unpacker.LastReadData.AsInt32();
@@ -128,8 +127,7 @@ namespace CellAO.Core.Functions
                 }
                 else if (unpacker.LastReadData.IsTypeOf(typeof(string)) == true)
                 {
-                    byte[] tempBytes = unpacker.LastReadData.AsBinary();
-                    string temp = BitConverter.ToString(tempBytes, 0);
+                    string temp = unpacker.LastReadData.AsStringUtf8();
                     this.Values.Add(temp);
                 }
                 else
