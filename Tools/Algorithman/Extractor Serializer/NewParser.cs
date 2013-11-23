@@ -46,6 +46,8 @@ namespace Extractor_Serializer
 
     using NiceHexOutput;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -831,6 +833,7 @@ namespace Extractor_Serializer
                 {
                     if (oo is string)
                     {
+                        LogUtil.Debug("Got string...");
                         var x = MessagePackObject.FromObject(Encoding.GetEncoding("UTF-8").GetBytes(oo as string));
                         func.Arguments.Values.Add(x);
                     }
