@@ -31,6 +31,7 @@ namespace Extractor_Serializer
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Net.Mime;
     using System.Text;
 
     using CellAO.Core.Actions;
@@ -828,8 +829,16 @@ namespace Extractor_Serializer
                 R = false;
                 foreach (object oo in this.ParseArgs(func.FunctionType, ref R))
                 {
-                    var x = MessagePackObject.FromObject(oo);
-                    func.Arguments.Values.Add(x);
+                    if (oo is string)
+                    {
+                        var x = MessagePackObject.FromObject(Encoding.GetEncoding("UTF-8").GetBytes(oo as string));
+                        func.Arguments.Values.Add(x);
+                    }
+                    else
+                    {
+                        var x = MessagePackObject.FromObject(oo);
+                        func.Arguments.Values.Add(x);
+                    }
                 }
 
                 list.Add(func);
