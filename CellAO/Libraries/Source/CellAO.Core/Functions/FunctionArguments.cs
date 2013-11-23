@@ -84,7 +84,7 @@ namespace CellAO.Core.Functions
                 if (obj.IsTypeOf(typeof(string))==true)
                 {
                     string temp = obj.AsStringUtf8();
-                    packer.PackString(temp, Encoding.GetEncoding("UTF-8"));
+                    packer.PackBinary(Encoding.GetEncoding("UTF-8").GetBytes(temp));
                 }
                 else if (obj.IsTypeOf(typeof(Single))==true)
                 {
@@ -128,7 +128,8 @@ namespace CellAO.Core.Functions
                 }
                 else if (unpacker.LastReadData.IsTypeOf(typeof(string)) == true)
                 {
-                    string temp = unpacker.LastReadData.AsStringUtf8();
+                    byte[] tempBytes = unpacker.LastReadData.AsBinary();
+                    string temp = BitConverter.ToString(tempBytes, 0);
                     this.Values.Add(temp);
                 }
                 else
