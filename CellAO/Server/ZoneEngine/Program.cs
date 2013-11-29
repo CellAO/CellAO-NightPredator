@@ -80,7 +80,15 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        private static ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
+
+        /// <summary>
+        /// </summary>
         private static ConsoleText ct;
+
+        /// <summary>
+        /// </summary>
+        private static bool exited = false;
 
         #endregion
 
@@ -89,12 +97,9 @@ namespace ZoneEngine
         /// <summary>
         /// Check the database
         /// </summary>
-        /// <returns>
-        /// true if ok
-        /// </returns>
-        private static bool CheckDatabase()
+        private static void CheckDatabase()
         {
-            return Misc.CheckDatabase();
+            Misc.CheckDatabase();
         }
 
         /// <summary>
@@ -123,7 +128,7 @@ namespace ZoneEngine
         {
             bool processedargs = false;
             ct.TextRead("zone_consolecommands.txt");
-            while (true)
+            while (!exited)
             {
                 if (!processedargs)
                 {
@@ -142,115 +147,10 @@ namespace ZoneEngine
 
                 Console.Write("\nServer Command >>");
                 string consoleCommand = Console.ReadLine();
-                switch (consoleCommand.ToLower())
+
+                if (!consoleCommands.Execute(consoleCommand))
                 {
-                    case "start":
-                        if (zoneServer.IsRunning)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Zone Server is already running");
-                            Console.ResetColor();
-                            break;
-                        }
-
-                        // TODO: Add Sql Check.
-                        csc.Compile(false);
-                        StartTheServer();
-                        break;
-                    case "startm": // Multiple dll compile
-                        if (zoneServer.IsRunning)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Zone Server is already running");
-                            Console.ResetColor();
-                            break;
-                        }
-
-                        // TODO: Add Sql Check.
-                        csc.Compile(true);
-                        StartTheServer();
-                        break;
-                    case "stop":
-                        if (!zoneServer.IsRunning)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Zone Server is not running");
-                            Console.ResetColor();
-                            break;
-                        }
-
-                        zoneServer.Stop();
-                        break;
-                    case "check":
-                    case "updatedb":
-                        CheckDatabase();
-                        break;
-                    case "exit":
-                    case "quit":
-                        if (zoneServer.IsRunning)
-                        {
-                            zoneServer.Stop();
-                        }
-
-                        ISComClient.ShutDown();
-
-                        return;
-
-                    case "ls": // list all available scripts, dont remove it since it does what it should
-                        Console.WriteLine("Available scripts");
-
-                        /* Old Lua way
-                        string[] files = Directory.GetFiles("Scripts");*/
-                        string[] files = Directory.GetFiles("Scripts\\", "*.cs", SearchOption.AllDirectories);
-                        if (files.Length == 0)
-                        {
-                            Console.WriteLine("No scripts were found.");
-                            break;
-                        }
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        foreach (string s in files)
-                        {
-                            Console.WriteLine(s);
-                        }
-
-                        Console.ResetColor();
-                        break;
-                    case "ping":
-
-                        // ChatCom.Server.Ping();
-                        Console.WriteLine("Ping is disabled till we can fix it");
-                        break;
-                    case "running":
-                        if (zoneServer.IsRunning)
-                        {
-                            Console.WriteLine("Zone Server is Running");
-                            break;
-                        }
-
-                        Console.WriteLine("Zone Server not Running");
-                        break;
-                    case "online":
-                        if (zoneServer.IsRunning)
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                            // TODO: Check all clients inside playfields
-                            lock (zoneServer.Clients)
-                            {
-                                foreach (ZoneClient c in zoneServer.Clients)
-                                {
-                                    Console.WriteLine("Character " + c.Character.Name + " online");
-                                }
-                            }
-
-                            Console.ResetColor();
-                        }
-
-                        break;
-                    default:
-                        ct.TextRead("zone_consolecmdsdefault.txt");
-                        break;
+                    ct.TextRead("zone_consolecmdsdefault.txt");
                 }
             }
         }
@@ -345,7 +245,7 @@ namespace ZoneEngine
                 return false;
             }
 
-            if (!CheckDatabase())
+            if (!Misc.CheckDatabase())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Error while initializing database");
@@ -362,7 +262,33 @@ namespace ZoneEngine
                 return false;
             }
 
+            if (!InitializeConsoleCommands())
+            {
+                return false;
+            }
+
             Console.ForegroundColor = ConsoleColor.White;
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeConsoleCommands()
+        {
+            consoleCommands.AddEntry("start", StartServer);
+            consoleCommands.AddEntry("exit", ShutDownServer);
+            consoleCommands.AddEntry("quit", ShutDownServer);
+            consoleCommands.AddEntry("online", ShowOnlineCharacters);
+            consoleCommands.AddEntry("running", IsServerRunning);
+            consoleCommands.AddEntry("ls", ListAvailableScripts);
+            consoleCommands.AddEntry("check", CheckDatabase);
+            consoleCommands.AddEntry("updatedb", CheckDatabase);
+            consoleCommands.AddEntry("ping", PingChatServer);
+            consoleCommands.AddEntry("stop", StopServer);
+            consoleCommands.AddEntry("startm", StartServerMultipleScriptDlls);
 
             return true;
         }
@@ -468,6 +394,46 @@ namespace ZoneEngine
         }
 
         /// <summary>
+        /// </summary>
+        private static void IsServerRunning()
+        {
+            if (zoneServer.IsRunning)
+            {
+                Console.WriteLine("Zone Server is Running");
+            }
+            else
+            {
+                Console.WriteLine("Zone Server not Running");
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void ListAvailableScripts()
+        {
+            // list all available scripts, dont remove it since it does what it should
+            Console.WriteLine("Available scripts");
+
+            string[] files = Directory.GetFiles(
+                "Scripts" + Path.DirectorySeparatorChar, 
+                "*.cs", 
+                SearchOption.AllDirectories);
+            if (files.Length == 0)
+            {
+                Console.WriteLine("No scripts were found.");
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            foreach (string s in files)
+            {
+                Console.WriteLine(s);
+            }
+
+            Console.ResetColor();
+        }
+
+        /// <summary>
         /// Load items and Nanos into static lists
         /// </summary>
         /// <returns>
@@ -536,6 +502,85 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        private static void PingChatServer()
+        {
+            // ChatCom.Server.Ping();
+            Console.WriteLine("Ping is disabled till we can fix it");
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void ShowOnlineCharacters()
+        {
+            if (zoneServer.IsRunning)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+
+                // TODO: Check all clients inside playfields
+                lock (zoneServer.Clients)
+                {
+                    foreach (ZoneClient c in zoneServer.Clients)
+                    {
+                        Console.WriteLine("Character " + c.Character.Name + " online");
+                    }
+                }
+
+                Console.ResetColor();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void ShutDownServer()
+        {
+            if (zoneServer.IsRunning)
+            {
+                zoneServer.Stop();
+            }
+
+            ISComClient.ShutDown();
+            exited = true;
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void StartServer()
+        {
+            if (zoneServer.IsRunning)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Zone Server is already running");
+                Console.ResetColor();
+            }
+            else
+            {
+                // TODO: Add Sql Check.
+                csc.Compile(false);
+                StartTheServer();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void StartServerMultipleScriptDlls()
+        {
+            // Multiple dll compile
+            if (zoneServer.IsRunning)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Zone Server is already running");
+                Console.ResetColor();
+            }
+            else
+            {
+                // TODO: Add Sql Check.
+                csc.Compile(true);
+                StartTheServer();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         private static void StartTheServer()
         {
             // TODO: Read playfield data, check which playfields have to be created, and create them
@@ -548,6 +593,22 @@ namespace ZoneEngine
 
             csc.AddScriptMembers();
             zoneServer.Start(true, false);
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void StopServer()
+        {
+            if (!zoneServer.IsRunning)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Zone Server is not running");
+                Console.ResetColor();
+            }
+            else
+            {
+                zoneServer.Stop();
+            }
         }
 
         #endregion
