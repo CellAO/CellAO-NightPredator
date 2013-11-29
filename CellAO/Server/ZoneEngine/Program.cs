@@ -192,6 +192,8 @@ namespace ZoneEngine
                             zoneServer.Stop();
                         }
 
+                        ISComClient.ShutDown();
+
                         return;
 
                     case "ls": // list all available scripts, dont remove it since it does what it should
