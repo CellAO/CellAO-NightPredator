@@ -39,10 +39,13 @@ namespace ZoneEngine
     using CellAO.Core.Nanos;
     using CellAO.Database;
 
+
     using NBug;
     using NBug.Properties;
 
     using NLog;
+
+    using locales;
 
     using Utility;
     using Utility.Config;
@@ -145,14 +148,20 @@ namespace ZoneEngine
                     processedargs = true;
                 }
 
-                Console.Write("\nServer Command >>");
+                Console.Write("\n{0} >>",locales.ServerConsoleCommand);
                 string consoleCommand = Console.ReadLine();
 
                 if (!consoleCommands.Execute(consoleCommand))
                 {
-                    ct.TextRead("zone_consolecmdsdefault.txt");
+                    ShowCommandHelp();
                 }
             }
+        }
+
+        private static void ShowCommandHelp()
+        {
+            Console.WriteLine(locales.ServerConsoleAvailableCommands);
+            Console.WriteLine(consoleCommands.HelpAll());
         }
 
         /// <summary>
@@ -278,6 +287,8 @@ namespace ZoneEngine
         /// </returns>
         private static bool InitializeConsoleCommands()
         {
+            consoleCommands.Engine = "Zone";
+
             consoleCommands.AddEntry("start", StartServer);
             consoleCommands.AddEntry("exit", ShutDownServer);
             consoleCommands.AddEntry("quit", ShutDownServer);
@@ -303,7 +314,7 @@ namespace ZoneEngine
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(
-                    "{0} Game functions loaded", 
+                    "{0} Game functions loaded",
                     FunctionCollection.Instance.NumberofRegisteredFunctions());
             }
             catch (Exception e)
@@ -384,7 +395,7 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
-                ct.TextRead("ip_config_parse_error.txt");
+                Console.WriteLine(locales.ServerConsoleIPParseError);
                 Console.Write(e.Message);
                 Console.ReadKey();
                 return false;
@@ -415,8 +426,8 @@ namespace ZoneEngine
             Console.WriteLine("Available scripts");
 
             string[] files = Directory.GetFiles(
-                "Scripts" + Path.DirectorySeparatorChar, 
-                "*.cs", 
+                "Scripts" + Path.DirectorySeparatorChar,
+                "*.cs",
                 SearchOption.AllDirectories);
             if (files.Length == 0)
             {
@@ -484,7 +495,7 @@ namespace ZoneEngine
             OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
 
             Console.WriteLine();
-            ct.TextRead("main.txt");
+            Console.WriteLine(locales.ServerConsoleMainText, DateTime.Now.Year);
 
             if (!Initialize())
             {

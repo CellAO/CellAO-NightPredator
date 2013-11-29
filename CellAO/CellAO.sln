@@ -67,6 +67,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Communication", "Libraries\Source\CellAO.Communication\CellAO.Communication.csproj", "{55F93BC4-61C6-42F3-A8CB-788221059917}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkDownDocumentator", "..\Tools\Algorithman\MarkDownDocumentator\MarkDownDocumentator.csproj", "{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60385925-84F5-4893-A5E0-C8C1D1190790} = {60385925-84F5-4893-A5E0-C8C1D1190790}
+		{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83} = {B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}
+		{CA8044C8-3283-4382-8B47-3CA7972692F9} = {CA8044C8-3283-4382-8B47-3CA7972692F9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentations", "Documentations", "{B4291DEA-9A6E-475E-B75B-53D3A8247289}"
 	ProjectSection(SolutionItems) = preProject
@@ -84,6 +89,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentations", "Documenta
 		Documentation\Stats.md = Documentation\Stats.md
 		Documentation\WeaponSlots.md = Documentation\WeaponSlots.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translations", "Libraries\Source\Translations\Translations.csproj", "{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -337,6 +344,20 @@ Global
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47}.Release|x64.ActiveCfg = Release|Any CPU
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47}.Release|x86.ActiveCfg = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|x64.ActiveCfg = Release|Any CPU
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,13 +375,14 @@ Global
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{55F93BC4-61C6-42F3-A8CB-788221059917} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{3C59FD3D-2A73-4450-B4A3-1DE0F771ECEC} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal

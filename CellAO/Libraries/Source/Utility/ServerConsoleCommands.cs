@@ -32,6 +32,8 @@ namespace Utility
     using System.Collections.Generic;
     using System.Linq;
 
+    using locales;
+
     #endregion
 
     /// <summary>
@@ -39,6 +41,10 @@ namespace Utility
     public class ServerConsoleCommands
     {
         #region Fields
+
+        /// <summary>
+        /// </summary>
+        public string Engine = string.Empty;
 
         /// <summary>
         /// </summary>
@@ -76,6 +82,66 @@ namespace Utility
             return false;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="commandString">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public string HelpText(string commandString)
+        {
+            if (this.entries.Any(x => x.CommandString == commandString))
+            {
+                if (locales.ResourceManager.GetObject("ServerConsoleCommandHelp" + this.Engine + "_" + commandString)
+                    != null)
+                {
+                    return
+                        (string)
+                            locales.ResourceManager.GetObject(
+                                "ServerConsoleCommandHelp" + this.Engine + "_" + commandString);
+                }
+
+                // If no specific output found for this engine, then fall back to normal
+                if (locales.ResourceManager.GetObject("ServerConsoleCommandHelp_" + commandString)
+                    != null)
+                {
+                    return
+                        (string)
+                            locales.ResourceManager.GetObject(
+                                "ServerConsoleCommandHelp" + this.Engine + "_" + commandString);
+                }
+
+
+            }
+
+            return "No help available for command '" + commandString + "'";
+        }
+
+        /// <summary>
+        /// Returns the length of the longest console command (for padding the output)
+        /// </summary>
+        /// <returns>
+        /// Length of the longest console command
+        /// </returns>
+        private int MaxCommandLength()
+        {
+            return this.entries.Max(x => x.CommandString.Length);
+        }
+
         #endregion
+
+        public string HelpAll()
+        {
+            int maxLength = this.MaxCommandLength();
+
+            string output = "";
+
+            foreach (ServerConsoleCommandEntry serverConsoleCommandEntry in entries)
+            {
+                output += serverConsoleCommandEntry.CommandString.PadRight(maxLength + 1)
+                          + this.HelpText(serverConsoleCommandEntry.CommandString)+Environment.NewLine;
+            }
+            return output;
+        }
     }
 }

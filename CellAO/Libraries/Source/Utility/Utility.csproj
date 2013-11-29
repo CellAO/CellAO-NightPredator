@@ -62,7 +62,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="locale\de\de_autostart.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -268,6 +267,12 @@
     <Content Include="locale\ro\ro_zone_consolecommands.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Translations\Translations.csproj">
+      <Project>{3c59fd3d-2a73-4450-b4a3-1de0f771ecec}</Project>
+      <Name>Translations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

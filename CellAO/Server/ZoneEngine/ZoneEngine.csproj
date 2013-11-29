@@ -150,6 +150,10 @@
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
       <Name>NiceHexOutput</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\Translations\Translations.csproj">
+      <Project>{3c59fd3d-2a73-4450-b4a3-1de0f771ecec}</Project>
+      <Name>Translations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
