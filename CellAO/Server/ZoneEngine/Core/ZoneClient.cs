@@ -32,6 +32,7 @@ namespace ZoneEngine.Core
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Net.Sockets;
 
     using Cell.Core;
 
@@ -51,6 +52,8 @@ namespace ZoneEngine.Core
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
+
+    using zlib;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
@@ -84,7 +87,19 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
+        private NetworkStream netStream;
+
+        /// <summary>
+        /// </summary>
         private short packetNumber = 0;
+
+        /// <summary>
+        /// </summary>
+        private ZOutputStream zStream;
+
+        /// <summary>
+        /// </summary>
+        private bool zStreamSetup;
 
         #endregion
 
@@ -211,6 +226,8 @@ namespace ZoneEngine.Core
 
             byte[] buffer = this.messageSerializer.Serialize(message);
             this.SendCompressed(buffer);
+            LogUtil.Debug(messageBody.GetType().ToString());
+            LogUtil.Debug(NiceHexOutput.Output(buffer));
         }
 
         /// <summary>
@@ -219,11 +236,25 @@ namespace ZoneEngine.Core
         /// </param>
         public void SendCompressed(byte[] buffer)
         {
-            byte[] pn = BitConverter.GetBytes(this.packetNumber++);
-            buffer[0] = pn[1];
-            buffer[1] = pn[0];
+            lock (this.zStream)
+            {
+                byte[] pn = BitConverter.GetBytes(this.packetNumber++);
+                buffer[0] = pn[1];
+                buffer[1] = pn[0];
 
-            this.Send(buffer);
+                try
+                {
+                    // We can not be multithreaded here. packet numbers would be jumbled
+                    this.zStream.Write(buffer, 0, buffer.Length);
+                    this.zStream.Flush();
+                }
+                catch (Exception e)
+                {
+                    LogUtil.Debug("Error writing to zStream");
+                    LogUtil.ErrorException(e);
+                    this.server.DisconnectClient(this);
+                }
+            }
         }
 
         /// <summary>
@@ -242,8 +273,9 @@ namespace ZoneEngine.Core
                                       MessageId = 0xdfdf, 
                                       PacketType = messageBody.PacketType, 
                                       Unknown = 0x0001, 
-                                      Sender = 0x03000000, 
-                                      Receiver = this.character.Identity.Instance
+                                      // TODO: Make compression choosable in config.xml
+                                      Sender = 0x01000000, // 01000000 = uncompressed, 03000000 = compressed
+                                      Receiver = 0 // this.character.Identity.Instance 
                                   }
                           };
             byte[] buffer = this.messageSerializer.Serialize(message);
@@ -257,6 +289,23 @@ namespace ZoneEngine.Core
             this.packetNumber = 1;
 
             this.Send(buffer);
+
+            // Now create the compressed stream
+            try
+            {
+                if (!this.zStreamSetup)
+                {
+                    // Create the zStream
+                    this.netStream = new NetworkStream(this.TcpSocket);
+                    this.zStream = new ZOutputStream(this.netStream, zlibConst.Z_BEST_COMPRESSION);
+                    this.zStream.FlushMode = zlibConst.Z_SYNC_FLUSH;
+                    this.zStreamSetup = true;
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
         }
 
         #endregion

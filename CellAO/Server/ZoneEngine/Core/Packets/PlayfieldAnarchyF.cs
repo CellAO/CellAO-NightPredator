@@ -28,6 +28,8 @@ namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
+    using System.Threading;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -100,6 +102,7 @@ namespace ZoneEngine.Core.Packets
                                                   };
             }
             */
+            Thread.Sleep(500);
             client.SendCompressed(message);
         }
 

@@ -111,10 +111,10 @@ namespace ZoneEngine.Core.Packets
         public static void Send(ZoneClient client, int stat, uint value, bool announce)
         {
             var statMessage = new StatMessage
-                              {
-                                  Identity = client.Character.Identity, 
-                                  Stats =
-                                      new[]
+            {
+                Identity = client.Character.Identity,
+                Stats =
+                    new[]
                                       {
                                           new GameTuple<CharacterStat, uint>
                                           {
@@ -123,7 +123,7 @@ namespace ZoneEngine.Core.Packets
                                               Value2 = value
                                           }
                                       }
-                              };
+            };
             var statM = new Message { Body = statMessage };
             if (!client.Character.DoNotDoTimers)
             {
@@ -136,6 +136,34 @@ namespace ZoneEngine.Core.Packets
             {
                 client.Character.Playfield.AnnounceOthers(statMessage, client.Character.Identity);
             }
+        }
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="stat">
+        /// </param>
+        /// <param name="value">
+        /// </param>
+        /// <param name="announce">
+        /// </param>
+        public static void SendDirect(ZoneClient client, int stat, uint value, bool announce)
+        {
+            var statMessage = new StatMessage
+            {
+                Identity = client.Character.Identity,
+                Stats =
+                    new[]
+                                      {
+                                          new GameTuple<CharacterStat, uint>
+                                          {
+                                              Value1 =
+                                                  (CharacterStat)stat, 
+                                              Value2 = value
+                                          }
+                                      }
+            };
+            client.SendCompressed(statMessage);
         }
 
         /// <summary>

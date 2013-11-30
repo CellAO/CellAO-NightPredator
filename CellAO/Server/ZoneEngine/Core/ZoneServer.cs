@@ -77,6 +77,8 @@ namespace ZoneEngine.Core
         [ImportingConstructor]
         public ZoneServer(ClientFactory clientFactory)
         {
+            // TODO: Get the Server id from chatengine or config file
+            this.Id = 0x356;
             this.clientFactory = clientFactory;
         }
 

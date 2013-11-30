@@ -98,7 +98,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             /* set SocialStatus to 0 */
             client.Character.Stats[521].BaseValue = 0;
-            Stat.Send(client, 521, 0, false);
+            // Stat.SendDirect(client, 521, 0, false);
 
             var identity = new Identity { Type = IdentityType.CanbeAffected, Instance = charID };
 
@@ -123,10 +123,10 @@ namespace ZoneEngine.Core.PacketHandlers
             client.SendCompressed(gameTimeMessage);
 
             /* set SocialStatus to 0 */
-            Stat.Set(client, 521, 0, false);
+            //Stat.SendDirect(client, 521, 0, false);
 
             /* again */
-            Stat.Set(client, 521, 0, false);
+            //Stat.SendDirect(client, 521, 0, false);
 
             /* visual */
             SimpleCharFullUpdate.SendToPlayfield(client);
