@@ -92,6 +92,10 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        void CalcTrickle();
+
+        /// <summary>
+        /// </summary>
         /// <param name="old">
         /// </param>
         /// <returns>

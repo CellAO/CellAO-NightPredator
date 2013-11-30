@@ -26,12 +26,20 @@
 
 namespace CellAO.Stats
 {
+    using System.Linq;
+
+    #region Usings ...
+
     #region Usings ...
 
     #region Usings ...
 
     using System;
     using System.Collections.Generic;
+
+    using CellAO.Enums;
+
+    #endregion
 
     #endregion
 
@@ -271,6 +279,12 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        public virtual void CalcTrickle()
+        {
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="val">
         /// </param>
         /// <returns>
@@ -326,12 +340,20 @@ namespace CellAO.Stats
         /// </summary>
         /// <param name="e">
         /// </param>
-        private void OnAfterStatChangedEvent(StatChangedEventArgs e)
+        internal void OnAfterStatChangedEvent(StatChangedEventArgs e)
         {
             EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
             if (handler != null)
             {
                 handler(this, e);
+            }
+
+            if (this.affects.Any())
+            {
+                foreach (int affectedStat in affects)
+                {
+                    this.Stats.All.Single(x => x.StatId == affectedStat).CalcTrickle();
+                }
             }
         }
 

@@ -69,9 +69,33 @@ namespace CellAO.Core.Entities
         private MeshLayers meshLayer = new MeshLayers();
 
         /// <summary>
+        /// </summary>
+        private MoveDirections moveDirection;
+
+        /// <summary>
+        /// </summary>
+        private MoveModes moveMode;
+
+        /// <summary>
+        /// </summary>
+        private DateTime predictionTime;
+
+        /// <summary>
+        /// </summary>
+        private MoveModes previousMoveMode;
+
+        /// <summary>
         /// Caching Mesh layer for social tab items
         /// </summary>
         private MeshLayers socialMeshLayer = new MeshLayers();
+
+        /// <summary>
+        /// </summary>
+        private SpinOrStrafeDirections spinDirection;
+
+        /// <summary>
+        /// </summary>
+        private SpinOrStrafeDirections strafeDirection;
 
         #endregion
 
@@ -254,6 +278,12 @@ namespace CellAO.Core.Entities
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public bool SetTarget(Identity identity)
         {
             this.SelectedTarget = identity;
@@ -268,7 +298,173 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void UpdateMoveType(byte moveType)
         {
-            throw new NotImplementedException();
+            this.predictionTime = DateTime.Now;
+
+            /*
+             * NV: Would be nice to have all other possible values filled out for this at some point... *Looks at Suiv*
+             * More specifically, 10, 13 and 22 - 10 and 13 seem to be tied to spinning with mouse. 22 seems random (ping mabe?)
+             * Also TODO: Tie this with CurrentMovementMode stat and persistance (ie, log off walking, log back on and still walking)
+             * Values of CurrentMovementMode and their effects:
+                0: slow moving feet not animating
+                1: rooted cant sit
+                2: walk
+                3: run
+                4: swim
+                5: crawl
+                6: sneak
+                7: flying
+                8: sitting
+                9: rooted can sit
+                10: same as 0
+                11: sleeping
+                12: lounging
+                13: same as 0
+                14: same as 0
+                15: same as 0
+                16: same as 0
+             */
+            switch (moveType)
+            {
+                case 1: // Forward Start
+                    this.moveDirection = MoveDirections.Forwards;
+                    break;
+                case 2: // Forward Stop
+                    this.moveDirection = MoveDirections.None;
+                    break;
+
+                case 3: // Reverse Start
+                    this.moveDirection = MoveDirections.Backwards;
+                    break;
+                case 4: // Reverse Stop
+                    this.moveDirection = MoveDirections.None;
+                    break;
+
+                case 5: // Strafe Right Start
+                    this.strafeDirection = SpinOrStrafeDirections.Right;
+                    break;
+                case 6: // Strafe Stop (Right)
+                    this.strafeDirection = SpinOrStrafeDirections.None;
+                    break;
+
+                case 7: // Strafe Left Start
+                    this.strafeDirection = SpinOrStrafeDirections.Left;
+                    break;
+                case 8: // Strafe Stop (Left)
+                    this.strafeDirection = SpinOrStrafeDirections.None;
+                    break;
+
+                case 9: // Turn Right Start
+                    this.spinDirection = SpinOrStrafeDirections.Right;
+                    break;
+                case 10: // Mouse Turn Right Start
+                    break;
+                case 11: // Turn Stop (Right)
+                    this.spinDirection = SpinOrStrafeDirections.None;
+                    break;
+
+                case 12: // Turn Left Start
+                    this.spinDirection = SpinOrStrafeDirections.Left;
+                    break;
+                case 13: // Mouse Turn Left Start
+                    break;
+                case 14: // Turn Stop (Left)
+                    this.spinDirection = SpinOrStrafeDirections.None;
+                    break;
+
+                case 15: // Jump Start
+
+                    // NV: TODO: This!
+                    break;
+                case 16: // Jump Stop
+                    break;
+
+                case 17: // Elevate Up Start
+                    break;
+                case 18: // Elevate Up Stop
+                    break;
+
+                case 19: // ? 19 = 20 = 22 = 31 = 32
+                    break;
+                case 20: // ? 19 = 20 = 22 = 31 = 32
+                    break;
+
+                case 21: // Full Stop
+                    break;
+
+                case 22: // ? 19 = 20 = 22 = 31 = 32
+                    break;
+
+                case 23: // Switch To Frozen Mode
+                    break;
+                case 24: // Switch To Walk Mode
+                    this.moveMode = MoveModes.Walk;
+                    break;
+                case 25: // Switch To Run Mode
+                    this.moveMode = MoveModes.Run;
+                    break;
+                case 26: // Switch To Swim Mode
+                    break;
+                case 27: // Switch To Crawl Mode
+                    this.previousMoveMode = this.moveMode;
+                    this.moveMode = MoveModes.Crawl;
+                    break;
+                case 28: // Switch To Sneak Mode
+                    this.previousMoveMode = this.moveMode;
+                    this.moveMode = MoveModes.Sneak;
+                    break;
+                case 29: // Switch To Fly Mode
+                    break;
+                case 30: // Switch To Sit Ground Mode
+                    this.previousMoveMode = this.moveMode;
+                    this.moveMode = MoveModes.Sit;
+                    this.Stats[StatIds.nanodelta].CalcTrickle();
+                    this.Stats[StatIds.healdelta].CalcTrickle();
+                    this.Stats[StatIds.nanointerval].CalcTrickle();
+                    this.Stats[StatIds.healinterval].CalcTrickle();
+                    break;
+
+                case 31: // ? 19 = 20 = 22 = 31 = 32
+                    break;
+                case 32: // ? 19 = 20 = 22 = 31 = 32
+                    break;
+
+                case 33: // Switch To Sleep Mode
+                    this.moveMode = MoveModes.Sleep;
+                    break;
+                case 34: // Switch To Lounge Mode
+                    this.moveMode = MoveModes.Lounge;
+                    break;
+
+                case 35: // Leave Swim Mode
+                    break;
+                case 36: // Leave Sneak Mode
+                    this.moveMode = this.previousMoveMode;
+                    break;
+                case 37: // Leave Sit Mode
+                    this.moveMode = this.previousMoveMode;
+                    this.Stats[StatIds.nanodelta].CalcTrickle();
+                    this.Stats[StatIds.healdelta].CalcTrickle();
+                    this.Stats[StatIds.nanointerval].CalcTrickle();
+                    this.Stats[StatIds.healinterval].CalcTrickle();
+                    break;
+                case 38: // Leave Frozen Mode
+                    break;
+                case 39: // Leave Fly Mode
+                    break;
+                case 40: // Leave Crawl Mode
+                    this.moveMode = this.previousMoveMode;
+                    break;
+                case 41: // Leave Sleep Mode
+                    break;
+                case 42: // Leave Lounge Mode
+                    break;
+                default:
+
+                    // Console.WriteLine("Unknown MoveType: " + moveType);
+                    break;
+            }
+
+            // Console.WriteLine((moveDirection != 0 ? moveMode.ToString() : "Stand") + "ing in the direction " + moveDirection.ToString() + (spinDirection != 0 ? " while spinning " + spinDirection.ToString() : "") + (strafeDirection != 0 ? " and strafing " + strafeDirection.ToString() : ""));
         }
 
         /// <summary>
