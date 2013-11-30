@@ -26,7 +26,7 @@
 
 #region NameSpace
 
-namespace ZoneEngine.Script
+namespace ZoneEngine.ChatCommands
 {
     #region Usings ...
 

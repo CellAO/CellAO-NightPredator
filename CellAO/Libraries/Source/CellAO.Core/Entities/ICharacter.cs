@@ -49,7 +49,7 @@ namespace CellAO.Core.Entities
 
     /// <summary>
     /// </summary>
-    public interface ICharacter : IPacketReceivingEntity, INamedEntity, ISummoner, IItemContainer
+    public interface ICharacter : IPacketReceivingEntity, INamedEntity, ISummoner, IItemContainer, ITargetingEntity
     {
         #region Public Properties
 

@@ -28,6 +28,8 @@
 
 namespace ZoneEngine.Script
 {
+    using ZoneEngine.ChatCommands;
+
     #region Usings ...
 
     #region Usings ...

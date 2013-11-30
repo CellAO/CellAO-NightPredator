@@ -254,6 +254,12 @@ namespace CellAO.Core.Entities
             throw new NotImplementedException();
         }
 
+        public bool SetTarget(Identity identity)
+        {
+            this.SelectedTarget = identity;
+            return true;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="moveType">

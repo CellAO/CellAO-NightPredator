@@ -69,6 +69,7 @@
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
@@ -113,7 +114,7 @@
     <Compile Include="Core\ZoneServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Script\AOChatCommand.cs" />
+    <Compile Include="ChatCommands\AOChatCommand.cs" />
     <Compile Include="Script\IAOScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
   </ItemGroup>
@@ -149,6 +150,10 @@
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Stats\CellAO.Stats.csproj">
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\Exceptions\Exceptions.csproj">
+      <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
+      <Name>Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
