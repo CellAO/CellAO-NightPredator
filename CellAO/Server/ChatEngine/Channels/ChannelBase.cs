@@ -28,11 +28,13 @@ namespace ChatEngine.Channels
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
 
     using Cell.Core;
 
     using ChatEngine.CoreClient;
+    using ChatEngine.Packets;
 
     #endregion
 
@@ -145,7 +147,8 @@ namespace ChatEngine.Channels
                         this.OnClientJoinChannel(((Client)client).Character.characterName);
                     }
 
-                    // TODO: Send feedback to client?
+                    byte[] channelJoinPacket = ChannelJoin.Create(this, new Byte[] { 0x00, 0x00 });
+                    client.Send(channelJoinPacket);
                     return true;
                 }
             }

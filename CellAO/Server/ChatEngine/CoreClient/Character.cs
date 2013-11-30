@@ -28,7 +28,10 @@ namespace ChatEngine.CoreClient
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Database.Dao;
+    using CellAO.Enums;
 
     #endregion
 
@@ -108,7 +111,16 @@ namespace ChatEngine.CoreClient
             {
                 if (this.characterSide == -1)
                 {
-                    this.characterSide = StatDao.GetById(50000, (int)this.CharacterId, 33).statvalue;
+                    try
+                    {
+                        this.characterSide = StatDao.GetById(50000, (int)this.CharacterId, (int)StatIds.side).statvalue;
+                    }
+                    catch (Exception e)
+                    {
+                        // Has no side in database yet
+                        this.characterSide = (int)SmokeLounge.AOtomation.Messaging.GameData.Side.Neutral;
+                        StatDao.AddStat(50000, (int)this.CharacterId, (int)StatIds.side, (int)SmokeLounge.AOtomation.Messaging.GameData.Side.Neutral);
+                    }
                 }
 
                 return this.characterSide;
