@@ -380,9 +380,9 @@ Global
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_UpdateAssemblyVersion = True
 		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
 	EndGlobalSection
 EndGlobal
