@@ -155,8 +155,7 @@ namespace LoginEngine.CoreClient
         public void Send(int receiver, MessageBody messageBody)
         {
             // TODO: Investigate if reciever is a timestamp
-            var message = new Message
-                          {
+            var message = new Message {
                               Body = messageBody, 
                               Header =
                                   new Header
@@ -175,9 +174,9 @@ namespace LoginEngine.CoreClient
             this.packetNumber++;
 
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             Console.WriteLine(NiceHexOutput.Output(buffer));
-            Console.ResetColor();
+            Colouring.Pop();
             LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(buffer));
 #endif
             if (buffer.Length % 4 > 0)

@@ -24,70 +24,49 @@
 
 #endregion
 
-namespace LoginEngine.MessageHandlers
+namespace Utility
 {
     #region Usings ...
 
     using System;
-    using System.ComponentModel.Composition;
-    using System.Globalization;
-    using System.Text;
-
-    using CellAO.Core.Components;
-
-    using LoginEngine.CoreClient;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
-
-    using Utility;
+    using System.Collections.Generic;
+    using System.Linq;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class UserLoginHandler : IHandleMessage<UserLoginMessage>
+    public static class Colouring
     {
+        #region Static Fields
+
+        /// <summary>
+        /// </summary>
+        private static List<ConsoleColor> colorStack = new List<ConsoleColor>();
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Handle(object sender, Message message)
+        public static void Pop()
         {
-            var client = (Client)sender;
-            var userLoginMessage = (UserLoginMessage)message.Body;
-            client.AccountName = userLoginMessage.UserName;
-            client.ClientVersion = userLoginMessage.ClientVersion;
-            Colouring.Push(ConsoleColor.Green);
-            Console.WriteLine(
-                "Client '" + client.AccountName + "' connected using version '" + client.ClientVersion + "'");
-            Colouring.Pop();
-
-            var salt = new byte[0x20];
-            var rand = new Random();
-
-            rand.NextBytes(salt);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < 32; i++)
+            if (colorStack.Count > 0)
             {
-                // 0x00 Breaks Things
-                if (salt[i] == 0)
-                {
-                    salt[i] = 42; // So we change it to something nicer
-                }
-
-                sb.Append(salt[i].ToString("x2", CultureInfo.InvariantCulture));
+                Console.ForegroundColor = colorStack.Last();
+                colorStack.RemoveAt(colorStack.Count - 1);
             }
+        }
 
-            client.ServerSalt = sb.ToString();
-            var serverSaltMessage = new ServerSaltMessage { ServerSalt = salt };
-            client.Send(0x00002B3F, serverSaltMessage);
+        /// <summary>
+        /// </summary>
+        /// <param name="color">
+        /// </param>
+        public static void Push(ConsoleColor color)
+        {
+            colorStack.Add(Console.ForegroundColor);
+            Console.ForegroundColor = color;
         }
 
         #endregion

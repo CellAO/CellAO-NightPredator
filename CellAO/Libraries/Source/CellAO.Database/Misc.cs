@@ -72,10 +72,10 @@ namespace CellAO.Database
 
             if (errorMessage != string.Empty)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error connecting to database");
                 Console.WriteLine(errorMessage);
-                Console.ResetColor();
+                Colouring.Pop();
                 return false;
             }
 
@@ -107,10 +107,10 @@ namespace CellAO.Database
 
             if (errorMessage != string.Empty)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error checking for table " + fName);
                 Console.WriteLine(errorMessage);
-                Console.ResetColor();
+                Colouring.Pop();
                 return false;
             }
 
@@ -120,8 +120,9 @@ namespace CellAO.Database
                 {
                     if (tablesNotFound.Count > 0)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        Colouring.Push(ConsoleColor.Red);
                         Console.Write("SQL Tables are not complete. Should they be created? (Y/N) ");
+                        Colouring.Pop();
 
                         string answer = Console.ReadLine();
                         string sqlQuery;
@@ -131,9 +132,9 @@ namespace CellAO.Database
                             {
                                 fName = Path.GetFileNameWithoutExtension(sqlFile);
                                 long fileSize = new FileInfo(sqlFile).Length;
-                                Console.ForegroundColor = ConsoleColor.Green;
+                                Colouring.Push(ConsoleColor.Green);
                                 Console.Write("Table " + fName.PadRight(67) + "[  0%]");
-
+                                Colouring.Pop();
                                 if (fileSize > 10000)
                                 {
                                     string[] queries = File.ReadAllLines(sqlFile);
@@ -236,14 +237,18 @@ namespace CellAO.Database
                                     }
                                     else
                                     {
+                                        Colouring.Push(ConsoleColor.Green);
                                         Console.Write("\rTable " + fName.PadRight(67) + "[100%]");
+                                        Colouring.Pop();
                                     }
                                 }
                                 else
                                 {
                                     sqlQuery = File.ReadAllText(sqlFile);
                                     conn.Execute(sqlQuery);
+                                    Colouring.Push(ConsoleColor.Green);
                                     Console.Write("\rTable " + fName.PadRight(67) + "[100%]");
+                                    Colouring.Pop();
                                 }
 
                                 Console.WriteLine();

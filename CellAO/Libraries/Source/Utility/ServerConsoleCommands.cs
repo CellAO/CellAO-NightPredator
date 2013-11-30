@@ -108,7 +108,7 @@ namespace Utility
                     return
                         (string)
                             locales.ResourceManager.GetObject(
-                                "ServerConsoleCommandHelp" + this.Engine + "_" + commandString);
+                                "ServerConsoleCommandHelp" + "_" + commandString);
                 }
 
 

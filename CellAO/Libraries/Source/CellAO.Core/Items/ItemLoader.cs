@@ -34,7 +34,7 @@ namespace CellAO.Core.Items
     using System.IO;
 
     using MsgPack.Serialization;
-
+    using locales;
     using zlib;
 
     #endregion
@@ -125,12 +125,12 @@ namespace CellAO.Core.Items
                 }
 
                 Console.Write(
-                    "Loaded {0} items in {1}\r", 
+                    locales.ItemLoaderLoadedItems + " - {1}\r",
                     new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
             }
 
             Console.Write(
-                "Loaded {0} items in {1}\r", 
+                locales.ItemLoaderLoadedItems + " - {1}\r",
                 new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();

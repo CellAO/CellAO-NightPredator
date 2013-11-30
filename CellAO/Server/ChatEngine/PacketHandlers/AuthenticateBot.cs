@@ -61,9 +61,9 @@ namespace ChatEngine.PacketHandlers
         public static void Read(Client client, byte[] packet)
         {
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             Console.WriteLine(NiceHexOutput.Output(packet));
-            Console.ResetColor();
+            Colouring.Pop();
             LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
 #endif
 
@@ -86,9 +86,9 @@ namespace ChatEngine.PacketHandlers
                 client.IsBot = true;
                 byte[] chars = AccountCharacterList.Create(userName);
 #if DEBUG
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(NiceHexOutput.Output(chars));
-                Console.ResetColor();
+                Colouring.Pop();
                 LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(chars));
 #endif
                 client.Send(chars);

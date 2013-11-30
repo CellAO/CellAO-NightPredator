@@ -120,9 +120,9 @@ namespace LoginEngine
                     case "start":
                         if (loginServer.IsRunning)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Colouring.Push(ConsoleColor.Red);
                             ct.TextRead("loginisrunning.txt");
-                            Console.ResetColor();
+                            Colouring.Pop();
                             break;
                         }
 
@@ -131,9 +131,9 @@ namespace LoginEngine
                     case "stop":
                         if (!loginServer.IsRunning)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Colouring.Push(ConsoleColor.Red);
                             ct.TextRead("loginisnotrunning.txt");
-                            Console.ResetColor();
+                            Colouring.Pop();
                             break;
                         }
 
@@ -413,9 +413,10 @@ namespace LoginEngine
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error occured while initalizing NLog/NBug");
                 Console.WriteLine(e.Message);
+                Colouring.Pop();
                 return false;
             }
 

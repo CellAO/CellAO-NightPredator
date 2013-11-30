@@ -39,13 +39,12 @@ namespace ZoneEngine
     using CellAO.Core.Nanos;
     using CellAO.Database;
 
+    using locales;
 
     using NBug;
     using NBug.Properties;
 
     using NLog;
-
-    using locales;
 
     using Utility;
     using Utility.Config;
@@ -84,10 +83,6 @@ namespace ZoneEngine
         /// <summary>
         /// </summary>
         private static ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
-
-        /// <summary>
-        /// </summary>
-        private static ConsoleText ct;
 
         /// <summary>
         /// </summary>
@@ -130,7 +125,8 @@ namespace ZoneEngine
         private static void CommandLoop(string[] args)
         {
             bool processedargs = false;
-            ct.TextRead("zone_consolecommands.txt");
+            Console.WriteLine(locales.ZoneEngineConsoleCommands);
+
             while (!exited)
             {
                 if (!processedargs)
@@ -139,7 +135,7 @@ namespace ZoneEngine
                     {
                         if (args[0].ToLower() == "/autostart")
                         {
-                            ct.TextRead("autostart.txt");
+                            Console.WriteLine(locales.ServerConsoleAutostart);
                             csc.Compile(false);
                             StartTheServer();
                         }
@@ -148,7 +144,7 @@ namespace ZoneEngine
                     processedargs = true;
                 }
 
-                Console.Write("\n{0} >>",locales.ServerConsoleCommand);
+                Console.Write("\n{0} >>", locales.ServerConsoleCommand);
                 string consoleCommand = Console.ReadLine();
 
                 if (!consoleCommands.Execute(consoleCommand))
@@ -156,12 +152,6 @@ namespace ZoneEngine
                     ShowCommandHelp();
                 }
             }
-        }
-
-        private static void ShowCommandHelp()
-        {
-            Console.WriteLine(locales.ServerConsoleAvailableCommands);
-            Console.WriteLine(consoleCommands.HelpAll());
         }
 
         /// <summary>
@@ -204,79 +194,82 @@ namespace ZoneEngine
         private static bool Initialize()
         {
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
 
             if (!InitializeGameFunctions())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error in Gamefunction initialization");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorInitializingGamefunctions);
+                Colouring.Pop();
                 return false;
             }
 
             if (!InitializeLogAndBug())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error while initializing NLog/NBug");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorInitializingNLogNBug);
+                Colouring.Pop();
                 return false;
             }
 
             if (!CheckZoneServerCreation())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error while creating ZoneServer instance");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorCreatingZoneServerInstance);
+                Colouring.Pop();
                 return false;
             }
 
             if (!ISComInitialization())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error initializing ISCom");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorInitializingISCom);
+                Colouring.Pop();
                 return false;
             }
 
             if (!InizializeTCPIP())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error initializing TCP/IP setup");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorTCPIPSetup);
+                Colouring.Pop();
                 return false;
             }
 
             if (!InitializeScriptCompiler())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error while creating ScriptCompiler instance");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorCreatingScriptCompilerInstance);
+                Colouring.Pop();
                 return false;
             }
 
             if (!Misc.CheckDatabase())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error while initializing database");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorInitializingDatabase);
+                Colouring.Pop();
                 return false;
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             if (!LoadItemsAndNanos())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error while loading Items/Nanos");
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorLoadingItemsNanos);
+                Colouring.Pop();
+                Colouring.Pop();
                 return false;
             }
+
+            Colouring.Pop();
 
             if (!InitializeConsoleCommands())
             {
                 return false;
             }
 
-            Console.ForegroundColor = ConsoleColor.White;
+            Colouring.Pop();
 
             return true;
         }
@@ -290,16 +283,20 @@ namespace ZoneEngine
             consoleCommands.Engine = "Zone";
 
             consoleCommands.AddEntry("start", StartServer);
+            consoleCommands.AddEntry("startm", StartServerMultipleScriptDlls);
+            consoleCommands.AddEntry("running", IsServerRunning);
+            consoleCommands.AddEntry("ping", PingChatServer);
+
+            consoleCommands.AddEntry("stop", StopServer);
+
             consoleCommands.AddEntry("exit", ShutDownServer);
             consoleCommands.AddEntry("quit", ShutDownServer);
-            consoleCommands.AddEntry("online", ShowOnlineCharacters);
-            consoleCommands.AddEntry("running", IsServerRunning);
-            consoleCommands.AddEntry("ls", ListAvailableScripts);
+
             consoleCommands.AddEntry("check", CheckDatabase);
             consoleCommands.AddEntry("updatedb", CheckDatabase);
-            consoleCommands.AddEntry("ping", PingChatServer);
-            consoleCommands.AddEntry("stop", StopServer);
-            consoleCommands.AddEntry("startm", StartServerMultipleScriptDlls);
+
+            consoleCommands.AddEntry("online", ShowOnlineCharacters);
+            consoleCommands.AddEntry("ls", ListAvailableScripts);
 
             return true;
         }
@@ -312,17 +309,19 @@ namespace ZoneEngine
         {
             try
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
-                    "{0} Game functions loaded",
+                    "{0} Game functions loaded", 
                     FunctionCollection.Instance.NumberofRegisteredFunctions());
             }
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
+                Colouring.Pop();
                 return false;
             }
 
+            Colouring.Pop();
             return true;
         }
 
@@ -346,9 +345,10 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error occured while initalizing NLog/NBug");
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorInitializingNLogNBug);
                 Console.WriteLine(e.Message);
+                Colouring.Pop();
                 return false;
             }
 
@@ -395,8 +395,10 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
-                Console.WriteLine(locales.ServerConsoleIPParseError);
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorIPAddressParseFailed);
                 Console.Write(e.Message);
+                Colouring.Pop();
                 Console.ReadKey();
                 return false;
             }
@@ -408,14 +410,17 @@ namespace ZoneEngine
         /// </summary>
         private static void IsServerRunning()
         {
+            Colouring.Push(ConsoleColor.White);
             if (zoneServer.IsRunning)
             {
-                Console.WriteLine("Zone Server is Running");
+                Console.WriteLine(locales.ServerConsoleServerIsRunning);
             }
             else
             {
-                Console.WriteLine("Zone Server not Running");
+                Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
             }
+
+            Colouring.Pop();
         }
 
         /// <summary>
@@ -423,25 +428,26 @@ namespace ZoneEngine
         private static void ListAvailableScripts()
         {
             // list all available scripts, dont remove it since it does what it should
-            Console.WriteLine("Available scripts");
+            Colouring.Push(ConsoleColor.White);
+            Console.WriteLine(locales.ServerConsoleAvailableScripts + ":");
 
             string[] files = Directory.GetFiles(
-                "Scripts" + Path.DirectorySeparatorChar,
-                "*.cs",
+                "Scripts" + Path.DirectorySeparatorChar, 
+                "*.cs", 
                 SearchOption.AllDirectories);
             if (files.Length == 0)
             {
-                Console.WriteLine("No scripts were found.");
+                Console.WriteLine(locales.ServerConsoleNoScriptsFound);
                 return;
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             foreach (string s in files)
             {
                 Console.WriteLine(s);
             }
 
-            Console.ResetColor();
+            Colouring.Pop();
         }
 
         /// <summary>
@@ -452,32 +458,40 @@ namespace ZoneEngine
         /// </returns>
         private static bool LoadItemsAndNanos()
         {
+            Colouring.Push(ConsoleColor.Green);
             try
             {
-                Console.WriteLine("Loaded {0} items", ItemLoader.CacheAllItems());
+                Console.WriteLine(locales.ItemLoaderLoadedItems, ItemLoader.CacheAllItems());
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("An error occured while loading the items.dat.");
+                Colouring.Pop();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorReadingItemsFile);
                 Console.WriteLine(e.Message);
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Pop();
                 return false;
             }
 
+            Colouring.Pop();
+
+            Colouring.Push(ConsoleColor.Green);
             try
             {
-                Console.WriteLine("Loaded {0} nanos", NanoLoader.CacheAllNanos());
+                Console.WriteLine(locales.NanoLoaderLoadedNanos, NanoLoader.CacheAllNanos());
                 Console.WriteLine();
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("An error occured while loading the nanos.dat.");
+                Colouring.Pop();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ErrorReadingNanosFile);
                 Console.WriteLine(e.Message);
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Pop();
                 return false;
             }
+
+            Colouring.Pop();
 
             return true;
         }
@@ -490,8 +504,6 @@ namespace ZoneEngine
         /// </param>
         private static void Main(string[] args)
         {
-            ct = new ConsoleText();
-
             OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
 
             Console.WriteLine();
@@ -499,7 +511,8 @@ namespace ZoneEngine
 
             if (!Initialize())
             {
-                Console.WriteLine("Error occurred while initializing. Please check the log file.");
+                Console.WriteLine(locales.ErrorInitializingEngine);
+                Console.WriteLine("Press enter to exit");
                 Console.ReadLine();
             }
             else
@@ -516,7 +529,20 @@ namespace ZoneEngine
         private static void PingChatServer()
         {
             // ChatCom.Server.Ping();
-            Console.WriteLine("Ping is disabled till we can fix it");
+            Console.WriteLine("Ping is disabled till we can do it");
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void ShowCommandHelp()
+        {
+            Colouring.Push(ConsoleColor.White);
+            Console.WriteLine(locales.ServerConsoleAvailableCommands);
+            Console.WriteLine("---------------------------");
+            Console.WriteLine(consoleCommands.HelpAll());
+            Console.WriteLine("---------------------------");
+            Console.WriteLine();
+            Colouring.Pop();
         }
 
         /// <summary>
@@ -525,7 +551,7 @@ namespace ZoneEngine
         {
             if (zoneServer.IsRunning)
             {
-                Console.ForegroundColor = ConsoleColor.White;
+                Colouring.Push(ConsoleColor.White);
 
                 // TODO: Check all clients inside playfields
                 lock (zoneServer.Clients)
@@ -536,7 +562,7 @@ namespace ZoneEngine
                     }
                 }
 
-                Console.ResetColor();
+                Colouring.Pop();
             }
         }
 
@@ -559,9 +585,9 @@ namespace ZoneEngine
         {
             if (zoneServer.IsRunning)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Zone Server is already running");
-                Console.ResetColor();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ServerConsoleServerIsRunning);
+                Colouring.Pop();
             }
             else
             {
@@ -578,9 +604,9 @@ namespace ZoneEngine
             // Multiple dll compile
             if (zoneServer.IsRunning)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Zone Server is already running");
-                Console.ResetColor();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ServerConsoleServerIsRunning);
+                Colouring.Pop();
             }
             else
             {
@@ -612,9 +638,9 @@ namespace ZoneEngine
         {
             if (!zoneServer.IsRunning)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Zone Server is not running");
-                Console.ResetColor();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
+                Colouring.Pop();
             }
             else
             {

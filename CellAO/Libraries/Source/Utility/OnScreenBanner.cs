@@ -80,17 +80,17 @@ namespace Utility
                 consoleWidth = 80;
             }
 
-            ConsoleColor oldColor = Console.ForegroundColor;
+            
             int centered = (consoleWidth - text.Length) / 2;
             Console.Write(boundary.PadRight(centered, ' '));
 
             if (c != ConsoleColor.Black)
             {
-                Console.ForegroundColor = c;
+                Colouring.Push(c);
             }
 
             Console.Write(text);
-            Console.ForegroundColor = oldColor;
+            Colouring.Pop();
             Console.Write(boundary.PadLeft(consoleWidth - (text.Length + centered), ' '));
         }
 

@@ -144,9 +144,9 @@ namespace ChatEngine.CoreClient
             this.packetNumber++;
 
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             Console.WriteLine(NiceHexOutput.Output(packetBytes));
-            Console.ResetColor();
+            Colouring.Pop();
             LogUtil.Debug("\r\nSent:\r\n" + NiceHexOutput.Output(packetBytes));
 #endif
             if (packetBytes.Length % 4 > 0)
@@ -203,9 +203,9 @@ namespace ChatEngine.CoreClient
                 byte[] packet = new byte[this._remainingLength];
                 Array.Copy(buffer.SegmentData, 0, packet, 0, this._remainingLength);
 #if DEBUG
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(NiceHexOutput.Output(packet));
-                Console.ResetColor();
+                Colouring.Pop();
                 LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
 #endif
                 ushort messageNumber = this.GetMessageNumber(packet);

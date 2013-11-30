@@ -61,6 +61,132 @@ namespace locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error while creating ScriptCompiler instance.
+        /// </summary>
+        public static string ErrorCreatingScriptCompilerInstance {
+            get {
+                return ResourceManager.GetString("ErrorCreatingScriptCompilerInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while creating ZoneServer instance.
+        /// </summary>
+        public static string ErrorCreatingZoneServerInstance {
+            get {
+                return ResourceManager.GetString("ErrorCreatingZoneServerInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while initializing database.
+        /// </summary>
+        public static string ErrorInitializingDatabase {
+            get {
+                return ResourceManager.GetString("ErrorInitializingDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred while initializing. Please check the log file..
+        /// </summary>
+        public static string ErrorInitializingEngine {
+            get {
+                return ResourceManager.GetString("ErrorInitializingEngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error in Gamefunction initialization.
+        /// </summary>
+        public static string ErrorInitializingGamefunctions {
+            get {
+                return ResourceManager.GetString("ErrorInitializingGamefunctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error initializing ISCom instance.
+        /// </summary>
+        public static string ErrorInitializingISCom {
+            get {
+                return ResourceManager.GetString("ErrorInitializingISCom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occured while initalizing NLog/NBug.
+        /// </summary>
+        public static string ErrorInitializingNLogNBug {
+            get {
+                return ResourceManager.GetString("ErrorInitializingNLogNBug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error parsing my ip address. Check config file!.
+        /// </summary>
+        public static string ErrorIPAddressParseFailed {
+            get {
+                return ResourceManager.GetString("ErrorIPAddressParseFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error while loading Items/Nanos.
+        /// </summary>
+        public static string ErrorLoadingItemsNanos {
+            get {
+                return ResourceManager.GetString("ErrorLoadingItemsNanos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured while loading the items.dat..
+        /// </summary>
+        public static string ErrorReadingItemsFile {
+            get {
+                return ResourceManager.GetString("ErrorReadingItemsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occured while loading the nanos.dat..
+        /// </summary>
+        public static string ErrorReadingNanosFile {
+            get {
+                return ResourceManager.GetString("ErrorReadingNanosFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error initializing TCP/IP setup.
+        /// </summary>
+        public static string ErrorTCPIPSetup {
+            get {
+                return ResourceManager.GetString("ErrorTCPIPSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded {0} items.
+        /// </summary>
+        public static string ItemLoaderLoadedItems {
+            get {
+                return ResourceManager.GetString("ItemLoaderLoadedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded {0} nanos.
+        /// </summary>
+        public static string NanoLoaderLoadedNanos {
+            get {
+                return ResourceManager.GetString("NanoLoaderLoadedNanos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatic start initiated.
         /// </summary>
         public static string ServerConsoleAutostart {
@@ -79,6 +205,15 @@ namespace locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available Scripts.
+        /// </summary>
+        public static string ServerConsoleAvailableScripts {
+            get {
+                return ResourceManager.GetString("ServerConsoleAvailableScripts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server Command.
         /// </summary>
         public static string ServerConsoleCommand {
@@ -88,11 +223,56 @@ namespace locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Text yet.
+        ///   Looks up a localized string similar to Checks for missing tables and creates them.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_check {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shuts down the engine..
+        /// </summary>
+        public static string ServerConsoleCommandHelp_exit {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists all available scripts.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_ls {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_ls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lists all online players.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_online {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_online", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not working yet, but will ping the chatserver in the future..
         /// </summary>
         public static string ServerConsoleCommandHelp_ping {
             get {
                 return ResourceManager.GetString("ServerConsoleCommandHelp_ping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shuts down the engine.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_quit {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_quit", resourceCulture);
             }
         }
         
@@ -106,11 +286,38 @@ namespace locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Just type &apos;quit&apos; or &apos;exit&apos; to exit the program.
+        ///   Looks up a localized string similar to Starts the server with scripts compiled into separated dlls.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_startm {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_startm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disconnects all clients and stops the server..
         /// </summary>
         public static string ServerConsoleCommandHelp_stop {
             get {
                 return ResourceManager.GetString("ServerConsoleCommandHelp_stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checks for missing tables and creates them.
+        /// </summary>
+        public static string ServerConsoleCommandHelp_updatedb {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelp_updatedb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shuts down ZoneEngine..
+        /// </summary>
+        public static string ServerConsoleCommandHelpZone_exit {
+            get {
+                return ResourceManager.GetString("ServerConsoleCommandHelpZone_exit", resourceCulture);
             }
         }
         
@@ -120,15 +327,6 @@ namespace locales {
         public static string ServerConsoleCommandHelpZone_start {
             get {
                 return ResourceManager.GetString("ServerConsoleCommandHelpZone_start", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error parsing my ip address. Check config file!.
-        /// </summary>
-        public static string ServerConsoleIPParseError {
-            get {
-                return ResourceManager.GetString("ServerConsoleIPParseError", resourceCulture);
             }
         }
         
@@ -144,6 +342,42 @@ namespace locales {
         public static string ServerConsoleMainText {
             get {
                 return ResourceManager.GetString("ServerConsoleMainText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No scripts were found..
+        /// </summary>
+        public static string ServerConsoleNoScriptsFound {
+            get {
+                return ResourceManager.GetString("ServerConsoleNoScriptsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server is not running..
+        /// </summary>
+        public static string ServerConsoleServerIsNotRunning {
+            get {
+                return ResourceManager.GetString("ServerConsoleServerIsNotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server is running..
+        /// </summary>
+        public static string ServerConsoleServerIsRunning {
+            get {
+                return ResourceManager.GetString("ServerConsoleServerIsRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter &quot;start&quot; to start server, &quot;stop&quot; to stop it, &quot;ping&quot; to ping the chatengine, and &quot;exit&quot; to exit program.
+        /// </summary>
+        public static string ZoneEngineConsoleCommands {
+            get {
+                return ResourceManager.GetString("ZoneEngineConsoleCommands", resourceCulture);
             }
         }
     }

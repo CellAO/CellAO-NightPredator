@@ -249,9 +249,9 @@ namespace ZoneEngine.Core
             byte[] buffer = this.messageSerializer.Serialize(message);
 
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
+            Colouring.Push(ConsoleColor.Green);
             Console.WriteLine(NiceHexOutput.Output(buffer));
-            Console.ResetColor();
+            Colouring.Pop();
             LogUtil.Debug(NiceHexOutput.Output(buffer));
 #endif
             this.packetNumber = 1;

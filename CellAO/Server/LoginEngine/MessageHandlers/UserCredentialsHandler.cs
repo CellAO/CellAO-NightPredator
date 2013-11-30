@@ -44,6 +44,8 @@ namespace LoginEngine.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -66,11 +68,11 @@ namespace LoginEngine.MessageHandlers
             var checkLogin = new CheckLogin();
             if (checkLogin.IsLoginAllowed(client, userCredentialsMessage.UserName) == false)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
                     "Client '" + client.AccountName
                     + "' banned, not a valid username, or sent a malformed Authentication Packet");
-                Console.ResetColor();
+                Colouring.Pop();
 
                 client.Send(0x00001F83, new LoginErrorMessage { Error = LoginError.InvalidUserNamePassword });
                 client.Server.DisconnectClient(client);
@@ -79,12 +81,13 @@ namespace LoginEngine.MessageHandlers
 
             if (checkLogin.IsLoginCorrect(client, userCredentialsMessage.Credentials) == false)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine("Client '" + client.AccountName + "' failed Authentication.");
-                Console.ResetColor();
 
                 client.Send(0x00001F83, new LoginErrorMessage { Error = LoginError.InvalidUserNamePassword });
                 client.Server.DisconnectClient(client);
+                Colouring.Pop();
+
                 return;
             }
 

@@ -33,6 +33,8 @@ namespace CellAO.Core.Nanos
     using System.Diagnostics.Contracts;
     using System.IO;
 
+    using locales;
+
     using MsgPack.Serialization;
 
     using zlib;
@@ -127,12 +129,12 @@ namespace CellAO.Core.Nanos
                 }
 
                 Console.Write(
-                    "Loaded {0} nanos in {1}\r", 
+                    locales.NanoLoaderLoadedNanos + " - {1}\r",
                     new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
             }
 
             Console.Write(
-                "Loaded {0} nanos in {1}\r", 
+                locales.NanoLoaderLoadedNanos + " - {1}\r",
                 new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();

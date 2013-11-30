@@ -126,9 +126,9 @@ namespace ChatEngine
                     case "start":
                         if (chatServer.IsRunning)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Colouring.Push(ConsoleColor.Red);
                             ct.TextRead("chatisrunning.txt");
-                            Console.ResetColor();
+                            Colouring.Pop();
                             break;
                         }
 
@@ -149,9 +149,9 @@ namespace ChatEngine
                     case "stop":
                         if (!chatServer.IsRunning)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
+                            Colouring.Push(ConsoleColor.Red);
                             ct.TextRead("chatisnotrunning.txt");
-                            Console.ResetColor();
+                            Colouring.Pop();
                             break;
                         }
 
@@ -270,9 +270,10 @@ namespace ChatEngine
             }
             catch (Exception e)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error occured while initalizing NLog/NBug");
                 Console.WriteLine(e.Message);
+                Colouring.Pop();
                 return false;
             }
 

@@ -177,6 +177,10 @@
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
       <Name>Exceptions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Translations\Translations.csproj">
+      <Project>{3c59fd3d-2a73-4450-b4a3-1de0f771ecec}</Project>
+      <Name>Translations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>

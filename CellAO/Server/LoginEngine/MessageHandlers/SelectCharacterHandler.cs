@@ -43,6 +43,7 @@ namespace LoginEngine.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
+    using Utility;
     using Utility.Config;
 
     #endregion
@@ -68,11 +69,11 @@ namespace LoginEngine.MessageHandlers
             var checkLogin = new CheckLogin();
             if (checkLogin.IsCharacterOnAccount(client, selectCharacterMessage.CharacterId) == false)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
                     "Client '" + client.AccountName + "' tried to log in as CharID "
                     + selectCharacterMessage.CharacterId + " but it is not on their account!");
-                Console.ResetColor();
+                Colouring.Pop();
 
                 // NV: Is this really what we want to send? Should find out sometime...
                 client.Send(0x00001F83, new LoginErrorMessage { Error = LoginError.InvalidUserNamePassword });

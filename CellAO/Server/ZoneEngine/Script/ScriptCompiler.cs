@@ -34,6 +34,8 @@ namespace ZoneEngine.Script
 
     #region Usings ...
 
+    #region Usings ...
+
     using System;
     using System.CodeDom.Compiler;
     using System.Collections.Generic;
@@ -49,7 +51,11 @@ namespace ZoneEngine.Script
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
+
     using ZoneEngine.Core;
+
+    #endregion
 
     #endregion
 
@@ -169,11 +175,13 @@ namespace ZoneEngine.Script
             string message, 
             ConsoleColor messageColor)
         {
-            Console.ForegroundColor = ownerColor;
+            Colouring.Push(ownerColor);
             Console.Write(owner + " ");
-            Console.ForegroundColor = messageColor;
+            Colouring.Pop();
+
+            Colouring.Push(messageColor);
             Console.Write(message + "\n");
-            Console.ResetColor();
+            Colouring.Pop();
         }
 
         /// <summary>
