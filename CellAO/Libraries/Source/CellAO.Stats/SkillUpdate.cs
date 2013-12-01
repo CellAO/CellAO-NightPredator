@@ -30,6 +30,8 @@ namespace CellAO.Stats
 
     using System;
 
+    using CellAO.Enums;
+
     #endregion
 
     /// <summary>
@@ -92,11 +94,11 @@ namespace CellAO.Stats
         /// </param>
         /// <returns>
         /// </returns>
-        public static double CalculateIP(IStats dynel)
+        public static double CalculateIP(IStatList dynel)
         {
             double calc = 0;
-            uint breed = dynel.Stats["Breed"].BaseValue; // 4 = Breed
-            uint profession = dynel.Stats["Profession"].BaseValue - 1; // 60 = Profession
+            uint breed = dynel[StatIds.breed].BaseValue; // 4 = Breed
+            uint profession = dynel[StatIds.profession].BaseValue - 1; // 60 = Profession
 
             double[,] skillCosts =
             {
@@ -191,7 +193,7 @@ namespace CellAO.Stats
             // start with attributes...
             for (counter = 0; counter < 6; counter++)
             {
-                stat = (Int32)dynel.Stats[Convert.ToInt32(attributeCost[counter, 0])].BaseValue;
+                stat = (Int32)dynel[Convert.ToInt32(attributeCost[counter, 0])].BaseValue;
                 for (c2 = (Int32)baseAttributes[breed - 1, counter]; c2 < stat; c2++)
                 {
                     calc += attributeCost[counter, breed] * c2;
@@ -200,7 +202,7 @@ namespace CellAO.Stats
 
             for (counter = 0; counter < 69; counter++)
             {
-                stat = (Int32)dynel.Stats[Convert.ToInt32(skillCosts[counter, 0])].BaseValue - 1;
+                stat = (Int32)dynel[Convert.ToInt32(skillCosts[counter, 0])].BaseValue - 1;
                 for (c2 = 5; c2 <= stat; c2++)
                 {
                     calc += Math.Floor(skillCosts[counter, professionMatrix[profession] + 1] * c2);
@@ -216,7 +218,7 @@ namespace CellAO.Stats
         /// </param>
         /// <returns>
         /// </returns>
-        public static uint CalculateNanoPoints(IStats dynel)
+        public static uint CalculateNanoPoints(IStatList dynel)
         {
             int[,] tableProfNanoPoints =
             {
@@ -243,18 +245,18 @@ namespace CellAO.Stats
             int[] breedMultiplicatorNanoPoints = { 3, 3, 4, 2 };
             int[] breedModificatorNanoPoints = { 0, -1, 1, -2 };
 
-            uint breed = dynel.Stats["Breed"].BaseValue;
-            uint profession = dynel.Stats["Profession"].BaseValue;
-            uint titleLevel = dynel.Stats["TitleLevel"].BaseValue;
-            uint level = dynel.Stats["Level"].BaseValue;
+            uint breed = dynel[StatIds.breed].BaseValue;
+            uint profession = dynel[StatIds.profession].BaseValue;
+            uint titleLevel = dynel[StatIds.titlelevel].BaseValue;
+            uint level = dynel[StatIds.level].BaseValue;
 
             // BreedBaseNP+(Level*(TableProfNP+BreedModiNP))+(NanoEnergyPool*BreedMultiNP))
             return
                 (uint)
                     (breedBaseNanoPoints[breed - 1]
-                     + (dynel.Stats["Level"].Value
+                     + (dynel[StatIds.level].Value
                         * (tableProfNanoPoints[titleLevel - 1, profession - 1] + breedModificatorNanoPoints[breed - 1]))
-                     + (dynel.Stats["NanoEnergyPool"].Value * breedMultiplicatorNanoPoints[breed - 1]));
+                     + (dynel[StatIds.nanoenergypool].Value * breedMultiplicatorNanoPoints[breed - 1]));
         }
 
         #endregion

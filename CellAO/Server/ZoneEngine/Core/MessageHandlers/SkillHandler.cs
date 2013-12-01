@@ -115,7 +115,7 @@ namespace ZoneEngine.Core.MessageHandlers
             }
 
             statlist.Add(53); // IP
-            uint usedIp = baseIp - (uint)Math.Floor(SkillUpdate.CalculateIP(client.Character));
+            uint usedIp = baseIp - (uint)Math.Floor(SkillUpdate.CalculateIP(client.Character.Stats));
             client.Character.Stats["IP"].BaseValue = usedIp;
 
             // Send the changed stats back to the client

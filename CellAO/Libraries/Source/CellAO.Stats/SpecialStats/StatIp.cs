@@ -29,7 +29,6 @@ namespace CellAO.Stats.SpecialStats
     #region Usings ...
 
     using System;
-    using System.Linq;
 
     using CellAO.Enums;
 
@@ -37,7 +36,7 @@ namespace CellAO.Stats.SpecialStats
 
     /// <summary>
     /// </summary>
-    public class StatNanoDelta : Stat
+    public class StatIp : Stat
     {
         #region Constructors and Destructors
 
@@ -55,7 +54,7 @@ namespace CellAO.Stats.SpecialStats
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        public StatNanoDelta(
+        public StatIp(
             Stats statList, 
             int number, 
             uint defaultValue, 
@@ -72,50 +71,60 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
-        {
-            get
-            {
-                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
-                return nanodelta[this.Stats[StatIds.breed].BaseValue - 1];
-            }
-
-            set
-            {
-                base.BaseValue = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         public override int Value
         {
             get
             {
-                int baseval = base.Value;
-                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
+                int baseIP = 0;
+                int characterLevel = this.Stats[StatIds.level].Value;
+
+                if (characterLevel > 204)
                 {
-                    baseval = (int)((double)1.5 * baseval);
+                    baseIP += (characterLevel - 204) * 600000;
+                    characterLevel = 204;
                 }
 
-                return baseval;
+                if (characterLevel > 189)
+                {
+                    baseIP += (characterLevel - 189) * 150000;
+                    characterLevel = 189;
+                }
+
+                if (characterLevel > 149)
+                {
+                    baseIP += (characterLevel - 149) * 80000;
+                    characterLevel = 149;
+                }
+
+                if (characterLevel > 99)
+                {
+                    baseIP += (characterLevel - 99) * 40000;
+                    characterLevel = 99;
+                }
+
+                if (characterLevel > 49)
+                {
+                    baseIP += (characterLevel - 49) * 20000;
+                    characterLevel = 49;
+                }
+
+                if (characterLevel > 14)
+                {
+                    baseIP += (characterLevel - 14) * 10000; // Change 99 => 14 by Wizard
+                    characterLevel = 14;
+                }
+
+                baseIP += 1500 + (characterLevel - 1) * 4000;
+
+                this.Set(baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats)));
+
+                return base.Value;
             }
 
             set
             {
                 base.Value = value;
             }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
-        {
-            this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
         }
 
         #endregion

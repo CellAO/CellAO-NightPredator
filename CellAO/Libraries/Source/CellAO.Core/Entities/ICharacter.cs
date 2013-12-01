@@ -68,10 +68,6 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        Identity FightingTarget { get; set; }
-
-        /// <summary>
-        /// </summary>
         Quaternion Heading { get; set; }
 
         /// <summary>
@@ -114,10 +110,6 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         Quaternion RawHeading { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Identity SelectedTarget { get; set; }
 
         /// <summary>
         /// Caching Mesh layer for social tab items

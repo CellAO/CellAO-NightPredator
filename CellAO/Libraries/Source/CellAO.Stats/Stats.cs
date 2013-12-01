@@ -26,20 +26,17 @@
 
 namespace CellAO.Stats
 {
-    using System.Linq;
-
-    using CellAO.Enums;
-
-    #region Usings ...
-
     #region Usings ...
 
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using System.Linq;
 
     using CellAO.Core.Exceptions;
     using CellAO.Database.Dao;
+    using CellAO.Enums;
+    using CellAO.Stats.SpecialStats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -55,147 +52,147 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbChemicalAC = new Stat(241, 0, true, false, false);
+        private readonly Stat absorbChemicalAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbColdAC = new Stat(243, 0, true, false, false);
+        private readonly Stat absorbColdAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbEnergyAC = new Stat(240, 0, true, false, false);
+        private readonly Stat absorbEnergyAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbFireAC = new Stat(244, 0, true, false, false);
+        private readonly Stat absorbFireAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbMeleeAC = new Stat(239, 0, true, false, false);
+        private readonly Stat absorbMeleeAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbNanoAC = new Stat(246, 0, true, false, false);
+        private readonly Stat absorbNanoAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbPoisonAC = new Stat(245, 0, true, false, false);
+        private readonly Stat absorbPoisonAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbProjectileAC = new Stat(238, 0, true, false, false);
+        private readonly Stat absorbProjectileAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat absorbRadiationAC = new Stat(242, 0, true, false, false);
+        private readonly Stat absorbRadiationAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat accessCount = new Stat(35, 1234567890, false, false, false);
+        private readonly Stat accessCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat accessGrant = new Stat(258, 1234567890, false, false, false);
+        private readonly Stat accessGrant;
 
         /// <summary>
         /// </summary>
-        private readonly Stat accessKey = new Stat(195, 1234567890, false, false, false);
+        private readonly Stat accessKey;
 
         /// <summary>
         /// </summary>
-        private readonly Stat accountFlags = new Stat(660, 1234567890, false, true, false);
+        private readonly Stat accountFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat accumulatedDamage = new Stat(222, 1234567890, false, false, false);
+        private readonly Stat accumulatedDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgEntranceStyles = new Stat(384, 1234567890, false, false, false);
+        private readonly Stat acgEntranceStyles;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgItemCategoryId = new Stat(704, 1234567890, false, false, false);
+        private readonly Stat acgItemCategoryId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgItemLevel = new Stat(701, 1234567890, false, false, false);
+        private readonly Stat acgItemLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgItemSeed = new Stat(700, 1234567890, false, false, false);
+        private readonly Stat acgItemSeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgItemTemplateId = new Stat(702, 1234567890, false, false, false);
+        private readonly Stat acgItemTemplateId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat acgItemTemplateId2 = new Stat(703, 1234567890, false, false, false);
+        private readonly Stat acgItemTemplateId2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat actionCategory = new Stat(588, 1234567890, false, false, false);
+        private readonly Stat actionCategory;
 
         /// <summary>
         /// </summary>
-        private readonly Stat advantageHash1 = new Stat(651, 1234567890, false, false, false);
+        private readonly Stat advantageHash1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat advantageHash2 = new Stat(652, 1234567890, false, false, false);
+        private readonly Stat advantageHash2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat advantageHash3 = new Stat(653, 1234567890, false, false, false);
+        private readonly Stat advantageHash3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat advantageHash4 = new Stat(654, 1234567890, false, false, false);
+        private readonly Stat advantageHash4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat advantageHash5 = new Stat(655, 1234567890, false, false, false);
+        private readonly Stat advantageHash5;
 
         /// <summary>
         /// </summary>
-        private readonly Stat adventuring = new Stat(137, 5, true, false, false);
+        private readonly StatSkill adventuring;
 
         /// <summary>
         /// </summary>
-        private readonly Stat age = new Stat(58, 0, false, false, false);
+        private readonly Stat age;
 
         /// <summary>
         /// </summary>
-        private readonly Stat aggDef = new Stat(51, 100, false, false, false);
+        private readonly Stat aggDef;
 
         /// <summary>
         /// </summary>
-        private readonly Stat aggressiveness = new Stat(201, 1234567890, false, false, false);
+        private readonly Stat aggressiveness;
 
         /// <summary>
         /// </summary>
-        private readonly Stat agility = new Stat(17, 0, true, false, false);
+        private readonly Stat agility;
 
         /// <summary>
         /// </summary>
-        private readonly Stat aimedShot = new Stat(151, 5, true, false, false);
+        private readonly StatSkill aimedShot;
 
         /// <summary>
         /// </summary>
-        private readonly Stat alienLevel = new Stat(169, 0, false, false, false);
+        private readonly Stat alienLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat alienNextXP = new Stat(178, 1500, true, false, false);
+        private readonly StatAlienNextXP alienNextXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat alienXP = new Stat(40, 0, false, false, false);
+        private readonly Stat alienXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat alignment = new Stat(62, 0, false, false, false);
+        private readonly Stat alignment;
 
         /// <summary>
         /// </summary>
@@ -203,2691 +200,2691 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat ammoName = new Stat(399, 1234567890, false, false, false);
+        private readonly Stat ammoName;
 
         /// <summary>
         /// </summary>
-        private readonly Stat ammoType = new Stat(420, 1234567890, false, false, false);
+        private readonly Stat ammoType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat ams = new Stat(22, 1234567890, false, false, false);
+        private readonly Stat ams;
 
         /// <summary>
         /// </summary>
-        private readonly Stat amsCap = new Stat(538, 1234567890, false, false, false);
+        private readonly Stat amsCap;
 
         /// <summary>
         /// </summary>
-        private readonly Stat amsModifier = new Stat(276, 0, false, false, false);
+        private readonly Stat amsModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat anim = new Stat(13, 1234567890, false, false, false);
+        private readonly Stat anim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat animPlay = new Stat(501, 1234567890, false, false, false);
+        private readonly Stat animPlay;
 
         /// <summary>
         /// </summary>
-        private readonly Stat animPos = new Stat(500, 1234567890, false, false, false);
+        private readonly Stat animPos;
 
         /// <summary>
         /// </summary>
-        private readonly Stat animSet = new Stat(353, 1234567890, false, false, false);
+        private readonly Stat animSet;
 
         /// <summary>
         /// </summary>
-        private readonly Stat animSpeed = new Stat(502, 1234567890, false, false, false);
+        private readonly Stat animSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat apartmentAccessCard = new Stat(584, 1234567890, false, false, false);
+        private readonly Stat apartmentAccessCard;
 
         /// <summary>
         /// </summary>
-        private readonly Stat apartmentsAllowed = new Stat(582, 1, false, false, false);
+        private readonly Stat apartmentsAllowed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat apartmentsOwned = new Stat(583, 0, false, false, false);
+        private readonly Stat apartmentsOwned;
 
         /// <summary>
         /// </summary>
-        private readonly Stat areaInstance = new Stat(87, 1234567890, false, false, false);
+        private readonly Stat areaInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat areaType = new Stat(86, 1234567890, false, false, false);
+        private readonly Stat areaType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat armourType = new Stat(424, 1234567890, false, false, false);
+        private readonly Stat armourType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat assaultRifle = new Stat(116, 5, true, false, false);
+        private readonly StatSkill assaultRifle;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attackCount = new Stat(36, 1234567890, false, false, false);
+        private readonly Stat attackCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attackRange = new Stat(287, 1234567890, false, false, false);
+        private readonly Stat attackRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attackShield = new Stat(516, 1234567890, false, false, false);
+        private readonly Stat attackShield;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attackSpeed = new Stat(3, 5, false, false, false);
+        private readonly Stat attackSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attackType = new Stat(354, 1234567890, false, false, false);
+        private readonly Stat attackType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat attitude = new Stat(63, 0, false, false, false);
+        private readonly Stat attitude;
 
         /// <summary>
         /// </summary>
-        private readonly Stat autoAttackFlags = new Stat(349, 5, false, false, false);
+        private readonly Stat autoAttackFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat autoLockTimeDefault = new Stat(175, 1234567890, false, false, false);
+        private readonly Stat autoLockTimeDefault;
 
         /// <summary>
         /// </summary>
-        private readonly Stat autoUnlockTimeDefault = new Stat(176, 1234567890, false, false, false);
+        private readonly Stat autoUnlockTimeDefault;
 
         /// <summary>
         /// </summary>
-        private readonly Stat backMesh = new Stat(38, 0, false, false, false);
+        private readonly Stat backMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat backstab = new Stat(489, 1234567890, true, false, false);
+        private readonly Stat backstab;
 
         /// <summary>
         /// </summary>
-        private readonly Stat bandolierSlots = new Stat(46, 1234567890, false, false, false);
+        private readonly Stat bandolierSlots;
 
         /// <summary>
         /// </summary>
-        private readonly Stat battlestationRep = new Stat(670, 10, false, false, false);
+        private readonly Stat battlestationRep;
 
         /// <summary>
         /// </summary>
-        private readonly Stat battlestationSide = new Stat(668, 0, false, false, false);
+        private readonly Stat battlestationSide;
 
         /// <summary>
         /// </summary>
-        private readonly Stat beltSlots = new Stat(45, 0, false, false, false);
+        private readonly Stat beltSlots;
 
         /// <summary>
         /// </summary>
-        private readonly Stat berserkMode = new Stat(235, 1234567890, false, false, false);
+        private readonly Stat berserkMode;
 
         /// <summary>
         /// </summary>
-        private readonly Stat biologicalMetamorphose = new Stat(128, 5, true, false, false);
+        private readonly StatSkill biologicalMetamorphose;
 
         /// <summary>
         /// </summary>
-        private readonly Stat birthDate = new Stat(248, 1234567890, false, false, false);
+        private readonly Stat birthDate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat bodyDevelopment = new Stat(152, 5, true, false, false);
+        private readonly StatSkill bodyDevelopment;
 
         /// <summary>
         /// </summary>
-        private readonly Stat bow = new Stat(111, 5, true, false, false);
+        private readonly StatSkill bow;
 
         /// <summary>
         /// </summary>
-        private readonly Stat bowSpecialAttack = new Stat(121, 5, true, false, false);
+        private readonly StatSkill bowSpecialAttack;
 
         /// <summary>
         /// </summary>
-        private readonly Stat brainType = new Stat(340, 1234567890, false, false, false);
+        private readonly Stat brainType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat brawl = new Stat(142, 5, true, false, false);
+        private readonly StatSkill brawl;
 
         /// <summary>
         /// </summary>
-        private readonly Stat breakingEntry = new Stat(165, 5, true, false, false);
+        private readonly StatSkill breakingEntry;
 
         /// <summary>
         /// </summary>
-        private readonly Stat breed = new Stat(4, 1234567890, false, false, false);
+        private readonly Stat breed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat breedHostility = new Stat(204, 1234567890, false, false, false);
+        private readonly Stat breedHostility;
 
         /// <summary>
         /// </summary>
-        private readonly Stat breedLimit = new Stat(320, 1234567890, false, false, false);
+        private readonly Stat breedLimit;
 
         /// <summary>
         /// </summary>
-        private readonly Stat buildingComplexInst = new Stat(188, 1234567890, false, false, false);
+        private readonly Stat buildingComplexInst;
 
         /// <summary>
         /// </summary>
-        private readonly Stat buildingInstance = new Stat(185, 1234567890, false, false, false);
+        private readonly Stat buildingInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat buildingType = new Stat(184, 1234567890, false, false, false);
+        private readonly Stat buildingType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat burst = new Stat(148, 5, true, false, false);
+        private readonly StatSkill burst;
 
         /// <summary>
         /// </summary>
-        private readonly Stat burstRecharge = new Stat(374, 1234567890, false, false, false);
+        private readonly Stat burstRecharge;
 
         /// <summary>
         /// </summary>
-        private readonly Stat buyModifier = new Stat(426, 1234567890, false, false, false);
+        private readonly Stat buyModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat can = new Stat(30, 1234567890, false, false, false);
+        private readonly Stat can;
 
         /// <summary>
         /// </summary>
-        private readonly Stat canChangeClothes = new Stat(223, 1234567890, false, false, false);
+        private readonly Stat canChangeClothes;
 
         /// <summary>
         /// </summary>
-        private readonly Stat cardOwnerInstance = new Stat(187, 1234567890, false, false, false);
+        private readonly Stat cardOwnerInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat cardOwnerType = new Stat(186, 1234567890, false, false, false);
+        private readonly Stat cardOwnerType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat cash = new Stat(61, 0, false, false, false);
+        private readonly Stat cash;
 
         /// <summary>
         /// </summary>
-        private readonly Stat castEffectType = new Stat(428, 1234567890, false, false, false);
+        private readonly Stat castEffectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat castSelfAbstractAnim = new Stat(378, 1234567890, false, false, false);
+        private readonly Stat castSelfAbstractAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat castSound = new Stat(270, 1234567890, false, false, false);
+        private readonly Stat castSound;
 
         /// <summary>
         /// </summary>
-        private readonly Stat castTargetAbstractAnim = new Stat(377, 1234567890, false, false, false);
+        private readonly Stat castTargetAbstractAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat catAnim = new Stat(401, 1234567890, false, false, false);
+        private readonly Stat catAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat catAnimFlags = new Stat(402, 1234567890, false, false, false);
+        private readonly Stat catAnimFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat catMesh = new Stat(42, 1234567890, false, false, false);
+        private readonly Stat catMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chanceOfBreakOnDebuff = new Stat(386, 1234567890, false, false, false);
+        private readonly Stat chanceOfBreakOnDebuff;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chanceOfBreakOnSpellAttack = new Stat(385, 1234567890, false, false, false);
+        private readonly Stat chanceOfBreakOnSpellAttack;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chanceOfUse = new Stat(422, 1234567890, false, false, false);
+        private readonly Stat chanceOfUse;
 
         /// <summary>
         /// </summary>
-        private readonly Stat changeSideCount = new Stat(237, 0, false, false, false);
+        private readonly Stat changeSideCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charRadius = new Stat(421, 1234567890, false, false, false);
+        private readonly Stat charRadius;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charState = new Stat(434, 1234567890, false, false, false);
+        private readonly Stat charState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charTmp1 = new Stat(441, 1234567890, false, false, false);
+        private readonly Stat charTmp1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charTmp2 = new Stat(442, 1234567890, false, false, false);
+        private readonly Stat charTmp2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charTmp3 = new Stat(443, 1234567890, false, false, false);
+        private readonly Stat charTmp3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat charTmp4 = new Stat(444, 1234567890, false, false, false);
+        private readonly Stat charTmp4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chemicalAC = new Stat(93, 0, true, false, false);
+        private readonly Stat chemicalAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chemicalDamageModifier = new Stat(281, 0, false, false, false);
+        private readonly Stat chemicalDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chemistry = new Stat(163, 5, true, false, false);
+        private readonly StatSkill chemistry;
 
         /// <summary>
         /// </summary>
-        private readonly Stat chestFlags = new Stat(394, 1234567890, false, false, false);
+        private readonly Stat chestFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat cityInstance = new Stat(640, 1234567890, false, false, false);
+        private readonly Stat cityInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat cityTerminalRechargePercent = new Stat(642, 1234567890, false, false, false);
+        private readonly Stat cityTerminalRechargePercent;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clan = new Stat(5, 0, false, false, false);
+        private readonly Stat clan;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanConserver = new Stat(571, 0, false, false, false);
+        private readonly Stat clanConserver;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanDevoted = new Stat(570, 0, false, false, false);
+        private readonly Stat clanDevoted;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanFinalized = new Stat(314, 1234567890, false, false, false);
+        private readonly Stat clanFinalized;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanGaia = new Stat(563, 0, false, false, false);
+        private readonly Stat clanGaia;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanHierarchy = new Stat(260, 1234567890, false, false, false);
+        private readonly Stat clanHierarchy;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanInstance = new Stat(305, 1234567890, false, false, false);
+        private readonly Stat clanInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanItemInstance = new Stat(331, 1234567890, false, false, false);
+        private readonly Stat clanItemInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanItemType = new Stat(330, 1234567890, false, false, false);
+        private readonly Stat clanItemType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanLevel = new Stat(48, 1234567890, false, false, false);
+        private readonly Stat clanLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanPrice = new Stat(302, 1234567890, false, false, false);
+        private readonly Stat clanPrice;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanRedeemed = new Stat(572, 0, false, false, false);
+        private readonly Stat clanRedeemed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanSentinels = new Stat(561, 0, false, false, false);
+        private readonly Stat clanSentinels;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanType = new Stat(304, 1234567890, false, false, false);
+        private readonly Stat clanType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanUpkeepInterval = new Stat(312, 1234567890, false, false, false);
+        private readonly Stat clanUpkeepInterval;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clanVanguards = new Stat(565, 0, false, false, false);
+        private readonly Stat clanVanguards;
 
         /// <summary>
         /// </summary>
-        private readonly Stat clientActivated = new Stat(262, 1234567890, false, false, false);
+        private readonly Stat clientActivated;
 
         /// <summary>
         /// </summary>
-        private readonly Stat closeCombatInitiative = new Stat(118, 5, true, false, false);
+        private readonly StatSkill closeCombatInitiative;
 
         /// <summary>
         /// </summary>
-        private readonly Stat coldAC = new Stat(95, 0, true, false, false);
+        private readonly Stat coldAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat coldDamageModifier = new Stat(311, 1234567890, false, false, false);
+        private readonly Stat coldDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat collideCheckInterval = new Stat(437, 1234567890, false, false, false);
+        private readonly Stat collideCheckInterval;
 
         /// <summary>
         /// </summary>
-        private readonly Stat collisionRadius = new Stat(357, 1234567890, false, false, false);
+        private readonly Stat collisionRadius;
 
         /// <summary>
         /// </summary>
-        private readonly Stat commandRange = new Stat(456, 1234567890, false, false, false);
+        private readonly Stat commandRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat compulsion = new Stat(328, 1234567890, false, false, false);
+        private readonly Stat compulsion;
 
         /// <summary>
         /// </summary>
-        private readonly Stat computerLiteracy = new Stat(161, 5, true, false, false);
+        private readonly StatSkill computerLiteracy;
 
         /// <summary>
         /// </summary>
-        private readonly Stat concealment = new Stat(164, 5, true, false, false);
+        private readonly StatSkill concealment;
 
         /// <summary>
         /// </summary>
-        private readonly Stat conditionState = new Stat(530, 1234567890, false, false, false);
+        private readonly Stat conditionState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat conformity = new Stat(200, 1234567890, false, false, false);
+        private readonly Stat conformity;
 
         /// <summary>
         /// </summary>
-        private readonly Stat corpseAnimKey = new Stat(417, 1234567890, false, false, false);
+        private readonly Stat corpseAnimKey;
 
         /// <summary>
         /// </summary>
-        private readonly Stat corpseHash = new Stat(398, 1234567890, false, false, false);
+        private readonly Stat corpseHash;
 
         /// <summary>
         /// </summary>
-        private readonly Stat corpseInstance = new Stat(416, 1234567890, false, false, false);
+        private readonly Stat corpseInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat corpseType = new Stat(415, 1234567890, false, false, false);
+        private readonly Stat corpseType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat criticalDecrease = new Stat(391, 1234567890, false, false, false);
+        private readonly Stat criticalDecrease;
 
         /// <summary>
         /// </summary>
-        private readonly Stat criticalIncrease = new Stat(379, 1234567890, false, false, false);
+        private readonly Stat criticalIncrease;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currBodyLocation = new Stat(220, 0, false, false, false);
+        private readonly Stat currBodyLocation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentMass = new Stat(78, 0, false, false, false);
+        private readonly Stat currentMass;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentMovementMode = new Stat(173, 3, false, false, false);
+        private readonly Stat currentMovementMode;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentNCU = new Stat(180, 0, false, false, false);
+        private readonly Stat currentNCU;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentNano = new Stat(214, 1, true, false, false);
+        private readonly StatCurrentNano currentNano;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentPlayfield = new Stat(589, 1234567890, false, false, false);
+        private readonly Stat currentPlayfield;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentState = new Stat(423, 0, false, false, false);
+        private readonly Stat currentState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat currentTime = new Stat(578, 1234567890, false, false, false);
+        private readonly Stat currentTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat damageBonus = new Stat(284, 1234567890, false, false, false);
+        private readonly Stat damageBonus;
 
         /// <summary>
         /// </summary>
-        private readonly Stat damageOverrideType = new Stat(339, 1234567890, false, false, false);
+        private readonly Stat damageOverrideType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat damageToNano = new Stat(659, 1234567890, false, false, false);
+        private readonly Stat damageToNano;
 
         /// <summary>
         /// </summary>
-        private readonly Stat damageToNanoMultiplier = new Stat(661, 1234567890, false, false, false);
+        private readonly Stat damageToNanoMultiplier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat damageType = new Stat(436, 1234567890, false, false, false);
+        private readonly Stat damageType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat deadTimer = new Stat(34, 0, false, false, false);
+        private readonly Stat deadTimer;
 
         /// <summary>
         /// </summary>
-        private readonly Stat deathReason = new Stat(338, 1234567890, false, false, false);
+        private readonly Stat deathReason;
 
         /// <summary>
         /// </summary>
-        private readonly Stat debuffFormula = new Stat(332, 1234567890, false, false, false);
+        private readonly Stat debuffFormula;
 
         /// <summary>
         /// </summary>
-        private readonly Stat defaultAttackType = new Stat(292, 1234567890, false, false, false);
+        private readonly Stat defaultAttackType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat defaultPos = new Stat(88, 1234567890, false, false, false);
+        private readonly Stat defaultPos;
 
         /// <summary>
         /// </summary>
-        private readonly Stat desiredTargetDistance = new Stat(447, 1234567890, false, false, false);
+        private readonly Stat desiredTargetDistance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dieAnim = new Stat(387, 1234567890, false, false, false);
+        private readonly Stat dieAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dimach = new Stat(144, 5, true, false, false);
+        private readonly StatSkill dimach;
 
         /// <summary>
         /// </summary>
-        private readonly Stat disarmTrap = new Stat(135, 5, true, false, false);
+        private readonly StatSkill disarmTrap;
 
         /// <summary>
         /// </summary>
-        private readonly Stat displayCATAnim = new Stat(403, 1234567890, false, false, false);
+        private readonly Stat displayCATAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat displayCATMesh = new Stat(404, 1234567890, false, false, false);
+        private readonly Stat displayCATMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat distanceToSpawnpoint = new Stat(641, 1234567890, false, false, false);
+        private readonly Stat distanceToSpawnpoint;
 
         /// <summary>
         /// </summary>
-        private readonly Stat distanceWeaponInitiative = new Stat(119, 5, true, false, false);
+        private readonly StatSkill distanceWeaponInitiative;
 
         /// <summary>
         /// </summary>
-        private readonly Stat districtNano = new Stat(590, 1234567890, false, false, false);
+        private readonly Stat districtNano;
 
         /// <summary>
         /// </summary>
-        private readonly Stat districtNanoInterval = new Stat(591, 1234567890, false, false, false);
+        private readonly Stat districtNanoInterval;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dms = new Stat(29, 1234567890, false, false, false);
+        private readonly Stat dms;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dmsModifier = new Stat(277, 0, false, false, false);
+        private readonly Stat dmsModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dodge = new Stat(154, 5, true, false, false);
+        private readonly StatSkill dodge;
 
         /// <summary>
         /// </summary>
-        private readonly Stat doorBlockTime = new Stat(335, 1234567890, false, false, false);
+        private readonly Stat doorBlockTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat doorFlags = new Stat(259, 1234567890, false, false, false);
+        private readonly Stat doorFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat driveAir = new Stat(139, 5, true, false, false);
+        private readonly StatSkill driveAir;
 
         /// <summary>
         /// </summary>
-        private readonly Stat driveGround = new Stat(166, 5, true, false, false);
+        private readonly StatSkill driveGround;
 
         /// <summary>
         /// </summary>
-        private readonly Stat driveWater = new Stat(117, 5, true, false, false);
+        private readonly StatSkill driveWater;
 
         /// <summary>
         /// </summary>
-        private readonly Stat duck = new Stat(153, 5, true, false, false);
+        private readonly StatSkill duck;
 
         /// <summary>
         /// </summary>
-        private readonly Stat dudChance = new Stat(534, 1234567890, false, false, false);
+        private readonly Stat dudChance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat durationModifier = new Stat(464, 1234567890, false, false, false);
+        private readonly Stat durationModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat effectBlue = new Stat(462, 1234567890, false, false, false);
+        private readonly Stat effectBlue;
 
         /// <summary>
         /// </summary>
-        private readonly Stat effectGreen = new Stat(461, 1234567890, false, false, false);
+        private readonly Stat effectGreen;
 
         /// <summary>
         /// </summary>
-        private readonly Stat effectIcon = new Stat(183, 1234567890, false, false, false);
+        private readonly Stat effectIcon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat effectRed = new Stat(460, 1234567890, false, false, false);
+        private readonly Stat effectRed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat effectType = new Stat(413, 1234567890, false, false, false);
+        private readonly Stat effectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat electricalEngineering = new Stat(126, 5, true, false, false);
+        private readonly StatSkill electricalEngineering;
 
         /// <summary>
         /// </summary>
-        private readonly Stat energy = new Stat(26, 1234567890, false, false, false);
+        private readonly Stat energy;
 
         /// <summary>
         /// </summary>
-        private readonly Stat energyAC = new Stat(92, 0, true, false, false);
+        private readonly Stat energyAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat energyDamageModifier = new Stat(280, 0, false, false, false);
+        private readonly Stat energyDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat equipDelay = new Stat(211, 1234567890, false, false, false);
+        private readonly Stat equipDelay;
 
         /// <summary>
         /// </summary>
-        private readonly Stat equippedWeapons = new Stat(274, 1234567890, false, false, false);
+        private readonly Stat equippedWeapons;
 
         /// <summary>
         /// </summary>
-        private readonly Stat evade = new Stat(155, 5, true, false, false);
+        private readonly StatSkill evade;
 
         /// <summary>
         /// </summary>
-        private readonly Stat exitInstance = new Stat(189, 1234567890, false, false, false);
+        private readonly Stat exitInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat expansion = new Stat(389, 0, false, true, false);
+        private readonly Stat expansion;
 
         /// <summary>
         /// </summary>
-        private readonly Stat expansionPlayfield = new Stat(531, 1234567890, false, false, false);
+        private readonly Stat expansionPlayfield;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extenalDoorInstance = new Stat(193, 1234567890, false, false, false);
+        private readonly Stat extenalDoorInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extenalPlayfieldInstance = new Stat(192, 1234567890, false, false, false);
+        private readonly Stat extenalPlayfieldInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extendedFlags = new Stat(598, 1234567890, false, false, false);
+        private readonly Stat extendedFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extendedTime = new Stat(373, 1234567890, false, false, false);
+        private readonly Stat extendedTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extroverty = new Stat(203, 1234567890, false, false, false);
+        private readonly Stat extroverty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fabricType = new Stat(41, 1234567890, false, false, false);
+        private readonly Stat fabricType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat face = new Stat(31, 1234567890, false, false, false);
+        private readonly Stat face;
 
         /// <summary>
         /// </summary>
-        private readonly Stat faceTexture = new Stat(347, 1234567890, false, false, false);
+        private readonly Stat faceTexture;
 
         /// <summary>
         /// </summary>
-        private readonly Stat factionModifier = new Stat(543, 1234567890, false, false, false);
+        private readonly Stat factionModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fallDamage = new Stat(474, 1234567890, false, false, false);
+        private readonly Stat fallDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fastAttack = new Stat(147, 5, true, false, false);
+        private readonly StatSkill fastAttack;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fatness = new Stat(47, 1234567890, false, false, false);
+        private readonly Stat fatness;
 
         /// <summary>
         /// </summary>
-        private readonly Stat features = new Stat(224, 6, false, false, false);
+        private readonly Stat features;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fieldQuantumPhysics = new Stat(157, 5, true, false, false);
+        private readonly StatSkill fieldQuantumPhysics;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fireAC = new Stat(97, 0, true, false, false);
+        private readonly Stat fireAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fireDamageModifier = new Stat(316, 0, false, false, false);
+        private readonly Stat fireDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat firstAid = new Stat(123, 5, true, false, false);
+        private readonly StatSkill firstAid;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fixtureFlags = new Stat(473, 1234567890, false, false, false);
+        private readonly Stat fixtureFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat flags = new Stat(0, 8917569, false, false, true);
+        private readonly Stat flags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat flingShot = new Stat(150, 5, true, false, false);
+        private readonly StatSkill flingShot;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fullAuto = new Stat(167, 5, true, false, false);
+        private readonly StatSkill fullAuto;
 
         /// <summary>
         /// </summary>
-        private readonly Stat fullAutoRecharge = new Stat(375, 1234567890, false, false, false);
+        private readonly Stat fullAutoRecharge;
 
         /// <summary>
         /// </summary>
-        private readonly Stat gatherAbstractAnim = new Stat(376, 1234567890, false, false, false);
+        private readonly Stat gatherAbstractAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat gatherEffectType = new Stat(366, 1234567890, false, false, false);
+        private readonly Stat gatherEffectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat gatherSound = new Stat(269, 1234567890, false, false, false);
+        private readonly Stat gatherSound;
 
         /// <summary>
         /// </summary>
-        private readonly Stat genderLimit = new Stat(321, 1234567890, false, false, false);
+        private readonly Stat genderLimit;
 
         /// <summary>
         /// </summary>
-        private readonly Stat globalClanInstance = new Stat(310, 1234567890, false, false, false);
+        private readonly Stat globalClanInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat globalClanType = new Stat(309, 1234567890, false, false, false);
+        private readonly Stat globalClanType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat globalResearchGoal = new Stat(266, 0, false, false, false);
+        private readonly Stat globalResearchGoal;
 
         /// <summary>
         /// </summary>
-        private readonly Stat globalResearchLevel = new Stat(264, 0, false, false, false);
+        private readonly Stat globalResearchLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat gmLevel = new Stat(215, 0, false, true, false);
+        private readonly Stat gmLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat gos = new Stat(566, 0, false, false, false);
+        private readonly Stat gos;
 
         /// <summary>
         /// </summary>
-        private readonly Stat grenade = new Stat(109, 5, true, false, false);
+        private readonly StatSkill grenade;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hairMesh = new Stat(32, 0, false, false, false);
+        private readonly Stat hairMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hasAlwaysLootable = new Stat(345, 1234567890, false, false, false);
+        private readonly Stat hasAlwaysLootable;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hasKnuBotData = new Stat(768, 1234567890, false, false, false);
+        private readonly Stat hasKnuBotData;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hateValueModifyer = new Stat(288, 1234567890, false, false, false);
+        private readonly Stat hateValueModifyer;
 
         /// <summary>
         /// </summary>
-        private readonly Stat headMesh = new Stat(64, 0, false, false, false);
+        private readonly Stat headMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healDelta = new Stat(343, 1234567890, true, false, false);
+        private readonly StatHealDelta healDelta;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healInterval = new Stat(342, 29, true, false, false);
+        private readonly StatHealInterval healInterval;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healMultiplier = new Stat(535, 1234567890, false, false, false);
+        private readonly Stat healMultiplier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat health = new Stat(27, 1, true, false, true);
+        private readonly StatHitPoints health;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healthChange = new Stat(172, 1234567890, false, false, false);
+        private readonly Stat healthChange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healthChangeBest = new Stat(170, 1234567890, false, false, false);
+        private readonly Stat healthChangeBest;
 
         /// <summary>
         /// </summary>
-        private readonly Stat healthChangeWorst = new Stat(171, 1234567890, false, false, false);
+        private readonly Stat healthChangeWorst;
 
         /// <summary>
         /// </summary>
-        private readonly Stat height = new Stat(28, 1234567890, false, false, false);
+        private readonly Stat height;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hitEffectType = new Stat(361, 1234567890, false, false, false);
+        private readonly Stat hitEffectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hitSound = new Stat(272, 1234567890, false, false, false);
+        private readonly Stat hitSound;
 
         /// <summary>
         /// </summary>
-        private readonly Stat houseTemplate = new Stat(620, 1234567890, false, false, false);
+        private readonly Stat houseTemplate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hpLevelUp = new Stat(601, 1234567890, false, false, false);
+        private readonly Stat hpLevelUp;
 
         /// <summary>
         /// </summary>
-        private readonly Stat hpPerSkill = new Stat(602, 1234567890, false, false, false);
+        private readonly Stat hpPerSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat icon = new Stat(79, 0, false, false, false);
+        private readonly Stat icon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat impactEffectType = new Stat(414, 1234567890, false, false, false);
+        private readonly Stat impactEffectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat inPlay = new Stat(194, 0, false, false, false);
+        private readonly Stat inPlay;
 
         /// <summary>
         /// </summary>
-        private readonly Stat info = new Stat(15, 1234567890, false, false, false);
+        private readonly Stat info;
 
         /// <summary>
         /// </summary>
-        private readonly Stat initiativeType = new Stat(440, 1234567890, false, false, false);
+        private readonly Stat initiativeType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat instance = new Stat(1002, 1234567890, false, true, false);
+        private readonly Stat instance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat insurancePercentage = new Stat(236, 0, false, false, false);
+        private readonly Stat insurancePercentage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat insuranceTime = new Stat(49, 0, false, false, false);
+        private readonly Stat insuranceTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat intelligence = new Stat(19, 0, true, false, false);
+        private readonly Stat intelligence;
 
         /// <summary>
         /// </summary>
-        private readonly Stat interactionRadius = new Stat(297, 1234567890, false, false, false);
+        private readonly Stat interactionRadius;
 
         /// <summary>
         /// </summary>
-        private readonly Stat interruptModifier = new Stat(383, 1234567890, false, false, false);
+        private readonly Stat interruptModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat invadersKilled = new Stat(615, 0, false, false, false);
+        private readonly Stat invadersKilled;
 
         /// <summary>
         /// </summary>
-        private readonly Stat inventoryId = new Stat(55, 1234567890, false, false, false);
+        private readonly Stat inventoryId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat inventoryTimeout = new Stat(50, 1234567890, false, false, false);
+        private readonly Stat inventoryTimeout;
 
         /// <summary>
         /// </summary>
-        private readonly Stat ip = new Stat(53, 1500, true, false, false);
+        private readonly StatIp ip;
 
         /// <summary>
         /// </summary>
-        private readonly Stat isFightingMe = new Stat(410, 0, false, false, false);
+        private readonly Stat isFightingMe;
 
         /// <summary>
         /// </summary>
-        private readonly Stat isVehicle = new Stat(658, 1234567890, false, false, false);
+        private readonly Stat isVehicle;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemAnim = new Stat(99, 1234567890, true, false, false);
+        private readonly Stat itemAnim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemClass = new Stat(76, 1234567890, false, false, false);
+        private readonly Stat itemClass;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemDelay = new Stat(294, 1234567890, false, false, false);
+        private readonly Stat itemDelay;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemDelayCap = new Stat(523, 1234567890, false, false, false);
+        private readonly Stat itemDelayCap;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemHateValue = new Stat(283, 1234567890, false, false, false);
+        private readonly Stat itemHateValue;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemOpposedSkill = new Stat(295, 1234567890, false, false, false);
+        private readonly Stat itemOpposedSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemSIS = new Stat(296, 1234567890, false, false, false);
+        private readonly Stat itemSIS;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemSkill = new Stat(293, 1234567890, false, false, false);
+        private readonly Stat itemSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat itemType = new Stat(72, 0, false, false, false);
+        private readonly Stat itemType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat killedByInvaders = new Stat(616, 0, false, false, false);
+        private readonly Stat killedByInvaders;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastConcretePlayfieldInstance = new Stat(191, 0, false, false, false);
+        private readonly Stat lastConcretePlayfieldInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastMailCheckTime = new Stat(650, 1283065897, false, false, false);
+        private readonly Stat lastMailCheckTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastPerkResetTime = new Stat(577, 0, false, false, false);
+        private readonly Stat lastPerkResetTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastRnd = new Stat(522, 1234567890, false, false, false);
+        private readonly Stat lastRnd;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastSK = new Stat(574, 0, false, false, false);
+        private readonly Stat lastSK;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastSaveXP = new Stat(372, 0, false, false, false);
+        private readonly Stat lastSaveXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastSaved = new Stat(249, 1234567890, false, false, false);
+        private readonly Stat lastSaved;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lastXP = new Stat(57, 0, false, false, false);
+        private readonly Stat lastXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat leaderLockDownTime = new Stat(614, 1234567890, false, false, false);
+        private readonly Stat leaderLockDownTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat level = new Stat(54, 1234567890, false, false, false);
+        private readonly Stat level;
 
         /// <summary>
         /// </summary>
-        private readonly Stat levelLimit = new Stat(322, 1234567890, false, false, false);
+        private readonly Stat levelLimit;
 
         /// <summary>
         /// </summary>
-        private readonly Stat life = new Stat(1, 1, true, false, false);
+        private readonly StatLife life;
 
         /// <summary>
         /// </summary>
-        private readonly Stat liquidType = new Stat(268, 1234567890, false, false, false);
+        private readonly Stat liquidType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lockDifficulty = new Stat(299, 1234567890, false, false, false);
+        private readonly Stat lockDifficulty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lockDownTime = new Stat(613, 1234567890, false, false, false);
+        private readonly Stat lockDownTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat losHeight = new Stat(466, 1234567890, false, false, false);
+        private readonly Stat losHeight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lowresMesh = new Stat(390, 1234567890, false, false, false);
+        private readonly Stat lowresMesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lrEnergyWeapon = new Stat(133, 5, true, false, false);
+        private readonly StatSkill lrEnergyWeapon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat lrMultipleWeapon = new Stat(134, 5, true, false, false);
+        private readonly StatSkill lrMultipleWeapon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapAreaPart1 = new Stat(471, 0, false, false, false);
+        private readonly Stat mapAreaPart1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapAreaPart2 = new Stat(472, 0, false, false, false);
+        private readonly Stat mapAreaPart2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapAreaPart3 = new Stat(585, 0, false, false, false);
+        private readonly Stat mapAreaPart3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapAreaPart4 = new Stat(586, 0, false, false, false);
+        private readonly Stat mapAreaPart4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapFlags = new Stat(9, 0, false, false, false);
+        private readonly Stat mapFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapNavigation = new Stat(140, 5, true, false, false);
+        private readonly StatSkill mapNavigation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mapOptions = new Stat(470, 0, false, false, false);
+        private readonly Stat mapOptions;
 
         /// <summary>
         /// </summary>
-        private readonly Stat martialArts = new Stat(100, 5, true, false, false);
+        private readonly StatSkill martialArts;
 
         /// <summary>
         /// </summary>
-        private readonly Stat materialCreation = new Stat(130, 5, true, false, false);
+        private readonly StatSkill materialCreation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat materialLocation = new Stat(131, 5, true, false, false);
+        private readonly StatSkill materialLocation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat materialMetamorphose = new Stat(127, 5, true, false, false);
+        private readonly StatSkill materialMetamorphose;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxDamage = new Stat(285, 1234567890, false, false, false);
+        private readonly Stat maxDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxEnergy = new Stat(212, 1234567890, false, false, false);
+        private readonly Stat maxEnergy;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxMass = new Stat(24, 1234567890, false, false, false);
+        private readonly Stat maxMass;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxNCU = new Stat(181, 8, false, false, false);
+        private readonly Stat maxNCU;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxNanoEnergy = new Stat(221, 1, false, false, false);
+        private readonly StatMaxNanoEnergy maxNanoEnergy;
 
         /// <summary>
         /// </summary>
-        private readonly Stat maxShopItems = new Stat(606, 1234567890, false, false, false);
+        private readonly Stat maxShopItems;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mechData = new Stat(662, 0, false, false, false);
+        private readonly Stat mechData;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mechanicalEngineering = new Stat(125, 5, true, false, false);
+        private readonly StatSkill mechanicalEngineering;
 
         /// <summary>
         /// </summary>
-        private readonly Stat meleeAC = new Stat(91, 0, true, false, false);
+        private readonly Stat meleeAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat meleeDamageModifier = new Stat(279, 0, false, false, false);
+        private readonly Stat meleeDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat meleeEnergyWeapon = new Stat(104, 5, true, false, false);
+        private readonly StatSkill meleeEnergyWeapon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat meleeMultiple = new Stat(101, 5, true, false, false);
+        private readonly StatSkill meleeMultiple;
 
         /// <summary>
         /// </summary>
-        private readonly Stat memberInstance = new Stat(308, 1234567890, false, false, false);
+        private readonly Stat memberInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat memberType = new Stat(307, 1234567890, false, false, false);
+        private readonly Stat memberType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat members = new Stat(300, 999, false, false, false);
+        private readonly Stat members;
 
         /// <summary>
         /// </summary>
-        private readonly Stat mesh = new Stat(12, 17530, false, false, false);
+        private readonly Stat mesh;
 
         /// <summary>
         /// </summary>
-        private readonly Stat metaType = new Stat(75, 0, false, false, false);
+        private readonly Stat metaType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat metersWalked = new Stat(252, 1234567890, false, false, false);
+        private readonly Stat metersWalked;
 
         /// <summary>
         /// </summary>
-        private readonly Stat minDamage = new Stat(286, 1234567890, false, false, false);
+        private readonly Stat minDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat minMembers = new Stat(301, 1234567890, false, false, false);
+        private readonly Stat minMembers;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits1 = new Stat(256, 0, false, false, false);
+        private readonly Stat missionBits1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits10 = new Stat(617, 0, false, false, false);
+        private readonly Stat missionBits10;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits11 = new Stat(618, 0, false, false, false);
+        private readonly Stat missionBits11;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits12 = new Stat(619, 0, false, false, false);
+        private readonly Stat missionBits12;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits2 = new Stat(257, 0, false, false, false);
+        private readonly Stat missionBits2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits3 = new Stat(303, 0, false, false, false);
+        private readonly Stat missionBits3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits4 = new Stat(432, 0, false, false, false);
+        private readonly Stat missionBits4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits5 = new Stat(65, 0, false, false, false);
+        private readonly Stat missionBits5;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits6 = new Stat(66, 0, false, false, false);
+        private readonly Stat missionBits6;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits7 = new Stat(67, 0, false, false, false);
+        private readonly Stat missionBits7;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits8 = new Stat(544, 0, false, false, false);
+        private readonly Stat missionBits8;
 
         /// <summary>
         /// </summary>
-        private readonly Stat missionBits9 = new Stat(545, 0, false, false, false);
+        private readonly Stat missionBits9;
 
         /// <summary>
         /// </summary>
-        private readonly Stat monsterData = new Stat(359, 0, false, false, true);
+        private readonly Stat monsterData;
 
         /// <summary>
         /// </summary>
-        private readonly Stat monsterLevelsKilled = new Stat(254, 1234567890, false, false, false);
+        private readonly Stat monsterLevelsKilled;
 
         /// <summary>
         /// </summary>
-        private readonly Stat monsterScale = new Stat(360, 1234567890, false, false, true);
+        private readonly Stat monsterScale;
 
         /// <summary>
         /// </summary>
-        private readonly Stat monsterTexture = new Stat(344, 1234567890, false, false, false);
+        private readonly Stat monsterTexture;
 
         /// <summary>
         /// </summary>
-        private readonly Stat monthsPaid = new Stat(69, 0, false, false, false);
+        private readonly Stat monthsPaid;
 
         /// <summary>
         /// </summary>
-        private readonly Stat moreFlags = new Stat(177, 1234567890, false, false, true);
+        private readonly Stat moreFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat multipleCount = new Stat(412, 1234567890, false, false, false);
+        private readonly Stat multipleCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat name = new Stat(14, 1234567890, false, false, false);
+        private readonly Stat name;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nameTemplate = new Stat(446, 1234567890, false, false, false);
+        private readonly Stat nameTemplate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoAC = new Stat(168, 5, true, false, false);
+        private readonly StatSkill nanoAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoDamageModifier = new Stat(315, 0, false, false, false);
+        private readonly Stat nanoDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoDamageMultiplier = new Stat(536, 0, false, false, false);
+        private readonly Stat nanoDamageMultiplier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoDelta = new Stat(364, 1234567890, true, false, false);
+        private readonly StatNanoDelta nanoDelta;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoEnergyPool = new Stat(132, 5, true, false, false);
+        private readonly StatSkill nanoEnergyPool;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoFocusLevel = new Stat(355, 0, false, false, false);
+        private readonly Stat nanoFocusLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoInterval = new Stat(363, 28, true, false, false);
+        private readonly StatNanoInterval nanoInterval;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoPoints = new Stat(407, 1234567890, false, false, false);
+        private readonly Stat nanoPoints;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoProgramming = new Stat(160, 5, true, false, false);
+        private readonly StatSkill nanoProgramming;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoProwessInitiative = new Stat(149, 5, true, false, false);
+        private readonly StatSkill nanoProwessInitiative;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoSpeed = new Stat(406, 1234567890, false, false, false);
+        private readonly Stat nanoSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nanoVulnerability = new Stat(537, 1234567890, false, false, false);
+        private readonly Stat nanoVulnerability;
 
         /// <summary>
         /// </summary>
-        private readonly Stat newbieHP = new Stat(600, 1234567890, false, false, false);
+        private readonly Stat newbieHP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat newbieNP = new Stat(603, 1234567890, false, false, false);
+        private readonly Stat newbieNP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nextDoorInBuilding = new Stat(190, 1234567890, false, false, false);
+        private readonly Stat nextDoorInBuilding;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nextFormula = new Stat(411, 1234567890, false, false, false);
+        private readonly Stat nextFormula;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nextSK = new Stat(575, 0, true, false, false);
+        private readonly StatNextSK nextSK;
 
         /// <summary>
         /// </summary>
-        private readonly Stat nextXP = new Stat(350, 1450, true, false, false);
+        private readonly StatNextXP nextXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npCostModifier = new Stat(318, 0, false, false, false);
+        private readonly Stat npCostModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npLevelUp = new Stat(604, 1234567890, false, false, false);
+        private readonly Stat npLevelUp;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npPerSkill = new Stat(605, 1234567890, false, false, false);
+        private readonly Stat npPerSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcBrainState = new Stat(429, 1234567890, false, false, false);
+        private readonly Stat npcBrainState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcCommand = new Stat(439, 1234567890, false, false, false);
+        private readonly Stat npcCommand;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcCommandArg = new Stat(445, 1234567890, false, false, false);
+        private readonly Stat npcCommandArg;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcCryForHelpRange = new Stat(465, 1234567890, false, false, false);
+        private readonly Stat npcCryForHelpRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcFamily = new Stat(455, 1234567890, false, false, false);
+        private readonly Stat npcFamily;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcFlags = new Stat(179, 1234567890, false, false, false);
+        private readonly Stat npcFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcFovStatus = new Stat(533, 1234567890, false, false, false);
+        private readonly Stat npcFovStatus;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcHasPatrolList = new Stat(452, 1234567890, false, false, false);
+        private readonly Stat npcHasPatrolList;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcHash = new Stat(356, 1234567890, false, false, false);
+        private readonly Stat npcHash;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcHatelistSize = new Stat(457, 1234567890, false, false, false);
+        private readonly Stat npcHatelistSize;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcIsSurrendering = new Stat(449, 1234567890, false, false, false);
+        private readonly Stat npcIsSurrendering;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcNumPets = new Stat(458, 1234567890, false, false, false);
+        private readonly Stat npcNumPets;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcScriptAmsScale = new Stat(581, 1234567890, false, false, false);
+        private readonly Stat npcScriptAmsScale;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcSpellArg1 = new Stat(638, 1234567890, false, false, false);
+        private readonly Stat npcSpellArg1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcSpellRet1 = new Stat(639, 1234567890, false, false, false);
+        private readonly Stat npcSpellRet1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcSurrenderInstance = new Stat(451, 1234567890, false, false, false);
+        private readonly Stat npcSurrenderInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcUseFightModeRegenRate = new Stat(519, 1234567890, false, false, false);
+        private readonly Stat npcUseFightModeRegenRate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcVicinityChars = new Stat(453, 1234567890, false, false, false);
+        private readonly Stat npcVicinityChars;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcVicinityFamily = new Stat(580, 1234567890, false, false, false);
+        private readonly Stat npcVicinityFamily;
 
         /// <summary>
         /// </summary>
-        private readonly Stat npcVicinityPlayers = new Stat(518, 1234567890, false, false, false);
+        private readonly Stat npcVicinityPlayers;
 
         /// <summary>
         /// </summary>
-        private readonly Stat numAttackEffects = new Stat(291, 1234567890, false, false, false);
+        private readonly Stat numAttackEffects;
 
         /// <summary>
         /// </summary>
-        private readonly Stat numberOfItems = new Stat(396, 1234567890, false, false, false);
+        private readonly Stat numberOfItems;
 
         /// <summary>
         /// </summary>
-        private readonly Stat numberOfTeamMembers = new Stat(587, 1234567890, false, false, false);
+        private readonly Stat numberOfTeamMembers;
 
         /// <summary>
         /// </summary>
-        private readonly Stat numberOnHateList = new Stat(529, 1234567890, false, false, false);
+        private readonly Stat numberOnHateList;
 
         /// <summary>
         /// </summary>
-        private readonly Stat objectType = new Stat(1001, 1234567890, false, true, false);
+        private readonly Stat objectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat odMaxSizeAdd = new Stat(463, 1234567890, false, false, false);
+        private readonly Stat odMaxSizeAdd;
 
         /// <summary>
         /// </summary>
-        private readonly Stat odMinSizeAdd = new Stat(459, 1234567890, false, false, false);
+        private readonly Stat odMinSizeAdd;
 
         /// <summary>
         /// </summary>
-        private readonly Stat oldTimeExist = new Stat(392, 1234567890, false, false, false);
+        private readonly Stat oldTimeExist;
 
         /// <summary>
         /// </summary>
-        private readonly Stat onTowerCreation = new Stat(513, 1234567890, false, false, false);
+        private readonly Stat onTowerCreation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat onehBluntWeapons = new Stat(102, 5, true, false, false);
+        private readonly StatSkill onehBluntWeapons;
 
         /// <summary>
         /// </summary>
-        private readonly Stat onehEdgedWeapon = new Stat(103, 5, true, false, false);
+        private readonly StatSkill onehEdgedWeapon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat orientationMode = new Stat(197, 1234567890, false, false, false);
+        private readonly Stat orientationMode;
 
         /// <summary>
         /// </summary>
-        private readonly Stat originatorType = new Stat(490, 1234567890, false, false, false);
+        private readonly Stat originatorType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otArmedForces = new Stat(560, 0, false, false, false);
+        private readonly Stat otArmedForces;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otFollowers = new Stat(567, 0, false, false, false);
+        private readonly Stat otFollowers;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otMed = new Stat(562, 1234567890, false, false, false);
+        private readonly Stat otMed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otOperator = new Stat(568, 0, false, false, false);
+        private readonly Stat otOperator;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otTrans = new Stat(564, 0, false, false, false);
+        private readonly Stat otTrans;
 
         /// <summary>
         /// </summary>
-        private readonly Stat otUnredeemed = new Stat(569, 0, false, false, false);
+        private readonly Stat otUnredeemed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat outerRadius = new Stat(358, 1234567890, false, false, false);
+        private readonly Stat outerRadius;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideMaterial = new Stat(337, 1234567890, false, false, false);
+        private readonly Stat overrideMaterial;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTexture = new Stat(336, 1234567890, false, false, false);
+        private readonly Stat overrideTexture;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureAttractor = new Stat(1014, 0, false, false, false);
+        private readonly Stat overrideTextureAttractor;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureBack = new Stat(1013, 0, false, false, false);
+        private readonly Stat overrideTextureBack;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureHead = new Stat(1008, 0, false, false, false);
+        private readonly Stat overrideTextureHead;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureShoulderpadLeft = new Stat(1012, 0, false, false, false);
+        private readonly Stat overrideTextureShoulderpadLeft;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureShoulderpadRight = new Stat(1011, 0, false, false, false);
+        private readonly Stat overrideTextureShoulderpadRight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureWeaponLeft = new Stat(1010, 0, false, false, false);
+        private readonly Stat overrideTextureWeaponLeft;
 
         /// <summary>
         /// </summary>
-        private readonly Stat overrideTextureWeaponRight = new Stat(1009, 0, false, false, false);
+        private readonly Stat overrideTextureWeaponRight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat ownedTowers = new Stat(514, 1234567890, false, false, false);
+        private readonly Stat ownedTowers;
 
         /// <summary>
         /// </summary>
-        private readonly Identity owner;
+        private readonly Identity owner = new Identity();
 
         /// <summary>
         /// </summary>
-        private readonly Stat ownerInstance = new Stat(433, 1234567890, false, false, false);
+        private readonly Stat ownerInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat paidPoints = new Stat(672, 0, false, false, false);
+        private readonly Stat paidPoints;
 
         /// <summary>
         /// </summary>
-        private readonly Stat parentInstance = new Stat(44, 1234567890, false, false, false);
+        private readonly Stat parentInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat parentType = new Stat(43, 1234567890, false, false, false);
+        private readonly Stat parentType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat parry = new Stat(145, 5, true, false, false);
+        private readonly StatSkill parry;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentChemicalDamage = new Stat(628, 1234567890, false, false, false);
+        private readonly Stat percentChemicalDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentColdDamage = new Stat(622, 1234567890, false, false, false);
+        private readonly Stat percentColdDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentEnergyDamage = new Stat(627, 1234567890, false, false, false);
+        private readonly Stat percentEnergyDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentFireDamage = new Stat(621, 1234567890, false, false, false);
+        private readonly Stat percentFireDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentMeleeDamage = new Stat(623, 1234567890, false, false, false);
+        private readonly Stat percentMeleeDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentPoisonDamage = new Stat(625, 1234567890, false, false, false);
+        private readonly Stat percentPoisonDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentProjectileDamage = new Stat(624, 1234567890, false, false, false);
+        private readonly Stat percentProjectileDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentRadiationDamage = new Stat(626, 1234567890, false, false, false);
+        private readonly Stat percentRadiationDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentRemainingHealth = new Stat(525, 1234567890, false, false, false);
+        private readonly Stat percentRemainingHealth;
 
         /// <summary>
         /// </summary>
-        private readonly Stat percentRemainingNano = new Stat(526, 1234567890, false, false, false);
+        private readonly Stat percentRemainingNano;
 
         /// <summary>
         /// </summary>
-        private readonly Stat perception = new Stat(136, 5, true, false, false);
+        private readonly StatSkill perception;
 
         /// <summary>
         /// </summary>
-        private readonly Stat personalResearchGoal = new Stat(265, 0, false, false, false);
+        private readonly Stat personalResearchGoal;
 
         /// <summary>
         /// </summary>
-        private readonly Stat personalResearchLevel = new Stat(263, 0, false, false, false);
+        private readonly Stat personalResearchLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petCounter = new Stat(251, 1234567890, false, false, false);
+        private readonly Stat petCounter;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petMaster = new Stat(196, 1234567890, false, false, false);
+        private readonly Stat petMaster;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReq1 = new Stat(467, 1234567890, false, false, false);
+        private readonly Stat petReq1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReq2 = new Stat(468, 1234567890, false, false, false);
+        private readonly Stat petReq2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReq3 = new Stat(469, 1234567890, false, false, false);
+        private readonly Stat petReq3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReqVal1 = new Stat(485, 1234567890, false, false, false);
+        private readonly Stat petReqVal1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReqVal2 = new Stat(486, 1234567890, false, false, false);
+        private readonly Stat petReqVal2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petReqVal3 = new Stat(487, 1234567890, false, false, false);
+        private readonly Stat petReqVal3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petState = new Stat(671, 1234567890, false, false, false);
+        private readonly Stat petState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat petType = new Stat(512, 1234567890, false, false, false);
+        private readonly Stat petType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pharmaceuticals = new Stat(159, 5, true, false, false);
+        private readonly StatSkill pharmaceuticals;
 
         /// <summary>
         /// </summary>
-        private readonly Stat physicalProwessInitiative = new Stat(120, 5, true, false, false);
+        private readonly StatSkill physicalProwessInitiative;
 
         /// <summary>
         /// </summary>
-        private readonly Stat piercing = new Stat(106, 5, true, false, false);
+        private readonly StatSkill piercing;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pistol = new Stat(112, 5, true, false, false);
+        private readonly StatSkill pistol;
 
         /// <summary>
         /// </summary>
-        private readonly Stat placement = new Stat(298, 1234567890, false, false, false);
+        private readonly Stat placement;
 
         /// <summary>
         /// </summary>
-        private readonly Stat playerId = new Stat(607, 1234567890, false, true, false);
+        private readonly Stat playerId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat playerKilling = new Stat(323, 1234567890, false, false, false);
+        private readonly Stat playerKilling;
 
         /// <summary>
         /// </summary>
-        private readonly Stat playerOptions = new Stat(576, 0, false, false, false);
+        private readonly Stat playerOptions;
 
         /// <summary>
         /// </summary>
-        private readonly Stat playfieldType = new Stat(438, 1234567890, false, false, false);
+        private readonly Stat playfieldType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat poisonAC = new Stat(96, 0, true, false, false);
+        private readonly Stat poisonAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat poisonDamageModifier = new Stat(317, 0, false, false, false);
+        private readonly Stat poisonDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat prevMovementMode = new Stat(174, 3, false, false, false);
+        private readonly Stat prevMovementMode;
 
         /// <summary>
         /// </summary>
-        private readonly Stat previousHealth = new Stat(11, 50, false, false, false);
+        private readonly Stat previousHealth;
 
         /// <summary>
         /// </summary>
-        private readonly Stat price = new Stat(74, 1234567890, false, false, false);
+        private readonly Stat price;
 
         /// <summary>
         /// </summary>
-        private readonly Stat primaryItemInstance = new Stat(81, 1234567890, false, false, false);
+        private readonly Stat primaryItemInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat primaryItemType = new Stat(80, 1234567890, false, false, false);
+        private readonly Stat primaryItemType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat primaryTemplateId = new Stat(395, 1234567890, false, false, false);
+        private readonly Stat primaryTemplateId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procChance1 = new Stat(556, 1234567890, false, false, false);
+        private readonly Stat procChance1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procChance2 = new Stat(557, 1234567890, false, false, false);
+        private readonly Stat procChance2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procChance3 = new Stat(558, 1234567890, false, false, false);
+        private readonly Stat procChance3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procChance4 = new Stat(559, 1234567890, false, false, false);
+        private readonly Stat procChance4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procInitiative1 = new Stat(539, 1234567890, false, false, false);
+        private readonly Stat procInitiative1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procInitiative2 = new Stat(540, 1234567890, false, false, false);
+        private readonly Stat procInitiative2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procInitiative3 = new Stat(541, 1234567890, false, false, false);
+        private readonly Stat procInitiative3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procInitiative4 = new Stat(542, 1234567890, false, false, false);
+        private readonly Stat procInitiative4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procNano1 = new Stat(552, 1234567890, false, false, false);
+        private readonly Stat procNano1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procNano2 = new Stat(553, 1234567890, false, false, false);
+        private readonly Stat procNano2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procNano3 = new Stat(554, 1234567890, false, false, false);
+        private readonly Stat procNano3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat procNano4 = new Stat(555, 1234567890, false, false, false);
+        private readonly Stat procNano4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat profession = new Stat(60, 1234567890, false, false, false);
+        private readonly Stat profession;
 
         /// <summary>
         /// </summary>
-        private readonly Stat professionLevel = new Stat(10, 1234567890, false, true, false);
+        private readonly Stat professionLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat projectileAC = new Stat(90, 0, true, false, false);
+        private readonly Stat projectileAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat projectileDamageModifier = new Stat(278, 0, false, false, false);
+        private readonly Stat projectileDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat proximityRangeIndoors = new Stat(484, 1234567890, false, false, false);
+        private readonly Stat proximityRangeIndoors;
 
         /// <summary>
         /// </summary>
-        private readonly Stat proximityRangeOutdoors = new Stat(454, 1234567890, false, false, false);
+        private readonly Stat proximityRangeOutdoors;
 
         /// <summary>
         /// </summary>
-        private readonly Stat psychic = new Stat(21, 0, true, false, false);
+        private readonly Stat psychic;
 
         /// <summary>
         /// </summary>
-        private readonly Stat psychologicalModification = new Stat(129, 5, true, false, false);
+        private readonly StatSkill psychologicalModification;
 
         /// <summary>
         /// </summary>
-        private readonly Stat psychology = new Stat(162, 5, true, false, false);
+        private readonly StatSkill psychology;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvPLevelsKilled = new Stat(255, 1234567890, false, false, false);
+        private readonly Stat pvPLevelsKilled;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpDuelDeaths = new Stat(675, 0, false, false, false);
+        private readonly Stat pvpDuelDeaths;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpDuelKills = new Stat(674, 0, false, false, false);
+        private readonly Stat pvpDuelKills;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpDuelScore = new Stat(684, 0, false, false, false);
+        private readonly Stat pvpDuelScore;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpProfessionDuelDeaths = new Stat(677, 0, false, false, false);
+        private readonly Stat pvpProfessionDuelDeaths;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpProfessionDuelKills = new Stat(676, 0, false, false, false);
+        private readonly Stat pvpProfessionDuelKills;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpRankedSoloDeaths = new Stat(679, 0, false, false, false);
+        private readonly Stat pvpRankedSoloDeaths;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpRankedSoloKills = new Stat(678, 0, false, false, false);
+        private readonly Stat pvpRankedSoloKills;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpRankedTeamDeaths = new Stat(681, 0, false, false, false);
+        private readonly Stat pvpRankedTeamDeaths;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpRankedTeamKills = new Stat(680, 0, false, false, false);
+        private readonly Stat pvpRankedTeamKills;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpRating = new Stat(333, 1300, false, false, false);
+        private readonly Stat pvpRating;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpSoloScore = new Stat(682, 0, false, false, false);
+        private readonly Stat pvpSoloScore;
 
         /// <summary>
         /// </summary>
-        private readonly Stat pvpTeamScore = new Stat(683, 0, false, false, false);
+        private readonly Stat pvpTeamScore;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtDungeonInstance = new Stat(497, 1234567890, false, false, false);
+        private readonly Stat qtDungeonInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterCount1 = new Stat(504, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterCount1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterCount2 = new Stat(506, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterCount2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterCount3 = new Stat(508, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterCount3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterID3 = new Stat(507, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterID3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterId1 = new Stat(503, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterId1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKillNumMonsterId2 = new Stat(505, 1234567890, false, false, false);
+        private readonly Stat qtKillNumMonsterId2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtKilledMonsters = new Stat(499, 1234567890, false, false, false);
+        private readonly Stat qtKilledMonsters;
 
         /// <summary>
         /// </summary>
-        private readonly Stat qtNumMonsters = new Stat(498, 1234567890, false, false, false);
+        private readonly Stat qtNumMonsters;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questAsMaximumRange = new Stat(802, 1234567890, false, false, false);
+        private readonly Stat questAsMaximumRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questAsMinimumRange = new Stat(801, 1234567890, false, false, false);
+        private readonly Stat questAsMinimumRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questBoothDifficulty = new Stat(800, 1234567890, false, false, false);
+        private readonly Stat questBoothDifficulty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex0 = new Stat(509, 1234567890, false, false, false);
+        private readonly Stat questIndex0;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex1 = new Stat(492, 1234567890, false, false, false);
+        private readonly Stat questIndex1;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex2 = new Stat(493, 1234567890, false, false, false);
+        private readonly Stat questIndex2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex3 = new Stat(494, 1234567890, false, false, false);
+        private readonly Stat questIndex3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex4 = new Stat(495, 1234567890, false, false, false);
+        private readonly Stat questIndex4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questIndex5 = new Stat(496, 1234567890, false, false, false);
+        private readonly Stat questIndex5;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questInstance = new Stat(491, 1234567890, false, false, false);
+        private readonly Stat questInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questLevelsSolved = new Stat(253, 1234567890, false, false, false);
+        private readonly Stat questLevelsSolved;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questStat = new Stat(261, 1234567890, false, false, false);
+        private readonly Stat questStat;
 
         /// <summary>
         /// </summary>
-        private readonly Stat questTimeout = new Stat(510, 1234567890, false, false, false);
+        private readonly Stat questTimeout;
 
         /// <summary>
         /// </summary>
-        private readonly Stat race = new Stat(89, 1, false, false, false);
+        private readonly Stat race;
 
         /// <summary>
         /// </summary>
-        private readonly Stat radiationAC = new Stat(94, 0, true, false, false);
+        private readonly Stat radiationAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat radiationDamageModifier = new Stat(282, 0, false, false, false);
+        private readonly Stat radiationDamageModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rangeIncreaserNF = new Stat(381, 0, false, false, false);
+        private readonly Stat rangeIncreaserNF;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rangeIncreaserWeapon = new Stat(380, 0, false, false, false);
+        private readonly Stat rangeIncreaserWeapon;
 
         /// <summary>
         /// </summary>
-        private readonly Stat readOnly = new Stat(435, 1234567890, false, false, false);
+        private readonly Stat readOnly;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rechargeDelay = new Stat(210, 1234567890, false, false, false);
+        private readonly Stat rechargeDelay;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rechargeDelayCap = new Stat(524, 1234567890, false, false, false);
+        private readonly Stat rechargeDelayCap;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reclaimItem = new Stat(365, 1234567890, false, false, false);
+        private readonly Stat reclaimItem;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectChemicalAC = new Stat(208, 0, true, false, false);
+        private readonly Stat reflectChemicalAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectColdAC = new Stat(217, 0, true, false, false);
+        private readonly Stat reflectColdAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectEnergyAC = new Stat(207, 0, true, false, false);
+        private readonly Stat reflectEnergyAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectFireAC = new Stat(219, 0, true, false, false);
+        private readonly Stat reflectFireAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectMeleeAC = new Stat(206, 0, true, false, false);
+        private readonly Stat reflectMeleeAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectNanoAC = new Stat(218, 0, true, false, false);
+        private readonly Stat reflectNanoAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectPoisonAC = new Stat(225, 0, false, false, false);
+        private readonly Stat reflectPoisonAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectProjectileAC = new Stat(205, 0, true, false, false);
+        private readonly Stat reflectProjectileAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectRadiationAC = new Stat(216, 0, true, false, false);
+        private readonly Stat reflectRadiationAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedChemicalAC = new Stat(478, 0, false, false, false);
+        private readonly Stat reflectReturnedChemicalAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedColdAC = new Stat(480, 0, false, false, false);
+        private readonly Stat reflectReturnedColdAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedEnergyAC = new Stat(477, 0, false, false, false);
+        private readonly Stat reflectReturnedEnergyAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedFireAC = new Stat(482, 0, false, false, false);
+        private readonly Stat reflectReturnedFireAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedMeleeAC = new Stat(476, 0, false, false, false);
+        private readonly Stat reflectReturnedMeleeAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedNanoAC = new Stat(481, 0, false, false, false);
+        private readonly Stat reflectReturnedNanoAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedPoisonAC = new Stat(483, 0, false, false, false);
+        private readonly Stat reflectReturnedPoisonAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedProjectileAC = new Stat(475, 0, false, false, false);
+        private readonly Stat reflectReturnedProjectileAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat reflectReturnedRadiationAC = new Stat(479, 0, false, false, false);
+        private readonly Stat reflectReturnedRadiationAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat regainXPPercentage = new Stat(593, 0, false, false, false);
+        private readonly Stat regainXPPercentage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat repairDifficulty = new Stat(73, 1234567890, false, false, false);
+        private readonly Stat repairDifficulty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat repairSkill = new Stat(77, 1234567890, false, false, false);
+        private readonly Stat repairSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat resistModifier = new Stat(393, 1234567890, false, false, false);
+        private readonly Stat resistModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat restModifier = new Stat(425, 1234567890, false, false, false);
+        private readonly Stat restModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat resurrectDest = new Stat(362, 1234567890, false, false, false);
+        private readonly Stat resurrectDest;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rifle = new Stat(113, 5, true, false, false);
+        private readonly StatSkill rifle;
 
         /// <summary>
         /// </summary>
-        private readonly Stat riposte = new Stat(143, 5, true, false, false);
+        private readonly StatSkill riposte;
 
         /// <summary>
         /// </summary>
-        private readonly Stat ritualTargetInst = new Stat(370, 1234567890, false, false, false);
+        private readonly Stat ritualTargetInst;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rnd = new Stat(520, 1234567890, false, false, false);
+        private readonly Stat rnd;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rotation = new Stat(400, 1234567890, false, false, false);
+        private readonly Stat rotation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat rp = new Stat(199, 0, false, false, false);
+        private readonly Stat rp;
 
         /// <summary>
         /// </summary>
-        private readonly Stat runSpeed = new Stat(156, 5, true, false, false);
+        private readonly StatSkill runSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat savedXP = new Stat(334, 0, false, false, false);
+        private readonly Stat savedXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat school = new Stat(405, 1234567890, false, false, false);
+        private readonly Stat school;
 
         /// <summary>
         /// </summary>
-        private readonly Stat secondaryItemInstance = new Stat(83, 1234567890, false, false, false);
+        private readonly Stat secondaryItemInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat secondaryItemTemplate = new Stat(273, 1234567890, false, false, false);
+        private readonly Stat secondaryItemTemplate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat secondaryItemType = new Stat(82, 1234567890, false, false, false);
+        private readonly Stat secondaryItemType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat selectedTarget = new Stat(431, 1234567890, false, false, false);
+        private readonly Stat selectedTarget;
 
         /// <summary>
         /// </summary>
-        private readonly Stat selectedTargetType = new Stat(397, 1234567890, false, false, false);
+        private readonly Stat selectedTargetType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sellModifier = new Stat(427, 1234567890, false, false, false);
+        private readonly Stat sellModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sense = new Stat(20, 0, true, false, false);
+        private readonly Stat sense;
 
         /// <summary>
         /// </summary>
-        private readonly Stat senseImprovement = new Stat(122, 5, true, false, false);
+        private readonly StatSkill senseImprovement;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sessionTime = new Stat(198, 1234567890, false, false, false);
+        private readonly Stat sessionTime;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sex = new Stat(59, 1234567890, false, false, false);
+        private readonly Stat sex;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shadowBreed = new Stat(532, 0, false, false, false);
+        private readonly Stat shadowBreed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shadowBreedTemplate = new Stat(579, 0, false, false, false);
+        private readonly Stat shadowBreedTemplate;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldChemicalAC = new Stat(229, 0, true, false, false);
+        private readonly Stat shieldChemicalAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldColdAC = new Stat(231, 0, true, false, false);
+        private readonly Stat shieldColdAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldEnergyAC = new Stat(228, 0, true, false, false);
+        private readonly Stat shieldEnergyAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldFireAC = new Stat(233, 0, true, false, false);
+        private readonly Stat shieldFireAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldMeleeAC = new Stat(227, 0, true, false, false);
+        private readonly Stat shieldMeleeAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldNanoAC = new Stat(232, 0, true, false, false);
+        private readonly Stat shieldNanoAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldPoisonAC = new Stat(234, 0, true, false, false);
+        private readonly Stat shieldPoisonAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldProjectileAC = new Stat(226, 0, true, false, false);
+        private readonly Stat shieldProjectileAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shieldRadiationAC = new Stat(230, 0, true, false, false);
+        private readonly Stat shieldRadiationAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopFlags = new Stat(610, 1234567890, false, false, false);
+        private readonly Stat shopFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopId = new Stat(657, 1234567890, false, false, false);
+        private readonly Stat shopId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopIndex = new Stat(656, 1234567890, false, false, false);
+        private readonly Stat shopIndex;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopLastUsed = new Stat(611, 1234567890, false, false, false);
+        private readonly Stat shopLastUsed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopPrice = new Stat(599, 1234567890, false, false, false);
+        private readonly Stat shopPrice;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopRent = new Stat(608, 1234567890, false, false, false);
+        private readonly Stat shopRent;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shopType = new Stat(612, 1234567890, false, false, false);
+        private readonly Stat shopType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shotgun = new Stat(115, 5, true, false, false);
+        private readonly StatSkill shotgun;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shoulderMeshHolder = new Stat(39, 0, false, false, false);
+        private readonly Stat shoulderMeshHolder;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shoulderMeshLeft = new Stat(1005, 0, false, false, false);
+        private readonly Stat shoulderMeshLeft;
 
         /// <summary>
         /// </summary>
-        private readonly Stat shoulderMeshRight = new Stat(1004, 0, false, false, false);
+        private readonly Stat shoulderMeshRight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat side = new Stat(33, 0, false, false, false);
+        private readonly Stat side;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sisCap = new Stat(352, 1234567890, false, false, false);
+        private readonly Stat sisCap;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sk = new Stat(573, 0, false, false, false);
+        private readonly Stat sk;
 
         /// <summary>
         /// </summary>
-        private readonly Stat skillDisabled = new Stat(329, 1234567890, false, false, false);
+        private readonly Stat skillDisabled;
 
         /// <summary>
         /// </summary>
-        private readonly Stat skillLockModifier = new Stat(382, 0, false, false, false);
+        private readonly Stat skillLockModifier;
 
         /// <summary>
         /// </summary>
-        private readonly Stat skillTimeOnSelectedTarget = new Stat(371, 1234567890, false, false, false);
+        private readonly Stat skillTimeOnSelectedTarget;
 
         /// <summary>
         /// </summary>
-        private readonly Stat sneakAttack = new Stat(146, 5, true, false, false);
+        private readonly StatSkill sneakAttack;
 
         /// <summary>
         /// </summary>
-        private readonly Stat socialStatus = new Stat(521, 0, false, false, false);
+        private readonly Stat socialStatus;
 
         /// <summary>
         /// </summary>
-        private readonly Stat soundVolume = new Stat(250, 1234567890, false, false, false);
+        private readonly Stat soundVolume;
 
         /// <summary>
         /// </summary>
-        private readonly Stat specialAttackShield = new Stat(517, 1234567890, false, false, false);
+        private readonly Stat specialAttackShield;
 
         /// <summary>
         /// </summary>
-        private readonly Stat specialCondition = new Stat(348, 1, false, false, false);
+        private readonly Stat specialCondition;
 
         /// <summary>
         /// </summary>
-        private readonly Stat specialization = new Stat(182, 0, false, false, false);
+        private readonly Stat specialization;
 
         /// <summary>
         /// </summary>
-        private readonly Stat speedPenalty = new Stat(70, 1234567890, false, false, false);
+        private readonly Stat speedPenalty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stability = new Stat(202, 1234567890, false, false, false);
+        private readonly Stat stability;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingLine2 = new Stat(546, 1234567890, false, false, false);
+        private readonly Stat stackingLine2;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingLine3 = new Stat(547, 1234567890, false, false, false);
+        private readonly Stat stackingLine3;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingLine4 = new Stat(548, 1234567890, false, false, false);
+        private readonly Stat stackingLine4;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingLine5 = new Stat(549, 1234567890, false, false, false);
+        private readonly Stat stackingLine5;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingLine6 = new Stat(550, 1234567890, false, false, false);
+        private readonly Stat stackingLine6;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stackingOrder = new Stat(551, 1234567890, false, false, false);
+        private readonly Stat stackingOrder;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stamina = new Stat(18, 0, true, false, false);
+        private readonly Stat stamina;
 
         /// <summary>
         /// </summary>
-        private readonly Stat statOne = new Stat(290, 1234567890, false, false, false);
+        private readonly Stat statOne;
 
         /// <summary>
         /// </summary>
-        private readonly Stat state = new Stat(7, 0, false, false, false);
+        private readonly Stat state;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stateAction = new Stat(98, 1234567890, true, false, false);
+        private readonly Stat stateAction;
 
         /// <summary>
         /// </summary>
-        private readonly Stat stateMachine = new Stat(450, 1234567890, false, false, false);
+        private readonly Stat stateMachine;
 
         /// <summary>
         /// </summary>
-        private readonly Stat staticInstance = new Stat(23, 1234567890, false, false, false);
+        private readonly Stat staticInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat staticType = new Stat(25, 1234567890, false, false, false);
+        private readonly Stat staticType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat streamCheckMagic = new Stat(999, 1234567890, false, false, false);
+        private readonly Stat streamCheckMagic;
 
         /// <summary>
         /// </summary>
-        private readonly Stat strength = new Stat(16, 0, true, false, false);
+        private readonly Stat strength;
 
         /// <summary>
         /// </summary>
-        private readonly Stat subMachineGun = new Stat(114, 5, true, false, false);
+        private readonly StatSkill subMachineGun;
 
         /// <summary>
         /// </summary>
-        private readonly Stat swim = new Stat(138, 5, true, false, false);
+        private readonly StatSkill swim;
 
         /// <summary>
         /// </summary>
-        private readonly Stat synergyHash = new Stat(609, 1234567890, false, false, false);
+        private readonly Stat synergyHash;
 
         /// <summary>
         /// </summary>
-        private readonly Stat taboo = new Stat(327, 1234567890, false, false, false);
+        private readonly Stat taboo;
 
         /// <summary>
         /// </summary>
-        private readonly Stat targetDistance = new Stat(527, 1234567890, false, false, false);
+        private readonly Stat targetDistance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat targetDistanceChange = new Stat(889, 1234567890, false, false, false);
+        private readonly Stat targetDistanceChange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat targetFacing = new Stat(488, 1234567890, false, false, false);
+        private readonly Stat targetFacing;
 
         /// <summary>
         /// </summary>
-        private readonly Stat team = new Stat(6, 0, false, false, false);
+        private readonly Stat team;
 
         /// <summary>
         /// </summary>
-        private readonly Stat teamAllowed = new Stat(324, 1234567890, false, false, false);
+        private readonly Stat teamAllowed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat teamCloseness = new Stat(528, 1234567890, false, false, false);
+        private readonly Stat teamCloseness;
 
         /// <summary>
         /// </summary>
-        private readonly Stat teamSide = new Stat(213, 0, false, false, false);
+        private readonly Stat teamSide;
 
         /// <summary>
         /// </summary>
-        private readonly Stat teleportPauseMilliSeconds = new Stat(351, 1234567890, false, false, false);
+        private readonly Stat teleportPauseMilliSeconds;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tempSavePlayfield = new Stat(595, 0, false, false, false);
+        private readonly Stat tempSavePlayfield;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tempSaveTeamId = new Stat(594, 0, false, false, false);
+        private readonly Stat tempSaveTeamId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tempSaveX = new Stat(596, 0, false, false, false);
+        private readonly Stat tempSaveX;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tempSaveY = new Stat(597, 0, false, false, false);
+        private readonly Stat tempSaveY;
 
         /// <summary>
         /// </summary>
-        private readonly Stat temporarySkillReduction = new Stat(247, 0, false, false, false);
+        private readonly Stat temporarySkillReduction;
 
         /// <summary>
         /// </summary>
-        private readonly Stat throwingKnife = new Stat(108, 5, true, false, false);
+        private readonly StatSkill throwingKnife;
 
         /// <summary>
         /// </summary>
-        private readonly Stat thrownGrapplingWeapons = new Stat(110, 5, true, false, false);
+        private readonly StatSkill thrownGrapplingWeapons;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tideRequiredDynelId = new Stat(900, 1234567890, false, false, false);
+        private readonly Stat tideRequiredDynelId;
 
         /// <summary>
         /// </summary>
-        private readonly Stat timeExist = new Stat(8, 1234567890, false, false, false);
+        private readonly Stat timeExist;
 
         /// <summary>
         /// </summary>
-        private readonly Stat timeSinceCreation = new Stat(56, 1234567890, false, false, false);
+        private readonly Stat timeSinceCreation;
 
         /// <summary>
         /// </summary>
-        private readonly Stat timeSinceUpkeep = new Stat(313, 1234567890, false, false, false);
+        private readonly Stat timeSinceUpkeep;
 
         /// <summary>
         /// </summary>
-        private readonly Stat titleLevel = new Stat(37, 1, false, false, false);
+        private readonly StatTitleLevel titleLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat totalDamage = new Stat(629, 1234567890, false, false, false);
+        private readonly Stat totalDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat totalMass = new Stat(71, 1234567890, false, false, false);
+        private readonly Stat totalMass;
 
         /// <summary>
         /// </summary>
-        private readonly Stat towerInstance = new Stat(515, 1234567890, false, false, false);
+        private readonly Stat towerInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat towerNpcHash = new Stat(511, 1234567890, false, false, false);
+        private readonly Stat towerNpcHash;
 
         /// <summary>
         /// </summary>
-        private readonly Stat towerType = new Stat(388, 1234567890, false, false, false);
+        private readonly Stat towerType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tracerEffectType = new Stat(419, 1234567890, false, false, false);
+        private readonly Stat tracerEffectType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackChemicalDamage = new Stat(633, 1234567890, false, false, false);
+        private readonly Stat trackChemicalDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackColdDamage = new Stat(635, 1234567890, false, false, false);
+        private readonly Stat trackColdDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackEnergyDamage = new Stat(632, 1234567890, false, false, false);
+        private readonly Stat trackEnergyDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackFireDamage = new Stat(637, 1234567890, false, false, false);
+        private readonly Stat trackFireDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackMeleeDamage = new Stat(631, 1234567890, false, false, false);
+        private readonly Stat trackMeleeDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackPoisonDamage = new Stat(636, 1234567890, false, false, false);
+        private readonly Stat trackPoisonDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackProjectileDamage = new Stat(630, 1234567890, false, false, false);
+        private readonly Stat trackProjectileDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trackRadiationDamage = new Stat(634, 1234567890, false, false, false);
+        private readonly Stat trackRadiationDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tradeLimit = new Stat(346, 1234567890, false, false, false);
+        private readonly Stat tradeLimit;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trainSkill = new Stat(408, 1234567890, false, false, false);
+        private readonly Stat trainSkill;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trainSkillCost = new Stat(409, 1234567890, false, false, false);
+        private readonly Stat trainSkillCost;
 
         /// <summary>
         /// </summary>
-        private readonly Stat trapDifficulty = new Stat(289, 1234567890, false, false, false);
+        private readonly Stat trapDifficulty;
 
         /// <summary>
         /// </summary>
-        private readonly Stat travelSound = new Stat(271, 1234567890, false, false, false);
+        private readonly Stat travelSound;
 
         /// <summary>
         /// </summary>
-        private readonly Stat treatment = new Stat(124, 5, true, false, false);
+        private readonly StatSkill treatment;
 
         /// <summary>
         /// </summary>
-        private readonly Stat turnSpeed = new Stat(267, 40000, false, false, false);
+        private readonly Stat turnSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat tutoring = new Stat(141, 5, true, false, false);
+        private readonly StatSkill tutoring;
 
         /// <summary>
         /// </summary>
-        private readonly Stat twohBluntWeapons = new Stat(107, 5, true, false, false);
+        private readonly StatSkill twohBluntWeapons;
 
         /// <summary>
         /// </summary>
-        private readonly Stat twohEdgedWeapons = new Stat(105, 5, true, false, false);
+        private readonly StatSkill twohEdgedWeapons;
 
         /// <summary>
         /// </summary>
-        private readonly Stat unarmedTemplateInstance = new Stat(418, 0, false, false, false);
+        private readonly Stat unarmedTemplateInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat unreadMailCount = new Stat(649, 0, false, false, false);
+        private readonly Stat unreadMailCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat unsavedXP = new Stat(592, 0, false, false, false);
+        private readonly Stat unsavedXP;
 
         /// <summary>
         /// </summary>
-        private readonly Stat userInstance = new Stat(85, 1234567890, false, false, false);
+        private readonly Stat userInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat userType = new Stat(84, 1234567890, false, false, false);
+        private readonly Stat userType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat vehicleAC = new Stat(664, 1234567890, false, false, false);
+        private readonly Stat vehicleAC;
 
         /// <summary>
         /// </summary>
-        private readonly Stat vehicleDamage = new Stat(665, 1234567890, false, false, false);
+        private readonly Stat vehicleDamage;
 
         /// <summary>
         /// </summary>
-        private readonly Stat vehicleHealth = new Stat(666, 1234567890, false, false, false);
+        private readonly Stat vehicleHealth;
 
         /// <summary>
         /// </summary>
-        private readonly Stat vehicleSpeed = new Stat(667, 1234567890, false, false, false);
+        private readonly Stat vehicleSpeed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat veteranPoints = new Stat(68, 0, false, false, false);
+        private readonly Stat veteranPoints;
 
         /// <summary>
         /// </summary>
-        private readonly Stat vicinityRange = new Stat(448, 1234567890, false, false, false);
+        private readonly Stat vicinityRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat victoryPoints = new Stat(669, 0, false, false, false);
+        private readonly Stat victoryPoints;
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualBreed = new Stat(367, 1234567890, false, false, true);
+        private readonly Stat visualBreed;
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualFlags = new Stat(673, 31, false, false, false);
+        private readonly Stat visualFlags;
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualLodLevel = new Stat(888, 1234567890, false, false, false);
+        private readonly Stat visualLodLevel;
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualProfession = new Stat(368, 1234567890, false, false, true);
+        private readonly Stat visualProfession;
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualSex = new Stat(369, 1234567890, false, false, true);
+        private readonly Stat visualSex;
 
         /// <summary>
         /// </summary>
-        private readonly Stat volumeMass = new Stat(2, 1234567890, false, false, false);
+        private readonly Stat volumeMass;
 
         /// <summary>
         /// </summary>
-        private readonly Stat voteCount = new Stat(306, 1234567890, false, false, false);
+        private readonly Stat voteCount;
 
         /// <summary>
         /// </summary>
-        private readonly Stat waitState = new Stat(430, 2, false, false, false);
+        private readonly Stat waitState;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponDisallowedInstance = new Stat(326, 1234567890, false, false, false);
+        private readonly Stat weaponDisallowedInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponDisallowedType = new Stat(325, 1234567890, false, false, false);
+        private readonly Stat weaponDisallowedType;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponMeshHolder = new Stat(209, 0, false, false, false);
+        private readonly Stat weaponMeshHolder;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponMeshLeft = new Stat(1007, 0, false, false, false);
+        private readonly Stat weaponMeshLeft;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponMeshRight = new Stat(1006, 0, false, false, false);
+        private readonly Stat weaponMeshRight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponSmithing = new Stat(158, 5, true, false, false);
+        private readonly StatSkill weaponSmithing;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponStyleLeft = new Stat(1015, 0, false, false, false);
+        private readonly Stat weaponStyleLeft;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponStyleRight = new Stat(1016, 0, false, false, false);
+        private readonly Stat weaponStyleRight;
 
         /// <summary>
         /// </summary>
-        private readonly Stat weaponsStyle = new Stat(1003, 1234567890, false, false, false);
+        private readonly Stat weaponsStyle;
 
         /// <summary>
         /// </summary>
-        private readonly Stat xp = new Stat(52, 0, false, false, false);
+        private readonly Stat xp;
 
         /// <summary>
         /// </summary>
-        private readonly Stat xpBonus = new Stat(341, 1234567890, false, false, false);
+        private readonly Stat xpBonus;
 
         /// <summary>
         /// </summary>
-        private readonly Stat xpKillRange = new Stat(275, 5, false, false, false);
+        private readonly Stat xpKillRange;
 
         /// <summary>
         /// </summary>
-        private readonly Stat xpModifier = new Stat(319, 0, false, false, false);
+        private readonly Stat xpModifier;
 
         #endregion
 
@@ -2902,6 +2899,715 @@ namespace CellAO.Stats
         public Stats(Identity owner)
         {
             this.owner = owner;
+
+            this.absorbChemicalAC = new Stat(this, 241, 0, true, false, false);
+            this.absorbColdAC = new Stat(this, 243, 0, true, false, false);
+            this.absorbEnergyAC = new Stat(this, 240, 0, true, false, false);
+            this.absorbFireAC = new Stat(this, 244, 0, true, false, false);
+            this.absorbMeleeAC = new Stat(this, 239, 0, true, false, false);
+            this.absorbNanoAC = new Stat(this, 246, 0, true, false, false);
+            this.absorbPoisonAC = new Stat(this, 245, 0, true, false, false);
+            this.absorbProjectileAC = new Stat(this, 238, 0, true, false, false);
+            this.absorbRadiationAC = new Stat(this, 242, 0, true, false, false);
+            this.accessCount = new Stat(this, 35, 1234567890, false, false, false);
+            this.accessGrant = new Stat(this, 258, 1234567890, false, false, false);
+            this.accessKey = new Stat(this, 195, 1234567890, false, false, false);
+            this.accountFlags = new Stat(this, 660, 1234567890, false, true, false);
+            this.accumulatedDamage = new Stat(this, 222, 1234567890, false, false, false);
+            this.acgEntranceStyles = new Stat(this, 384, 1234567890, false, false, false);
+            this.acgItemCategoryId = new Stat(this, 704, 1234567890, false, false, false);
+            this.acgItemLevel = new Stat(this, 701, 1234567890, false, false, false);
+            this.acgItemSeed = new Stat(this, 700, 1234567890, false, false, false);
+            this.acgItemTemplateId = new Stat(this, 702, 1234567890, false, false, false);
+            this.acgItemTemplateId2 = new Stat(this, 703, 1234567890, false, false, false);
+            this.actionCategory = new Stat(this, 588, 1234567890, false, false, false);
+            this.advantageHash1 = new Stat(this, 651, 1234567890, false, false, false);
+            this.advantageHash2 = new Stat(this, 652, 1234567890, false, false, false);
+            this.advantageHash3 = new Stat(this, 653, 1234567890, false, false, false);
+            this.advantageHash4 = new Stat(this, 654, 1234567890, false, false, false);
+            this.advantageHash5 = new Stat(this, 655, 1234567890, false, false, false);
+            this.adventuring = new StatSkill(this, 137, 5, true, false, false);
+            this.age = new Stat(this, 58, 0, false, false, false);
+            this.aggDef = new Stat(this, 51, 100, false, false, false);
+            this.aggressiveness = new Stat(this, 201, 1234567890, false, false, false);
+            this.agility = new Stat(this, 17, 0, true, false, false);
+            this.aimedShot = new StatSkill(this, 151, 5, true, false, false);
+            this.alienLevel = new Stat(this, 169, 0, false, false, false);
+            this.alienNextXP = new StatAlienNextXP(this, 178, 1500, true, false, false);
+            this.alienXP = new Stat(this, 40, 0, false, false, false);
+            this.alignment = new Stat(this, 62, 0, false, false, false);
+            this.ammoName = new Stat(this, 399, 1234567890, false, false, false);
+            this.ammoType = new Stat(this, 420, 1234567890, false, false, false);
+            this.ams = new Stat(this, 22, 1234567890, false, false, false);
+            this.amsCap = new Stat(this, 538, 1234567890, false, false, false);
+            this.amsModifier = new Stat(this, 276, 0, false, false, false);
+            this.anim = new Stat(this, 13, 1234567890, false, false, false);
+            this.animPlay = new Stat(this, 501, 1234567890, false, false, false);
+            this.animPos = new Stat(this, 500, 1234567890, false, false, false);
+            this.animSet = new Stat(this, 353, 1234567890, false, false, false);
+            this.animSpeed = new Stat(this, 502, 1234567890, false, false, false);
+            this.apartmentAccessCard = new Stat(this, 584, 1234567890, false, false, false);
+            this.apartmentsAllowed = new Stat(this, 582, 1, false, false, false);
+            this.apartmentsOwned = new Stat(this, 583, 0, false, false, false);
+            this.areaInstance = new Stat(this, 87, 1234567890, false, false, false);
+            this.areaType = new Stat(this, 86, 1234567890, false, false, false);
+            this.armourType = new Stat(this, 424, 1234567890, false, false, false);
+            this.assaultRifle = new StatSkill(this, 116, 5, true, false, false);
+            this.attackCount = new Stat(this, 36, 1234567890, false, false, false);
+            this.attackRange = new Stat(this, 287, 1234567890, false, false, false);
+            this.attackShield = new Stat(this, 516, 1234567890, false, false, false);
+            this.attackSpeed = new Stat(this, 3, 5, false, false, false);
+            this.attackType = new Stat(this, 354, 1234567890, false, false, false);
+            this.attitude = new Stat(this, 63, 0, false, false, false);
+            this.autoAttackFlags = new Stat(this, 349, 5, false, false, false);
+            this.autoLockTimeDefault = new Stat(this, 175, 1234567890, false, false, false);
+            this.autoUnlockTimeDefault = new Stat(this, 176, 1234567890, false, false, false);
+            this.backMesh = new Stat(this, 38, 0, false, false, false);
+            this.backstab = new Stat(this, 489, 1234567890, true, false, false);
+            this.bandolierSlots = new Stat(this, 46, 1234567890, false, false, false);
+            this.battlestationRep = new Stat(this, 670, 10, false, false, false);
+            this.battlestationSide = new Stat(this, 668, 0, false, false, false);
+            this.beltSlots = new Stat(this, 45, 0, false, false, false);
+            this.berserkMode = new Stat(this, 235, 1234567890, false, false, false);
+            this.biologicalMetamorphose = new StatSkill(this, 128, 5, true, false, false);
+            this.birthDate = new Stat(this, 248, 1234567890, false, false, false);
+            this.bodyDevelopment = new StatSkill(this, 152, 5, true, false, false);
+            this.bow = new StatSkill(this, 111, 5, true, false, false);
+            this.bowSpecialAttack = new StatSkill(this, 121, 5, true, false, false);
+            this.brainType = new Stat(this, 340, 1234567890, false, false, false);
+            this.brawl = new StatSkill(this, 142, 5, true, false, false);
+            this.breakingEntry = new StatSkill(this, 165, 5, true, false, false);
+            this.breed = new Stat(this, 4, 1234567890, false, false, false);
+            this.breedHostility = new Stat(this, 204, 1234567890, false, false, false);
+            this.breedLimit = new Stat(this, 320, 1234567890, false, false, false);
+            this.buildingComplexInst = new Stat(this, 188, 1234567890, false, false, false);
+            this.buildingInstance = new Stat(this, 185, 1234567890, false, false, false);
+            this.buildingType = new Stat(this, 184, 1234567890, false, false, false);
+            this.burst = new StatSkill(this, 148, 5, true, false, false);
+            this.burstRecharge = new Stat(this, 374, 1234567890, false, false, false);
+            this.buyModifier = new Stat(this, 426, 1234567890, false, false, false);
+            this.can = new Stat(this, 30, 1234567890, false, false, false);
+            this.canChangeClothes = new Stat(this, 223, 1234567890, false, false, false);
+            this.cardOwnerInstance = new Stat(this, 187, 1234567890, false, false, false);
+            this.cardOwnerType = new Stat(this, 186, 1234567890, false, false, false);
+            this.cash = new Stat(this, 61, 0, false, false, false);
+            this.castEffectType = new Stat(this, 428, 1234567890, false, false, false);
+            this.castSelfAbstractAnim = new Stat(this, 378, 1234567890, false, false, false);
+            this.castSound = new Stat(this, 270, 1234567890, false, false, false);
+            this.castTargetAbstractAnim = new Stat(this, 377, 1234567890, false, false, false);
+            this.catAnim = new Stat(this, 401, 1234567890, false, false, false);
+            this.catAnimFlags = new Stat(this, 402, 1234567890, false, false, false);
+            this.catMesh = new Stat(this, 42, 1234567890, false, false, false);
+            this.chanceOfBreakOnDebuff = new Stat(this, 386, 1234567890, false, false, false);
+            this.chanceOfBreakOnSpellAttack = new Stat(this, 385, 1234567890, false, false, false);
+            this.chanceOfUse = new Stat(this, 422, 1234567890, false, false, false);
+            this.changeSideCount = new Stat(this, 237, 0, false, false, false);
+            this.charRadius = new Stat(this, 421, 1234567890, false, false, false);
+            this.charState = new Stat(this, 434, 1234567890, false, false, false);
+            this.charTmp1 = new Stat(this, 441, 1234567890, false, false, false);
+            this.charTmp2 = new Stat(this, 442, 1234567890, false, false, false);
+            this.charTmp3 = new Stat(this, 443, 1234567890, false, false, false);
+            this.charTmp4 = new Stat(this, 444, 1234567890, false, false, false);
+            this.chemicalAC = new Stat(this, 93, 0, true, false, false);
+            this.chemicalDamageModifier = new Stat(this, 281, 0, false, false, false);
+            this.chemistry = new StatSkill(this, 163, 5, true, false, false);
+            this.chestFlags = new Stat(this, 394, 1234567890, false, false, false);
+            this.cityInstance = new Stat(this, 640, 1234567890, false, false, false);
+            this.cityTerminalRechargePercent = new Stat(this, 642, 1234567890, false, false, false);
+            this.clan = new Stat(this, 5, 0, false, false, false);
+            this.clanConserver = new Stat(this, 571, 0, false, false, false);
+            this.clanDevoted = new Stat(this, 570, 0, false, false, false);
+            this.clanFinalized = new Stat(this, 314, 1234567890, false, false, false);
+            this.clanGaia = new Stat(this, 563, 0, false, false, false);
+            this.clanHierarchy = new Stat(this, 260, 1234567890, false, false, false);
+            this.clanInstance = new Stat(this, 305, 1234567890, false, false, false);
+            this.clanItemInstance = new Stat(this, 331, 1234567890, false, false, false);
+            this.clanItemType = new Stat(this, 330, 1234567890, false, false, false);
+            this.clanLevel = new Stat(this, 48, 1234567890, false, false, false);
+            this.clanPrice = new Stat(this, 302, 1234567890, false, false, false);
+            this.clanRedeemed = new Stat(this, 572, 0, false, false, false);
+            this.clanSentinels = new Stat(this, 561, 0, false, false, false);
+            this.clanType = new Stat(this, 304, 1234567890, false, false, false);
+            this.clanUpkeepInterval = new Stat(this, 312, 1234567890, false, false, false);
+            this.clanVanguards = new Stat(this, 565, 0, false, false, false);
+            this.clientActivated = new Stat(this, 262, 1234567890, false, false, false);
+            this.closeCombatInitiative = new StatSkill(this, 118, 5, true, false, false);
+            this.coldAC = new Stat(this, 95, 0, true, false, false);
+            this.coldDamageModifier = new Stat(this, 311, 1234567890, false, false, false);
+            this.collideCheckInterval = new Stat(this, 437, 1234567890, false, false, false);
+            this.collisionRadius = new Stat(this, 357, 1234567890, false, false, false);
+            this.commandRange = new Stat(this, 456, 1234567890, false, false, false);
+            this.compulsion = new Stat(this, 328, 1234567890, false, false, false);
+            this.computerLiteracy = new StatSkill(this, 161, 5, true, false, false);
+            this.concealment = new StatSkill(this, 164, 5, true, false, false);
+            this.conditionState = new Stat(this, 530, 1234567890, false, false, false);
+            this.conformity = new Stat(this, 200, 1234567890, false, false, false);
+            this.corpseAnimKey = new Stat(this, 417, 1234567890, false, false, false);
+            this.corpseHash = new Stat(this, 398, 1234567890, false, false, false);
+            this.corpseInstance = new Stat(this, 416, 1234567890, false, false, false);
+            this.corpseType = new Stat(this, 415, 1234567890, false, false, false);
+            this.criticalDecrease = new Stat(this, 391, 1234567890, false, false, false);
+            this.criticalIncrease = new Stat(this, 379, 1234567890, false, false, false);
+            this.currBodyLocation = new Stat(this, 220, 0, false, false, false);
+            this.currentMass = new Stat(this, 78, 0, false, false, false);
+            this.currentMovementMode = new Stat(this, 173, 3, false, false, false);
+            this.currentNCU = new Stat(this, 180, 0, false, false, false);
+            this.currentNano = new StatCurrentNano(this, 214, 1, true, false, false);
+            this.currentPlayfield = new Stat(this, 589, 1234567890, false, false, false);
+            this.currentState = new Stat(this, 423, 0, false, false, false);
+            this.currentTime = new Stat(this, 578, 1234567890, false, false, false);
+            this.damageBonus = new Stat(this, 284, 1234567890, false, false, false);
+            this.damageOverrideType = new Stat(this, 339, 1234567890, false, false, false);
+            this.damageToNano = new Stat(this, 659, 1234567890, false, false, false);
+            this.damageToNanoMultiplier = new Stat(this, 661, 1234567890, false, false, false);
+            this.damageType = new Stat(this, 436, 1234567890, false, false, false);
+            this.deadTimer = new Stat(this, 34, 0, false, false, false);
+            this.deathReason = new Stat(this, 338, 1234567890, false, false, false);
+            this.debuffFormula = new Stat(this, 332, 1234567890, false, false, false);
+            this.defaultAttackType = new Stat(this, 292, 1234567890, false, false, false);
+            this.defaultPos = new Stat(this, 88, 1234567890, false, false, false);
+            this.desiredTargetDistance = new Stat(this, 447, 1234567890, false, false, false);
+            this.dieAnim = new Stat(this, 387, 1234567890, false, false, false);
+            this.dimach = new StatSkill(this, 144, 5, true, false, false);
+            this.disarmTrap = new StatSkill(this, 135, 5, true, false, false);
+            this.displayCATAnim = new Stat(this, 403, 1234567890, false, false, false);
+            this.displayCATMesh = new Stat(this, 404, 1234567890, false, false, false);
+            this.distanceToSpawnpoint = new Stat(this, 641, 1234567890, false, false, false);
+            this.distanceWeaponInitiative = new StatSkill(this, 119, 5, true, false, false);
+            this.districtNano = new Stat(this, 590, 1234567890, false, false, false);
+            this.districtNanoInterval = new Stat(this, 591, 1234567890, false, false, false);
+            this.dms = new Stat(this, 29, 1234567890, false, false, false);
+            this.dmsModifier = new Stat(this, 277, 0, false, false, false);
+            this.dodge = new StatSkill(this, 154, 5, true, false, false);
+            this.doorBlockTime = new Stat(this, 335, 1234567890, false, false, false);
+            this.doorFlags = new Stat(this, 259, 1234567890, false, false, false);
+            this.driveAir = new StatSkill(this, 139, 5, true, false, false);
+            this.driveGround = new StatSkill(this, 166, 5, true, false, false);
+            this.driveWater = new StatSkill(this, 117, 5, true, false, false);
+            this.duck = new StatSkill(this, 153, 5, true, false, false);
+            this.dudChance = new Stat(this, 534, 1234567890, false, false, false);
+            this.durationModifier = new Stat(this, 464, 1234567890, false, false, false);
+            this.effectBlue = new Stat(this, 462, 1234567890, false, false, false);
+            this.effectGreen = new Stat(this, 461, 1234567890, false, false, false);
+            this.effectIcon = new Stat(this, 183, 1234567890, false, false, false);
+            this.effectRed = new Stat(this, 460, 1234567890, false, false, false);
+            this.effectType = new Stat(this, 413, 1234567890, false, false, false);
+            this.electricalEngineering = new StatSkill(this, 126, 5, true, false, false);
+            this.energy = new Stat(this, 26, 1234567890, false, false, false);
+            this.energyAC = new Stat(this, 92, 0, true, false, false);
+            this.energyDamageModifier = new Stat(this, 280, 0, false, false, false);
+            this.equipDelay = new Stat(this, 211, 1234567890, false, false, false);
+            this.equippedWeapons = new Stat(this, 274, 1234567890, false, false, false);
+            this.evade = new StatSkill(this, 155, 5, true, false, false);
+            this.exitInstance = new Stat(this, 189, 1234567890, false, false, false);
+            this.expansion = new Stat(this, 389, 0, false, true, false);
+            this.expansionPlayfield = new Stat(this, 531, 1234567890, false, false, false);
+            this.extenalDoorInstance = new Stat(this, 193, 1234567890, false, false, false);
+            this.extenalPlayfieldInstance = new Stat(this, 192, 1234567890, false, false, false);
+            this.extendedFlags = new Stat(this, 598, 1234567890, false, false, false);
+            this.extendedTime = new Stat(this, 373, 1234567890, false, false, false);
+            this.extroverty = new Stat(this, 203, 1234567890, false, false, false);
+            this.fabricType = new Stat(this, 41, 1234567890, false, false, false);
+            this.face = new Stat(this, 31, 1234567890, false, false, false);
+            this.faceTexture = new Stat(this, 347, 1234567890, false, false, false);
+            this.factionModifier = new Stat(this, 543, 1234567890, false, false, false);
+            this.fallDamage = new Stat(this, 474, 1234567890, false, false, false);
+            this.fastAttack = new StatSkill(this, 147, 5, true, false, false);
+            this.fatness = new Stat(this, 47, 1234567890, false, false, false);
+            this.features = new Stat(this, 224, 6, false, false, false);
+            this.fieldQuantumPhysics = new StatSkill(this, 157, 5, true, false, false);
+            this.fireAC = new Stat(this, 97, 0, true, false, false);
+            this.fireDamageModifier = new Stat(this, 316, 0, false, false, false);
+            this.firstAid = new StatSkill(this, 123, 5, true, false, false);
+            this.fixtureFlags = new Stat(this, 473, 1234567890, false, false, false);
+            this.flags = new Stat(this, 0, 8917569, false, false, true);
+            this.flingShot = new StatSkill(this, 150, 5, true, false, false);
+            this.fullAuto = new StatSkill(this, 167, 5, true, false, false);
+            this.fullAutoRecharge = new Stat(this, 375, 1234567890, false, false, false);
+            this.gatherAbstractAnim = new Stat(this, 376, 1234567890, false, false, false);
+            this.gatherEffectType = new Stat(this, 366, 1234567890, false, false, false);
+            this.gatherSound = new Stat(this, 269, 1234567890, false, false, false);
+            this.genderLimit = new Stat(this, 321, 1234567890, false, false, false);
+            this.globalClanInstance = new Stat(this, 310, 1234567890, false, false, false);
+            this.globalClanType = new Stat(this, 309, 1234567890, false, false, false);
+            this.globalResearchGoal = new Stat(this, 266, 0, false, false, false);
+            this.globalResearchLevel = new Stat(this, 264, 0, false, false, false);
+            this.gmLevel = new Stat(this, 215, 0, false, true, false);
+            this.gos = new Stat(this, 566, 0, false, false, false);
+            this.grenade = new StatSkill(this, 109, 5, true, false, false);
+            this.hairMesh = new Stat(this, 32, 0, false, false, false);
+            this.hasAlwaysLootable = new Stat(this, 345, 1234567890, false, false, false);
+            this.hasKnuBotData = new Stat(this, 768, 1234567890, false, false, false);
+            this.hateValueModifyer = new Stat(this, 288, 1234567890, false, false, false);
+            this.headMesh = new Stat(this, 64, 0, false, false, false);
+            this.healDelta = new StatHealDelta(this, 343, 1234567890, true, false, false);
+            this.healInterval = new StatHealInterval(this, 342, 29, true, false, false);
+            this.healMultiplier = new Stat(this, 535, 1234567890, false, false, false);
+            this.health = new StatHitPoints(this, 27, 1, true, false, true);
+            this.healthChange = new Stat(this, 172, 1234567890, false, false, false);
+            this.healthChangeBest = new Stat(this, 170, 1234567890, false, false, false);
+            this.healthChangeWorst = new Stat(this, 171, 1234567890, false, false, false);
+            this.height = new Stat(this, 28, 1234567890, false, false, false);
+            this.hitEffectType = new Stat(this, 361, 1234567890, false, false, false);
+            this.hitSound = new Stat(this, 272, 1234567890, false, false, false);
+            this.houseTemplate = new Stat(this, 620, 1234567890, false, false, false);
+            this.hpLevelUp = new Stat(this, 601, 1234567890, false, false, false);
+            this.hpPerSkill = new Stat(this, 602, 1234567890, false, false, false);
+            this.icon = new Stat(this, 79, 0, false, false, false);
+            this.impactEffectType = new Stat(this, 414, 1234567890, false, false, false);
+            this.inPlay = new Stat(this, 194, 0, false, false, false);
+            this.info = new Stat(this, 15, 1234567890, false, false, false);
+            this.initiativeType = new Stat(this, 440, 1234567890, false, false, false);
+            this.instance = new Stat(this, 1002, 1234567890, false, true, false);
+            this.insurancePercentage = new Stat(this, 236, 0, false, false, false);
+            this.insuranceTime = new Stat(this, 49, 0, false, false, false);
+            this.intelligence = new Stat(this, 19, 0, true, false, false);
+            this.interactionRadius = new Stat(this, 297, 1234567890, false, false, false);
+            this.interruptModifier = new Stat(this, 383, 1234567890, false, false, false);
+            this.invadersKilled = new Stat(this, 615, 0, false, false, false);
+            this.inventoryId = new Stat(this, 55, 1234567890, false, false, false);
+            this.inventoryTimeout = new Stat(this, 50, 1234567890, false, false, false);
+            this.ip = new StatIp(this, 53, 1500, true, false, false);
+            this.isFightingMe = new Stat(this, 410, 0, false, false, false);
+            this.isVehicle = new Stat(this, 658, 1234567890, false, false, false);
+            this.itemAnim = new Stat(this, 99, 1234567890, true, false, false);
+            this.itemClass = new Stat(this, 76, 1234567890, false, false, false);
+            this.itemDelay = new Stat(this, 294, 1234567890, false, false, false);
+            this.itemDelayCap = new Stat(this, 523, 1234567890, false, false, false);
+            this.itemHateValue = new Stat(this, 283, 1234567890, false, false, false);
+            this.itemOpposedSkill = new Stat(this, 295, 1234567890, false, false, false);
+            this.itemSIS = new Stat(this, 296, 1234567890, false, false, false);
+            this.itemSkill = new Stat(this, 293, 1234567890, false, false, false);
+            this.itemType = new Stat(this, 72, 0, false, false, false);
+            this.killedByInvaders = new Stat(this, 616, 0, false, false, false);
+            this.lastConcretePlayfieldInstance = new Stat(this, 191, 0, false, false, false);
+            this.lastMailCheckTime = new Stat(this, 650, 1283065897, false, false, false);
+            this.lastPerkResetTime = new Stat(this, 577, 0, false, false, false);
+            this.lastRnd = new Stat(this, 522, 1234567890, false, false, false);
+            this.lastSK = new Stat(this, 574, 0, false, false, false);
+            this.lastSaveXP = new Stat(this, 372, 0, false, false, false);
+            this.lastSaved = new Stat(this, 249, 1234567890, false, false, false);
+            this.lastXP = new Stat(this, 57, 0, false, false, false);
+            this.leaderLockDownTime = new Stat(this, 614, 1234567890, false, false, false);
+            this.level = new Stat(this, 54, 1234567890, false, false, false);
+            this.levelLimit = new Stat(this, 322, 1234567890, false, false, false);
+            this.life = new StatLife(this, 1, 1, true, false, false);
+            this.liquidType = new Stat(this, 268, 1234567890, false, false, false);
+            this.lockDifficulty = new Stat(this, 299, 1234567890, false, false, false);
+            this.lockDownTime = new Stat(this, 613, 1234567890, false, false, false);
+            this.losHeight = new Stat(this, 466, 1234567890, false, false, false);
+            this.lowresMesh = new Stat(this, 390, 1234567890, false, false, false);
+            this.lrEnergyWeapon = new StatSkill(this, 133, 5, true, false, false);
+            this.lrMultipleWeapon = new StatSkill(this, 134, 5, true, false, false);
+            this.mapAreaPart1 = new Stat(this, 471, 0, false, false, false);
+            this.mapAreaPart2 = new Stat(this, 472, 0, false, false, false);
+            this.mapAreaPart3 = new Stat(this, 585, 0, false, false, false);
+            this.mapAreaPart4 = new Stat(this, 586, 0, false, false, false);
+            this.mapFlags = new Stat(this, 9, 0, false, false, false);
+            this.mapNavigation = new StatSkill(this, 140, 5, true, false, false);
+            this.mapOptions = new Stat(this, 470, 0, false, false, false);
+            this.martialArts = new StatSkill(this, 100, 5, true, false, false);
+            this.materialCreation = new StatSkill(this, 130, 5, true, false, false);
+            this.materialLocation = new StatSkill(this, 131, 5, true, false, false);
+            this.materialMetamorphose = new StatSkill(this, 127, 5, true, false, false);
+            this.maxDamage = new Stat(this, 285, 1234567890, false, false, false);
+            this.maxEnergy = new Stat(this, 212, 1234567890, false, false, false);
+            this.maxMass = new Stat(this, 24, 1234567890, false, false, false);
+            this.maxNCU = new Stat(this, 181, 8, false, false, false);
+            this.maxNanoEnergy = new StatMaxNanoEnergy(this, 221, 1, false, false, false);
+            this.maxShopItems = new Stat(this, 606, 1234567890, false, false, false);
+            this.mechData = new Stat(this, 662, 0, false, false, false);
+            this.mechanicalEngineering = new StatSkill(this, 125, 5, true, false, false);
+            this.meleeAC = new Stat(this, 91, 0, true, false, false);
+            this.meleeDamageModifier = new Stat(this, 279, 0, false, false, false);
+            this.meleeEnergyWeapon = new StatSkill(this, 104, 5, true, false, false);
+            this.meleeMultiple = new StatSkill(this, 101, 5, true, false, false);
+            this.memberInstance = new Stat(this, 308, 1234567890, false, false, false);
+            this.memberType = new Stat(this, 307, 1234567890, false, false, false);
+            this.members = new Stat(this, 300, 999, false, false, false);
+            this.mesh = new Stat(this, 12, 17530, false, false, false);
+            this.metaType = new Stat(this, 75, 0, false, false, false);
+            this.metersWalked = new Stat(this, 252, 1234567890, false, false, false);
+            this.minDamage = new Stat(this, 286, 1234567890, false, false, false);
+            this.minMembers = new Stat(this, 301, 1234567890, false, false, false);
+            this.missionBits1 = new Stat(this, 256, 0, false, false, false);
+            this.missionBits10 = new Stat(this, 617, 0, false, false, false);
+            this.missionBits11 = new Stat(this, 618, 0, false, false, false);
+            this.missionBits12 = new Stat(this, 619, 0, false, false, false);
+            this.missionBits2 = new Stat(this, 257, 0, false, false, false);
+            this.missionBits3 = new Stat(this, 303, 0, false, false, false);
+            this.missionBits4 = new Stat(this, 432, 0, false, false, false);
+            this.missionBits5 = new Stat(this, 65, 0, false, false, false);
+            this.missionBits6 = new Stat(this, 66, 0, false, false, false);
+            this.missionBits7 = new Stat(this, 67, 0, false, false, false);
+            this.missionBits8 = new Stat(this, 544, 0, false, false, false);
+            this.missionBits9 = new Stat(this, 545, 0, false, false, false);
+            this.monsterData = new Stat(this, 359, 0, false, false, true);
+            this.monsterLevelsKilled = new Stat(this, 254, 1234567890, false, false, false);
+            this.monsterScale = new Stat(this, 360, 1234567890, false, false, true);
+            this.monsterTexture = new Stat(this, 344, 1234567890, false, false, false);
+            this.monthsPaid = new Stat(this, 69, 0, false, false, false);
+            this.moreFlags = new Stat(this, 177, 1234567890, false, false, true);
+            this.multipleCount = new Stat(this, 412, 1234567890, false, false, false);
+            this.name = new Stat(this, 14, 1234567890, false, false, false);
+            this.nameTemplate = new Stat(this, 446, 1234567890, false, false, false);
+            this.nanoAC = new StatSkill(this, 168, 5, true, false, false);
+            this.nanoDamageModifier = new Stat(this, 315, 0, false, false, false);
+            this.nanoDamageMultiplier = new Stat(this, 536, 0, false, false, false);
+            this.nanoDelta = new StatNanoDelta(this, 364, 1234567890, true, false, false);
+            this.nanoEnergyPool = new StatSkill(this, 132, 5, true, false, false);
+            this.nanoFocusLevel = new Stat(this, 355, 0, false, false, false);
+            this.nanoInterval = new StatNanoInterval(this, 363, 28, true, false, false);
+            this.nanoPoints = new Stat(this, 407, 1234567890, false, false, false);
+            this.nanoProgramming = new StatSkill(this, 160, 5, true, false, false);
+            this.nanoProwessInitiative = new StatSkill(this, 149, 5, true, false, false);
+            this.nanoSpeed = new Stat(this, 406, 1234567890, false, false, false);
+            this.nanoVulnerability = new Stat(this, 537, 1234567890, false, false, false);
+            this.newbieHP = new Stat(this, 600, 1234567890, false, false, false);
+            this.newbieNP = new Stat(this, 603, 1234567890, false, false, false);
+            this.nextDoorInBuilding = new Stat(this, 190, 1234567890, false, false, false);
+            this.nextFormula = new Stat(this, 411, 1234567890, false, false, false);
+            this.nextSK = new StatNextSK(this, 575, 0, true, false, false);
+            this.nextXP = new StatNextXP(this, 350, 1450, true, false, false);
+            this.npCostModifier = new Stat(this, 318, 0, false, false, false);
+            this.npLevelUp = new Stat(this, 604, 1234567890, false, false, false);
+            this.npPerSkill = new Stat(this, 605, 1234567890, false, false, false);
+            this.npcBrainState = new Stat(this, 429, 1234567890, false, false, false);
+            this.npcCommand = new Stat(this, 439, 1234567890, false, false, false);
+            this.npcCommandArg = new Stat(this, 445, 1234567890, false, false, false);
+            this.npcCryForHelpRange = new Stat(this, 465, 1234567890, false, false, false);
+            this.npcFamily = new Stat(this, 455, 1234567890, false, false, false);
+            this.npcFlags = new Stat(this, 179, 1234567890, false, false, false);
+            this.npcFovStatus = new Stat(this, 533, 1234567890, false, false, false);
+            this.npcHasPatrolList = new Stat(this, 452, 1234567890, false, false, false);
+            this.npcHash = new Stat(this, 356, 1234567890, false, false, false);
+            this.npcHatelistSize = new Stat(this, 457, 1234567890, false, false, false);
+            this.npcIsSurrendering = new Stat(this, 449, 1234567890, false, false, false);
+            this.npcNumPets = new Stat(this, 458, 1234567890, false, false, false);
+            this.npcScriptAmsScale = new Stat(this, 581, 1234567890, false, false, false);
+            this.npcSpellArg1 = new Stat(this, 638, 1234567890, false, false, false);
+            this.npcSpellRet1 = new Stat(this, 639, 1234567890, false, false, false);
+            this.npcSurrenderInstance = new Stat(this, 451, 1234567890, false, false, false);
+            this.npcUseFightModeRegenRate = new Stat(this, 519, 1234567890, false, false, false);
+            this.npcVicinityChars = new Stat(this, 453, 1234567890, false, false, false);
+            this.npcVicinityFamily = new Stat(this, 580, 1234567890, false, false, false);
+            this.npcVicinityPlayers = new Stat(this, 518, 1234567890, false, false, false);
+            this.numAttackEffects = new Stat(this, 291, 1234567890, false, false, false);
+            this.numberOfItems = new Stat(this, 396, 1234567890, false, false, false);
+            this.numberOfTeamMembers = new Stat(this, 587, 1234567890, false, false, false);
+            this.numberOnHateList = new Stat(this, 529, 1234567890, false, false, false);
+            this.objectType = new Stat(this, 1001, 1234567890, false, true, false);
+            this.odMaxSizeAdd = new Stat(this, 463, 1234567890, false, false, false);
+            this.odMinSizeAdd = new Stat(this, 459, 1234567890, false, false, false);
+            this.oldTimeExist = new Stat(this, 392, 1234567890, false, false, false);
+            this.onTowerCreation = new Stat(this, 513, 1234567890, false, false, false);
+            this.onehBluntWeapons = new StatSkill(this, 102, 5, true, false, false);
+            this.onehEdgedWeapon = new StatSkill(this, 103, 5, true, false, false);
+            this.orientationMode = new Stat(this, 197, 1234567890, false, false, false);
+            this.originatorType = new Stat(this, 490, 1234567890, false, false, false);
+            this.otArmedForces = new Stat(this, 560, 0, false, false, false);
+            this.otFollowers = new Stat(this, 567, 0, false, false, false);
+            this.otMed = new Stat(this, 562, 1234567890, false, false, false);
+            this.otOperator = new Stat(this, 568, 0, false, false, false);
+            this.otTrans = new Stat(this, 564, 0, false, false, false);
+            this.otUnredeemed = new Stat(this, 569, 0, false, false, false);
+            this.outerRadius = new Stat(this, 358, 1234567890, false, false, false);
+            this.overrideMaterial = new Stat(this, 337, 1234567890, false, false, false);
+            this.overrideTexture = new Stat(this, 336, 1234567890, false, false, false);
+            this.overrideTextureAttractor = new Stat(this, 1014, 0, false, false, false);
+            this.overrideTextureBack = new Stat(this, 1013, 0, false, false, false);
+            this.overrideTextureHead = new Stat(this, 1008, 0, false, false, false);
+            this.overrideTextureShoulderpadLeft = new Stat(this, 1012, 0, false, false, false);
+            this.overrideTextureShoulderpadRight = new Stat(this, 1011, 0, false, false, false);
+            this.overrideTextureWeaponLeft = new Stat(this, 1010, 0, false, false, false);
+            this.overrideTextureWeaponRight = new Stat(this, 1009, 0, false, false, false);
+            this.ownedTowers = new Stat(this, 514, 1234567890, false, false, false);
+            this.ownerInstance = new Stat(this, 433, 1234567890, false, false, false);
+            this.paidPoints = new Stat(this, 672, 0, false, false, false);
+            this.parentInstance = new Stat(this, 44, 1234567890, false, false, false);
+            this.parentType = new Stat(this, 43, 1234567890, false, false, false);
+            this.parry = new StatSkill(this, 145, 5, true, false, false);
+            this.percentChemicalDamage = new Stat(this, 628, 1234567890, false, false, false);
+            this.percentColdDamage = new Stat(this, 622, 1234567890, false, false, false);
+            this.percentEnergyDamage = new Stat(this, 627, 1234567890, false, false, false);
+            this.percentFireDamage = new Stat(this, 621, 1234567890, false, false, false);
+            this.percentMeleeDamage = new Stat(this, 623, 1234567890, false, false, false);
+            this.percentPoisonDamage = new Stat(this, 625, 1234567890, false, false, false);
+            this.percentProjectileDamage = new Stat(this, 624, 1234567890, false, false, false);
+            this.percentRadiationDamage = new Stat(this, 626, 1234567890, false, false, false);
+            this.percentRemainingHealth = new Stat(this, 525, 1234567890, false, false, false);
+            this.percentRemainingNano = new Stat(this, 526, 1234567890, false, false, false);
+            this.perception = new StatSkill(this, 136, 5, true, false, false);
+            this.personalResearchGoal = new Stat(this, 265, 0, false, false, false);
+            this.personalResearchLevel = new Stat(this, 263, 0, false, false, false);
+            this.petCounter = new Stat(this, 251, 1234567890, false, false, false);
+            this.petMaster = new Stat(this, 196, 1234567890, false, false, false);
+            this.petReq1 = new Stat(this, 467, 1234567890, false, false, false);
+            this.petReq2 = new Stat(this, 468, 1234567890, false, false, false);
+            this.petReq3 = new Stat(this, 469, 1234567890, false, false, false);
+            this.petReqVal1 = new Stat(this, 485, 1234567890, false, false, false);
+            this.petReqVal2 = new Stat(this, 486, 1234567890, false, false, false);
+            this.petReqVal3 = new Stat(this, 487, 1234567890, false, false, false);
+            this.petState = new Stat(this, 671, 1234567890, false, false, false);
+            this.petType = new Stat(this, 512, 1234567890, false, false, false);
+            this.pharmaceuticals = new StatSkill(this, 159, 5, true, false, false);
+            this.physicalProwessInitiative = new StatSkill(this, 120, 5, true, false, false);
+            this.piercing = new StatSkill(this, 106, 5, true, false, false);
+            this.pistol = new StatSkill(this, 112, 5, true, false, false);
+            this.placement = new Stat(this, 298, 1234567890, false, false, false);
+            this.playerId = new Stat(this, 607, 1234567890, false, true, false);
+            this.playerKilling = new Stat(this, 323, 1234567890, false, false, false);
+            this.playerOptions = new Stat(this, 576, 0, false, false, false);
+            this.playfieldType = new Stat(this, 438, 1234567890, false, false, false);
+            this.poisonAC = new Stat(this, 96, 0, true, false, false);
+            this.poisonDamageModifier = new Stat(this, 317, 0, false, false, false);
+            this.prevMovementMode = new Stat(this, 174, 3, false, false, false);
+            this.previousHealth = new Stat(this, 11, 50, false, false, false);
+            this.price = new Stat(this, 74, 1234567890, false, false, false);
+            this.primaryItemInstance = new Stat(this, 81, 1234567890, false, false, false);
+            this.primaryItemType = new Stat(this, 80, 1234567890, false, false, false);
+            this.primaryTemplateId = new Stat(this, 395, 1234567890, false, false, false);
+            this.procChance1 = new Stat(this, 556, 1234567890, false, false, false);
+            this.procChance2 = new Stat(this, 557, 1234567890, false, false, false);
+            this.procChance3 = new Stat(this, 558, 1234567890, false, false, false);
+            this.procChance4 = new Stat(this, 559, 1234567890, false, false, false);
+            this.procInitiative1 = new Stat(this, 539, 1234567890, false, false, false);
+            this.procInitiative2 = new Stat(this, 540, 1234567890, false, false, false);
+            this.procInitiative3 = new Stat(this, 541, 1234567890, false, false, false);
+            this.procInitiative4 = new Stat(this, 542, 1234567890, false, false, false);
+            this.procNano1 = new Stat(this, 552, 1234567890, false, false, false);
+            this.procNano2 = new Stat(this, 553, 1234567890, false, false, false);
+            this.procNano3 = new Stat(this, 554, 1234567890, false, false, false);
+            this.procNano4 = new Stat(this, 555, 1234567890, false, false, false);
+            this.profession = new Stat(this, 60, 1234567890, false, false, false);
+            this.professionLevel = new Stat(this, 10, 1234567890, false, true, false);
+            this.projectileAC = new Stat(this, 90, 0, true, false, false);
+            this.projectileDamageModifier = new Stat(this, 278, 0, false, false, false);
+            this.proximityRangeIndoors = new Stat(this, 484, 1234567890, false, false, false);
+            this.proximityRangeOutdoors = new Stat(this, 454, 1234567890, false, false, false);
+            this.psychic = new Stat(this, 21, 0, true, false, false);
+            this.psychologicalModification = new StatSkill(this, 129, 5, true, false, false);
+            this.psychology = new StatSkill(this, 162, 5, true, false, false);
+            this.pvPLevelsKilled = new Stat(this, 255, 1234567890, false, false, false);
+            this.pvpDuelDeaths = new Stat(this, 675, 0, false, false, false);
+            this.pvpDuelKills = new Stat(this, 674, 0, false, false, false);
+            this.pvpDuelScore = new Stat(this, 684, 0, false, false, false);
+            this.pvpProfessionDuelDeaths = new Stat(this, 677, 0, false, false, false);
+            this.pvpProfessionDuelKills = new Stat(this, 676, 0, false, false, false);
+            this.pvpRankedSoloDeaths = new Stat(this, 679, 0, false, false, false);
+            this.pvpRankedSoloKills = new Stat(this, 678, 0, false, false, false);
+            this.pvpRankedTeamDeaths = new Stat(this, 681, 0, false, false, false);
+            this.pvpRankedTeamKills = new Stat(this, 680, 0, false, false, false);
+            this.pvpRating = new Stat(this, 333, 1300, false, false, false);
+            this.pvpSoloScore = new Stat(this, 682, 0, false, false, false);
+            this.pvpTeamScore = new Stat(this, 683, 0, false, false, false);
+            this.qtDungeonInstance = new Stat(this, 497, 1234567890, false, false, false);
+            this.qtKillNumMonsterCount1 = new Stat(this, 504, 1234567890, false, false, false);
+            this.qtKillNumMonsterCount2 = new Stat(this, 506, 1234567890, false, false, false);
+            this.qtKillNumMonsterCount3 = new Stat(this, 508, 1234567890, false, false, false);
+            this.qtKillNumMonsterID3 = new Stat(this, 507, 1234567890, false, false, false);
+            this.qtKillNumMonsterId1 = new Stat(this, 503, 1234567890, false, false, false);
+            this.qtKillNumMonsterId2 = new Stat(this, 505, 1234567890, false, false, false);
+            this.qtKilledMonsters = new Stat(this, 499, 1234567890, false, false, false);
+            this.qtNumMonsters = new Stat(this, 498, 1234567890, false, false, false);
+            this.questAsMaximumRange = new Stat(this, 802, 1234567890, false, false, false);
+            this.questAsMinimumRange = new Stat(this, 801, 1234567890, false, false, false);
+            this.questBoothDifficulty = new Stat(this, 800, 1234567890, false, false, false);
+            this.questIndex0 = new Stat(this, 509, 1234567890, false, false, false);
+            this.questIndex1 = new Stat(this, 492, 1234567890, false, false, false);
+            this.questIndex2 = new Stat(this, 493, 1234567890, false, false, false);
+            this.questIndex3 = new Stat(this, 494, 1234567890, false, false, false);
+            this.questIndex4 = new Stat(this, 495, 1234567890, false, false, false);
+            this.questIndex5 = new Stat(this, 496, 1234567890, false, false, false);
+            this.questInstance = new Stat(this, 491, 1234567890, false, false, false);
+            this.questLevelsSolved = new Stat(this, 253, 1234567890, false, false, false);
+            this.questStat = new Stat(this, 261, 1234567890, false, false, false);
+            this.questTimeout = new Stat(this, 510, 1234567890, false, false, false);
+            this.race = new Stat(this, 89, 1, false, false, false);
+            this.radiationAC = new Stat(this, 94, 0, true, false, false);
+            this.radiationDamageModifier = new Stat(this, 282, 0, false, false, false);
+            this.rangeIncreaserNF = new Stat(this, 381, 0, false, false, false);
+            this.rangeIncreaserWeapon = new Stat(this, 380, 0, false, false, false);
+            this.readOnly = new Stat(this, 435, 1234567890, false, false, false);
+            this.rechargeDelay = new Stat(this, 210, 1234567890, false, false, false);
+            this.rechargeDelayCap = new Stat(this, 524, 1234567890, false, false, false);
+            this.reclaimItem = new Stat(this, 365, 1234567890, false, false, false);
+            this.reflectChemicalAC = new Stat(this, 208, 0, true, false, false);
+            this.reflectColdAC = new Stat(this, 217, 0, true, false, false);
+            this.reflectEnergyAC = new Stat(this, 207, 0, true, false, false);
+            this.reflectFireAC = new Stat(this, 219, 0, true, false, false);
+            this.reflectMeleeAC = new Stat(this, 206, 0, true, false, false);
+            this.reflectNanoAC = new Stat(this, 218, 0, true, false, false);
+            this.reflectPoisonAC = new Stat(this, 225, 0, false, false, false);
+            this.reflectProjectileAC = new Stat(this, 205, 0, true, false, false);
+            this.reflectRadiationAC = new Stat(this, 216, 0, true, false, false);
+            this.reflectReturnedChemicalAC = new Stat(this, 478, 0, false, false, false);
+            this.reflectReturnedColdAC = new Stat(this, 480, 0, false, false, false);
+            this.reflectReturnedEnergyAC = new Stat(this, 477, 0, false, false, false);
+            this.reflectReturnedFireAC = new Stat(this, 482, 0, false, false, false);
+            this.reflectReturnedMeleeAC = new Stat(this, 476, 0, false, false, false);
+            this.reflectReturnedNanoAC = new Stat(this, 481, 0, false, false, false);
+            this.reflectReturnedPoisonAC = new Stat(this, 483, 0, false, false, false);
+            this.reflectReturnedProjectileAC = new Stat(this, 475, 0, false, false, false);
+            this.reflectReturnedRadiationAC = new Stat(this, 479, 0, false, false, false);
+            this.regainXPPercentage = new Stat(this, 593, 0, false, false, false);
+            this.repairDifficulty = new Stat(this, 73, 1234567890, false, false, false);
+            this.repairSkill = new Stat(this, 77, 1234567890, false, false, false);
+            this.resistModifier = new Stat(this, 393, 1234567890, false, false, false);
+            this.restModifier = new Stat(this, 425, 1234567890, false, false, false);
+            this.resurrectDest = new Stat(this, 362, 1234567890, false, false, false);
+            this.rifle = new StatSkill(this, 113, 5, true, false, false);
+            this.riposte = new StatSkill(this, 143, 5, true, false, false);
+            this.ritualTargetInst = new Stat(this, 370, 1234567890, false, false, false);
+            this.rnd = new Stat(this, 520, 1234567890, false, false, false);
+            this.rotation = new Stat(this, 400, 1234567890, false, false, false);
+            this.rp = new Stat(this, 199, 0, false, false, false);
+            this.runSpeed = new StatSkill(this, 156, 5, true, false, false);
+            this.savedXP = new Stat(this, 334, 0, false, false, false);
+            this.school = new Stat(this, 405, 1234567890, false, false, false);
+            this.secondaryItemInstance = new Stat(this, 83, 1234567890, false, false, false);
+            this.secondaryItemTemplate = new Stat(this, 273, 1234567890, false, false, false);
+            this.secondaryItemType = new Stat(this, 82, 1234567890, false, false, false);
+            this.selectedTarget = new Stat(this, 431, 1234567890, false, false, false);
+            this.selectedTargetType = new Stat(this, 397, 1234567890, false, false, false);
+            this.sellModifier = new Stat(this, 427, 1234567890, false, false, false);
+            this.sense = new Stat(this, 20, 0, true, false, false);
+            this.senseImprovement = new StatSkill(this, 122, 5, true, false, false);
+            this.sessionTime = new Stat(this, 198, 1234567890, false, false, false);
+            this.sex = new Stat(this, 59, 1234567890, false, false, false);
+            this.shadowBreed = new Stat(this, 532, 0, false, false, false);
+            this.shadowBreedTemplate = new Stat(this, 579, 0, false, false, false);
+            this.shieldChemicalAC = new Stat(this, 229, 0, true, false, false);
+            this.shieldColdAC = new Stat(this, 231, 0, true, false, false);
+            this.shieldEnergyAC = new Stat(this, 228, 0, true, false, false);
+            this.shieldFireAC = new Stat(this, 233, 0, true, false, false);
+            this.shieldMeleeAC = new Stat(this, 227, 0, true, false, false);
+            this.shieldNanoAC = new Stat(this, 232, 0, true, false, false);
+            this.shieldPoisonAC = new Stat(this, 234, 0, true, false, false);
+            this.shieldProjectileAC = new Stat(this, 226, 0, true, false, false);
+            this.shieldRadiationAC = new Stat(this, 230, 0, true, false, false);
+            this.shopFlags = new Stat(this, 610, 1234567890, false, false, false);
+            this.shopId = new Stat(this, 657, 1234567890, false, false, false);
+            this.shopIndex = new Stat(this, 656, 1234567890, false, false, false);
+            this.shopLastUsed = new Stat(this, 611, 1234567890, false, false, false);
+            this.shopPrice = new Stat(this, 599, 1234567890, false, false, false);
+            this.shopRent = new Stat(this, 608, 1234567890, false, false, false);
+            this.shopType = new Stat(this, 612, 1234567890, false, false, false);
+            this.shotgun = new StatSkill(this, 115, 5, true, false, false);
+            this.shoulderMeshHolder = new Stat(this, 39, 0, false, false, false);
+            this.shoulderMeshLeft = new Stat(this, 1005, 0, false, false, false);
+            this.shoulderMeshRight = new Stat(this, 1004, 0, false, false, false);
+            this.side = new Stat(this, 33, 0, false, false, false);
+            this.sisCap = new Stat(this, 352, 1234567890, false, false, false);
+            this.sk = new Stat(this, 573, 0, false, false, false);
+            this.skillDisabled = new Stat(this, 329, 1234567890, false, false, false);
+            this.skillLockModifier = new Stat(this, 382, 0, false, false, false);
+            this.skillTimeOnSelectedTarget = new Stat(this, 371, 1234567890, false, false, false);
+            this.sneakAttack = new StatSkill(this, 146, 5, true, false, false);
+            this.socialStatus = new Stat(this, 521, 0, false, false, false);
+            this.soundVolume = new Stat(this, 250, 1234567890, false, false, false);
+            this.specialAttackShield = new Stat(this, 517, 1234567890, false, false, false);
+            this.specialCondition = new Stat(this, 348, 1, false, false, false);
+            this.specialization = new Stat(this, 182, 0, false, false, false);
+            this.speedPenalty = new Stat(this, 70, 1234567890, false, false, false);
+            this.stability = new Stat(this, 202, 1234567890, false, false, false);
+            this.stackingLine2 = new Stat(this, 546, 1234567890, false, false, false);
+            this.stackingLine3 = new Stat(this, 547, 1234567890, false, false, false);
+            this.stackingLine4 = new Stat(this, 548, 1234567890, false, false, false);
+            this.stackingLine5 = new Stat(this, 549, 1234567890, false, false, false);
+            this.stackingLine6 = new Stat(this, 550, 1234567890, false, false, false);
+            this.stackingOrder = new Stat(this, 551, 1234567890, false, false, false);
+            this.stamina = new Stat(this, 18, 0, true, false, false);
+            this.statOne = new Stat(this, 290, 1234567890, false, false, false);
+            this.state = new Stat(this, 7, 0, false, false, false);
+            this.stateAction = new Stat(this, 98, 1234567890, true, false, false);
+            this.stateMachine = new Stat(this, 450, 1234567890, false, false, false);
+            this.staticInstance = new Stat(this, 23, 1234567890, false, false, false);
+            this.staticType = new Stat(this, 25, 1234567890, false, false, false);
+            this.streamCheckMagic = new Stat(this, 999, 1234567890, false, false, false);
+            this.strength = new Stat(this, 16, 0, true, false, false);
+            this.subMachineGun = new StatSkill(this, 114, 5, true, false, false);
+            this.swim = new StatSkill(this, 138, 5, true, false, false);
+            this.synergyHash = new Stat(this, 609, 1234567890, false, false, false);
+            this.taboo = new Stat(this, 327, 1234567890, false, false, false);
+            this.targetDistance = new Stat(this, 527, 1234567890, false, false, false);
+            this.targetDistanceChange = new Stat(this, 889, 1234567890, false, false, false);
+            this.targetFacing = new Stat(this, 488, 1234567890, false, false, false);
+            this.team = new Stat(this, 6, 0, false, false, false);
+            this.teamAllowed = new Stat(this, 324, 1234567890, false, false, false);
+            this.teamCloseness = new Stat(this, 528, 1234567890, false, false, false);
+            this.teamSide = new Stat(this, 213, 0, false, false, false);
+            this.teleportPauseMilliSeconds = new Stat(this, 351, 1234567890, false, false, false);
+            this.tempSavePlayfield = new Stat(this, 595, 0, false, false, false);
+            this.tempSaveTeamId = new Stat(this, 594, 0, false, false, false);
+            this.tempSaveX = new Stat(this, 596, 0, false, false, false);
+            this.tempSaveY = new Stat(this, 597, 0, false, false, false);
+            this.temporarySkillReduction = new Stat(this, 247, 0, false, false, false);
+            this.throwingKnife = new StatSkill(this, 108, 5, true, false, false);
+            this.thrownGrapplingWeapons = new StatSkill(this, 110, 5, true, false, false);
+            this.tideRequiredDynelId = new Stat(this, 900, 1234567890, false, false, false);
+            this.timeExist = new Stat(this, 8, 1234567890, false, false, false);
+            this.timeSinceCreation = new Stat(this, 56, 1234567890, false, false, false);
+            this.timeSinceUpkeep = new Stat(this, 313, 1234567890, false, false, false);
+            this.titleLevel = new StatTitleLevel(this, 37, 1, false, false, false);
+            this.totalDamage = new Stat(this, 629, 1234567890, false, false, false);
+            this.totalMass = new Stat(this, 71, 1234567890, false, false, false);
+            this.towerInstance = new Stat(this, 515, 1234567890, false, false, false);
+            this.towerNpcHash = new Stat(this, 511, 1234567890, false, false, false);
+            this.towerType = new Stat(this, 388, 1234567890, false, false, false);
+            this.tracerEffectType = new Stat(this, 419, 1234567890, false, false, false);
+            this.trackChemicalDamage = new Stat(this, 633, 1234567890, false, false, false);
+            this.trackColdDamage = new Stat(this, 635, 1234567890, false, false, false);
+            this.trackEnergyDamage = new Stat(this, 632, 1234567890, false, false, false);
+            this.trackFireDamage = new Stat(this, 637, 1234567890, false, false, false);
+            this.trackMeleeDamage = new Stat(this, 631, 1234567890, false, false, false);
+            this.trackPoisonDamage = new Stat(this, 636, 1234567890, false, false, false);
+            this.trackProjectileDamage = new Stat(this, 630, 1234567890, false, false, false);
+            this.trackRadiationDamage = new Stat(this, 634, 1234567890, false, false, false);
+            this.tradeLimit = new Stat(this, 346, 1234567890, false, false, false);
+            this.trainSkill = new Stat(this, 408, 1234567890, false, false, false);
+            this.trainSkillCost = new Stat(this, 409, 1234567890, false, false, false);
+            this.trapDifficulty = new Stat(this, 289, 1234567890, false, false, false);
+            this.travelSound = new Stat(this, 271, 1234567890, false, false, false);
+            this.treatment = new StatSkill(this, 124, 5, true, false, false);
+            this.turnSpeed = new Stat(this, 267, 40000, false, false, false);
+            this.tutoring = new StatSkill(this, 141, 5, true, false, false);
+            this.twohBluntWeapons = new StatSkill(this, 107, 5, true, false, false);
+            this.twohEdgedWeapons = new StatSkill(this, 105, 5, true, false, false);
+            this.unarmedTemplateInstance = new Stat(this, 418, 0, false, false, false);
+            this.unreadMailCount = new Stat(this, 649, 0, false, false, false);
+            this.unsavedXP = new Stat(this, 592, 0, false, false, false);
+            this.userInstance = new Stat(this, 85, 1234567890, false, false, false);
+            this.userType = new Stat(this, 84, 1234567890, false, false, false);
+            this.vehicleAC = new Stat(this, 664, 1234567890, false, false, false);
+            this.vehicleDamage = new Stat(this, 665, 1234567890, false, false, false);
+            this.vehicleHealth = new Stat(this, 666, 1234567890, false, false, false);
+            this.vehicleSpeed = new Stat(this, 667, 1234567890, false, false, false);
+            this.veteranPoints = new Stat(this, 68, 0, false, false, false);
+            this.vicinityRange = new Stat(this, 448, 1234567890, false, false, false);
+            this.victoryPoints = new Stat(this, 669, 0, false, false, false);
+            this.visualBreed = new Stat(this, 367, 1234567890, false, false, true);
+            this.visualFlags = new Stat(this, 673, 31, false, false, false);
+            this.visualLodLevel = new Stat(this, 888, 1234567890, false, false, false);
+            this.visualProfession = new Stat(this, 368, 1234567890, false, false, true);
+            this.visualSex = new Stat(this, 369, 1234567890, false, false, true);
+            this.volumeMass = new Stat(this, 2, 1234567890, false, false, false);
+            this.voteCount = new Stat(this, 306, 1234567890, false, false, false);
+            this.waitState = new Stat(this, 430, 2, false, false, false);
+            this.weaponDisallowedInstance = new Stat(this, 326, 1234567890, false, false, false);
+            this.weaponDisallowedType = new Stat(this, 325, 1234567890, false, false, false);
+            this.weaponMeshHolder = new Stat(this, 209, 0, false, false, false);
+            this.weaponMeshLeft = new Stat(this, 1007, 0, false, false, false);
+            this.weaponMeshRight = new Stat(this, 1006, 0, false, false, false);
+            this.weaponSmithing = new StatSkill(this, 158, 5, true, false, false);
+            this.weaponStyleLeft = new Stat(this, 1015, 0, false, false, false);
+            this.weaponStyleRight = new Stat(this, 1016, 0, false, false, false);
+            this.weaponsStyle = new Stat(this, 1003, 1234567890, false, false, false);
+            this.xp = new Stat(this, 52, 0, false, false, false);
+            this.xpBonus = new Stat(this, 341, 1234567890, false, false, false);
+            this.xpKillRange = new Stat(this, 275, 5, false, false, false);
+            this.xpModifier = new Stat(this, 319, 0, false, false, false);
+
             this.all.Add(this.flags);
             this.all.Add(this.life);
             this.all.Add(this.volumeMass);
@@ -3610,7 +4316,13 @@ namespace CellAO.Stats
             this.SetAbilityTricklers();
             this.bodyDevelopment.Affects.Add(this.life.StatId);
             this.nanoEnergyPool.Affects.Add(this.maxNanoEnergy.StatId);
+            this.nanoEnergyPool.Affects.Add(this.nanoDelta.StatId);
+            this.currentMovementMode.Affects.Add(this.nanoDelta.StatId);
+            this.currentMovementMode.Affects.Add(this.healDelta.StatId);
+            this.currentMovementMode.Affects.Add(this.nanoInterval.StatId);
+            this.currentMovementMode.Affects.Add(this.healInterval.StatId);
             this.level.Affects.Add(this.life.StatId);
+            this.level.Affects.Add(this.health.StatId);
             this.level.Affects.Add(this.maxNanoEnergy.StatId);
             this.level.Affects.Add(this.titleLevel.StatId);
             this.level.Affects.Add(this.nextSK.StatId);
@@ -10759,6 +11471,12 @@ namespace CellAO.Stats
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="i">
+        /// </param>
+        /// <returns>
+        /// </returns>
         IStat IStatList.this[StatIds i]
         {
             get
@@ -10948,7 +11666,7 @@ namespace CellAO.Stats
             foreach (DBStats dbStats in
                 StatDao.GetById((int)identity.Type, identity.Instance))
             {
-                this.SetBaseValue(dbStats.statid, (uint)dbStats.statvalue);
+                this.SetBaseValueWithoutTriggering(dbStats.statid, (uint)dbStats.statvalue);
             }
         }
 
@@ -11015,6 +11733,17 @@ namespace CellAO.Stats
 
             throw new StatDoesNotExistException(
                 "Stat " + stat + " does not exist.\r\nValue: " + value + "\r\nMethod: SetBaseValue");
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stat">
+        /// </param>
+        /// <param name="value">
+        /// </param>
+        public void SetBaseValueWithoutTriggering(int stat, uint value)
+        {
+            this.all.Single(x => x.StatId==stat).SetBaseValue (value);
         }
 
         /// <summary>
@@ -11279,6 +12008,4 @@ namespace CellAO.Stats
 
         #endregion
     }
-
-    #endregion
 }

@@ -24,67 +24,46 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace CellAO.Stats.SpecialStats
 {
     #region Usings ...
 
     using System;
 
+    using CellAO.Enums;
+
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStat
+    public class StatCurrentNano : Stat
     {
-        #region Public Events
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        bool AnnounceToPlayfield { get; set; }
-
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int StatId { get; }
-
-        /// <summary>
-        /// </summary>
-        IStatList Stats { get; }
-
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
+        /// <param name="statList">
+        /// </param>
+        /// <param name="number">
+        /// </param>
+        /// <param name="defaultValue">
+        /// </param>
+        /// <param name="sendBaseValue">
+        /// </param>
+        /// <param name="dontWrite">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public StatCurrentNano(
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
+            bool announceToPlayfield)
+            : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
+        {
+        }
 
         #endregion
 
@@ -92,18 +71,15 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
+        /// <param name="val">
         /// </param>
         /// <returns>
         /// </returns>
-        uint GetMaxValue(uint old);
+        public override uint GetMaxValue(uint val)
+        {
+            return (uint)Math.Min(val, this.Stats[StatIds.maxnanoenergy].Value);
+        }
 
         #endregion
-
-        void SetBaseValue(uint value);
     }
 }

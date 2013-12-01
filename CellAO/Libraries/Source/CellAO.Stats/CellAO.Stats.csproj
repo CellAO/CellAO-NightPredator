@@ -44,7 +44,21 @@
     </Compile>
     <Compile Include="IStat.cs" />
     <Compile Include="IStatList.cs" />
+    <Compile Include="SpecialStats\StatAlienNextXP.cs" />
+    <Compile Include="SpecialStats\StatCurrentNano.cs" />
+    <Compile Include="SpecialStats\StatHealDelta.cs" />
+    <Compile Include="SpecialStats\StatHealInterval.cs" />
+    <Compile Include="SpecialStats\StatLife.cs" />
+    <Compile Include="SpecialStats\StatHitPoints.cs" />
+    <Compile Include="SpecialStats\StatIp.cs" />
+    <Compile Include="SpecialStats\StatMaxNanoEnergy.cs" />
     <Compile Include="SpecialStats\StatNanoDelta.cs" />
+    <Compile Include="SpecialStats\StatNanoInterval.cs" />
+    <Compile Include="SpecialStats\StatNextSK.cs" />
+    <Compile Include="SpecialStats\StatNextXP.cs" />
+    <Compile Include="SpecialStats\StatSkill.cs" />
+    <Compile Include="SpecialStats\StatTitleLevel.cs" />
+    <Compile Include="SpecialStats\XPTable.cs" />
     <Compile Include="Stat.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="IStats.cs" />

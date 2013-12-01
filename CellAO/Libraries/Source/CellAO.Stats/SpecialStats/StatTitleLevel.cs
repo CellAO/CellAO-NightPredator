@@ -24,31 +24,44 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace CellAO.Stats.SpecialStats
 {
     #region Usings ...
 
-    using System;
+    using CellAO.Enums;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStat
+    public class StatTitleLevel : Stat
     {
-        #region Public Events
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
+        /// <param name="statList">
+        /// </param>
+        /// <param name="number">
+        /// </param>
+        /// <param name="defaultValue">
+        /// </param>
+        /// <param name="sendBaseValue">
+        /// </param>
+        /// <param name="dontWrite">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public StatTitleLevel(
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
+            bool announceToPlayfield)
+            : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
+        {
+        }
 
         #endregion
 
@@ -56,54 +69,50 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        bool AnnounceToPlayfield { get; set; }
+        public override int Value
+        {
+            get
+            {
+                int level = this.Stats[StatIds.level].Value;
+                if (level >= 205)
+                {
+                    return 7;
+                }
 
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
+                if (level >= 190)
+                {
+                    return 6;
+                }
 
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
+                if (level >= 150)
+                {
+                    return 5;
+                }
 
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
+                if (level >= 100)
+                {
+                    return 4;
+                }
 
-        /// <summary>
-        /// </summary>
-        int StatId { get; }
+                if (level >= 50)
+                {
+                    return 3;
+                }
 
-        /// <summary>
-        /// </summary>
-        IStatList Stats { get; }
+                if (level >= 15)
+                {
+                    return 2;
+                }
 
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
+                return 1;
+            }
 
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        uint GetMaxValue(uint old);
+            set
+            {
+                base.Value = value;
+            }
+        }
 
         #endregion
-
-        void SetBaseValue(uint value);
     }
 }

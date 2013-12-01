@@ -24,31 +24,46 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace CellAO.Stats.SpecialStats
 {
     #region Usings ...
 
     using System;
 
+    using CellAO.Enums;
+
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStat
+    public class StatHealInterval : Stat
     {
-        #region Public Events
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
+        /// <param name="statList">
+        /// </param>
+        /// <param name="number">
+        /// </param>
+        /// <param name="defaultValue">
+        /// </param>
+        /// <param name="sendBaseValue">
+        /// </param>
+        /// <param name="dontWrite">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public StatHealInterval(
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
+            bool announceToPlayfield)
+            : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
+        {
+        }
 
         #endregion
 
@@ -56,54 +71,22 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        bool AnnounceToPlayfield { get; set; }
+        public override uint BaseValue
+        {
+            get
+            {
+                return
+                    (uint)
+                        (29 - Math.Min(this.Stats[StatIds.stamina].Value / 30, 27)
+                         - (this.Stats[StatIds.currentmovementmode].Value == (int)MoveModes.Sit ? 1 : 0));
+            }
 
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int StatId { get; }
-
-        /// <summary>
-        /// </summary>
-        IStatList Stats { get; }
-
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
+            set
+            {
+                base.BaseValue = value;
+            }
+        }
 
         #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        uint GetMaxValue(uint old);
-
-        #endregion
-
-        void SetBaseValue(uint value);
     }
 }

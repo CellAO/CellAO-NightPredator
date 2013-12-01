@@ -29,7 +29,6 @@ namespace CellAO.Stats.SpecialStats
     #region Usings ...
 
     using System;
-    using System.Linq;
 
     using CellAO.Enums;
 
@@ -37,7 +36,7 @@ namespace CellAO.Stats.SpecialStats
 
     /// <summary>
     /// </summary>
-    public class StatNanoDelta : Stat
+    public class StatMaxNanoEnergy : Stat
     {
         #region Constructors and Destructors
 
@@ -55,7 +54,7 @@ namespace CellAO.Stats.SpecialStats
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        public StatNanoDelta(
+        public StatMaxNanoEnergy(
             Stats statList, 
             int number, 
             uint defaultValue, 
@@ -76,13 +75,24 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
-                return nanodelta[this.Stats[StatIds.breed].BaseValue - 1];
+                int[] breedBaseNanoPoints = { 10, 10, 15, 8, 10, 10, 10 };
+                return (uint)breedBaseNanoPoints[this.Stats[StatIds.breed].BaseValue - 1];
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public override int Modifier
+        {
+            get
+            {
+                return base.Modifier;
             }
 
             set
             {
-                base.BaseValue = value;
+                base.Modifier = value;
+                this.Stats[StatIds.currentnano].Value = Math.Min(this.Value, this.Stats[StatIds.currentnano].Value);
             }
         }
 
@@ -92,30 +102,49 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                int baseval = base.Value;
-                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
+                int[,] tableProfessionNanoPoints =
                 {
-                    baseval = (int)((double)1.5 * baseval);
+                    { 4, 4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4 }, 
+                    { 4, 4, 5, 4, 5, 5, 5, 5, 4, 5, 5, 5, 4, 4 }, 
+                    { 4, 4, 6, 4, 6, 5, 5, 5, 4, 6, 6, 6, 4, 4 }, 
+                    { 4, 4, 7, 4, 6, 6, 5, 5, 4, 7, 7, 7, 4, 4 }, 
+                    { 4, 4, 8, 4, 7, 6, 6, 6, 4, 8, 8, 8, 4, 4 }, 
+                    { 4, 4, 9, 4, 7, 7, 7, 7, 4, 10, 10, 10, 4, 5 }, 
+                    { 5, 5, 10, 5, 8, 8, 8, 8, 5, 11, 11, 11, 5, 7 }, 
+                };
+
+                int[] breedMultiplicatorNanoPoints = { 3, 3, 4, 2, 3, 3, 3 };
+                int[] breedModificatorNanoPoints = { 0, -1, 1, -2, 0, 0, 0 };
+                uint breed = this.Stats[StatIds.breed].BaseValue;
+                uint profession = this.Stats[StatIds.profession].BaseValue;
+
+                // TODO: Change the tableProfessionNanoPoints array and add the 13th as dummy
+                if (profession > 13)
+                {
+                    profession--;
                 }
 
-                return baseval;
+                uint titleLevel = this.Stats[StatIds.titlelevel].BaseValue;
+                uint level = this.Stats[StatIds.level].BaseValue;
+
+                int beforeModifiers =
+                    (int)
+                        (this.BaseValue
+                         + (level
+                            * (tableProfessionNanoPoints[titleLevel - 1, profession - 1]
+                               + breedModificatorNanoPoints[breed - 1]))
+                         + (this.Stats[StatIds.nanoenergypool].Value * breedMultiplicatorNanoPoints[breed - 1]));
+                return (int)Math.Floor(
+                    (double) // ReSharper disable PossibleLossOfFraction
+                        ((beforeModifiers + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+
+                // ReSharper restore PossibleLossOfFraction
             }
 
             set
             {
                 base.Value = value;
             }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
-        {
-            this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
         }
 
         #endregion

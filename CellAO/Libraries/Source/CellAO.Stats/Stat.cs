@@ -26,20 +26,11 @@
 
 namespace CellAO.Stats
 {
-    using System.Linq;
-
-    #region Usings ...
-
-    #region Usings ...
-
     #region Usings ...
 
     using System;
     using System.Collections.Generic;
-
-    using CellAO.Enums;
-
-    #endregion
+    using System.Linq;
 
     #endregion
 
@@ -61,9 +52,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat, 
-            uint valueBeforeChange, 
-            uint valueAfterChange, 
+            Stat changedStat,
+            uint valueBeforeChange,
+            uint valueAfterChange,
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -95,10 +86,6 @@ namespace CellAO.Stats
         #endregion
     }
 
-    #endregion
-
-    #region Stat class for one stat
-
     /// <summary>
     /// </summary>
     public class Stat : IStat
@@ -115,11 +102,19 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        private int modifier = 0;
+
+        /// <summary>
+        /// </summary>
         private int percentageModifier = 100; // From Items/Perks/Nanos
 
         /// <summary>
         /// </summary>
         private bool sendBaseValue = true;
+
+        /// <summary>
+        /// </summary>
+        private int trickle = 0;
 
         #endregion
 
@@ -127,6 +122,8 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        /// <param name="statList">
+        /// </param>
         /// <param name="number">
         /// </param>
         /// <param name="defaultValue">
@@ -137,8 +134,15 @@ namespace CellAO.Stats
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        public Stat(int number, uint defaultValue, bool sendBaseValue, bool dontWrite, bool announceToPlayfield)
+        public Stat(
+            Stats statList,
+            int number,
+            uint defaultValue,
+            bool sendBaseValue,
+            bool dontWrite,
+            bool announceToPlayfield)
         {
+            this.Stats = statList;
             this.StatId = number;
             this.DefaultValue = defaultValue;
             this.BaseValue = defaultValue;
@@ -192,9 +196,20 @@ namespace CellAO.Stats
             }
         }
 
+        private uint baseValue = 1234567890;
         /// <summary>
         /// </summary>
-        public uint BaseValue { get; set; }
+        public virtual uint BaseValue
+        {
+            get
+            {
+                return this.baseValue;
+            }
+            set
+            {
+                this.baseValue = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -210,11 +225,29 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public int Modifier { get; set; }
+        public virtual int Modifier
+        {
+            get
+            {
+                return this.modifier;
+            }
+
+            set
+            {
+                int oldValue = this.Value;
+                int oldModifier = this.modifier;
+                this.modifier = value;
+                if (value != oldModifier)
+                {
+                    this.OnAfterStatChangedEvent(
+                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
-        public int PercentageModifier
+        public virtual int PercentageModifier
         {
             get
             {
@@ -223,7 +256,14 @@ namespace CellAO.Stats
 
             set
             {
+                int oldPercentageModifier = this.percentageModifier;
+                int oldValue = this.Value;
                 this.percentageModifier = value;
+                if (value != oldPercentageModifier)
+                {
+                    this.OnAfterStatChangedEvent(
+                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                }
             }
         }
 
@@ -252,7 +292,25 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public int Trickle { get; set; }
+        public virtual int Trickle
+        {
+            get
+            {
+                return this.trickle;
+            }
+
+            set
+            {
+                int oldTrickle = this.trickle;
+                int oldValue = this.Value;
+                this.trickle = value;
+                if (value != oldTrickle)
+                {
+                    this.OnAfterStatChangedEvent(
+                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -294,6 +352,11 @@ namespace CellAO.Stats
             return val;
         }
 
+        public void SetBaseValue(uint value)
+        {
+            this.baseValue = value;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="value">
@@ -332,6 +395,16 @@ namespace CellAO.Stats
             this.Set((uint)value, starting);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="stats">
+        /// </param>
+        public void SetStats(Stats stats)
+        {
+            // Set the owning list
+            this.Stats = stats;
+        }
+
         #endregion
 
         #region Methods
@@ -350,7 +423,7 @@ namespace CellAO.Stats
 
             if (this.affects.Any())
             {
-                foreach (int affectedStat in affects)
+                foreach (int affectedStat in this.affects)
                 {
                     this.Stats.All.Single(x => x.StatId == affectedStat).CalcTrickle();
                 }
@@ -385,6 +458,4 @@ namespace CellAO.Stats
 
         #endregion
     }
-
-    #endregion
 }

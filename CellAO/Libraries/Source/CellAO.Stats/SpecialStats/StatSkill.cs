@@ -29,7 +29,6 @@ namespace CellAO.Stats.SpecialStats
     #region Usings ...
 
     using System;
-    using System.Linq;
 
     using CellAO.Enums;
 
@@ -37,7 +36,7 @@ namespace CellAO.Stats.SpecialStats
 
     /// <summary>
     /// </summary>
-    public class StatNanoDelta : Stat
+    public class StatSkill : Stat
     {
         #region Constructors and Destructors
 
@@ -55,7 +54,7 @@ namespace CellAO.Stats.SpecialStats
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        public StatNanoDelta(
+        public StatSkill(
             Stats statList, 
             int number, 
             uint defaultValue, 
@@ -72,38 +71,34 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override int Trickle
         {
             get
             {
-                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
-                return nanodelta[this.Stats[StatIds.breed].BaseValue - 1];
+                double strengthTrickle = SkillTrickleTable.table[this.StatId - 100, 1];
+                double agilityTrickle = SkillTrickleTable.table[this.StatId - 100, 2];
+                double staminaTrickle = SkillTrickleTable.table[this.StatId - 100, 3];
+                double intelligenceTrickle = SkillTrickleTable.table[this.StatId - 100, 4];
+                double senseTrickle = SkillTrickleTable.table[this.StatId - 100, 5];
+                double psychicTrickle = SkillTrickleTable.table[this.StatId - 100, 6];
+
+                return
+                    Convert.ToInt32(
+                        Math.Round(
+                            Math.Round(
+                                strengthTrickle * this.Stats[StatIds.strength].Value
+                                + staminaTrickle * this.Stats[StatIds.stamina].Value
+                                + senseTrickle * this.Stats[StatIds.sense].Value
+                                + agilityTrickle * this.Stats[StatIds.agility].Value
+                                + intelligenceTrickle * this.Stats[StatIds.intelligence].Value
+                                + psychicTrickle * this.Stats[StatIds.psychic].Value, 
+                                MidpointRounding.AwayFromZero) / 4, 
+                            MidpointRounding.AwayFromZero));
             }
 
             set
             {
-                base.BaseValue = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public override int Value
-        {
-            get
-            {
-                int baseval = base.Value;
-                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
-                {
-                    baseval = (int)((double)1.5 * baseval);
-                }
-
-                return baseval;
-            }
-
-            set
-            {
-                base.Value = value;
+                base.Trickle = value;
             }
         }
 
@@ -115,7 +110,22 @@ namespace CellAO.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
-            this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
+            double strengthTrickle = SkillTrickleTable.table[this.StatId - 100, 1];
+            double agilityTrickle = SkillTrickleTable.table[this.StatId - 100, 2];
+            double staminaTrickle = SkillTrickleTable.table[this.StatId - 100, 3];
+            double intelligenceTrickle = SkillTrickleTable.table[this.StatId - 100, 4];
+            double senseTrickle = SkillTrickleTable.table[this.StatId - 100, 5];
+            double psychicTrickle = SkillTrickleTable.table[this.StatId - 100, 6];
+
+            this.Trickle =
+                Convert.ToInt32(
+                    Math.Floor(
+                        (strengthTrickle * this.Stats[StatIds.strength].Value
+                         + staminaTrickle * this.Stats[StatIds.stamina].Value
+                         + senseTrickle * this.Stats[StatIds.sense].Value
+                         + agilityTrickle * this.Stats[StatIds.agility].Value
+                         + intelligenceTrickle * this.Stats[StatIds.intelligence].Value
+                         + psychicTrickle * this.Stats[StatIds.psychic].Value) / 4));
         }
 
         #endregion

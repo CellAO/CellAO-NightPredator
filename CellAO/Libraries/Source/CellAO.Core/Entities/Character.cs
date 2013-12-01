@@ -74,15 +74,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        private MoveModes moveMode;
-
-        /// <summary>
-        /// </summary>
         private DateTime predictionTime;
-
-        /// <summary>
-        /// </summary>
-        private MoveModes previousMoveMode;
 
         /// <summary>
         /// Caching Mesh layer for social tab items
@@ -221,6 +213,40 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public List<IUploadedNanos> UploadedNanos { get; private set; }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// </summary>
+        private MoveModes moveMode
+        {
+            get
+            {
+                return (MoveModes)this.Stats[StatIds.currentmovementmode].Value;
+            }
+
+            set
+            {
+                this.Stats[StatIds.currentmovementmode].Value = (int)value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        private MoveModes previousMoveMode
+        {
+            get
+            {
+                return (MoveModes)this.Stats[StatIds.prevmovementmode].Value;
+            }
+
+            set
+            {
+                this.Stats[StatIds.prevmovementmode].Value = (int)value;
+            }
+        }
 
         #endregion
 
@@ -417,10 +443,6 @@ namespace CellAO.Core.Entities
                 case 30: // Switch To Sit Ground Mode
                     this.previousMoveMode = this.moveMode;
                     this.moveMode = MoveModes.Sit;
-                    this.Stats[StatIds.nanodelta].CalcTrickle();
-                    this.Stats[StatIds.healdelta].CalcTrickle();
-                    this.Stats[StatIds.nanointerval].CalcTrickle();
-                    this.Stats[StatIds.healinterval].CalcTrickle();
                     break;
 
                 case 31: // ? 19 = 20 = 22 = 31 = 32
@@ -442,10 +464,6 @@ namespace CellAO.Core.Entities
                     break;
                 case 37: // Leave Sit Mode
                     this.moveMode = this.previousMoveMode;
-                    this.Stats[StatIds.nanodelta].CalcTrickle();
-                    this.Stats[StatIds.healdelta].CalcTrickle();
-                    this.Stats[StatIds.nanointerval].CalcTrickle();
-                    this.Stats[StatIds.healinterval].CalcTrickle();
                     break;
                 case 38: // Leave Frozen Mode
                     break;
