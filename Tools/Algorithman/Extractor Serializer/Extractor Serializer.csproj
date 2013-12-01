@@ -39,8 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CellAO\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
-    <Reference Include="NBug">
-      <HintPath>..\..\..\CellAO\packages\NBug.1.1.1\lib\net40-client\NBug.dll</HintPath>
+    <Reference Include="NBug, Version=1.2.0.0, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\CellAO\packages\NBug.1.2.2\lib\net40-client\NBug.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
