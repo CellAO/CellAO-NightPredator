@@ -31,6 +31,7 @@ namespace CellAO.Core.Entities
     using System;
 
     using CellAO.Core.Inventory;
+    using CellAO.Core.Playfields;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -89,6 +90,10 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public IPlayfield Playfield { get; set; }
 
         /// <summary>
         /// </summary>

@@ -109,7 +109,13 @@ namespace CellAO.Core.Inventory
         /// </exception>
         public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
         {
-            throw new NotImplementedException();
+            IItem toEquip = sendingPage[fromPlacement];
+
+            // First: Check if the item can be worn
+            if ((toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear)
+            {
+                // TODO: Create the interpolated Item and check the requirement
+            }
         }
 
         /// <summary>

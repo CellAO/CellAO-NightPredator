@@ -30,6 +30,7 @@ namespace CellAO.Core.Entities
 
     using System;
 
+    using CellAO.Core.Playfields;
     using CellAO.Stats;
 
     #endregion
@@ -43,6 +44,10 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         bool DoNotDoTimers { get; set; }
+
+        /// <summary>
+        /// </summary>
+        IPlayfield Playfield { get; set; }
 
         /// <summary>
         /// </summary>

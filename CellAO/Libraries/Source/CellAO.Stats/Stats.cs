@@ -11612,7 +11612,7 @@ namespace CellAO.Stats
         /// </param>
         /// <returns>
         /// </returns>
-        public Stat GetStatbyNumber(int number)
+        public Stat GetStatByNumber(int number)
         {
             foreach (Stat c in this.all)
             {

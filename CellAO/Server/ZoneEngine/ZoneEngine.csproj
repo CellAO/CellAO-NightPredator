@@ -99,7 +99,6 @@
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
     <Compile Include="Core\PacketHandlers\ContainerAddItem.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
-    <Compile Include="Core\PacketHandlers\SkillUpdate.cs" />
     <Compile Include="Core\Packets\AddTemplate.cs" />
     <Compile Include="Core\Packets\AppearanceUpdate.cs" />
     <Compile Include="Core\PacketHandlers\ChatCommandHandler.cs" />

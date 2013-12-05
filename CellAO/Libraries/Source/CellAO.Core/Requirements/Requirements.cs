@@ -30,6 +30,12 @@ namespace CellAO.Core.Requirements
 
     using System;
 
+    using CellAO.Core.Entities;
+    using CellAO.Enums;
+    using CellAO.Stats;
+
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -38,6 +44,14 @@ namespace CellAO.Core.Requirements
     [Serializable]
     public class Requirements : IRequirements
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private Func<IInstancedEntity, bool> theCheckFunc = null;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -64,6 +78,43 @@ namespace CellAO.Core.Requirements
         /// Value to check against
         /// </summary>
         public int Value { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool CheckRequirement(IInstancedEntity entity)
+        {
+            if (this.theCheckFunc == null)
+            {
+                try
+                {
+                    this.theCheckFunc = RequirementLambdaCreator.Create(this);
+                    return this.theCheckFunc(entity);
+                }
+                catch (Exception)
+                {
+                    LogUtil.Debug("Could not create lambda for a requirement.");
+                    LogUtil.Debug("Values:");
+                    LogUtil.Debug("Target:       " + ((ItemTarget)this.Target));
+                    LogUtil.Debug(
+                        "StatId:       " + (this.Statnumber + " (" + StatNamesDefaults.GetStatName(this.Statnumber))
+                        + ")");
+                    LogUtil.Debug("Operator:     " + ((Operator)this.Operator));
+                    LogUtil.Debug("Value:        " + this.Value);
+                    LogUtil.Debug("ChildOperator:" + ((Operator)this.ChildOperator));
+                    return false;
+                }
+            }
+
+            return this.theCheckFunc(entity);
+        }
 
         #endregion
     }

@@ -31,7 +31,9 @@ namespace CellAO.Core.Actions
     using System;
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     #endregion
 
@@ -63,6 +65,35 @@ namespace CellAO.Core.Actions
         /// List of Requirements for this action
         /// </summary>
         public List<Requirements> Requirements { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool CheckRequirements(IInstancedEntity entity)
+        {
+            bool result = true;
+            foreach (Requirements requirements in this.Requirements)
+            {
+                if (requirements.ChildOperator == (int)Operator.And)
+                {
+                    result &= requirements.CheckRequirement(entity);
+                }
+
+                if (!result)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         #endregion
     }

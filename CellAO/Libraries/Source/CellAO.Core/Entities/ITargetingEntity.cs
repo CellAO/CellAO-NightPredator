@@ -34,7 +34,7 @@ namespace CellAO.Core.Entities
 
     /// <summary>
     /// </summary>
-    public interface ITargetingEntity
+    public interface ITargetingEntity : IInstancedEntity
     {
         #region Public Properties
 

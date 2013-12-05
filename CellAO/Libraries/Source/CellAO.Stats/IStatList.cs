@@ -97,6 +97,8 @@ namespace CellAO.Stats
         /// </summary>
         void ClearModifiers();
 
+        Stat GetStatByNumber(int number);
+        
         #endregion
     }
 }
