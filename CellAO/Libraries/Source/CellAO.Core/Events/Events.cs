@@ -90,5 +90,26 @@ namespace CellAO.Core.Events
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        internal Events Copy()
+        {
+            Events copy = new Events();
+
+            copy.EventType = this.EventType;
+            foreach (Functions functions in this.Functions)
+            {
+                copy.Functions.Add(functions.Copy());
+            }
+
+            return copy;
+        }
+
+        #endregion
     }
 }

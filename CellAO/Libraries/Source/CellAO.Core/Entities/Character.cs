@@ -34,7 +34,6 @@ namespace CellAO.Core.Entities
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Network;
-    using CellAO.Core.Playfields;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
@@ -170,10 +169,6 @@ namespace CellAO.Core.Entities
                 }
             }
         }
-
-        /// <summary>
-        /// </summary>
-        public IPlayfield Playfield { get; set; }
 
         /// <summary>
         /// </summary>

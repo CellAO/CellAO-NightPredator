@@ -39,7 +39,7 @@ namespace CellAO.Core.Requirements
     #endregion
 
     /// <summary>
-    /// AORequirements
+    /// Requirements
     /// </summary>
     [Serializable]
     public class Requirements : IRequirements
@@ -114,6 +114,21 @@ namespace CellAO.Core.Requirements
             }
 
             return this.theCheckFunc(entity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public Requirements Copy()
+        {
+            Requirements copy = new Requirements();
+            copy.Operator = this.Operator;
+            copy.ChildOperator = this.ChildOperator;
+            copy.Target = this.Target;
+            copy.Statnumber = this.Statnumber;
+            copy.Value = this.Value;
+            return copy;
         }
 
         #endregion

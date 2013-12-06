@@ -28,11 +28,6 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
-    using System;
-
-    using CellAO.Core.Items;
-    using CellAO.Enums;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -50,110 +45,16 @@ namespace CellAO.Core.Inventory
         public SocialArmorInventoryPage(int ownerInstance)
             : base((int)IdentityType.SocialPage, 15, 0x31, ownerInstance)
         {
+            this.NeedsItemCheck = true;
         }
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Added(ItemTemplate item)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="templ">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Removed(int slot, ItemTemplate item)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="receivingPage">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
-        {
-            throw new NotImplementedException();
-        }
+        public bool NeedsItemCheck { get; set; }
 
         #endregion
     }

@@ -32,6 +32,7 @@ namespace CellAO.Core.Components
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
+    using System.ComponentModel.Composition.Primitives;
     using System.Linq;
     using System.Reflection;
 
@@ -143,7 +144,7 @@ namespace CellAO.Core.Components
                 try
                 {
                     var assemblyCatalog = new AssemblyCatalog(assembly);
-                    var assemblyParts = assemblyCatalog.Parts.ToArray();
+                    ComposablePartDefinition[] assemblyParts = assemblyCatalog.Parts.ToArray();
                     catalog.Catalogs.Add(assemblyCatalog);
                 }
                 catch (Exception)
@@ -151,6 +152,7 @@ namespace CellAO.Core.Components
                     // Dont catch not importable assemblies errors
                 }
             }
+
             var container = new CompositionContainer(catalog);
             var batch = new CompositionBatch();
             batch.AddExportedValue<IContainer>(this);

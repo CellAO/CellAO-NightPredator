@@ -348,6 +348,48 @@ namespace CellAO.Core.Items
         /// </summary>
         /// <returns>
         /// </returns>
+        public ItemTemplate Copy()
+        {
+            ItemTemplate copy = new ItemTemplate();
+            copy.ID = this.ID;
+            copy.Flags = this.Flags;
+            copy.ItemType = this.ItemType;
+            copy.MultipleCount = this.MultipleCount;
+            copy.Nothing = this.Nothing;
+            copy.Quality = this.Quality;
+
+            foreach (KeyValuePair<int, int> kv in this.Attack)
+            {
+                copy.Attack.Add(kv.Key, kv.Value);
+            }
+
+            foreach (Actions actions in this.Actions)
+            {
+                copy.Actions.Add(actions.Copy());
+            }
+
+            foreach (KeyValuePair<int, int> kv in this.Defend)
+            {
+                copy.Defend.Add(kv.Key, kv.Value);
+            }
+
+            foreach (Events events in this.Events)
+            {
+                copy.Events.Add(events.Copy());
+            }
+
+            foreach (KeyValuePair<int, int> kv in this.Stats)
+            {
+                copy.Stats.Add(kv.Key, kv.Value);
+            }
+
+            return copy;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public bool DoesAutoSelect()
         {
             return (this.CanFlags() & (1 << 20)) > 0;

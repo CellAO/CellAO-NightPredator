@@ -129,12 +129,12 @@ namespace CellAO.Core.Nanos
                 }
 
                 Console.Write(
-                    locales.NanoLoaderLoadedNanos + " - {1}\r",
+                    locales.NanoLoaderLoadedNanos + " - {1}\r", 
                     new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
             }
 
             Console.Write(
-                locales.NanoLoaderLoadedNanos + " - {1}\r",
+                locales.NanoLoaderLoadedNanos + " - {1}\r", 
                 new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();

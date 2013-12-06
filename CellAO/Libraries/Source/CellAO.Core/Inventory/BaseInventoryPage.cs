@@ -186,6 +186,68 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Added(ItemTemplate item)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="templ">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+
+            // First: Check if the item can be worn
+            if ((toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear)
+            {
+                this.Add(toPlacement, toEquip);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         public int FindFreeSlot()
@@ -202,6 +264,26 @@ namespace CellAO.Core.Inventory
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+            IItem hotSwapItem = this[toPlacement];
+            sendingPage.Remove(fromPlacement);
+            sendingPage.Add(fromPlacement, hotSwapItem);
+            this.Remove(toPlacement);
+            this.Add(toPlacement, toEquip);
         }
 
         /// <summary>
@@ -293,6 +375,51 @@ namespace CellAO.Core.Inventory
 
             this.Content.Remove(slotNum);
             return temp;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Removed(int slot, ItemTemplate item)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slotFrom">
+        /// </param>
+        /// <param name="slotTo">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="receivingPage">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
+        {
+            IItem toUnEquip = this[fromPlacement];
+            receivingPage.Add(toPlacement, toUnEquip);
+            this.Remove(fromPlacement);
         }
 
         /// <summary>

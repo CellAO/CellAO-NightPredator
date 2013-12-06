@@ -173,5 +173,52 @@ namespace CellAO.Core.Functions
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        internal Functions Copy()
+        {
+            Functions copy = new Functions();
+
+            foreach (Requirements requirements in this.Requirements)
+            {
+                copy.Requirements.Add(requirements.Copy());
+            }
+
+            foreach (object ob in this.Arguments.Values)
+            {
+                if (ob.GetType() == typeof(string))
+                {
+                    string z = (string)ob;
+                    copy.Arguments.Values.Add(z);
+                }
+
+                if (ob.GetType() == typeof(int))
+                {
+                    int i = (int)ob;
+                    copy.Arguments.Values.Add(i);
+                }
+
+                if (ob.GetType() == typeof(Single))
+                {
+                    float s = (Single)ob;
+                    copy.Arguments.Values.Add(s);
+                }
+            }
+
+            copy.dolocalstats = this.dolocalstats;
+            copy.FunctionType = this.FunctionType;
+            copy.Target = this.Target;
+            copy.TickCount = this.TickCount;
+            copy.TickInterval = this.TickInterval;
+
+            return copy;
+        }
+
+        #endregion
     }
 }

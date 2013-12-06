@@ -96,5 +96,25 @@ namespace CellAO.Core.Actions
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        internal Actions Copy()
+        {
+            Actions copy = new Actions();
+            copy.ActionType = this.ActionType;
+            foreach (Requirements requirements in this.Requirements)
+            {
+                copy.Requirements.Add(requirements.Copy());
+            }
+
+            return copy;
+        }
+
+        #endregion
     }
 }

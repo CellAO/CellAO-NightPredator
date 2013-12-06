@@ -1,15 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region License
+
+// Copyright (c) 2005-2013, CellAO Team
+// 
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+#endregion
 
 namespace CellAO.Core.Textures
 {
-    using CellAO.Core.Entities;
-    using CellAO.Interfaces;
+    #region Usings ...
 
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using CellAO.Core.Entities;
+
+    #endregion
+
+    /// <summary>
+    /// </summary>
     public class MeshLayers
     {
+        #region Fields
+
         /// <summary>
         /// </summary>
         private readonly SortedList<int, int> mesh = new SortedList<int, int>();
@@ -17,6 +48,10 @@ namespace CellAO.Core.Textures
         /// <summary>
         /// </summary>
         private readonly SortedList<int, int> meshOverride = new SortedList<int, int>();
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
@@ -38,150 +73,47 @@ namespace CellAO.Core.Textures
             }
         }
 
-        /// <summary>
-        /// </summary>
-        public void Clear()
-        {
-            this.mesh.Clear();
-            this.meshOverride.Clear();
-        }
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public int Count()
-        {
-            return this.mesh.Count;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
+        /// <param name="placement">
         /// </param>
         /// <returns>
         /// </returns>
-        public int ReturnMesh(int number)
+        public static int GetLayer(int placement)
         {
-            return this.mesh.ElementAt(number).Value;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public int ReturnOverrideMesh(int number)
-        {
-            return this.meshOverride.ElementAt(number).Value;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public int GetMeshKey(int number)
-        {
-            return this.mesh.ElementAt(number).Key;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToAdd">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        public void AddMesh(int position, int meshToAdd, int overridetexture, int layer)
-        {
-            int key = (position << 16) + layer;
-            if (this.mesh.ContainsKey(key))
+            switch (placement)
             {
-                this.mesh[key] = meshToAdd;
-            }
-            else
-            {
-                this.mesh.Add(key, meshToAdd);
-            }
+                    // Equipment pages
+                case 18: // Head
+                    return 0;
+                case 19: // Back
+                    return 4;
+                case 20: // Shoulders
+                case 22:
+                    return 4;
+                case 6: // Hands (Weapons)
+                case 8:
+                    return 4;
 
-            if (this.meshOverride.ContainsKey(key))
-            {
-                this.meshOverride[key] = overridetexture;
+                    // Social page
+                case 50: // Head
+                    return 0;
+                case 51: // Back
+                    return 4;
+                case 52: // Shoulders
+                case 54:
+                    return 4;
+                case 56: // Hands (Weapons)
+                case 58:
+                    return 4;
+
+                default:
+                    return 0;
             }
-            else
-            {
-                this.meshOverride.Add(key, overridetexture);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="position">
-        /// </param>
-        /// <param name="meshToRemove">
-        /// </param>
-        /// <param name="overridetexture">
-        /// </param>
-        /// <param name="layer">
-        /// </param>
-        public void RemoveMesh(int position, int meshToRemove, int overridetexture, int layer)
-        {
-            int key = (position << 16) + layer;
-            this.mesh.Remove(key);
-            this.meshOverride.Remove(key);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public List<AOMeshs> GetMeshs()
-        {
-            List<AOMeshs> meshList = new List<AOMeshs>();
-            int counter;
-            for (counter = 0; counter < this.mesh.Count; counter++)
-            {
-                AOMeshs aoMesh = new AOMeshs();
-                aoMesh.Position = this.mesh.ElementAt(counter).Key >> 16;
-                aoMesh.Mesh = this.mesh.ElementAt(counter).Value;
-                aoMesh.OverrideTexture = this.meshOverride.ElementAt(counter).Value;
-                aoMesh.Layer = this.mesh.ElementAt(counter).Key & 0xffff;
-                meshList.Add(aoMesh);
-            }
-
-            return meshList;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="pos">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public AOMeshs GetMeshAtPosition(int pos)
-        {
-            foreach (int key in this.mesh.Keys)
-            {
-                if ((key >> 16) == pos)
-                {
-                    // Just return mesh with highest priority (0 = highest)
-                    AOMeshs aoMeshs = new AOMeshs();
-                    aoMeshs.Layer = key & 0xffff;
-                    aoMeshs.Position = key >> 16;
-                    aoMeshs.Mesh = this.mesh[key];
-                    aoMeshs.OverrideTexture = this.meshOverride[key];
-                    return aoMeshs;
-                }
-            }
-
-            // No mesh at this position found
-            return null;
         }
 
         /// <summary>
@@ -380,45 +312,150 @@ namespace CellAO.Core.Textures
             return output;
         }
 
-        #region GetLayer
+        /// <summary>
+        /// </summary>
+        /// <param name="position">
+        /// </param>
+        /// <param name="meshToAdd">
+        /// </param>
+        /// <param name="overridetexture">
+        /// </param>
+        /// <param name="layer">
+        /// </param>
+        public void AddMesh(int position, int meshToAdd, int overridetexture, int layer)
+        {
+            int key = (position << 16) + layer;
+            if (this.mesh.ContainsKey(key))
+            {
+                this.mesh[key] = meshToAdd;
+            }
+            else
+            {
+                this.mesh.Add(key, meshToAdd);
+            }
+
+            if (this.meshOverride.ContainsKey(key))
+            {
+                this.meshOverride[key] = overridetexture;
+            }
+            else
+            {
+                this.meshOverride.Add(key, overridetexture);
+            }
+        }
 
         /// <summary>
         /// </summary>
-        /// <param name="placement">
+        public void Clear()
+        {
+            this.mesh.Clear();
+            this.meshOverride.Clear();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int Count()
+        {
+            return this.mesh.Count;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="pos">
         /// </param>
         /// <returns>
         /// </returns>
-        public static int GetLayer(int placement)
+        public AOMeshs GetMeshAtPosition(int pos)
         {
-            switch (placement)
+            foreach (int key in this.mesh.Keys)
             {
-                // Equipment pages
-                case 18: // Head
-                    return 0;
-                case 19: // Back
-                    return 4;
-                case 20: // Shoulders
-                case 22:
-                    return 4;
-                case 6: // Hands (Weapons)
-                case 8:
-                    return 4;
-
-                // Social page
-                case 50: // Head
-                    return 0;
-                case 51: // Back
-                    return 4;
-                case 52: // Shoulders
-                case 54:
-                    return 4;
-                case 56: // Hands (Weapons)
-                case 58:
-                    return 4;
-
-                default:
-                    return 0;
+                if ((key >> 16) == pos)
+                {
+                    // Just return mesh with highest priority (0 = highest)
+                    AOMeshs aoMeshs = new AOMeshs();
+                    aoMeshs.Layer = key & 0xffff;
+                    aoMeshs.Position = key >> 16;
+                    aoMeshs.Mesh = this.mesh[key];
+                    aoMeshs.OverrideTexture = this.meshOverride[key];
+                    return aoMeshs;
+                }
             }
+
+            // No mesh at this position found
+            return null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="number">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int GetMeshKey(int number)
+        {
+            return this.mesh.ElementAt(number).Key;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public List<AOMeshs> GetMeshs()
+        {
+            List<AOMeshs> meshList = new List<AOMeshs>();
+            int counter;
+            for (counter = 0; counter < this.mesh.Count; counter++)
+            {
+                AOMeshs aoMesh = new AOMeshs();
+                aoMesh.Position = this.mesh.ElementAt(counter).Key >> 16;
+                aoMesh.Mesh = this.mesh.ElementAt(counter).Value;
+                aoMesh.OverrideTexture = this.meshOverride.ElementAt(counter).Value;
+                aoMesh.Layer = this.mesh.ElementAt(counter).Key & 0xffff;
+                meshList.Add(aoMesh);
+            }
+
+            return meshList;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="position">
+        /// </param>
+        /// <param name="meshToRemove">
+        /// </param>
+        /// <param name="overridetexture">
+        /// </param>
+        /// <param name="layer">
+        /// </param>
+        public void RemoveMesh(int position, int meshToRemove, int overridetexture, int layer)
+        {
+            int key = (position << 16) + layer;
+            this.mesh.Remove(key);
+            this.meshOverride.Remove(key);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="number">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int ReturnMesh(int number)
+        {
+            return this.mesh.ElementAt(number).Value;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="number">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int ReturnOverrideMesh(int number)
+        {
+            return this.meshOverride.ElementAt(number).Value;
         }
 
         #endregion

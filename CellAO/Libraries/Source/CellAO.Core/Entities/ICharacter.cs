@@ -33,16 +33,13 @@ namespace CellAO.Core.Entities
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Network;
-    using CellAO.Core.Playfields;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
-    using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
@@ -91,12 +88,6 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        IPlayfield Playfield { get; set; }
-
-        /// <summary>
-        /// </summary>
         TimeSpan PredictionDuration { get; }
 
         /// <summary>
@@ -138,14 +129,6 @@ namespace CellAO.Core.Entities
         /// <param name="announceToPlayfield">
         /// </param>
         void Send(MessageBody messageBody, bool announceToPlayfield);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool SetFightingTarget(Identity identity);
 
         /// <summary>
         /// Update move type

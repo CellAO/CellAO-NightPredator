@@ -26,14 +26,6 @@
 
 namespace CellAO.Core.Functions
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
-
-    
 
     #region Requirement Check constants
 

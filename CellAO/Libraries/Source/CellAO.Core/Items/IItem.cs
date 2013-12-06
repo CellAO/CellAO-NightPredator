@@ -28,6 +28,13 @@ namespace CellAO.Core.Items
 {
     #region Usings ...
 
+    using System.Collections.Generic;
+
+    using CellAO.Core.Actions;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Events;
+    using CellAO.Enums;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -55,6 +62,14 @@ namespace CellAO.Core.Items
         Identity Identity { get; }
 
         /// <summary>
+        /// </summary>
+        List<Actions> ItemActions { get; }
+
+        /// <summary>
+        /// </summary>
+        List<Events> ItemEvents { get; }
+
+        /// <summary>
         /// LowId of the item template
         /// </summary>
         int LowID { get; }
@@ -77,6 +92,16 @@ namespace CellAO.Core.Items
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="actionType">
+        /// </param>
+        /// <param name="entity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool CheckRequirements(ActionType actionType, ITargetingEntity entity);
 
         /// <summary>
         /// Get item attribute

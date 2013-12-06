@@ -32,6 +32,11 @@ namespace CellAO.Core.Items
     using System.Collections.Generic;
     using System.Linq;
 
+    using CellAO.Core.Actions;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Events;
+    using CellAO.Enums;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -53,6 +58,14 @@ namespace CellAO.Core.Items
         /// <summary>
         /// </summary>
         private readonly ItemTemplate templateLow;
+
+        /// <summary>
+        /// </summary>
+        private List<Actions> actions = null;
+
+        /// <summary>
+        /// </summary>
+        private List<Events> events = null;
 
         #endregion
 
@@ -109,6 +122,36 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
+        public List<Actions> ItemActions
+        {
+            get
+            {
+                if (this.actions == null)
+                {
+                    this.CreateInterpolatedRequirements();
+                }
+
+                return this.actions;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public List<Events> ItemEvents
+        {
+            get
+            {
+                if (this.events == null)
+                {
+                    this.CreateInterpolatedRequirements();
+                }
+
+                return this.events;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         public int LowID
         {
             get
@@ -150,6 +193,131 @@ namespace CellAO.Core.Items
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="actionType">
+        /// </param>
+        /// <param name="entity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool CheckRequirements(ActionType actionType, ITargetingEntity entity)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        public void CreateInterpolatedRequirements()
+        {
+            float factor = (this.Quality - this.templateLow.Quality)
+                           / (this.templateHigh.Quality - this.templateLow.Quality);
+            if (this.actions == null)
+            {
+                if (this.Quality == this.templateLow.Quality)
+                {
+                    this.actions = this.templateLow.Actions;
+                }
+                else if (this.Quality == this.templateHigh.Quality)
+                {
+                    this.actions = this.templateHigh.Actions;
+                }
+                else
+                {
+                    // We need to create the interpolated actions first
+                    this.actions = new List<Actions>();
+                    foreach (Actions action in this.templateLow.Actions)
+                    {
+                        Actions temp = this.templateLow.Actions.Single(x => x.ActionType == action.ActionType).Copy();
+
+                        Actions highActions = this.templateHigh.Actions.Single(x => x.ActionType == action.ActionType);
+                        Actions lowActions = action;
+                        for (int reqnum = 0; reqnum < highActions.Requirements.Count; reqnum++)
+                        {
+                            temp.Requirements[reqnum].Value =
+                                Convert.ToInt32(
+                                    factor
+                                    * (highActions.Requirements[reqnum].Value - lowActions.Requirements[reqnum].Value));
+                        }
+
+                        this.actions.Add(temp);
+                    }
+                }
+            }
+
+            if (this.events == null)
+            {
+                // We need to create interpolated events first
+                if (this.Quality == this.templateLow.Quality)
+                {
+                    this.events = this.templateLow.Events;
+                }
+                else if (this.Quality == this.templateHigh.Quality)
+                {
+                    this.events = this.templateHigh.Events;
+                }
+                else
+                {
+                    this.events = new List<Events>();
+
+                    for (int evnum = 0; evnum < this.templateLow.Events.Count; evnum++)
+                    {
+                        Events temp = this.templateLow.Events[evnum].Copy();
+                        for (int funcnum = 0; funcnum < this.templateLow.Events[evnum].Functions.Count; funcnum++)
+                        {
+                            for (int reqnum = 0;
+                                reqnum < this.templateLow.Events[evnum].Functions[funcnum].Requirements.Count;
+                                reqnum++)
+                            {
+                                temp.Functions[funcnum].Requirements[reqnum].Value =
+                                    Convert.ToInt32(
+                                        factor
+                                        * (this.templateHigh.Events[evnum].Functions[funcnum].Requirements[reqnum].Value
+                                           - this.templateLow.Events[evnum].Functions[funcnum].Requirements[reqnum]
+                                               .Value)
+                                        + this.templateLow.Events[evnum].Functions[funcnum].Requirements[reqnum].Value);
+                            }
+
+                            for (int argnum = 0;
+                                argnum < this.templateLow.Events[evnum].Functions[funcnum].Arguments.Values.Count;
+                                argnum++)
+                            {
+                                if (temp.Functions[funcnum].Arguments.Values[argnum].IsTypeOf<int>() == true)
+                                {
+                                    temp.Functions[funcnum].Arguments.Values[argnum] =
+                                        Convert.ToInt32(
+                                            factor
+                                            * (this.templateHigh.Events[evnum].Functions[funcnum].Arguments.Values[
+                                                argnum].AsInt32()
+                                               - this.templateLow.Events[evnum].Functions[funcnum].Arguments.Values[
+                                                   argnum].AsInt32())
+                                            + this.templateLow.Events[evnum].Functions[funcnum].Arguments.Values[argnum]
+                                                .AsInt32());
+                                }
+                                else if (temp.Functions[funcnum].Arguments.Values[argnum].IsTypeOf<float>() == true)
+                                {
+                                    temp.Functions[funcnum].Arguments.Values[argnum] = factor
+                                                                                       * (this.templateHigh.Events[evnum
+                                                                                           ].Functions[funcnum]
+                                                                                           .Arguments.Values[argnum]
+                                                                                           .AsSingle()
+                                                                                          - this.templateLow.Events[
+                                                                                              evnum].Functions[funcnum]
+                                                                                              .Arguments.Values[argnum]
+                                                                                              .AsSingle())
+                                                                                       + this.templateLow.Events[evnum]
+                                                                                           .Functions[funcnum].Arguments
+                                                                                           .Values[argnum].AsSingle();
+                                }
+                            }
+                        }
+
+                        this.events.Add(temp);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
