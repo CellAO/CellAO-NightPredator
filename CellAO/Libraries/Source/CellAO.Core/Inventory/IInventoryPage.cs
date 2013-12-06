@@ -52,6 +52,10 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        bool NeedsItemCheck { get; set; }
+
+        /// <summary>
+        /// </summary>
         int Page { get; set; }
 
         #endregion

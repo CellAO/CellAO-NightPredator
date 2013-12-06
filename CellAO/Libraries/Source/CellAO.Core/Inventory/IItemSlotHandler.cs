@@ -39,16 +39,8 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public interface IItemSlotHandler
+    public interface IItemSlotHandler : IInventoryPage
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        bool NeedsItemCheck { get; set; }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>

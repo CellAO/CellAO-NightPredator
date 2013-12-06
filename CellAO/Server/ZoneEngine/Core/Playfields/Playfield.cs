@@ -354,15 +354,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public T FindByIdentity<T>(Identity identity) where T : Character
         {
-            foreach (IInstancedEntity entity in this.Entities.Where(x => x is T))
-            {
-                if (entity.Identity == identity)
-                {
-                    return (T)entity;
-                }
-            }
-
-            return null;
+            return this.Entities.SingleOrDefault(x => x is T) as T;
         }
 
         /// <summary>

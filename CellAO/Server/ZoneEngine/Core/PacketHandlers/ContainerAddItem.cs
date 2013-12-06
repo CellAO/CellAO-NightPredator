@@ -29,10 +29,13 @@ namespace ZoneEngine.Core.PacketHandlers
     #region Usings ...
 
     using System;
+    using System.Linq;
     using System.Threading;
 
+    using CellAO.Core.Actions;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -150,11 +153,27 @@ namespace ZoneEngine.Core.PacketHandlers
             {
                 if (itemTo != null)
                 {
-                    equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
+                    if (receivingPage.NeedsItemCheck)
+                    {
+                        Actions action = GetAction(receivingPage,itemFrom);
+                        
+                        if (action.CheckRequirements(cli.Character))
+                        {
+                            equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
+                        }
+                    }
                 }
                 else
                 {
-                    equipTo.Equip(sendingPage, fromPlacement, toPlacement);
+                    if (receivingPage.NeedsItemCheck)
+                    {
+                        Actions action = GetAction(receivingPage, itemFrom);
+
+                        if (action.CheckRequirements(cli.Character))
+                        {
+                            equipTo.Equip(sendingPage, fromPlacement, toPlacement);
+                        }
+                    }
                 }
             }
             else
@@ -315,6 +334,24 @@ namespace ZoneEngine.Core.PacketHandlers
             itemTo = null;
         }
 
+        public static Actions GetAction(IInventoryPage page, IItem item)
+        {
+            Actions action = null;
+            // TODO: Add special check for social page
+            if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
+            {
+                action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWear);
+            }
+            if (page is WeaponInventoryPage)
+            {
+                action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWield);
+            }
+            if (action == null)
+            {
+                throw new NotSupportedException("No suitable action found for equipping to this page: " + page.GetType());
+            }
+            return action;
+        }
         /// <summary>
         /// </summary>
         /// <param name="placement">

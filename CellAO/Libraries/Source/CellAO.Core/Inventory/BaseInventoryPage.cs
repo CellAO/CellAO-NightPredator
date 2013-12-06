@@ -112,6 +112,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         public int MaxSlots { get; set; }
 
+        public bool NeedsItemCheck { get; set; }
+
         /// <summary>
         /// </summary>
         public virtual int Page

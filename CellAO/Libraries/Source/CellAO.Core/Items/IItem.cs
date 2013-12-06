@@ -135,7 +135,6 @@ namespace CellAO.Core.Items
         /// Write item to database
         /// </summary>
         void WriteToDatabase();
-
         #endregion
     }
 }

@@ -50,12 +50,5 @@ namespace CellAO.Core.Inventory
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public bool NeedsItemCheck { get; set; }
-
-        #endregion
     }
 }
