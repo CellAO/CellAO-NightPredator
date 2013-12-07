@@ -44,6 +44,7 @@
     </Compile>
     <Compile Include="IStat.cs" />
     <Compile Include="IStatList.cs" />
+    <Compile Include="SpecialStats\OverridingModifierStat.cs" />
     <Compile Include="SpecialStats\StatAlienNextXP.cs" />
     <Compile Include="SpecialStats\StatCurrentNano.cs" />
     <Compile Include="SpecialStats\StatGMLevel.cs" />

@@ -282,6 +282,7 @@ namespace CellAO.Core.Entities
             // First, walk inventory and get buffs from there
             this.DoNotDoTimers = true;
             this.Stats.ClearModifiers();
+            this.Textures.Clear();
             this.BaseInventory.CalculateModifiers(this);
             
         }

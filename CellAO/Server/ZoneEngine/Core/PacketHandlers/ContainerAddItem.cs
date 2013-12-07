@@ -390,13 +390,17 @@ namespace ZoneEngine.Core.PacketHandlers
                 new Identity { Type = toIdentity.Type, Instance = toIdentity.Instance },
                 toPlacement);
              */
+
             cli.Character.Stats.ClearChangedFlags();
+
+            // Apply item functions before sending the appearanceupdate message
+            cli.Character.CalculateSkills();
+
             if (!noAppearanceUpdate)
             {
                 AppearanceUpdate.AnnounceAppearanceUpdate((Character)cli.Character);
             }
 
-            cli.Character.CalculateSkills();
             itemFrom = null;
             itemTo = null;
         }
@@ -419,11 +423,19 @@ namespace ZoneEngine.Core.PacketHandlers
             if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
             {
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWear);
+                if (action == null)
+                {
+                    return new Actions();
+                }
             }
 
             if (page is WeaponInventoryPage)
             {
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWield);
+                if (action == null)
+                {
+                    return new Actions();
+                }
             }
 
             if (page is PlayerInventoryPage)

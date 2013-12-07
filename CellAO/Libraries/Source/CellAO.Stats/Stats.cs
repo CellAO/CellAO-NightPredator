@@ -1013,7 +1013,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat headMesh;
+        private readonly OverridingModifierStat headMesh;
 
         /// <summary>
         /// </summary>
@@ -1357,7 +1357,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat mesh;
+        private readonly OverridingModifierStat mesh;
 
         /// <summary>
         /// </summary>
@@ -3140,7 +3140,7 @@ namespace CellAO.Stats
             this.hasAlwaysLootable = new Stat(this, 345, 1234567890, false, false, false);
             this.hasKnuBotData = new Stat(this, 768, 1234567890, false, false, false);
             this.hateValueModifyer = new Stat(this, 288, 1234567890, false, false, false);
-            this.headMesh = new Stat(this, 64, 0, false, false, false);
+            this.headMesh = new OverridingModifierStat(this, 64, 0, false, false, false);
             this.healDelta = new StatHealDelta(this, 343, 1234567890, true, false, false);
             this.healInterval = new StatHealInterval(this, 342, 29, true, false, false);
             this.healMultiplier = new Stat(this, 535, 1234567890, false, false, false);
@@ -3226,7 +3226,7 @@ namespace CellAO.Stats
             this.memberInstance = new Stat(this, 308, 1234567890, false, false, false);
             this.memberType = new Stat(this, 307, 1234567890, false, false, false);
             this.members = new Stat(this, 300, 999, false, false, false);
-            this.mesh = new Stat(this, 12, 17530, false, false, false);
+            this.mesh = new OverridingModifierStat(this, 12, 17530, false, false, false);
             this.metaType = new Stat(this, 75, 0, false, false, false);
             this.metersWalked = new Stat(this, 252, 1234567890, false, false, false);
             this.minDamage = new Stat(this, 286, 1234567890, false, false, false);

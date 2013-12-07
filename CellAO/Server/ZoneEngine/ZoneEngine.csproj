@@ -72,6 +72,8 @@
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
+    <Compile Include="Core\Functions\GameFunctions\applytexture.cs" />
+    <Compile Include="Core\Functions\GameFunctions\changebodymesh.cs" />
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
