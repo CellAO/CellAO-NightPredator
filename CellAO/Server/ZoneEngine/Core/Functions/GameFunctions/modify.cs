@@ -28,6 +28,8 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Core.Entities;
 
     using MsgPack;
@@ -95,8 +97,8 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             MessagePackObject[] Arguments)
         {
             Character ch = (Character)Self;
-            ch.Stats[Arguments[0].AsInt32()].Modifier = ch.Stats[Arguments[0].AsInt32()].Modifier
-                                                        + Arguments[1].AsInt32();
+            ch.Stats[Arguments[0].AsInt32()].Modifier += Arguments[1].AsInt32();
+            Console.WriteLine("modify stat " + Arguments[0].AsInt32());
             return true;
         }
 

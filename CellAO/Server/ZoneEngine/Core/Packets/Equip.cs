@@ -97,7 +97,9 @@ namespace ZoneEngine.Core.Packets
                                                             Instance =
                                                                 slotNumber
                                                         }, 
+                                                        Unknown = 0,
                                                 };
+
                     client.SendCompressed(templateActionMessage);
                     break;
             }

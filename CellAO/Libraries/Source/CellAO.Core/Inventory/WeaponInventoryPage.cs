@@ -28,7 +28,14 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using System.Linq;
+
+    using CellAO.Core.Entities;
+    using CellAO.Core.Events;
+    using CellAO.Core.Functions;
     using CellAO.Core.Items;
+    using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -53,6 +60,37 @@ namespace CellAO.Core.Inventory
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        public override void CalculateModifiers(Character character)
+        {
+            foreach (IItem item in this.List().Values)
+            {
+                foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
+                {
+                    foreach (Functions functions in events.Functions)
+                    {
+                        bool result = true;
+                        foreach (Requirements requirements in functions.Requirements)
+                        {
+                            result &= requirements.CheckRequirement(character);
+                            if (!result)
+                            {
+                                break;
+                            }
+                        }
+
+                        if (result)
+                        {
+                            character.Client.CallFunction(functions);
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>

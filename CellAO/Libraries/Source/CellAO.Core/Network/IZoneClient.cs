@@ -65,5 +65,7 @@ namespace CellAO.Core.Network
         void SendCompressed(MessageBody messageBody);
 
         #endregion
+
+        void CallFunction(Functions.Functions functions);
     }
 }

@@ -1095,7 +1095,7 @@ namespace CellAO.Stats
         public static int GetDefault(int statId)
         {
             // Return 1234567890 if nothing else is specified
-            return !Defaults.ContainsKey(statId) ? 123456890 : Defaults[statId];
+            return !Defaults.ContainsKey(statId) ? 1234567890 : Defaults[statId];
         }
 
         /// <summary>

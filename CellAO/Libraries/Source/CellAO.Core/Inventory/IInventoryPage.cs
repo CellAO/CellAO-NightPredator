@@ -86,6 +86,12 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        void CalculateModifiers(Character character);
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         int FindFreeSlot();

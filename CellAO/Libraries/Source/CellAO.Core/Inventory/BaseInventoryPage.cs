@@ -32,6 +32,7 @@ namespace CellAO.Core.Inventory
     using System.Collections.Generic;
     using System.Data.Linq;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Enums;
@@ -201,6 +202,15 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        public virtual void CalculateModifiers(Character character)
+        {
+            // Do nothing
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="slot">
         /// </param>
         /// <param name="item">
@@ -290,7 +300,7 @@ namespace CellAO.Core.Inventory
 
             sendingPage.Remove(fromPlacement);
             this.Remove(toPlacement);
-            
+
             sendingPage.Add(fromPlacement, hotSwapItem);
             this.Add(toPlacement, toEquip);
         }

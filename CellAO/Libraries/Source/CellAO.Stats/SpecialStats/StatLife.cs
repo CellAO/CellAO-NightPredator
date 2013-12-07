@@ -75,10 +75,35 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                int[] breedBaseHitPoints = { 10, 15, 10, 25, 30, 30, 30 };
-                uint breed = this.Stats[StatIds.breed].BaseValue;
+                // Hitpoints by Profession and TitleLevel
+                int[,] tableProfessionHitPoints =
+                {
+                    { 6, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 6, 6 }, 
+                    { 7, 7, 6, 7, 7, 7, 6, 7, 8, 6, 6, 6, 7, 7 }, 
+                    { 8, 7, 6, 7, 7, 8, 7, 7, 9, 6, 6, 6, 8, 7 }, 
+                    { 9, 8, 6, 8, 8, 8, 7, 7, 10, 6, 6, 6, 9, 8 }, 
+                    { 10, 9, 6, 9, 8, 9, 8, 8, 11, 6, 6, 6, 10, 9 }, 
+                    { 11, 12, 6, 10, 9, 9, 9, 9, 12, 6, 6, 6, 11, 10 }, 
+                    { 12, 13, 7, 11, 10, 10, 10, 10, 13, 7, 7, 7, 12, 11 }, 
+                };
 
-                return (uint)breedBaseHitPoints[breed - 1];
+                int[] breedMultiplicatorHitPoints = { 3, 3, 2, 4, 8, 8, 10 };
+                int[] breedModificatorHitPoints = { 0, -1, -1, 0, 0, 0, 0 };
+                uint breed = this.Stats[StatIds.breed].BaseValue;
+                uint profession = this.Stats[StatIds.profession].BaseValue;
+
+                uint titleLevel = (uint)this.Stats[StatIds.titlelevel].Value;
+                uint level = (uint)this.Stats[StatIds.level].Value;
+                int[] breedBaseHitPoints = { 10, 15, 10, 25, 30, 30, 30 };
+                int baseValue = breedBaseHitPoints[breed - 1];               
+                int beforeModifiers =
+                    (int)
+                        (baseValue
+                         + (level
+                            * (tableProfessionHitPoints[titleLevel - 1, profession - 1]
+                               + breedModificatorHitPoints[breed - 1]))
+                         + (this.Stats[StatIds.bodydevelopment].Value * breedMultiplicatorHitPoints[breed - 1]));
+                return (uint)beforeModifiers;
             }
         }
 
@@ -135,38 +160,10 @@ namespace CellAO.Stats.SpecialStats
         public override int Value
         {
             get
-            {
-                // Hitpoints by Profession and TitleLevel
-                int[,] tableProfessionHitPoints =
-                {
-                    { 6, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 6, 6 }, 
-                    { 7, 7, 6, 7, 7, 7, 6, 7, 8, 6, 6, 6, 7, 7 }, 
-                    { 8, 7, 6, 7, 7, 8, 7, 7, 9, 6, 6, 6, 8, 7 }, 
-                    { 9, 8, 6, 8, 8, 8, 7, 7, 10, 6, 6, 6, 9, 8 }, 
-                    { 10, 9, 6, 9, 8, 9, 8, 8, 11, 6, 6, 6, 10, 9 }, 
-                    { 11, 12, 6, 10, 9, 9, 9, 9, 12, 6, 6, 6, 11, 10 }, 
-                    { 12, 13, 7, 11, 10, 10, 10, 10, 13, 7, 7, 7, 12, 11 }, 
-                };
-
-                int[] breedMultiplicatorHitPoints = { 3, 3, 2, 4, 8, 8, 10 };
-                int[] breedModificatorHitPoints = { 0, -1, -1, 0, 0, 0, 0 };
-                uint breed = this.Stats[StatIds.breed].BaseValue;
-                uint profession = this.Stats[StatIds.profession].BaseValue;
-
-                uint titleLevel = (uint)this.Stats[StatIds.titlelevel].Value;
-                uint level = (uint)this.Stats[StatIds.level].Value;
-                int beforeModifiers =
-                    (int)
-                        (this.BaseValue
-                         + (level
-                            * (tableProfessionHitPoints[titleLevel - 1, profession - 1]
-                               + breedModificatorHitPoints[breed - 1]))
-                         + (this.Stats[StatIds.bodydevelopment].Value * breedMultiplicatorHitPoints[breed - 1]));
+            {                
                 return (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
-                        ((beforeModifiers + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-
-                // ReSharper restore PossibleLossOfFraction
+                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
             }
 
             set

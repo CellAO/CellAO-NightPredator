@@ -31,6 +31,7 @@ namespace CellAO.Core.Inventory
     using System;
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Items;
     using CellAO.Enums;
 
@@ -133,6 +134,18 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        public void CalculateModifiers(Character character)
+        {
+            foreach (IInventoryPage page in this.Pages.Values)
+            {
+                page.CalculateModifiers(character);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="slotNum">
         /// </param>
         /// <returns>
@@ -149,7 +162,7 @@ namespace CellAO.Core.Inventory
                     return page.Value;
                 }
             }
-            
+
             if (slotNum == (int)IdentityType.TradeWindow)
             {
                 return this.Pages[this.StandardPage];

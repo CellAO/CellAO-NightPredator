@@ -55,6 +55,8 @@ namespace ZoneEngine.Core
 
     using zlib;
 
+    using ZoneEngine.Core.Functions;
+
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
@@ -226,6 +228,17 @@ namespace ZoneEngine.Core
             this.SendCompressed(buffer);
             LogUtil.Debug(messageBody.GetType().ToString());
             LogUtil.Debug(NiceHexOutput.Output(buffer));
+        }
+
+        public void CallFunction(CellAO.Core.Functions.Functions functions)
+        {
+            // TODO: Make it more versatile, not just applying stuff on yourself
+            FunctionCollection.Instance.CallFunction(
+                functions.FunctionType,
+                this.character,
+                this.character,
+                this.character,
+                functions.Arguments.Values.ToArray());
         }
 
         /// <summary>

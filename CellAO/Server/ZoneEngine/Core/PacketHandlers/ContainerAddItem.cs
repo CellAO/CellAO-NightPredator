@@ -155,9 +155,9 @@ namespace ZoneEngine.Core.PacketHandlers
             noAppearanceUpdate =
                 !((equipTo is WeaponInventoryPage) || (equipTo is ArmorInventoryPage)
                   || (equipTo is SocialArmorInventoryPage));
-            noAppearanceUpdate &= !((unequipFrom is WeaponInventoryPage) || (unequipFrom is ArmorInventoryPage)
+            noAppearanceUpdate &=
+                !((unequipFrom is WeaponInventoryPage) || (unequipFrom is ArmorInventoryPage)
                   || (unequipFrom is SocialArmorInventoryPage));
-
 
             if (equipTo != null)
             {
@@ -178,14 +178,16 @@ namespace ZoneEngine.Core.PacketHandlers
                                 // and other messages have to be done too
                                 // like heartbeat timer, damage from environment and such
 
-                                delay = itemFrom.GetAttribute(211) + itemTo.GetAttribute(211);
+                                delay = (itemFrom.GetAttribute(211) == 1234567890 ? 20 : itemFrom.GetAttribute(211))
+                                        + (itemTo.GetAttribute(211) == 1234567890 ? 20 : itemTo.GetAttribute(211));
 
-                                Thread.Sleep(delay*10);
+                                Thread.Sleep(delay * 10);
                             }
                             else
                             {
                                 Thread.Sleep(200); // social has to wait for 0.2 secs too (for helmet update)
                             }
+
                             cli.SendCompressed(message);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
@@ -214,13 +216,20 @@ namespace ZoneEngine.Core.PacketHandlers
                                 // like heartbeat timer, damage from environment and such
 
                                 delay = itemFrom.GetAttribute(211);
-                                if (equipTo is SocialArmorInventoryPage)
+                                if ((equipTo is SocialArmorInventoryPage) || (delay == 1234567890))
                                 {
                                     delay = 20;
                                 }
 
-                                Thread.Sleep(delay*10);
+                                Thread.Sleep(delay * 10);
                             }
+
+                            if (sendingPage == receivingPage)
+                            {
+                                // Switch rings for example
+                                UnEquip.Send(cli, sendingPage, fromPlacement);
+                            }
+
                             cli.SendCompressed(message);
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
@@ -242,12 +251,14 @@ namespace ZoneEngine.Core.PacketHandlers
                         // like heartbeat timer, damage from environment and such
 
                         delay = itemFrom.GetAttribute(211);
-                        if (unequipFrom is SocialArmorInventoryPage)
+                        if ((unequipFrom is SocialArmorInventoryPage) || (delay == 1234567890))
                         {
                             delay = 20;
                         }
+
                         Thread.Sleep(delay * 10);
                     }
+
                     UnEquip.Send(cli, sendingPage, fromPlacement);
                     cli.SendCompressed(message);
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
@@ -385,6 +396,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 AppearanceUpdate.AnnounceAppearanceUpdate((Character)cli.Character);
             }
 
+            cli.Character.CalculateSkills();
             itemFrom = null;
             itemTo = null;
         }

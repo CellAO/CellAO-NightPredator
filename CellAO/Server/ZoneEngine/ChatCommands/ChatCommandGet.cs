@@ -149,6 +149,7 @@ namespace ZoneEngine.ChatCommands
                                   + statValue;
 
                 client.SendChatText(response);
+
                 if (statValue != targetCharacter.Stats[statId].Value)
                 {
                     response = "Effective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "

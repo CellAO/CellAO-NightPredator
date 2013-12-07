@@ -33,6 +33,8 @@ namespace CellAO.Core.Functions
     using System.IO;
 
     using CellAO.Core.Requirements;
+
+    using MsgPack;
     using MsgPack.Serialization;
 
     #endregion
@@ -188,23 +190,26 @@ namespace CellAO.Core.Functions
                 copy.Requirements.Add(requirements.Copy());
             }
 
-            foreach (object ob in this.Arguments.Values)
+            foreach (MessagePackObject ob in this.Arguments.Values)
             {
-                if (ob.GetType() == typeof(string))
+                if (ob.IsTypeOf(typeof(string))==true)
                 {
-                    string z = (string)ob;
+                    MessagePackObject z = new MessagePackObject();
+                    z = ob.ToString();
                     copy.Arguments.Values.Add(z);
                 }
 
-                if (ob.GetType() == typeof(int))
+                if (ob.IsTypeOf(typeof(int)) == true)
                 {
-                    int i = (int)ob;
+                    MessagePackObject i = new MessagePackObject();
+                    i = ob.AsInt32();
                     copy.Arguments.Values.Add(i);
                 }
 
                 if (ob.GetType() == typeof(Single))
                 {
-                    float s = (Single)ob;
+                    MessagePackObject s = new MessagePackObject();
+                    s = ob.AsSingle();
                     copy.Arguments.Values.Add(s);
                 }
             }

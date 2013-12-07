@@ -75,7 +75,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                int level = this.Stats[StatIds.level].Value;
+                int level = this.Stats[StatIds.alienlevel].Value;
                 return Convert.ToInt32(XPTable.TableAlienXP[level, 2]);
             }
 

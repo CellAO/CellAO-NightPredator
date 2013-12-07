@@ -30,6 +30,7 @@ namespace CellAO.Core.Inventory
 
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Items;
     using CellAO.Enums;
 
@@ -80,6 +81,12 @@ namespace CellAO.Core.Inventory
         /// <returns>
         /// </returns>
         InventoryError AddToPage(int pageNum, int slotNum, IItem item);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        void CalculateModifiers(Character character);
 
         /// <summary>
         /// </summary>

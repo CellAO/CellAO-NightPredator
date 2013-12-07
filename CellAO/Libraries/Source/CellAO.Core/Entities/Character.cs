@@ -278,6 +278,12 @@ namespace CellAO.Core.Entities
         public void CalculateSkills()
         {
             // TODO: Reintroduce skill calculation (walk inventory and active nanos)
+
+            // First, walk inventory and get buffs from there
+            this.DoNotDoTimers = true;
+            this.Stats.ClearModifiers();
+            this.BaseInventory.CalculateModifiers(this);
+            
         }
 
         /// <summary>
@@ -568,7 +574,7 @@ namespace CellAO.Core.Entities
         /// </param>
         private void StatsAfterStatChangedEvent(object sender, StatChangedEventArgs e)
         {
-            uint valueToSend = e.Stat.SendBaseValue ? e.NewValue : (uint)e.Stat.Value;
+            uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
             var messageBody = new StatMessage()
                               {
                                   Identity = this.Identity, 

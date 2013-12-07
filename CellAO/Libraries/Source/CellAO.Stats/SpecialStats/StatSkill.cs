@@ -84,16 +84,13 @@ namespace CellAO.Stats.SpecialStats
 
                 return
                     Convert.ToInt32(
-                        Math.Round(
-                            Math.Round(
-                                strengthTrickle * this.Stats[StatIds.strength].Value
-                                + staminaTrickle * this.Stats[StatIds.stamina].Value
-                                + senseTrickle * this.Stats[StatIds.sense].Value
-                                + agilityTrickle * this.Stats[StatIds.agility].Value
-                                + intelligenceTrickle * this.Stats[StatIds.intelligence].Value
-                                + psychicTrickle * this.Stats[StatIds.psychic].Value, 
-                                MidpointRounding.AwayFromZero) / 4, 
-                            MidpointRounding.AwayFromZero));
+                        Math.Floor(
+                            (strengthTrickle * this.Stats[StatIds.strength].Value
+                             + staminaTrickle * this.Stats[StatIds.stamina].Value
+                             + senseTrickle * this.Stats[StatIds.sense].Value
+                             + agilityTrickle * this.Stats[StatIds.agility].Value
+                             + intelligenceTrickle * this.Stats[StatIds.intelligence].Value
+                             + psychicTrickle * this.Stats[StatIds.psychic].Value) / 4));
             }
 
             set
