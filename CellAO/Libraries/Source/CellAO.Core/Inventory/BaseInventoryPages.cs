@@ -34,6 +34,8 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Items;
     using CellAO.Enums;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     #endregion
 
     /// <summary>
@@ -139,13 +141,18 @@ namespace CellAO.Core.Inventory
         /// </exception>
         public IInventoryPage PageFromSlot(int slotNum)
         {
-            foreach (KeyValuePair<int, IInventoryPage> page  in this.Pages)
+            foreach (KeyValuePair<int, IInventoryPage> page in this.Pages)
             {
                 if ((slotNum >= page.Value.FirstSlotNumber)
                     && (slotNum <= page.Value.FirstSlotNumber + page.Value.MaxSlots))
                 {
                     return page.Value;
                 }
+            }
+            
+            if (slotNum == (int)IdentityType.TradeWindow)
+            {
+                return this.Pages[this.StandardPage];
             }
 
             throw new IndexOutOfRangeException("No inventory page found for slot " + slotNum);

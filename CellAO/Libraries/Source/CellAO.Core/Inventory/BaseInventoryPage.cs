@@ -287,9 +287,11 @@ namespace CellAO.Core.Inventory
         {
             IItem toEquip = sendingPage[fromPlacement];
             IItem hotSwapItem = this[toPlacement];
+
             sendingPage.Remove(fromPlacement);
-            sendingPage.Add(fromPlacement, hotSwapItem);
             this.Remove(toPlacement);
+            
+            sendingPage.Add(fromPlacement, hotSwapItem);
             this.Add(toPlacement, toEquip);
         }
 

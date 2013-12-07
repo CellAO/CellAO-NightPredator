@@ -152,17 +152,41 @@ namespace ZoneEngine.Core.PacketHandlers
             IItemSlotHandler equipTo = receivingPage as IItemSlotHandler;
             IItemSlotHandler unequipFrom = sendingPage as IItemSlotHandler;
 
+            noAppearanceUpdate =
+                !((equipTo is WeaponInventoryPage) || (equipTo is ArmorInventoryPage)
+                  || (equipTo is SocialArmorInventoryPage));
+            noAppearanceUpdate &= !((unequipFrom is WeaponInventoryPage) || (unequipFrom is ArmorInventoryPage)
+                  || (unequipFrom is SocialArmorInventoryPage));
+
+
             if (equipTo != null)
             {
                 if (itemTo != null)
                 {
                     if (receivingPage.NeedsItemCheck)
                     {
-                        Actions action = GetAction(receivingPage, itemFrom);
+                        Actions action = GetAction(sendingPage, itemFrom);
 
                         if (action.CheckRequirements(cli.Character))
                         {
                             UnEquip.Send(cli, receivingPage, toPlacement);
+                            if (!noAppearanceUpdate)
+                            {
+                                // Equipmentpages need delays
+                                // Delay when equipping/unequipping
+                                // has to be redone, jumping breaks the equiping/unequiping 
+                                // and other messages have to be done too
+                                // like heartbeat timer, damage from environment and such
+
+                                delay = itemFrom.GetAttribute(211) + itemTo.GetAttribute(211);
+
+                                Thread.Sleep(delay*10);
+                            }
+                            else
+                            {
+                                Thread.Sleep(200); // social has to wait for 0.2 secs too (for helmet update)
+                            }
+                            cli.SendCompressed(message);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
                         }
@@ -181,6 +205,23 @@ namespace ZoneEngine.Core.PacketHandlers
 
                         if (action.CheckRequirements(cli.Character))
                         {
+                            if (!noAppearanceUpdate)
+                            {
+                                // Equipmentpages need delays
+                                // Delay when equipping/unequipping
+                                // has to be redone, jumping breaks the equiping/unequiping 
+                                // and other messages have to be done too
+                                // like heartbeat timer, damage from environment and such
+
+                                delay = itemFrom.GetAttribute(211);
+                                if (equipTo is SocialArmorInventoryPage)
+                                {
+                                    delay = 20;
+                                }
+
+                                Thread.Sleep(delay*10);
+                            }
+                            cli.SendCompressed(message);
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
                         }
@@ -191,8 +232,25 @@ namespace ZoneEngine.Core.PacketHandlers
             {
                 if (unequipFrom != null)
                 {
-                    unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
+                    // Send to client first
+                    if (!noAppearanceUpdate)
+                    {
+                        // Equipmentpages need delays
+                        // Delay when equipping/unequipping
+                        // has to be redone, jumping breaks the equiping/unequiping 
+                        // and other messages have to be done too
+                        // like heartbeat timer, damage from environment and such
+
+                        delay = itemFrom.GetAttribute(211);
+                        if (unequipFrom is SocialArmorInventoryPage)
+                        {
+                            delay = 20;
+                        }
+                        Thread.Sleep(delay * 10);
+                    }
                     UnEquip.Send(cli, sendingPage, fromPlacement);
+                    cli.SendCompressed(message);
+                    unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
                 }
             }
 
@@ -312,19 +370,6 @@ namespace ZoneEngine.Core.PacketHandlers
         }*/
 
             cli.Character.DoNotDoTimers = false;
-            if ((equipTo != null) || (unequipFrom != null))
-            {
-                // Equipmentpages need delays
-                // Delay when equipping/unequipping
-                // has to be redone, jumping breaks the equiping/unequiping 
-                // and other messages have to be done too
-                // like heartbeat timer, damage from environment and such
-                Thread.Sleep(delay);
-            }
-            else
-            {
-                Thread.Sleep(200); // social has to wait for 0.2 secs too (for helmet update)
-            }
 
             /*
             SwitchItem.Send(
@@ -367,6 +412,12 @@ namespace ZoneEngine.Core.PacketHandlers
             if (page is WeaponInventoryPage)
             {
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWield);
+            }
+
+            if (page is PlayerInventoryPage)
+            {
+                // No checks needed for unequipping
+                return new Actions();
             }
 
             if (action == null)
