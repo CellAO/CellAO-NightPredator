@@ -444,6 +444,12 @@ namespace ZoneEngine.Core.PacketHandlers
                 return new Actions();
             }
 
+            if (page is SocialArmorInventoryPage)
+            {
+                // TODO: Check for side, sex, breed conditionals
+                return new Actions();
+            }
+
             if (action == null)
             {
                 throw new NotSupportedException(

@@ -28,6 +28,15 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using System.Linq;
+
+    using CellAO.Core.Entities;
+    using CellAO.Core.Events;
+    using CellAO.Core.Functions;
+    using CellAO.Core.Items;
+    using CellAO.Core.Requirements;
+    using CellAO.Enums;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -46,6 +55,44 @@ namespace CellAO.Core.Inventory
             : base((int)IdentityType.SocialPage, 15, 0x31, ownerInstance)
         {
             this.NeedsItemCheck = true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        public override void CalculateModifiers(Character character)
+        {
+            foreach (IItem item in this.List().Values)
+            {
+                foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
+                {
+                    foreach (Functions functions in events.Functions.Where(x=>IsSocialTabFuncton(x.FunctionType)))
+                    {
+                        bool result = true;
+                        foreach (Requirements requirements in functions.Requirements)
+                        {
+                            result &= requirements.CheckRequirement(character);
+                            if (!result)
+                            {
+                                break;
+                            }
+                        }
+
+                        if (result)
+                        {
+                            character.Client.CallFunction(functions);
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool IsSocialTabFuncton(int p)
+        {
+            // Functions applyable on social page: (List not complete yet)
+            int[] goodFunctions = { 53039, 53054, };
+            return goodFunctions.Any(x => x == p);
         }
 
         #endregion
