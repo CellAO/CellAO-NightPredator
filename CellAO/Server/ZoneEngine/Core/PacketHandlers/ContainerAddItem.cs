@@ -40,6 +40,8 @@ namespace ZoneEngine.Core.PacketHandlers
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.Packets;
+
     #endregion
 
     /// <summary>
@@ -99,7 +101,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // Get standard page if toplacement cant be found (0x6F for next free slot)
             // TODO: If Entities are not the same (other player, bag etc) then always add to the standard page
-            if (receivingPage == null)
+            if ((receivingPage == null) || (itemReceiver.GetType() != (cli.Character.GetType())))
             {
                 receivingPage = itemReceiver.BaseInventory.Pages[itemReceiver.BaseInventory.StandardPage];
             }
@@ -155,11 +157,13 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     if (receivingPage.NeedsItemCheck)
                     {
-                        Actions action = GetAction(receivingPage,itemFrom);
-                        
+                        Actions action = GetAction(receivingPage, itemFrom);
+
                         if (action.CheckRequirements(cli.Character))
                         {
+                            UnEquip.Send(cli, receivingPage, toPlacement);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
+                            Equip.Send(cli, receivingPage, toPlacement);
                         }
                     }
                 }
@@ -167,11 +171,16 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     if (receivingPage.NeedsItemCheck)
                     {
+                        if (itemFrom == null)
+                        {
+                            throw new NullReferenceException("itemFrom can not be null, possible inventory error");
+                        }
                         Actions action = GetAction(receivingPage, itemFrom);
 
                         if (action.CheckRequirements(cli.Character))
                         {
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
+                            Equip.Send(cli, receivingPage, toPlacement);
                         }
                     }
                 }
@@ -181,6 +190,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 if (unequipFrom != null)
                 {
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
+                    UnEquip.Send(cli, sendingPage, fromPlacement);
                 }
             }
 
@@ -334,24 +344,40 @@ namespace ZoneEngine.Core.PacketHandlers
             itemTo = null;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="page">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotSupportedException">
+        /// </exception>
         public static Actions GetAction(IInventoryPage page, IItem item)
         {
             Actions action = null;
+
             // TODO: Add special check for social page
             if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
             {
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWear);
             }
+
             if (page is WeaponInventoryPage)
             {
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWield);
             }
+
             if (action == null)
             {
-                throw new NotSupportedException("No suitable action found for equipping to this page: " + page.GetType());
+                throw new NotSupportedException(
+                    "No suitable action found for equipping to this page: " + page.GetType());
             }
+
             return action;
         }
+
         /// <summary>
         /// </summary>
         /// <param name="placement">

@@ -69,7 +69,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public IInventoryPages BaseInventory { get; private set; }
+        public IInventoryPages BaseInventory { get; set; }
 
         /// <summary>
         /// </summary>

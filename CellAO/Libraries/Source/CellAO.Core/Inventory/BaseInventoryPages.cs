@@ -139,7 +139,15 @@ namespace CellAO.Core.Inventory
         /// </exception>
         public IInventoryPage PageFromSlot(int slotNum)
         {
-            throw new NotImplementedException();
+            foreach (KeyValuePair<int, IInventoryPage> page  in this.Pages)
+            {
+                if ((slotNum >= page.Value.FirstSlotNumber)
+                    && (slotNum <= page.Value.FirstSlotNumber + page.Value.MaxSlots))
+                {
+                    return page.Value;
+                }
+            }
+            throw new IndexOutOfRangeException("No inventory page found for slot "+slotNum);
         }
 
         /// <summary>

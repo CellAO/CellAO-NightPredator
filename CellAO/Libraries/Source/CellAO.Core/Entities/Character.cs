@@ -42,6 +42,7 @@ namespace CellAO.Core.Entities
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
@@ -104,6 +105,29 @@ namespace CellAO.Core.Entities
             this.Client = zoneClient;
             this.ActiveNanos = new List<IActiveNano>();
             this.UploadedNanos = new List<IUploadedNanos>();
+            this.BaseInventory=new PlayerInventory(this);
+            this.Stats.AfterStatChangedEvent+=StatsAfterStatChangedEvent;
+            this.BaseInventory.Read();
+        }
+
+        private void StatsAfterStatChangedEvent(object sender, Stats.StatChangedEventArgs e)
+        {
+            uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
+            var messageBody = new SetStatMessage()
+                              {
+                                  Identity = this.Identity,
+                                  Stat = (CharacterStat)e.Stat.StatId,
+                                  Value=e.Stat.Value
+                              };
+
+            if (e.AnnounceToPlayfield)
+            {
+                Client.Character.Playfield.Announce(messageBody);
+            }
+            else
+            {
+                Client.SendCompressed(messageBody);
+            }
         }
 
         #endregion

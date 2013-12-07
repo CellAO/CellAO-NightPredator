@@ -242,9 +242,12 @@ namespace CellAO.Core.Inventory
             IItem toEquip = sendingPage[fromPlacement];
 
             // First: Check if the item can be worn
-            if ((toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear)
+            bool canBeWornCheck = (toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear;
+
+            if (canBeWornCheck)
             {
                 this.Add(toPlacement, toEquip);
+                sendingPage.Remove(fromPlacement);
             }
         }
 

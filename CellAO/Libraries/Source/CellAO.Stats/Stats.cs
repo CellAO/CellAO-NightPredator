@@ -30,6 +30,7 @@ namespace CellAO.Stats
 
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -11667,6 +11668,18 @@ namespace CellAO.Stats
                 StatDao.GetById((int)identity.Type, identity.Instance))
             {
                 this.SetBaseValueWithoutTriggering(dbStats.statid, (uint)dbStats.statvalue);
+            }
+        }
+
+        public event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
+
+
+        public void AfterStatChangedEventHandler(StatChangedEventArgs e)
+        {
+            EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
+            if (handler != null)
+            {
+                handler(this, e);
             }
         }
 

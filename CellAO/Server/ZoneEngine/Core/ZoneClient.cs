@@ -156,13 +156,13 @@ namespace ZoneEngine.Core
             IEnumerable<DBCharacter> daochar = CharacterDao.GetById(charId);
             if (daochar.Count() == 0)
             {
-                throw new Exception("Character " + charId.ToString() + " not found.");
+                throw new Exception("Character " + charId + " not found.");
             }
 
             if (daochar.Count() > 1)
             {
                 throw new Exception(
-                    daochar.Count().ToString() + " Characters with id " + charId.ToString()
+                    daochar.Count() + " Characters with id " + charId
                     + " found??? Check Database setup!");
             }
 
@@ -172,15 +172,14 @@ namespace ZoneEngine.Core
             this.character.FirstName = character.FirstName;
             this.character.Coordinates = new Coordinate(character.X, character.Y, character.Z);
             this.character.Heading = new Quaternion(
-                character.HeadingX, 
-                character.HeadingY, 
-                character.HeadingZ, 
+                character.HeadingX,
+                character.HeadingY,
+                character.HeadingZ,
                 character.HeadingW);
             this.character.Playfield = this.server.PlayfieldById(character.Playfield);
             this.Playfield = this.character.Playfield;
             this.Playfield.Entities.Add(this.character);
             this.character.Stats.Read();
-            this.character.BaseInventory.Read();
         }
 
         /// <summary>
@@ -193,10 +192,10 @@ namespace ZoneEngine.Core
         {
             var message = new ChatTextMessage
                           {
-                              Identity = this.Character.Identity, 
-                              Unknown = 0x00, 
-                              Text = text, 
-                              Unknown1 = 0x1000, 
+                              Identity = this.Character.Identity,
+                              Unknown = 0x00,
+                              Text = text,
+                              Unknown1 = 0x1000,
                               Unknown2 = 0x00000000
                           };
 
@@ -212,14 +211,14 @@ namespace ZoneEngine.Core
         {
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = this.server.Id, 
+                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0),
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
+                                      Sender = this.server.Id,
                                       Receiver = this.Character.Identity.Instance
                                   }
                           };
@@ -266,13 +265,13 @@ namespace ZoneEngine.Core
             // TODO: Investigate if reciever is a timestamp
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = 0xdfdf, 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
+                                      MessageId = 0xdfdf,
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
                                       // TODO: Make compression choosable in config.xml
                                       Sender = 0x01000000, // 01000000 = uncompressed, 03000000 = compressed
                                       Receiver = 0 // this.character.Identity.Instance 
@@ -376,8 +375,8 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
+                    this,
+                    "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 this.server.Warning(this, NiceHexOutput.Output(packet));
                 return false;
@@ -389,8 +388,8 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
+                    this,
+                    "Client sent unknown message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }

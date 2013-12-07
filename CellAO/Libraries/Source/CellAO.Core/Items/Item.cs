@@ -211,6 +211,13 @@ namespace CellAO.Core.Items
         /// </summary>
         public void CreateInterpolatedRequirements()
         {
+            if (this.templateLow.Quality == this.templateHigh.Quality)
+            {
+                this.actions = this.templateLow.Actions;
+                this.events = this.templateLow.Events;
+                return;
+            }
+
             float factor = (this.Quality - this.templateLow.Quality)
                            / (this.templateHigh.Quality - this.templateLow.Quality);
             if (this.actions == null)

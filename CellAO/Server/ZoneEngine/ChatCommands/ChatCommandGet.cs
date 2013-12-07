@@ -72,8 +72,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ZoneClient client)
         {
-            // No help needed, no arguments can be given
-            return;
+            client.SendChatText("Syntax: /get <stat name|stat id>");
         }
 
         /// <summary>

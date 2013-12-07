@@ -24,75 +24,29 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
-    using System;
-    using System.Collections.Generic;
+    using CellAO.Core.Entities;
 
-    using CellAO.Enums;
-    using CellAO.Interfaces;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using MsgPack;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStatList : IDatabaseObject
+    internal class Function_modify : FunctionPrototype
     {
-        #region Public Events
+        #region Fields
 
         /// <summary>
         /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        #endregion
-
-        #region Public Properties
+        public new string FunctionName = "modify";
 
         /// <summary>
         /// </summary>
-        List<IStat> All { get; }
-
-        /// <summary>
-        /// </summary>
-        Identity Owner { get; }
-
-        #endregion
-
-        #region Public Indexers
-
-        /// <summary>
-        /// Number-indexed access to Stats List
-        /// </summary>
-        /// <param name="index">
-        /// Id of Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[int index] { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="i">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IStat this[StatIds i] { get; }
-
-        /// <summary>
-        /// Name-indexed access to Stats List
-        /// </summary>
-        /// <param name="name">
-        /// Name of the Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[string name] { get; }
+        public new int FunctionNumber = 53045;
 
         #endregion
 
@@ -100,27 +54,69 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        /// <param name="e">
+        /// <param name="self">
+        /// </param>
+        /// <param name="caller">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="arguments">
         /// </param>
         /// <returns>
         /// </returns>
-        void AfterStatChangedEventHandler(StatChangedEventArgs e);
+        public override bool Execute(
+            INamedEntity self, 
+            INamedEntity caller, 
+            IInstancedEntity target, 
+            MessagePackObject[] arguments)
+        {
+            lock (target)
+            {
+                return this.FunctionExecute(self, caller, target, arguments);
+            }
+        }
 
         /// <summary>
         /// </summary>
-        void ClearChangedFlags();
-
-        /// <summary>
-        /// </summary>
-        void ClearModifiers();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
+        /// <param name="Self">
+        /// </param>
+        /// <param name="Caller">
+        /// </param>
+        /// <param name="Target">
+        /// </param>
+        /// <param name="Arguments">
         /// </param>
         /// <returns>
         /// </returns>
-        Stat GetStatByNumber(int number);
+        public bool FunctionExecute(
+            INamedEntity Self, 
+            INamedEntity Caller, 
+            IInstancedEntity Target, 
+            MessagePackObject[] Arguments)
+        {
+            Character ch = (Character)Self;
+            ch.Stats[Arguments[0].AsInt32()].Modifier = ch.Stats[Arguments[0].AsInt32()].Modifier
+                                                        + Arguments[1].AsInt32();
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override string ReturnName()
+        {
+            return this.FunctionName;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override int ReturnNumber()
+        {
+            return this.FunctionNumber;
+        }
 
         #endregion
     }

@@ -102,8 +102,18 @@ namespace CellAO.Stats
         /// </returns>
         uint GetMaxValue(uint old);
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="value">
+        /// </param>
+        void Set(uint value, bool starting = false);
 
+        /// <summary>
+        /// </summary>
+        /// <param name="value">
+        /// </param>
         void SetBaseValue(uint value);
+
+        #endregion
     }
 }

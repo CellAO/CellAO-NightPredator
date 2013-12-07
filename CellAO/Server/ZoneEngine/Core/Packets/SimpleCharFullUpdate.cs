@@ -36,6 +36,7 @@ namespace ZoneEngine.Core.Packets
     using CellAO.Core.Nanos;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -121,51 +122,51 @@ namespace ZoneEngine.Core.Packets
 
             lock (character)
             {
-                socialonly = (character.Stats["VisualFlags"].Value & 0x40) > 0;
-                showsocial = (character.Stats["VisualFlags"].Value & 0x20) > 0;
+                socialonly = (character.Stats[StatIds.visualflags].Value & 0x40) > 0;
+                showsocial = (character.Stats[StatIds.visualflags].Value & 0x20) > 0;
 
                 charPlayfield = character.Playfield.Identity.Instance;
                 charCoord = character.Coordinates;
                 charId = character.Identity;
                 charHeading = character.Heading;
 
-                sideValue = character.Stats["Side"].BaseValue;
-                fatValue = character.Stats["Fatness"].BaseValue;
-                breedValue = character.Stats["Breed"].BaseValue;
-                sexValue = character.Stats["Sex"].BaseValue;
-                raceValue = character.Stats["Race"].BaseValue;
+                sideValue = character.Stats[StatIds.side].BaseValue;
+                fatValue = character.Stats[StatIds.fatness].BaseValue;
+                breedValue = character.Stats[StatIds.breed].BaseValue;
+                sexValue = character.Stats[StatIds.sex].BaseValue;
+                raceValue = character.Stats[StatIds.race].BaseValue;
 
                 charName = character.Name;
-                charFlagsValue = character.Stats["Flags"].Value;
-                accFlagsValue = character.Stats["AccountFlags"].Value;
+                charFlagsValue = character.Stats[StatIds.flags].Value;
+                accFlagsValue = character.Stats[StatIds.accountflags].Value;
 
-                expansionValue = character.Stats["Expansion"].Value;
-                currentNano = character.Stats["CurrentNano"].Value;
+                expansionValue = character.Stats[StatIds.expansion].Value;
+                currentNano = character.Stats[StatIds.currentnano].Value;
 
-                strengthBaseValue = character.Stats["Strength"].BaseValue;
-                staminaBaseValue = character.Stats["Strength"].BaseValue;
-                agilityBaseValue = character.Stats["Strength"].BaseValue;
-                senseBaseValue = character.Stats["Strength"].BaseValue;
-                intelligenceBaseValue = character.Stats["Strength"].BaseValue;
-                psychicBaseValue = character.Stats["Strength"].BaseValue;
+                strengthBaseValue = character.Stats[StatIds.strength].BaseValue;
+                staminaBaseValue = character.Stats[StatIds.stamina].BaseValue;
+                agilityBaseValue = character.Stats[StatIds.agility].BaseValue;
+                senseBaseValue = character.Stats[StatIds.sense].BaseValue;
+                intelligenceBaseValue = character.Stats[StatIds.intelligence].BaseValue;
+                psychicBaseValue = character.Stats[StatIds.psychic].BaseValue;
 
                 firstName = character.FirstName;
                 lastName = character.LastName;
                 orgNameLength = character.OrganizationName.Length;
                 orgName = character.OrganizationName;
-                levelValue = character.Stats["Level"].Value;
-                healthValue = character.Stats["Life"].Value;
+                levelValue = character.Stats[StatIds.level].Value;
+                healthValue = character.Stats[StatIds.life].Value;
 
-                monsterData = character.Stats["MonsterData"].Value;
-                monsterScale = character.Stats["MonsterScale"].Value;
-                visualFlags = character.Stats["VisualFlags"].Value;
+                monsterData = character.Stats[StatIds.monsterdata].Value;
+                monsterScale = character.Stats[StatIds.monsterscale].Value;
+                visualFlags = character.Stats[StatIds.visualflags].Value;
 
-                currentMovementMode = character.Stats["CurrentMovementMode"].Value;
-                runSpeedBaseValue = character.Stats["RunSpeed"].BaseValue;
+                currentMovementMode = character.Stats[StatIds.currentmovementmode].Value;
+                runSpeedBaseValue = character.Stats[StatIds.runspeed].BaseValue;
 
                 texturesCount = character.Textures.Count;
 
-                headMeshValue = character.Stats["HeadMesh"].Value;
+                headMeshValue = character.Stats[StatIds.headmesh].Value;
 
                 foreach (int num in character.SocialTab.Keys)
                 {
@@ -193,9 +194,9 @@ namespace ZoneEngine.Core.Packets
                     nanos.Add(tempNano);
                 }
 
-                losHeight = character.Stats["LosHeight"].Value;
-                NPCFamily = character.Stats["NpcFamily"].Value;
-                currentHealth = character.Stats["Health"].Value;
+                losHeight = character.Stats[StatIds.losheight].Value;
+                NPCFamily = character.Stats[StatIds.npcfamily].Value;
+                currentHealth = character.Stats[StatIds.health].Value;
             }
 
             var scfu = new SimpleCharFullUpdateMessage();

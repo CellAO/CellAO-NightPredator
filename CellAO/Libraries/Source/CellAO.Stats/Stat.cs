@@ -421,6 +421,8 @@ namespace CellAO.Stats
                 handler(this, e);
             }
 
+            Stats.AfterStatChangedEventHandler(e);
+
             if (this.affects.Any())
             {
                 foreach (int affectedStat in this.affects)

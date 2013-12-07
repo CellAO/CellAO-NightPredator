@@ -24,103 +24,71 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
-    using System;
-    using System.Collections.Generic;
-
-    using CellAO.Enums;
-    using CellAO.Interfaces;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStatList : IDatabaseObject
+    public static class UnEquip
     {
-        #region Public Events
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        List<IStat> All { get; }
-
-        /// <summary>
-        /// </summary>
-        Identity Owner { get; }
-
-        #endregion
-
-        #region Public Indexers
-
-        /// <summary>
-        /// Number-indexed access to Stats List
-        /// </summary>
-        /// <param name="index">
-        /// Id of Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[int index] { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="i">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IStat this[StatIds i] { get; }
-
-        /// <summary>
-        /// Name-indexed access to Stats List
-        /// </summary>
-        /// <param name="name">
-        /// Name of the Stat
-        /// </param>
-        /// <returns>
-        /// IStat object
-        /// </returns>
-        IStat this[string name] { get; }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="e">
+        /// <param name="client">
         /// </param>
-        /// <returns>
-        /// </returns>
-        void AfterStatChangedEventHandler(StatChangedEventArgs e);
-
-        /// <summary>
-        /// </summary>
-        void ClearChangedFlags();
-
-        /// <summary>
-        /// </summary>
-        void ClearModifiers();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="number">
+        /// <param name="page">
         /// </param>
-        /// <returns>
-        /// </returns>
-        Stat GetStatByNumber(int number);
+        /// <param name="slotNumber">
+        /// </param>
+        public static void Send(IZoneClient client, IInventoryPage page, int slotNumber)
+        {
+            switch (slotNumber)
+            {
+                case 6:
+                    var action97Message = new CharacterActionMessage()
+                    {
+                        Action =
+                            CharacterActionType
+                            .Unknown3,
+                        Parameter2 = 6
+
+                    };
+                    client.SendCompressed(action97Message);
+                    break;
+                default:
+                    IItem item = page[slotNumber];
+                    var templateActionMessage = new TemplateActionMessage()
+                    {
+                        ItemHighId = item.HighID,
+                        ItemLowId = item.LowID,
+                        Quality = item.Quality,
+                        Unknown1 = 1,
+                        Unknown2 = 7,
+                        Placement =
+                            new Identity()
+                            {
+                                Type =
+                                    page.Identity
+                                    .Type,
+                                Instance =
+                                    slotNumber
+                            },
+                    };
+                    client.SendCompressed(templateActionMessage);
+                    break;
+            }
+        }
 
         #endregion
     }
