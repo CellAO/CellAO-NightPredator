@@ -49,6 +49,5 @@ namespace CellAO.Core.Inventory
         }
 
         #endregion
-
     }
 }

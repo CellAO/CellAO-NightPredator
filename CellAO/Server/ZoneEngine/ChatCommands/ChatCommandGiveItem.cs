@@ -32,17 +32,20 @@ namespace ZoneEngine.ChatCommands
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
-    using CellAO.Stats;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Core;
+    using ZoneEngine.Core.Packets;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ChatCommandSet : AOChatCommand
+    public class ChatCommandGiveItem : AOChatCommand
     {
         #region Public Methods and Operators
 
@@ -54,17 +57,12 @@ namespace ZoneEngine.ChatCommands
         /// </returns>
         public override bool CheckCommandArguments(string[] args)
         {
-            // Two different checks return true: <int> <uint> and <string> <uint>
             List<Type> check = new List<Type>();
             check.Add(typeof(int));
-            check.Add(typeof(uint));
-            bool check1 = CheckArgumentHelper(check, args);
+            check.Add(typeof(int));
+            check.Add(typeof(int));
 
-            check.Clear();
-            check.Add(typeof(string));
-            check.Add(typeof(uint));
-            check1 |= CheckArgumentHelper(check, args);
-            return check1;
+            return CheckArgumentHelper(check, args);
         }
 
         /// <summary>
@@ -73,7 +71,8 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ZoneClient client)
         {
-            client.SendChatText("Syntax: /get <stat name|stat id> <new stat value>");
+            client.SendChatText("Usage: Select target and /command giveitem lowid highid ql");
+            return;
         }
 
         /// <summary>
@@ -86,77 +85,53 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
         {
-            // Fallback to self if no target is selected
-            if (target.Instance == 0)
+            IInstancedEntity targetEntity = null;
+            if ((targetEntity = client.Playfield.FindByIdentity(target)) != null)
             {
-                target.Type = client.Character.Identity.Type;
-                target.Instance = client.Character.Identity.Instance;
-            }
+                IItemContainer container = targetEntity as IItemContainer;
 
-            int statId = 1234567890;
-
-            if (!int.TryParse(args[1], out statId))
-            {
-                try
+                // Does this entity have a BaseInventory?
+                if (container != null)
                 {
-                    statId = StatNamesDefaults.GetStatNumber(args[1].ToLower());
+                    int lowId;
+                    int highId;
+                    int ql;
+                    if (!int.TryParse(args[1], out lowId))
+                    {
+                        client.SendChatText("LowId is no number");
+                        return;
+                    }
+
+                    if (!int.TryParse(args[2], out highId))
+                    {
+                        client.SendChatText("HighId is no number");
+                        return;
+                    }
+
+                    if (!int.TryParse(args[3], out ql))
+                    {
+                        client.SendChatText("QualityLevel is no number");
+                        return;
+                    }
+
+                    Item item = new Item(ql, lowId, highId);
+                    InventoryError err = container.BaseInventory.TryAdd(item);
+                    if (err != InventoryError.OK)
+                    {
+                        client.SendChatText("Could not add to inventory." + (int)err);
+                    }
+
+                    if (targetEntity as Character != null)
+                    {
+                        AddTemplate.Send((targetEntity as Character).Client, item);
+                    }
                 }
-                catch (Exception)
+                else
                 {
+                    client.SendChatText("Target has no Inventory.");
+                    return;
                 }
             }
-
-            if (statId == 1234567890)
-            {
-                client.SendChatText("Unknown Stat name " + args[1]);
-                return;
-            }
-
-            uint statNewValue = 1234567890;
-            try
-            {
-                statNewValue = uint.Parse(args[2]);
-            }
-            catch
-            {
-                try
-                {
-                    // For values >= 2^31
-                    statNewValue = uint.Parse(args[2]);
-                }
-                catch (FormatException)
-                {
-                }
-                catch (OverflowException)
-                {
-                }
-            }
-
-            IInstancedEntity tempch = client.Playfield.FindByIdentity(target);
-
-            uint statOldValue;
-            try
-            {
-                statOldValue = tempch.Stats[statId].BaseValue;
-                tempch.Stats[statId].Set(statNewValue);
-            }
-            catch
-            {
-                client.SendChatText("Unknown StatId " + statId);
-                return;
-            }
-
-            string name = string.Empty;
-            if (tempch is INamedEntity)
-            {
-                name = ((INamedEntity)tempch).Name + " ";
-            }
-
-            string response = "Dynel " + name + "(" + target.Type + ":" + target.Instance + "): Stat "
-                              + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
-            response += " Old: " + statOldValue;
-            response += " New: " + statNewValue;
-            client.SendChatText(response);
         }
 
         /// <summary>
@@ -165,7 +140,6 @@ namespace ZoneEngine.ChatCommands
         /// </returns>
         public override int GMLevelNeeded()
         {
-            // Be a GM
             return 1;
         }
 
@@ -176,7 +150,7 @@ namespace ZoneEngine.ChatCommands
         public override List<string> ListCommands()
         {
             List<string> temp = new List<string>();
-            temp.Add("set");
+            temp.Add("giveitem");
             return temp;
         }
 

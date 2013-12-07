@@ -57,34 +57,31 @@ namespace ZoneEngine.Core.Packets
             {
                 case 6:
                     var action97Message = new CharacterActionMessage()
-                    {
-                        Action =
-                            CharacterActionType
-                            .Unknown3,
-                        Parameter2 = 6
-
-                    };
+                                          {
+                                              Action = CharacterActionType.Unknown3, 
+                                              Parameter2 = 6
+                                          };
                     client.SendCompressed(action97Message);
                     break;
                 default:
                     IItem item = page[slotNumber];
                     var templateActionMessage = new TemplateActionMessage()
-                    {
-                        ItemHighId = item.HighID,
-                        ItemLowId = item.LowID,
-                        Quality = item.Quality,
-                        Unknown1 = 1,
-                        Unknown2 = 7,
-                        Placement =
-                            new Identity()
-                            {
-                                Type =
-                                    page.Identity
-                                    .Type,
-                                Instance =
-                                    slotNumber
-                            },
-                    };
+                                                {
+                                                    ItemHighId = item.HighID, 
+                                                    ItemLowId = item.LowID, 
+                                                    Quality = item.Quality, 
+                                                    Unknown1 = 1, 
+                                                    Unknown2 = 7, 
+                                                    Placement =
+                                                        new Identity()
+                                                        {
+                                                            Type =
+                                                                page.Identity
+                                                                .Type, 
+                                                            Instance =
+                                                                slotNumber
+                                                        }, 
+                                                };
                     client.SendCompressed(templateActionMessage);
                     break;
             }

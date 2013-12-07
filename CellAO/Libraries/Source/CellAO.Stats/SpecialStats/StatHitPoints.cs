@@ -28,6 +28,8 @@ namespace CellAO.Stats.SpecialStats
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Enums;
 
     #endregion
@@ -75,7 +77,7 @@ namespace CellAO.Stats.SpecialStats
         /// </returns>
         public override uint GetMaxValue(uint val)
         {
-            return (uint)this.Stats[StatIds.health].Value;
+            return Math.Min((uint)this.Stats[StatIds.life].Value, val);
         }
 
         #endregion

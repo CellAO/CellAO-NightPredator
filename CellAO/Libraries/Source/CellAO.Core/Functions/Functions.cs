@@ -33,7 +33,6 @@ namespace CellAO.Core.Functions
     using System.IO;
 
     using CellAO.Core.Requirements;
-
     using MsgPack.Serialization;
 
     #endregion

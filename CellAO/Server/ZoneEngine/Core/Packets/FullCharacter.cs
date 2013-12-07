@@ -829,17 +829,9 @@ namespace ZoneEngine.Core.Packets
 
             fc.Unknown11 = new object[0];
 
-            
-
             fc.Unknown12 = new object[0];
 
-            
-
-            #region Data12 (Empty)
-
             fc.Unknown13 = new object[0];
-
-            #endregion
 
             client.SendCompressed(fc);
         }

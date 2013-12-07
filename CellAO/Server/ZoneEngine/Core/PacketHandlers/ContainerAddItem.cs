@@ -101,7 +101,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // Get standard page if toplacement cant be found (0x6F for next free slot)
             // TODO: If Entities are not the same (other player, bag etc) then always add to the standard page
-            if ((receivingPage == null) || (itemReceiver.GetType() != (cli.Character.GetType())))
+            if ((receivingPage == null) || (itemReceiver.GetType() != cli.Character.GetType()))
             {
                 receivingPage = itemReceiver.BaseInventory.Pages[itemReceiver.BaseInventory.StandardPage];
             }
@@ -175,6 +175,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         {
                             throw new NullReferenceException("itemFrom can not be null, possible inventory error");
                         }
+
                         Actions action = GetAction(receivingPage, itemFrom);
 
                         if (action.CheckRequirements(cli.Character))

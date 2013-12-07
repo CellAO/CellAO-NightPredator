@@ -110,8 +110,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     Console.WriteLine("Case 4 Started");
                     break;
 
-                    
-
                 case 5:
                 {
                     IInstancedEntity tPlayer = null;
@@ -201,10 +199,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    
-
-                    #region /org disband
-
                 case 6:
 
                     // Add Org Bank to prez
@@ -216,9 +210,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     StatDao.DisbandOrganization((int)client.Character.Stats["Clan"].BaseValue);
                     break;
 
-                    #endregion
-
-                    #region /org startvote <text> <duration> <entries>
+                    
 
                 case 7:
 
@@ -226,7 +218,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // arguments (<text> <duration> and <entries>) are in CmdStr
                     break;
 
-                    #endregion
+                    
 
                     #region /org vote info
 

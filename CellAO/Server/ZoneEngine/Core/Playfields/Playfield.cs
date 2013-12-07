@@ -254,13 +254,23 @@ namespace CellAO.Core.Playfields
         /// </summary>
         public void DisconnectAllClients()
         {
-            foreach (IInstancedEntity entity in this.Entities)
+            foreach (IInstancedEntity entity in this.Entities.Where(x => x is Character))
             {
                 if ((entity as Character) != null)
                 {
                     (entity as Character).Client.Server.DisconnectClient((entity as Character).Client);
+                    this.Entities.Remove(entity);
                 }
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entity">
+        /// </param>
+        public void DisconnectClient(IInstancedEntity entity)
+        {
+            this.Entities.Remove(entity);
         }
 
         /// <summary>

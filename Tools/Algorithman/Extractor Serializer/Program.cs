@@ -466,7 +466,7 @@ namespace Extractor_Serializer
                     {
                         bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
                     }
-                    
+
                     sm.Flush();
                     nanoList2.Clear();
                 }
@@ -476,6 +476,7 @@ namespace Extractor_Serializer
             {
                 bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
             }
+
             sm.Seek(0, SeekOrigin.Begin);
             CopyStream(sm, ds);
             sm.Close();
@@ -526,6 +527,7 @@ namespace Extractor_Serializer
             {
                 bf2.Pack(sm, items.ElementAt(items.Count - i));
             }
+
             sm.Seek(0, SeekOrigin.Begin);
             CopyStream(sm, ds);
             sm.Close();

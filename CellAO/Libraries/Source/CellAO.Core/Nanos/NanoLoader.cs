@@ -32,11 +32,8 @@ namespace CellAO.Core.Nanos
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.IO;
-
     using locales;
-
     using MsgPack.Serialization;
-
     using zlib;
 
     #endregion

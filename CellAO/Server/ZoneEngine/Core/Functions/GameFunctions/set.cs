@@ -100,7 +100,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IStats tempTarget = Target;
             if (tempTarget != null)
             {
-                tempTarget.Stats[statNumber].SetBaseValue((uint)statValue);
+                tempTarget.Stats[statNumber].Set((uint)statValue);
                 return true;
             }
 

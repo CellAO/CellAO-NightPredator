@@ -37,8 +37,10 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
+    using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -105,29 +107,9 @@ namespace CellAO.Core.Entities
             this.Client = zoneClient;
             this.ActiveNanos = new List<IActiveNano>();
             this.UploadedNanos = new List<IUploadedNanos>();
-            this.BaseInventory=new PlayerInventory(this);
-            this.Stats.AfterStatChangedEvent+=StatsAfterStatChangedEvent;
+            this.BaseInventory = new PlayerInventory(this);
+            this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
             this.BaseInventory.Read();
-        }
-
-        private void StatsAfterStatChangedEvent(object sender, Stats.StatChangedEventArgs e)
-        {
-            uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
-            var messageBody = new SetStatMessage()
-                              {
-                                  Identity = this.Identity,
-                                  Stat = (CharacterStat)e.Stat.StatId,
-                                  Value=e.Stat.Value
-                              };
-
-            if (e.AnnounceToPlayfield)
-            {
-                Client.Character.Playfield.Announce(messageBody);
-            }
-            else
-            {
-                Client.SendCompressed(messageBody);
-            }
         }
 
         #endregion
@@ -289,6 +271,15 @@ namespace CellAO.Core.Entities
         public bool HasNano(int nanoId)
         {
             return this.UploadedNanos.Any(x => x.NanoId == nanoId);
+        }
+
+        /// <summary>
+        /// </summary>
+        public void Save()
+        {
+            this.WriteStats();
+            this.BaseInventory.Write();
+            CharacterDao.UpdatePosition(this.GetDBCharacter());
         }
 
         /// <summary>
@@ -510,7 +501,7 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void WriteStats()
         {
-            throw new NotImplementedException();
+            this.Stats.Write();
         }
 
         #endregion
@@ -519,11 +510,71 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        internal DBCharacter GetDBCharacter()
+        {
+            DBCharacter temp = new DBCharacter();
+            temp.FirstName = this.FirstName;
+            temp.LastName = this.LastName;
+
+            temp.HeadingW = this.RawHeading.wf;
+            temp.HeadingX = this.RawHeading.xf;
+            temp.HeadingY = this.RawHeading.yf;
+            temp.HeadingZ = this.RawHeading.zf;
+            temp.X = this.Coordinates.x;
+            temp.Y = this.Coordinates.y;
+            temp.Z = this.Coordinates.z;
+
+            temp.Id = this.Identity.Instance;
+            temp.Name = this.Name;
+            temp.Online = 1;
+            temp.Playfield = this.Playfield.Identity.Instance;
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="messageBody">
         /// </param>
         internal void Send(MessageBody messageBody)
         {
             this.Client.SendCompressed(messageBody);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        private void StatsAfterStatChangedEvent(object sender, StatChangedEventArgs e)
+        {
+            uint valueToSend = e.Stat.SendBaseValue ? e.NewValue : (uint)e.Stat.Value;
+            var messageBody = new StatMessage()
+                              {
+                                  Identity = this.Identity, 
+                                  Stats =
+                                      new[]
+                                      {
+                                          new GameTuple<CharacterStat, uint>()
+                                          {
+                                              Value1 =
+                                                  (CharacterStat)
+                                                  e.Stat.StatId, 
+                                              Value2 = valueToSend
+                                          }
+                                      }, 
+                              };
+
+            if (e.AnnounceToPlayfield)
+            {
+                this.Client.Character.Playfield.Announce(messageBody);
+            }
+            else
+            {
+                this.Client.SendCompressed(messageBody);
+            }
         }
 
         #endregion

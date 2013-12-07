@@ -124,6 +124,10 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        void Save();
+
+        /// <summary>
+        /// </summary>
         /// <param name="messageBody">
         /// </param>
         /// <param name="announceToPlayfield">

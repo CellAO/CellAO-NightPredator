@@ -35,7 +35,9 @@ namespace ZoneEngine.Core
 
     using Cell.Core;
 
+    using CellAO.Core.Network;
     using CellAO.Core.Playfields;
+    using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -80,6 +82,7 @@ namespace ZoneEngine.Core
             // TODO: Get the Server id from chatengine or config file
             this.Id = 0x356;
             this.clientFactory = clientFactory;
+            this.ClientDisconnected += this.ZoneServerClientDisconnected;
         }
 
         #endregion
@@ -161,6 +164,19 @@ namespace ZoneEngine.Core
         protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="forced">
+        /// </param>
+        private void ZoneServerClientDisconnected(IClient client, bool forced)
+        {
+            OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
+            Playfield pf = (Playfield)((IZoneClient)client).Character.Playfield;
+            pf.DisconnectClient(((IZoneClient)client).Character);
         }
 
         #endregion

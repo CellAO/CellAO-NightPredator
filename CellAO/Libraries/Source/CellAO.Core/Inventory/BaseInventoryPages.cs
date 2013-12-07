@@ -147,7 +147,8 @@ namespace CellAO.Core.Inventory
                     return page.Value;
                 }
             }
-            throw new IndexOutOfRangeException("No inventory page found for slot "+slotNum);
+
+            throw new IndexOutOfRangeException("No inventory page found for slot " + slotNum);
         }
 
         /// <summary>

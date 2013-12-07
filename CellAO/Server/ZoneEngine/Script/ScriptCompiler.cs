@@ -28,7 +28,7 @@
 
 namespace ZoneEngine.Script
 {
-    using ZoneEngine.ChatCommands;
+    #region Usings ...
 
     #region Usings ...
 
@@ -55,7 +55,10 @@ namespace ZoneEngine.Script
 
     using Utility;
 
+    using ZoneEngine.ChatCommands;
     using ZoneEngine.Core;
+
+    #endregion
 
     #endregion
 

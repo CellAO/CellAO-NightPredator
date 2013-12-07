@@ -35,10 +35,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL" Condition=" '$(OS)' == 'Windows_NT' ">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\CellAO\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
-    </Reference>
     <Reference Include="NBug, Version=1.2.0.0, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CellAO\packages\NBug.1.2.2\lib\net40-client\NBug.dll</HintPath>
@@ -88,7 +84,7 @@
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj" Condition=" '$(OS)' != 'Windows_NT' ">
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
     </ProjectReference>

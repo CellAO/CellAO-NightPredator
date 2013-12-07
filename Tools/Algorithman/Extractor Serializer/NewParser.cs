@@ -31,7 +31,6 @@ namespace Extractor_Serializer
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Net.Mime;
     using System.Text;
 
     using CellAO.Core.Actions;
@@ -45,8 +44,6 @@ namespace Extractor_Serializer
     using MsgPack;
 
     using NiceHexOutput;
-
-    using Utility;
 
     #endregion
 
@@ -831,8 +828,9 @@ namespace Extractor_Serializer
                 R = false;
                 foreach (object oo in this.ParseArgs(func.FunctionType, ref R))
                 {
-                    var x = MessagePackObject.FromObject(oo);
-                    func.Arguments.Values.Add(x);                }
+                    MessagePackObject x = MessagePackObject.FromObject(oo);
+                    func.Arguments.Values.Add(x);
+                }
 
                 list.Add(func);
                 num3++;
