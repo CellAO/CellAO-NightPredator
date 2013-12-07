@@ -74,8 +74,8 @@ namespace ZoneEngine.Core.PacketHandlers
                         int orgID = OrganizationDao.GetOrganizationId(message.CommandArgs);
 
                         // Make sure the order of these next two lines is not swapped -NV
-                        client.Character.Stats["ClanLevel"].Value = 0;
-                        client.Character.Stats["Clan"].Value = orgID;
+                        client.Character.Stats[StatIds.clanlevel].Value = 0;
+                        client.Character.Stats[StatIds.clan].Value = orgID;
                         break;
                     }
                     else
@@ -90,13 +90,13 @@ namespace ZoneEngine.Core.PacketHandlers
                     // org ranks
                     // Displays Org Rank Structure.
                     /* Select governingform from DB, Roll through display from GovForm */
-                    if (client.Character.Stats["Clan"].BaseValue == 0)
+                if (client.Character.Stats[StatIds.clan].BaseValue == 0)
                     {
                         client.SendChatText("You're not in an organization!");
                         break;
                     }
 
-                    int governingForm = OrganizationDao.GetGovernmentForm((int)client.Character.Stats["Clan"].BaseValue);
+                    int governingForm = OrganizationDao.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
 
                     client.SendChatText("Current Rank Structure: " + GetRankList(governingForm));
                     break;
@@ -122,7 +122,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         int orgGoverningForm = 0, orgLeaderID = 0;
 
                         DBOrganization orgData =
-                            OrganizationDao.GetOrganizationData((int)tPlayer.Stats["Clan"].BaseValue);
+                            OrganizationDao.GetOrganizationData((int)tPlayer.Stats[StatIds.clan].BaseValue);
 
                         if (orgData != null)
                         {
@@ -165,7 +165,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             textGovForm = "Department";
                         }
 
-                        string orgRank = GetRank(orgGoverningForm, tPlayer.Stats["ClanLevel"].BaseValue);
+                        string orgRank = GetRank(orgGoverningForm, tPlayer.Stats[StatIds.clanlevel].BaseValue);
 
                         var infoMessage = new OrgInfoMessage
                                           {
@@ -179,7 +179,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                                       Type = IdentityType.Organization, 
                                                       Instance =
                                                           (int)
-                                                          tPlayer.Stats["Clan"].BaseValue
+                                                          tPlayer.Stats[StatIds.clan].BaseValue
                                                   }, 
                                               
                                               // TODO: Possible NULL here
@@ -203,11 +203,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     // Add Org Bank to prez
                     DBOrganization orgDisband =
-                        OrganizationDao.GetOrganizationData((int)client.Character.Stats["Clan"].BaseValue);
-                    client.Character.Stats["Cash"].BaseValue += (uint)orgDisband.Bank;
+                        OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                    client.Character.Stats[StatIds.cash].BaseValue += (uint)orgDisband.Bank;
 
                     // Clear stat 5 (Clan) from all chars where value=orgId
-                    StatDao.DisbandOrganization((int)client.Character.Stats["Clan"].BaseValue);
+                    StatDao.DisbandOrganization((int)client.Character.Stats[StatIds.clan].BaseValue);
                     break;
 
                     
@@ -252,7 +252,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     if (toPromote != null)
                     {
                         // First we check if target is in the same org as you
-                        if (toPromote.Stats["Clan"].BaseValue != client.Character.Stats["Clan"].BaseValue)
+                        if (toPromote.Stats[StatIds.clan].BaseValue != client.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // not in same org
                             client.SendChatText("Target is not in your organization!");
@@ -285,8 +285,8 @@ namespace ZoneEngine.Core.PacketHandlers
                                              */
 
                                     OrganizationDao.SetNewPrez(orgPromote.ID, toPromote.Identity.Instance);
-                                    toPromote.Stats["ClanLevel"].Value = 0;
-                                    client.Character.Stats["ClanLevel"].Value = 1;
+                                    toPromote.Stats[StatIds.clanlevel].Value = 0;
+                                    client.Character.Stats[StatIds.clanlevel].Value = 1;
 
                                     client.SendChatText(
                                         "You've passed leadership of the organization to: "
@@ -298,7 +298,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                 else
                                 {
                                     // Just Promote
-                                    targetOldRank = toPromote.Stats["ClanLevel"].Value;
+                                    targetOldRank = toPromote.Stats[StatIds.clanlevel].Value;
                                     targetNewRank = targetOldRank - 1;
                                     promotedToRank = GetRank(promoteGovForm, (uint)targetNewRank);
                                     toPromote.Stats[StatIds.clanlevel].Value = targetNewRank;
@@ -373,10 +373,10 @@ namespace ZoneEngine.Core.PacketHandlers
                                 break;
                             }
 
-                            targetCurRank = toDemote.Stats["ClanLevel"].Value;
+                            targetCurRank = toDemote.Stats[StatIds.clanlevel].Value;
                             targetNewerRank = targetCurRank + 1;
                             demotedToRank = GetRank(demoteGovForm, (uint)targetNewerRank);
-                            toDemote.Stats["ClanLevel"].Value = targetNewerRank;
+                            toDemote.Stats[StatIds.clanlevel].Value = targetNewerRank;
                             client.SendChatText(
                                 "You've demoted " + (toDemote as Character).Name + " to " + demotedToRank);
                             toDemote.Client.SendChatText(

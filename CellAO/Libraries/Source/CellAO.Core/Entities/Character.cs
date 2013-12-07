@@ -109,6 +109,24 @@ namespace CellAO.Core.Entities
             this.UploadedNanos = new List<IUploadedNanos>();
             this.BaseInventory = new PlayerInventory(this);
             this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
+            
+            this.SocialTab = new Dictionary<int, int>();
+            this.SocialTab.Add(0, 0);
+            this.SocialTab.Add(1, 0);
+            this.SocialTab.Add(2, 0);
+            this.SocialTab.Add(3, 0);
+            this.SocialTab.Add(4, 0);
+            this.SocialTab.Add(38, 0);
+            this.SocialTab.Add(1004, 0);
+            this.SocialTab.Add(1005, 0);
+            this.SocialTab.Add(64, 0);
+            this.SocialTab.Add(32, 0);
+            this.SocialTab.Add(1006, 0);
+            this.SocialTab.Add(1007, 0);
+
+            this.meshLayer.AddMesh(0, this.Stats["HeadMesh"].Value, 0, 4);
+            this.socialMeshLayer.AddMesh(0, this.Stats["HeadMesh"].Value, 0, 4);
+
             this.BaseInventory.Read();
         }
 
@@ -167,7 +185,7 @@ namespace CellAO.Core.Entities
             {
                 try
                 {
-                    return OrganizationDao.GetOrganizationData(this.Stats["Clan"].Value).Name;
+                    return OrganizationDao.GetOrganizationData(this.Stats[StatIds.clan].Value).Name;
                 }
                 catch (Exception)
                 {
@@ -522,9 +540,9 @@ namespace CellAO.Core.Entities
             temp.HeadingX = this.RawHeading.xf;
             temp.HeadingY = this.RawHeading.yf;
             temp.HeadingZ = this.RawHeading.zf;
-            temp.X = this.Coordinates.x;
-            temp.Y = this.Coordinates.y;
-            temp.Z = this.Coordinates.z;
+            temp.X = this.RawCoordinates.X;
+            temp.Y = this.RawCoordinates.Y;
+            temp.Z = this.RawCoordinates.Z;
 
             temp.Id = this.Identity.Instance;
             temp.Name = this.Name;

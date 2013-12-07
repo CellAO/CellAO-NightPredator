@@ -33,6 +33,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using System.ComponentModel.Composition;
 
     using CellAO.Core.Components;
+    using CellAO.Enums;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -63,7 +64,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             uint baseIp = 0;
 
-            uint characterLevel = client.Character.Stats["Level"].BaseValue;
+            uint characterLevel = client.Character.Stats[StatIds.level].BaseValue;
 
             // Calculate base IP value for character level
             if (characterLevel > 204)
@@ -116,7 +117,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             statlist.Add(53); // IP
             uint usedIp = baseIp - (uint)Math.Floor(SkillUpdate.CalculateIP(client.Character.Stats));
-            client.Character.Stats["IP"].BaseValue = usedIp;
+            client.Character.Stats[StatIds.ip].BaseValue = usedIp;
 
             // Send the changed stats back to the client
             count = 0;
