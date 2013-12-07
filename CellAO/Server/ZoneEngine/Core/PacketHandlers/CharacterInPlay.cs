@@ -28,6 +28,8 @@ namespace ZoneEngine.Core.PacketHandlers
 {
     #region Usings ...
 
+    using CellAO.Enums;
+
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -52,6 +54,9 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // Player is in game now, starting is over, set stats normally now
             client.Character.Starting = false;
+
+            // Needed fix, so gmlevel will be loaded
+            client.Character.Stats[StatIds.gmlevel].Value = client.Character.Stats[StatIds.gmlevel].Value;
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN

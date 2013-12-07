@@ -175,8 +175,10 @@ namespace ZoneEngine.Core
         private void ZoneServerClientDisconnected(IClient client, bool forced)
         {
             OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
+            ((IZoneClient)client).Character.Save();
             Playfield pf = (Playfield)((IZoneClient)client).Character.Playfield;
             pf.DisconnectClient(((IZoneClient)client).Character);
+            // TODO: Send a despawn packet to playfield
         }
 
         #endregion

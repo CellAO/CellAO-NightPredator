@@ -28,6 +28,8 @@
 
 namespace ZoneEngine.Script
 {
+    using CellAO.Enums;
+
     #region Usings ...
 
     #region Usings ...
@@ -330,7 +332,7 @@ namespace ZoneEngine.Script
                         if (aoc != null)
                         {
                             // Check GM Level bitwise
-                            if ((client.Character.Stats["GMLevel"].Value < aoc.GMLevelNeeded())
+                            if ((client.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
                                 && (aoc.GMLevelNeeded() > 0))
                             {
                                 client.SendChatText(
@@ -384,7 +386,7 @@ namespace ZoneEngine.Script
                     AOChatCommand aoc = (AOChatCommand)assembly.CreateInstance(typename);
                     if (aoc != null)
                     {
-                        if (client.Character.Stats["GMLevel"].Value >= aoc.GMLevelNeeded())
+                        if (client.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
                         {
                             client.SendChatText(
                                 scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal)));

@@ -985,7 +985,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat gmLevel;
+        private readonly StatGmLevel gmLevel;
 
         /// <summary>
         /// </summary>
@@ -3133,7 +3133,7 @@ namespace CellAO.Stats
             this.globalClanType = new Stat(this, 309, 1234567890, false, false, false);
             this.globalResearchGoal = new Stat(this, 266, 0, false, false, false);
             this.globalResearchLevel = new Stat(this, 264, 0, false, false, false);
-            this.gmLevel = new Stat(this, 215, 0, false, true, false);
+            this.gmLevel = new StatGmLevel(this, 215, 0, false, true, false);
             this.gos = new Stat(this, 566, 0, false, false, false);
             this.grenade = new StatSkill(this, 109, 5, true, false, false);
             this.hairMesh = new Stat(this, 32, 0, false, false, false);
@@ -4328,6 +4328,7 @@ namespace CellAO.Stats
             this.level.Affects.Add(this.titleLevel.StatId);
             this.level.Affects.Add(this.nextSK.StatId);
             this.level.Affects.Add(this.nextXP.StatId);
+            this.level.Affects.Add(this.ip.StatId);
             this.alienLevel.Affects.Add(this.alienNextXP.StatId);
             this.xp.Affects.Add(this.level.StatId);
             this.sk.Affects.Add(this.level.StatId);

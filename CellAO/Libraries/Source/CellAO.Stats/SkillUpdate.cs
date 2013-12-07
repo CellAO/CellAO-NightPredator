@@ -73,19 +73,19 @@ namespace CellAO.Stats
             int[] breedMultiplicatorHitPoints = { 3, 3, 2, 4 };
             int[] breedModificatorHitPoints = { 0, -1, -1, 0 };
 
-            uint breed = dynel.Stats["Breed"].BaseValue;
-            uint profession = dynel.Stats["Profession"].BaseValue;
-            uint titlelevel = dynel.Stats["TitleLevel"].BaseValue;
-            uint level = dynel.Stats["Level"].BaseValue;
+            uint breed = dynel.Stats[StatIds.breed].BaseValue;
+            uint profession = dynel.Stats[StatIds.profession].BaseValue;
+            uint titlelevel = dynel.Stats[StatIds.titlelevel].BaseValue;
+            uint level = dynel.Stats[StatIds.level].BaseValue;
 
             // BreedBaseHP+(Level*(TableProfHP+BreedModiHP))+(BodyDevelopment*BreedMultiHP))
             return
                 (uint)
                     (breedBaseHitPoints[breed - 1]
-                     + (dynel.Stats["Level"].Value
+                     + (dynel.Stats[StatIds.level].Value
                         * (tableProfessionHitPoints[titlelevel - 1, profession - 1]
                            + breedModificatorHitPoints[breed - 1]))
-                     + (dynel.Stats["BodyDevelopment"].Value * breedMultiplicatorHitPoints[breed - 1]));
+                     + (dynel.Stats[StatIds.bodydevelopment].Value * breedMultiplicatorHitPoints[breed - 1]));
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace CellAO.Stats
             return
                 (uint)
                     (breedBaseNanoPoints[breed - 1]
-                     + (dynel[StatIds.level].Value
+                     + (level
                         * (tableProfNanoPoints[titleLevel - 1, profession - 1] + breedModificatorNanoPoints[breed - 1]))
                      + (dynel[StatIds.nanoenergypool].Value * breedMultiplicatorNanoPoints[breed - 1]));
         }

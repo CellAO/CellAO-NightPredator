@@ -46,6 +46,7 @@
     <Compile Include="IStatList.cs" />
     <Compile Include="SpecialStats\StatAlienNextXP.cs" />
     <Compile Include="SpecialStats\StatCurrentNano.cs" />
+    <Compile Include="SpecialStats\StatGMLevel.cs" />
     <Compile Include="SpecialStats\StatHealDelta.cs" />
     <Compile Include="SpecialStats\StatHealInterval.cs" />
     <Compile Include="SpecialStats\StatLife.cs" />

@@ -35,6 +35,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.PacketHandlers;
+
     #endregion
 
     /// <summary>
@@ -55,7 +57,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var client = (ZoneClient)sender;
             var characterActionMessage = (CharacterActionMessage)message.Body;
 
-            // CharacterAction.Read(characterActionMessage, client);
+            CharacterAction.Read(characterActionMessage, client);
         }
 
         #endregion

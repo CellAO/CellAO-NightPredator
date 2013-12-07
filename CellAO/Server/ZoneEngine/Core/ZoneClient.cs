@@ -251,7 +251,6 @@ namespace ZoneEngine.Core
                     LogUtil.Debug("Error writing to zStream");
                     LogUtil.ErrorException(e);
                     this.server.DisconnectClient(this);
-                    this.Character.Save();
                 }
             }
         }

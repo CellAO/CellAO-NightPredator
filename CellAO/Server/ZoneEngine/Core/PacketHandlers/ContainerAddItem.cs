@@ -33,6 +33,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using System.Threading;
 
     using CellAO.Core.Actions;
+    using CellAO.Core.Entities;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Enums;
@@ -336,9 +337,7 @@ namespace ZoneEngine.Core.PacketHandlers
             cli.Character.Stats.ClearChangedFlags();
             if (!noAppearanceUpdate)
             {
-                throw new NotImplementedException("TODO");
-
-                // cli.Character.AppearanceUpdate();
+                AppearanceUpdate.AnnounceAppearanceUpdate((Character)cli.Character);
             }
 
             itemFrom = null;
