@@ -2978,7 +2978,7 @@ namespace CellAO.Stats
             this.brainType = new Stat(this, 340, 1234567890, false, false, false);
             this.brawl = new StatSkill(this, 142, 5, true, false, false);
             this.breakingEntry = new StatSkill(this, 165, 5, true, false, false);
-            this.breed = new Stat(this, 4, 1234567890, false, false, false);
+            this.breed = new Stat(this, 4, 1, false, false, false); // Needed to set default value to 1
             this.breedHostility = new Stat(this, 204, 1234567890, false, false, false);
             this.breedLimit = new Stat(this, 320, 1234567890, false, false, false);
             this.buildingComplexInst = new Stat(this, 188, 1234567890, false, false, false);

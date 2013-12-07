@@ -2,7 +2,7 @@
 
 ----------
 
-**flags**
+**flags [0]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -14,11 +14,11 @@
 ----------
 
 
-**life**
+**life [1]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatLife
 
-**Default value:** 1
+**Default value:** 10
 
 **Tags:** 
 `Save in Database`  
@@ -26,7 +26,7 @@
 ----------
 
 
-**volumemass**
+**volumemass [2]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -38,7 +38,7 @@
 ----------
 
 
-**attackspeed**
+**attackspeed [3]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -50,7 +50,55 @@
 ----------
 
 
-**breed**
+**breed [4]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**clan [5]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**team [6]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**state [7]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**timeexist [8]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -62,7 +110,7 @@
 ----------
 
 
-**clan**
+**mapflags [9]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -74,55 +122,7 @@
 ----------
 
 
-**team**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**state**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**timeexist**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**mapflags**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**professionlevel**
+**professionlevel [10]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -134,7 +134,7 @@
 ----------
 
 
-**previoushealth**
+**previoushealth [11]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -146,7 +146,7 @@
 ----------
 
 
-**mesh**
+**mesh [12]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -158,7 +158,7 @@
 ----------
 
 
-**anim**
+**anim [13]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -170,7 +170,7 @@
 ----------
 
 
-**name**
+**name [14]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -182,7 +182,7 @@
 ----------
 
 
-**info**
+**info [15]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -194,7 +194,7 @@
 ----------
 
 
-**strength**
+**strength [16]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -206,7 +206,7 @@
 ----------
 
 
-**agility**
+**agility [17]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -218,7 +218,7 @@
 ----------
 
 
-**stamina**
+**stamina [18]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -230,7 +230,7 @@
 ----------
 
 
-**intelligence**
+**intelligence [19]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -242,7 +242,7 @@
 ----------
 
 
-**sense**
+**sense [20]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -254,7 +254,7 @@
 ----------
 
 
-**psychic**
+**psychic [21]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -266,7 +266,7 @@
 ----------
 
 
-**ams**
+**ams [22]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -278,7 +278,7 @@
 ----------
 
 
-**staticinstance**
+**staticinstance [23]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -290,7 +290,7 @@
 ----------
 
 
-**maxmass**
+**maxmass [24]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -302,7 +302,7 @@
 ----------
 
 
-**statictype**
+**statictype [25]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -314,7 +314,7 @@
 ----------
 
 
-**energy**
+**energy [26]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -326,9 +326,9 @@
 ----------
 
 
-**health**
+**health [27]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatHitPoints
 
 **Default value:** 1
 
@@ -338,7 +338,7 @@
 ----------
 
 
-**height**
+**height [28]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -350,7 +350,7 @@
 ----------
 
 
-**dms**
+**dms [29]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -362,7 +362,7 @@
 ----------
 
 
-**can**
+**can [30]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -374,7 +374,7 @@
 ----------
 
 
-**face**
+**face [31]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -386,7 +386,7 @@
 ----------
 
 
-**hairmesh**
+**hairmesh [32]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -398,7 +398,7 @@
 ----------
 
 
-**side**
+**side [33]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -410,7 +410,7 @@
 ----------
 
 
-**deadtimer**
+**deadtimer [34]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -422,7 +422,7 @@
 ----------
 
 
-**accesscount**
+**accesscount [35]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -434,7 +434,7 @@
 ----------
 
 
-**attackcount**
+**attackcount [36]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -446,9 +446,9 @@
 ----------
 
 
-**titlelevel**
+**titlelevel [37]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatTitleLevel
 
 **Default value:** 1
 
@@ -458,7 +458,7 @@
 ----------
 
 
-**backmesh**
+**backmesh [38]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -470,7 +470,7 @@
 ----------
 
 
-**alienxp**
+**alienxp [40]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -482,7 +482,7 @@
 ----------
 
 
-**fabrictype**
+**fabrictype [41]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -494,7 +494,7 @@
 ----------
 
 
-**catmesh**
+**catmesh [42]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -506,7 +506,7 @@
 ----------
 
 
-**parenttype**
+**parenttype [43]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -518,7 +518,7 @@
 ----------
 
 
-**parentinstance**
+**parentinstance [44]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -530,7 +530,7 @@
 ----------
 
 
-**beltslots**
+**beltslots [45]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -542,7 +542,7 @@
 ----------
 
 
-**bandolierslots**
+**bandolierslots [46]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -554,7 +554,7 @@
 ----------
 
 
-**fatness**
+**fatness [47]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -566,7 +566,7 @@
 ----------
 
 
-**clanlevel**
+**clanlevel [48]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -578,7 +578,7 @@
 ----------
 
 
-**insurancetime**
+**insurancetime [49]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -590,7 +590,7 @@
 ----------
 
 
-**inventorytimeout**
+**inventorytimeout [50]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -602,7 +602,7 @@
 ----------
 
 
-**aggdef**
+**aggdef [51]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -614,7 +614,7 @@
 ----------
 
 
-**xp**
+**xp [52]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -626,9 +626,9 @@
 ----------
 
 
-**ip**
+**ip [53]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatIp
 
 **Default value:** 1500
 
@@ -638,7 +638,7 @@
 ----------
 
 
-**level**
+**level [54]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -650,7 +650,7 @@
 ----------
 
 
-**inventoryid**
+**inventoryid [55]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -662,7 +662,7 @@
 ----------
 
 
-**timesincecreation**
+**timesincecreation [56]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -674,7 +674,7 @@
 ----------
 
 
-**lastxp**
+**lastxp [57]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -686,7 +686,7 @@
 ----------
 
 
-**age**
+**age [58]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -698,7 +698,7 @@
 ----------
 
 
-**sex**
+**sex [59]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -710,7 +710,7 @@
 ----------
 
 
-**profession**
+**profession [60]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -722,7 +722,7 @@
 ----------
 
 
-**cash**
+**cash [61]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -734,7 +734,7 @@
 ----------
 
 
-**alignment**
+**alignment [62]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -746,7 +746,7 @@
 ----------
 
 
-**attitude**
+**attitude [63]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -758,7 +758,7 @@
 ----------
 
 
-**headmesh**
+**headmesh [64]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -770,7 +770,7 @@
 ----------
 
 
-**missionbits5**
+**missionbits5 [65]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -782,7 +782,7 @@
 ----------
 
 
-**missionbits6**
+**missionbits6 [66]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -794,7 +794,7 @@
 ----------
 
 
-**missionbits7**
+**missionbits7 [67]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -806,7 +806,7 @@
 ----------
 
 
-**veteranpoints**
+**veteranpoints [68]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -818,7 +818,7 @@
 ----------
 
 
-**monthspaid**
+**monthspaid [69]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -830,7 +830,7 @@
 ----------
 
 
-**speedpenalty**
+**speedpenalty [70]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -842,7 +842,7 @@
 ----------
 
 
-**totalmass**
+**totalmass [71]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -854,7 +854,7 @@
 ----------
 
 
-**itemtype**
+**itemtype [72]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -866,7 +866,7 @@
 ----------
 
 
-**repairdifficulty**
+**repairdifficulty [73]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -878,7 +878,7 @@
 ----------
 
 
-**price**
+**price [74]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -890,7 +890,7 @@
 ----------
 
 
-**metatype**
+**metatype [75]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -902,7 +902,7 @@
 ----------
 
 
-**itemclass**
+**itemclass [76]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -914,7 +914,7 @@
 ----------
 
 
-**repairskill**
+**repairskill [77]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -926,7 +926,7 @@
 ----------
 
 
-**currentmass**
+**currentmass [78]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -938,7 +938,7 @@
 ----------
 
 
-**icon**
+**icon [79]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -950,7 +950,7 @@
 ----------
 
 
-**primaryitemtype**
+**primaryitemtype [80]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -962,7 +962,7 @@
 ----------
 
 
-**primaryiteminstance**
+**primaryiteminstance [81]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -974,7 +974,7 @@
 ----------
 
 
-**secondaryitemtype**
+**secondaryitemtype [82]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -986,7 +986,7 @@
 ----------
 
 
-**secondaryiteminstance**
+**secondaryiteminstance [83]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -998,7 +998,7 @@
 ----------
 
 
-**usertype**
+**usertype [84]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1010,7 +1010,7 @@
 ----------
 
 
-**userinstance**
+**userinstance [85]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1022,7 +1022,7 @@
 ----------
 
 
-**areatype**
+**areatype [86]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1034,7 +1034,7 @@
 ----------
 
 
-**areainstance**
+**areainstance [87]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1046,7 +1046,7 @@
 ----------
 
 
-**defaultpos**
+**defaultpos [88]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1058,7 +1058,7 @@
 ----------
 
 
-**race**
+**race [89]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1070,7 +1070,7 @@
 ----------
 
 
-**projectileac**
+**projectileac [90]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1082,7 +1082,7 @@
 ----------
 
 
-**meleeac**
+**meleeac [91]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1094,7 +1094,7 @@
 ----------
 
 
-**energyac**
+**energyac [92]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1106,7 +1106,7 @@
 ----------
 
 
-**chemicalac**
+**chemicalac [93]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1118,7 +1118,7 @@
 ----------
 
 
-**radiationac**
+**radiationac [94]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1130,7 +1130,7 @@
 ----------
 
 
-**coldac**
+**coldac [95]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1142,7 +1142,7 @@
 ----------
 
 
-**poisonac**
+**poisonac [96]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1154,7 +1154,7 @@
 ----------
 
 
-**fireac**
+**fireac [97]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1166,7 +1166,7 @@
 ----------
 
 
-**stateaction**
+**stateaction [98]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1178,7 +1178,7 @@
 ----------
 
 
-**itemanim**
+**itemanim [99]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -1190,9 +1190,9 @@
 ----------
 
 
-**martialarts**
+**martialarts [100]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1202,9 +1202,9 @@
 ----------
 
 
-**meleemultiple**
+**meleemultiple [101]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1214,9 +1214,9 @@
 ----------
 
 
-**1hbluntweapons**
+**1hbluntweapons [102]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1226,9 +1226,9 @@
 ----------
 
 
-**1hedgedweapon**
+**1hedgedweapon [103]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1238,9 +1238,9 @@
 ----------
 
 
-**meleeenergyweapon**
+**meleeenergyweapon [104]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1250,9 +1250,9 @@
 ----------
 
 
-**2hedgedweapons**
+**2hedgedweapons [105]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1262,9 +1262,9 @@
 ----------
 
 
-**piercing**
+**piercing [106]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1274,9 +1274,9 @@
 ----------
 
 
-**2hbluntweapons**
+**2hbluntweapons [107]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1286,9 +1286,9 @@
 ----------
 
 
-**throwingknife**
+**throwingknife [108]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1298,9 +1298,9 @@
 ----------
 
 
-**grenade**
+**grenade [109]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1310,9 +1310,9 @@
 ----------
 
 
-**throwngrapplingweapons**
+**throwngrapplingweapons [110]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1322,9 +1322,9 @@
 ----------
 
 
-**bow**
+**bow [111]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1334,9 +1334,9 @@
 ----------
 
 
-**pistol**
+**pistol [112]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1346,9 +1346,9 @@
 ----------
 
 
-**rifle**
+**rifle [113]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1358,9 +1358,9 @@
 ----------
 
 
-**submachinegun**
+**submachinegun [114]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1370,9 +1370,9 @@
 ----------
 
 
-**shotgun**
+**shotgun [115]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1382,9 +1382,9 @@
 ----------
 
 
-**assaultrifle**
+**assaultrifle [116]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1394,9 +1394,9 @@
 ----------
 
 
-**drivewater**
+**drivewater [117]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1406,9 +1406,9 @@
 ----------
 
 
-**closecombatinitiative**
+**closecombatinitiative [118]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1418,9 +1418,9 @@
 ----------
 
 
-**distanceweaponinitiative**
+**distanceweaponinitiative [119]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1430,9 +1430,9 @@
 ----------
 
 
-**physicalprowessinitiative**
+**physicalprowessinitiative [120]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1442,9 +1442,9 @@
 ----------
 
 
-**bowspecialattack**
+**bowspecialattack [121]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1454,9 +1454,9 @@
 ----------
 
 
-**senseimprovement**
+**senseimprovement [122]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1466,9 +1466,9 @@
 ----------
 
 
-**firstaid**
+**firstaid [123]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1478,9 +1478,9 @@
 ----------
 
 
-**treatment**
+**treatment [124]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1490,9 +1490,9 @@
 ----------
 
 
-**mechanicalengineering**
+**mechanicalengineering [125]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1502,9 +1502,9 @@
 ----------
 
 
-**electricalengineering**
+**electricalengineering [126]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1514,9 +1514,9 @@
 ----------
 
 
-**materialmetamorphose**
+**materialmetamorphose [127]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1526,9 +1526,9 @@
 ----------
 
 
-**biologicalmetamorphose**
+**biologicalmetamorphose [128]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1538,9 +1538,9 @@
 ----------
 
 
-**psychologicalmodification**
+**psychologicalmodification [129]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1550,9 +1550,9 @@
 ----------
 
 
-**materialcreation**
+**materialcreation [130]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1562,9 +1562,9 @@
 ----------
 
 
-**materiallocation**
+**materiallocation [131]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1574,9 +1574,9 @@
 ----------
 
 
-**nanoenergypool**
+**nanoenergypool [132]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1586,9 +1586,9 @@
 ----------
 
 
-**lr_energyweapon**
+**lr_energyweapon [133]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1598,9 +1598,9 @@
 ----------
 
 
-**lr_multipleweapon**
+**lr_multipleweapon [134]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1610,9 +1610,9 @@
 ----------
 
 
-**disarmtrap**
+**disarmtrap [135]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1622,9 +1622,9 @@
 ----------
 
 
-**perception**
+**perception [136]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1634,9 +1634,9 @@
 ----------
 
 
-**adventuring**
+**adventuring [137]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1646,9 +1646,9 @@
 ----------
 
 
-**swim**
+**swim [138]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1658,9 +1658,9 @@
 ----------
 
 
-**driveair**
+**driveair [139]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1670,9 +1670,9 @@
 ----------
 
 
-**mapnavigation**
+**mapnavigation [140]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1682,9 +1682,9 @@
 ----------
 
 
-**tutoring**
+**tutoring [141]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1694,9 +1694,9 @@
 ----------
 
 
-**brawl**
+**brawl [142]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1706,9 +1706,9 @@
 ----------
 
 
-**riposte**
+**riposte [143]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1718,9 +1718,9 @@
 ----------
 
 
-**dimach**
+**dimach [144]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1730,9 +1730,9 @@
 ----------
 
 
-**parry**
+**parry [145]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1742,9 +1742,9 @@
 ----------
 
 
-**sneakattack**
+**sneakattack [146]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1754,9 +1754,9 @@
 ----------
 
 
-**fastattack**
+**fastattack [147]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1766,9 +1766,9 @@
 ----------
 
 
-**burst**
+**burst [148]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1778,9 +1778,9 @@
 ----------
 
 
-**nanoprowessinitiative**
+**nanoprowessinitiative [149]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1790,9 +1790,9 @@
 ----------
 
 
-**flingshot**
+**flingshot [150]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1802,9 +1802,9 @@
 ----------
 
 
-**aimedshot**
+**aimedshot [151]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1814,9 +1814,9 @@
 ----------
 
 
-**bodydevelopment**
+**bodydevelopment [152]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1826,9 +1826,9 @@
 ----------
 
 
-**duck**
+**duck [153]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1838,9 +1838,9 @@
 ----------
 
 
-**dodge**
+**dodge [154]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1850,9 +1850,9 @@
 ----------
 
 
-**evade**
+**evade [155]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1862,9 +1862,9 @@
 ----------
 
 
-**runspeed**
+**runspeed [156]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1874,9 +1874,9 @@
 ----------
 
 
-**fieldquantumphysics**
+**fieldquantumphysics [157]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1886,9 +1886,9 @@
 ----------
 
 
-**weaponsmithing**
+**weaponsmithing [158]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1898,9 +1898,9 @@
 ----------
 
 
-**pharmaceuticals**
+**pharmaceuticals [159]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1910,9 +1910,9 @@
 ----------
 
 
-**nanoprogramming**
+**nanoprogramming [160]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1922,9 +1922,9 @@
 ----------
 
 
-**computerliteracy**
+**computerliteracy [161]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1934,9 +1934,9 @@
 ----------
 
 
-**psychology**
+**psychology [162]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1946,9 +1946,9 @@
 ----------
 
 
-**chemistry**
+**chemistry [163]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1958,9 +1958,9 @@
 ----------
 
 
-**concealment**
+**concealment [164]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1970,9 +1970,9 @@
 ----------
 
 
-**breakingentry**
+**breakingentry [165]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1982,9 +1982,9 @@
 ----------
 
 
-**driveground**
+**driveground [166]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -1994,9 +1994,9 @@
 ----------
 
 
-**fullauto**
+**fullauto [167]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -2006,9 +2006,9 @@
 ----------
 
 
-**nanoac**
+**nanoac [168]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatSkill
 
 **Default value:** 5
 
@@ -2018,7 +2018,7 @@
 ----------
 
 
-**alienlevel**
+**alienlevel [169]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2030,7 +2030,7 @@
 ----------
 
 
-**healthchangebest**
+**healthchangebest [170]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2042,7 +2042,7 @@
 ----------
 
 
-**healthchangeworst**
+**healthchangeworst [171]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2054,7 +2054,7 @@
 ----------
 
 
-**healthchange**
+**healthchange [172]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2066,7 +2066,7 @@
 ----------
 
 
-**currentmovementmode**
+**currentmovementmode [173]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2078,7 +2078,7 @@
 ----------
 
 
-**prevmovementmode**
+**prevmovementmode [174]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2090,7 +2090,7 @@
 ----------
 
 
-**autolocktimedefault**
+**autolocktimedefault [175]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2102,7 +2102,7 @@
 ----------
 
 
-**autounlocktimedefault**
+**autounlocktimedefault [176]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2114,7 +2114,7 @@
 ----------
 
 
-**moreflags**
+**moreflags [177]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2126,9 +2126,9 @@
 ----------
 
 
-**aliennextxp**
+**aliennextxp [178]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatAlienNextXP
 
 **Default value:** 1500
 
@@ -2138,7 +2138,7 @@
 ----------
 
 
-**npcflags**
+**npcflags [179]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2150,7 +2150,7 @@
 ----------
 
 
-**currentncu**
+**currentncu [180]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2162,7 +2162,7 @@
 ----------
 
 
-**maxncu**
+**maxncu [181]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2174,7 +2174,7 @@
 ----------
 
 
-**specialization**
+**specialization [182]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2186,7 +2186,7 @@
 ----------
 
 
-**effecticon**
+**effecticon [183]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2198,7 +2198,7 @@
 ----------
 
 
-**buildingtype**
+**buildingtype [184]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2210,7 +2210,7 @@
 ----------
 
 
-**buildinginstance**
+**buildinginstance [185]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2222,7 +2222,7 @@
 ----------
 
 
-**cardownertype**
+**cardownertype [186]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2234,7 +2234,7 @@
 ----------
 
 
-**cardownerinstance**
+**cardownerinstance [187]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2246,7 +2246,7 @@
 ----------
 
 
-**buildingcomplexinst**
+**buildingcomplexinst [188]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2258,7 +2258,7 @@
 ----------
 
 
-**exitinstance**
+**exitinstance [189]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2270,7 +2270,7 @@
 ----------
 
 
-**nextdoorinbuilding**
+**nextdoorinbuilding [190]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2282,7 +2282,7 @@
 ----------
 
 
-**lastconcreteplayfieldinstance**
+**lastconcreteplayfieldinstance [191]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2294,7 +2294,7 @@
 ----------
 
 
-**extenalplayfieldinstance**
+**extenalplayfieldinstance [192]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2306,7 +2306,7 @@
 ----------
 
 
-**extenaldoorinstance**
+**extenaldoorinstance [193]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2318,7 +2318,7 @@
 ----------
 
 
-**inplay**
+**inplay [194]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2330,7 +2330,7 @@
 ----------
 
 
-**accesskey**
+**accesskey [195]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2342,7 +2342,7 @@
 ----------
 
 
-**petmaster**
+**petmaster [196]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2354,7 +2354,7 @@
 ----------
 
 
-**orientationmode**
+**orientationmode [197]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2366,7 +2366,7 @@
 ----------
 
 
-**sessiontime**
+**sessiontime [198]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2378,7 +2378,7 @@
 ----------
 
 
-**rp**
+**rp [199]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2390,7 +2390,7 @@
 ----------
 
 
-**conformity**
+**conformity [200]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2402,7 +2402,7 @@
 ----------
 
 
-**aggressiveness**
+**aggressiveness [201]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2414,7 +2414,7 @@
 ----------
 
 
-**stability**
+**stability [202]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2426,7 +2426,7 @@
 ----------
 
 
-**extroverty**
+**extroverty [203]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2438,7 +2438,7 @@
 ----------
 
 
-**breedhostility**
+**breedhostility [204]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2450,7 +2450,7 @@
 ----------
 
 
-**reflectprojectileac**
+**reflectprojectileac [205]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2462,7 +2462,7 @@
 ----------
 
 
-**reflectmeleeac**
+**reflectmeleeac [206]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2474,7 +2474,7 @@
 ----------
 
 
-**reflectenergyac**
+**reflectenergyac [207]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2486,7 +2486,7 @@
 ----------
 
 
-**reflectchemicalac**
+**reflectchemicalac [208]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2498,7 +2498,7 @@
 ----------
 
 
-**rechargedelay**
+**rechargedelay [210]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2510,7 +2510,7 @@
 ----------
 
 
-**equipdelay**
+**equipdelay [211]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2522,7 +2522,7 @@
 ----------
 
 
-**maxenergy**
+**maxenergy [212]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2534,7 +2534,7 @@
 ----------
 
 
-**teamside**
+**teamside [213]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2546,9 +2546,9 @@
 ----------
 
 
-**currentnano**
+**currentnano [214]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatCurrentNano
 
 **Default value:** 1
 
@@ -2558,7 +2558,7 @@
 ----------
 
 
-**gmlevel**
+**gmlevel [215]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2570,7 +2570,7 @@
 ----------
 
 
-**reflectradiationac**
+**reflectradiationac [216]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2582,7 +2582,7 @@
 ----------
 
 
-**reflectcoldac**
+**reflectcoldac [217]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2594,7 +2594,7 @@
 ----------
 
 
-**reflectnanoac**
+**reflectnanoac [218]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2606,7 +2606,7 @@
 ----------
 
 
-**reflectfireac**
+**reflectfireac [219]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2618,7 +2618,7 @@
 ----------
 
 
-**currbodylocation**
+**currbodylocation [220]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2630,11 +2630,11 @@
 ----------
 
 
-**maxnanoenergy**
+**maxnanoenergy [221]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatMaxNanoEnergy
 
-**Default value:** 1
+**Default value:** 10
 
 **Tags:** 
 `Save in Database`  
@@ -2642,7 +2642,7 @@
 ----------
 
 
-**accumulateddamage**
+**accumulateddamage [222]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2654,7 +2654,7 @@
 ----------
 
 
-**canchangeclothes**
+**canchangeclothes [223]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2666,7 +2666,7 @@
 ----------
 
 
-**features**
+**features [224]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2678,7 +2678,7 @@
 ----------
 
 
-**reflectpoisonac**
+**reflectpoisonac [225]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2690,7 +2690,7 @@
 ----------
 
 
-**shieldprojectileac**
+**shieldprojectileac [226]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2702,7 +2702,7 @@
 ----------
 
 
-**shieldmeleeac**
+**shieldmeleeac [227]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2714,7 +2714,7 @@
 ----------
 
 
-**shieldenergyac**
+**shieldenergyac [228]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2726,7 +2726,7 @@
 ----------
 
 
-**shieldchemicalac**
+**shieldchemicalac [229]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2738,7 +2738,7 @@
 ----------
 
 
-**shieldradiationac**
+**shieldradiationac [230]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2750,7 +2750,7 @@
 ----------
 
 
-**shieldcoldac**
+**shieldcoldac [231]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2762,7 +2762,7 @@
 ----------
 
 
-**shieldnanoac**
+**shieldnanoac [232]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2774,7 +2774,7 @@
 ----------
 
 
-**shieldfireac**
+**shieldfireac [233]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2786,7 +2786,7 @@
 ----------
 
 
-**shieldpoisonac**
+**shieldpoisonac [234]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2798,7 +2798,7 @@
 ----------
 
 
-**berserkmode**
+**berserkmode [235]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2810,7 +2810,7 @@
 ----------
 
 
-**insurancepercentage**
+**insurancepercentage [236]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2822,7 +2822,7 @@
 ----------
 
 
-**changesidecount**
+**changesidecount [237]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2834,7 +2834,7 @@
 ----------
 
 
-**absorbprojectileac**
+**absorbprojectileac [238]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2846,7 +2846,7 @@
 ----------
 
 
-**absorbmeleeac**
+**absorbmeleeac [239]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2858,7 +2858,7 @@
 ----------
 
 
-**absorbenergyac**
+**absorbenergyac [240]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2870,7 +2870,7 @@
 ----------
 
 
-**absorbchemicalac**
+**absorbchemicalac [241]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2882,7 +2882,7 @@
 ----------
 
 
-**absorbradiationac**
+**absorbradiationac [242]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2894,7 +2894,7 @@
 ----------
 
 
-**absorbcoldac**
+**absorbcoldac [243]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2906,7 +2906,7 @@
 ----------
 
 
-**absorbfireac**
+**absorbfireac [244]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2918,7 +2918,7 @@
 ----------
 
 
-**absorbpoisonac**
+**absorbpoisonac [245]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2930,7 +2930,7 @@
 ----------
 
 
-**absorbnanoac**
+**absorbnanoac [246]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2942,7 +2942,7 @@
 ----------
 
 
-**temporaryskillreduction**
+**temporaryskillreduction [247]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2954,7 +2954,7 @@
 ----------
 
 
-**birthdate**
+**birthdate [248]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2966,7 +2966,7 @@
 ----------
 
 
-**lastsaved**
+**lastsaved [249]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2978,7 +2978,7 @@
 ----------
 
 
-**soundvolume**
+**soundvolume [250]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2990,7 +2990,7 @@
 ----------
 
 
-**petcounter**
+**petcounter [251]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3002,7 +3002,7 @@
 ----------
 
 
-**meeterswalked**
+**meeterswalked [252]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3014,7 +3014,7 @@
 ----------
 
 
-**questlevelssolved**
+**questlevelssolved [253]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3026,7 +3026,7 @@
 ----------
 
 
-**monsterlevelskilled**
+**monsterlevelskilled [254]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3038,7 +3038,7 @@
 ----------
 
 
-**pvplevelskilled**
+**pvplevelskilled [255]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3050,7 +3050,7 @@
 ----------
 
 
-**missionbits1**
+**missionbits1 [256]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3062,7 +3062,7 @@
 ----------
 
 
-**missionbits2**
+**missionbits2 [257]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3074,7 +3074,7 @@
 ----------
 
 
-**accessgrant**
+**accessgrant [258]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3086,7 +3086,7 @@
 ----------
 
 
-**doorflags**
+**doorflags [259]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3098,7 +3098,7 @@
 ----------
 
 
-**clanhierarchy**
+**clanhierarchy [260]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3110,7 +3110,7 @@
 ----------
 
 
-**queststat**
+**queststat [261]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3122,7 +3122,7 @@
 ----------
 
 
-**clientactivated**
+**clientactivated [262]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3134,7 +3134,7 @@
 ----------
 
 
-**personalresearchlevel**
+**personalresearchlevel [263]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3146,7 +3146,7 @@
 ----------
 
 
-**globalresearchlevel**
+**globalresearchlevel [264]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3158,7 +3158,7 @@
 ----------
 
 
-**personalresearchgoal**
+**personalresearchgoal [265]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3170,7 +3170,7 @@
 ----------
 
 
-**globalresearchgoal**
+**globalresearchgoal [266]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3182,7 +3182,7 @@
 ----------
 
 
-**turnspeed**
+**turnspeed [267]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3194,7 +3194,7 @@
 ----------
 
 
-**liquidtype**
+**liquidtype [268]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3206,7 +3206,7 @@
 ----------
 
 
-**gathersound**
+**gathersound [269]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3218,7 +3218,7 @@
 ----------
 
 
-**castsound**
+**castsound [270]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3230,7 +3230,7 @@
 ----------
 
 
-**travelsound**
+**travelsound [271]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3242,7 +3242,7 @@
 ----------
 
 
-**hitsound**
+**hitsound [272]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3254,7 +3254,7 @@
 ----------
 
 
-**secondaryitemtemplate**
+**secondaryitemtemplate [273]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3266,7 +3266,7 @@
 ----------
 
 
-**equippedweapons**
+**equippedweapons [274]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3278,7 +3278,7 @@
 ----------
 
 
-**xpkillrange**
+**xpkillrange [275]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3290,7 +3290,7 @@
 ----------
 
 
-**amsmodifier**
+**amsmodifier [276]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3302,7 +3302,7 @@
 ----------
 
 
-**dmsmodifier**
+**dmsmodifier [277]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3314,7 +3314,7 @@
 ----------
 
 
-**projectiledamagemodifier**
+**projectiledamagemodifier [278]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3326,7 +3326,7 @@
 ----------
 
 
-**meleedamagemodifier**
+**meleedamagemodifier [279]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3338,7 +3338,7 @@
 ----------
 
 
-**energydamagemodifier**
+**energydamagemodifier [280]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3350,7 +3350,7 @@
 ----------
 
 
-**chemicaldamagemodifier**
+**chemicaldamagemodifier [281]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3362,7 +3362,7 @@
 ----------
 
 
-**radiationdamagemodifier**
+**radiationdamagemodifier [282]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3374,7 +3374,7 @@
 ----------
 
 
-**itemhatevalue**
+**itemhatevalue [283]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3386,7 +3386,7 @@
 ----------
 
 
-**damagebonus**
+**damagebonus [284]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3398,7 +3398,7 @@
 ----------
 
 
-**maxdamage**
+**maxdamage [285]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3410,7 +3410,7 @@
 ----------
 
 
-**mindamage**
+**mindamage [286]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3422,7 +3422,7 @@
 ----------
 
 
-**attackrange**
+**attackrange [287]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3434,7 +3434,7 @@
 ----------
 
 
-**hatevaluemodifyer**
+**hatevaluemodifyer [288]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3446,7 +3446,7 @@
 ----------
 
 
-**trapdifficulty**
+**trapdifficulty [289]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3458,7 +3458,7 @@
 ----------
 
 
-**statone**
+**statone [290]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3470,7 +3470,7 @@
 ----------
 
 
-**numattackeffects**
+**numattackeffects [291]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3482,7 +3482,7 @@
 ----------
 
 
-**defaultattacktype**
+**defaultattacktype [292]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3494,7 +3494,7 @@
 ----------
 
 
-**itemskill**
+**itemskill [293]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3506,7 +3506,7 @@
 ----------
 
 
-**itemdelay**
+**itemdelay [294]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3518,7 +3518,7 @@
 ----------
 
 
-**itemopposedskill**
+**itemopposedskill [295]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3530,7 +3530,7 @@
 ----------
 
 
-**itemsis**
+**itemsis [296]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3542,7 +3542,7 @@
 ----------
 
 
-**interactionradius**
+**interactionradius [297]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3554,7 +3554,7 @@
 ----------
 
 
-**placement**
+**placement [298]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3566,7 +3566,7 @@
 ----------
 
 
-**lockdifficulty**
+**lockdifficulty [299]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3578,7 +3578,7 @@
 ----------
 
 
-**members**
+**members [300]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3590,7 +3590,7 @@
 ----------
 
 
-**minmembers**
+**minmembers [301]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3602,7 +3602,7 @@
 ----------
 
 
-**clanprice**
+**clanprice [302]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3614,7 +3614,7 @@
 ----------
 
 
-**missionbits3**
+**missionbits3 [303]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3626,7 +3626,7 @@
 ----------
 
 
-**clantype**
+**clantype [304]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3638,7 +3638,7 @@
 ----------
 
 
-**claninstance**
+**claninstance [305]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3650,7 +3650,7 @@
 ----------
 
 
-**votecount**
+**votecount [306]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3662,7 +3662,7 @@
 ----------
 
 
-**membertype**
+**membertype [307]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3674,7 +3674,7 @@
 ----------
 
 
-**memberinstance**
+**memberinstance [308]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3686,7 +3686,7 @@
 ----------
 
 
-**globalclantype**
+**globalclantype [309]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3698,7 +3698,7 @@
 ----------
 
 
-**globalclaninstance**
+**globalclaninstance [310]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3710,7 +3710,7 @@
 ----------
 
 
-**colddamagemodifier**
+**colddamagemodifier [311]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3722,7 +3722,7 @@
 ----------
 
 
-**clanupkeepinterval**
+**clanupkeepinterval [312]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3734,7 +3734,7 @@
 ----------
 
 
-**timesinceupkeep**
+**timesinceupkeep [313]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3746,7 +3746,7 @@
 ----------
 
 
-**clanfinalized**
+**clanfinalized [314]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3758,7 +3758,7 @@
 ----------
 
 
-**nanodamagemodifier**
+**nanodamagemodifier [315]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3770,7 +3770,7 @@
 ----------
 
 
-**firedamagemodifier**
+**firedamagemodifier [316]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3782,7 +3782,7 @@
 ----------
 
 
-**poisondamagemodifier**
+**poisondamagemodifier [317]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3794,7 +3794,7 @@
 ----------
 
 
-**npcostmodifier**
+**npcostmodifier [318]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3806,7 +3806,7 @@
 ----------
 
 
-**xpmodifier**
+**xpmodifier [319]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3818,7 +3818,7 @@
 ----------
 
 
-**breedlimit**
+**breedlimit [320]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3830,7 +3830,7 @@
 ----------
 
 
-**genderlimit**
+**genderlimit [321]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3842,7 +3842,7 @@
 ----------
 
 
-**levellimit**
+**levellimit [322]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3854,7 +3854,7 @@
 ----------
 
 
-**playerkilling**
+**playerkilling [323]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3866,7 +3866,7 @@
 ----------
 
 
-**teamallowed**
+**teamallowed [324]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3878,7 +3878,7 @@
 ----------
 
 
-**weapondisallowedtype**
+**weapondisallowedtype [325]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3890,7 +3890,7 @@
 ----------
 
 
-**weapondisallowedinstance**
+**weapondisallowedinstance [326]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3902,7 +3902,7 @@
 ----------
 
 
-**taboo**
+**taboo [327]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3914,7 +3914,7 @@
 ----------
 
 
-**compulsion**
+**compulsion [328]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3926,7 +3926,7 @@
 ----------
 
 
-**skilldisabled**
+**skilldisabled [329]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3938,7 +3938,7 @@
 ----------
 
 
-**clanitemtype**
+**clanitemtype [330]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3950,7 +3950,7 @@
 ----------
 
 
-**claniteminstance**
+**claniteminstance [331]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3962,7 +3962,7 @@
 ----------
 
 
-**debuffformula**
+**debuffformula [332]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3974,7 +3974,7 @@
 ----------
 
 
-**pvp_rating**
+**pvp_rating [333]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3986,7 +3986,7 @@
 ----------
 
 
-**savedxp**
+**savedxp [334]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -3998,7 +3998,7 @@
 ----------
 
 
-**doorblocktime**
+**doorblocktime [335]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4010,7 +4010,7 @@
 ----------
 
 
-**overridetexture**
+**overridetexture [336]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4022,7 +4022,7 @@
 ----------
 
 
-**overridematerial**
+**overridematerial [337]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4034,7 +4034,7 @@
 ----------
 
 
-**deathreason**
+**deathreason [338]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4046,7 +4046,7 @@
 ----------
 
 
-**damageoverridetype**
+**damageoverridetype [339]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4058,7 +4058,7 @@
 ----------
 
 
-**braintype**
+**braintype [340]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4070,7 +4070,7 @@
 ----------
 
 
-**xpbonus**
+**xpbonus [341]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4082,9 +4082,9 @@
 ----------
 
 
-**healinterval**
+**healinterval [342]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatHealInterval
 
 **Default value:** 29
 
@@ -4094,7 +4094,19 @@
 ----------
 
 
-**healdelta**
+**healdelta [343]**
+
+**Class type:** CellAO.Stats.SpecialStats.StatHealDelta
+
+**Default value:** 3
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**monstertexture [344]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4106,7 +4118,7 @@
 ----------
 
 
-**monstertexture**
+**hasalwayslootable [345]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4118,7 +4130,7 @@
 ----------
 
 
-**hasalwayslootable**
+**tradelimit [346]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4130,7 +4142,7 @@
 ----------
 
 
-**tradelimit**
+**facetexture [347]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4142,19 +4154,7 @@
 ----------
 
 
-**facetexture**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**specialcondition**
+**specialcondition [348]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4166,7 +4166,7 @@
 ----------
 
 
-**autoattackflags**
+**autoattackflags [349]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4178,9 +4178,9 @@
 ----------
 
 
-**nextxp**
+**nextxp [350]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatNextXP
 
 **Default value:** 1450
 
@@ -4190,7 +4190,7 @@
 ----------
 
 
-**teleportpausemilliseconds**
+**teleportpausemilliseconds [351]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4202,7 +4202,7 @@
 ----------
 
 
-**siscap**
+**siscap [352]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4214,7 +4214,7 @@
 ----------
 
 
-**animset**
+**animset [353]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4226,7 +4226,7 @@
 ----------
 
 
-**attacktype**
+**attacktype [354]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4238,7 +4238,7 @@
 ----------
 
 
-**nanofocuslevel**
+**nanofocuslevel [355]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4250,7 +4250,7 @@
 ----------
 
 
-**npchash**
+**npchash [356]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4262,7 +4262,7 @@
 ----------
 
 
-**collisionradius**
+**collisionradius [357]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4274,7 +4274,7 @@
 ----------
 
 
-**outerradius**
+**outerradius [358]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4286,7 +4286,7 @@
 ----------
 
 
-**monsterdata**
+**monsterdata [359]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4298,7 +4298,7 @@
 ----------
 
 
-**monsterscale**
+**monsterscale [360]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4310,7 +4310,7 @@
 ----------
 
 
-**hiteffecttype**
+**hiteffecttype [361]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4322,7 +4322,7 @@
 ----------
 
 
-**resurrectdest**
+**resurrectdest [362]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4334,9 +4334,9 @@
 ----------
 
 
-**nanointerval**
+**nanointerval [363]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatNanoInterval
 
 **Default value:** 28
 
@@ -4346,7 +4346,19 @@
 ----------
 
 
-**nanodelta**
+**nanodelta [364]**
+
+**Class type:** CellAO.Stats.SpecialStats.StatNanoDelta
+
+**Default value:** 3
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**reclaimitem [365]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4358,7 +4370,7 @@
 ----------
 
 
-**reclaimitem**
+**gathereffecttype [366]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4370,31 +4382,7 @@
 ----------
 
 
-**gathereffecttype**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**visualbreed**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  , `Announce to Playfield`  
-
-----------
-
-
-**visualprofession**
+**visualbreed [367]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4406,7 +4394,7 @@
 ----------
 
 
-**visualsex**
+**visualprofession [368]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4418,7 +4406,19 @@
 ----------
 
 
-**ritualtargetinst**
+**visualsex [369]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  , `Announce to Playfield`  
+
+----------
+
+
+**ritualtargetinst [370]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4430,7 +4430,7 @@
 ----------
 
 
-**skilltimeonselectedtarget**
+**skilltimeonselectedtarget [371]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4442,7 +4442,7 @@
 ----------
 
 
-**lastsavexp**
+**lastsavexp [372]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4454,7 +4454,7 @@
 ----------
 
 
-**extendedtime**
+**extendedtime [373]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4466,7 +4466,7 @@
 ----------
 
 
-**burstrecharge**
+**burstrecharge [374]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4478,7 +4478,7 @@
 ----------
 
 
-**fullautorecharge**
+**fullautorecharge [375]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4490,7 +4490,7 @@
 ----------
 
 
-**gatherabstractanim**
+**gatherabstractanim [376]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4502,7 +4502,7 @@
 ----------
 
 
-**casttargetabstractanim**
+**casttargetabstractanim [377]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4514,7 +4514,7 @@
 ----------
 
 
-**castselfabstractanim**
+**castselfabstractanim [378]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4526,7 +4526,7 @@
 ----------
 
 
-**criticalincrease**
+**criticalincrease [379]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4538,7 +4538,7 @@
 ----------
 
 
-**rangeincreaserweapon**
+**rangeincreaserweapon [380]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4550,7 +4550,7 @@
 ----------
 
 
-**rangeincreasernf**
+**rangeincreasernf [381]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4562,7 +4562,7 @@
 ----------
 
 
-**skilllockmodifier**
+**skilllockmodifier [382]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4574,7 +4574,7 @@
 ----------
 
 
-**interruptmodifier**
+**interruptmodifier [383]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4586,7 +4586,7 @@
 ----------
 
 
-**acgentrancestyles**
+**acgentrancestyles [384]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4598,7 +4598,7 @@
 ----------
 
 
-**chanceofbreakonspellattack**
+**chanceofbreakonspellattack [385]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4610,7 +4610,7 @@
 ----------
 
 
-**chanceofbreakondebuff**
+**chanceofbreakondebuff [386]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4622,7 +4622,7 @@
 ----------
 
 
-**dieanim**
+**dieanim [387]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4634,7 +4634,7 @@
 ----------
 
 
-**towertype**
+**towertype [388]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4646,7 +4646,7 @@
 ----------
 
 
-**expansion**
+**expansion [389]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4658,7 +4658,7 @@
 ----------
 
 
-**lowresmesh**
+**lowresmesh [390]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4670,7 +4670,7 @@
 ----------
 
 
-**criticaldecrease**
+**criticaldecrease [391]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4682,7 +4682,7 @@
 ----------
 
 
-**oldtimeexist**
+**oldtimeexist [392]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4694,7 +4694,7 @@
 ----------
 
 
-**resistmodifier**
+**resistmodifier [393]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4706,7 +4706,7 @@
 ----------
 
 
-**chestflags**
+**chestflags [394]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4718,7 +4718,7 @@
 ----------
 
 
-**primarytemplateid**
+**primarytemplateid [395]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4730,7 +4730,7 @@
 ----------
 
 
-**numberofitems**
+**numberofitems [396]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4742,7 +4742,7 @@
 ----------
 
 
-**selectedtargettype**
+**selectedtargettype [397]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4754,7 +4754,7 @@
 ----------
 
 
-**corpse_hash**
+**corpse_hash [398]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4766,7 +4766,7 @@
 ----------
 
 
-**ammoname**
+**ammoname [399]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4778,7 +4778,7 @@
 ----------
 
 
-**rotation**
+**rotation [400]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4790,7 +4790,7 @@
 ----------
 
 
-**catanim**
+**catanim [401]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4802,7 +4802,7 @@
 ----------
 
 
-**catanimflags**
+**catanimflags [402]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4814,7 +4814,7 @@
 ----------
 
 
-**displaycatanim**
+**displaycatanim [403]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4826,7 +4826,7 @@
 ----------
 
 
-**displaycatmesh**
+**displaycatmesh [404]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4838,7 +4838,7 @@
 ----------
 
 
-**school**
+**school [405]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4850,7 +4850,7 @@
 ----------
 
 
-**nanospeed**
+**nanospeed [406]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4862,7 +4862,7 @@
 ----------
 
 
-**nanopoints**
+**nanopoints [407]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4874,7 +4874,7 @@
 ----------
 
 
-**trainskill**
+**trainskill [408]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4886,7 +4886,7 @@
 ----------
 
 
-**trainskillcost**
+**trainskillcost [409]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4898,7 +4898,7 @@
 ----------
 
 
-**isfightingme**
+**isfightingme [410]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4910,7 +4910,7 @@
 ----------
 
 
-**nextformula**
+**nextformula [411]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4922,7 +4922,7 @@
 ----------
 
 
-**multiplecount**
+**multiplecount [412]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4934,7 +4934,7 @@
 ----------
 
 
-**effecttype**
+**effecttype [413]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4946,7 +4946,7 @@
 ----------
 
 
-**impacteffecttype**
+**impacteffecttype [414]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4958,7 +4958,7 @@
 ----------
 
 
-**corpsetype**
+**corpsetype [415]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4970,7 +4970,7 @@
 ----------
 
 
-**corpseinstance**
+**corpseinstance [416]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4982,7 +4982,7 @@
 ----------
 
 
-**corpseanimkey**
+**corpseanimkey [417]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4994,7 +4994,7 @@
 ----------
 
 
-**unarmedtemplateinstance**
+**unarmedtemplateinstance [418]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5006,7 +5006,7 @@
 ----------
 
 
-**tracereffecttype**
+**tracereffecttype [419]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5018,7 +5018,7 @@
 ----------
 
 
-**ammotype**
+**ammotype [420]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5030,7 +5030,7 @@
 ----------
 
 
-**charradius**
+**charradius [421]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5042,7 +5042,7 @@
 ----------
 
 
-**chanceofuse**
+**chanceofuse [422]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5054,7 +5054,7 @@
 ----------
 
 
-**currentstate**
+**currentstate [423]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5066,7 +5066,7 @@
 ----------
 
 
-**armourtype**
+**armourtype [424]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5078,7 +5078,7 @@
 ----------
 
 
-**restmodifier**
+**restmodifier [425]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5090,7 +5090,7 @@
 ----------
 
 
-**buymodifier**
+**buymodifier [426]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5102,7 +5102,7 @@
 ----------
 
 
-**sellmodifier**
+**sellmodifier [427]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5114,7 +5114,7 @@
 ----------
 
 
-**casteffecttype**
+**casteffecttype [428]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5126,7 +5126,7 @@
 ----------
 
 
-**npcbrainstate**
+**npcbrainstate [429]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5138,7 +5138,7 @@
 ----------
 
 
-**waitstate**
+**waitstate [430]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5150,7 +5150,7 @@
 ----------
 
 
-**selectedtarget**
+**selectedtarget [431]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5162,7 +5162,7 @@
 ----------
 
 
-**missionbits4**
+**missionbits4 [432]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5174,7 +5174,7 @@
 ----------
 
 
-**ownerinstance**
+**ownerinstance [433]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5186,7 +5186,7 @@
 ----------
 
 
-**charstate**
+**charstate [434]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5198,7 +5198,7 @@
 ----------
 
 
-**readonly**
+**readonly [435]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5210,7 +5210,7 @@
 ----------
 
 
-**damagetype**
+**damagetype [436]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5222,7 +5222,7 @@
 ----------
 
 
-**collidecheckinterval**
+**collidecheckinterval [437]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5234,7 +5234,7 @@
 ----------
 
 
-**playfieldtype**
+**playfieldtype [438]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5246,7 +5246,7 @@
 ----------
 
 
-**npccommand**
+**npccommand [439]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5258,7 +5258,7 @@
 ----------
 
 
-**initiativetype**
+**initiativetype [440]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5270,7 +5270,7 @@
 ----------
 
 
-**chartmp1**
+**chartmp1 [441]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5282,7 +5282,7 @@
 ----------
 
 
-**chartmp2**
+**chartmp2 [442]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5294,7 +5294,7 @@
 ----------
 
 
-**chartmp3**
+**chartmp3 [443]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5306,7 +5306,7 @@
 ----------
 
 
-**chartmp4**
+**chartmp4 [444]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5318,7 +5318,7 @@
 ----------
 
 
-**npccommandarg**
+**npccommandarg [445]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5330,7 +5330,7 @@
 ----------
 
 
-**nametemplate**
+**nametemplate [446]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5342,7 +5342,7 @@
 ----------
 
 
-**desiredtargetdistance**
+**desiredtargetdistance [447]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5354,7 +5354,7 @@
 ----------
 
 
-**vicinityrange**
+**vicinityrange [448]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5366,7 +5366,7 @@
 ----------
 
 
-**npcissurrendering**
+**npcissurrendering [449]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5378,7 +5378,7 @@
 ----------
 
 
-**statemachine**
+**statemachine [450]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5390,7 +5390,7 @@
 ----------
 
 
-**npcsurrenderinstance**
+**npcsurrenderinstance [451]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5402,7 +5402,7 @@
 ----------
 
 
-**npchaspatrollist**
+**npchaspatrollist [452]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5414,7 +5414,7 @@
 ----------
 
 
-**npcvicinitychars**
+**npcvicinitychars [453]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5426,7 +5426,7 @@
 ----------
 
 
-**proximityrangeoutdoors**
+**proximityrangeoutdoors [454]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5438,7 +5438,7 @@
 ----------
 
 
-**npcfamily**
+**npcfamily [455]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5450,7 +5450,7 @@
 ----------
 
 
-**commandrange**
+**commandrange [456]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5462,7 +5462,7 @@
 ----------
 
 
-**npchatelistsize**
+**npchatelistsize [457]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5474,7 +5474,7 @@
 ----------
 
 
-**npcnumpets**
+**npcnumpets [458]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5486,7 +5486,7 @@
 ----------
 
 
-**odminsizeadd**
+**odminsizeadd [459]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5498,7 +5498,7 @@
 ----------
 
 
-**effectred**
+**effectred [460]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5510,7 +5510,7 @@
 ----------
 
 
-**effectgreen**
+**effectgreen [461]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5522,7 +5522,7 @@
 ----------
 
 
-**effectblue**
+**effectblue [462]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5534,7 +5534,7 @@
 ----------
 
 
-**odmaxsizeadd**
+**odmaxsizeadd [463]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5546,7 +5546,7 @@
 ----------
 
 
-**durationmodifier**
+**durationmodifier [464]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5558,7 +5558,7 @@
 ----------
 
 
-**npccryforhelprange**
+**npccryforhelprange [465]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5570,7 +5570,7 @@
 ----------
 
 
-**losheight**
+**losheight [466]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5582,7 +5582,7 @@
 ----------
 
 
-**petreq1**
+**petreq1 [467]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5594,7 +5594,7 @@
 ----------
 
 
-**petreq2**
+**petreq2 [468]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5606,7 +5606,7 @@
 ----------
 
 
-**petreq3**
+**petreq3 [469]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5618,7 +5618,7 @@
 ----------
 
 
-**mapoptions**
+**mapoptions [470]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5630,7 +5630,7 @@
 ----------
 
 
-**mapareapart1**
+**mapareapart1 [471]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5642,7 +5642,7 @@
 ----------
 
 
-**mapareapart2**
+**mapareapart2 [472]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5654,7 +5654,7 @@
 ----------
 
 
-**fixtureflags**
+**fixtureflags [473]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5666,7 +5666,7 @@
 ----------
 
 
-**falldamage**
+**falldamage [474]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5678,19 +5678,7 @@
 ----------
 
 
-**reflectreturnedprojectileac**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**reflectreturnedmeleeac**
+**reflectreturnedprojectileac [475]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5702,7 +5690,7 @@
 ----------
 
 
-**reflectreturnedenergyac**
+**reflectreturnedmeleeac [476]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5714,7 +5702,7 @@
 ----------
 
 
-**reflectreturnedchemicalac**
+**reflectreturnedenergyac [477]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5726,7 +5714,7 @@
 ----------
 
 
-**reflectreturnedradiationac**
+**reflectreturnedchemicalac [478]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5738,7 +5726,7 @@
 ----------
 
 
-**reflectreturnedcoldac**
+**reflectreturnedradiationac [479]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5750,7 +5738,7 @@
 ----------
 
 
-**reflectreturnednanoac**
+**reflectreturnedcoldac [480]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5762,7 +5750,7 @@
 ----------
 
 
-**reflectreturnedfireac**
+**reflectreturnednanoac [481]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5774,7 +5762,7 @@
 ----------
 
 
-**reflectreturnedpoisonac**
+**reflectreturnedfireac [482]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -5786,451 +5774,7 @@
 ----------
 
 
-**proximityrangeindoors**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**petreqval1**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**petreqval2**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**petreqval3**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**targetfacing**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**backstab**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**originatortype**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questinstance**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex1**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex2**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex3**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex4**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex5**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtdungeoninstance**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtnummonsters**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkilledmonsters**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**animpos**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**animplay**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**animspeed**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonsterid1**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonstercount1**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonsterid2**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonstercount2**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonsterid3**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**qtkillnummonstercount3**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questindex0**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**questtimeout**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**tower_npchash**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**pettype**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**ontowercreation**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**ownedtowers**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**towerinstance**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**attackshield**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**specialattackshield**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**npcvicinityplayers**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**npcusefightmoderegenrate**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**rnd**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**socialstatus**
+**reflectreturnedpoisonac [483]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6242,7 +5786,7 @@
 ----------
 
 
-**lastrnd**
+**proximityrangeindoors [484]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6254,7 +5798,7 @@
 ----------
 
 
-**itemdelaycap**
+**petreqval1 [485]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6266,7 +5810,7 @@
 ----------
 
 
-**rechargedelaycap**
+**petreqval2 [486]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6278,7 +5822,7 @@
 ----------
 
 
-**percentremaininghealth**
+**petreqval3 [487]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6290,7 +5834,7 @@
 ----------
 
 
-**percentremainingnano**
+**targetfacing [488]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6302,7 +5846,7 @@
 ----------
 
 
-**targetdistance**
+**backstab [489]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6314,7 +5858,7 @@
 ----------
 
 
-**teamcloseness**
+**originatortype [490]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6326,7 +5870,7 @@
 ----------
 
 
-**numberonhatelist**
+**questinstance [491]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6338,7 +5882,7 @@
 ----------
 
 
-**conditionstate**
+**questindex1 [492]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6350,7 +5894,7 @@
 ----------
 
 
-**expansionplayfield**
+**questindex2 [493]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6362,7 +5906,331 @@
 ----------
 
 
-**shadowbreed**
+**questindex3 [494]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**questindex4 [495]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**questindex5 [496]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtdungeoninstance [497]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtnummonsters [498]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkilledmonsters [499]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**animpos [500]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**animplay [501]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**animspeed [502]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonsterid1 [503]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonstercount1 [504]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonsterid2 [505]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonstercount2 [506]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonsterid3 [507]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**qtkillnummonstercount3 [508]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**questindex0 [509]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**questtimeout [510]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**tower_npchash [511]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**pettype [512]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**ontowercreation [513]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**ownedtowers [514]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**towerinstance [515]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**attackshield [516]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**specialattackshield [517]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**npcvicinityplayers [518]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**npcusefightmoderegenrate [519]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**rnd [520]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**socialstatus [521]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6374,7 +6242,7 @@
 ----------
 
 
-**npcfovstatus**
+**lastrnd [522]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6386,7 +6254,7 @@
 ----------
 
 
-**dudchance**
+**itemdelaycap [523]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6398,7 +6266,7 @@
 ----------
 
 
-**healmultiplier**
+**rechargedelaycap [524]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6410,7 +6278,91 @@
 ----------
 
 
-**nanodamagemultiplier**
+**percentremaininghealth [525]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**percentremainingnano [526]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**targetdistance [527]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**teamcloseness [528]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**numberonhatelist [529]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**conditionstate [530]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**expansionplayfield [531]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**shadowbreed [532]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6422,7 +6374,7 @@
 ----------
 
 
-**nanovulnerability**
+**npcfovstatus [533]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6434,7 +6386,7 @@
 ----------
 
 
-**amscap**
+**dudchance [534]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6446,7 +6398,7 @@
 ----------
 
 
-**procinitiative1**
+**healmultiplier [535]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6458,55 +6410,7 @@
 ----------
 
 
-**procinitiative2**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**procinitiative3**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**procinitiative4**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**factionmodifier**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**missionbits8**
+**nanodamagemultiplier [536]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6518,19 +6422,7 @@
 ----------
 
 
-**missionbits9**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**stackingline2**
+**nanovulnerability [537]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6542,7 +6434,7 @@
 ----------
 
 
-**stackingline3**
+**amscap [538]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6554,7 +6446,7 @@
 ----------
 
 
-**stackingline4**
+**procinitiative1 [539]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6566,7 +6458,7 @@
 ----------
 
 
-**stackingline5**
+**procinitiative2 [540]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6578,7 +6470,7 @@
 ----------
 
 
-**stackingline6**
+**procinitiative3 [541]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6590,7 +6482,7 @@
 ----------
 
 
-**stackingorder**
+**procinitiative4 [542]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6602,7 +6494,7 @@
 ----------
 
 
-**procnano1**
+**factionmodifier [543]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6614,7 +6506,31 @@
 ----------
 
 
-**procnano2**
+**missionbits8 [544]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**missionbits9 [545]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**stackingline2 [546]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6626,7 +6542,7 @@
 ----------
 
 
-**procnano3**
+**stackingline3 [547]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6638,7 +6554,7 @@
 ----------
 
 
-**procnano4**
+**stackingline4 [548]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6650,7 +6566,7 @@
 ----------
 
 
-**procchance1**
+**stackingline5 [549]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6662,7 +6578,7 @@
 ----------
 
 
-**procchance2**
+**stackingline6 [550]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6674,7 +6590,7 @@
 ----------
 
 
-**procchance3**
+**stackingorder [551]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6686,7 +6602,7 @@
 ----------
 
 
-**procchance4**
+**procnano1 [552]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6698,31 +6614,7 @@
 ----------
 
 
-**otarmedforces**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**clansentinels**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**otmed**
+**procnano2 [553]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6734,187 +6626,7 @@
 ----------
 
 
-**clangaia**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**ottrans**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**clanvanguards**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**gos**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**otfollowers**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**otoperator**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**otunredeemed**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**clandevoted**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**clanconserver**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**clanredeemed**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**sk**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**lastsk**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**nextsk**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**playeroptions**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**lastperkresettime**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 0
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**currenttime**
+**procnano3 [554]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6926,7 +6638,67 @@
 ----------
 
 
-**shadowbreedtemplate**
+**procnano4 [555]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**procchance1 [556]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**procchance2 [557]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**procchance3 [558]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**procchance4 [559]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**otarmedforces [560]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6938,7 +6710,19 @@
 ----------
 
 
-**npcvicinityfamily**
+**clansentinels [561]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**otmed [562]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6950,7 +6734,187 @@
 ----------
 
 
-**npcscriptamsscale**
+**clangaia [563]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**ottrans [564]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**clanvanguards [565]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**gos [566]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**otfollowers [567]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**otoperator [568]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**otunredeemed [569]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**clandevoted [570]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**clanconserver [571]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**clanredeemed [572]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**sk [573]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**lastsk [574]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**nextsk [575]**
+
+**Class type:** CellAO.Stats.SpecialStats.StatNextSK
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**playeroptions [576]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**lastperkresettime [577]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**currenttime [578]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6962,7 +6926,43 @@
 ----------
 
 
-**apartmentsallowed**
+**shadowbreedtemplate [579]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 0
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**npcvicinityfamily [580]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**npcscriptamsscale [581]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**apartmentsallowed [582]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6974,7 +6974,7 @@
 ----------
 
 
-**apartmentsowned**
+**apartmentsowned [583]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6986,7 +6986,7 @@
 ----------
 
 
-**apartmentaccesscard**
+**apartmentaccesscard [584]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -6998,7 +6998,7 @@
 ----------
 
 
-**mapareapart3**
+**mapareapart3 [585]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7010,7 +7010,7 @@
 ----------
 
 
-**mapareapart4**
+**mapareapart4 [586]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7022,7 +7022,7 @@
 ----------
 
 
-**numberofteammembers**
+**numberofteammembers [587]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7034,7 +7034,7 @@
 ----------
 
 
-**actioncategory**
+**actioncategory [588]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7046,7 +7046,7 @@
 ----------
 
 
-**currentplayfield**
+**currentplayfield [589]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7058,7 +7058,7 @@
 ----------
 
 
-**districtnano**
+**districtnano [590]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7070,7 +7070,7 @@
 ----------
 
 
-**districtnanointerval**
+**districtnanointerval [591]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7082,7 +7082,7 @@
 ----------
 
 
-**unsavedxp**
+**unsavedxp [592]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7094,7 +7094,7 @@
 ----------
 
 
-**regainxppercentage**
+**regainxppercentage [593]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7106,7 +7106,7 @@
 ----------
 
 
-**tempsaveteamid**
+**tempsaveteamid [594]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7118,7 +7118,7 @@
 ----------
 
 
-**tempsaveplayfield**
+**tempsaveplayfield [595]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7130,7 +7130,7 @@
 ----------
 
 
-**tempsavex**
+**tempsavex [596]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7142,7 +7142,7 @@
 ----------
 
 
-**tempsavey**
+**tempsavey [597]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7154,7 +7154,7 @@
 ----------
 
 
-**extendedflags**
+**extendedflags [598]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7166,7 +7166,7 @@
 ----------
 
 
-**shopprice**
+**shopprice [599]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7178,7 +7178,7 @@
 ----------
 
 
-**newbiehp**
+**newbiehp [600]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7190,7 +7190,7 @@
 ----------
 
 
-**hplevelup**
+**hplevelup [601]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7202,7 +7202,7 @@
 ----------
 
 
-**hpperskill**
+**hpperskill [602]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7214,7 +7214,7 @@
 ----------
 
 
-**newbienp**
+**newbienp [603]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7226,7 +7226,7 @@
 ----------
 
 
-**nplevelup**
+**nplevelup [604]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7238,7 +7238,7 @@
 ----------
 
 
-**npperskill**
+**npperskill [605]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7250,7 +7250,7 @@
 ----------
 
 
-**maxshopitems**
+**maxshopitems [606]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7262,7 +7262,7 @@
 ----------
 
 
-**playerid**
+**playerid [607]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7274,19 +7274,7 @@
 ----------
 
 
-**shoprent**
-
-**Class type:** CellAO.Stats.Stat
-
-**Default value:** 1234567890
-
-**Tags:** 
-`Save in Database`  
-
-----------
-
-
-**synergyhash**
+**shoprent [608]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7298,7 +7286,7 @@
 ----------
 
 
-**shopflags**
+**synergyhash [609]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7310,7 +7298,7 @@
 ----------
 
 
-**shoplastused**
+**shopflags [610]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7322,7 +7310,7 @@
 ----------
 
 
-**shoptype**
+**shoplastused [611]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7334,7 +7322,7 @@
 ----------
 
 
-**lockdowntime**
+**shoptype [612]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7346,7 +7334,7 @@
 ----------
 
 
-**leaderlockdowntime**
+**lockdowntime [613]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7358,7 +7346,19 @@
 ----------
 
 
-**invaderskilled**
+**leaderlockdowntime [614]**
+
+**Class type:** CellAO.Stats.Stat
+
+**Default value:** 1234567890
+
+**Tags:** 
+`Save in Database`  
+
+----------
+
+
+**invaderskilled [615]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7370,7 +7370,7 @@
 ----------
 
 
-**killedbyinvaders**
+**killedbyinvaders [616]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7382,7 +7382,7 @@
 ----------
 
 
-**missionbits10**
+**missionbits10 [617]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7394,7 +7394,7 @@
 ----------
 
 
-**missionbits11**
+**missionbits11 [618]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7406,7 +7406,7 @@
 ----------
 
 
-**missionbits12**
+**missionbits12 [619]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7418,7 +7418,7 @@
 ----------
 
 
-**housetemplate**
+**housetemplate [620]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7430,7 +7430,7 @@
 ----------
 
 
-**percentfiredamage**
+**percentfiredamage [621]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7442,7 +7442,7 @@
 ----------
 
 
-**percentcolddamage**
+**percentcolddamage [622]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7454,7 +7454,7 @@
 ----------
 
 
-**percentmeleedamage**
+**percentmeleedamage [623]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7466,7 +7466,7 @@
 ----------
 
 
-**percentprojectiledamage**
+**percentprojectiledamage [624]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7478,7 +7478,7 @@
 ----------
 
 
-**percentpoisondamage**
+**percentpoisondamage [625]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7490,7 +7490,7 @@
 ----------
 
 
-**percentradiationdamage**
+**percentradiationdamage [626]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7502,7 +7502,7 @@
 ----------
 
 
-**percentenergydamage**
+**percentenergydamage [627]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7514,7 +7514,7 @@
 ----------
 
 
-**percentchemicaldamage**
+**percentchemicaldamage [628]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7526,7 +7526,7 @@
 ----------
 
 
-**totaldamage**
+**totaldamage [629]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7538,7 +7538,7 @@
 ----------
 
 
-**trackprojectiledamage**
+**trackprojectiledamage [630]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7550,7 +7550,7 @@
 ----------
 
 
-**trackmeleedamage**
+**trackmeleedamage [631]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7562,7 +7562,7 @@
 ----------
 
 
-**trackenergydamage**
+**trackenergydamage [632]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7574,7 +7574,7 @@
 ----------
 
 
-**trackchemicaldamage**
+**trackchemicaldamage [633]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7586,7 +7586,7 @@
 ----------
 
 
-**trackradiationdamage**
+**trackradiationdamage [634]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7598,7 +7598,7 @@
 ----------
 
 
-**trackcolddamage**
+**trackcolddamage [635]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7610,7 +7610,7 @@
 ----------
 
 
-**trackpoisondamage**
+**trackpoisondamage [636]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7622,7 +7622,7 @@
 ----------
 
 
-**trackfiredamage**
+**trackfiredamage [637]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7634,7 +7634,7 @@
 ----------
 
 
-**npcspellarg1**
+**npcspellarg1 [638]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7646,7 +7646,7 @@
 ----------
 
 
-**npcspellret1**
+**npcspellret1 [639]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7658,7 +7658,7 @@
 ----------
 
 
-**cityinstance**
+**cityinstance [640]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7670,7 +7670,7 @@
 ----------
 
 
-**distancetospawnpoint**
+**distancetospawnpoint [641]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7682,7 +7682,7 @@
 ----------
 
 
-**cityterminalrechargepercent**
+**cityterminalrechargepercent [642]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7694,7 +7694,7 @@
 ----------
 
 
-**unreadmailcount**
+**unreadmailcount [649]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7706,7 +7706,7 @@
 ----------
 
 
-**lastmailchecktime**
+**lastmailchecktime [650]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7718,7 +7718,7 @@
 ----------
 
 
-**advantagehash1**
+**advantagehash1 [651]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7730,7 +7730,7 @@
 ----------
 
 
-**advantagehash2**
+**advantagehash2 [652]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7742,7 +7742,7 @@
 ----------
 
 
-**advantagehash3**
+**advantagehash3 [653]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7754,7 +7754,7 @@
 ----------
 
 
-**advantagehash4**
+**advantagehash4 [654]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7766,7 +7766,7 @@
 ----------
 
 
-**advantagehash5**
+**advantagehash5 [655]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7778,7 +7778,7 @@
 ----------
 
 
-**shopindex**
+**shopindex [656]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7790,7 +7790,7 @@
 ----------
 
 
-**shopid**
+**shopid [657]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7802,7 +7802,7 @@
 ----------
 
 
-**isvehicle**
+**isvehicle [658]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7814,7 +7814,7 @@
 ----------
 
 
-**damagetonano**
+**damagetonano [659]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7826,7 +7826,7 @@
 ----------
 
 
-**accountflags**
+**accountflags [660]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7838,7 +7838,7 @@
 ----------
 
 
-**damagetonanomultiplier**
+**damagetonanomultiplier [661]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7850,7 +7850,7 @@
 ----------
 
 
-**mechdata**
+**mechdata [662]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7862,7 +7862,7 @@
 ----------
 
 
-**vehicleac**
+**vehicleac [664]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7874,7 +7874,7 @@
 ----------
 
 
-**vehicledamage**
+**vehicledamage [665]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7886,7 +7886,7 @@
 ----------
 
 
-**vehiclehealth**
+**vehiclehealth [666]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7898,7 +7898,7 @@
 ----------
 
 
-**vehiclespeed**
+**vehiclespeed [667]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7910,7 +7910,7 @@
 ----------
 
 
-**battlestationside**
+**battlestationside [668]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7922,7 +7922,7 @@
 ----------
 
 
-**vp**
+**vp [669]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7934,7 +7934,7 @@
 ----------
 
 
-**battlestationrep**
+**battlestationrep [670]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7946,7 +7946,7 @@
 ----------
 
 
-**petstate**
+**petstate [671]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7958,7 +7958,7 @@
 ----------
 
 
-**paidpoints**
+**paidpoints [672]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7970,7 +7970,7 @@
 ----------
 
 
-**visualflags**
+**visualflags [673]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7982,7 +7982,7 @@
 ----------
 
 
-**pvpduelkills**
+**pvpduelkills [674]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -7994,7 +7994,7 @@
 ----------
 
 
-**pvpdueldeaths**
+**pvpdueldeaths [675]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8006,7 +8006,7 @@
 ----------
 
 
-**pvpprofessionduelkills**
+**pvpprofessionduelkills [676]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8018,7 +8018,7 @@
 ----------
 
 
-**pvpprofessiondueldeaths**
+**pvpprofessiondueldeaths [677]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8030,7 +8030,7 @@
 ----------
 
 
-**pvprankedsolokills**
+**pvprankedsolokills [678]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8042,7 +8042,7 @@
 ----------
 
 
-**pvprankedsolodeaths**
+**pvprankedsolodeaths [679]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8054,7 +8054,7 @@
 ----------
 
 
-**pvprankedteamkills**
+**pvprankedteamkills [680]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8066,7 +8066,7 @@
 ----------
 
 
-**pvprankedteamdeaths**
+**pvprankedteamdeaths [681]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8078,7 +8078,7 @@
 ----------
 
 
-**pvpsoloscore**
+**pvpsoloscore [682]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8090,7 +8090,7 @@
 ----------
 
 
-**pvpteamscore**
+**pvpteamscore [683]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8102,7 +8102,7 @@
 ----------
 
 
-**pvpduelscore**
+**pvpduelscore [684]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8114,7 +8114,7 @@
 ----------
 
 
-**acgitemseed**
+**acgitemseed [700]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8126,7 +8126,7 @@
 ----------
 
 
-**acgitemlevel**
+**acgitemlevel [701]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8138,7 +8138,7 @@
 ----------
 
 
-**acgitemtemplateid**
+**acgitemtemplateid [702]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8150,7 +8150,7 @@
 ----------
 
 
-**acgitemtemplateid2**
+**acgitemtemplateid2 [703]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8162,7 +8162,7 @@
 ----------
 
 
-**acgitemcategoryid**
+**acgitemcategoryid [704]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8174,7 +8174,7 @@
 ----------
 
 
-**hasknubotdata**
+**hasknubotdata [768]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8186,7 +8186,7 @@
 ----------
 
 
-**questboothdifficulty**
+**questboothdifficulty [800]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8198,7 +8198,7 @@
 ----------
 
 
-**questasminimumrange**
+**questasminimumrange [801]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8210,7 +8210,7 @@
 ----------
 
 
-**questasmaximumrange**
+**questasmaximumrange [802]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8222,7 +8222,7 @@
 ----------
 
 
-**visuallodlevel**
+**visuallodlevel [888]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8234,7 +8234,7 @@
 ----------
 
 
-**targetdistancechange**
+**targetdistancechange [889]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8246,7 +8246,7 @@
 ----------
 
 
-**tiderequireddynelid**
+**tiderequireddynelid [900]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8258,7 +8258,7 @@
 ----------
 
 
-**streamcheckmagic**
+**streamcheckmagic [999]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8270,7 +8270,7 @@
 ----------
 
 
-**type**
+**type [1001]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8282,7 +8282,7 @@
 ----------
 
 
-**instance**
+**instance [1002]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8294,7 +8294,7 @@
 ----------
 
 
-**weapontype**
+**weapontype [1003]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8306,7 +8306,7 @@
 ----------
 
 
-**shouldermeshright**
+**shouldermeshright [1004]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8318,7 +8318,7 @@
 ----------
 
 
-**shouldermeshleft**
+**shouldermeshleft [1005]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8330,7 +8330,7 @@
 ----------
 
 
-**weaponmeshright**
+**weaponmeshright [1006]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8342,7 +8342,7 @@
 ----------
 
 
-**weaponmeshleft**
+**weaponmeshleft [1007]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8354,7 +8354,7 @@
 ----------
 
 
-**overridetextureattractor**
+**overridetextureattractor [1014]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8366,7 +8366,7 @@
 ----------
 
 
-**overridetextureback**
+**overridetextureback [1013]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8378,7 +8378,7 @@
 ----------
 
 
-**overridetexturehead**
+**overridetexturehead [1008]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8390,7 +8390,7 @@
 ----------
 
 
-**overridetextureshoulderpadleft**
+**overridetextureshoulderpadleft [1012]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8402,7 +8402,7 @@
 ----------
 
 
-**overridetextureshoulderpadright**
+**overridetextureshoulderpadright [1011]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8414,7 +8414,7 @@
 ----------
 
 
-**overridetextureweaponleft**
+**overridetextureweaponleft [1010]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8426,7 +8426,7 @@
 ----------
 
 
-**overridetextureweaponright**
+**overridetextureweaponright [1009]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -8444,6 +8444,6 @@
 
 *Copyright © 2013 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.681 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.840 - Night Predator*
 
 

@@ -172,7 +172,7 @@ namespace MarkDownDocumentator
                 bool dontWriteToSql = stat.DoNotDontWriteToSql;
                 bool announceToPlayfield = stat.AnnounceToPlayfield;
                 string className = stat.GetType().FullName;
-                tw.WriteLine("**" + statName + "**");
+                tw.WriteLine("**" + statName + " [" + stat.StatId + "]**");
                 tw.WriteLine();
                 tw.WriteLine("**Class type:** " + className);
                 tw.WriteLine();
@@ -224,64 +224,64 @@ namespace MarkDownDocumentator
 
             WriteLink(tw, "Move modes", "MoveModes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "MoveModes.md"))), 
-                "MoveModes", 
-                typeof(MoveModes), 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "MoveModes.md"))),
+                "MoveModes",
+                typeof(MoveModes),
                 false);
 
             WriteHeader2(tw, "Inventory slots");
             WriteLink(tw, "Weapon page slots", "WeaponSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "WeaponSlots.md"))), 
-                "Weapon slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "WeaponSlots.md"))),
+                "Weapon slots",
                 typeof(WeaponSlots));
 
             WriteLink(tw, "Armor page slots", "ArmorSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ArmorSlots.md"))), 
-                "Armor slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ArmorSlots.md"))),
+                "Armor slots",
                 typeof(ArmorSlots));
 
             WriteLink(tw, "Implant page slots", "ImplantSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ImplantSlots.md"))), 
-                "Implant slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ImplantSlots.md"))),
+                "Implant slots",
                 typeof(ImplantSlots));
 
             WriteHeader2(tw, "Item/Inventory related");
             tw.WriteLine();
             WriteLink(tw, "Inventory Errors", "InventoryError.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "InventoryError.md"))), 
-                "Inventory Errors", 
-                typeof(InventoryError), 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "InventoryError.md"))),
+                "Inventory Errors",
+                typeof(InventoryError),
                 false);
 
             WriteLink(tw, "Can flags", "CanFlags.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "CanFlags.md"))), 
-                "Can Flags", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "CanFlags.md"))),
+                "Can Flags",
                 typeof(CanFlags));
 
             WriteLink(tw, "Action Types", "ActionTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ActionTypes.md"))), 
-                "Action Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ActionTypes.md"))),
+                "Action Types",
                 typeof(ActionType));
             WriteLink(tw, "Event Types", "EventTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "EventTypes.md"))), 
-                "Event Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "EventTypes.md"))),
+                "Event Types",
                 typeof(EventType));
             WriteLink(tw, "Function Types", "FunctionTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "FunctionTypes.md"))), 
-                "Function Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "FunctionTypes.md"))),
+                "Function Types",
                 typeof(ActionType));
             WriteLink(tw, "Operators", "Operator.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "Operator.md"))), 
-                "Operators", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "Operator.md"))),
+                "Operators",
                 typeof(Operator));
 
             WriteFooter(tw);

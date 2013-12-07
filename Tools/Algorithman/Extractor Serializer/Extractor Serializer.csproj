@@ -35,7 +35,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
+    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL" Condition=" '$(OS)' == 'Windows_NT' ">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CellAO\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
@@ -87,6 +87,10 @@
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj" Condition=" '$(OS)' != 'Windows_NT' ">
+      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
+      <Name>MsgPack.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>

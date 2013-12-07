@@ -35,7 +35,7 @@
     <Reference Include="MemBus">
       <HintPath>..\..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
     </Reference>
-    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
+    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL" Condition=" '$(OS)' == 'Windows_NT' ">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
@@ -78,6 +78,10 @@
     <ProjectReference Include="..\Cell.Util\Cell.Util.csproj">
       <Project>{77d1aef7-aa59-4b5a-b114-e0c1ebe1b3c9}</Project>
       <Name>Cell.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj" Condition=" '$(OS)' != 'Windows_NT' ">
+      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
+      <Name>MsgPack.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>

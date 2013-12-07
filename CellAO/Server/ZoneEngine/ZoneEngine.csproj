@@ -42,7 +42,7 @@
       <HintPath>..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL">
+    <Reference Include="MsgPack, Version=0.4.0.0, Culture=neutral, PublicKeyToken=a2625990d5dc0167, processorArchitecture=MSIL" Condition=" '$(OS)' == 'Windows_NT' ">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
@@ -159,12 +159,16 @@
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
       <Name>Exceptions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj" Condition=" '$(OS)' != 'Windows_NT' ">
+      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
+      <Name>MsgPack.Mono</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
       <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
       <Name>NiceHexOutput</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Translations\Translations.csproj">
-      <Project>{3c59fd3d-2a73-4450-b4a3-1de0f771ecec}</Project>
+      <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>
       <Name>Translations</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Utility\Utility.csproj">

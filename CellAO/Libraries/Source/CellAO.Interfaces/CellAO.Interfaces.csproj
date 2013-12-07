@@ -35,7 +35,7 @@
     <Reference Include="MemBus">
       <HintPath>..\..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
     </Reference>
-    <Reference Include="MsgPack">
+    <Reference Include="MsgPack" Condition=" '$(OS)' == 'Windows_NT' ">
       <HintPath>..\..\..\packages\MsgPack.Cli.0.4.0\lib\net40-client\MsgPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -72,6 +72,10 @@
     <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
       <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
       <Name>CellAO.Enums</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj" Condition=" '$(OS)' != 'Windows_NT' ">
+      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
+      <Name>MsgPack.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
