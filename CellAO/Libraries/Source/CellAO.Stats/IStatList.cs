@@ -102,8 +102,6 @@ namespace CellAO.Stats
         /// </summary>
         /// <param name="e">
         /// </param>
-        /// <returns>
-        /// </returns>
         void AfterStatChangedEventHandler(StatChangedEventArgs e);
 
         /// <summary>

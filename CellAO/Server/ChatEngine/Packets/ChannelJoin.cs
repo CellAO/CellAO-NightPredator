@@ -94,6 +94,14 @@ namespace ChatEngine.Packets
             return writer.Finish();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="channel">
+        /// </param>
+        /// <param name="otherData">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static byte[] Create(ChannelBase channel, byte[] otherData)
         {
             PacketWriter writer = new PacketWriter(60);

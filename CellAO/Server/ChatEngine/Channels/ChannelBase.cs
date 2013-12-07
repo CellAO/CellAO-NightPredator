@@ -147,7 +147,7 @@ namespace ChatEngine.Channels
                         this.OnClientJoinChannel(((Client)client).Character.characterName);
                     }
 
-                    byte[] channelJoinPacket = ChannelJoin.Create(this, new Byte[] { 0x00, 0x00 });
+                    byte[] channelJoinPacket = ChannelJoin.Create(this, new byte[] { 0x00, 0x00 });
                     client.Send(channelJoinPacket);
                     return true;
                 }

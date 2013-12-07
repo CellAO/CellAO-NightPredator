@@ -178,6 +178,7 @@ namespace ZoneEngine.Core
             ((IZoneClient)client).Character.Save();
             Playfield pf = (Playfield)((IZoneClient)client).Character.Playfield;
             pf.DisconnectClient(((IZoneClient)client).Character);
+
             // TODO: Send a despawn packet to playfield
         }
 

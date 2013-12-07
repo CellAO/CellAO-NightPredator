@@ -30,7 +30,6 @@ namespace CellAO.Stats
 
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Diagnostics.Contracts;
     using System.Linq;
 
@@ -4350,6 +4349,14 @@ namespace CellAO.Stats
             this.instance.DoNotDontWriteToSql = true;
             this.gmLevel.DoNotDontWriteToSql = true;
         }
+
+        #endregion
+
+        #region Public Events
+
+        /// <summary>
+        /// </summary>
+        public event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
 
         #endregion
 
@@ -11519,6 +11526,19 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        /// <param name="e">
+        /// </param>
+        public void AfterStatChangedEventHandler(StatChangedEventArgs e)
+        {
+            EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         public void ClearChangedFlags()
         {
             foreach (Stat cs in this.all)
@@ -11672,18 +11692,6 @@ namespace CellAO.Stats
             }
         }
 
-        public event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-
-        public void AfterStatChangedEventHandler(StatChangedEventArgs e)
-        {
-            EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
         /// <summary>
         /// </summary>
         public void SetAbilityTricklers()
@@ -11757,7 +11765,7 @@ namespace CellAO.Stats
         /// </param>
         public void SetBaseValueWithoutTriggering(int stat, uint value)
         {
-            this.all.Single(x => x.StatId==stat).SetBaseValue (value);
+            this.all.Single(x => x.StatId == stat).SetBaseValue(value);
         }
 
         /// <summary>

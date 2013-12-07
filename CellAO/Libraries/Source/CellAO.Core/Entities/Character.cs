@@ -109,23 +109,25 @@ namespace CellAO.Core.Entities
             this.UploadedNanos = new List<IUploadedNanos>();
             this.BaseInventory = new PlayerInventory(this);
             this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
-            
-            this.SocialTab = new Dictionary<int, int>();
-            this.SocialTab.Add(0, 0);
-            this.SocialTab.Add(1, 0);
-            this.SocialTab.Add(2, 0);
-            this.SocialTab.Add(3, 0);
-            this.SocialTab.Add(4, 0);
-            this.SocialTab.Add(38, 0);
-            this.SocialTab.Add(1004, 0);
-            this.SocialTab.Add(1005, 0);
-            this.SocialTab.Add(64, 0);
-            this.SocialTab.Add(32, 0);
-            this.SocialTab.Add(1006, 0);
-            this.SocialTab.Add(1007, 0);
 
-            this.meshLayer.AddMesh(0, this.Stats["HeadMesh"].Value, 0, 4);
-            this.socialMeshLayer.AddMesh(0, this.Stats["HeadMesh"].Value, 0, 4);
+            this.SocialTab = new Dictionary<int, int>
+                             {
+                                 { 0, 0 }, 
+                                 { 1, 0 }, 
+                                 { 2, 0 }, 
+                                 { 3, 0 }, 
+                                 { 4, 0 }, 
+                                 { 38, 0 }, 
+                                 { 1004, 0 }, 
+                                 { 1005, 0 }, 
+                                 { 64, 0 }, 
+                                 { 32, 0 }, 
+                                 { 1006, 0 }, 
+                                 { 1007, 0 }
+                             };
+
+            this.meshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
+            this.socialMeshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
 
             this.BaseInventory.Read();
         }
@@ -283,8 +285,28 @@ namespace CellAO.Core.Entities
             this.DoNotDoTimers = true;
             this.Stats.ClearModifiers();
             this.Textures.Clear();
+            this.meshLayer.Clear();
+            this.socialMeshLayer.Clear();
+            this.meshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
+            this.socialMeshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
+
+            this.SocialTab = new Dictionary<int, int>
+                             {
+                                 { 0, 0 }, 
+                                 { 1, 0 }, 
+                                 { 2, 0 }, 
+                                 { 3, 0 }, 
+                                 { 4, 0 }, 
+                                 { 38, 0 }, 
+                                 { 1004, 0 }, 
+                                 { 1005, 0 }, 
+                                 { 64, 0 }, 
+                                 { 32, 0 }, 
+                                 { 1006, 0 }, 
+                                 { 1007, 0 }
+                             };
+
             this.BaseInventory.CalculateModifiers(this);
-            
         }
 
         /// <summary>

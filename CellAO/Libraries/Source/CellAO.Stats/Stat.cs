@@ -52,9 +52,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat,
-            uint valueBeforeChange,
-            uint valueAfterChange,
+            Stat changedStat, 
+            uint valueBeforeChange, 
+            uint valueAfterChange, 
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -102,6 +102,10 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        private uint baseValue = 1234567890;
+
+        /// <summary>
+        /// </summary>
         private int modifier = 0;
 
         /// <summary>
@@ -135,11 +139,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList,
-            int number,
-            uint defaultValue,
-            bool sendBaseValue,
-            bool dontWrite,
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
             bool announceToPlayfield)
         {
             this.Stats = statList;
@@ -196,7 +200,6 @@ namespace CellAO.Stats
             }
         }
 
-        private uint baseValue = 1234567890;
         /// <summary>
         /// </summary>
         public virtual uint BaseValue
@@ -205,6 +208,7 @@ namespace CellAO.Stats
             {
                 return this.baseValue;
             }
+
             set
             {
                 this.baseValue = value;
@@ -352,11 +356,6 @@ namespace CellAO.Stats
             return val;
         }
 
-        public void SetBaseValue(uint value)
-        {
-            this.baseValue = value;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="value">
@@ -397,6 +396,15 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        /// <param name="value">
+        /// </param>
+        public void SetBaseValue(uint value)
+        {
+            this.baseValue = value;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="stats">
         /// </param>
         public void SetStats(Stats stats)
@@ -421,7 +429,7 @@ namespace CellAO.Stats
                 handler(this, e);
             }
 
-            Stats.AfterStatChangedEventHandler(e);
+            this.Stats.AfterStatChangedEventHandler(e);
 
             if (this.affects.Any())
             {

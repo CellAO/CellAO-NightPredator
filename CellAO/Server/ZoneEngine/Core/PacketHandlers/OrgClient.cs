@@ -90,13 +90,14 @@ namespace ZoneEngine.Core.PacketHandlers
                     // org ranks
                     // Displays Org Rank Structure.
                     /* Select governingform from DB, Roll through display from GovForm */
-                if (client.Character.Stats[StatIds.clan].BaseValue == 0)
+                    if (client.Character.Stats[StatIds.clan].BaseValue == 0)
                     {
                         client.SendChatText("You're not in an organization!");
                         break;
                     }
 
-                    int governingForm = OrganizationDao.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
+                    int governingForm =
+                        OrganizationDao.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
 
                     client.SendChatText("Current Rank Structure: " + GetRankList(governingForm));
                     break;
@@ -179,7 +180,8 @@ namespace ZoneEngine.Core.PacketHandlers
                                                       Type = IdentityType.Organization, 
                                                       Instance =
                                                           (int)
-                                                          tPlayer.Stats[StatIds.clan].BaseValue
+                                                          tPlayer.Stats[StatIds.clan]
+                                                          .BaseValue
                                                   }, 
                                               
                                               // TODO: Possible NULL here
@@ -210,8 +212,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     StatDao.DisbandOrganization((int)client.Character.Stats[StatIds.clan].BaseValue);
                     break;
 
-                    
-
                 case 7:
 
                     // org startvote <"text"> <duration(minutes)> <entries>
@@ -220,14 +220,12 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region /org vote info
-
                 case 8:
 
                     // org vote info
                     break;
 
-                    #endregion
+                    
 
                     #region /org vote <entry>
 

@@ -148,6 +148,21 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
+        /// <param name="functions">
+        /// </param>
+        public void CallFunction(CellAO.Core.Functions.Functions functions)
+        {
+            // TODO: Make it more versatile, not just applying stuff on yourself
+            FunctionCollection.Instance.CallFunction(
+                functions.FunctionType, 
+                this.character, 
+                this.character, 
+                this.character, 
+                functions.Arguments.Values.ToArray());
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="charId">
         /// </param>
         /// <exception cref="Exception">
@@ -228,17 +243,6 @@ namespace ZoneEngine.Core
             this.SendCompressed(buffer);
             LogUtil.Debug(messageBody.GetType().ToString());
             LogUtil.Debug(NiceHexOutput.Output(buffer));
-        }
-
-        public void CallFunction(CellAO.Core.Functions.Functions functions)
-        {
-            // TODO: Make it more versatile, not just applying stuff on yourself
-            FunctionCollection.Instance.CallFunction(
-                functions.FunctionType,
-                this.character,
-                this.character,
-                this.character,
-                functions.Arguments.Values.ToArray());
         }
 
         /// <summary>

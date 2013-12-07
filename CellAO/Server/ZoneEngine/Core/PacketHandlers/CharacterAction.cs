@@ -349,6 +349,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // Stop current logout timer and send stop logout packet
                     client.Character.UpdateMoveType((byte)client.Character.PreviousMoveMode);
                     client.Playfield.Announce(packet);
+
                     // client.CancelLogOut();
                 }
 
@@ -359,6 +360,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // If action == Stand
                     client.Character.UpdateMoveType(37);
                     client.Playfield.Announce(packet);
+
                     // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
                     // client.StandCancelLogout();
                 }
@@ -465,8 +467,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     client.Character.BaseInventory.Pages[(int)packet.Target.Type].Write();
                     break;
 
-                    
-
                 case 0x35:
                     client.Character.BaseInventory.Pages[(int)packet.Target.Type][packet.Target.Instance].MultipleCount
                         += client.Character.BaseInventory.Pages[(int)packet.Target.Type][args2].MultipleCount;
@@ -476,8 +476,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
 
                     
-
-                    #region Sneak Action
 
                     // ###################################################################################
                     // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
@@ -510,7 +508,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    #endregion
+                    
 
                     #region Use Item on Item
 

@@ -192,7 +192,7 @@ namespace CellAO.Core.Functions
 
             foreach (MessagePackObject ob in this.Arguments.Values)
             {
-                if (ob.IsTypeOf(typeof(string))==true)
+                if (ob.IsTypeOf(typeof(string)) == true)
                 {
                     MessagePackObject z = new MessagePackObject();
                     z = ob.ToString();
@@ -206,7 +206,7 @@ namespace CellAO.Core.Functions
                     copy.Arguments.Values.Add(i);
                 }
 
-                if (ob.GetType() == typeof(Single))
+                if (ob.IsTypeOf(typeof(Single)) == true)
                 {
                     MessagePackObject s = new MessagePackObject();
                     s = ob.AsSingle();

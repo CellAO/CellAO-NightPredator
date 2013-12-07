@@ -28,7 +28,7 @@
 
 namespace ZoneEngine.Script
 {
-    using CellAO.Enums;
+    #region Usings ...
 
     #region Usings ...
 
@@ -50,6 +50,7 @@ namespace ZoneEngine.Script
     using System.Text;
 
     using CellAO.Core.Entities;
+    using CellAO.Enums;
 
     using Microsoft.CSharp;
 
@@ -59,6 +60,8 @@ namespace ZoneEngine.Script
 
     using ZoneEngine.ChatCommands;
     using ZoneEngine.Core;
+
+    #endregion
 
     #endregion
 

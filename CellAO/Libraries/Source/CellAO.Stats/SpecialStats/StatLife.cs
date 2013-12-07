@@ -95,7 +95,7 @@ namespace CellAO.Stats.SpecialStats
                 uint titleLevel = (uint)this.Stats[StatIds.titlelevel].Value;
                 uint level = (uint)this.Stats[StatIds.level].Value;
                 int[] breedBaseHitPoints = { 10, 15, 10, 25, 30, 30, 30 };
-                int baseValue = breedBaseHitPoints[breed - 1];               
+                int baseValue = breedBaseHitPoints[breed - 1];
                 int beforeModifiers =
                     (int)
                         (baseValue
@@ -160,7 +160,7 @@ namespace CellAO.Stats.SpecialStats
         public override int Value
         {
             get
-            {                
+            {
                 return (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
                         ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));

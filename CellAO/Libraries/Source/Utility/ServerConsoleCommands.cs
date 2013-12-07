@@ -84,6 +84,25 @@ namespace Utility
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public string HelpAll()
+        {
+            int maxLength = this.MaxCommandLength();
+
+            string output = string.Empty;
+
+            foreach (ServerConsoleCommandEntry serverConsoleCommandEntry in this.entries)
+            {
+                output += serverConsoleCommandEntry.CommandString.PadRight(maxLength + 1)
+                          + this.HelpText(serverConsoleCommandEntry.CommandString) + Environment.NewLine;
+            }
+
+            return output;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="commandString">
         /// </param>
         /// <returns>
@@ -102,20 +121,18 @@ namespace Utility
                 }
 
                 // If no specific output found for this engine, then fall back to normal
-                if (locales.ResourceManager.GetObject("ServerConsoleCommandHelp_" + commandString)
-                    != null)
+                if (locales.ResourceManager.GetObject("ServerConsoleCommandHelp_" + commandString) != null)
                 {
-                    return
-                        (string)
-                            locales.ResourceManager.GetObject(
-                                "ServerConsoleCommandHelp" + "_" + commandString);
+                    return (string)locales.ResourceManager.GetObject("ServerConsoleCommandHelp" + "_" + commandString);
                 }
-
-
             }
 
             return "No help available for command '" + commandString + "'";
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Returns the length of the longest console command (for padding the output)
@@ -129,19 +146,5 @@ namespace Utility
         }
 
         #endregion
-
-        public string HelpAll()
-        {
-            int maxLength = this.MaxCommandLength();
-
-            string output = "";
-
-            foreach (ServerConsoleCommandEntry serverConsoleCommandEntry in entries)
-            {
-                output += serverConsoleCommandEntry.CommandString.PadRight(maxLength + 1)
-                          + this.HelpText(serverConsoleCommandEntry.CommandString)+Environment.NewLine;
-            }
-            return output;
-        }
     }
 }

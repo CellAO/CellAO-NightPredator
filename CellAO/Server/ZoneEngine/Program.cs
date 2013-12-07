@@ -201,6 +201,7 @@ namespace ZoneEngine
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingGamefunctions);
                 Colouring.Pop();
+                Colouring.Pop();
                 return false;
             }
 
@@ -208,6 +209,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingNLogNBug);
+                Colouring.Pop();
                 Colouring.Pop();
                 return false;
             }
@@ -217,6 +219,7 @@ namespace ZoneEngine
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorCreatingZoneServerInstance);
                 Colouring.Pop();
+                Colouring.Pop();
                 return false;
             }
 
@@ -224,6 +227,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingISCom);
+                Colouring.Pop();
                 Colouring.Pop();
                 return false;
             }
@@ -233,6 +237,7 @@ namespace ZoneEngine
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorTCPIPSetup);
                 Colouring.Pop();
+                Colouring.Pop();
                 return false;
             }
 
@@ -241,6 +246,7 @@ namespace ZoneEngine
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorCreatingScriptCompilerInstance);
                 Colouring.Pop();
+                Colouring.Pop();
                 return false;
             }
 
@@ -248,6 +254,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingDatabase);
+                Colouring.Pop();
                 Colouring.Pop();
                 return false;
             }

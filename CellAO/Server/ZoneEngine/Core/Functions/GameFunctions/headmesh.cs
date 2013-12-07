@@ -28,26 +28,32 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Core.Entities;
     using CellAO.Enums;
 
     using MsgPack;
 
+    using Utility;
+
+    using ZoneEngine.Core.Packets;
+
     #endregion
 
     /// <summary>
     /// </summary>
-    internal class Function_changebodymesh : FunctionPrototype
+    internal class Function_headmesh : FunctionPrototype
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "changebodymesh";
+        public new string FunctionName = "headmesh";
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53054;
+        public new int FunctionNumber = 53035;
 
         #endregion
 
@@ -95,11 +101,31 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity Target, 
             MessagePackObject[] Arguments)
         {
-            return true;
+#if DEBUG
+            Console.WriteLine(FunctionArgumentList.List(Arguments));
+#endif
+            if (Arguments.Length == 2)
+            {
+                ((Character)Self).Stats[StatIds.headmesh].Value = Arguments[1].AsInt32();
+                ((Character)Self).MeshLayer.AddMesh(0, Arguments[1].AsInt32(), Arguments[0].AsInt32(), 4);
+            }
+            else
+            {
+                int placement = (Int32)Arguments[Arguments.Length - 1];
+                if (placement >= 49)
+                {
+                    // Social page
+                    ((Character)Self).SocialMeshLayer.AddMesh(0, Arguments[1].AsInt32(), Arguments[0].AsInt32(), 4);
+                }
+                else
+                {
+                    ((Character)Self).Stats[StatIds.headmesh].Value = Arguments[0].AsInt32();
+                    ((Character)Self).MeshLayer.AddMesh(0, Arguments[1].AsInt32(), Arguments[0].AsInt32(), 4);
+                }
+            }
 
-            // TODO: Wait for mesh name list
-            Character ch = (Character)Self;
-            ch.Stats[StatIds.mesh].Value = Arguments[0].AsInt32();
+            AppearanceUpdate.AnnounceAppearanceUpdate((Character)Self);
+
             return true;
         }
 

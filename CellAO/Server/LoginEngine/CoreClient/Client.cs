@@ -155,7 +155,8 @@ namespace LoginEngine.CoreClient
         public void Send(int receiver, MessageBody messageBody)
         {
             // TODO: Investigate if reciever is a timestamp
-            var message = new Message {
+            var message = new Message
+                          {
                               Body = messageBody, 
                               Header =
                                   new Header

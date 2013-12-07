@@ -31,6 +31,7 @@ namespace CellAO.Core.Network
     using Cell.Core;
 
     using CellAO.Core.Entities;
+    using CellAO.Core.Functions;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
 
@@ -52,6 +53,12 @@ namespace CellAO.Core.Network
 
         /// <summary>
         /// </summary>
+        /// <param name="functions">
+        /// </param>
+        void CallFunction(Functions functions);
+
+        /// <summary>
+        /// </summary>
         /// <param name="text">
         /// </param>
         /// <returns>
@@ -65,7 +72,5 @@ namespace CellAO.Core.Network
         void SendCompressed(MessageBody messageBody);
 
         #endregion
-
-        void CallFunction(Functions.Functions functions);
     }
 }

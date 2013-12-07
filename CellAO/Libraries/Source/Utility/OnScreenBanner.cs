@@ -45,16 +45,50 @@ namespace Utility
         public static void PrintCellAOBanner(ConsoleColor titleColor)
         {
             int consoleWidth = Console.WindowWidth;
-
+            bool sameWidth = consoleWidth == Console.BufferWidth;
             Console.Clear();
 
             Console.Write("**".PadRight(consoleWidth, '*'));
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             CenteredString(string.Empty, "**");
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             CenteredString("CellAO " + AssemblyInfoclass.Title, "**", titleColor);
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             CenteredString(AssemblyInfoclass.AssemblyVersion, "**", ConsoleColor.White);
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             CenteredString(AssemblyInfoclass.RevisionName, "**", ConsoleColor.DarkGray);
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             CenteredString(string.Empty, "**");
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
+
             Console.Write("**".PadRight(consoleWidth, '*'));
+            if (!sameWidth)
+            {
+                Console.WriteLine();
+            }
         }
 
         #endregion
@@ -80,7 +114,6 @@ namespace Utility
                 consoleWidth = 80;
             }
 
-            
             int centered = (consoleWidth - text.Length) / 2;
             Console.Write(boundary.PadRight(centered, ' '));
 

@@ -37,6 +37,8 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Requirements;
     using CellAO.Enums;
 
+    using MsgPack;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -57,41 +59,65 @@ namespace CellAO.Core.Inventory
             this.NeedsItemCheck = true;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
         public override void CalculateModifiers(Character character)
         {
-            foreach (IItem item in this.List().Values)
+            for (int itemSlot = this.FirstSlotNumber; itemSlot < this.FirstSlotNumber + this.MaxSlots; itemSlot++)
             {
-                foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
+                IItem item = this[itemSlot];
+                if (item != null)
                 {
-                    foreach (Functions functions in events.Functions.Where(x=>IsSocialTabFuncton(x.FunctionType)))
+                    foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
                     {
-                        bool result = true;
-                        foreach (Requirements requirements in functions.Requirements)
+                        foreach (
+                            Functions functions in events.Functions.Where(x => this.IsSocialTabFunction(x.FunctionType))
+                            )
                         {
-                            result &= requirements.CheckRequirement(character);
-                            if (!result)
+                            bool result = true;
+                            foreach (Requirements requirements in functions.Requirements)
                             {
-                                break;
+                                result &= requirements.CheckRequirement(character);
+                                if (!result)
+                                {
+                                    break;
+                                }
                             }
-                        }
 
-                        if (result)
-                        {
-                            character.Client.CallFunction(functions);
+                            if (result)
+                            {
+                                Functions copy = functions.Copy();
+                                MessagePackObject mpo = new MessagePackObject();
+                                mpo = itemSlot;
+                                copy.Arguments.Values.Add(mpo);
+                                character.Client.CallFunction(copy);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private bool IsSocialTabFuncton(int p)
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="p">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private bool IsSocialTabFunction(int p)
         {
             // Functions applyable on social page: (List not complete yet)
-            int[] goodFunctions = { 53039, 53054, };
+            int[] goodFunctions = { 53035, 53039, 53054 };
             return goodFunctions.Any(x => x == p);
         }
 

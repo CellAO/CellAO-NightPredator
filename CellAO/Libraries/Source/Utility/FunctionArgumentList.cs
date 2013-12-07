@@ -24,97 +24,38 @@
 
 #endregion
 
-namespace CellAO.Stats
+namespace Utility
 {
     #region Usings ...
 
-    using System;
+    using MsgPack;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IStat
+    public static class FunctionArgumentList
     {
-        #region Public Events
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        bool AnnounceToPlayfield { get; set; }
-
-        /// <summary>
-        /// </summary>
-        uint BaseValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Modifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int PercentageModifier { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int StatId { get; }
-
-        /// <summary>
-        /// </summary>
-        IStatList Stats { get; }
-
-        /// <summary>
-        /// </summary>
-        int Trickle { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Value { get; set; }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        void CalcTrickle();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="old">
+        /// <param name="objects">
         /// </param>
         /// <returns>
         /// </returns>
-        uint GetMaxValue(uint old);
+        public static string List(MessagePackObject[] objects)
+        {
+            string output = string.Empty;
 
-        /// <summary>
-        /// </summary>
-        /// <param name="value">
-        /// </param>
-        /// <param name="starting">
-        /// </param>
-        void Set(uint value, bool starting = false);
+            foreach (MessagePackObject mpo in objects)
+            {
+                // Using \r\n here with purpose, dont change to Environment.NewLine
+                output += mpo.UnderlyingType.ToString() + ": " + mpo.ToString() + "\r\n";
+            }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="value">
-        /// </param>
-        void SetBaseValue(uint value);
+            return output;
+        }
 
         #endregion
     }

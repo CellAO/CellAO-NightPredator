@@ -140,6 +140,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                         t.Textures.Add(new AOTextures((Int32)Arguments[1], (Int32)Arguments[0]));
                     }
                 }
+
                 AppearanceUpdate.AnnounceAppearanceUpdate(t);
             }
 

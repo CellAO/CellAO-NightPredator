@@ -33,6 +33,8 @@ namespace ChatEngine.CoreClient
     using CellAO.Database.Dao;
     using CellAO.Enums;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     #endregion
 
     /// <summary>
@@ -118,8 +120,8 @@ namespace ChatEngine.CoreClient
                     catch (Exception e)
                     {
                         // Has no side in database yet
-                        this.characterSide = (int)SmokeLounge.AOtomation.Messaging.GameData.Side.Neutral;
-                        StatDao.AddStat(50000, (int)this.CharacterId, (int)StatIds.side, (int)SmokeLounge.AOtomation.Messaging.GameData.Side.Neutral);
+                        this.characterSide = (int)Side.Neutral;
+                        StatDao.AddStat(50000, (int)this.CharacterId, (int)StatIds.side, (int)Side.Neutral);
                     }
                 }
 

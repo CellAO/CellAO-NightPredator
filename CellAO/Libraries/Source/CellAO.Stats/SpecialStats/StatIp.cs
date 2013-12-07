@@ -67,8 +67,10 @@ namespace CellAO.Stats.SpecialStats
 
         #endregion
 
-        #region Public Properties
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// </summary>
         public override void CalcTrickle()
         {
             int baseIP = 0;

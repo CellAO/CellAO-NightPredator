@@ -37,6 +37,8 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Requirements;
     using CellAO.Enums;
 
+    using MsgPack;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -67,25 +69,33 @@ namespace CellAO.Core.Inventory
         /// </param>
         public override void CalculateModifiers(Character character)
         {
-            foreach (IItem item in this.List().Values)
+            for (int itemSlot = this.FirstSlotNumber; itemSlot < this.FirstSlotNumber + this.MaxSlots; itemSlot++)
             {
-                foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
+                IItem item = this[itemSlot];
+                if (item != null)
                 {
-                    foreach (Functions functions in events.Functions)
+                    foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
                     {
-                        bool result = true;
-                        foreach (Requirements requirements in functions.Requirements)
+                        foreach (Functions functions in events.Functions)
                         {
-                            result &= requirements.CheckRequirement(character);
-                            if (!result)
+                            bool result = true;
+                            foreach (Requirements requirements in functions.Requirements)
                             {
-                                break;
+                                result &= requirements.CheckRequirement(character);
+                                if (!result)
+                                {
+                                    break;
+                                }
                             }
-                        }
 
-                        if (result)
-                        {
-                            character.Client.CallFunction(functions);
+                            if (result)
+                            {
+                                Functions copy = functions.Copy();
+                                MessagePackObject mpo = new MessagePackObject();
+                                mpo = itemSlot;
+                                copy.Arguments.Values.Add(mpo);
+                                character.Client.CallFunction(copy);
+                            }
                         }
                     }
                 }

@@ -58,7 +58,7 @@ namespace ZoneEngine.Core.Packets
                 case 6:
                     var action167Message = new CharacterActionMessage()
                                            {
-                                               Identity = client.Character.Identity,
+                                               Identity = client.Character.Identity, 
                                                Action =
                                                    CharacterActionType
                                                    .ChangeAnimationAndStance, 
@@ -67,7 +67,7 @@ namespace ZoneEngine.Core.Packets
 
                     var equipMessage = new CharacterActionMessage()
                                        {
-                                           Identity=client.Character.Identity,
+                                           Identity = client.Character.Identity, 
                                            Action = CharacterActionType.Equip, 
                                            Target = page.Identity, 
                                            Parameter1 = 0, 
@@ -79,7 +79,7 @@ namespace ZoneEngine.Core.Packets
                     IItem item = page[slotNumber];
                     var templateActionMessage = new TemplateActionMessage()
                                                 {
-                                                    Identity=client.Character.Identity,
+                                                    Identity = client.Character.Identity, 
                                                     ItemHighId = item.HighID, 
                                                     ItemLowId = item.LowID, 
                                                     Quality = item.Quality, 
@@ -97,7 +97,7 @@ namespace ZoneEngine.Core.Packets
                                                             Instance =
                                                                 slotNumber
                                                         }, 
-                                                        Unknown = 0,
+                                                    Unknown = 0, 
                                                 };
 
                     client.SendCompressed(templateActionMessage);

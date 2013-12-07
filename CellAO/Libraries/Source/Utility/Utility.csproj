@@ -53,6 +53,7 @@
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ConfigReadWrite.cs" />
     <Compile Include="ConsoleText.cs" />
+    <Compile Include="FunctionArgumentList.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="OnScreenBanner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -270,6 +271,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
+      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
+      <Name>MsgPack.Mono</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Translations\Translations.csproj">
       <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>
       <Name>Translations</Name>
