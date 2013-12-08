@@ -34,23 +34,18 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public class PlayerInventory : UnitInventory
+    public class BankInventoryPage : BaseInventoryPage
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        /// <param name="owner">
+        /// <param name="ownerInstance">
         /// </param>
-        public PlayerInventory(IItemContainer owner)
-            : base(owner)
+        public BankInventoryPage(int ownerInstance)
+            : base((int)IdentityType.Bank, 50, 1, ownerInstance)
         {
-            this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance));
+            this.NeedsItemCheck = false;
         }
 
         #endregion
