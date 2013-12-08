@@ -119,6 +119,12 @@ namespace ZoneEngine.Core.Functions
                 return func.Execute(self, caller, target, arguments);
             }
 
+            if (Program.DebugGameFunctions)
+            {
+                LogUtil.Debug("Function " + functionNumber + " not found!");
+                LogUtil.Debug(FunctionArgumentList.List(arguments));
+            }
+
             return false;
         }
 

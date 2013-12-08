@@ -33,6 +33,7 @@ namespace CellAO.Core.Entities
     using System.Linq;
 
     using CellAO.Core.Inventory;
+    using CellAO.Core.Nanos;
     using CellAO.Core.Network;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
@@ -108,7 +109,13 @@ namespace CellAO.Core.Entities
         {
             this.Client = zoneClient;
             this.ActiveNanos = new List<IActiveNano>();
+
             this.UploadedNanos = new List<IUploadedNanos>();
+            foreach (int nano in UploadedNanosDao.ReadNanos(identity.Instance))
+            {
+                this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
+            }
+            
             this.BaseInventory = new PlayerInventory(this);
             this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
 
@@ -610,7 +617,7 @@ namespace CellAO.Core.Entities
             uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
             var messageBody = new StatMessage()
                               {
-                                  Identity = this.Identity, 
+                                  Identity = this.Identity,
                                   Stats =
                                       new[]
                                       {
@@ -621,7 +628,7 @@ namespace CellAO.Core.Entities
                                                   e.Stat.StatId, 
                                               Value2 = valueToSend
                                           }
-                                      }, 
+                                      },
                               };
 
             if (e.AnnounceToPlayfield)

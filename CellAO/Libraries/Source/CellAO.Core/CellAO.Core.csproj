@@ -131,6 +131,7 @@
     <Compile Include="Nanos\AONano.cs" />
     <Compile Include="Nanos\NanoFormula.cs" />
     <Compile Include="Nanos\NanoLoader.cs" />
+    <Compile Include="Nanos\UploadedNano.cs" />
     <Compile Include="Network\IZoneClient.cs" />
     <Compile Include="Playfields\IPlayfield.cs" />
     <Compile Include="Playfields\PlayfieldDistrict.cs" />

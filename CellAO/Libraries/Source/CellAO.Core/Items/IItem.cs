@@ -121,6 +121,16 @@ namespace CellAO.Core.Items
         byte[] GetItemAttributes();
 
         /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="eventType">
+        /// </param>
+        /// <param name="itemSlot">
+        /// </param>
+        void PerformAction(ICharacter character, EventType eventType, int itemSlot);
+
+        /// <summary>
         /// Set an item attribute
         /// </summary>
         /// <param name="attributeId">

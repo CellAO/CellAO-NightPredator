@@ -74,6 +74,7 @@
     <Compile Include="Dao\RecentMessagesDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
+    <Compile Include="Dao\UploadedNanosDao.cs" />
     <Compile Include="Entities\DBBuddyListEntry.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />

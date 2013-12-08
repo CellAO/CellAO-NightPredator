@@ -35,7 +35,11 @@ namespace CellAO.Core.Items
     using CellAO.Core.Actions;
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
+    using CellAO.Core.Functions;
+    using CellAO.Core.Requirements;
     using CellAO.Enums;
+
+    using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -379,6 +383,42 @@ namespace CellAO.Core.Items
             }
 
             return temp;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="eventType">
+        /// </param>
+        /// <param name="itemSlot">
+        /// </param>
+        public void PerformAction(ICharacter character, EventType eventType, int itemSlot)
+        {
+            foreach (Events events in this.ItemEvents.Where(x => x.EventType == (int)eventType))
+            {
+                foreach (Functions functions in events.Functions)
+                {
+                    bool result = true;
+                    foreach (Requirements requirements in functions.Requirements)
+                    {
+                        result &= requirements.CheckRequirement(character);
+                        if (!result)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (result)
+                    {
+                        Functions copy = functions.Copy();
+                        MessagePackObject mpo = new MessagePackObject();
+                        mpo = itemSlot;
+                        copy.Arguments.Values.Add(mpo);
+                        character.Client.CallFunction(copy);
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -527,29 +527,21 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
                 }
 
-                    
-
                 case 0xdc:
                     TradeSkillReceiver.TradeSkillSourceChanged(client, args1, args2);
                     break;
-
-                    
-
-                    #region Tradeskill Target Changed
 
                 case 0xdd:
                     TradeSkillReceiver.TradeSkillTargetChanged(client, args1, args2);
                     break;
 
-                    #endregion
-
-                    #region Tradeskill Build Pressed
+                    
 
                 case 0xde:
                     TradeSkillReceiver.TradeSkillBuildPressed(client, packet.Target.Instance);
                     break;
 
-                    #endregion
+                    
 
                     #region default
 

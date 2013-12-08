@@ -80,6 +80,7 @@
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
+    <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomatinMessageToPlayfieldOthers.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Core\MessageHandlers\ChatCmdHandler.cs" />
     <Compile Include="Core\MessageHandlers\ContainerAddItemHandler.cs" />
     <Compile Include="Core\MessageHandlers\FollowTargetHandler.cs" />
+    <Compile Include="Core\MessageHandlers\GenericCmdHandler.cs" />
     <Compile Include="Core\MessageHandlers\LookAtHandler.cs" />
     <Compile Include="Core\MessageHandlers\SkillHandler.cs" />
     <Compile Include="Core\MessageHandlers\SocialActionCmdHandler.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Core\PacketHandlers\CharDCMove.cs" />
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
     <Compile Include="Core\PacketHandlers\ContainerAddItem.cs" />
+    <Compile Include="Core\PacketHandlers\GenericCmd.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
     <Compile Include="Core\Packets\AddTemplate.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
     <Compile Include="Core\Packets\Stat.cs" />
+    <Compile Include="Core\Packets\TemplateAction.cs" />
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />
