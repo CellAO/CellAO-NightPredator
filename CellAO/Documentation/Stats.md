@@ -18,7 +18,7 @@
 
 **Class type:** CellAO.Stats.SpecialStats.StatLife
 
-**Default value:** 10
+**Default value:** 1929912817
 
 **Tags:** 
 `Save in Database`  
@@ -148,7 +148,7 @@
 
 **mesh [12]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.OverridingModifierStat
 
 **Default value:** 17530
 
@@ -714,7 +714,7 @@
 
 **Class type:** CellAO.Stats.Stat
 
-**Default value:** 1234567890
+**Default value:** 1
 
 **Tags:** 
 `Save in Database`  
@@ -760,7 +760,7 @@
 
 **headmesh [64]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.OverridingModifierStat
 
 **Default value:** 0
 
@@ -2560,7 +2560,7 @@
 
 **gmlevel [215]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatGmLevel
 
 **Default value:** 0
 
@@ -8444,6 +8444,6 @@
 
 *Copyright © 2013 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.840 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.870 - Night Predator*
 
 

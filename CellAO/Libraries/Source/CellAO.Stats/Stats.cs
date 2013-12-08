@@ -3379,7 +3379,7 @@ namespace CellAO.Stats
             this.procNano2 = new Stat(this, 553, 1234567890, false, false, false);
             this.procNano3 = new Stat(this, 554, 1234567890, false, false, false);
             this.procNano4 = new Stat(this, 555, 1234567890, false, false, false);
-            this.profession = new Stat(this, 60, 1234567890, false, false, false);
+            this.profession = new Stat(this, 60, 1, false, false, false);
             this.professionLevel = new Stat(this, 10, 1234567890, false, true, false);
             this.projectileAC = new Stat(this, 90, 0, true, false, false);
             this.projectileDamageModifier = new Stat(this, 278, 0, false, false, false);

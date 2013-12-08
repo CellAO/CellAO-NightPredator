@@ -284,6 +284,12 @@ namespace MarkDownDocumentator
                 "Operators", 
                 typeof(Operator));
 
+            WriteLink(tw, "Identity Types", "IdentityTypes.md");
+            WriteEnumList(
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "IdentityTypes.md"))), 
+                "Identity Types", 
+                typeof(IdentityType));
+
             WriteFooter(tw);
             tw.Close();
         }

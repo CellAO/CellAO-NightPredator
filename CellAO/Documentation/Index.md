@@ -27,12 +27,14 @@
 
 [Operators](./Operator.md)
 
+[Identity Types](./IdentityTypes.md)
+
 
 
 ----------
 
 *Copyright © 2013 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.840 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.870 - Night Predator*
 
 
