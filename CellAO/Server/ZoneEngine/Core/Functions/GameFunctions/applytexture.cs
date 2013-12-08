@@ -32,6 +32,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
     using CellAO.Core.Entities;
     using CellAO.Core.Textures;
+    using CellAO.Enums;
 
     using MsgPack;
 
@@ -43,15 +44,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     /// </summary>
     internal class Function_applytexture : FunctionPrototype
     {
-        #region Fields
+        #region Constants
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "applytexture";
+        private const FunctionType functionId = FunctionType.Texture;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53039;
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 

@@ -29,6 +29,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     #region Usings ...
 
     using CellAO.Core.Entities;
+    using CellAO.Enums;
     using CellAO.Stats;
 
     using MsgPack;
@@ -39,15 +40,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     /// </summary>
     internal class Function_set : FunctionPrototype
     {
-        #region Fields
+        #region Constants
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "set";
+        private const FunctionType functionId = FunctionType.Set;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53026;
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 

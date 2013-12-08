@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     using System;
 
     using CellAO.Core.Entities;
+    using CellAO.Enums;
 
     using MsgPack;
 
@@ -40,15 +41,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     /// </summary>
     internal class Function_modify : FunctionPrototype
     {
-        #region Fields
+        #region Constants
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "modify";
+        private const FunctionType functionId = FunctionType.Modify;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53045;
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 

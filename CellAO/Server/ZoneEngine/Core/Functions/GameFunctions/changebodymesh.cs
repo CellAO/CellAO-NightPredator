@@ -39,15 +39,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     /// </summary>
     internal class Function_changebodymesh : FunctionPrototype
     {
-        #region Fields
+        #region Constants
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "changebodymesh";
+        private const FunctionType functionId = FunctionType.ChangeBodyMesh;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53054;
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 

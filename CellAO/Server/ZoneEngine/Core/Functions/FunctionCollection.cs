@@ -56,7 +56,7 @@ namespace ZoneEngine.Core.Functions
 
         /// <summary>
         /// </summary>
-        private readonly Dictionary<int, Type> functions = new Dictionary<int, Type>();
+        private readonly Dictionary<int, FunctionPrototype> functions = new Dictionary<int, FunctionPrototype>();
 
         /// <summary>
         /// </summary>
@@ -119,10 +119,7 @@ namespace ZoneEngine.Core.Functions
         {
             if (this.functions.Keys.Contains(functionnumber))
             {
-                return
-                    (FunctionPrototype)
-                        this.assembly.CreateInstance(
-                            this.functions[functionnumber].Namespace + "." + this.functions[functionnumber].Name);
+                return this.functions[functionnumber];
             }
 
             return null;
@@ -147,20 +144,21 @@ namespace ZoneEngine.Core.Functions
             {
                 this.assembly = Assembly.GetExecutingAssembly();
 
-                foreach (Type t in this.assembly.GetTypes())
+                foreach (Type t in
+                    this.assembly.GetTypes()
+                        .Where(
+                            x =>
+                                x.IsClass && (x.Namespace == "ZoneEngine.Core.Functions.GameFunctions")
+                                && ((x.Name != "FunctionPrototype") && (x.Name != "FunctionCollection"))))
                 {
-                    if (t.IsClass)
                     {
-                        if (t.Namespace == "ZoneEngine.Core.Functions.GameFunctions")
+                        FunctionPrototype temp = (FunctionPrototype)this.assembly.CreateInstance(t.FullName);
+                        if (temp == null)
                         {
-                            if ((t.Name != "FunctionPrototype") && (t.Name != "FunctionCollection"))
-                            {
-                                this.functions.Add(
-                                    ((FunctionPrototype)this.assembly.CreateInstance(t.Namespace + "." + t.Name))
-                                        .ReturnNumber(), 
-                                    t);
-                            }
+                            throw new NullReferenceException("Could not create function " + t.FullName);
                         }
+
+                        this.functions.Add(temp.ReturnNumber(), temp);
                     }
                 }
             }

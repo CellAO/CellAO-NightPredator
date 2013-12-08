@@ -24,9 +24,11 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
+
+    using System;
 
     using CellAO.Core.Entities;
     using CellAO.Enums;
@@ -37,31 +39,25 @@ namespace ZoneEngine.Core.Functions
 
     /// <summary>
     /// </summary>
-    public abstract class FunctionPrototype
+    internal class Function_modifypercentage : FunctionPrototype
     {
+        #region Constants
+
+        /// <summary>
+        /// </summary>
+        private const FunctionType functionId = FunctionType.ModifyPercentage;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        public abstract FunctionType FunctionId { get; }
-
-        /// <summary>
-        /// </summary>
-        public string FunctionName
+        public override FunctionType FunctionId
         {
             get
             {
-                return this.FunctionId.ToString();
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public int FunctionNumber
-        {
-            get
-            {
-                return (int)this.FunctionId;
+                return functionId;
             }
         }
 
@@ -70,39 +66,70 @@ namespace ZoneEngine.Core.Functions
         #region Public Methods and Operators
 
         /// <summary>
-        /// Locks function targets and executes the function
         /// </summary>
         /// <param name="self">
-        /// Dynel (Character or NPC)
         /// </param>
         /// <param name="caller">
-        /// Caller of the function
         /// </param>
         /// <param name="target">
-        /// Target of the Function (Dynel or Statel)
         /// </param>
         /// <param name="arguments">
-        /// Function Arguments
         /// </param>
         /// <returns>
         /// </returns>
-        public abstract bool Execute(
+        public override bool Execute(
             INamedEntity self, 
             INamedEntity caller, 
             IInstancedEntity target, 
-            MessagePackObject[] arguments);
+            MessagePackObject[] arguments)
+        {
+            lock (target)
+            {
+                return this.FunctionExecute(self, caller, target, arguments);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Self">
+        /// </param>
+        /// <param name="Caller">
+        /// </param>
+        /// <param name="Target">
+        /// </param>
+        /// <param name="Arguments">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool FunctionExecute(
+            INamedEntity Self, 
+            INamedEntity Caller, 
+            IInstancedEntity Target, 
+            MessagePackObject[] Arguments)
+        {
+            Character ch = (Character)Self;
+            ch.Stats[Arguments[0].AsInt32()].PercentageModifier += Arguments[1].AsInt32();
+            Console.WriteLine("percentage-modify stat " + Arguments[0].AsInt32());
+            return true;
+        }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public abstract string ReturnName();
+        public override string ReturnName()
+        {
+            return this.FunctionName;
+        }
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public abstract int ReturnNumber();
+        public override int ReturnNumber()
+        {
+            return this.FunctionNumber;
+        }
 
         #endregion
     }

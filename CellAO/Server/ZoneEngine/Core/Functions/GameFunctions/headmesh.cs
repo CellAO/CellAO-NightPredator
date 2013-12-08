@@ -45,15 +45,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     /// </summary>
     internal class Function_headmesh : FunctionPrototype
     {
-        #region Fields
+        #region Constants
 
         /// <summary>
         /// </summary>
-        public new string FunctionName = "headmesh";
+        private const FunctionType functionId = FunctionType.HeadMesh;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        public new int FunctionNumber = 53035;
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 
