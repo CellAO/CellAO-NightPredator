@@ -152,12 +152,15 @@ namespace ZoneEngine
                     processedargs = true;
                 }
 
-                Console.Write("\n{0} >>", locales.ServerConsoleCommand);
+                Console.Write(Environment.NewLine + "{0} >>", locales.ServerConsoleCommand);
                 string consoleCommand = Console.ReadLine();
 
-                if (!consoleCommands.Execute(consoleCommand))
+                if (consoleCommand != null)
                 {
-                    ShowCommandHelp();
+                    if (!consoleCommands.Execute(consoleCommand))
+                    {
+                        ShowCommandHelp();
+                    }
                 }
             }
         }
@@ -172,6 +175,7 @@ namespace ZoneEngine
         {
             if (zoneServer != null)
             {
+                exited = true;
                 zoneServer.DisconnectAllClients();
                 LogUtil.Debug("Shutting down ZoneEngine hard");
             }
