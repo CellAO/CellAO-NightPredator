@@ -241,8 +241,11 @@ namespace ZoneEngine.Core
 
             byte[] buffer = this.messageSerializer.Serialize(message);
             this.SendCompressed(buffer);
-            LogUtil.Debug(messageBody.GetType().ToString());
-            LogUtil.Debug(NiceHexOutput.Output(buffer));
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug(messageBody.GetType().ToString());
+                LogUtil.Debug(NiceHexOutput.Output(buffer));
+            }
         }
 
         /// <summary>
@@ -288,22 +291,21 @@ namespace ZoneEngine.Core
                                       MessageId = 0xdfdf, 
                                       PacketType = messageBody.PacketType, 
                                       Unknown = 0x0001, 
-                                      
+
                                       // TODO: Make compression choosable in config.xml
                                       Sender = 0x01000000, 
-                                      
+
                                       // 01000000 = uncompressed, 03000000 = compressed
                                       Receiver = 0 // this.character.Identity.Instance 
                                   }
                           };
             byte[] buffer = this.messageSerializer.Serialize(message);
 
-#if DEBUG
-            Colouring.Push(ConsoleColor.Green);
-            Console.WriteLine(NiceHexOutput.Output(buffer));
-            Colouring.Pop();
-            LogUtil.Debug(NiceHexOutput.Output(buffer));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug(NiceHexOutput.Output(buffer));
+            }
+
             this.packetNumber = 1;
 
             this.Send(buffer);
@@ -379,12 +381,11 @@ namespace ZoneEngine.Core
             var packet = new byte[this._remainingLength];
             Array.Copy(buffer.SegmentData, packet, this._remainingLength);
 
-#if DEBUG
-            Console.WriteLine("Receiving");
-            Console.WriteLine("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-            Console.WriteLine(NiceHexOutput.Output(packet));
-            LogUtil.Debug("\r\nReceived: \r\n" + NiceHexOutput.Output(packet));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug("\r\nReceived: \r\n" + NiceHexOutput.Output(packet));
+            }
+
             this._remainingLength = 0;
             try
             {

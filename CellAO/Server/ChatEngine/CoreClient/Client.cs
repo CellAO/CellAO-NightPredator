@@ -143,12 +143,11 @@ namespace ChatEngine.CoreClient
             packetBytes[1] = BitConverter.GetBytes(this.packetNumber)[1];
             this.packetNumber++;
 
-#if DEBUG
-            Colouring.Push(ConsoleColor.Green);
-            Console.WriteLine(NiceHexOutput.Output(packetBytes));
-            Colouring.Pop();
-            LogUtil.Debug("\r\nSent:\r\n" + NiceHexOutput.Output(packetBytes));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug("\r\nSent:\r\n" + NiceHexOutput.Output(packetBytes));
+            }
+
             if (packetBytes.Length % 4 > 0)
             {
                 Array.Resize(ref packetBytes, packetBytes.Length + (4 - (packetBytes.Length % 4)));
@@ -202,12 +201,11 @@ namespace ChatEngine.CoreClient
             {
                 byte[] packet = new byte[this._remainingLength];
                 Array.Copy(buffer.SegmentData, 0, packet, 0, this._remainingLength);
-#if DEBUG
-                Colouring.Push(ConsoleColor.Green);
-                Console.WriteLine(NiceHexOutput.Output(packet));
-                Colouring.Pop();
-                LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
-#endif
+                if (Program.DebugNetwork)
+                {
+                    LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
+                }
+
                 ushort messageNumber = this.GetMessageNumber(packet);
                 Parser parser = new Parser();
                 return parser.Parse(this, packet, messageNumber);

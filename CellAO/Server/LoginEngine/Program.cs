@@ -60,6 +60,10 @@ namespace LoginEngine
 
         /// <summary>
         /// </summary>
+        public static bool DebugNetwork;
+
+        /// <summary>
+        /// </summary>
         private static readonly IContainer Container = new MefContainer();
 
         /// <summary>
@@ -171,6 +175,20 @@ namespace LoginEngine
                         break;
                     case "help setpass":
                         ct.TextRead("logincmdhelpsetpass.txt");
+                        break;
+                    case "debugnetwork":
+                        DebugNetwork = !DebugNetwork;
+                        Colouring.Push(ConsoleColor.Green);
+                        if (DebugNetwork)
+                        {
+                            Console.WriteLine("Debugging of network traffic enabled");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Debugging of network traffic disabled");
+                        }
+
+                        Colouring.Pop();
                         break;
 
                     default:

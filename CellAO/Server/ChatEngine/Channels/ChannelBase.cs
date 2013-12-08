@@ -28,7 +28,6 @@ namespace ChatEngine.Channels
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
 
     using Cell.Core;

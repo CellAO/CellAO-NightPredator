@@ -70,6 +70,14 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        public static bool DebugGameFunctions;
+
+        /// <summary>
+        /// </summary>
+        public static bool DebugNetwork;
+
+        /// <summary>
+        /// </summary>
         public static ISComV2Client ISComClient;
 
         /// <summary>
@@ -305,6 +313,10 @@ namespace ZoneEngine
             consoleCommands.AddEntry("online", ShowOnlineCharacters);
             consoleCommands.AddEntry("ls", ListAvailableScripts);
 
+            consoleCommands.AddEntry("debuggamefunctions", SetDebugGameFunctions);
+
+            consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
+
             return true;
         }
 
@@ -537,6 +549,42 @@ namespace ZoneEngine
         {
             // ChatCom.Server.Ping();
             Console.WriteLine("Ping is disabled till we can do it");
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void SetDebugGameFunctions()
+        {
+            DebugGameFunctions = !DebugGameFunctions;
+            Colouring.Push(ConsoleColor.Green);
+            if (DebugGameFunctions)
+            {
+                Console.WriteLine("Debugging Game functions enabled");
+            }
+            else
+            {
+                Console.WriteLine("Debugging Game functions disabled");
+            }
+
+            Colouring.Pop();
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void SetDebugNetwork()
+        {
+            DebugNetwork = !DebugNetwork;
+            Colouring.Push(ConsoleColor.Green);
+            if (DebugNetwork)
+            {
+                Console.WriteLine("Debugging of network traffic enabled");
+            }
+            else
+            {
+                Console.WriteLine("Debugging of network traffic disabled");
+            }
+
+            Colouring.Pop();
         }
 
         /// <summary>

@@ -174,12 +174,11 @@ namespace LoginEngine.CoreClient
             buffer[1] = BitConverter.GetBytes(this.packetNumber)[1];
             this.packetNumber++;
 
-#if DEBUG
-            Colouring.Push(ConsoleColor.Green);
-            Console.WriteLine(NiceHexOutput.Output(buffer));
-            Colouring.Pop();
-            LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(buffer));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(buffer));
+            }
+
             if (buffer.Length % 4 > 0)
             {
                 Array.Resize(ref buffer, buffer.Length + (4 - (buffer.Length % 4)));
@@ -239,12 +238,11 @@ namespace LoginEngine.CoreClient
             var packet = new byte[this._remainingLength];
             Array.Copy(buffer.SegmentData, packet, this._remainingLength);
 
-#if DEBUG
-            Console.WriteLine("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-            Console.WriteLine(NiceHexOutput.Output(packet));
-            LogUtil.Debug("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-            LogUtil.Debug(NiceHexOutput.Output(packet));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
+                LogUtil.Debug(NiceHexOutput.Output(packet));
+            }
 
             this._remainingLength = 0;
             try

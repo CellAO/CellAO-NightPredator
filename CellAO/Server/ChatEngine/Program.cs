@@ -61,6 +61,10 @@ namespace ChatEngine
 
         /// <summary>
         /// </summary>
+        public static bool DebugNetwork;
+
+        /// <summary>
+        /// </summary>
         public static ISComV2Server ISCom;
 
         /// <summary>
@@ -180,6 +184,20 @@ namespace ChatEngine
                         break;
                     case "help running":
                         ct.TextRead("chathelpcmdrunning.txt");
+                        break;
+                    case "debugnetwork":
+                        DebugNetwork = !DebugNetwork;
+                        Colouring.Push(ConsoleColor.Green);
+                        if (DebugNetwork)
+                        {
+                            Console.WriteLine("Debugging Game functions enabled");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Debugging Game functions disabled");
+                        }
+
+                        Colouring.Pop();
                         break;
                 }
             }

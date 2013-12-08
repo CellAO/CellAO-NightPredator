@@ -28,7 +28,6 @@ namespace ChatEngine.PacketHandlers
 {
     #region Usings ...
 
-    using System;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -60,12 +59,10 @@ namespace ChatEngine.PacketHandlers
         /// </param>
         public static void Read(Client client, byte[] packet)
         {
-#if DEBUG
-            Colouring.Push(ConsoleColor.Green);
-            Console.WriteLine(NiceHexOutput.Output(packet));
-            Colouring.Pop();
-            LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
-#endif
+            if (Program.DebugNetwork)
+            {
+                LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
+            }
 
             MemoryStream m_stream = new MemoryStream(packet);
             BinaryReader m_reader = new BinaryReader(m_stream);
@@ -85,12 +82,11 @@ namespace ChatEngine.PacketHandlers
             {
                 client.IsBot = true;
                 byte[] chars = AccountCharacterList.Create(userName);
-#if DEBUG
-                Colouring.Push(ConsoleColor.Green);
-                Console.WriteLine(NiceHexOutput.Output(chars));
-                Colouring.Pop();
-                LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(chars));
-#endif
+                if (Program.DebugNetwork)
+                {
+                    LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(chars));
+                }
+
                 client.Send(chars);
             }
             else

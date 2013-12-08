@@ -38,6 +38,8 @@ namespace ZoneEngine.Core.Functions
 
     using MsgPack;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -106,7 +108,18 @@ namespace ZoneEngine.Core.Functions
             MessagePackObject[] arguments)
         {
             FunctionPrototype func = this.GetFunctionByNumber(functionNumber);
-            return func.Execute(self, caller, target, arguments);
+            if (func != null)
+            {
+                if (Program.DebugGameFunctions)
+                {
+                    LogUtil.Debug(func.GetType().FullName + " was called with the following arguments: ");
+                    LogUtil.Debug(FunctionArgumentList.List(arguments));
+                }
+
+                return func.Execute(self, caller, target, arguments);
+            }
+
+            return false;
         }
 
         /// <summary>

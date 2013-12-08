@@ -35,8 +35,6 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
     using MsgPack;
 
-    using Utility;
-
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -111,9 +109,6 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity Target, 
             MessagePackObject[] Arguments)
         {
-#if DEBUG
-            Console.WriteLine(FunctionArgumentList.List(Arguments));
-#endif
             if (Arguments.Length == 2)
             {
                 ((Character)Self).Stats[StatIds.headmesh].Value = Arguments[1].AsInt32();

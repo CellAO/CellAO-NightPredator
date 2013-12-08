@@ -475,8 +475,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     client.SendCompressed(packet);
                     break;
 
-                    
-
                     // ###################################################################################
                     // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
                     // currently i cannot find a missing packet or link which tells the server the player
@@ -510,8 +508,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region Use Item on Item
-
                     /*
                 case 81:
                     {
@@ -524,7 +520,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     }
                     */
 
-                    #endregion
+                    
 
                     #region Change Visual Flag
 

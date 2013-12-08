@@ -218,8 +218,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     // arguments (<text> <duration> and <entries>) are in CmdStr
                     break;
 
-                    
-
                 case 8:
 
                     // org vote info
@@ -227,14 +225,12 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region /org vote <entry>
-
                 case 9:
 
                     // <entry> is CmdStr
                     break;
 
-                    #endregion
+                    
 
                     #region /org promote
 
