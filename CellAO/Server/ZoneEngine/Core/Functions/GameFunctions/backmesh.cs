@@ -24,9 +24,11 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
+
+    using System;
 
     using CellAO.Core.Entities;
     using CellAO.Enums;
@@ -37,31 +39,25 @@ namespace ZoneEngine.Core.Functions
 
     /// <summary>
     /// </summary>
-    public abstract class FunctionPrototype
+    internal class backmesh : FunctionPrototype
     {
+        #region Constants
+
+        /// <summary>
+        /// </summary>
+        private const FunctionType functionId = FunctionType.BackMesh;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        public abstract FunctionType FunctionId { get; }
-
-        /// <summary>
-        /// </summary>
-        public string FunctionName
+        public override FunctionType FunctionId
         {
             get
             {
-                return this.FunctionId.ToString();
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public int FunctionNumber
-        {
-            get
-            {
-                return (int)this.FunctionId;
+                return functionId;
             }
         }
 
@@ -70,44 +66,67 @@ namespace ZoneEngine.Core.Functions
         #region Public Methods and Operators
 
         /// <summary>
-        /// Locks function targets and executes the function
         /// </summary>
         /// <param name="self">
-        /// Dynel (Character or NPC)
         /// </param>
         /// <param name="caller">
-        /// Caller of the function
         /// </param>
         /// <param name="target">
-        /// Target of the Function (Dynel or Statel)
         /// </param>
         /// <param name="arguments">
-        /// Function Arguments
         /// </param>
         /// <returns>
         /// </returns>
-        public abstract bool Execute(
+        public override bool Execute(
             INamedEntity self, 
             INamedEntity caller, 
             IInstancedEntity target, 
-            MessagePackObject[] arguments);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public virtual string ReturnName()
+            MessagePackObject[] arguments)
         {
-            return this.FunctionName;
+            lock (target)
+            {
+                return this.FunctionExecute(self, caller, target, arguments);
+            }
         }
 
         /// <summary>
         /// </summary>
+        /// <param name="Self">
+        /// </param>
+        /// <param name="Caller">
+        /// </param>
+        /// <param name="Target">
+        /// </param>
+        /// <param name="Arguments">
+        /// </param>
         /// <returns>
         /// </returns>
-        public virtual int ReturnNumber()
+        public bool FunctionExecute(
+            INamedEntity Self, 
+            INamedEntity Caller, 
+            IInstancedEntity Target, 
+            MessagePackObject[] Arguments)
         {
-            return this.FunctionNumber;
+            if (Arguments.Length == 2)
+            {
+                ((Character)Self).Stats[StatIds.backmesh].Value = Arguments[0].AsInt32();
+                ((Character)Self).MeshLayer.AddMesh(5, (Int32)Arguments[1], (Int32)Arguments[0], 0);
+            }
+            else
+            {
+                int placement = (Int32)Arguments[Arguments.Length - 1];
+                if (placement == 51)
+                {
+                    ((Character)Self).SocialMeshLayer.AddMesh(5, (Int32)Arguments[1], (Int32)Arguments[0], 0);
+                }
+                else
+                {
+                    ((Character)Self).Stats[StatIds.backmesh].Value = Arguments[0].AsInt32();
+                    ((Character)Self).MeshLayer.AddMesh(5, (Int32)Arguments[1], (Int32)Arguments[0], 0);
+                }
+            }
+
+            return true;
         }
 
         #endregion

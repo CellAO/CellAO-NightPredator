@@ -118,24 +118,6 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             return false;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public override string ReturnName()
-        {
-            return this.FunctionName;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public override int ReturnNumber()
-        {
-            return this.FunctionNumber;
-        }
-
         #endregion
     }
 }
