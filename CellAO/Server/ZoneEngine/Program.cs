@@ -171,7 +171,7 @@ namespace ZoneEngine
         /// </param>
         /// <param name="e">
         /// </param>
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        private static void ConsoleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             if (zoneServer != null)
             {
@@ -542,7 +542,7 @@ namespace ZoneEngine
         /// </param>
         private static void Main(string[] args)
         {
-            Console.CancelKeyPress += Console_CancelKeyPress;
+            Console.CancelKeyPress += ConsoleCancelKeyPress;
 
             OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
 
