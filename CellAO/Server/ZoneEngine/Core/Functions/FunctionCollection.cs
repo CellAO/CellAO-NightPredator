@@ -112,7 +112,7 @@ namespace ZoneEngine.Core.Functions
             {
                 if (Program.DebugGameFunctions)
                 {
-                    LogUtil.Debug("Called "+func.GetType().Name+ ": ");
+                    LogUtil.Debug("Called " + func.GetType().Name + ": ");
                     LogUtil.Debug(FunctionArgumentList.List(arguments));
                 }
 

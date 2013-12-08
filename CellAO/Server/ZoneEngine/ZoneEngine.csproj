@@ -76,6 +76,7 @@
     <Compile Include="Core\Functions\GameFunctions\backmesh.cs" />
     <Compile Include="Core\Functions\GameFunctions\changebodymesh.cs" />
     <Compile Include="Core\Functions\GameFunctions\headmesh.cs" />
+    <Compile Include="Core\Functions\GameFunctions\hit.cs" />
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
