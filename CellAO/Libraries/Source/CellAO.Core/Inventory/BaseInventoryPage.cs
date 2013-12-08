@@ -451,7 +451,7 @@ namespace CellAO.Core.Inventory
         /// </exception>
         public bool ValidSlot(int slotNum)
         {
-            throw new NotImplementedException();
+            return (this.FirstSlotNumber <= slotNum) && (slotNum < this.FirstSlotNumber + this.MaxSlots);
         }
 
         /// <summary>

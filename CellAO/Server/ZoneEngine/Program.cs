@@ -118,7 +118,7 @@ namespace ZoneEngine
             {
                 zoneServer = Container.GetInstance<ZoneServer>();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -291,6 +291,18 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorLoadingItemsNanos);
+                Colouring.Pop();
+                Colouring.Pop();
+                return false;
+            }
+
+            Colouring.Pop();
+
+            Colouring.Push(ConsoleColor.Green);
+            if (!LoadTradeSkills())
+            {
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine("No locale yet: Error reading trade skills");
                 Colouring.Pop();
                 Colouring.Pop();
                 return false;
@@ -530,6 +542,24 @@ namespace ZoneEngine
             }
 
             Colouring.Pop();
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool LoadTradeSkills()
+        {
+            try
+            {
+                int temp = TradeSkill.Instance.ItemNames.Count;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
 
             return true;
         }

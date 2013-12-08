@@ -86,6 +86,7 @@
     <Compile Include="Entities\INamedEntity.cs" />
     <Compile Include="Entities\INonPlayerCharacter.cs" />
     <Compile Include="Entities\ITargetingEntity.cs" />
+    <Compile Include="Entities\TradeSkillInfo.cs" />
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
     <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />

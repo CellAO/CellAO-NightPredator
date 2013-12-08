@@ -30,6 +30,7 @@ namespace CellAO.Core.Inventory
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
@@ -141,6 +142,62 @@ namespace CellAO.Core.Inventory
             foreach (IInventoryPage page in this.Pages.Values)
             {
                 page.CalculateModifiers(character);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetLocation">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// </exception>
+        public Item GetItemAt(int targetLocation)
+        {
+            // TODO: Maybe check not only for BankInventoryPage here (TradeWindow, knubot etc)
+            foreach (BaseInventoryPage inventoryPage in this.Pages.Values.Where(x => !(x is BankInventoryPage)))
+            {
+                if (inventoryPage.ValidSlot(targetLocation))
+                {
+                    if (inventoryPage[targetLocation] != null)
+                    {
+                        return (Item)inventoryPage[targetLocation];
+                    }
+                }
+            }
+
+            throw new NullReferenceException("Inventory mismatch!");
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NullReferenceException">
+        /// </exception>
+        public Item GetItemInContainer(int container, int placement)
+        {
+            try
+            {
+                IInventoryPage inventoryPage = this.Pages[container];
+                if (inventoryPage.ValidSlot(placement))
+                {
+                    if (inventoryPage[placement] != null)
+                    {
+                        return (Item)inventoryPage[placement];
+                    }
+                }
+
+                throw new NullReferenceException("Container/Placement error: " + container + "/" + placement);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 

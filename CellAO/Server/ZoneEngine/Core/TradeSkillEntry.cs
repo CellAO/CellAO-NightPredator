@@ -24,47 +24,69 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace ZoneEngine.Core
 {
     #region Usings ...
 
     using System.Collections.Generic;
 
-    using CellAO.Core.Entities;
-    using CellAO.Core.Items;
-    using CellAO.Enums;
+    using CellAO.Database.Entities;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IInventoryPages
+    public class TradeSkillEntry
     {
-        #region Public Properties
+        #region Fields
 
         /// <summary>
         /// </summary>
-        IItemContainer Owner { get; }
+        public int DeleteFlag;
 
         /// <summary>
         /// </summary>
-        IDictionary<int, IInventoryPage> Pages { get; }
+        public int ID1;
 
         /// <summary>
         /// </summary>
-        int StandardPage { get; set; }
-
-        #endregion
-
-        #region Public Indexers
+        public int ID2;
 
         /// <summary>
         /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInventoryPage this[int index] { get; }
+        public bool IsImplant;
+
+        /// <summary>
+        /// </summary>
+        public int MaxBump;
+
+        /// <summary>
+        /// </summary>
+        public int MaxXP;
+
+        /// <summary>
+        /// </summary>
+        public int MinTargetQL;
+
+        /// <summary>
+        /// </summary>
+        public int MinXP;
+
+        /// <summary>
+        /// </summary>
+        public int QLRangePercent;
+
+        /// <summary>
+        /// </summary>
+        public int ResultHighId;
+
+        /// <summary>
+        /// </summary>
+        public int ResultLowId;
+
+        /// <summary>
+        /// </summary>
+        public List<TradeSkillSkill> Skills = new List<TradeSkillSkill>();
 
         #endregion
 
@@ -72,85 +94,69 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
-        /// </param>
-        /// <param name="item">
+        /// <param name="ts">
         /// </param>
         /// <returns>
         /// </returns>
-        InventoryError AddToPage(int pageNum, int slotNum, IItem item);
+        public static TradeSkillEntry ConvertFromDB(DBTradeSkill ts)
+        {
+            TradeSkillEntry tse = new TradeSkillEntry();
+            tse.ID1 = ts.ID1;
+            tse.ID2 = ts.ID2;
+            tse.IsImplant = ts.IsImplant > 0;
+            tse.MaxBump = ts.MaxBump;
+            tse.MaxXP = ts.MaxXP;
+            tse.MinTargetQL = ts.MinTarget;
+            tse.MinXP = ts.MinXP;
+            tse.ResultLowId = int.Parse(ts.ResultIDS.Split(',')[0].Trim());
+            tse.ResultHighId = int.Parse(ts.ResultIDS.Split(',')[1].Trim());
+            tse.QLRangePercent = ts.QLRangePercent;
+            tse.DeleteFlag = ts.DeleteFlag;
+
+            string[] skillStrings = ts.Skill.Split(',');
+            string[] skillPercents = ts.SkillPercent.Split(',');
+            string[] skillPerBumps = ts.SkillPerBump.Split(',');
+
+            int skillcount = skillStrings.Length;
+
+            for (int i = 0; i < skillcount; i++)
+            {
+                TradeSkillSkill tss = new TradeSkillSkill();
+                tss.StatId = int.Parse(skillStrings[i].Trim());
+                tss.SkillPerBump = int.Parse(skillPerBumps[i].Trim());
+                tss.Percent = int.Parse(skillPercents[i].Trim());
+                tse.Skills.Add(tss);
+            }
+
+            return tse;
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
+        /// <param name="sourceQL">
         /// </param>
-        void CalculateModifiers(Character character);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="targetLocation">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        Item GetItemAt(int targetLocation);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="container">
-        /// </param>
-        /// <param name="placement">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        Item GetItemInContainer(int container, int placement);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInventoryPage PageFromSlot(int slotNum);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Read();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
+        /// <param name="targetQL">
         /// </param>
         /// <returns>
         /// </returns>
-        IItem RemoveItem(int pageNum, int slotNum);
+        internal bool ValidateRange(int sourceQL, int targetQL)
+        {
+            if (this.QLRangePercent != 0)
+            {
+                if (this.QLRangePercent == 1)
+                {
+                    return sourceQL >= targetQL;
+                }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="statId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int Stat(int statId);
+                return (targetQL - (decimal)sourceQL) / targetQL <= this.QLRangePercent / 100M;
+            }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError TryAdd(IItem item);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Write();
+            return true;
+        }
 
         #endregion
     }

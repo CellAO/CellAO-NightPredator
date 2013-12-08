@@ -223,16 +223,12 @@ namespace ZoneEngine.Core.PacketHandlers
                     // org vote info
                     break;
 
-                    
-
                 case 9:
 
                     // <entry> is CmdStr
                     break;
 
                     
-
-                    #region /org promote
 
                 case 10:
                 {
@@ -320,7 +316,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
                 }
 
-                    #endregion
+                    
 
                     #region /org demote
 

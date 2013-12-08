@@ -24,133 +24,65 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace CellAO.Database.Entities
 {
-    #region Usings ...
-
-    using System.Collections.Generic;
-
-    using CellAO.Core.Entities;
-    using CellAO.Core.Items;
-    using CellAO.Enums;
-
-    #endregion
-
     /// <summary>
     /// </summary>
-    public interface IInventoryPages
+    public class DBTradeSkill
     {
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        IItemContainer Owner { get; }
+        public int DeleteFlag { get; set; }
 
         /// <summary>
         /// </summary>
-        IDictionary<int, IInventoryPage> Pages { get; }
+        public int ID1 { get; set; }
 
         /// <summary>
         /// </summary>
-        int StandardPage { get; set; }
-
-        #endregion
-
-        #region Public Indexers
+        public int ID2 { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInventoryPage this[int index] { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
+        public int IsImplant { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError AddToPage(int pageNum, int slotNum, IItem item);
+        public int MaxBump { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
-        /// </param>
-        void CalculateModifiers(Character character);
+        public int MaxXP { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="targetLocation">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        Item GetItemAt(int targetLocation);
+        public int MinTarget { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="container">
-        /// </param>
-        /// <param name="placement">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        Item GetItemInContainer(int container, int placement);
+        public int MinXP { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IInventoryPage PageFromSlot(int slotNum);
+        public int QLRangePercent { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Read();
+        public string ResultIDS { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageNum">
-        /// </param>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IItem RemoveItem(int pageNum, int slotNum);
+        public string Skill { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="statId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int Stat(int statId);
+        public string SkillPerBump { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError TryAdd(IItem item);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Write();
+        public string SkillPercent { get; set; }
 
         #endregion
     }

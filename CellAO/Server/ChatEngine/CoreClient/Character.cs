@@ -117,7 +117,7 @@ namespace ChatEngine.CoreClient
                     {
                         this.characterSide = StatDao.GetById(50000, (int)this.CharacterId, (int)StatIds.side).statvalue;
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // Has no side in database yet
                         this.characterSide = (int)Side.Neutral;

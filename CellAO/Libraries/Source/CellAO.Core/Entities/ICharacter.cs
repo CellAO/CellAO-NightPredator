@@ -40,6 +40,8 @@ namespace CellAO.Core.Entities
 
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using ZoneEngine.Core;
+
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
@@ -106,6 +108,14 @@ namespace CellAO.Core.Entities
         /// Caching Mesh layer for social tab items
         /// </summary>
         MeshLayers SocialMeshLayer { get; }
+
+        /// <summary>
+        /// </summary>
+        TradeSkillInfo TradeSkillSource { get; set; }
+
+        /// <summary>
+        /// </summary>
+        TradeSkillInfo TradeSkillTarget { get; set; }
 
         /// <summary>
         /// Uploaded Nanos list

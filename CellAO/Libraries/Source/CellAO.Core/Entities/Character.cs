@@ -46,6 +46,8 @@ namespace CellAO.Core.Entities
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core;
+
     using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
@@ -230,6 +232,14 @@ namespace CellAO.Core.Entities
                 this.socialMeshLayer = value;
             }
         }
+
+        /// <summary>
+        /// </summary>
+        public TradeSkillInfo TradeSkillSource { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public TradeSkillInfo TradeSkillTarget { get; set; }
 
         /// <summary>
         /// </summary>
