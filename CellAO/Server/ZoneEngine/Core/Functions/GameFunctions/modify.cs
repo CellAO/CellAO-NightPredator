@@ -28,8 +28,6 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
-    using System;
-
     using CellAO.Core.Entities;
     using CellAO.Enums;
 
@@ -107,9 +105,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity Target, 
             MessagePackObject[] Arguments)
         {
-            Character ch = (Character)Self;
-            ch.Stats[Arguments[0].AsInt32()].Modifier += Arguments[1].AsInt32();
-            Console.WriteLine("modify stat " + Arguments[0].AsInt32());
+            ((Character)Self).Stats[Arguments[0].AsInt32()].Modifier += Arguments[1].AsInt32();
             return true;
         }
 
