@@ -164,6 +164,21 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            if (zoneServer != null)
+            {
+                zoneServer.DisconnectAllClients();
+                LogUtil.Debug("Shutting down ZoneEngine hard");
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         private static bool ISComInitialization()
@@ -523,6 +538,8 @@ namespace ZoneEngine
         /// </param>
         private static void Main(string[] args)
         {
+            Console.CancelKeyPress += Console_CancelKeyPress;
+
             OnScreenBanner.PrintCellAOBanner(ConsoleColor.Green);
 
             Console.WriteLine();
@@ -536,6 +553,9 @@ namespace ZoneEngine
             }
             else
             {
+#if DEBUG
+                StartTheServer();
+#endif
                 CommandLoop(args);
             }
 

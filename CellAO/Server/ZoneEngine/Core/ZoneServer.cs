@@ -91,6 +91,16 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
+        public void DisconnectAllClients()
+        {
+            foreach (Playfield pf in this.playfields)
+            {
+                pf.DisconnectAllClients();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="id">
         /// </param>
         /// <returns>

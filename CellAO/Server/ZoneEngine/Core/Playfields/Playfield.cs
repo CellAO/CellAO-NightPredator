@@ -254,8 +254,10 @@ namespace CellAO.Core.Playfields
         /// </summary>
         public void DisconnectAllClients()
         {
-            foreach (IInstancedEntity entity in this.Entities.Where(x => x is Character))
+            IEnumerable<IInstancedEntity> templist = this.Entities.Where(et => et is Character);
+            for (int i = templist.Count() - 1; i >= 0; i--)
             {
+                IInstancedEntity entity = templist.ElementAt(i);
                 if ((entity as Character) != null)
                 {
                     (entity as Character).Client.Server.DisconnectClient((entity as Character).Client);
