@@ -24,34 +24,48 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
+    using CellAO.Core.Entities;
+    using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
+    using CellAO.Enums;
     using CellAO.Interfaces;
+    using CellAO.Stats;
+
+    using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface INamedEntity : IInstancedEntity
+    internal class teleport : FunctionPrototype
     {
+        #region Constants
+
+        /// <summary>
+        /// </summary>
+        private const FunctionType functionId = FunctionType.Teleport;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        string FirstName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string LastName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string Name { get; set; }
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return functionId;
+            }
+        }
 
         #endregion
 
@@ -59,13 +73,52 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <param name="destination">
+        /// <param name="self">
         /// </param>
-        /// <param name="heading">
+        /// <param name="caller">
         /// </param>
-        /// <param name="playfield">
+        /// <param name="target">
         /// </param>
-        void Teleport(Coordinate destination, IQuaternion heading, Identity playfield);
+        /// <param name="arguments">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public override bool Execute(
+            INamedEntity self,
+            INamedEntity caller,
+            IInstancedEntity target,
+            MessagePackObject[] arguments)
+        {
+            lock (target)
+            {
+                return this.FunctionExecute(self, caller, target, arguments);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Self">
+        /// </param>
+        /// <param name="Caller">
+        /// </param>
+        /// <param name="Target">
+        /// </param>
+        /// <param name="Arguments">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool FunctionExecute(
+            INamedEntity Self,
+            INamedEntity Caller,
+            IInstancedEntity Target,
+            MessagePackObject[] Arguments)
+        {
+            Coordinate destination=new Coordinate();
+            IQuaternion heading = new Quaternion(0.0, 0.0, 0.0, 0.0);
+            Identity playfield=new Identity();
+            ((Character)Self).Teleport(destination, heading, playfield);
+            return true;
+        }
 
         #endregion
     }

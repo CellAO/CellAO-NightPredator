@@ -309,6 +309,32 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="charId">
+        /// </param>
+        /// <param name="pfType">
+        /// </param>
+        /// <param name="pfNum">
+        /// </param>
+        public static void SetPlayfield(int charId, int pfType, int pfNum)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    // TODO: extend character table for GameServerId, SgId and playfield type
+                    conn.Execute(
+                        "UPDATE characters SET playfield=@PF WHERE ID=@characterId", 
+                        new { PF = pfNum, characterId = charId });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Write back the position of the Characer
         /// </summary>
         /// <param name="character">

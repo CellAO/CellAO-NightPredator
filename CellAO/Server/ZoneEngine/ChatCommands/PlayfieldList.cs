@@ -24,48 +24,91 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
+namespace ZoneEngine.ChatCommands
 {
     #region Usings ...
 
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+
+    using CellAO.Core.Entities;
+    using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
-    using CellAO.Interfaces;
+
+    using MemBus.Support;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using ZoneEngine.Core;
+    using ZoneEngine.Core.Playfields;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface INamedEntity : IInstancedEntity
+    public class PlayfieldList : AOChatCommand
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        string FirstName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string LastName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string Name { get; set; }
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="destination">
+        /// <param name="args">
         /// </param>
-        /// <param name="heading">
+        /// <returns>
+        /// </returns>
+        public override bool CheckCommandArguments(string[] args)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
         /// </param>
-        /// <param name="playfield">
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public override void CommandHelp(ZoneClient client)
+        {
+            // No help needed, no arguments can be given
+            client.SendChatText("Lists all playfields and their id's");
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
         /// </param>
-        void Teleport(Coordinate destination, IQuaternion heading, Identity playfield);
+        /// <param name="target">
+        /// </param>
+        /// <param name="args">
+        /// </param>
+        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        {
+            var list = ((Playfield)client.Playfield).ListAvailablePlayfields();
+            foreach (KeyValuePair<Identity, string> pf in list)
+            {
+                client.SendChatText(pf.Key.Instance.ToString().PadLeft(8)+": "+pf.Value);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override int GMLevelNeeded()
+        {
+            return 1;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override List<string> ListCommands()
+        {
+            var temp = new List<string> { "pflist", "playfieldlist" };
+            return temp;
+        }
 
         #endregion
     }

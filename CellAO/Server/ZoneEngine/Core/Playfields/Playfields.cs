@@ -26,6 +26,8 @@
 
 namespace ZoneEngine.Core.Playfields
 {
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
     #region Usings ...
 
     using System.Collections.Generic;
@@ -421,6 +423,16 @@ namespace ZoneEngine.Core.Playfields
             return false;
         }
 
+
+        public static Dictionary<int,string> PlayfieldNames()
+        {
+            Dictionary<int,string> temp=new Dictionary<int, string>();
+            foreach (PlayfieldInfo pfInfo in Instance.playfields)
+            {
+                temp.Add(pfInfo.id, pfInfo.name);
+            }
+            return temp;
+        }
         #endregion
     }
 

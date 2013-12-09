@@ -31,11 +31,15 @@ namespace CellAO.Core.Playfields
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
 
     using Cell.Core;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
+    using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
@@ -46,13 +50,17 @@ namespace CellAO.Core.Playfields
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
     using Utility;
+    using Config = Utility.Config.ConfigReadWrite;
 
     using ZoneEngine.Core;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.Packets;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
@@ -72,7 +80,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        private readonly ServerBase server;
+        private readonly ZoneServer server;
 
         /// <summary>
         /// </summary>
@@ -330,10 +338,10 @@ namespace CellAO.Core.Playfields
             }
 
             FunctionCollection.Instance.CallFunction(
-                imExecuteFunction.Function.FunctionType, 
-                (INamedEntity)user, 
-                (INamedEntity)user, 
-                target, 
+                imExecuteFunction.Function.FunctionType,
+                (INamedEntity)user,
+                (INamedEntity)user,
+                target,
                 imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
@@ -501,6 +509,64 @@ namespace CellAO.Core.Playfields
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            // Teleport to another playfield
+            ZoneEngine.Core.Packets.Teleport.Send(character, destination, heading, playfield);
+
+            // Send packet, disconnect, and other playfield waits for connect
+            DespawnMessage despawnMessage = Despawn.Create(character.Identity);
+            character.DoNotDoTimers = true;
+            character.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
+                                       {
+                                           X=destination.x,Y=destination.y,Z=destination.z
+                                       };
+            character.Heading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
+            character.RawHeading = character.Heading;
+            character.Save();
+            CharacterDao.SetPlayfield(character.Identity.Instance, (int)playfield.Type, playfield.Instance);
+
+            // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
+            // for now, just transmit our ip and port
+
+            IPAddress tempIp;
+            if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
+            {
+                var zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
+                foreach (var ip in zoneHost.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        tempIp = ip;
+                        break;
+                    }
+                }
+            }
+
+            var redirect = new ZoneRedirectionMessage
+                           {
+                               ServerIpAddress = tempIp,
+                               ServerPort = (ushort)this.server.TcpEndPoint.Port
+                           };
+            character.Client.SendCompressed(redirect);
+        }
+
+
+        public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
+
+        {
+            return this.server.ListAvailablePlayfields(global);
+        }
         #endregion
     }
 }

@@ -32,7 +32,9 @@ namespace CellAO.Core.Playfields
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
+    using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using MemBus;
 
@@ -156,6 +158,18 @@ namespace CellAO.Core.Playfields
         /// <param name="obj">
         /// </param>
         void Publish(object obj);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield);
 
         #endregion
     }

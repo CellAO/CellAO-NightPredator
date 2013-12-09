@@ -39,6 +39,8 @@ namespace ZoneEngine.Core
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
 
+    using NLog.LayoutRenderers;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Component;
@@ -193,5 +195,28 @@ namespace ZoneEngine.Core
         }
 
         #endregion
+
+        public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
+        {
+            Dictionary<Identity, string> temp = new Dictionary<Identity, string>();
+            Dictionary<int, string> names = Playfields.Playfields.PlayfieldNames();
+
+            if (!global)
+            {
+                foreach (Playfield pf in this.playfields)
+                {
+                    temp.Add(pf.Identity, names[pf.Identity.Instance]);
+                }
+            }
+            else
+            {
+                foreach (KeyValuePair<int, string> pf in names)
+                {
+                    temp.Add(new Identity() { Type = IdentityType.Playfield, Instance = pf.Key }, pf.Value);
+                }
+            }
+
+            return temp;
+        }
     }
 }

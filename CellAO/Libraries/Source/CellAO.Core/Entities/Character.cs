@@ -115,7 +115,7 @@ namespace CellAO.Core.Entities
             {
                 this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
             }
-            
+
             this.BaseInventory = new PlayerInventory(this);
             this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
 
@@ -392,6 +392,34 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        public void StopMovement()
+        {
+            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
+            this.RawCoordinates.X = this.Coordinates.x;
+            this.RawCoordinates.Y = this.Coordinates.y;
+            this.RawCoordinates.Z = this.Coordinates.z;
+            this.RawHeading = this.Heading;
+
+            this.spinDirection = SpinOrStrafeDirections.None;
+            this.strafeDirection = SpinOrStrafeDirections.None;
+            this.moveDirection = MoveDirections.None;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            this.Playfield.Teleport(this, destination, heading, playfield);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="moveType">
         /// </param>
         /// <exception cref="NotImplementedException">
@@ -617,7 +645,7 @@ namespace CellAO.Core.Entities
             uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
             var messageBody = new StatMessage()
                               {
-                                  Identity = this.Identity,
+                                  Identity = this.Identity, 
                                   Stats =
                                       new[]
                                       {
@@ -628,7 +656,7 @@ namespace CellAO.Core.Entities
                                                   e.Stat.StatId, 
                                               Value2 = valueToSend
                                           }
-                                      },
+                                      }, 
                               };
 
             if (e.AnnounceToPlayfield)

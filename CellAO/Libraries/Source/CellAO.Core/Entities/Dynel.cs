@@ -32,6 +32,8 @@ namespace CellAO.Core.Entities
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Vector;
+    using CellAO.Interfaces;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -132,6 +134,19 @@ namespace CellAO.Core.Entities
         public bool Read()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            // TODO: Maybe write teleport code for dynels
         }
 
         /// <summary>

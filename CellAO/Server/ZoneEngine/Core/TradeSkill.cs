@@ -196,7 +196,7 @@ namespace ZoneEngine.Core
             {
                 this.tradeSkillList.Add(TradeSkillEntry.ConvertFromDB(tradeSkill));
                 i++;
-                if ((i % 10) == 0)
+                if ((i % 1000) == 0)
                 {
                     Console.Write("\rCached {0} trade skill entries", i);
                 }

@@ -361,7 +361,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
-                    "{0} Game functions loaded", 
+                    "{0} Game functions loaded",
                     FunctionCollection.Instance.NumberofRegisteredFunctions());
             }
             catch (Exception e)
@@ -482,8 +482,8 @@ namespace ZoneEngine
             Console.WriteLine(locales.ServerConsoleAvailableScripts + ":");
 
             string[] files = Directory.GetFiles(
-                "Scripts" + Path.DirectorySeparatorChar, 
-                "*.cs", 
+                "Scripts" + Path.DirectorySeparatorChar,
+                "*.cs",
                 SearchOption.AllDirectories);
             if (files.Length == 0)
             {
@@ -737,7 +737,7 @@ namespace ZoneEngine
 
             // Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
 
-            csc.AddScriptMembers();
+            Console.WriteLine(csc.AddScriptMembers() + " chat commands loaded");
             zoneServer.Start(true, false);
         }
 

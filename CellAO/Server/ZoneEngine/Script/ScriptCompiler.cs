@@ -107,10 +107,10 @@ namespace ZoneEngine.Script
         /// </summary>
         private readonly CompilerParameters p = new CompilerParameters
                                                 {
-                                                    GenerateInMemory = false, 
-                                                    GenerateExecutable = false, 
-                                                    IncludeDebugInformation = true, 
-                                                    OutputAssembly = "Scripts.dll", 
+                                                    GenerateInMemory = false,
+                                                    GenerateExecutable = false,
+                                                    IncludeDebugInformation = true,
+                                                    OutputAssembly = "Scripts.dll",
 
                                                     // TODO: Figure out how to parse the file and return the usings, then load those.
                                                     ReferencedAssemblies =
@@ -124,9 +124,9 @@ namespace ZoneEngine.Script
                                                         "ZoneEngine.exe", 
                                                         "ChatEngine.exe", 
                                                         "LoginEngine.exe"
-                                                    }, 
-                                                    TreatWarningsAsErrors = false, 
-                                                    WarningLevel = 3, 
+                                                    },
+                                                    TreatWarningsAsErrors = false,
+                                                    WarningLevel = 3,
                                                     CompilerOptions = "/optimize"
                                                 };
 
@@ -180,9 +180,9 @@ namespace ZoneEngine.Script
         /// The color to display the message in.
         /// </param>
         public static void LogScriptAction(
-            string owner, 
-            ConsoleColor ownerColor, 
-            string message, 
+            string owner,
+            ConsoleColor ownerColor,
+            string message,
             ConsoleColor messageColor)
         {
             Colouring.Push(ownerColor);
@@ -250,7 +250,7 @@ namespace ZoneEngine.Script
 
         /// <summary>
         /// </summary>
-        public void AddScriptMembers()
+        public int AddScriptMembers()
         {
             this.scriptList.Clear();
             foreach (Assembly assembly in this.multipleDllList)
@@ -288,24 +288,19 @@ namespace ZoneEngine.Script
 
             this.chatCommands.Clear();
             Assembly wholeassembly = Assembly.GetExecutingAssembly();
-            foreach (Type t in wholeassembly.GetTypes())
+            int chatCommands = 0;
+            foreach (Type t in wholeassembly.GetTypes().Where(x => x.IsSubclassOf(typeof(AOChatCommand))))
             {
-                if (t.Namespace == "ZoneEngine.ChatCommands")
+                chatCommands++;
+                AOChatCommand aoc = (AOChatCommand)wholeassembly.CreateInstance(t.FullName);
+                List<string> acceptedcommands = aoc.ListCommands();
+                foreach (string command in acceptedcommands)
                 {
-                    if (t.Name != "AOChatCommand")
-                    {
-                        if (!this.chatCommands.ContainsKey(t.Namespace + "." + t.Name))
-                        {
-                            AOChatCommand aoc = (AOChatCommand)wholeassembly.CreateInstance(t.Namespace + "." + t.Name);
-                            List<string> acceptedcommands = aoc.ListCommands();
-                            foreach (string command in acceptedcommands)
-                            {
-                                this.chatCommands.Add(t.Namespace + "." + t.Name + ":" + command, t);
-                            }
-                        }
-                    }
+                    this.chatCommands.Add(t.FullName + ":" + command, t);
                 }
             }
+            return chatCommands;
+
         }
 
         /// <summary>
@@ -377,7 +372,7 @@ namespace ZoneEngine.Script
                     scriptNames[i] = scriptNames[i].Substring(scriptNames[i].IndexOf(":", StringComparison.Ordinal) + 1)
                                      + ":"
                                      + scriptNames[i].Substring(
-                                         0, 
+                                         0,
                                          scriptNames[i].IndexOf(":", StringComparison.Ordinal));
                 }
 
@@ -420,11 +415,11 @@ namespace ZoneEngine.Script
                         if (aoScript != null)
                         {
                             kv.Value.InvokeMember(
-                                functionName, 
-                                BindingFlags.Default | BindingFlags.InvokeMethod, 
-                                null, 
-                                aoScript, 
-                                new object[] { character }, 
+                                functionName,
+                                BindingFlags.Default | BindingFlags.InvokeMethod,
+                                null,
+                                aoScript,
+                                new object[] { character },
                                 CultureInfo.InvariantCulture);
                         }
                     }
@@ -448,14 +443,14 @@ namespace ZoneEngine.Script
             if (multipleFiles)
             {
                 LogScriptAction(
-                    "ScriptCompiler:", 
-                    ConsoleColor.Yellow, 
-                    "multiple scripts configuration active.", 
+                    "ScriptCompiler:",
+                    ConsoleColor.Yellow,
+                    "multiple scripts configuration active.",
                     ConsoleColor.Magenta);
                 foreach (string scriptFile in this.ScriptsList)
                 {
                     this.p.OutputAssembly = string.Format(
-                        CultureInfo.CurrentCulture, 
+                        CultureInfo.CurrentCulture,
                         Path.Combine("tmp", DllName(scriptFile)));
 
                     // Create the directory if it doesnt exist
@@ -477,9 +472,9 @@ namespace ZoneEngine.Script
                     }
 
                     LogScriptAction(
-                        "Script " + scriptFile, 
-                        ConsoleColor.Green, 
-                        "Compiled to: " + this.p.OutputAssembly, 
+                        "Script " + scriptFile,
+                        ConsoleColor.Green,
+                        "Compiled to: " + this.p.OutputAssembly,
                         ConsoleColor.Green);
 
                     // Add the compiled assembly to our list
@@ -516,9 +511,9 @@ namespace ZoneEngine.Script
                 catch (FileLoadException ee)
                 {
                     LogScriptAction(
-                        "ERROR", 
-                        ConsoleColor.Red, 
-                        "File loading not successful:\r\n" + ee, 
+                        "ERROR",
+                        ConsoleColor.Red,
+                        "File loading not successful:\r\n" + ee,
                         ConsoleColor.Red);
                     return false;
                 }
@@ -623,9 +618,9 @@ namespace ZoneEngine.Script
                             if (scriptObject != null)
                             {
                                 LogScriptAction(
-                                    "Script", 
-                                    ConsoleColor.Green, 
-                                    scriptObject.GetType().Name + " Loaded.", 
+                                    "Script",
+                                    ConsoleColor.Green,
+                                    scriptObject.GetType().Name + " Loaded.",
                                     ConsoleColor.Green);
 
                                 // Lets run our script and display its results
@@ -682,18 +677,18 @@ namespace ZoneEngine.Script
             catch (UnauthorizedAccessException)
             {
                 LogScriptAction(
-                    "Error", 
-                    ConsoleColor.Red, 
-                    "You don't have permission to access this directory", 
+                    "Error",
+                    ConsoleColor.Red,
+                    "You don't have permission to access this directory",
                     ConsoleColor.Red);
                 return false;
             }
             catch (IOException)
             {
                 LogScriptAction(
-                    "Error", 
-                    ConsoleColor.Red, 
-                    "I/O Error occured. (Path is filename or network error)", 
+                    "Error",
+                    ConsoleColor.Red,
+                    "I/O Error occured. (Path is filename or network error)",
                     ConsoleColor.Red);
                 return false;
             }
@@ -701,9 +696,9 @@ namespace ZoneEngine.Script
             if (this.ScriptsList.Length == 0)
             {
                 LogScriptAction(
-                    "Error:", 
-                    ConsoleColor.Red, 
-                    "Scripts directory contains no scripts!", 
+                    "Error:",
+                    ConsoleColor.Red,
+                    "Scripts directory contains no scripts!",
                     ConsoleColor.Yellow);
                 return false;
             }

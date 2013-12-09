@@ -69,6 +69,8 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
+    <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
+    <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
+    <Compile Include="Core\Functions\GameFunctions\teleport.cs" />
     <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
@@ -114,12 +117,14 @@
     <Compile Include="Core\PacketHandlers\ChatCommandHandler.cs" />
     <Compile Include="Core\Packets\ChatServerInfo.cs" />
     <Compile Include="Core\Packets\DeleteItem.cs" />
+    <Compile Include="Core\Packets\Despawn.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
     <Compile Include="Core\Packets\FullCharacter.cs" />
     <Compile Include="Core\Packets\PlayfieldAnarchyF.cs" />
     <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
     <Compile Include="Core\Packets\Stat.cs" />
+    <Compile Include="Core\Packets\Teleport.cs" />
     <Compile Include="Core\Packets\TemplateAction.cs" />
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
