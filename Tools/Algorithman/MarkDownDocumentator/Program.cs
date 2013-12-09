@@ -29,12 +29,14 @@ namespace MarkDownDocumentator
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     using CellAO.Enums;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Utility;
 
@@ -224,74 +226,147 @@ namespace MarkDownDocumentator
 
             WriteLink(tw, "Move modes", "MoveModes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "MoveModes.md"))), 
-                "MoveModes", 
-                typeof(MoveModes), 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "MoveModes.md"))),
+                "MoveModes",
+                typeof(MoveModes),
                 false);
 
             WriteHeader2(tw, "Inventory slots");
             WriteLink(tw, "Weapon page slots", "WeaponSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "WeaponSlots.md"))), 
-                "Weapon slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "WeaponSlots.md"))),
+                "Weapon slots",
                 typeof(WeaponSlots));
 
             WriteLink(tw, "Armor page slots", "ArmorSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ArmorSlots.md"))), 
-                "Armor slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ArmorSlots.md"))),
+                "Armor slots",
                 typeof(ArmorSlots));
 
             WriteLink(tw, "Implant page slots", "ImplantSlots.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ImplantSlots.md"))), 
-                "Implant slots", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ImplantSlots.md"))),
+                "Implant slots",
                 typeof(ImplantSlots));
 
             WriteHeader2(tw, "Item/Inventory related");
             tw.WriteLine();
             WriteLink(tw, "Inventory Errors", "InventoryError.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "InventoryError.md"))), 
-                "Inventory Errors", 
-                typeof(InventoryError), 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "InventoryError.md"))),
+                "Inventory Errors",
+                typeof(InventoryError),
                 false);
 
             WriteLink(tw, "Can flags", "CanFlags.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "CanFlags.md"))), 
-                "Can Flags", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "CanFlags.md"))),
+                "Can Flags",
                 typeof(CanFlags));
 
             WriteLink(tw, "Action Types", "ActionTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ActionTypes.md"))), 
-                "Action Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ActionTypes.md"))),
+                "Action Types",
                 typeof(ActionType));
             WriteLink(tw, "Event Types", "EventTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "EventTypes.md"))), 
-                "Event Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "EventTypes.md"))),
+                "Event Types",
                 typeof(EventType));
             WriteLink(tw, "Function Types", "FunctionTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "FunctionTypes.md"))), 
-                "Function Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "FunctionTypes.md"))),
+                "Function Types",
                 typeof(ActionType));
             WriteLink(tw, "Operators", "Operator.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "Operator.md"))), 
-                "Operators", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "Operator.md"))),
+                "Operators",
                 typeof(Operator));
 
             WriteLink(tw, "Identity Types", "IdentityTypes.md");
             WriteEnumList(
-                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "IdentityTypes.md"))), 
-                "Identity Types", 
+                Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "IdentityTypes.md"))),
+                "Identity Types",
                 typeof(IdentityType));
+
+            WriteHeader2(tw, "Network related");
+            tw.WriteLine();
+
+            WriteLink(tw, "N3 Message IDs", "N3MessageIDs.md");
+            WriteEnumListHex(
+                Path.Combine("..", "..", "Documentation", "N3MessageIDs.md"),
+                "N3 Message IDs",
+                typeof(N3MessageType));
 
             WriteFooter(tw);
             tw.Close();
+        }
+
+        private static void WriteEnumListHex(string fileName, string enumName, Type enumType, bool writeValues = true)
+        {
+            bool isFlagsEnum = false;
+            object[] memInfo = enumType.GetCustomAttributes(typeof(FlagsAttribute), false);
+            isFlagsEnum = memInfo.Length > 0;
+
+            TextWriter tw = new StreamWriter(fileName);
+
+            WriteHeader1(tw, enumName);
+            WriteCode(tw, enumType.FullName);
+            if (writeValues)
+            {
+                tw.Write(" : ");
+                WriteCode(tw, enumType.GetEnumUnderlyingType().Name);
+            }
+
+            if (isFlagsEnum)
+            {
+                tw.WriteLine();
+                tw.WriteLine();
+                WriteCode(tw, "[Flags]");
+            }
+
+            tw.WriteLine();
+            WriteHorizonalLine(tw);
+            tw.WriteLine();
+            Array temp2 = Enum.GetValues(enumType);
+
+            List<String> tempList = new List<string>();
+
+            int max = temp2.Length;
+            foreach (object v in temp2)
+            {
+                string eName = Enum.GetName(enumType, v);
+                string tempString = "**" + eName + "**";
+                
+                if (writeValues)
+                {
+                    object underlyingValue = Convert.ChangeType(v, Enum.GetUnderlyingType(v.GetType()));
+                    tempString+=" = 0x" + ((int)underlyingValue).ToString("X8");
+                }
+
+                max--;
+                if (max > 0)
+                {
+                    tempString+=",";
+                }
+
+                tempList.Add(tempString);
+            }
+
+
+            tempList.Sort();
+            foreach (string s in tempList)
+            {
+                tw.WriteLine(s);
+                tw.WriteLine();
+            }
+
+            WriteFooter(tw);
+            tw.Close();
+
         }
 
         /// <summary>
