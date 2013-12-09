@@ -232,6 +232,7 @@ namespace MarkDownDocumentator
                 false);
 
             WriteHeader2(tw, "Inventory slots");
+            
             WriteLink(tw, "Weapon page slots", "WeaponSlots.md");
             WriteEnumList(
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "WeaponSlots.md"))),
@@ -252,6 +253,7 @@ namespace MarkDownDocumentator
 
             WriteHeader2(tw, "Item/Inventory related");
             tw.WriteLine();
+            
             WriteLink(tw, "Inventory Errors", "InventoryError.md");
             WriteEnumList(
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "InventoryError.md"))),
@@ -270,16 +272,19 @@ namespace MarkDownDocumentator
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "ActionTypes.md"))),
                 "Action Types",
                 typeof(ActionType));
+            
             WriteLink(tw, "Event Types", "EventTypes.md");
             WriteEnumList(
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "EventTypes.md"))),
                 "Event Types",
                 typeof(EventType));
+            
             WriteLink(tw, "Function Types", "FunctionTypes.md");
             WriteEnumList(
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "FunctionTypes.md"))),
                 "Function Types",
-                typeof(ActionType));
+                typeof(FunctionType));
+
             WriteLink(tw, "Operators", "Operator.md");
             WriteEnumList(
                 Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "Operator.md"))),
