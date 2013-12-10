@@ -53,6 +53,7 @@
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ConfigReadWrite.cs" />
     <Compile Include="ConsoleText.cs" />
+    <Compile Include="CpuRamUtilization.cs" />
     <Compile Include="FunctionArgumentList.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="OnScreenBanner.cs" />
