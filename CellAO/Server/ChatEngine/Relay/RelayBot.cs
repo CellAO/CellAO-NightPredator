@@ -148,6 +148,7 @@ namespace Chatengine.Relay
             this.ChatCommandProcessors.Add("send", this.ProcessChatCommandSend);
             this.ChatCommandProcessors.Add("home", this.ProcessChatCommandHome);
             this.ChatCommandProcessors.Add("mentions", this.ProcessChatCommandMentions);
+            this.ChatCommandProcessors.Add("serverinfo", this.ProcessChatCommandServerInfo);
         }
 
         /// <summary>
@@ -503,6 +504,30 @@ namespace Chatengine.Relay
             // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
             // client.LocalUser.SendMessage(replyTargets, "Tweet sent by {0} at {1}.", tweetStatus.User.ScreenName,
             // tweetStatus.CreatedDate.ToLongTimeString());
+        }
+
+        /// <summary>
+        /// Need to change Some Information in this code. Probably a Seperate MOTD for IRC or something to have the bot read and send for
+        /// connection Info.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="source"></param>
+        /// <param name="targets"></param>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        private void ProcessChatCommandServerInfo(
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
+            IList<string> parameters)
+        {
+            IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
+
+            client.LocalUser.SendMessage(replyTarget, "A Howto Setup Connection to CellAO can be found here: TBA");
+            client.LocalUser.SendMessage(
+                replyTarget,
+                "There the address for this server is: " + Config.Instance.CurrentConfig.ListenIP);
         }
 
         /// <summary>
