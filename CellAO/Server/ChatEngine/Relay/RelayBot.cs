@@ -48,7 +48,7 @@ namespace Chatengine.Relay
     public class RelayBot : BasicIrcBot
     {
         // List of all currently logged-in Twitter users.
-        // private List<CellAOUsers> cellaoUsers;
+       // private List<CellAOUsers> cellAoUserses;
 
         #region Fields
 
@@ -527,7 +527,7 @@ namespace Chatengine.Relay
             client.LocalUser.SendMessage(replyTarget, "A Howto Setup Connection to CellAO can be found here: TBA");
             client.LocalUser.SendMessage(
                 replyTarget,
-                "There the address for this server is: " + Config.Instance.CurrentConfig.ListenIP);
+                "There the address for this server is: " + Config.Instance.CurrentConfig.ListenIP+ "  On Port: "+Config.Instance.CurrentConfig.LoginPort);
         }
 
         /// <summary>
