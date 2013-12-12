@@ -530,7 +530,7 @@ namespace Chatengine.Relay
         {
             IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
-            client.LocalUser.SendMessage(replyTarget, "A Howto Setup Connection to CellAO can be found here: TBA");
+            client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: TBA");
             client.LocalUser.SendMessage(
                 replyTarget,
                 "This is address for the server: " + Config.Instance.CurrentConfig.ListenIP+ "  On Port: "+Config.Instance.CurrentConfig.LoginPort);
