@@ -33,6 +33,7 @@ namespace Chatengine.Relay
     using System.Text;
 
     using ChatEngine.CoreServer;
+    using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
 
     using IrcDotNet;
@@ -72,6 +73,11 @@ namespace Chatengine.Relay
         /// </summary>
         private IrcClient client = null;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private List<CellAoBotUser> cellAoBotUsers;
+
         #endregion
 
         #region Constructors and Destructors
@@ -81,7 +87,7 @@ namespace Chatengine.Relay
         public RelayBot()
             : base()
         {
-            // this.cellaoUsers = new List<CellAOUsers>();
+            this.cellAoBotUsers = new List<CellAoBotUser>();
         }
 
         #endregion
