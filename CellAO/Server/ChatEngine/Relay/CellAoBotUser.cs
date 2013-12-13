@@ -1,30 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
-using CellAO.Database;
-using IrcDotNet;
+﻿#region License
+
+// Copyright (c) 2005-2013, CellAO Team
+// 
+// 
+// All rights reserved.
+// 
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+
+#endregion
 
 namespace ChatEngine.Relay
 {
+    #region Usings ...
+
+    using System.Data.SqlClient;
+    using System.Diagnostics;
+
     using CellAO.Database.Dao;
+
+    using IrcDotNet;
+
+    #endregion
 
     public class CellAoBotUser
     {
+        #region Constructors and Destructors
+
         public CellAoBotUser(IrcUser ircUser)
         {
             Debug.Assert(ircUser != null);
             this.IrcUser = ircUser;
         }
 
-
-        public bool IsAuthenticated
-        {
-            get;
-            private set;
-        }
+        #endregion
 
         //public CellAoUser CellAoUser
         //{
@@ -32,50 +60,42 @@ namespace ChatEngine.Relay
         //    private set;
         //}
 
-        public IrcUser IrcUser
-        {
-            get;
-            private set;
-        }
+        #region Public Properties
 
-               public bool LogIn(string username, string password)
+        public IrcUser IrcUser { get; private set; }
+
+        public bool IsAuthenticated { get; private set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public bool LogIn(string username, string password)
         {
             try
             {
-                LoginDataDao.GetByUsername(username);
+                string dUser = LoginDataDao.GetByUsername(username).Username;
 
-
-
-                // Log in to Twitter service using xAuth authentication.
-                //var token = this.service.GetAccessTokenWithXAuth(username, password);
-               // this.service.AuthenticateWith(token.Token, token.TokenSecret);
-                //var user = this.service.GetUserProfile();
-               // if (user.Name == null)
+                if (dUser != username)
+                {
                     return false;
-                
-               // this.TwitterUser = user;
+                }
+
                 this.IsAuthenticated = true;
 
                 return true;
             }
-            catch (WebException exWeb)
+            catch (SqlException)
             {
-                var httpResponse = exWeb.Response as HttpWebResponse;
-                if (httpResponse != null)
-                {
-                    if (httpResponse.StatusCode == HttpStatusCode.Unauthorized)
-                        return false;
-                }
                 throw;
             }
         }
 
         public void LogOut()
         {
-            // Log out of Twitter service.
-            //this.service.EndSession();
-            //this.TwitterUser = null;
             this.IsAuthenticated = false;
         }
+
+        #endregion
     }
 }
