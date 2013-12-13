@@ -30,6 +30,7 @@ namespace LoginEngine
 
     using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
 
@@ -193,132 +194,148 @@ namespace LoginEngine
 
                     default:
 
-                        // This section handles the command for adding a user to the database
-                        if (consoleCommand.ToLower().StartsWith("adduser"))
+                        if (consoleCommand.ToLower().StartsWith("logoffchars"))
                         {
                             string[] parts = consoleCommand.Split(' ');
-                            if (parts.Length < 9)
+                            if (parts.Count() != 2)
                             {
-                                Console.WriteLine(
-                                    "Invalid command syntax." + Environment.NewLine + "Please use:"
-                                    + Environment.NewLine
-                                    + "Adduser <username> <password> <number of characters> <expansion> <gm level> <email> <FirstName> <LastName>");
+                                Console.WriteLine("Usage: logoffchars <username>");
+                            }
+                            else
+                            {
+                                LoginDataDao.LogoffChars(parts[1]);
                                 break;
                             }
-
-                            string username = parts[1];
-                            string password = parts[2];
-                            int numChars = 0;
-                            try
-                            {
-                                numChars = int.Parse(parts[3]);
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error: <number of characters> must be a number (duh!)");
-                                break;
-                            }
-
-                            int expansions = 0;
-                            try
-                            {
-                                expansions = int.Parse(parts[4]);
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error: <expansions> must be a number between 0 and 2047!");
-                                break;
-                            }
-
-                            if (expansions < 0 || expansions > 2047)
-                            {
-                                Console.WriteLine("Error: <expansions> must be a number between 0 and 2047!");
-                                break;
-                            }
-
-                            int gm = 0;
-                            try
-                            {
-                                gm = int.Parse(parts[5]);
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error: <GM Level> must be number (duh!)");
-                                break;
-                            }
-
-                            string email = parts[6];
-                            if (email == null)
-                            {
-                                email = string.Empty;
-                            }
-
-                            if (!TestEmailRegex.TestEmail(email))
-                            {
-                                Console.WriteLine("Error: <Email> You must supply an email address for this account");
-                                break;
-                            }
-
-                            string firstname = parts[7];
-                            try
-                            {
-                                if (firstname == null)
-                                {
-                                    throw new ArgumentNullException();
-                                }
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error: <FirstName> You must supply a first name for this accout");
-                                break;
-                            }
-
-                            string lastname = parts[8];
-                            try
-                            {
-                                if (lastname == null)
-                                {
-                                    throw new ArgumentNullException();
-                                }
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Error: <LastName> You must supply a last name for this account");
-                                break;
-                            }
-
-                            DBLoginData login = new DBLoginData
-                                                {
-                                                    Username = username, 
-                                                    AccountFlags = 0, 
-                                                    Allowed_Characters = numChars, 
-                                                    CreationDate = DateTime.Now, 
-                                                    Email = email, 
-                                                    Expansions = expansions, 
-                                                    FirstName = firstname, 
-                                                    LastName = lastname, 
-                                                    GM = gm, 
-                                                    Flags = 0, 
-                                                    Password =
-                                                        new LoginEncryption().GeneratePasswordHash(
-                                                            password)
-                                                };
-                            try
-                            {
-                                LoginDataDao.WriteLoginData(login);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(
-                                    "An error occured while trying to add a new user account:" + Environment.NewLine
-                                    + "{0}", 
-                                    ex.Message);
-                                break;
-                            }
-
-                            Console.WriteLine("User added successfully.");
-                            break;
                         }
+                        else
+                            
+                            // This section handles the command for adding a user to the database
+                            if (consoleCommand.ToLower().StartsWith("adduser"))
+                            {
+                                string[] parts = consoleCommand.Split(' ');
+                                if (parts.Length < 9)
+                                {
+                                    Console.WriteLine(
+                                        "Invalid command syntax." + Environment.NewLine + "Please use:"
+                                        + Environment.NewLine
+                                        + "Adduser <username> <password> <number of characters> <expansion> <gm level> <email> <FirstName> <LastName>");
+                                    break;
+                                }
+
+                                string username = parts[1];
+                                string password = parts[2];
+                                int numChars = 0;
+                                try
+                                {
+                                    numChars = int.Parse(parts[3]);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Error: <number of characters> must be a number (duh!)");
+                                    break;
+                                }
+
+                                int expansions = 0;
+                                try
+                                {
+                                    expansions = int.Parse(parts[4]);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Error: <expansions> must be a number between 0 and 2047!");
+                                    break;
+                                }
+
+                                if (expansions < 0 || expansions > 2047)
+                                {
+                                    Console.WriteLine("Error: <expansions> must be a number between 0 and 2047!");
+                                    break;
+                                }
+
+                                int gm = 0;
+                                try
+                                {
+                                    gm = int.Parse(parts[5]);
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Error: <GM Level> must be number (duh!)");
+                                    break;
+                                }
+
+                                string email = parts[6];
+                                if (email == null)
+                                {
+                                    email = string.Empty;
+                                }
+
+                                if (!TestEmailRegex.TestEmail(email))
+                                {
+                                    Console.WriteLine(
+                                        "Error: <Email> You must supply an email address for this account");
+                                    break;
+                                }
+
+                                string firstname = parts[7];
+                                try
+                                {
+                                    if (firstname == null)
+                                    {
+                                        throw new ArgumentNullException();
+                                    }
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Error: <FirstName> You must supply a first name for this accout");
+                                    break;
+                                }
+
+                                string lastname = parts[8];
+                                try
+                                {
+                                    if (lastname == null)
+                                    {
+                                        throw new ArgumentNullException();
+                                    }
+                                }
+                                catch
+                                {
+                                    Console.WriteLine("Error: <LastName> You must supply a last name for this account");
+                                    break;
+                                }
+
+                                DBLoginData login = new DBLoginData
+                                                    {
+                                                        Username = username, 
+                                                        AccountFlags = 0, 
+                                                        Allowed_Characters = numChars, 
+                                                        CreationDate = DateTime.Now, 
+                                                        Email = email, 
+                                                        Expansions = expansions, 
+                                                        FirstName = firstname, 
+                                                        LastName = lastname, 
+                                                        GM = gm, 
+                                                        Flags = 0, 
+                                                        Password =
+                                                            new LoginEncryption().GeneratePasswordHash(
+                                                                password)
+                                                    };
+                                try
+                                {
+                                    LoginDataDao.WriteLoginData(login);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(
+                                        "An error occured while trying to add a new user account:" + Environment.NewLine
+                                        + "{0}", 
+                                        ex.Message);
+                                    break;
+                                }
+
+                                Console.WriteLine("User added successfully.");
+                                break;
+                            }
 
                         // This function just hashes the string you enter using the loginencryption method
                         if (consoleCommand.ToLower().StartsWith("hash"))

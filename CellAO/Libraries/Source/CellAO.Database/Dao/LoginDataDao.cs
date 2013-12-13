@@ -131,6 +131,40 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="user">
+        /// </param>
+        public static void LogoffChars(string user)
+        {
+            IEnumerable<DBCharacter> characters = CharacterDao.GetAllForUser(user);
+            foreach (DBCharacter character in characters)
+            {
+                OnlineDao.SetOffline(character.Id);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="user">
+        /// </param>
+        /// <param name="gmlevel">
+        /// </param>
+        public static void SetGM(string user, int gmlevel)
+        {
+            try
+            {
+                using (IDbConnection conn = Connector.GetConnection())
+                {
+                    conn.Execute("UPDATE login SET GM=@gm", new { gm = gmlevel });
+                }
+            }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+        }
+
+        /// <summary>
         /// Write login data to table
         /// </summary>
         /// <param name="login">
