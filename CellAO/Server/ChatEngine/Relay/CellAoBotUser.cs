@@ -66,6 +66,14 @@ namespace ChatEngine.Relay
 
         public bool IsAuthenticated { get; private set; }
 
+        //TODO: Figure out how to get ChatServe to gather some information about Users?
+
+        //public TwitterUser TwitterUser
+        //{
+        //    get;
+        //    private set;
+        //}
+
         #endregion
 
         #region Public Methods and Operators

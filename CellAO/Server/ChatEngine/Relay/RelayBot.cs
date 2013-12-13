@@ -28,6 +28,7 @@ namespace Chatengine.Relay
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -35,7 +36,7 @@ namespace Chatengine.Relay
     using ChatEngine.CoreServer;
     using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
-
+    
     using IrcDotNet;
 
     using Utility;
@@ -380,6 +381,8 @@ namespace Chatengine.Relay
             string command, 
             IList<string> parameters)
         {
+            var sourceUser = (IrcUser)source;
+
             // var sourceUser = (IrcUser)source;
             // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
             // if (twitterUser != null)
@@ -572,15 +575,22 @@ namespace Chatengine.Relay
             localUser.SendNotice(target, "This is the {0}, welcome.", ProgramInfo.AssemblyTitle);
             localUser.SendNotice(target, "Message me with '.help' for instructions on how to use me.");
 
-            // localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
+             localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
         }
 
-        #endregion
 
-        // private void SendTweetInfo(IrcClient client, IList<IIrcMessageTarget> targets, TwitterStatus tweet)
-        // {
-        // client.LocalUser.SendMessage(targets, "@{0}: {1}", tweet.User.ScreenName,
-        // SanitizeTextForIrc(tweet.Text));
-        // }
+        //TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
+
+        //private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
+        //{
+        //    var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
+        //    if (twitterUser == null)
+        //        throw new InvalidOperationException(string.Format(
+        //            "User '{0}' is not logged in to Twitter.", ircUser.NickName));
+        //    return twitterUser;
+        //}
+
+
+        #endregion
     }
 }
