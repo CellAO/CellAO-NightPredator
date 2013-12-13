@@ -199,7 +199,8 @@ namespace LoginEngine
                             int gmlevel = 0;
                             if ((parts.Count() != 3) || (!Int32.TryParse(parts[2], out gmlevel)))
                             {
-                                Console.WriteLine("Usage: logoffchars <username>");
+                                Console.WriteLine("Usage: setgm <username> <gmlevel>");
+                                Console.WriteLine("gmlevel range: 0 - 511");
                             }
                             else
                             {
