@@ -193,7 +193,20 @@ namespace LoginEngine
                         break;
 
                     default:
-
+                        if (consoleCommand.ToLower().StartsWith("setgm"))
+                        {
+                            string[] parts = consoleCommand.Split(' ');
+                            int gmlevel = 0;
+                            if ((parts.Count() != 3) || (!Int32.TryParse(parts[2], out gmlevel)))
+                            {
+                                Console.WriteLine("Usage: logoffchars <username>");
+                            }
+                            else
+                            {
+                                LoginDataDao.SetGM(parts[1], gmlevel);
+                                break;
+                            }
+                        }
                         if (consoleCommand.ToLower().StartsWith("logoffchars"))
                         {
                             string[] parts = consoleCommand.Split(' ');
@@ -208,7 +221,7 @@ namespace LoginEngine
                             }
                         }
                         else
-                            
+
                             // This section handles the command for adding a user to the database
                             if (consoleCommand.ToLower().StartsWith("adduser"))
                             {
@@ -306,16 +319,16 @@ namespace LoginEngine
 
                                 DBLoginData login = new DBLoginData
                                                     {
-                                                        Username = username, 
-                                                        AccountFlags = 0, 
-                                                        Allowed_Characters = numChars, 
-                                                        CreationDate = DateTime.Now, 
-                                                        Email = email, 
-                                                        Expansions = expansions, 
-                                                        FirstName = firstname, 
-                                                        LastName = lastname, 
-                                                        GM = gm, 
-                                                        Flags = 0, 
+                                                        Username = username,
+                                                        AccountFlags = 0,
+                                                        Allowed_Characters = numChars,
+                                                        CreationDate = DateTime.Now,
+                                                        Email = email,
+                                                        Expansions = expansions,
+                                                        FirstName = firstname,
+                                                        LastName = lastname,
+                                                        GM = gm,
+                                                        Flags = 0,
                                                         Password =
                                                             new LoginEncryption().GeneratePasswordHash(
                                                                 password)
@@ -328,7 +341,7 @@ namespace LoginEngine
                                 {
                                     Console.WriteLine(
                                         "An error occured while trying to add a new user account:" + Environment.NewLine
-                                        + "{0}", 
+                                        + "{0}",
                                         ex.Message);
                                     break;
                                 }
