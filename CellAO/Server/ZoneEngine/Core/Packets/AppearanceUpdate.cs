@@ -81,6 +81,7 @@ namespace ZoneEngine.Core.Packets
             // int ShoulderMeshRightValue;
             int VisualFlags;
             int PlayField;
+            int bodyMesh = 0;
 
             /*
             int OverrideTextureHead;
@@ -101,6 +102,7 @@ namespace ZoneEngine.Core.Packets
 
                 socialonly = (VisualFlags & 0x40) > 0;
                 showsocial = (VisualFlags & 0x20) > 0;
+                bodyMesh = character.Stats[StatIds.mesh].Value;
 
                 /*
                 showhelmet = ((character.Stats.VisualFlags.Value & 0x4) > 0);
@@ -194,6 +196,7 @@ namespace ZoneEngine.Core.Packets
                             Layer = (byte)mesh.Layer
                         }).ToArray();
             message.VisualFlags = (short)VisualFlags;
+            message.Unknown1 = (byte)bodyMesh;
 
             character.Playfield.Announce(message);
         }

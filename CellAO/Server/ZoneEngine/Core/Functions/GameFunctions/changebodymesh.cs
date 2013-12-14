@@ -105,11 +105,18 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity Target, 
             MessagePackObject[] Arguments)
         {
-            return true;
-
             // TODO: Wait for mesh name list
             Character ch = (Character)Self;
-            ch.Stats[StatIds.mesh].Value = Arguments[0].AsInt32();
+            switch (Arguments[0].AsString())
+            {
+                case "robe":
+                    ch.Stats[StatIds.mesh].Value = 1;
+                    break;
+                default:
+                    ch.Stats[StatIds.mesh].Value = 0;
+                    break;
+            }
+
             return true;
         }
 

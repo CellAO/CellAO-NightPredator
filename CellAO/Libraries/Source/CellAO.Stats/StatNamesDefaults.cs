@@ -100,10 +100,10 @@ namespace CellAO.Stats
             NameList.Add(32, "HairMesh");
             NameList.Add(33, "Side");
             NameList.Add(34, "DeadTimer");
-            NameList.Add(35, "AccessCount");
-            NameList.Add(36, "AttackCount");
+            NameList.Add(35, "AccessCount"); // DamageToPet
+            NameList.Add(36, "AttackCount"); 
             NameList.Add(37, "TitleLevel");
-            NameList.Add(38, "BackMesh");
+            NameList.Add(38, "BackMesh"); // CombatRange
             NameList.Add(40, "AlienXP");
             NameList.Add(41, "FabricType");
             NameList.Add(42, "CATMesh");
@@ -262,7 +262,7 @@ namespace CellAO.Stats
             NameList.Add(195, "AccessKey");
             NameList.Add(196, "PetMaster");
             NameList.Add(197, "OrientationMode");
-            NameList.Add(198, "SessionTime");
+            NameList.Add(198, "SessionTime"); // MissionBits13
             NameList.Add(199, "RP");
             NameList.Add(200, "Conformity");
             NameList.Add(201, "Aggressiveness");
@@ -273,7 +273,7 @@ namespace CellAO.Stats
             NameList.Add(206, "ReflectMeleeAC");
             NameList.Add(207, "ReflectEnergyAC");
             NameList.Add(208, "ReflectChemicalAC");
-            NameList.Add(210, "RechargeDelay");
+            NameList.Add(210, "RechargeDelay"); // WeaponMesh
             NameList.Add(211, "EquipDelay");
             NameList.Add(212, "MaxEnergy");
             NameList.Add(213, "TeamSide");
@@ -498,7 +498,7 @@ namespace CellAO.Stats
             NameList.Add(432, "MissionBits4");
             NameList.Add(433, "OwnerInstance");
             NameList.Add(434, "CharState");
-            NameList.Add(435, "ReadOnly");
+            NameList.Add(435, "ReadOnly"); 
             NameList.Add(436, "DamageType");
             NameList.Add(437, "CollideCheckInterval");
             NameList.Add(438, "PlayfieldType");
@@ -712,7 +712,7 @@ namespace CellAO.Stats
             NameList.Add(652, "AdvantageHash2");
             NameList.Add(653, "AdvantageHash3");
             NameList.Add(654, "AdvantageHash4");
-            NameList.Add(655, "AdvantageHash5");
+            NameList.Add(655, "AdvantageHash5"); 
             NameList.Add(656, "ShopIndex");
             NameList.Add(657, "ShopID");
             NameList.Add(658, "IsVehicle");
@@ -741,8 +741,10 @@ namespace CellAO.Stats
             NameList.Add(682, "PVPSoloScore");
             NameList.Add(683, "PVPTeamScore");
             NameList.Add(684, "PVPDuelScore");
-            NameList.Add(700, "ACGItemSeed");
-            NameList.Add(701, "ACGItemLevel");
+            NameList.Add(685, "MissionBits14");
+            NameList.Add(686, "MissionBits15");
+            NameList.Add(700, "ACGItemSeed"); 
+            NameList.Add(701, "ACGItemLevel"); 
             NameList.Add(702, "ACGItemTemplateID");
             NameList.Add(703, "ACGItemTemplateID2");
             NameList.Add(704, "ACGItemCategoryID");

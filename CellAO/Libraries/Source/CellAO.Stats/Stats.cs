@@ -3225,7 +3225,7 @@ namespace CellAO.Stats
             this.memberInstance = new Stat(this, 308, 1234567890, false, false, false);
             this.memberType = new Stat(this, 307, 1234567890, false, false, false);
             this.members = new Stat(this, 300, 999, false, false, false);
-            this.mesh = new OverridingModifierStat(this, 12, 17530, false, false, false);
+            this.mesh = new OverridingModifierStat(this, 12, 0, false, false, false);
             this.metaType = new Stat(this, 75, 0, false, false, false);
             this.metersWalked = new Stat(this, 252, 1234567890, false, false, false);
             this.minDamage = new Stat(this, 286, 1234567890, false, false, false);
