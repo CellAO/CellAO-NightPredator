@@ -60,7 +60,7 @@ namespace Utility
         /// </param>
         /// <param name="command">
         /// </param>
-        public void AddEntry(string commandString, Action command)
+        public void AddEntry(string commandString, Action<string[]> command)
         {
             this.entries.Add(new ServerConsoleCommandEntry() { Command = command, CommandString = commandString });
         }
@@ -73,9 +73,25 @@ namespace Utility
         /// </returns>
         public bool Execute(string commandString)
         {
-            if (this.entries.Any(x => x.CommandString == commandString))
+            // First lets remove double spaces
+            while (commandString.IndexOf("  ") > -1)
             {
-                this.entries.Single(x => x.CommandString == commandString).Command();
+                commandString = commandString.Replace("  ", " ");
+            }
+
+            // Then leading or trailing spaces
+            commandString = commandString.Trim();
+
+            // Empty command string -> no command at all
+            if (commandString == string.Empty)
+            {
+                return false;
+            }
+
+            string[] parts = commandString.Split(' ');
+            if (this.entries.Any(x => x.CommandString == parts[0]))
+            {
+                this.entries.Single(x => x.CommandString == parts[0]).Command(parts);
                 return true;
             }
 
@@ -94,8 +110,9 @@ namespace Utility
 
             foreach (ServerConsoleCommandEntry serverConsoleCommandEntry in this.entries)
             {
+                output += output == string.Empty ? string.Empty : Environment.NewLine;
                 output += serverConsoleCommandEntry.CommandString.PadRight(maxLength + 1)
-                          + this.HelpText(serverConsoleCommandEntry.CommandString) + Environment.NewLine;
+                          + this.HelpText(serverConsoleCommandEntry.CommandString);
             }
 
             return output;

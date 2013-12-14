@@ -207,21 +207,23 @@ namespace CellAO.Database.Dao
         /// <param name="login">
         /// DBLoginData object
         /// </param>
-        public static void WriteNewPassword(DBLoginData login)
+        /// <returns>
+        /// </returns>
+        public static int WriteNewPassword(DBLoginData login)
         {
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    conn.Execute(
-                        "UPDATE login SET password=@pwd WHERE Username=@user", 
+                    return conn.Execute(
+                        "UPDATE login SET password=@pwd WHERE Username=@user LIMIT 1", 
                         new { pwd = login.Password, user = login.Username });
                 }
             }
             catch (Exception e)
             {
                 LogUtil.ErrorException(e);
-                throw;
+                return 0;
             }
         }
 

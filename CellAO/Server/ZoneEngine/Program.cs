@@ -103,7 +103,7 @@ namespace ZoneEngine
         /// <summary>
         /// Check the database
         /// </summary>
-        private static void CheckDatabase()
+        private static void CheckDatabase(string[] parts)
         {
             Misc.CheckDatabase();
         }
@@ -458,7 +458,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void IsServerRunning()
+        private static void IsServerRunning(string[] parts)
         {
             Colouring.Push(ConsoleColor.White);
             if (zoneServer.IsRunning)
@@ -475,7 +475,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void ListAvailableScripts()
+        private static void ListAvailableScripts(string[] parts)
         {
             // list all available scripts, dont remove it since it does what it should
             Colouring.Push(ConsoleColor.White);
@@ -599,7 +599,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void PingChatServer()
+        private static void PingChatServer(string[] parts)
         {
             // ChatCom.Server.Ping();
             Console.WriteLine("Ping is disabled till we can do it");
@@ -607,7 +607,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void SetDebugGameFunctions()
+        private static void SetDebugGameFunctions(string[] parts)
         {
             DebugGameFunctions = !DebugGameFunctions;
             Colouring.Push(ConsoleColor.Green);
@@ -625,7 +625,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void SetDebugNetwork()
+        private static void SetDebugNetwork(string[] parts)
         {
             DebugNetwork = !DebugNetwork;
             Colouring.Push(ConsoleColor.Green);
@@ -656,7 +656,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void ShowOnlineCharacters()
+        private static void ShowOnlineCharacters(string[] parts)
         {
             if (zoneServer.IsRunning)
             {
@@ -677,7 +677,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void ShutDownServer()
+        private static void ShutDownServer(string[] parts)
         {
             if (zoneServer.IsRunning)
             {
@@ -690,7 +690,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void StartServer()
+        private static void StartServer(string[] parts)
         {
             if (zoneServer.IsRunning)
             {
@@ -708,7 +708,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void StartServerMultipleScriptDlls()
+        private static void StartServerMultipleScriptDlls(string[] parts)
         {
             // Multiple dll compile
             if (zoneServer.IsRunning)
@@ -743,7 +743,7 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        private static void StopServer()
+        private static void StopServer(string[] parts)
         {
             if (!zoneServer.IsRunning)
             {

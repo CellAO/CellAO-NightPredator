@@ -40,7 +40,7 @@ namespace Utility
 
         /// <summary>
         /// </summary>
-        public Action Command;
+        public Action<string[]> Command;
 
         /// <summary>
         /// </summary>
