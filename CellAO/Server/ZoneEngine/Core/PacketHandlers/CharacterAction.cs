@@ -65,391 +65,398 @@ namespace ZoneEngine.Core.PacketHandlers
             switch (actionNum)
             {
                 case 19:
-                {
-                    // Cast nano
-                    // CastNanoSpell
-                    var msg = new CastNanoSpellMessage
-                              {
-                                  Identity = client.Character.Identity, 
-                                  Unknown = 0x00, 
-                                  NanoId = args2, 
-                                  Target = packet.Target, 
-                                  Unknown1 = 0x00000000, 
-                                  Caster = client.Character.Identity
-                              };
+                    {
+                        // Cast nano
+                        // CastNanoSpell
+                        var msg = new CastNanoSpellMessage
+                        {
+                            Identity = client.Character.Identity,
+                            Unknown = 0x00,
+                            NanoId = args2,
+                            Target = packet.Target,
+                            Unknown1 = 0x00000000,
+                            Caster = client.Character.Identity
+                        };
 
-                    client.Character.Playfield.Announce(msg);
+                        client.Character.Playfield.Announce(msg);
 
-                    // CharacterAction 107
-                    var characterAction107 = new CharacterActionMessage
-                                             {
-                                                 Identity = client.Character.Identity, 
-                                                 Unknown = 0x00, 
-                                                 Action = CharacterActionType.Unknown1, 
-                                                 Unknown1 = 0x00000000, 
-                                                 Target = Identity.None, 
-                                                 Parameter1 = 1, 
-                                                 Parameter2 = args2, 
-                                                 Unknown2 = 0x0000
-                                             };
-                    client.Character.Playfield.Announce(characterAction107);
+                        // TODO: This has to be delayed (Casting attack speed) and needs to move to some other part
+                        // TODO: Check nanoskill requirements
+                        // TODO: Lower current nano points/check if enough nano points
 
-                    // CharacterAction 98
-                    var characterAction98 = new CharacterActionMessage
-                                            {
-                                                Identity = packet.Target, 
-                                                Unknown = 0x00, 
-                                                Action = CharacterActionType.Unknown2, 
-                                                Unknown1 = 0x00000000, 
-                                                Target =
-                                                    new Identity
-                                                    {
-                                                        Type =
-                                                            IdentityType
-                                                            .NanoProgram, 
-                                                        Instance = args2
-                                                    }, 
-                                                Parameter1 = client.Character.Identity.Instance, 
-                                                Parameter2 = 0x249F0, // duration?
-                                                Unknown2 = 0x0000
-                                            };
-                    client.Character.Playfield.Announce(characterAction98);
-                }
+                        // CharacterAction 107
+                        var characterAction107 = new CharacterActionMessage
+                        {
+                            Identity = client.Character.Identity,
+                            Unknown = 0x00,
+                            Action = CharacterActionType.FinishNanoCasting,
+                            Unknown1 = 0x00000000,
+                            Target = Identity.None,
+                            Parameter1 = 1,
+                            Parameter2 = args2,
+                            Unknown2 = 0x0000
+                        };
+
+                        client.Character.Playfield.Announce(characterAction107);
+
+                        // CharacterAction 98
+                        var characterAction98 = new CharacterActionMessage
+                        {
+                            Identity = packet.Target,
+                            Unknown = 0x00,
+                            Action = CharacterActionType.SetNanoDuration,
+                            Unknown1 = 0x00000000,
+                            Target =
+                                new Identity
+                                {
+                                    Type =
+                                        IdentityType
+                                        .NanoProgram,
+                                    Instance = args2
+                                },
+                            Parameter1 = client.Character.Identity.Instance,
+                            Parameter2 = 0x249F0, // duration? 
+                            // Algorithman: Yes, it's duration
+                            Unknown2 = 0x0000
+                        };
+
+                        client.Character.Playfield.Announce(characterAction98);
+                    }
 
                     break;
 
-                    /* this is here to prevent server crash that is caused by
-         * search action if server doesn't reply if something is
-         * found or not */
+                /* this is here to prevent server crash that is caused by
+     * search action if server doesn't reply if something is
+     * found or not */
                 case 66:
-                {
-                    // If action == search
-                    /* Msg 110:136744723 = "No hidden objects found." */
-                    // TODO: SEARCH!!
-                    SendFeedback.Send(client, 110, 136744723);
-                }
+                    {
+                        // If action == search
+                        /* Msg 110:136744723 = "No hidden objects found." */
+                        // TODO: SEARCH!!
+                        SendFeedback.Send(client, 110, 136744723);
+                    }
 
                     break;
 
                 case 105:
-                {
-                    // If action == Info Request
-                    IInstancedEntity tPlayer = client.Playfield.FindByIdentity(packet.Target);
-                    var tChar = tPlayer as Character;
-                    if (tChar != null)
                     {
-                        uint LegacyScore = tChar.Stats[StatIds.pvp_rating].BaseValue;
-                        string LegacyTitle = null;
-                        if (LegacyScore < 1400)
+                        // If action == Info Request
+                        IInstancedEntity tPlayer = client.Playfield.FindByIdentity(packet.Target);
+                        var tChar = tPlayer as Character;
+                        if (tChar != null)
                         {
-                            LegacyTitle = string.Empty;
-                        }
-                        else if (LegacyScore < 1500)
-                        {
-                            LegacyTitle = "Freshman";
-                        }
-                        else if (LegacyScore < 1600)
-                        {
-                            LegacyTitle = "Rookie";
-                        }
-                        else if (LegacyScore < 1700)
-                        {
-                            LegacyTitle = "Apprentice";
-                        }
-                        else if (LegacyScore < 1800)
-                        {
-                            LegacyTitle = "Novice";
-                        }
-                        else if (LegacyScore < 1900)
-                        {
-                            LegacyTitle = "Neophyte";
-                        }
-                        else if (LegacyScore < 2000)
-                        {
-                            LegacyTitle = "Experienced";
-                        }
-                        else if (LegacyScore < 2100)
-                        {
-                            LegacyTitle = "Expert";
-                        }
-                        else if (LegacyScore < 2300)
-                        {
-                            LegacyTitle = "Master";
-                        }
-                        else if (LegacyScore < 2500)
-                        {
-                            LegacyTitle = "Champion";
-                        }
-                        else
-                        {
-                            LegacyTitle = "Grand Master";
-                        }
-
-                        int orgGoverningForm = 0;
-                        try
-                        {
-                            orgGoverningForm = OrganizationDao.GetGovernmentForm(tChar.Stats[StatIds.clan].Value);
-                        }
-                        catch (Exception)
-                        {
-                        }
-
-                        // Uses methods in ZoneEngine\PacketHandlers\OrgClient.cs
-                        /* Known packetFlags--
-                                 * 0x40 - No org | 0x41 - Org | 0x43 - Org and towers | 0x47 - Org, towers, player has personal towers | 0x50 - No pvp data shown
-                                 * Bitflags--
-                                 * Bit0 = hasOrg, Bit1 = orgTowers, Bit2 = personalTowers, Bit3 = (Int32) time until supression changes (Byte) type of supression level?, Bit4 = noPvpDataShown, Bit5 = hasFaction, Bit6 = ?, Bit 7 = null.
-                                */
-
-                        int? orgId;
-                        string orgRank;
-                        InfoPacketType type;
-                        if (tPlayer.Stats[StatIds.clan].BaseValue == 0)
-                        {
-                            type = InfoPacketType.Character;
-                            orgId = null;
-                            orgRank = null;
-                        }
-                        else
-                        {
-                            type = InfoPacketType.CharacterOrg;
-                            orgId = (int?)tPlayer.Stats[StatIds.clan].BaseValue;
-                            if (client.Character.Stats[StatIds.clan].BaseValue == tPlayer.Stats[StatIds.clan].BaseValue)
+                            uint LegacyScore = tChar.Stats[StatIds.pvp_rating].BaseValue;
+                            string LegacyTitle = null;
+                            if (LegacyScore < 1400)
                             {
-                                orgRank = OrgClient.GetRank(
-                                    orgGoverningForm, 
-                                    tPlayer.Stats[StatIds.clanlevel].BaseValue);
+                                LegacyTitle = string.Empty;
+                            }
+                            else if (LegacyScore < 1500)
+                            {
+                                LegacyTitle = "Freshman";
+                            }
+                            else if (LegacyScore < 1600)
+                            {
+                                LegacyTitle = "Rookie";
+                            }
+                            else if (LegacyScore < 1700)
+                            {
+                                LegacyTitle = "Apprentice";
+                            }
+                            else if (LegacyScore < 1800)
+                            {
+                                LegacyTitle = "Novice";
+                            }
+                            else if (LegacyScore < 1900)
+                            {
+                                LegacyTitle = "Neophyte";
+                            }
+                            else if (LegacyScore < 2000)
+                            {
+                                LegacyTitle = "Experienced";
+                            }
+                            else if (LegacyScore < 2100)
+                            {
+                                LegacyTitle = "Expert";
+                            }
+                            else if (LegacyScore < 2300)
+                            {
+                                LegacyTitle = "Master";
+                            }
+                            else if (LegacyScore < 2500)
+                            {
+                                LegacyTitle = "Champion";
                             }
                             else
                             {
-                                orgRank = string.Empty;
+                                LegacyTitle = "Grand Master";
                             }
-                        }
 
-                        var info = new CharacterInfoPacket
-                                   {
-                                       Unknown1 = 0x01, 
-                                       Profession =
-                                           (Profession)tPlayer.Stats[StatIds.profession].Value, 
-                                       Level = (byte)tPlayer.Stats[StatIds.level].Value, 
-                                       TitleLevel = (byte)tPlayer.Stats[StatIds.titlelevel].Value, 
-                                       VisualProfession =
-                                           (Profession)tPlayer.Stats[StatIds.visualflags].Value, 
-                                       SideXp = 0, 
-                                       Health = tPlayer.Stats[StatIds.health].Value, 
-                                       MaxHealth = tPlayer.Stats[StatIds.life].Value, 
-                                       BreedHostility = 0x00000000, 
-                                       OrganizationId = orgId, 
-                                       FirstName = tChar.FirstName, 
-                                       LastName = tChar.LastName, 
-                                       LegacyTitle = LegacyTitle, 
-                                       Unknown2 = 0x0000, 
-                                       OrganizationRank = orgRank, 
-                                       TowerFields = null, 
-                                       CityPlayfieldId = 0x00000000, 
-                                       Towers = null, 
-                                       InvadersKilled =
-                                           tPlayer.Stats[StatIds.invaderskilled].Value, 
-                                       KilledByInvaders =
-                                           tPlayer.Stats[StatIds.killedbyinvaders].Value, 
-                                       AiLevel = tPlayer.Stats[StatIds.alienlevel].Value, 
-                                       PvpDuelWins = tPlayer.Stats[StatIds.pvpduelkills].Value, 
-                                       PvpDuelLoses = tPlayer.Stats[StatIds.pvpdueldeaths].Value, 
-                                       PvpProfessionDuelLoses =
-                                           tPlayer.Stats[StatIds.pvpprofessiondueldeaths].Value, 
-                                       PvpSoloKills =
-                                           tPlayer.Stats[StatIds.pvprankedsolokills].Value, 
-                                       PvpTeamKills =
-                                           tPlayer.Stats[StatIds.pvprankedteamkills].Value, 
-                                       PvpSoloScore = tPlayer.Stats[StatIds.pvpsoloscore].Value, 
-                                       PvpTeamScore = tPlayer.Stats[StatIds.pvpteamscore].Value, 
-                                       PvpDuelScore = tPlayer.Stats[StatIds.pvpduelscore].Value
-                                   };
+                            int orgGoverningForm = 0;
+                            try
+                            {
+                                orgGoverningForm = OrganizationDao.GetGovernmentForm(tChar.Stats[StatIds.clan].Value);
+                            }
+                            catch (Exception)
+                            {
+                            }
 
-                        var infoPacketMessage = new InfoPacketMessage
-                                                {
-                                                    Identity = tPlayer.Identity, 
-                                                    Unknown = 0x00, 
-                                                    Type = type, 
-                                                    Info = info
-                                                };
+                            // Uses methods in ZoneEngine\PacketHandlers\OrgClient.cs
+                            /* Known packetFlags--
+                                     * 0x40 - No org | 0x41 - Org | 0x43 - Org and towers | 0x47 - Org, towers, player has personal towers | 0x50 - No pvp data shown
+                                     * Bitflags--
+                                     * Bit0 = hasOrg, Bit1 = orgTowers, Bit2 = personalTowers, Bit3 = (Int32) time until supression changes (Byte) type of supression level?, Bit4 = noPvpDataShown, Bit5 = hasFaction, Bit6 = ?, Bit 7 = null.
+                                    */
 
-                        client.SendCompressed(infoPacketMessage);
-                    }
-                    else
-                    {
-                        // TODO: NPC's
-                        /*
-                                var npc =
-                                    (NonPlayerCharacterClass)
-                                    FindDynel.FindDynelById(packet.Target);
-                                if (npc != null)
+                            int? orgId;
+                            string orgRank;
+                            InfoPacketType type;
+                            if (tPlayer.Stats[StatIds.clan].BaseValue == 0)
+                            {
+                                type = InfoPacketType.Character;
+                                orgId = null;
+                                orgRank = null;
+                            }
+                            else
+                            {
+                                type = InfoPacketType.CharacterOrg;
+                                orgId = (int?)tPlayer.Stats[StatIds.clan].BaseValue;
+                                if (client.Character.Stats[StatIds.clan].BaseValue == tPlayer.Stats[StatIds.clan].BaseValue)
                                 {
-                                    var infoPacket = new PacketWriter();
+                                    orgRank = OrgClient.GetRank(
+                                        orgGoverningForm,
+                                        tPlayer.Stats[StatIds.clanlevel].BaseValue);
+                                }
+                                else
+                                {
+                                    orgRank = string.Empty;
+                                }
+                            }
 
-                                    // Start packet header
-                                    infoPacket.PushByte(0xDF);
-                                    infoPacket.PushByte(0xDF);
-                                    infoPacket.PushShort(10);
-                                    infoPacket.PushShort(1);
-                                    infoPacket.PushShort(0);
-                                    infoPacket.PushInt(3086); // sender (server ID)
-                                    infoPacket.PushInt(client.Character.Id.Instance); // receiver 
-                                    infoPacket.PushInt(0x4D38242E); // packet ID
-                                    infoPacket.PushIdentity(npc.Id); // affected identity
-                                    infoPacket.PushByte(0); // ?
+                            var info = new CharacterInfoPacket
+                            {
+                                Unknown1 = 0x01,
+                                Profession =
+                                    (Profession)tPlayer.Stats[StatIds.profession].Value,
+                                Level = (byte)tPlayer.Stats[StatIds.level].Value,
+                                TitleLevel = (byte)tPlayer.Stats[StatIds.titlelevel].Value,
+                                VisualProfession =
+                                    (Profession)tPlayer.Stats[StatIds.visualflags].Value,
+                                SideXp = 0,
+                                Health = tPlayer.Stats[StatIds.health].Value,
+                                MaxHealth = tPlayer.Stats[StatIds.life].Value,
+                                BreedHostility = 0x00000000,
+                                OrganizationId = orgId,
+                                FirstName = tChar.FirstName,
+                                LastName = tChar.LastName,
+                                LegacyTitle = LegacyTitle,
+                                Unknown2 = 0x0000,
+                                OrganizationRank = orgRank,
+                                TowerFields = null,
+                                CityPlayfieldId = 0x00000000,
+                                Towers = null,
+                                InvadersKilled =
+                                    tPlayer.Stats[StatIds.invaderskilled].Value,
+                                KilledByInvaders =
+                                    tPlayer.Stats[StatIds.killedbyinvaders].Value,
+                                AiLevel = tPlayer.Stats[StatIds.alienlevel].Value,
+                                PvpDuelWins = tPlayer.Stats[StatIds.pvpduelkills].Value,
+                                PvpDuelLoses = tPlayer.Stats[StatIds.pvpdueldeaths].Value,
+                                PvpProfessionDuelLoses =
+                                    tPlayer.Stats[StatIds.pvpprofessiondueldeaths].Value,
+                                PvpSoloKills =
+                                    tPlayer.Stats[StatIds.pvprankedsolokills].Value,
+                                PvpTeamKills =
+                                    tPlayer.Stats[StatIds.pvprankedteamkills].Value,
+                                PvpSoloScore = tPlayer.Stats[StatIds.pvpsoloscore].Value,
+                                PvpTeamScore = tPlayer.Stats[StatIds.pvpteamscore].Value,
+                                PvpDuelScore = tPlayer.Stats[StatIds.pvpduelscore].Value
+                            };
 
-                                    // End packet header
-                                    infoPacket.PushByte(0x50); // npc's just have 0x50
-                                    infoPacket.PushByte(1); // esi_001?
-                                    infoPacket.PushByte((byte)npc.Stats.Profession.Value); // Profession
-                                    infoPacket.PushByte((byte)npc.Stats.Level.Value); // Level
-                                    infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value); // Titlelevel
-                                    infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value); // Visual Profession
+                            var infoPacketMessage = new InfoPacketMessage
+                            {
+                                Identity = tPlayer.Identity,
+                                Unknown = 0x00,
+                                Type = type,
+                                Info = info
+                            };
 
-                                    infoPacket.PushShort(0); // no idea for npc's
-                                    infoPacket.PushUInt(npc.Stats.Health.Value); // Current Health (Health)
-                                    infoPacket.PushUInt(npc.Stats.Life.Value); // Max Health (Life)
-                                    infoPacket.PushInt(0); // BreedHostility?
-                                    infoPacket.PushUInt(0); // org ID
-                                    infoPacket.PushShort(0);
-                                    infoPacket.PushShort(0);
-                                    infoPacket.PushShort(0);
-                                    infoPacket.PushShort(0);
-                                    infoPacket.PushInt(0x499602d2);
-                                    infoPacket.PushInt(0x499602d2);
-                                    infoPacket.PushInt(0x499602d2);
-                                    var infoPacketA = infoPacket.Finish();
-                                    client.SendCompressed(infoPacketA);
-                                }*/
+                            client.SendCompressed(infoPacketMessage);
+                        }
+                        else
+                        {
+                            // TODO: NPC's
+                            /*
+                                    var npc =
+                                        (NonPlayerCharacterClass)
+                                        FindDynel.FindDynelById(packet.Target);
+                                    if (npc != null)
+                                    {
+                                        var infoPacket = new PacketWriter();
+
+                                        // Start packet header
+                                        infoPacket.PushByte(0xDF);
+                                        infoPacket.PushByte(0xDF);
+                                        infoPacket.PushShort(10);
+                                        infoPacket.PushShort(1);
+                                        infoPacket.PushShort(0);
+                                        infoPacket.PushInt(3086); // sender (server ID)
+                                        infoPacket.PushInt(client.Character.Id.Instance); // receiver 
+                                        infoPacket.PushInt(0x4D38242E); // packet ID
+                                        infoPacket.PushIdentity(npc.Id); // affected identity
+                                        infoPacket.PushByte(0); // ?
+
+                                        // End packet header
+                                        infoPacket.PushByte(0x50); // npc's just have 0x50
+                                        infoPacket.PushByte(1); // esi_001?
+                                        infoPacket.PushByte((byte)npc.Stats.Profession.Value); // Profession
+                                        infoPacket.PushByte((byte)npc.Stats.Level.Value); // Level
+                                        infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value); // Titlelevel
+                                        infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value); // Visual Profession
+
+                                        infoPacket.PushShort(0); // no idea for npc's
+                                        infoPacket.PushUInt(npc.Stats.Health.Value); // Current Health (Health)
+                                        infoPacket.PushUInt(npc.Stats.Life.Value); // Max Health (Life)
+                                        infoPacket.PushInt(0); // BreedHostility?
+                                        infoPacket.PushUInt(0); // org ID
+                                        infoPacket.PushShort(0);
+                                        infoPacket.PushShort(0);
+                                        infoPacket.PushShort(0);
+                                        infoPacket.PushShort(0);
+                                        infoPacket.PushInt(0x499602d2);
+                                        infoPacket.PushInt(0x499602d2);
+                                        infoPacket.PushInt(0x499602d2);
+                                        var infoPacketA = infoPacket.Finish();
+                                        client.SendCompressed(infoPacketA);
+                                    }*/
+                        }
                     }
-                }
 
                     break;
 
                 case 120:
-                {
-                    // If action == Logout
-                    // Start 30 second logout timer if client is not a GM (statid 215)
-                    if (client.Character.Stats[StatIds.gmlevel].Value == 0)
                     {
-                        // client.startLogoutTimer();
+                        // If action == Logout
+                        // Start 30 second logout timer if client is not a GM (statid 215)
+                        if (client.Character.Stats[StatIds.gmlevel].Value == 0)
+                        {
+                            // client.startLogoutTimer();
+                        }
+                        else
+                        {
+                            // If client is a GM, disconnect without timer
+                            client.Server.DisconnectClient(client);
+                        }
                     }
-                    else
-                    {
-                        // If client is a GM, disconnect without timer
-                        client.Server.DisconnectClient(client);
-                    }
-                }
 
                     break;
                 case 121:
-                {
-                    // If action == Stop Logout
-                    // Stop current logout timer and send stop logout packet
-                    client.Character.UpdateMoveType((byte)client.Character.PreviousMoveMode);
-                    client.Playfield.Announce(packet);
+                    {
+                        // If action == Stop Logout
+                        // Stop current logout timer and send stop logout packet
+                        client.Character.UpdateMoveType((byte)client.Character.PreviousMoveMode);
+                        client.Playfield.Announce(packet);
 
-                    // client.CancelLogOut();
-                }
+                        // client.CancelLogOut();
+                    }
 
                     break;
 
                 case 87:
-                {
-                    // If action == Stand
-                    client.Character.UpdateMoveType(37);
-                    client.Playfield.Announce(packet);
+                    {
+                        // If action == Stand
+                        client.Character.UpdateMoveType(37);
+                        client.Playfield.Announce(packet);
 
-                    // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
-                    // client.StandCancelLogout();
-                }
+                        // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
+                        // client.StandCancelLogout();
+                    }
 
                     break;
 
                 case 22:
-                {
-                    // Kick Team Member
-                }
+                    {
+                        // Kick Team Member
+                    }
 
                     break;
                 case 24:
-                {
-                    // Leave Team
-                    /*
-                            var team = new TeamClass();
-                            team.LeaveTeam(client);
-                             */
-                }
+                    {
+                        // Leave Team
+                        /*
+                                var team = new TeamClass();
+                                team.LeaveTeam(client);
+                                 */
+                    }
 
                     break;
                 case 25:
-                {
-                    // Transfer Team Leadership
-                }
+                    {
+                        // Transfer Team Leadership
+                    }
 
                     break;
                 case 26:
-                {
-                    // Team Join Request
-                    // Send Team Invite Request To Target Player
-                    /*
-                            var team = new TeamClass();
-                            team.SendTeamRequest(client, packet.Target);
-                             */
-                }
+                    {
+                        // Team Join Request
+                        // Send Team Invite Request To Target Player
+                        /*
+                                var team = new TeamClass();
+                                team.SendTeamRequest(client, packet.Target);
+                                 */
+                    }
 
                     break;
                 case 28:
-                {
-                    /*
-                            // Request Reply
-                            // Check if positive or negative response
+                    {
+                        /*
+                                // Request Reply
+                                // Check if positive or negative response
 
-                            // if positive
-                            var team = new TeamClass();
-                            var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
+                                // if positive
+                                var team = new TeamClass();
+                                var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
 
-                            // Destination Client 0 = Sender, 1 = Reciever
+                                // Destination Client 0 = Sender, 1 = Reciever
 
-                            // Reciever Packets
-                            ///////////////////
+                                // Reciever Packets
+                                ///////////////////
 
-                            // CharAction 15
-                            team.TeamRequestReply(client, packet.Target);
+                                // CharAction 15
+                                team.TeamRequestReply(client, packet.Target);
 
-                            // CharAction 23
-                            team.TeamRequestReplyCharacterAction23(client, packet.Target);
+                                // CharAction 23
+                                team.TeamRequestReplyCharacterAction23(client, packet.Target);
 
-                            // TeamMember Packet
-                            team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
+                                // TeamMember Packet
+                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
 
-                            // TeamMemberInfo Packet
-                            team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
+                                // TeamMemberInfo Packet
+                                team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
 
-                            // TeamMember Packet
-                            team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
+                                // TeamMember Packet
+                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
 
-                            // Sender Packets
-                            /////////////////
+                                // Sender Packets
+                                /////////////////
 
-                            // TeamMember Packet
-                            team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
+                                // TeamMember Packet
+                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
 
-                            // TeamMemberInfo Packet
-                            team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
+                                // TeamMemberInfo Packet
+                                team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
 
-                            // TeamMember Packet
-                            team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
-                             */
-                }
+                                // TeamMember Packet
+                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
+                                 */
+                    }
 
                     break;
 
                 case 0x70: // Remove/Delete item
                     ItemDao.RemoveItem(
-                        (int)packet.Target.Type, 
-                        client.Character.Identity.Instance, 
+                        (int)packet.Target.Type,
+                        client.Character.Identity.Instance,
                         packet.Target.Instance);
                     client.Character.BaseInventory.RemoveItem((int)packet.Target.Type, packet.Target.Instance);
                     client.SendCompressed(packet);
@@ -462,7 +469,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     newItem.MultipleCount = args2;
 
                     client.Character.BaseInventory.Pages[(int)packet.Target.Type].Add(
-                        client.Character.BaseInventory.Pages[(int)packet.Target.Type].FindFreeSlot(), 
+                        client.Character.BaseInventory.Pages[(int)packet.Target.Type].FindFreeSlot(),
                         newItem);
                     client.Character.BaseInventory.Pages[(int)packet.Target.Type].Write();
                     break;
@@ -475,57 +482,57 @@ namespace ZoneEngine.Core.PacketHandlers
                     client.SendCompressed(packet);
                     break;
 
-                    // ###################################################################################
-                    // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
-                    // currently i cannot find a missing packet or link which tells the server the player
-                    // has stopped sneaking, hidden packet or something, will come back to later.
-                    // ###################################################################################
+                // ###################################################################################
+                // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
+                // currently i cannot find a missing packet or link which tells the server the player
+                // has stopped sneaking, hidden packet or something, will come back to later.
+                // ###################################################################################
 
-                    // Sneak Packet Received
+                // Sneak Packet Received
                 case 163:
-                {
-                    // TODO: IF SNEAKING IS ALLOWED RUN THIS CODE.
-                    // Send Action 162 : Enable Sneak
-                    var sneak = new CharacterActionMessage
-                                {
-                                    Identity = client.Character.Identity, 
-                                    Unknown = 0x00, 
-                                    Action = CharacterActionType.StartedSneaking, 
-                                    Unknown1 = 0x00000000, 
-                                    Target = Identity.None, 
-                                    Parameter1 = 0, 
-                                    Parameter2 = 0, 
-                                    Unknown2 = 0x0000
-                                };
+                    {
+                        // TODO: IF SNEAKING IS ALLOWED RUN THIS CODE.
+                        // Send Action 162 : Enable Sneak
+                        var sneak = new CharacterActionMessage
+                        {
+                            Identity = client.Character.Identity,
+                            Unknown = 0x00,
+                            Action = CharacterActionType.StartedSneaking,
+                            Unknown1 = 0x00000000,
+                            Target = Identity.None,
+                            Parameter1 = 0,
+                            Parameter2 = 0,
+                            Unknown2 = 0x0000
+                        };
 
-                    client.SendCompressed(sneak);
+                        client.SendCompressed(sneak);
 
-                    // End of Enable sneak
-                    // TODO: IF SNEAKING IS NOT ALLOWED SEND REJECTION PACKET
-                }
+                        // End of Enable sneak
+                        // TODO: IF SNEAKING IS NOT ALLOWED SEND REJECTION PACKET
+                    }
 
                     break;
 
                 case 81:
-                {
-                    Identity item1 = packet.Target;
-                    var item2 = new Identity { Type = (IdentityType)args1, Instance = args2 };
+                    {
+                        Identity item1 = packet.Target;
+                        var item2 = new Identity { Type = (IdentityType)args1, Instance = args2 };
 
-                    client.Character.TradeSkillSource = new TradeSkillInfo(0, (int)item1.Type, item1.Instance);
-                    client.Character.TradeSkillTarget = new TradeSkillInfo(1, (int)item2.Type, item2.Instance);
-                    TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
+                        client.Character.TradeSkillSource = new TradeSkillInfo(0, (int)item1.Type, item1.Instance);
+                        client.Character.TradeSkillTarget = new TradeSkillInfo(1, (int)item2.Type, item2.Instance);
+                        TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
 
-                    break;
-                }
+                        break;
+                    }
 
                 case 166:
-                {
-                    client.Character.Stats[StatIds.visualflags].Value = args2;
+                    {
+                        client.Character.Stats[StatIds.visualflags].Value = args2;
 
-                    // client.SendChatText("Setting Visual Flag to "+unknown3.ToString());
-                    AppearanceUpdate.AnnounceAppearanceUpdate((Character)client.Character);
-                    break;
-                }
+                        // client.SendChatText("Setting Visual Flag to "+unknown3.ToString());
+                        AppearanceUpdate.AnnounceAppearanceUpdate((Character)client.Character);
+                        break;
+                    }
 
                 case 0xdc:
                     TradeSkillReceiver.TradeSkillSourceChanged(client, args1, args2);
@@ -535,24 +542,24 @@ namespace ZoneEngine.Core.PacketHandlers
                     TradeSkillReceiver.TradeSkillTargetChanged(client, args1, args2);
                     break;
 
-                    
+
 
                 case 0xde:
                     TradeSkillReceiver.TradeSkillBuildPressed(client, packet.Target.Instance);
                     break;
 
-                    
 
-                    #region default
+
+                #region default
 
                 default:
-                {
-                    client.Playfield.Announce(packet);
-                }
+                    {
+                        client.Playfield.Announce(packet);
+                    }
 
                     break;
 
-                    #endregion
+                #endregion
             }
         }
 
