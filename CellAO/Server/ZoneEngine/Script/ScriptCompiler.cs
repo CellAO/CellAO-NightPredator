@@ -345,7 +345,7 @@ namespace ZoneEngine.Script
                             {
                                 if (commandArguments[1].ToUpperInvariant() == "HELP")
                                 {
-                                    aoc.CommandHelp(client);
+                                    aoc.CommandHelp(client.Character);
                                     return;
                                 }
                             }
@@ -353,11 +353,11 @@ namespace ZoneEngine.Script
                             // Execute the command with the given command arguments, if CheckCommandArguments is true else print command help
                             if (aoc.CheckCommandArguments(commandArguments))
                             {
-                                aoc.ExecuteCommand(client, target, commandArguments);
+                                aoc.ExecuteCommand(client.Character, target, commandArguments);
                             }
                             else
                             {
-                                aoc.CommandHelp(client);
+                                aoc.CommandHelp(client.Character);
                             }
                         }
                     }

@@ -77,7 +77,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void CommandHelp(Character character)
+        public override void CommandHelp(ICharacter character)
         {
             character.Client.SendChatText("Teleports you");
             character.Client.SendChatText("Usage: /tp [float] [float] [int] (X, Z, Playfield)");
@@ -92,7 +92,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(Character character, Identity target, string[] args)
+        public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
             var check = new List<Type> { typeof(float), typeof(float), typeof(int) };
 
@@ -140,7 +140,7 @@ namespace ZoneEngine.ChatCommands
             }
 
             character.Playfield.Teleport(
-                character, 
+                (Character)character, 
                 coord, 
                 character.Heading, 
                 new Identity() { Type = IdentityType.Playfield, Instance = pf });

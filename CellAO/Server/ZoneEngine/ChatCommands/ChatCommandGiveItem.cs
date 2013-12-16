@@ -68,7 +68,7 @@ namespace ZoneEngine.ChatCommands
         /// </summary>
         /// <param name="character">
         /// </param>
-        public override void CommandHelp(Character character)
+        public override void CommandHelp(ICharacter character)
         {
             character.Client.SendChatText("Usage: Select target and /command giveitem lowid highid ql");
             return;
@@ -82,7 +82,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(Character character, Identity target, string[] args)
+        public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
             IInstancedEntity targetEntity = null;
 

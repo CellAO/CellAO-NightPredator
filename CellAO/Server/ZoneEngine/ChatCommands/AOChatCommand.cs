@@ -139,7 +139,7 @@ namespace ZoneEngine.ChatCommands
         /// </summary>
         /// <param name="client">
         /// </param>
-        public abstract void CommandHelp(Character character);
+        public abstract void CommandHelp(ICharacter character);
 
         /// <summary>
         /// Execute the chat command
@@ -153,7 +153,7 @@ namespace ZoneEngine.ChatCommands
         /// <param name="args">
         /// command arguments
         /// </param>
-        public abstract void ExecuteCommand(Character character, Identity target, string[] args);
+        public abstract void ExecuteCommand(ICharacter character, Identity target, string[] args);
 
         /// <summary>
         /// Returns the GM Level needed for this command
