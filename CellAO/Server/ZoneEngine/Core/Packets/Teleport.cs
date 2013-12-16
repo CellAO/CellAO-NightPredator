@@ -56,50 +56,70 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public static void Send(Character character, Coordinate destination, IQuaternion heading, Identity playfield)
+        /// <returns>
+        /// </returns>
+        public static N3TeleportMessage Create(
+            ICharacter character, 
+            Coordinate destination, 
+            IQuaternion heading, 
+            Identity playfield)
         {
-            var message = new N3TeleportMessage()
-                          {
-                              Identity = character.Identity, 
-                              Destination =
-                                  new Vector3()
-                                  {
-                                      X = destination.x, 
-                                      Y = destination.y, 
-                                      Z = destination.z
-                                  }, 
-                              Heading =
-                                  new Quaternion()
-                                  {
-                                      X = heading.xf, 
-                                      Y = heading.yf, 
-                                      Z = heading.zf, 
-                                      W = heading.wf
-                                  }, 
-                              Unknown1 = 0x61, 
-                              Playfield =
-                                  new Identity()
-                                  {
-                                      Type = IdentityType.Playfield1, 
-                                      Instance = playfield.Instance
-                                  }, 
-                              ChangePlayfield =
-                                  ((playfield.Instance != character.Playfield.Identity.Instance)
-                                   || (playfield.Type != character.Playfield.Identity.Type))
-                                      ? new Identity
-                                        {
-                                            Type = IdentityType.Playfield2, 
-                                            Instance = playfield.Instance
-                                        }
-                                      : Identity.None, 
-                              Playfield2 =
-                                  new Identity
-                                  {
-                                      Type = IdentityType.Playfield3, 
-                                      Instance = playfield.Instance
-                                  }, 
-                          };
-            character.Client.SendCompressed(message);
+            return new N3TeleportMessage()
+                   {
+                       Identity = character.Identity, 
+                       Destination =
+                           new Vector3()
+                           {
+                               X = destination.x, 
+                               Y = destination.y, 
+                               Z = destination.z
+                           }, 
+                       Heading =
+                           new Quaternion()
+                           {
+                               X = heading.xf, 
+                               Y = heading.yf, 
+                               Z = heading.zf, 
+                               W = heading.wf
+                           }, 
+                       Unknown1 = 0x61, 
+                       Playfield =
+                           new Identity()
+                           {
+                               Type = IdentityType.Playfield1, 
+                               Instance = playfield.Instance
+                           }, 
+                       ChangePlayfield =
+                           ((playfield.Instance != character.Playfield.Identity.Instance)
+                            || (playfield.Type != character.Playfield.Identity.Type))
+                               ? new Identity
+                                 {
+                                     Type = IdentityType.Playfield2, 
+                                     Instance = playfield.Instance
+                                 }
+                               : Identity.None, 
+                       Playfield2 =
+                           new Identity
+                           {
+                               Type = IdentityType.Playfield3, 
+                               Instance = playfield.Instance
+                           }, 
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public static void Send(ICharacter character, Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            character.Send(Create(character, destination, heading, playfield));
         }
 
         #endregion

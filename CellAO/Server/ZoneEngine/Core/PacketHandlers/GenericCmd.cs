@@ -92,6 +92,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                 client.Character.BaseInventory.RemoveItem(
                                     (int)message.Target.Type, 
                                     message.Target.Instance);
+                                
                                 DeleteItem.Send(client, (int)message.Target.Type, message.Target.Instance);
                             }
                         }

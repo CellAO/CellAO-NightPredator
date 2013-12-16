@@ -29,6 +29,7 @@ namespace ZoneEngine.Core.Packets
     #region Usings ...
 
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -51,24 +52,40 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="placement">
         /// </param>
-        public static void Send(ZoneClient client, Item item, int container, int placement)
+        /// <returns>
+        /// </returns>
+        public static TemplateActionMessage Create(IZoneClient client, Item item, int container, int placement)
         {
-            var message = new TemplateActionMessage()
-                          {
-                              Identity = client.Character.Identity, 
-                              ItemHighId = item.HighID, 
-                              ItemLowId = item.LowID, 
-                              Quality = item.Quality, 
-                              Placement =
-                                  new Identity()
-                                  {
-                                      Type = (IdentityType)container, 
-                                      Instance = placement
-                                  }, 
-                              Unknown1 = 1, 
-                              Unknown2 = 3
-                          };
-            client.SendCompressed(message);
+            return new TemplateActionMessage()
+                   {
+                       Identity = client.Character.Identity, 
+                       ItemHighId = item.HighID, 
+                       ItemLowId = item.LowID, 
+                       Quality = item.Quality, 
+                       Placement =
+                           new Identity()
+                           {
+                               Type = (IdentityType)container, 
+                               Instance = placement
+                           }, 
+                       Unknown1 = 1, 
+                       Unknown2 = 3
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        public static void Send(IZoneClient client, Item item, int container, int placement)
+        {
+            client.Character.Send(Create(client, item, container, placement));
         }
 
         #endregion

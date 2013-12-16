@@ -28,8 +28,13 @@ namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
+    using CellAO.Core.Entities;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
@@ -41,6 +46,50 @@ namespace ZoneEngine.Core.Packets
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static MessageBody Create(ICharacter character, int container, int placement)
+        {
+            return new CharacterActionMessage()
+                   {
+                       Identity = character.Identity, 
+                       Action = CharacterActionType.DeleteItem, 
+                       Target =
+                           new Identity()
+                           {
+                               Type = (IdentityType)container, 
+                               Instance = placement
+                           }
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IMSendAOtomationMessageBodyToClient CreateIM(ICharacter character, int container, int placement)
+        {
+            return new IMSendAOtomationMessageBodyToClient()
+                   {
+                       client = character.Client, 
+                       Body = Create(character, container, placement)
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="client">
         /// </param>
         /// <param name="container">
@@ -49,18 +98,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ZoneClient client, int container, int placement)
         {
-            var messageBody = new CharacterActionMessage()
-                              {
-                                  Identity = client.Character.Identity, 
-                                  Action = CharacterActionType.DeleteItem, 
-                                  Target =
-                                      new Identity()
-                                      {
-                                          Type = (IdentityType)container, 
-                                          Instance = placement
-                                      }
-                              };
-            client.SendCompressed(messageBody);
+            client.Character.Playfield.Send(client, Create(client.Character, container, placement));
         }
 
         #endregion

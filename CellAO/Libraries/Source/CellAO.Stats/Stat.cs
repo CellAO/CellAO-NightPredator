@@ -52,9 +52,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat, 
-            uint valueBeforeChange, 
-            uint valueAfterChange, 
+            Stat changedStat,
+            uint valueBeforeChange,
+            uint valueAfterChange,
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -139,11 +139,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList, 
-            int number, 
-            uint defaultValue, 
-            bool sendBaseValue, 
-            bool dontWrite, 
+            Stats statList,
+            int number,
+            uint defaultValue,
+            bool sendBaseValue,
+            bool dontWrite,
             bool announceToPlayfield)
         {
             this.Stats = statList;

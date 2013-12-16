@@ -30,6 +30,8 @@ namespace ZoneEngine.Core.Packets
 
     using System.Threading;
 
+    using CellAO.Core.Network;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -47,48 +49,55 @@ namespace ZoneEngine.Core.Packets
         /// </summary>
         /// <param name="client">
         /// </param>
-        public static void Send(ZoneClient client)
+        public static void Send(IZoneClient client)
+        {
+            var message = Create(client);
+            client.SendCompressed(message);
+        }
+
+
+        public static PlayfieldAnarchyFMessage Create(IZoneClient client)
         {
             var message = new PlayfieldAnarchyFMessage
-                          {
-                              Identity =
-                                  new Identity
-                                  {
-                                      Type = IdentityType.Playfield2, 
-                                      Instance =
-                                          client.Character.Playfield.Identity
-                                          .Instance
-                                  }, 
-                              CharacterCoordinates =
-                                  new Vector3
-                                  {
-                                      X = client.Character.Coordinates.x, 
-                                      Y = client.Character.Coordinates.y, 
-                                      Z = client.Character.Coordinates.z, 
-                                  }, 
-                              PlayfieldId1 =
-                                  new Identity
-                                  {
-                                      Type = IdentityType.Playfield1, 
-                                      Instance =
-                                          client.Character.Playfield.Identity
-                                          .Instance
-                                  }, 
-                              PlayfieldId2 =
-                                  new Identity
-                                  {
-                                      Type = IdentityType.Playfield2, 
-                                      Instance =
-                                          client.Character.Playfield.Identity
-                                          .Instance
-                                  }, 
-                              PlayfieldX =
-                                  Playfields.GetPlayfieldX(
-                                      client.Character.Playfield.Identity.Instance), 
-                              PlayfieldZ =
-                                  Playfields.GetPlayfieldZ(
-                                      client.Character.Playfield.Identity.Instance)
-                          };
+            {
+                Identity =
+                    new Identity
+                    {
+                        Type = IdentityType.Playfield2,
+                        Instance =
+                            client.Character.Playfield.Identity
+                            .Instance
+                    },
+                CharacterCoordinates =
+                    new Vector3
+                    {
+                        X = client.Character.Coordinates.x,
+                        Y = client.Character.Coordinates.y,
+                        Z = client.Character.Coordinates.z,
+                    },
+                PlayfieldId1 =
+                    new Identity
+                    {
+                        Type = IdentityType.Playfield1,
+                        Instance =
+                            client.Character.Playfield.Identity
+                            .Instance
+                    },
+                PlayfieldId2 =
+                    new Identity
+                    {
+                        Type = IdentityType.Playfield2,
+                        Instance =
+                            client.Character.Playfield.Identity
+                            .Instance
+                    },
+                PlayfieldX =
+                    Playfields.GetPlayfieldX(
+                        client.Character.Playfield.Identity.Instance),
+                PlayfieldZ =
+                    Playfields.GetPlayfieldZ(
+                        client.Character.Playfield.Identity.Instance)
+            };
 
             // TODO: Add the VendorHandler again
             /* var vendorcount = VendorHandler.GetNumberofVendorsinPlayfield(client.Character.PlayField);
@@ -102,10 +111,8 @@ namespace ZoneEngine.Core.Packets
                                                   };
             }
             */
-            Thread.Sleep(500);
-            client.SendCompressed(message);
+            return message;
         }
-
         #endregion
     }
 }

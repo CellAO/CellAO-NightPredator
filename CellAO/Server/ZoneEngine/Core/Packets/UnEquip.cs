@@ -62,7 +62,7 @@ namespace ZoneEngine.Core.Packets
                                               Action = CharacterActionType.Unknown3, 
                                               Parameter2 = 6
                                           };
-                    client.SendCompressed(action97Message);
+                    client.Character.Send(action97Message);
                     break;
                 default:
                     IItem item = page[slotNumber];
@@ -85,7 +85,7 @@ namespace ZoneEngine.Core.Packets
                                                         }, 
                                                     Unknown = 0, 
                                                 };
-                    client.SendCompressed(templateActionMessage);
+                    client.Character.Send(templateActionMessage);
                     break;
             }
         }

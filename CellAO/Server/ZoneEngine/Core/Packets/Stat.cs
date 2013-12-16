@@ -33,6 +33,7 @@ namespace ZoneEngine.Core.Packets
     using System.Linq;
 
     using CellAO.Core.Entities;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -59,7 +60,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="announce">
         /// </param>
-        public static void Send(ZoneClient client, int stat, int value, bool announce)
+        public static void Send(IZoneClient client, int stat, int value, bool announce)
         {
             Send(client, stat, (UInt32)value, announce);
         }
@@ -91,7 +92,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(Dynel dynel, int stat, int value, bool announce)
         {
-            Character character = dynel as Character;
+            ICharacter character = dynel as ICharacter;
             if (character != null)
             {
                 Send(character, stat, value, announce);
@@ -108,7 +109,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="announce">
         /// </param>
-        public static void Send(ZoneClient client, int stat, uint value, bool announce)
+        public static void Send(IZoneClient client, int stat, uint value, bool announce)
         {
             var statMessage = new StatMessage
                               {
@@ -148,9 +149,9 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="announce">
         /// </param>
-        public static void Send(Character character, int stat, uint value, bool announce)
+        public static void Send(ICharacter character, int stat, uint value, bool announce)
         {
-            Send((ZoneClient)character.Client, stat, value, announce);
+            Send((IZoneClient)character.Client, stat, value, announce);
         }
 
         /// <summary>
@@ -163,9 +164,9 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="announce">
         /// </param>
-        public static void Send(Character character, int stat, int value, bool announce)
+        public static void Send(ICharacter character, int stat, int value, bool announce)
         {
-            Send((ZoneClient)character.Client, stat, value, announce);
+            Send(character.Client, stat, value, announce);
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="statsToUpdate">
         /// </param>
-        public static void SendBulk(Character ch, Dictionary<int, uint> statsToUpdate)
+        public static void SendBulk(ICharacter ch, Dictionary<int, uint> statsToUpdate)
         {
             if (statsToUpdate.Count == 0)
             {
@@ -221,7 +222,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="statsToUpdate">
         /// </param>
-        public static void SendBulk(ZoneClient client, Dictionary<int, uint> statsToUpdate)
+        public static void SendBulk(IZoneClient client, Dictionary<int, uint> statsToUpdate)
         {
             if (statsToUpdate.Count == 0)
             {
@@ -277,7 +278,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="announce">
         /// </param>
-        public static void SendDirect(ZoneClient client, int stat, uint value, bool announce)
+        public static void SendDirect(IZoneClient client, int stat, uint value, bool announce)
         {
             var statMessage = new StatMessage
                               {
@@ -314,7 +315,7 @@ namespace ZoneEngine.Core.Packets
         /// <returns>
         /// The <see cref="uint"/>.
         /// </returns>
-        public static uint Set(ZoneClient client, int stat, uint value, bool announce)
+        public static uint Set(IZoneClient client, int stat, uint value, bool announce)
         {
             var oldValue = (uint)client.Character.Stats[stat].Value;
             Send(client, stat, value, announce);

@@ -56,7 +56,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter1 = 0, 
                                   Parameter2 = 0
                               };
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter1 = 0, 
                                   Parameter2 = min
                               };
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter1 = tradeSkillStatId, 
                                   Parameter2 = tradeSkillRequirement
                               };
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter2 = low
                               };
 
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter1 = 0, 
                                   Parameter2 = count
                               };
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace ZoneEngine.Core.Packets
                                   Parameter1 = 0, 
                                   Parameter2 = count
                               };
-            character.Client.SendCompressed(messageBody);
+            character.Send(messageBody);
         }
 
         #endregion

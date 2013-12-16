@@ -70,7 +70,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Client.SendChatText("Usage: Select target and /command giveitem lowid highid ql");
+            character.Playfield.Publish(ChatText.CreateIM(character, "Usage: Select target and /command giveitem lowid highid ql"));
             return;
         }
 
@@ -102,19 +102,19 @@ namespace ZoneEngine.ChatCommands
                 int ql;
                 if (!int.TryParse(args[1], out lowId))
                 {
-                    character.Client.SendChatText("LowId is no number");
+                    character.Playfield.Publish(ChatText.CreateIM(character, "LowId is no number"));
                     return;
                 }
 
                 if (!int.TryParse(args[2], out highId))
                 {
-                    character.Client.SendChatText("HighId is no number");
+                    character.Playfield.Publish(ChatText.CreateIM(character, "HighId is no number"));
                     return;
                 }
 
                 if (!int.TryParse(args[3], out ql))
                 {
-                    character.Client.SendChatText("QualityLevel is no number");
+                    character.Playfield.Publish(ChatText.CreateIM(character, "QualityLevel is no number"));
                     return;
                 }
 
@@ -122,7 +122,7 @@ namespace ZoneEngine.ChatCommands
                 InventoryError err = container.BaseInventory.TryAdd(item);
                 if (err != InventoryError.OK)
                 {
-                    character.Client.SendChatText("Could not add to inventory." + (int)err);
+                    character.Playfield.Publish(ChatText.CreateIM(character, "Could not add to inventory. (" + err + ")"));
                 }
 
                 if (targetEntity as Character != null)
@@ -132,7 +132,7 @@ namespace ZoneEngine.ChatCommands
             }
             else
             {
-                character.Client.SendChatText("Target has no Inventory.");
+                character.Playfield.Publish(ChatText.CreateIM(character, "Target has no Inventory."));
             }
         }
 

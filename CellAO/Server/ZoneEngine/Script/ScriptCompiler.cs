@@ -28,6 +28,8 @@
 
 namespace ZoneEngine.Script
 {
+    using ZoneEngine.Core.Packets;
+
     #region Usings ...
 
     #region Usings ...
@@ -333,8 +335,7 @@ namespace ZoneEngine.Script
                             if ((client.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
                                 && (aoc.GMLevelNeeded() > 0))
                             {
-                                client.SendChatText(
-                                    "You are not authorized to use this command!. This incident will be recorded.");
+                                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "You are not authorized to use this command!. This incident will be recorded."));
 
                                 // It is not yet :)
                                 return;
@@ -365,7 +366,7 @@ namespace ZoneEngine.Script
             }
             else
             {
-                client.SendChatText("Available Commands:");
+                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "Available Commands:"));
                 string[] scriptNames = this.chatCommands.Keys.ToArray();
                 for (int i = 0; i < scriptNames.Length; i++)
                 {
@@ -386,8 +387,7 @@ namespace ZoneEngine.Script
                     {
                         if (client.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
                         {
-                            client.SendChatText(
-                                scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal)));
+                            client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal))));
                         }
                     }
                 }
@@ -453,7 +453,7 @@ namespace ZoneEngine.Script
                         CultureInfo.CurrentCulture,
                         Path.Combine("tmp", DllName(scriptFile)));
 
-                    // Create the directory if it doesnt exist
+                    // CreateIM the directory if it doesnt exist
                     FileInfo file = new FileInfo(Path.Combine("tmp", DllName(scriptFile)));
                     if (file.Directory != null)
                     {

@@ -215,7 +215,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <returns>
         /// </returns>
-        public bool SendChatText(string text)
+        public bool dSendChatText(string text)
         {
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
@@ -252,11 +252,12 @@ namespace ZoneEngine.Core
                           };
 
             byte[] buffer = this.messageSerializer.Serialize(message);
-            this.SendCompressed(buffer);
+
             if (Program.DebugNetwork)
             {
                 LogUtil.Debug(messageBody.GetType().ToString());
             }
+            this.SendCompressed(buffer);
         }
 
         /// <summary>
@@ -265,6 +266,7 @@ namespace ZoneEngine.Core
         /// </param>
         public void SendCompressed(byte[] buffer)
         {
+            // We can not be multithreaded here. packet numbers would be jumbled
             lock (this.zStream)
             {
                 byte[] pn = BitConverter.GetBytes(this.packetNumber++);
@@ -273,7 +275,6 @@ namespace ZoneEngine.Core
 
                 try
                 {
-                    // We can not be multithreaded here. packet numbers would be jumbled
                     this.zStream.Write(buffer, 0, buffer.Length);
                     this.zStream.Flush();
                 }
@@ -288,28 +289,6 @@ namespace ZoneEngine.Core
             {
                 LogUtil.Debug(NiceHexOutput.Output(buffer));
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="MsgCategory">
-        /// </param>
-        /// <param name="MsgNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public bool SendFeedback(int MsgCategory, int MsgNum)
-        {
-            var message = new FeedbackMessage
-                          {
-                              Identity = this.Character.Identity,
-                              Unknown = 0x01,
-                              Unknown1 = 0x00000000,
-                              CategoryId = MsgCategory,
-                              MessageId = MsgNum
-                          };
-            this.SendCompressed(message);
-            return true;
         }
 
         /// <summary>
@@ -352,7 +331,7 @@ namespace ZoneEngine.Core
             {
                 if (!this.zStreamSetup)
                 {
-                    // Create the zStream
+                    // CreateIM the zStream
                     this.netStream = new NetworkStream(this.TcpSocket);
                     this.zStream = new ZOutputStream(this.netStream, zlibConst.Z_BEST_COMPRESSION);
                     this.zStream.FlushMode = zlibConst.Z_SYNC_FLUSH;

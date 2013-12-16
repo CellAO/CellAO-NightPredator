@@ -24,59 +24,29 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.InternalMessages
 {
     #region Usings ...
 
     using CellAO.Core.Network;
 
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class SendFeedback
+    public class IMSendAOtomationMessageBodiesToClient : InternalMessageBody
     {
-        #region Public Methods and Operators
+        #region Fields
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="MsgCategory">
-        /// </param>
-        /// <param name="MsgNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static FeedbackMessage Create(IZoneClient client, int MsgCategory, int MsgNum)
-        {
-            return new FeedbackMessage
-                   {
-                       Identity = client.Character.Identity, 
-                       Unknown = 0x01, 
-                       Unknown1 = 0x00000000, 
-                       CategoryId = MsgCategory, 
-                       MessageId = MsgNum
-                   };
-        }
+        public MessageBody[] Bodies;
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="MsgCategory">
-        /// </param>
-        /// <param name="MsgNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static bool Send(IZoneClient client, int MsgCategory, int MsgNum)
-        {
-            client.Character.Send(Create(client, MsgCategory, MsgNum));
-            return true;
-        }
+        public IZoneClient client;
 
         #endregion
     }

@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.Packets
 
     using CellAO.Core.Entities;
     using CellAO.Core.Nanos;
+    using CellAO.Core.Network;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Enums;
@@ -58,7 +59,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static SimpleCharFullUpdateMessage ConstructMessage(Character character)
+        public static SimpleCharFullUpdateMessage ConstructMessage(ICharacter character)
         {
             // Character Variables
             bool socialonly;
@@ -164,21 +165,21 @@ namespace ZoneEngine.Core.Packets
                 currentMovementMode = character.Stats[StatIds.currentmovementmode].Value;
                 runSpeedBaseValue = character.Stats[StatIds.runspeed].BaseValue;
 
-                texturesCount = character.Textures.Count;
+                texturesCount = ((Character)character).Textures.Count;
 
-                headMeshValue = character.Stats[StatIds.headmesh].Value;
+                headMeshValue = ((Character)character).Stats[StatIds.headmesh].Value;
 
-                foreach (int num in character.SocialTab.Keys)
+                foreach (int num in ((Character)character).SocialTab.Keys)
                 {
-                    socialTab.Add(num, character.SocialTab[num]);
+                    socialTab.Add(num, ((Character)character).SocialTab[num]);
                 }
 
-                foreach (AOTextures at in character.Textures)
+                foreach (AOTextures at in ((Character)character).Textures)
                 {
                     textures.Add(new AOTextures(at.place, at.Texture));
                 }
 
-                meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
+                meshs = MeshLayers.GetMeshs((Character)character, showsocial, socialonly);
 
                 foreach (AONano nano in character.ActiveNanos)
                 {
@@ -426,9 +427,9 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static SimpleCharFullUpdateMessage ConstructMessage(ZoneClient client)
+        public static SimpleCharFullUpdateMessage ConstructMessage(IZoneClient client)
         {
-            return ConstructMessage((Character)client.Character);
+            return ConstructMessage(client.Character);
         }
 
         /// <summary>
@@ -437,17 +438,17 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="receiver">
         /// </param>
-        public static void SendToOne(Character character, ZoneClient receiver)
+        public static void SendToOne(ICharacter character, IZoneClient receiver)
         {
             SimpleCharFullUpdateMessage message = ConstructMessage(character);
-            receiver.SendCompressed(message);
+            receiver.Character.Send(message);
         }
 
         /// <summary>
         /// </summary>
         /// <param name="client">
         /// </param>
-        public static void SendToPlayfield(ZoneClient client)
+        public static void SendToPlayfield(IZoneClient client)
         {
             SimpleCharFullUpdateMessage message = ConstructMessage(client);
             client.Character.Playfield.Announce(message);

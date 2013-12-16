@@ -63,7 +63,7 @@ namespace ZoneEngine.Core.Packets
                                                    CharacterActionType
                                                    .ChangeAnimationAndStance, 
                                            };
-                    client.SendCompressed(action167Message);
+                    client.Character.Playfield.Announce(action167Message);
 
                     var equipMessage = new CharacterActionMessage()
                                        {
@@ -73,7 +73,7 @@ namespace ZoneEngine.Core.Packets
                                            Parameter1 = 0, 
                                            Parameter2 = 6, 
                                        };
-                    client.SendCompressed(equipMessage);
+                    client.Character.Send(equipMessage);
                     break;
                 default:
                     IItem item = page[slotNumber];
@@ -99,8 +99,7 @@ namespace ZoneEngine.Core.Packets
                                                         }, 
                                                     Unknown = 0, 
                                                 };
-
-                    client.SendCompressed(templateActionMessage);
+                    client.Character.Send(templateActionMessage);
                     break;
             }
         }

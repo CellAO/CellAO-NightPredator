@@ -28,54 +28,66 @@ namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
-    using CellAO.Core.Network;
+    using CellAO.Core.Entities;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class SendFeedback
+    public static class ChatText
     {
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
-        /// <param name="MsgCategory">
+        /// <param name="text">
         /// </param>
-        /// <param name="MsgNum">
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
         /// </param>
         /// <returns>
         /// </returns>
-        public static FeedbackMessage Create(IZoneClient client, int MsgCategory, int MsgNum)
+        public static ChatTextMessage Create(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
         {
-            return new FeedbackMessage
+            return new ChatTextMessage()
                    {
-                       Identity = client.Character.Identity, 
-                       Unknown = 0x01, 
-                       Unknown1 = 0x00000000, 
-                       CategoryId = MsgCategory, 
-                       MessageId = MsgNum
+                       Identity = character.Identity, 
+                       Text = text, 
+                       Unknown1 = unknown1, 
+                       Unknown2 = unknown2
                    };
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
-        /// <param name="MsgCategory">
+        /// <param name="text">
         /// </param>
-        /// <param name="MsgNum">
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
         /// </param>
         /// <returns>
         /// </returns>
-        public static bool Send(IZoneClient client, int MsgCategory, int MsgNum)
+        public static IMSendAOtomationMessageBodyToClient CreateIM(
+            ICharacter character, 
+            string text, 
+            short unknown1 = 0, 
+            int unknown2 = 0)
         {
-            client.Character.Send(Create(client, MsgCategory, MsgNum));
-            return true;
+            return new IMSendAOtomationMessageBodyToClient()
+                   {
+                       Body = Create(character, text, unknown1, unknown2), 
+                       client = character.Client
+                   };
         }
 
         #endregion

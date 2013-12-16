@@ -39,6 +39,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
     #endregion
@@ -79,9 +80,11 @@ namespace ZoneEngine.ChatCommands
         /// </exception>
         public override void CommandHelp(ICharacter character)
         {
-            character.Client.SendChatText("Teleports you");
-            character.Client.SendChatText("Usage: /tp [float] [float] [int] (X, Z, Playfield)");
-            character.Client.SendChatText("Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)");
+            character.Playfield.Publish(
+                ChatText.CreateIM(
+                    character, 
+                    "Teleports you\r\n" + "Usage: /tp [float] [float] [int] (X, Z, Playfield)\r\n"
+                    + "Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)"));
         }
 
         /// <summary>

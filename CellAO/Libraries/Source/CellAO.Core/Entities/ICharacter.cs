@@ -142,7 +142,13 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="announceToPlayfield">
         /// </param>
-        void Send(MessageBody messageBody, bool announceToPlayfield);
+        void Send(MessageBody messageBody, bool announceToPlayfield = false);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        void Send(SystemMessage message);
 
         /// <summary>
         /// Update move type

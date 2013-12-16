@@ -47,19 +47,30 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="item">
         /// </param>
+        /// <returns>
+        /// </returns>
+        public static AddTemplateMessage Create(IZoneClient client, Item item)
+        {
+            return new AddTemplateMessage
+                   {
+                       Identity = client.Character.Identity, 
+                       Unknown = 0x00, 
+                       LowId = item.LowID, 
+                       HighId = item.HighID, 
+                       Quality = item.Quality, 
+                       Count = item.MultipleCount
+                   };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="item">
+        /// </param>
         public static void Send(IZoneClient client, Item item)
         {
-            var message = new AddTemplateMessage
-                          {
-                              Identity = client.Character.Identity, 
-                              Unknown = 0x00, 
-                              LowId = item.LowID, 
-                              HighId = item.HighID, 
-                              Quality = item.Quality, 
-                              Count = item.MultipleCount
-                          };
-
-            client.SendCompressed(message);
+            client.Character.Playfield.Send(client, Create(client, item));
         }
 
         #endregion

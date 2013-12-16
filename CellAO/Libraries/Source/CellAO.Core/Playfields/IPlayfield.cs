@@ -32,6 +32,7 @@ namespace CellAO.Core.Playfields
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
@@ -158,6 +159,22 @@ namespace CellAO.Core.Playfields
         /// <param name="obj">
         /// </param>
         void Publish(object obj);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="body">
+        /// </param>
+        void Send(IZoneClient client, MessageBody body);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        void Send(IZoneClient client, Message message);
 
         /// <summary>
         /// </summary>

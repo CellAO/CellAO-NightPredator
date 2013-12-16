@@ -367,6 +367,15 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        /// <param name="message">
+        /// </param>
+        public void Send(SystemMessage message)
+        {
+            this.Playfield.Send(this.Client, message);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="identity">
         /// </param>
         /// <returns>
@@ -631,7 +640,7 @@ namespace CellAO.Core.Entities
         /// </param>
         internal void Send(MessageBody messageBody)
         {
-            this.Client.SendCompressed(messageBody);
+            this.Playfield.Send(this.Client, messageBody);
         }
 
         /// <summary>
@@ -643,6 +652,7 @@ namespace CellAO.Core.Entities
         private void StatsAfterStatChangedEvent(object sender, StatChangedEventArgs e)
         {
             uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
+
             var messageBody = new StatMessage()
                               {
                                   Identity = this.Identity, 
@@ -661,11 +671,11 @@ namespace CellAO.Core.Entities
 
             if (e.AnnounceToPlayfield)
             {
-                this.Client.Character.Playfield.Announce(messageBody);
+                this.Playfield.Announce(messageBody);
             }
             else
             {
-                this.Client.SendCompressed(messageBody);
+                this.Send(messageBody);
             }
         }
 

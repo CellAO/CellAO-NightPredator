@@ -37,6 +37,8 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using ZoneEngine.Core.Packets;
+
     #endregion
 
     /// <summary>
@@ -70,7 +72,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Client.SendChatText("Syntax: /get <stat name|stat id>");
+            character.Playfield.Publish(ChatText.CreateIM(character, "Syntax: /get <stat name|stat id>"));
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace ZoneEngine.ChatCommands
 
             if (target.Type != IdentityType.CanbeAffected)
             {
-                character.Client.SendChatText("Target must be player/monster/NPC");
+                character.Playfield.Publish(ChatText.CreateIM(character, "Target must be player/monster/NPC"));
                 return;
             }
 
@@ -119,7 +121,7 @@ namespace ZoneEngine.ChatCommands
 
                 if (statId == 1234567890)
                 {
-                    character.Client.SendChatText("Unknown Stat name " + args[1]);
+                    character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat name " + args[1]));
                     return;
                 }
 
@@ -138,7 +140,7 @@ namespace ZoneEngine.ChatCommands
                 }
                 catch (StatDoesNotExistException)
                 {
-                    character.Client.SendChatText("Unknown Stat Id " + statId);
+                    character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat Id " + statId));
                     return;
                 }
 
@@ -146,22 +148,19 @@ namespace ZoneEngine.ChatCommands
                                   + "): Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
                                   + statValue;
 
-                character.Client.SendChatText(response);
-
                 if (statValue != targetCharacter.Stats[statId].Value)
                 {
-                    response = "Effective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
+                    response += "\r\nEffective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
                                + effectiveValue;
-                    character.Client.SendChatText(response);
                 }
 
-                response = "Trickle: " + trickle + " Modificator: " + mod + " Percentage: " + perc;
-                character.Client.SendChatText(response);
+                response += "\r\nTrickle: " + trickle + " Modificator: " + mod + " Percentage: " + perc;
+                character.Playfield.Publish(ChatText.CreateIM(character, response));
             }
             else
             {
                 // Shouldnt be happen again (fallback to self)
-                character.Client.SendChatText("Unable to find target.");
+                character.Playfield.Publish(ChatText.CreateIM(character, "Unable to find target."));
             }
         }
 

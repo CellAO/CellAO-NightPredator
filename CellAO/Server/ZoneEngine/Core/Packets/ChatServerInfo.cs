@@ -48,12 +48,10 @@ namespace ZoneEngine.Core.Packets
         #region Public Methods and Operators
 
         /// <summary>
-        /// Sends chat server info to client
         /// </summary>
-        /// <param name="client">
-        /// Client that gets the info
-        /// </param>
-        public static void Send(IZoneClient client)
+        /// <returns>
+        /// </returns>
+        public static ChatServerInfoMessage Create()
         {
             /* get chat settings from config */
             string chatServerIp = string.Empty;
@@ -77,8 +75,18 @@ namespace ZoneEngine.Core.Packets
 
             int chatPort = Convert.ToInt32(ConfigReadWrite.Instance.CurrentConfig.ChatPort);
 
-            var chatServerInfoMessage = new ChatServerInfoMessage { HostName = chatServerIp, Port = chatPort };
-            client.SendCompressed(chatServerInfoMessage);
+            return new ChatServerInfoMessage { HostName = chatServerIp, Port = chatPort };
+        }
+
+        /// <summary>
+        /// Sends chat server info to client
+        /// </summary>
+        /// <param name="client">
+        /// Client that gets the info
+        /// </param>
+        public static void Send(IZoneClient client)
+        {
+            client.Character.Send(Create());
         }
 
         #endregion

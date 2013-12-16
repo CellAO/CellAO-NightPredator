@@ -87,6 +87,7 @@ namespace ZoneEngine.Core.PacketHandlers
             // builders instead of sending (half) hardcoded
             // packets.
 
+
             /* send chat server info to client */
             ChatServerInfo.Send(client);
 

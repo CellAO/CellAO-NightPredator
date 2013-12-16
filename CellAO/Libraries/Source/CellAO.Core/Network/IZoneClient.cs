@@ -63,7 +63,7 @@ namespace CellAO.Core.Network
         /// </param>
         /// <returns>
         /// </returns>
-        bool SendChatText(string text);
+        bool dSendChatText(string text);
 
         /// <summary>
         /// </summary>

@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.Packets
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -50,9 +51,15 @@ namespace ZoneEngine.Core.Packets
         /// </summary>
         /// <param name="client">
         /// </param>
-        public static void Send(ZoneClient client)
+        public static void Send(IZoneClient client)
         {
-            var fc = new FullCharacterMessage { Identity = client.Character.Identity, Unknown1 = 25 };
+            // TODO: Let this in for now, it needs to be removed when Character login is rewritten
+            client.SendCompressed(Create(client));
+        }
+
+        public static FullCharacterMessage Create(IZoneClient client)
+        {
+            var fullCharacterMessage = new FullCharacterMessage { Identity = client.Character.Identity, Unknown1 = 25 };
 
             /* part 1 of data */
             List<InventorySlot> inventory = new List<InventorySlot>();
@@ -61,40 +68,40 @@ namespace ZoneEngine.Core.Packets
                 foreach (KeyValuePair<int, IItem> kv in ivp.List())
                 {
                     var temp = new InventorySlot
-                               {
-                                   Placement = kv.Key, 
-                                   Flags = (short)kv.Value.Flags, 
-                                   Count = (short)kv.Value.MultipleCount, 
-                                   Identity = kv.Value.Identity, 
-                                   ItemLowId = kv.Value.LowID, 
-                                   ItemHighId = kv.Value.HighID, 
-                                   Quality = kv.Value.Quality, 
-                                   Unknown = kv.Value.Nothing
-                               };
+                    {
+                        Placement = kv.Key,
+                        Flags = (short)kv.Value.Flags,
+                        Count = (short)kv.Value.MultipleCount,
+                        Identity = kv.Value.Identity,
+                        ItemLowId = kv.Value.LowID,
+                        ItemHighId = kv.Value.HighID,
+                        Quality = kv.Value.Quality,
+                        Unknown = kv.Value.Nothing
+                    };
                     inventory.Add(temp);
                 }
             }
 
-            fc.InventorySlots = inventory.ToArray();
+            fullCharacterMessage.InventorySlots = inventory.ToArray();
 
             /* part 2 of data */
             /* number of entries */
-            fc.UploadedNanoIds = client.Character.UploadedNanos.Select(n => n.NanoId).ToArray();
+            fullCharacterMessage.UploadedNanoIds = client.Character.UploadedNanos.Select(n => n.NanoId).ToArray();
 
             /* part 3 of data */
             /* number of entries */
-            fc.Unknown2 = new object[0];
+            fullCharacterMessage.Unknown2 = new object[0];
 
             /* No idea what these are */
             /* used to be skill locks + some unknown data */
 
             // TODO: Find out what following 6 ints are
-            fc.Unknown3 = 1;
-            fc.Unknown4 = 0;
-            fc.Unknown5 = 1;
-            fc.Unknown6 = 0;
-            fc.Unknown7 = 1;
-            fc.Unknown8 = 0;
+            fullCharacterMessage.Unknown3 = 1;
+            fullCharacterMessage.Unknown4 = 0;
+            fullCharacterMessage.Unknown5 = 1;
+            fullCharacterMessage.Unknown6 = 0;
+            fullCharacterMessage.Unknown7 = 1;
+            fullCharacterMessage.Unknown8 = 0;
 
             /* part 6 of data (1-st stats block) */
 
@@ -297,7 +304,7 @@ namespace ZoneEngine.Core.Packets
             /* Members */
             AddStat3232(client, stats1, 300);
 
-            fc.Stats1 = stats1.ToArray();
+            fullCharacterMessage.Stats1 = stats1.ToArray();
 
             /* Int32 stat number
                Int32 stat value */
@@ -735,7 +742,7 @@ namespace ZoneEngine.Core.Packets
             /* AlienXP */
             AddStat3232(client, stats2, 40);
 
-            fc.Stats2 = stats2.ToArray();
+            fullCharacterMessage.Stats2 = stats2.ToArray();
 
             /* Byte stat number
                Byte stat value */
@@ -765,7 +772,7 @@ namespace ZoneEngine.Core.Packets
             /* BeltSlots */
             AddStat88(client, stats3, 45);
 
-            fc.Stats3 = stats3.ToArray();
+            fullCharacterMessage.Stats3 = stats3.ToArray();
 
             /* Byte stat number
                Int16 (short) stat value */
@@ -819,21 +826,20 @@ namespace ZoneEngine.Core.Packets
             /* ChangeSideCount */
             AddStat816(client, stats4, 237);
 
-            fc.Stats4 = stats4.ToArray();
+            fullCharacterMessage.Stats4 = stats4.ToArray();
 
             /* ? */
-            fc.Unknown9 = 0;
+            fullCharacterMessage.Unknown9 = 0;
 
             /* ? */
-            fc.Unknown10 = 0;
+            fullCharacterMessage.Unknown10 = 0;
 
-            fc.Unknown11 = new object[0];
+            fullCharacterMessage.Unknown11 = new object[0];
 
-            fc.Unknown12 = new object[0];
+            fullCharacterMessage.Unknown12 = new object[0];
 
-            fc.Unknown13 = new object[0];
-
-            client.SendCompressed(fc);
+            fullCharacterMessage.Unknown13 = new object[0];
+            return fullCharacterMessage;
         }
 
         #endregion
@@ -848,7 +854,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="statId">
         /// </param>
-        private static void AddStat3232(ZoneClient client, IList<GameTuple<int, uint>> list, int statId)
+        private static void AddStat3232(IZoneClient client, IList<GameTuple<int, uint>> list, int statId)
         {
             var tuple = new GameTuple<int, uint> { Value1 = statId, Value2 = client.Character.Stats[statId].BaseValue };
 
@@ -863,7 +869,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="statId">
         /// </param>
-        private static void AddStat816(ZoneClient client, IList<GameTuple<byte, short>> list, int statId)
+        private static void AddStat816(IZoneClient client, IList<GameTuple<byte, short>> list, int statId)
         {
             if (statId > 255)
             {
@@ -872,7 +878,7 @@ namespace ZoneEngine.Core.Packets
 
             var tuple = new GameTuple<byte, short>
                         {
-                            Value1 = (byte)statId, 
+                            Value1 = (byte)statId,
                             Value2 = (short)client.Character.Stats[statId].BaseValue
                         };
 
@@ -887,7 +893,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="statId">
         /// </param>
-        private static void AddStat88(ZoneClient client, IList<GameTuple<byte, byte>> list, int statId)
+        private static void AddStat88(IZoneClient client, IList<GameTuple<byte, byte>> list, int statId)
         {
             if (statId > 255)
             {
@@ -896,7 +902,7 @@ namespace ZoneEngine.Core.Packets
 
             var tuple = new GameTuple<byte, byte>
                         {
-                            Value1 = (byte)statId, 
+                            Value1 = (byte)statId,
                             Value2 = (byte)client.Character.Stats[statId].BaseValue
                         };
 

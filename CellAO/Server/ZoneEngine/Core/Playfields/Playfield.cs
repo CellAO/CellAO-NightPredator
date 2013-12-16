@@ -34,10 +34,9 @@ namespace CellAO.Core.Playfields
     using System.Net;
     using System.Net.Sockets;
 
-    using Cell.Core;
-
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
     using CellAO.Enums;
@@ -53,14 +52,15 @@ namespace CellAO.Core.Playfields
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
     using Utility;
-    using Config = Utility.Config.ConfigReadWrite;
 
     using ZoneEngine.Core;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.Packets;
 
+    using Config = Utility.Config.ConfigReadWrite;
     using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -112,6 +112,9 @@ namespace CellAO.Core.Playfields
                     this.SendAOtomationMessageToPlayfieldOthers));
             this.memBusDisposeContainer.Add(
                 this.playfieldBus.Subscribe<IMSendAOtomationMessageBodyToClient>(this.SendAOtomationMessageBodyToClient));
+            this.memBusDisposeContainer.Add(
+                this.playfieldBus.Subscribe<IMSendAOtomationMessageBodiesToClient>(
+                    this.SendAOtomationMessageBodiesToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
             this.Entities = new HashSet<IInstancedEntity>();
@@ -232,7 +235,9 @@ namespace CellAO.Core.Playfields
 
                 if (character != null)
                 {
-                    character.Send(messageBody, false);
+                    // Make this whole thing unblocking with publishing single internal messages
+                    this.Publish(
+                        new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
                 }
             }
         }
@@ -252,7 +257,9 @@ namespace CellAO.Core.Playfields
                 {
                     if (character.Identity != dontSend)
                     {
-                        character.Send(messageBody, false);
+                        // Make this whole thing unblocking with publishing single internal messages
+                        this.Publish(
+                            new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
                     }
                 }
             }
@@ -338,10 +345,10 @@ namespace CellAO.Core.Playfields
             }
 
             FunctionCollection.Instance.CallFunction(
-                imExecuteFunction.Function.FunctionType,
-                (INamedEntity)user,
-                (INamedEntity)user,
-                target,
+                imExecuteFunction.Function.FunctionType, 
+                (INamedEntity)user, 
+                (INamedEntity)user, 
+                target, 
                 imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
@@ -410,6 +417,17 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="global">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
+        {
+            return this.server.ListAvailablePlayfields(global);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         public int NumberOfDynels()
@@ -446,11 +464,45 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="body">
+        /// </param>
+        public void Send(IZoneClient client, MessageBody body)
+        {
+            this.Publish(new IMSendAOtomationMessageBodyToClient() { client = client, Body = body });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        public void Send(IZoneClient client, Message message)
+        {
+            this.Publish(new IMSendAOtomationMessageToClient() { client = client, message = message });
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="msg">
         /// </param>
         public void SendAOtMessageBodyToClient(IMSendAOtomationMessageBodyToClient msg)
         {
             msg.client.SendCompressed(msg.Body);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="msg">
+        /// </param>
+        public void SendAOtomationMessageBodiesToClient(IMSendAOtomationMessageBodiesToClient msg)
+        {
+            foreach (MessageBody mb in msg.Bodies)
+            {
+                msg.client.SendCompressed(mb);
+            }
         }
 
         /// <summary>
@@ -525,12 +577,11 @@ namespace CellAO.Core.Playfields
             ZoneEngine.Core.Packets.Teleport.Send(character, destination, heading, playfield);
 
             // Send packet, disconnect, and other playfield waits for connect
+            
             DespawnMessage despawnMessage = Despawn.Create(character.Identity);
+            this.AnnounceOthers(despawnMessage, character.Identity);
             character.DoNotDoTimers = true;
-            character.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
-                                       {
-                                           X=destination.x,Y=destination.y,Z=destination.z
-                                       };
+            character.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             character.Heading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
             character.RawHeading = character.Heading;
             character.Save();
@@ -542,8 +593,8 @@ namespace CellAO.Core.Playfields
             IPAddress tempIp;
             if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
             {
-                var zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
-                foreach (var ip in zoneHost.AddressList)
+                IPHostEntry zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
+                foreach (IPAddress ip in zoneHost.AddressList)
                 {
                     if (ip.AddressFamily == AddressFamily.InterNetwork)
                     {
@@ -555,18 +606,12 @@ namespace CellAO.Core.Playfields
 
             var redirect = new ZoneRedirectionMessage
                            {
-                               ServerIpAddress = tempIp,
+                               ServerIpAddress = tempIp, 
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
-            character.Client.SendCompressed(redirect);
+            this.Send(character.Client, redirect);
         }
 
-
-        public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
-
-        {
-            return this.server.ListAvailablePlayfields(global);
-        }
         #endregion
     }
 }

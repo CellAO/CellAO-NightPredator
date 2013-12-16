@@ -52,6 +52,13 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void AnnounceAppearanceUpdate(Character character)
         {
+            var message = Create(character);
+
+            character.Playfield.Announce(message);
+        }
+
+        public static AppearanceUpdateMessage Create(Character character)
+        {
             var message = new AppearanceUpdateMessage { Identity = character.Identity, Unknown = 0x00, };
 
             List<AOMeshs> meshs;
@@ -190,16 +197,17 @@ namespace ZoneEngine.Core.Packets
                     mesh =>
                         new Mesh
                         {
-                            Position = (byte)mesh.Position, 
-                            Id = (uint)mesh.Mesh, 
-                            OverrideTextureId = mesh.OverrideTexture, 
+                            Position = (byte)mesh.Position,
+                            Id = (uint)mesh.Mesh,
+                            OverrideTextureId = mesh.OverrideTexture,
                             Layer = (byte)mesh.Layer
                         }).ToArray();
             message.VisualFlags = (short)VisualFlags;
             message.Unknown1 = (byte)bodyMesh;
 
-            character.Playfield.Announce(message);
+            return message;
         }
+
 
         #endregion
     }

@@ -87,6 +87,7 @@
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomatinMessageToPlayfieldOthers.cs" />
+    <Compile Include="Core\InternalMessages\IMSendAOtomationMessageBodiesToClient.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomationMessageBodyToClient.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomationMessageToClient.cs" />
     <Compile Include="Core\InternalMessages\IMSendAOtomationMessageToPlayfield.cs" />
@@ -115,7 +116,9 @@
     <Compile Include="Core\Packets\AddTemplate.cs" />
     <Compile Include="Core\Packets\AppearanceUpdate.cs" />
     <Compile Include="Core\PacketHandlers\ChatCommandHandler.cs" />
+    <Compile Include="Core\Packets\Bulk.cs" />
     <Compile Include="Core\Packets\ChatServerInfo.cs" />
+    <Compile Include="Core\Packets\ChatText.cs" />
     <Compile Include="Core\Packets\DeleteItem.cs" />
     <Compile Include="Core\Packets\Despawn.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
