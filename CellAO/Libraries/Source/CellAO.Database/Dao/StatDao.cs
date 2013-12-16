@@ -89,13 +89,15 @@ namespace CellAO.Database.Dao
         {
             try
             {
-                // Delete all stats before writing
-                DeleteStats(stats[0].type, stats[0].instance);
-
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     using (IDbTransaction trans = conn.BeginTransaction())
                     {
+                        // Do it in one transaction, so no stats can be lost
+                        conn.Execute(
+                            "DELETE FROM stats WHERE type=@type AND instance=@instance", 
+                            stats[0], 
+                            transaction: trans);
                         conn.Execute(
                             "INSERT INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)", 
                             stats, 
