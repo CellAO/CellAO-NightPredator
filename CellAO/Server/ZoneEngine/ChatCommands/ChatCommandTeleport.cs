@@ -36,8 +36,9 @@ namespace ZoneEngine.ChatCommands
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core;
+    using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.Playfields;
 
     #endregion
@@ -72,38 +73,36 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void CommandHelp(ZoneClient client)
+        public override void CommandHelp(Character character)
         {
-            // No help needed, no arguments can be given
-            client.SendChatText("Teleports you");
-            client.SendChatText("Usage: /tp [float] [float] [int] (X, Z, Playfield)");
-            client.SendChatText("Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)");
-            return;
+            character.Client.SendChatText("Teleports you");
+            character.Client.SendChatText("Usage: /tp [float] [float] [int] (X, Z, Playfield)");
+            character.Client.SendChatText("Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)");
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="target">
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        public override void ExecuteCommand(Character character, Identity target, string[] args)
         {
             var check = new List<Type> { typeof(float), typeof(float), typeof(int) };
 
             var coord = new Coordinate();
-            int pf = client.Character.Playfield.Identity.Instance;
+            int pf = character.Playfield.Identity.Instance;
             if (CheckArgumentHelper(check, args))
             {
                 coord = new Coordinate(
                     float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    client.Character.Coordinates.y, 
+                    character.Coordinates.y, 
                     float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
                 pf = int.Parse(args[3]);
             }
@@ -126,14 +125,24 @@ namespace ZoneEngine.ChatCommands
 
             if (!Playfields.ValidPlayfield(pf))
             {
-                client.SendFeedback(110, 188845972);
+                character.Playfield.Publish(
+                    new IMSendAOtomationMessageBodyToClient()
+                    {
+                        Body =
+                            new FeedbackMessage()
+                            {
+                                CategoryId = 110, 
+                                MessageId = 188845972
+                            }, 
+                        client = character.Client
+                    });
                 return;
             }
 
-            client.Playfield.Teleport(
-                (Character)client.Character, 
+            character.Playfield.Teleport(
+                (Character)character, 
                 coord, 
-                client.Character.Heading, 
+                character.Heading, 
                 new Identity() { Type = IdentityType.Playfield, Instance = pf });
         }
 

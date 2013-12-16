@@ -217,6 +217,7 @@ namespace ZoneEngine.Core
         /// </returns>
         public bool SendChatText(string text)
         {
+            // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
                           {
                               Identity = this.Character.Identity,

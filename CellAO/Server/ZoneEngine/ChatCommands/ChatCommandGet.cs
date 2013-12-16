@@ -37,8 +37,6 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using ZoneEngine.Core;
-
     #endregion
 
     /// <summary>
@@ -70,9 +68,9 @@ namespace ZoneEngine.ChatCommands
         /// </summary>
         /// <param name="client">
         /// </param>
-        public override void CommandHelp(ZoneClient client)
+        public override void CommandHelp(Character character)
         {
-            client.SendChatText("Syntax: /get <stat name|stat id>");
+            character.Client.SendChatText("Syntax: /get <stat name|stat id>");
         }
 
         /// <summary>
@@ -83,21 +81,21 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        public override void ExecuteCommand(Character character, Identity target, string[] args)
         {
             // Fallback to self if no target is selected
             if (target.Instance == 0)
             {
-                target = client.Character.Identity;
+                target = character.Identity;
             }
 
             if (target.Type != IdentityType.CanbeAffected)
             {
-                client.SendChatText("Target must be player/monster/NPC");
+                character.Client.SendChatText("Target must be player/monster/NPC");
                 return;
             }
 
-            Dynel targetDynel = (Dynel)client.Playfield.FindByIdentity(target);
+            Dynel targetDynel = (Dynel)character.Playfield.FindByIdentity(target);
             if (targetDynel != null)
             {
                 Character targetCharacter = (Character)targetDynel;
@@ -121,7 +119,7 @@ namespace ZoneEngine.ChatCommands
 
                 if (statId == 1234567890)
                 {
-                    client.SendChatText("Unknown Stat name " + args[1]);
+                    character.Client.SendChatText("Unknown Stat name " + args[1]);
                     return;
                 }
 
@@ -140,7 +138,7 @@ namespace ZoneEngine.ChatCommands
                 }
                 catch (StatDoesNotExistException)
                 {
-                    client.SendChatText("Unknown Stat Id " + statId);
+                    character.Client.SendChatText("Unknown Stat Id " + statId);
                     return;
                 }
 
@@ -148,22 +146,22 @@ namespace ZoneEngine.ChatCommands
                                   + "): Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
                                   + statValue;
 
-                client.SendChatText(response);
+                character.Client.SendChatText(response);
 
                 if (statValue != targetCharacter.Stats[statId].Value)
                 {
                     response = "Effective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
                                + effectiveValue;
-                    client.SendChatText(response);
+                    character.Client.SendChatText(response);
                 }
 
                 response = "Trickle: " + trickle + " Modificator: " + mod + " Percentage: " + perc;
-                client.SendChatText(response);
+                character.Client.SendChatText(response);
             }
             else
             {
                 // Shouldnt be happen again (fallback to self)
-                client.SendChatText("Unable to find target.");
+                character.Client.SendChatText("Unable to find target.");
             }
         }
 

@@ -71,9 +71,9 @@ namespace ZoneEngine.ChatCommands
         /// </summary>
         /// <param name="client">
         /// </param>
-        public override void CommandHelp(ZoneClient client)
+        public override void CommandHelp(Character character)
         {
-            client.SendChatText("Syntax: /get <stat name|stat id> <new stat value>");
+            character.Client.SendChatText("Syntax: /get <stat name|stat id> <new stat value>");
         }
 
         /// <summary>
@@ -84,13 +84,13 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        public override void ExecuteCommand(Character character, Identity target, string[] args)
         {
             // Fallback to self if no target is selected
             if (target.Instance == 0)
             {
-                target.Type = client.Character.Identity.Type;
-                target.Instance = client.Character.Identity.Instance;
+                target.Type = character.Client.Character.Identity.Type;
+                target.Instance = character.Client.Character.Identity.Instance;
             }
 
             int statId = 1234567890;
@@ -108,7 +108,7 @@ namespace ZoneEngine.ChatCommands
 
             if (statId == 1234567890)
             {
-                client.SendChatText("Unknown Stat name " + args[1]);
+                character.Client.SendChatText("Unknown Stat name " + args[1]);
                 return;
             }
 
@@ -132,7 +132,7 @@ namespace ZoneEngine.ChatCommands
                 }
             }
 
-            IInstancedEntity tempch = client.Playfield.FindByIdentity(target);
+            IInstancedEntity tempch = character.Playfield.FindByIdentity(target);
 
             uint statOldValue;
             try
@@ -142,7 +142,7 @@ namespace ZoneEngine.ChatCommands
             }
             catch
             {
-                client.SendChatText("Unknown StatId " + statId);
+                character.Client.SendChatText("Unknown StatId " + statId);
                 return;
             }
 
@@ -156,7 +156,7 @@ namespace ZoneEngine.ChatCommands
                               + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
             response += " Old: " + statOldValue;
             response += " New: " + statNewValue;
-            client.SendChatText(response);
+            character.Client.SendChatText(response);
         }
 
         /// <summary>

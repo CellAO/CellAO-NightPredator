@@ -28,6 +28,8 @@ namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
+    using CellAO.Core.Network;
+
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -48,7 +50,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static bool Send(ZoneClient client, int MsgCategory, int MsgNum)
+        public static bool Send(IZoneClient client, int MsgCategory, int MsgNum)
         {
             var message = new FeedbackMessage
                           {

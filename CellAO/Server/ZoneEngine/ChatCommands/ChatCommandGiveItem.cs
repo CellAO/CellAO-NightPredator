@@ -38,7 +38,6 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using ZoneEngine.Core;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -67,70 +66,73 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
-        public override void CommandHelp(ZoneClient client)
+        public override void CommandHelp(Character character)
         {
-            client.SendChatText("Usage: Select target and /command giveitem lowid highid ql");
+            character.Client.SendChatText("Usage: Select target and /command giveitem lowid highid ql");
             return;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="target">
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        public override void ExecuteCommand(Character character, Identity target, string[] args)
         {
             IInstancedEntity targetEntity = null;
-            if ((targetEntity = client.Playfield.FindByIdentity(target)) != null)
+
+            // Fall back to self it no target is selected
+            if ((targetEntity = character.Playfield.FindByIdentity(target)) == null)
             {
-                IItemContainer container = targetEntity as IItemContainer;
+                targetEntity = character;
+            }
 
-                // Does this entity have a BaseInventory?
-                if (container != null)
+            IItemContainer container = targetEntity as IItemContainer;
+
+            // Does this entity have a BaseInventory?
+            if (container != null)
+            {
+                int lowId;
+                int highId;
+                int ql;
+                if (!int.TryParse(args[1], out lowId))
                 {
-                    int lowId;
-                    int highId;
-                    int ql;
-                    if (!int.TryParse(args[1], out lowId))
-                    {
-                        client.SendChatText("LowId is no number");
-                        return;
-                    }
-
-                    if (!int.TryParse(args[2], out highId))
-                    {
-                        client.SendChatText("HighId is no number");
-                        return;
-                    }
-
-                    if (!int.TryParse(args[3], out ql))
-                    {
-                        client.SendChatText("QualityLevel is no number");
-                        return;
-                    }
-
-                    Item item = new Item(ql, lowId, highId);
-                    InventoryError err = container.BaseInventory.TryAdd(item);
-                    if (err != InventoryError.OK)
-                    {
-                        client.SendChatText("Could not add to inventory." + (int)err);
-                    }
-
-                    if (targetEntity as Character != null)
-                    {
-                        AddTemplate.Send((targetEntity as Character).Client, item);
-                    }
-                }
-                else
-                {
-                    client.SendChatText("Target has no Inventory.");
+                    character.Client.SendChatText("LowId is no number");
                     return;
                 }
+
+                if (!int.TryParse(args[2], out highId))
+                {
+                    character.Client.SendChatText("HighId is no number");
+                    return;
+                }
+
+                if (!int.TryParse(args[3], out ql))
+                {
+                    character.Client.SendChatText("QualityLevel is no number");
+                    return;
+                }
+
+                Item item = new Item(ql, lowId, highId);
+                InventoryError err = container.BaseInventory.TryAdd(item);
+                if (err != InventoryError.OK)
+                {
+                    character.Client.SendChatText("Could not add to inventory." + (int)err);
+                }
+
+                if (targetEntity as Character != null)
+                {
+                    AddTemplate.Send((targetEntity as Character).Client, item);
+                }
+            }
+            else
+            {
+                character.Client.SendChatText("Target has no Inventory.");
             }
         }
 
