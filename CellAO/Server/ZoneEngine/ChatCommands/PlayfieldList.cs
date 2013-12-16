@@ -68,10 +68,10 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void CommandHelp(ZoneClient client)
+        public override void CommandHelp(Character character)
         {
             // No help needed, no arguments can be given
-            client.SendChatText("Lists all playfields and their id's");
+            character.Client.SendChatText("Lists all playfields and their id's");
         }
 
         /// <summary>
@@ -82,12 +82,12 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         /// <param name="args">
         /// </param>
-        public override void ExecuteCommand(ZoneClient client, Identity target, string[] args)
+        public override void ExecuteCommand(Character character, Identity target, string[] args)
         {
-            var list = ((Playfield)client.Playfield).ListAvailablePlayfields();
+            var list = ((Playfield)character.Playfield).ListAvailablePlayfields();
             foreach (KeyValuePair<Identity, string> pf in list)
             {
-                client.SendChatText(pf.Key.Instance.ToString().PadLeft(8)+": "+pf.Value);
+                character.Client.SendChatText(pf.Key.Instance.ToString().PadLeft(8) + ": " + pf.Value);
             }
         }
 

@@ -140,7 +140,7 @@ namespace ZoneEngine.ChatCommands
             }
 
             character.Playfield.Teleport(
-                (Character)character, 
+                character, 
                 coord, 
                 character.Heading, 
                 new Identity() { Type = IdentityType.Playfield, Instance = pf });
