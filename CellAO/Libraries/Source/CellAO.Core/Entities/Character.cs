@@ -651,6 +651,11 @@ namespace CellAO.Core.Entities
         /// </param>
         private void StatsAfterStatChangedEvent(object sender, StatChangedEventArgs e)
         {
+            if (DoNotDoTimers)
+            {
+                return;
+            }
+
             uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
 
             var messageBody = new StatMessage()

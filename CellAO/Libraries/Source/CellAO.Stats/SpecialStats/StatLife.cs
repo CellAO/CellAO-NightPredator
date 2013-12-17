@@ -109,65 +109,37 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Modifier
-        {
-            get
-            {
-                return base.Modifier;
-            }
-
-            set
-            {
-                base.Modifier = value;
-                this.Stats[StatIds.life].Value = Math.Min(this.Value, this.Stats[StatIds.life].Value);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public override int PercentageModifier
-        {
-            get
-            {
-                return base.PercentageModifier;
-            }
-
-            set
-            {
-                base.PercentageModifier = value;
-                this.Stats[StatIds.life].Value = Math.Min(this.Value, this.Stats[StatIds.life].Value);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public override int Trickle
-        {
-            get
-            {
-                return base.Trickle;
-            }
-
-            set
-            {
-                base.Trickle = value;
-                this.Stats[StatIds.life].Value = Math.Min(this.Value, this.Stats[StatIds.life].Value);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         public override int Value
         {
             get
             {
-                return (int)Math.Floor(
-                    (double) // ReSharper disable PossibleLossOfFraction
-                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+                if (this.reCalculate)
+                {
+                    int lastOld = this.lastCalculatedValue;
+                    this.lastCalculatedValue =
+                        (int)
+                            Math.Floor(
+                                (double)
+                                    ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+                    if (lastOld != this.lastCalculatedValue)
+                    {
+                        this.OnAfterStatChangedEvent(
+                            new StatChangedEventArgs(
+                                this, 
+                                (uint)lastOld, 
+                                (uint)this.lastCalculatedValue, 
+                                this.AnnounceToPlayfield));
+                    }
+
+                    this.reCalculate = false;
+                }
+
+                return this.lastCalculatedValue;
             }
 
             set
             {
+                this.reCalculate = true;
             }
         }
 

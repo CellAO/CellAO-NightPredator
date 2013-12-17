@@ -29,7 +29,6 @@ namespace CellAO.Stats.SpecialStats
     #region Usings ...
 
     using System;
-    using System.Linq;
 
     using CellAO.Enums;
 
@@ -82,6 +81,7 @@ namespace CellAO.Stats.SpecialStats
 
             set
             {
+                this.reCalculate = true;
                 base.BaseValue = value;
             }
         }
@@ -93,9 +93,9 @@ namespace CellAO.Stats.SpecialStats
             get
             {
                 int baseval = base.Value;
-                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
+                if (this.Stats[StatIds.currentmovementmode].Value == (int)MoveModes.Sit)
                 {
-                    baseval = (int)((double)1.5 * baseval);
+                    baseval += baseval >> 1;
                 }
 
                 return baseval;

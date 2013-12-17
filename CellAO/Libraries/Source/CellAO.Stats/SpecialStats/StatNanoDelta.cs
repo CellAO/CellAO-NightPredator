@@ -92,17 +92,25 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                int baseval = base.Value;
-                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
+                if (this.reCalculate)
                 {
-                    baseval = (int)((double)1.5 * baseval);
+                    this.reCalculate = false;
+                    int baseval = base.Value;
+                    if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value
+                        == (int)MoveModes.Sit)
+                    {
+                        baseval = (int)((double)1.5 * baseval);
+                    }
+
+                    this.lastCalculatedValue = baseval;
                 }
 
-                return baseval;
+                return this.lastCalculatedValue;
             }
 
             set
             {
+                this.reCalculate = true;
                 base.Value = value;
             }
         }
@@ -115,6 +123,7 @@ namespace CellAO.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
+            this.reCalculate = true;
             this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
         }
 

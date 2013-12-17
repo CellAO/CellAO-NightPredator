@@ -3191,7 +3191,7 @@ namespace CellAO.Stats
             this.leaderLockDownTime = new Stat(this, 614, 1234567890, false, false, false);
             this.level = new Stat(this, 54, 1234567890, false, false, false);
             this.levelLimit = new Stat(this, 322, 1234567890, false, false, false);
-            this.life = new StatLife(this, 1, 1, true, false, false);
+            this.life = new StatLife(this, 1, 1, true, false, true);
             this.liquidType = new Stat(this, 268, 1234567890, false, false, false);
             this.lockDifficulty = new Stat(this, 299, 1234567890, false, false, false);
             this.lockDownTime = new Stat(this, 613, 1234567890, false, false, false);

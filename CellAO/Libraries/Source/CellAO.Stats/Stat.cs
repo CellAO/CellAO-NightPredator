@@ -31,6 +31,7 @@ namespace CellAO.Stats
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.Remoting.Messaging;
 
     #endregion
 
@@ -52,9 +53,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat,
-            uint valueBeforeChange,
-            uint valueAfterChange,
+            Stat changedStat, 
+            uint valueBeforeChange, 
+            uint valueAfterChange, 
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -106,6 +107,10 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        internal int lastCalculatedValue = -1;
+
+        /// <summary>
+        /// </summary>
         private int modifier = 0;
 
         /// <summary>
@@ -115,6 +120,8 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         private bool sendBaseValue = true;
+
+        internal bool reCalculate = true;
 
         /// <summary>
         /// </summary>
@@ -139,11 +146,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList,
-            int number,
-            uint defaultValue,
-            bool sendBaseValue,
-            bool dontWrite,
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
             bool announceToPlayfield)
         {
             this.Stats = statList;
@@ -211,6 +218,7 @@ namespace CellAO.Stats
 
             set
             {
+                this.reCalculate = true;
                 this.baseValue = value;
             }
         }
@@ -238,13 +246,19 @@ namespace CellAO.Stats
 
             set
             {
-                int oldValue = this.Value;
+                int oldValue = this.lastCalculatedValue;
                 int oldModifier = this.modifier;
                 this.modifier = value;
                 if (value != oldModifier)
                 {
+                    this.reCalculate = true;
+                    this.lastCalculatedValue = this.Value;
                     this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                        new StatChangedEventArgs(
+                            this, 
+                            (uint)oldValue, 
+                            (uint)this.lastCalculatedValue, 
+                            this.AnnounceToPlayfield));
                 }
             }
         }
@@ -261,12 +275,18 @@ namespace CellAO.Stats
             set
             {
                 int oldPercentageModifier = this.percentageModifier;
-                int oldValue = this.Value;
+                int oldValue = this.lastCalculatedValue;
                 this.percentageModifier = value;
                 if (value != oldPercentageModifier)
                 {
+                    this.reCalculate = true;
+                    this.lastCalculatedValue = this.Value;
                     this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                        new StatChangedEventArgs(
+                            this, 
+                            (uint)oldValue, 
+                            (uint)this.lastCalculatedValue, 
+                            this.AnnounceToPlayfield));
                 }
             }
         }
@@ -306,12 +326,18 @@ namespace CellAO.Stats
             set
             {
                 int oldTrickle = this.trickle;
-                int oldValue = this.Value;
+                int oldValue = this.lastCalculatedValue;
                 this.trickle = value;
                 if (value != oldTrickle)
                 {
+                    this.reCalculate = true;
+                    this.lastCalculatedValue = this.Value;
                     this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(this, (uint)oldValue, (uint)this.Value, this.AnnounceToPlayfield));
+                        new StatChangedEventArgs(
+                            this, 
+                            (uint)oldValue, 
+                            (uint)this.lastCalculatedValue, 
+                            this.AnnounceToPlayfield));
                 }
             }
         }
@@ -322,15 +348,27 @@ namespace CellAO.Stats
         {
             get
             {
-                return (int)Math.Floor(
+                if (this.reCalculate)
+                {
+                    int lastOld = this.lastCalculatedValue;
+                    this.lastCalculatedValue=(int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
                         ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
 
+                    if (lastOld != this.lastCalculatedValue)
+                    {
+                        this.OnAfterStatChangedEvent(
+                            new StatChangedEventArgs(this, (uint)lastOld, (uint)this.lastCalculatedValue, this.announceToPlayfield));
+                    }
                 // ReSharper restore PossibleLossOfFraction
+                    this.reCalculate = false;
+                }
+                return this.lastCalculatedValue;
             }
 
             set
             {
+                this.reCalculate = true;
                 this.Set(value);
             }
         }
@@ -343,6 +381,7 @@ namespace CellAO.Stats
         /// </summary>
         public virtual void CalcTrickle()
         {
+            this.reCalculate = true;
         }
 
         /// <summary>
@@ -435,7 +474,11 @@ namespace CellAO.Stats
             {
                 foreach (int affectedStat in this.affects)
                 {
-                    this.Stats.All.Single(x => x.StatId == affectedStat).CalcTrickle();
+                    var stat = this.Stats[affectedStat];
+                    stat.CalcTrickle();
+                    
+                    // This sends values to the client if needed (value has changed)
+                    var temp = stat.Value;
                 }
             }
         }

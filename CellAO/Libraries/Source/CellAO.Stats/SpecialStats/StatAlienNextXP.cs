@@ -75,12 +75,19 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                int level = this.Stats[StatIds.alienlevel].Value;
-                return Convert.ToInt32(XPTable.TableAlienXP[level, 2]);
+                if (this.reCalculate)
+                {
+                    int level = this.Stats[StatIds.alienlevel].Value;
+                    this.lastCalculatedValue = Convert.ToInt32(XPTable.TableAlienXP[level, 2]);
+                    this.reCalculate = false;
+                }
+
+                return this.lastCalculatedValue;
             }
 
             set
             {
+                this.reCalculate = true;
                 base.Value = value;
             }
         }

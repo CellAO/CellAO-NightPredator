@@ -95,6 +95,7 @@ namespace CellAO.Stats.SpecialStats
 
             set
             {
+                this.reCalculate = true;
                 base.Trickle = value;
             }
         }
