@@ -59,6 +59,10 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        bool ChangedAppearance { get; set; }
+
+        /// <summary>
+        /// </summary>
         IZoneClient Client { get; }
 
         /// <summary>

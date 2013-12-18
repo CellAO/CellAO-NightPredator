@@ -189,5 +189,7 @@ namespace CellAO.Core.Playfields
         void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield);
 
         #endregion
+
+        void AnnounceAppearanceUpdate(ICharacter character);
     }
 }

@@ -433,7 +433,7 @@ namespace CellAO.Stats
         /// </param>
         /// <param name="starting">
         /// </param>
-        public void Set(int value, bool starting = false)
+        public virtual void Set(int value, bool starting = false)
         {
             this.Set((uint)value, starting);
         }

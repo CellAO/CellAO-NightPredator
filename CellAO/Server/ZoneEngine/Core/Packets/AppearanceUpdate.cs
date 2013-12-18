@@ -50,15 +50,16 @@ namespace ZoneEngine.Core.Packets
         /// </summary>
         /// <param name="character">
         /// </param>
-        public static void AnnounceAppearanceUpdate(Character character)
+        public static void AnnounceAppearanceUpdate(ICharacter character)
         {
             var message = Create(character);
 
             character.Playfield.Announce(message);
         }
 
-        public static AppearanceUpdateMessage Create(Character character)
+        public static AppearanceUpdateMessage Create(ICharacter characterToSend)
         {
+            var character = (Character)characterToSend;
             var message = new AppearanceUpdateMessage { Identity = character.Identity, Unknown = 0x00, };
 
             List<AOMeshs> meshs;

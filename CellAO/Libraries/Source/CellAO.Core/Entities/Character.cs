@@ -149,6 +149,10 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        public bool ChangedAppearance { get; set; }
+
+        /// <summary>
+        /// </summary>
         public IZoneClient Client { get; private set; }
 
         /// <summary>
@@ -322,6 +326,12 @@ namespace CellAO.Core.Entities
                              };
 
             this.BaseInventory.CalculateModifiers(this);
+
+            if (this.ChangedAppearance)
+            {
+                this.Playfield.AnnounceAppearanceUpdate(this);
+                this.ChangedAppearance = false;
+            }
         }
 
         /// <summary>

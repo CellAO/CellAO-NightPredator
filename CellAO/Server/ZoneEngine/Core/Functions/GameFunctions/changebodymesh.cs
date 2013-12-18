@@ -116,7 +116,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                     ch.Stats[StatIds.mesh].Value = 0;
                     break;
             }
-
+            ch.ChangedAppearance = true;
             return true;
         }
 

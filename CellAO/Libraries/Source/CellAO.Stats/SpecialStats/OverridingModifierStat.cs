@@ -59,17 +59,12 @@ namespace CellAO.Stats.SpecialStats
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="value">
-        /// </param>
-        public override void SetValue(int value)
+        public override void Set(int value, bool starting = false)
         {
             this.Modifier = value - (int)this.BaseValue;
+            this.ReCalculate = true;
+            this.Changed = true;
         }
 
-        #endregion
     }
 }

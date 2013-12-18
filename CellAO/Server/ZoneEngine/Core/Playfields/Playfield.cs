@@ -539,22 +539,25 @@ namespace CellAO.Core.Playfields
         public void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs)
         {
             Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
-            foreach (IEntity entity in this.Entities)
+            lock (this.Entities)
             {
-                if (entity.Identity != dontSendTo)
+                foreach (IEntity entity in this.Entities)
                 {
-                    if (entity.Identity.Type == IdentityType.CanbeAffected)
+                    if (entity.Identity != dontSendTo)
                     {
-                        var temp = entity as INamedEntity;
-                        if (temp != null)
+                        if (entity.Identity.Type == IdentityType.CanbeAffected)
                         {
-                            // TODO: make it NPC-safe
-                            SimpleCharFullUpdateMessage simpleCharFullUpdate =
-                                SimpleCharFullUpdate.ConstructMessage((Character)temp);
-                            sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
+                            var temp = entity as INamedEntity;
+                            if (temp != null)
+                            {
+                                // TODO: make it NPC-safe
+                                SimpleCharFullUpdateMessage simpleCharFullUpdate =
+                                    SimpleCharFullUpdate.ConstructMessage((Character)temp);
+                                sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
 
-                            var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
-                            sendSCFUs.toClient.SendCompressed(charInPlay);
+                                var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
+                                sendSCFUs.toClient.SendCompressed(charInPlay);
+                            }
                         }
                     }
                 }
@@ -610,6 +613,11 @@ namespace CellAO.Core.Playfields
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
             this.Send(character.Client, redirect);
+        }
+
+        public void AnnounceAppearanceUpdate(ICharacter character)
+        {
+            AppearanceUpdate.AnnounceAppearanceUpdate(character);
         }
 
         #endregion
