@@ -120,6 +120,7 @@ namespace CellAO.Stats
         /// </param>
         void SetBaseValue(uint value);
 
+        bool ReCalculate { get; set; }
         #endregion
     }
 }

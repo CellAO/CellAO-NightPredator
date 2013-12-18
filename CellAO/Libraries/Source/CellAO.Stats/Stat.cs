@@ -52,9 +52,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat, 
-            uint valueBeforeChange, 
-            uint valueAfterChange, 
+            Stat changedStat,
+            uint valueBeforeChange,
+            uint valueAfterChange,
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -94,11 +94,11 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        internal int lastCalculatedValue = -1;
+        internal int LastCalculatedValue = -1;
 
         /// <summary>
         /// </summary>
-        internal bool reCalculate = true;
+        public bool ReCalculate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -147,11 +147,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList, 
-            int number, 
-            uint defaultValue, 
-            bool sendBaseValue, 
-            bool dontWrite, 
+            Stats statList,
+            int number,
+            uint defaultValue,
+            bool sendBaseValue,
+            bool dontWrite,
             bool announceToPlayfield)
         {
             this.Stats = statList;
@@ -161,6 +161,7 @@ namespace CellAO.Stats
             this.sendBaseValue = sendBaseValue;
             this.DoNotDontWriteToSql = dontWrite;
             this.announceToPlayfield = announceToPlayfield;
+            this.ReCalculate = true;
         }
 
         #endregion
@@ -219,7 +220,7 @@ namespace CellAO.Stats
 
             set
             {
-                this.reCalculate = true;
+                this.ReCalculate = true;
                 this.baseValue = value;
             }
         }
@@ -252,10 +253,10 @@ namespace CellAO.Stats
         {
             get
             {
-                this.lastCalculatedValue = (int)Math.Floor(
+                this.LastCalculatedValue = (int)Math.Floor(
                     (double) // ReSharper disable PossibleLossOfFraction
                         ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-                return this.lastCalculatedValue;
+                return this.LastCalculatedValue;
             }
         }
 
@@ -270,19 +271,13 @@ namespace CellAO.Stats
 
             set
             {
-                int oldValue = this.lastCalculatedValue;
+                int oldValue = this.LastCalculatedValue;
                 int oldModifier = this.modifier;
                 this.modifier = value;
                 if (value != oldModifier)
                 {
-                    this.reCalculate = true;
-                    this.lastCalculatedValue = this.Value;
-                    this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(
-                            this, 
-                            (uint)oldValue, 
-                            (uint)this.lastCalculatedValue, 
-                            this.AnnounceToPlayfield));
+                    this.ReCalculate = true;
+                    var temp = this.Value;
                 }
             }
         }
@@ -299,18 +294,11 @@ namespace CellAO.Stats
             set
             {
                 int oldPercentageModifier = this.percentageModifier;
-                int oldValue = this.lastCalculatedValue;
                 this.percentageModifier = value;
                 if (value != oldPercentageModifier)
                 {
-                    this.reCalculate = true;
-                    this.lastCalculatedValue = this.Value;
-                    this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(
-                            this, 
-                            (uint)oldValue, 
-                            (uint)this.lastCalculatedValue, 
-                            this.AnnounceToPlayfield));
+                    this.ReCalculate = true;
+                    var temp = this.Value;
                 }
             }
         }
@@ -350,18 +338,11 @@ namespace CellAO.Stats
             set
             {
                 int oldTrickle = this.trickle;
-                int oldValue = this.lastCalculatedValue;
                 this.trickle = value;
                 if (value != oldTrickle)
                 {
-                    this.reCalculate = true;
-                    this.lastCalculatedValue = this.Value;
-                    this.OnAfterStatChangedEvent(
-                        new StatChangedEventArgs(
-                            this, 
-                            (uint)oldValue, 
-                            (uint)this.lastCalculatedValue, 
-                            this.AnnounceToPlayfield));
+                    this.ReCalculate = true;
+                    var temp = this.Value;
                 }
             }
         }
@@ -372,21 +353,21 @@ namespace CellAO.Stats
         {
             get
             {
-                if (this.reCalculate)
+                if (this.ReCalculate)
                 {
                     int temp = this.GetValue;
-                    this.Changed |= temp != this.lastCalculatedValue;
-                    this.reCalculate = false;
+                    this.Changed |= temp != this.LastCalculatedValue;
+                    this.ReCalculate = false;
 
-                    this.lastCalculatedValue = temp;
+                    this.LastCalculatedValue = temp;
                 }
 
-                return this.lastCalculatedValue;
+                return this.LastCalculatedValue;
             }
 
             set
             {
-                this.reCalculate = true;
+                this.ReCalculate = true;
                 this.Set(value);
             }
         }
@@ -399,7 +380,7 @@ namespace CellAO.Stats
         /// </summary>
         public virtual void CalcTrickle()
         {
-            this.reCalculate = true;
+            this.ReCalculate = true;
         }
 
         /// <summary>
@@ -437,11 +418,10 @@ namespace CellAO.Stats
                 {
                     foreach (int affectedStat in this.affects)
                     {
-                        IStat stat = this.Stats[affectedStat];
-                        stat.CalcTrickle();
 
+                        this.Stats[affectedStat].ReCalculate = true;
                         // This recalculates values and sets the changed flag so it can be sent to the client if needed (value has changed)
-                        int temp = stat.Value;
+                        int temp = this.Stats[affectedStat].Value;
                     }
                 }
             }
@@ -466,7 +446,7 @@ namespace CellAO.Stats
         {
             this.Changed = this.baseValue != value;
             this.baseValue = value;
-            this.reCalculate = true;
+            this.ReCalculate = true;
         }
 
         /// <summary>
@@ -490,61 +470,5 @@ namespace CellAO.Stats
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// </summary>
-        /// <param name="e">
-        /// </param>
-        internal void OnAfterStatChangedEvent(StatChangedEventArgs e)
-        {
-            EventHandler<StatChangedEventArgs> handler = this.AfterStatChangedEvent;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-
-            this.Stats.AfterStatChangedEventHandler(e);
-
-            if (this.affects.Any())
-            {
-                foreach (int affectedStat in this.affects)
-                {
-                    IStat stat = this.Stats[affectedStat];
-                    stat.CalcTrickle();
-
-                    // This sends values to the client if needed (value has changed)
-                    int temp = stat.Value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="e">
-        /// </param>
-        private void OnBeforeStatChangedEvent(StatChangedEventArgs e)
-        {
-            EventHandler<StatChangedEventArgs> handler = this.BeforeStatChangedEvent;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="e">
-        /// </param>
-        private void OnCalculateStat(StatChangedEventArgs e)
-        {
-            EventHandler<StatChangedEventArgs> handler = this.CalculateStatEvent;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        #endregion
     }
 }

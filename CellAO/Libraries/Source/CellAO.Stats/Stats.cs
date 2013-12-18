@@ -4340,6 +4340,7 @@ namespace CellAO.Stats
             this.stamina.Affects.Add(this.healInterval.StatId);
             this.psychic.Affects.Add(this.nanoInterval.StatId);
             this.level.Affects.Add(this.ip.StatId);
+            this.stamina.Affects.Add(this.bodyDevelopment.StatId);
 
             this.expansion.DoNotDontWriteToSql = true;
             this.accountFlags.DoNotDontWriteToSql = true;

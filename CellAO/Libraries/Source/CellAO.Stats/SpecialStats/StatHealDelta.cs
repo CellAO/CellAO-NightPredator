@@ -96,15 +96,16 @@ namespace CellAO.Stats.SpecialStats
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
+        public override int Trickle
         {
-            this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.bodydevelopment].Value / 100));
+            get
+            {
+                return (int)Math.Floor((double)(this.Stats[StatIds.bodydevelopment].Value / 100));
+            }
+            set
+            {
+                base.Trickle = value;
+            }
         }
 
         #endregion

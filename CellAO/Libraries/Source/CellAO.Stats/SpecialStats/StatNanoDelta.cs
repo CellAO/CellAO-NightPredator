@@ -105,7 +105,7 @@ namespace CellAO.Stats.SpecialStats
         /// </summary>
         public override void CalcTrickle()
         {
-            this.reCalculate = true;
+            this.ReCalculate = true;
             this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
         }
 

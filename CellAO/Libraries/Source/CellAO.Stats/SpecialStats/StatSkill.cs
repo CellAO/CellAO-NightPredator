@@ -95,35 +95,9 @@ namespace CellAO.Stats.SpecialStats
 
             set
             {
-                this.reCalculate = true;
+                this.ReCalculate = true;
                 base.Trickle = value;
             }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
-        {
-            double strengthTrickle = SkillTrickleTable.table[this.StatId - 100, 1];
-            double agilityTrickle = SkillTrickleTable.table[this.StatId - 100, 2];
-            double staminaTrickle = SkillTrickleTable.table[this.StatId - 100, 3];
-            double intelligenceTrickle = SkillTrickleTable.table[this.StatId - 100, 4];
-            double senseTrickle = SkillTrickleTable.table[this.StatId - 100, 5];
-            double psychicTrickle = SkillTrickleTable.table[this.StatId - 100, 6];
-
-            this.Trickle =
-                Convert.ToInt32(
-                    Math.Floor(
-                        (strengthTrickle * this.Stats[StatIds.strength].Value
-                         + staminaTrickle * this.Stats[StatIds.stamina].Value
-                         + senseTrickle * this.Stats[StatIds.sense].Value
-                         + agilityTrickle * this.Stats[StatIds.agility].Value
-                         + intelligenceTrickle * this.Stats[StatIds.intelligence].Value
-                         + psychicTrickle * this.Stats[StatIds.psychic].Value) / 4));
         }
 
         #endregion
