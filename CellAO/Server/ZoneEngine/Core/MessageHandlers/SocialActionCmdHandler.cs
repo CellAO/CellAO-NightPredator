@@ -70,6 +70,9 @@ namespace ZoneEngine.MessageHandlers
                                Action = socialActionCmdMessage.Action
                            };
             client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
+
+            // This may be not needed here
+            client.Character.SendChangedStats();
         }
 
         #endregion

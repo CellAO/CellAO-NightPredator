@@ -71,16 +71,11 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override uint GetBaseValue
         {
             get
             {
                 return (uint)(28 - (Math.Min(this.Stats[StatIds.psychic].Value / 60, 13) * 2));
-            }
-
-            set
-            {
-                base.BaseValue = value;
             }
         }
 

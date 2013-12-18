@@ -58,6 +58,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var chatCmdMessage = (ChatCmdMessage)message.Body;
 
             ChatCommandHandler.Read(chatCmdMessage, client);
+            client.Character.SendChangedStats();
         }
 
         #endregion

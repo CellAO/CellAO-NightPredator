@@ -5394,6 +5394,61 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        public GameTuple<CharacterStat, uint>[] ChangedAnnouncingStats
+        {
+            get
+            {
+                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
+                foreach (Stat stat in this.all)
+                {
+                    if (stat.Changed && stat.AnnounceToPlayfield)
+                    {
+                        temp.Add(
+                            new GameTuple<CharacterStat, uint>()
+                            {
+                                Value1 = (CharacterStat)stat.StatId, 
+                                Value2 =
+                                    stat.SendBaseValue
+                                        ? stat.BaseValue
+                                        : (uint)stat.Value
+                            });
+                    }
+                }
+
+                return temp.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public GameTuple<CharacterStat, uint>[] ChangedStats
+        {
+            get
+            {
+                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
+                foreach (Stat stat in this.all)
+                {
+                    if (stat.Changed)
+                    {
+                        temp.Add(
+                            new GameTuple<CharacterStat, uint>()
+                            {
+                                Value1 = (CharacterStat)stat.StatId, 
+                                Value2 =
+                                    stat.SendBaseValue
+                                        ? stat.BaseValue
+                                        : (uint)stat.Value
+                            });
+                        stat.Changed = false;
+                    }
+                }
+
+                return temp.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         public Stat CharRadius
         {
             get
@@ -11454,7 +11509,7 @@ namespace CellAO.Stats
 
         #endregion
 
-        #region Explicit Interface Indexers
+        #region Public Indexers
 
         /// <summary>
         /// </summary>
@@ -11464,19 +11519,18 @@ namespace CellAO.Stats
         /// </exception>
         /// <returns>
         /// </returns>
-        IStat IStatList.this[int index]
+        public IStat this[int index]
         {
             get
             {
-                foreach (IStat stat in this.all)
+                try
                 {
-                    if (stat.StatId == index)
-                    {
-                        return stat;
-                    }
+                    return this.All.Single(x => x.StatId == index);
                 }
-
-                throw new StatDoesNotExistException("Stat with Id " + index + " does not exist");
+                catch (Exception)
+                {
+                    throw new StatDoesNotExistException("Stat with Id " + index + " does not exist");
+                }
             }
         }
 
@@ -11486,7 +11540,7 @@ namespace CellAO.Stats
         /// </param>
         /// <returns>
         /// </returns>
-        IStat IStatList.this[StatIds i]
+        public IStat this[StatIds i]
         {
             get
             {
@@ -11502,21 +11556,12 @@ namespace CellAO.Stats
         /// </exception>
         /// <returns>
         /// </returns>
-        IStat IStatList.this[string name]
+        public IStat this[string name]
         {
             get
             {
                 int index = StatNamesDefaults.GetStatNumber(name);
-                foreach (IStat stat in this.all)
-                {
-                    if (stat.StatId == index)
-                    {
-                        return stat;
-                    }
-                }
-
-                throw new StatDoesNotExistException(
-                    "huh? Stat with Id " + index + " does not exist, but the name " + name + " exists? CODER ALERT");
+                return this.all.Single(x => x.StatId == index);
             }
         }
 

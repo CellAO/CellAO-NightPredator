@@ -69,7 +69,7 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
@@ -105,11 +105,6 @@ namespace CellAO.Stats.SpecialStats
                 }
 
                 return 1;
-            }
-
-            set
-            {
-                base.Value = value;
             }
         }
 

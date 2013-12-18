@@ -64,6 +64,7 @@ namespace ZoneEngine.Core.MessageHandlers
             }
 
             dynel.SetTarget(lookAtMessage.Target);
+            client.Character.SendChangedStats();
         }
 
         #endregion

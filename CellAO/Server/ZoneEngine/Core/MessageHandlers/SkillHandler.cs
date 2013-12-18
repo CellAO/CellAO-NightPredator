@@ -141,7 +141,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             // and save the changes to the statsdb
             client.Character.WriteStats();
-            client.Character.CalculateSkills();
+            client.Character.SendChangedStats();
         }
 
         #endregion

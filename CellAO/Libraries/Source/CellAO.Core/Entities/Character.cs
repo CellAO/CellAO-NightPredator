@@ -41,7 +41,6 @@ namespace CellAO.Core.Entities
     using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
-    using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -117,7 +116,6 @@ namespace CellAO.Core.Entities
             }
 
             this.BaseInventory = new PlayerInventory(this);
-            this.Stats.AfterStatChangedEvent += this.StatsAfterStatChangedEvent;
 
             this.SocialTab = new Dictionary<int, int>
                              {
@@ -372,6 +370,24 @@ namespace CellAO.Core.Entities
         public void Send(SystemMessage message)
         {
             this.Playfield.Send(this.Client, message);
+        }
+
+        /// <summary>
+        /// </summary>
+        public void SendChangedStats()
+        {
+            var message = new StatMessage() { Identity = this.Identity, };
+            message.Stats = this.Stats.ChangedAnnouncingStats;
+            if (message.Stats.Length > 0)
+            {
+                this.Playfield.AnnounceOthers(message, this.Identity);
+            }
+
+            message.Stats = this.Stats.ChangedStats;
+            if (message.Stats.Length > 0)
+            {
+                this.Playfield.Send(this.Client, message);
+            }
         }
 
         /// <summary>
@@ -641,47 +657,6 @@ namespace CellAO.Core.Entities
         internal void Send(MessageBody messageBody)
         {
             this.Playfield.Send(this.Client, messageBody);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sender">
-        /// </param>
-        /// <param name="e">
-        /// </param>
-        private void StatsAfterStatChangedEvent(object sender, StatChangedEventArgs e)
-        {
-            if (DoNotDoTimers)
-            {
-                return;
-            }
-
-            uint valueToSend = e.Stat.SendBaseValue ? e.Stat.BaseValue : (uint)e.Stat.Value;
-
-            var messageBody = new StatMessage()
-                              {
-                                  Identity = this.Identity, 
-                                  Stats =
-                                      new[]
-                                      {
-                                          new GameTuple<CharacterStat, uint>()
-                                          {
-                                              Value1 =
-                                                  (CharacterStat)
-                                                  e.Stat.StatId, 
-                                              Value2 = valueToSend
-                                          }
-                                      }, 
-                              };
-
-            if (e.AnnounceToPlayfield)
-            {
-                this.Playfield.Announce(messageBody);
-            }
-            else
-            {
-                this.Send(messageBody);
-            }
         }
 
         #endregion

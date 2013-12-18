@@ -58,6 +58,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var characterActionMessage = (CharacterActionMessage)message.Body;
 
             CharacterAction.Read(characterActionMessage, client);
+            client.Character.SendChangedStats();
         }
 
         #endregion

@@ -68,7 +68,7 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
@@ -77,7 +77,7 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="target">
         /// </param>
@@ -150,8 +150,8 @@ namespace ZoneEngine.ChatCommands
 
                 if (statValue != targetCharacter.Stats[statId].Value)
                 {
-                    response += "\r\nEffective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") = "
-                               + effectiveValue;
+                    response += "\r\nEffective value Stat " + StatNamesDefaults.GetStatName(statId) + " (" + statId
+                                + ") = " + effectiveValue;
                 }
 
                 response += "\r\nTrickle: " + trickle + " Modificator: " + mod + " Percentage: " + perc;

@@ -70,7 +70,8 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(ChatText.CreateIM(character, "Usage: Select target and /command giveitem lowid highid ql"));
+            character.Playfield.Publish(
+                ChatText.CreateIM(character, "Usage: Select target and /command giveitem lowid highid ql"));
             return;
         }
 
@@ -122,7 +123,8 @@ namespace ZoneEngine.ChatCommands
                 InventoryError err = container.BaseInventory.TryAdd(item);
                 if (err != InventoryError.OK)
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "Could not add to inventory. (" + err + ")"));
+                    character.Playfield.Publish(
+                        ChatText.CreateIM(character, "Could not add to inventory. (" + err + ")"));
                 }
 
                 if (targetEntity as Character != null)

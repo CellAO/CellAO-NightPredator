@@ -71,7 +71,7 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {

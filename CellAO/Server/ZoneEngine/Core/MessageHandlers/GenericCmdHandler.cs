@@ -58,6 +58,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var genericCmdMessage = (GenericCmdMessage)message.Body;
 
             GenericCmd.Read(genericCmdMessage, client);
+            client.Character.SendChangedStats();
         }
 
         #endregion

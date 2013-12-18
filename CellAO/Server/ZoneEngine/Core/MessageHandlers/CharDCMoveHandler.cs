@@ -57,6 +57,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var client = (ZoneClient)sender;
             var charDCMoveMessage = (CharDCMoveMessage)message.Body;
             CharacterDCMove.Read(charDCMoveMessage, client);
+            client.Character.SendChangedStats();
         }
 
         #endregion

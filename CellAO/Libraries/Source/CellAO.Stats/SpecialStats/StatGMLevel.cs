@@ -69,16 +69,11 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
                 return LoginDataDao.GetByCharacterId(this.Stats.Owner.Instance).GM;
-            }
-
-            set
-            {
-                base.Value = value;
             }
         }
 

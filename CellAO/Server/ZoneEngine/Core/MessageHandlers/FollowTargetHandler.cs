@@ -71,6 +71,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                Unknown7 = followTargetMessage.Unknown7
                            };
             client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
+            client.Character.SendChangedStats();
         }
 
         #endregion

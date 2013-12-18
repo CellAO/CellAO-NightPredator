@@ -71,7 +71,7 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override uint GetBaseValue
         {
             get
             {
@@ -109,37 +109,14 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
-                if (this.reCalculate)
-                {
-                    int lastOld = this.lastCalculatedValue;
-                    this.lastCalculatedValue =
-                        (int)
-                            Math.Floor(
-                                (double)
-                                    ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-                    if (lastOld != this.lastCalculatedValue)
-                    {
-                        this.OnAfterStatChangedEvent(
-                            new StatChangedEventArgs(
-                                this, 
-                                (uint)lastOld, 
-                                (uint)this.lastCalculatedValue, 
-                                this.AnnounceToPlayfield));
-                    }
-
-                    this.reCalculate = false;
-                }
-
-                return this.lastCalculatedValue;
-            }
-
-            set
-            {
-                this.reCalculate = true;
+                return
+                    (int)
+                        Math.Floor(
+                            (double)((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
             }
         }
 

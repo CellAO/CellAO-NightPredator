@@ -30,22 +30,14 @@ namespace ZoneEngine.ChatCommands
 
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq.Expressions;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
-    using CellAO.Core.Vector;
-
-    using MemBus.Support;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core;
     using ZoneEngine.Core.Packets;
-    using ZoneEngine.Core.Playfields;
 
     #endregion
 
@@ -68,7 +60,7 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
@@ -80,7 +72,7 @@ namespace ZoneEngine.ChatCommands
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="target">
         /// </param>
@@ -88,12 +80,13 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
-            var list = ((Playfield)character.Playfield).ListAvailablePlayfields();
+            Dictionary<Identity, string> list = ((Playfield)character.Playfield).ListAvailablePlayfields();
             var messList = new List<MessageBody>();
             foreach (KeyValuePair<Identity, string> pf in list)
             {
                 messList.Add(ChatText.Create(character, pf.Key.Instance.ToString().PadLeft(8) + ": " + pf.Value));
             }
+
             character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));
         }
 

@@ -28,7 +28,7 @@
 
 namespace ZoneEngine.ChatCommands
 {
-    using CellAO.Core.Entities;
+    #region Usings ...
 
     #region Usings ...
 
@@ -39,9 +39,11 @@ namespace ZoneEngine.ChatCommands
     using System.Globalization;
     using System.Linq;
 
+    using CellAO.Core.Entities;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using ZoneEngine.Core;
+    #endregion
 
     #endregion
 
@@ -137,15 +139,14 @@ namespace ZoneEngine.ChatCommands
         /// <summary>
         /// Returns Help for this command
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         public abstract void CommandHelp(ICharacter character);
 
         /// <summary>
         /// Execute the chat command
         /// </summary>
-        /// <param name="client">
-        /// client
+        /// <param name="character">
         /// </param>
         /// <param name="target">
         /// Target identity

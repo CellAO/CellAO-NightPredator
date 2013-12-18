@@ -71,39 +71,28 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override uint GetBaseValue
         {
             get
             {
                 uint[] healDelta = { 3, 3, 2, 4, 12, 15, 20 };
                 return healDelta[this.Stats[StatIds.breed].BaseValue - 1];
             }
-
-            set
-            {
-                this.reCalculate = true;
-                base.BaseValue = value;
-            }
         }
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
-                int baseval = base.Value;
+                uint baseval = this.BaseValue;
                 if (this.Stats[StatIds.currentmovementmode].Value == (int)MoveModes.Sit)
                 {
                     baseval += baseval >> 1;
                 }
 
-                return baseval;
-            }
-
-            set
-            {
-                base.Value = value;
+                return (int)baseval;
             }
         }
 

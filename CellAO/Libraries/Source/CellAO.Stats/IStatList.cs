@@ -58,6 +58,14 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        GameTuple<CharacterStat, uint>[] ChangedAnnouncingStats { get; }
+
+        /// <summary>
+        /// </summary>
+        GameTuple<CharacterStat, uint>[] ChangedStats { get; }
+
+        /// <summary>
+        /// </summary>
         Identity Owner { get; }
 
         #endregion

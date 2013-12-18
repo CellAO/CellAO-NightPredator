@@ -151,6 +151,10 @@ namespace CellAO.Core.Entities
         void Send(SystemMessage message);
 
         /// <summary>
+        /// </summary>
+        void SendChangedStats();
+
+        /// <summary>
         /// Update move type
         /// </summary>
         /// <param name="moveType">

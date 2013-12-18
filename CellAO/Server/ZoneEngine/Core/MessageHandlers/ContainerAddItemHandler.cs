@@ -58,6 +58,7 @@ namespace ZoneEngine.Core.MessageHandlers
             var containerAddItemMessage = (ContainerAddItemMessage)message.Body;
 
             ContainerAddItem.AddItemToContainer(containerAddItemMessage, client);
+            client.Character.SendChangedStats();
         }
 
         #endregion

@@ -72,46 +72,28 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override uint GetBaseValue
         {
             get
             {
                 uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
                 return nanodelta[this.Stats[StatIds.breed].BaseValue - 1];
             }
-
-            set
-            {
-                base.BaseValue = value;
-            }
         }
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
-                if (this.reCalculate)
+                uint baseval = this.GetBaseValue;
+                if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
                 {
-                    this.reCalculate = false;
-                    int baseval = base.Value;
-                    if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value
-                        == (int)MoveModes.Sit)
-                    {
-                        baseval = (int)((double)1.5 * baseval);
-                    }
-
-                    this.lastCalculatedValue = baseval;
+                    baseval = baseval + (baseval >> 1);
                 }
 
-                return this.lastCalculatedValue;
-            }
-
-            set
-            {
-                this.reCalculate = true;
-                base.Value = value;
+                return (int)baseval;
             }
         }
 

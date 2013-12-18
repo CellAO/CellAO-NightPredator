@@ -73,7 +73,8 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(ChatText.CreateIM(character, "Syntax: /get <stat name|stat id> <new stat value>"));
+            character.Playfield.Publish(
+                ChatText.CreateIM(character, "Syntax: /get <stat name|stat id> <new stat value>"));
         }
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace ZoneEngine.ChatCommands
             uint statNewValue = 1234567890;
             try
             {
-                statNewValue = uint.Parse(args[2]);
+                statNewValue = (uint)int.Parse(args[2]);
             }
             catch
             {
@@ -138,7 +139,7 @@ namespace ZoneEngine.ChatCommands
             try
             {
                 statOldValue = tempch.Stats[statId].BaseValue;
-                tempch.Stats[statId].Set(statNewValue);
+                tempch.Stats[statId].Value = (int)statNewValue;
             }
             catch
             {

@@ -71,24 +71,12 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override int Value
+        public override int GetValue
         {
             get
             {
-                if (this.reCalculate)
-                {
-                    int level = this.Stats[StatIds.alienlevel].Value;
-                    this.lastCalculatedValue = Convert.ToInt32(XPTable.TableAlienXP[level, 2]);
-                    this.reCalculate = false;
-                }
-
-                return this.lastCalculatedValue;
-            }
-
-            set
-            {
-                this.reCalculate = true;
-                base.Value = value;
+                int level = this.Stats[StatIds.alienlevel].Value;
+                return Convert.ToInt32(XPTable.TableAlienXP[level, 2]);
             }
         }
 

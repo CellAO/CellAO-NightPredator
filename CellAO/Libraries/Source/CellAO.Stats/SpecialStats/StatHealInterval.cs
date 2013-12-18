@@ -71,7 +71,7 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override uint BaseValue
+        public override uint GetBaseValue
         {
             get
             {
@@ -79,12 +79,6 @@ namespace CellAO.Stats.SpecialStats
                     (uint)
                         (29 - Math.Min(this.Stats[StatIds.stamina].Value / 30, 27)
                          - (this.Stats[StatIds.currentmovementmode].Value == (int)MoveModes.Sit ? 1 : 0));
-            }
-
-            set
-            {
-                this.reCalculate = true;
-                base.BaseValue = value;
             }
         }
 

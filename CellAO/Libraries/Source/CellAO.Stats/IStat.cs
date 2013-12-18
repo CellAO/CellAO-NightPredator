@@ -64,6 +64,10 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        bool Changed { get; set; }
+
+        /// <summary>
+        /// </summary>
         int Modifier { get; set; }
 
         /// <summary>

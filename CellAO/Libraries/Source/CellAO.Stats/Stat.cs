@@ -31,7 +31,6 @@ namespace CellAO.Stats
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.Remoting.Messaging;
 
     #endregion
 
@@ -95,6 +94,14 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        internal int lastCalculatedValue = -1;
+
+        /// <summary>
+        /// </summary>
+        internal bool reCalculate = true;
+
+        /// <summary>
+        /// </summary>
         private readonly List<int> affects = new List<int>();
 
         /// <summary>
@@ -107,10 +114,6 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        internal int lastCalculatedValue = -1;
-
-        /// <summary>
-        /// </summary>
         private int modifier = 0;
 
         /// <summary>
@@ -120,8 +123,6 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         private bool sendBaseValue = true;
-
-        internal bool reCalculate = true;
 
         /// <summary>
         /// </summary>
@@ -209,11 +210,11 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public virtual uint BaseValue
+        public uint BaseValue
         {
             get
             {
-                return this.baseValue;
+                return this.GetBaseValue;
             }
 
             set
@@ -234,6 +235,29 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         public bool DoNotDontWriteToSql { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public virtual uint GetBaseValue
+        {
+            get
+            {
+                return this.baseValue;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public virtual int GetValue
+        {
+            get
+            {
+                this.lastCalculatedValue = (int)Math.Floor(
+                    (double) // ReSharper disable PossibleLossOfFraction
+                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+                return this.lastCalculatedValue;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -344,25 +368,19 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public virtual int Value
+        public int Value
         {
             get
             {
                 if (this.reCalculate)
                 {
-                    int lastOld = this.lastCalculatedValue;
-                    this.lastCalculatedValue=(int)Math.Floor(
-                    (double) // ReSharper disable PossibleLossOfFraction
-                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-
-                    if (lastOld != this.lastCalculatedValue)
-                    {
-                        this.OnAfterStatChangedEvent(
-                            new StatChangedEventArgs(this, (uint)lastOld, (uint)this.lastCalculatedValue, this.announceToPlayfield));
-                    }
-                // ReSharper restore PossibleLossOfFraction
+                    int temp = this.GetValue;
+                    this.Changed |= temp != this.lastCalculatedValue;
                     this.reCalculate = false;
+
+                    this.lastCalculatedValue = temp;
                 }
+
                 return this.lastCalculatedValue;
             }
 
@@ -411,14 +429,21 @@ namespace CellAO.Stats
 
             if (value != this.BaseValue)
             {
-                uint oldvalue = (uint)this.Value;
-                uint max = this.GetMaxValue(value);
-                this.OnBeforeStatChangedEvent(new StatChangedEventArgs(this, oldvalue, max, this.announceToPlayfield));
-                this.BaseValue = max;
-                this.OnAfterStatChangedEvent(new StatChangedEventArgs(this, oldvalue, max, this.announceToPlayfield));
                 this.Changed = true;
+                uint max = this.GetMaxValue(value);
+                this.BaseValue = max;
 
-                this.OnCalculateStat(new StatChangedEventArgs(this, oldvalue, max, this.announceToPlayfield));
+                if (this.affects.Any())
+                {
+                    foreach (int affectedStat in this.affects)
+                    {
+                        IStat stat = this.Stats[affectedStat];
+                        stat.CalcTrickle();
+
+                        // This recalculates values and sets the changed flag so it can be sent to the client if needed (value has changed)
+                        int temp = stat.Value;
+                    }
+                }
             }
         }
 
@@ -437,9 +462,11 @@ namespace CellAO.Stats
         /// </summary>
         /// <param name="value">
         /// </param>
-        public void SetBaseValue(uint value)
+        public virtual void SetBaseValue(uint value)
         {
+            this.Changed = this.baseValue != value;
             this.baseValue = value;
+            this.reCalculate = true;
         }
 
         /// <summary>
@@ -450,6 +477,15 @@ namespace CellAO.Stats
         {
             // Set the owning list
             this.Stats = stats;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="value">
+        /// </param>
+        public virtual void SetValue(int value)
+        {
+            this.SetBaseValue((uint)value);
         }
 
         #endregion
@@ -474,11 +510,11 @@ namespace CellAO.Stats
             {
                 foreach (int affectedStat in this.affects)
                 {
-                    var stat = this.Stats[affectedStat];
+                    IStat stat = this.Stats[affectedStat];
                     stat.CalcTrickle();
-                    
+
                     // This sends values to the client if needed (value has changed)
-                    var temp = stat.Value;
+                    int temp = stat.Value;
                 }
             }
         }
