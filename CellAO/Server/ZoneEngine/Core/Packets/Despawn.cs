@@ -31,6 +31,8 @@ namespace ZoneEngine.Core.Packets
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.InternalMessages;
+
     #endregion
 
     /// <summary>
@@ -49,6 +51,18 @@ namespace ZoneEngine.Core.Packets
         {
             var message = new DespawnMessage { Identity = targetId, Unknown = 0x01 };
             return message;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetIdentity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IMSendAOtomationMessageToPlayfieldOthers CreateIM(Identity targetIdentity)
+        {
+            DespawnMessage message = Create(targetIdentity);
+            return new IMSendAOtomationMessageToPlayfieldOthers() { Body = message, Identity = targetIdentity };
         }
 
         #endregion
