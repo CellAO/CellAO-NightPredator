@@ -61,6 +61,10 @@
     <Compile Include="bStream.cs" />
     <Compile Include="Extractor.cs" />
     <Compile Include="NewParser.cs" />
+    <Content Include="..\..\..\CellAO\Datafiles\itemrelations.txt">
+      <Link>itemrelations.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

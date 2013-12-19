@@ -36,6 +36,8 @@ namespace CellAO.Core.Items
     using CellAO.Core.Events;
     using CellAO.Stats;
 
+    using MemBus.Subscribing;
+
     #endregion
 
     /// <summary>
@@ -84,6 +86,10 @@ namespace CellAO.Core.Items
         /// Quality level
         /// </summary>
         public int Quality;
+
+        /// <summary>
+        /// </summary>
+        public List<int> Relations = new List<int>();
 
         /// <summary>
         /// Item attributes
@@ -767,6 +773,48 @@ namespace CellAO.Core.Items
             return StatNamesDefaults.GetDefault(number);
         }
 
+        public int GetLowId(int qualityLevel)
+        {
+            int result = -1;
+            foreach (int ids in this.Relations)
+            {
+                if (result == -1)
+                {
+                    if (ItemLoader.ItemList[ids].Quality <= qualityLevel)
+                    {
+                        result = ids;
+                    }
+                }
+                else
+                    if ((ItemLoader.ItemList[ids].Quality > ItemLoader.ItemList[result].Quality) && (ItemLoader.ItemList[ids].Quality <= qualityLevel))
+                    {
+                        result = ids;
+                    }
+            }
+            return result;
+        }
+
+
+        public int GetHighId(int qualityLevel)
+        {
+            int result = 1234567890;
+            foreach (int ids in this.Relations)
+            {
+                if (result == 1234567890)
+                {
+                    if (ItemLoader.ItemList[ids].Quality >= qualityLevel)
+                    {
+                        result = ids;
+                    }
+                }
+                else if ((ItemLoader.ItemList[ids].Quality < ItemLoader.ItemList[result].Quality)
+                         && (ItemLoader.ItemList[ids].Quality >= qualityLevel))
+                {
+                    result = ids;
+                }
+            }
+            return result;
+        }
         #endregion
     }
 }

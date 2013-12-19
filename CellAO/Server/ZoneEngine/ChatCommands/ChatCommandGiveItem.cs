@@ -59,7 +59,6 @@ namespace ZoneEngine.ChatCommands
             List<Type> check = new List<Type>();
             check.Add(typeof(int));
             check.Add(typeof(int));
-            check.Add(typeof(int));
 
             return CheckArgumentHelper(check, args);
         }
@@ -71,7 +70,9 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(character, "Usage: Select target and /command giveitem lowid highid ql"));
+                ChatText.CreateIM(
+                    character, 
+                    "Usage: Select target and /command giveitem id ql\r\nIt doesn't matter if high or low id is given"));
             return;
         }
 
@@ -107,19 +108,22 @@ namespace ZoneEngine.ChatCommands
                     return;
                 }
 
-                if (!int.TryParse(args[2], out highId))
-                {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "HighId is no number"));
-                    return;
-                }
-
-                if (!int.TryParse(args[3], out ql))
+                if (!int.TryParse(args[2], out ql))
                 {
                     character.Playfield.Publish(ChatText.CreateIM(character, "QualityLevel is no number"));
                     return;
                 }
 
+                // Determine low and high id depending on ql
+                lowId = ItemLoader.ItemList[lowId].GetLowId(ql);
+                highId = ItemLoader.ItemList[lowId].GetHighId(ql);
+
                 Item item = new Item(ql, lowId, highId);
+                if (ItemLoader.ItemList[lowId].IsStackable())
+                {
+                    item.MultipleCount = ItemLoader.ItemList[lowId].getItemAttribute(212);
+                }
+
                 InventoryError err = container.BaseInventory.TryAdd(item);
                 if (err != InventoryError.OK)
                 {

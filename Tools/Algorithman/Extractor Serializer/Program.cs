@@ -77,7 +77,9 @@ namespace Extractor_Serializer
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Net;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
@@ -102,6 +104,18 @@ namespace Extractor_Serializer
         #endregion
 
         #region Static Fields
+
+        /// <summary>
+        /// </summary>
+        public static List<List<int>> Relations = new List<List<int>>();
+
+        /// <summary>
+        /// </summary>
+        public static Regex reg = new Regex(@".*\/item\/([0-9]*)\/.*");
+
+        /// <summary>
+        /// </summary>
+        public static WebClient webClient = new WebClient();
 
         /// <summary>
         /// The ext.
@@ -198,6 +212,33 @@ namespace Extractor_Serializer
             return line;
         }
 
+        /// <summary>
+        /// </summary>
+        public static void ReadItemRelations()
+        {
+            TextReader tr = new StreamReader("itemrelations.txt");
+            string line;
+            string lastline = null;
+            while ((line = tr.ReadLine()) != null)
+            {
+                if (line != lastline)
+                {
+                    string[] rels = line.Split(' ');
+                    List<int> temp = new List<int>();
+                    foreach (string r in rels)
+                    {
+                        temp.Add(int.Parse(r));
+                    }
+
+                    Relations.Add(temp);
+                }
+
+                lastline = line;
+            }
+
+            tr.Close();
+        }
+
         #endregion
 
         #region Methods
@@ -247,6 +288,39 @@ namespace Extractor_Serializer
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="template">
+        /// </param>
+        private static void GetItemRelations(ItemTemplate template)
+        {
+            try
+            {
+                string html = webClient.DownloadString("http://www.aoitems.com/item/" + template.ID + "/");
+                int pos;
+                if ((pos = html.IndexOf("<select class=\"TemplateSelector\">")) != -1)
+                {
+                    // found template selector
+                    // now narrow down to the links
+                    html = html.Substring(pos + 33);
+                    html = html.Substring(0, html.IndexOf("</select"));
+                    foreach (Match r in reg.Matches(html))
+                    {
+                        int id = int.Parse(r.Groups[1].Value);
+                        template.Relations.Add(id);
+                    }
+                }
+                else
+                {
+                    template.Relations.Add(template.ID);
+                }
+            }
+            catch (Exception)
+            {
+                template.Relations.Add(template.ID);
+            }
         }
 
         /// <summary>
@@ -330,6 +404,9 @@ namespace Extractor_Serializer
                 }
             }
 
+            Console.WriteLine("Loading item relations...");
+            ReadItemRelations();
+
             TextWriter tw = new StreamWriter("itemnames.sql", false, Encoding.GetEncoding("windows-1252"));
             tw.WriteLine("DROP TABLE IF EXISTS `itemnames`;");
             tw.WriteLine("CREATE TABLE `itemnames` (");
@@ -356,6 +433,7 @@ namespace Extractor_Serializer
             // GetData(@"D:\c#\extractor serializer\data\playfields\",0xf4241);
             // GetData(@"D:\c#\extractor serializer\data\nanostrains\",0xf4266);
             // GetData(@"D:\c#\extractor serializer\data\perks\",0xf4264);
+
             var np = new NewParser();
             var rawItemList = new List<ItemTemplate>();
             var rawNanoList = new List<NanoFormula>();
@@ -368,7 +446,7 @@ namespace Extractor_Serializer
                 }
 
                 rawNanoList.Add(np.ParseNano(0xFDE85, recnum, extractor.GetRecordData(0xFDE85, recnum), "temp.sql"));
-                if ((counter % 1000) == 0)
+                if ((counter % 2000) == 0)
                 {
                     Console.Write("\rNano ID: " + recnum.ToString().PadLeft(9));
                 }
@@ -389,7 +467,7 @@ namespace Extractor_Serializer
             {
                 Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
                 rawItemList.Add(np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql));
-                if ((counter % 1000) == 0)
+                if ((counter % 7500) == 0)
                 {
                     Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
                 }
@@ -401,6 +479,59 @@ namespace Extractor_Serializer
 
             Console.WriteLine();
             Console.WriteLine("Items extracted: " + rawItemList.Count);
+
+            List<ItemTemplate> tempItemTemplates = new List<ItemTemplate>();
+            Console.WriteLine("Setting item relations");
+            int perc = Relations.Count / 100;
+            counter = 0;
+            int counter2 = 0;
+            foreach (List<int> rels in Relations)
+            {
+                foreach (int id in rels)
+                {
+                    try
+                    {
+                        ItemTemplate temp = rawItemList.FirstOrDefault(x => x.ID == id);
+                        if (temp != null)
+                        {
+                            temp.Relations = rels;
+                            tempItemTemplates.Add(temp);
+                            rawItemList.Remove(temp);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+
+                if (counter % perc == 0)
+                {
+                    Console.Write("\r" + counter2 + "% done");
+                    counter2++;
+                }
+
+                counter++;
+            }
+
+            Console.WriteLine("\r100% done");
+
+            if (rawItemList.Count != 0)
+            {
+                foreach (ItemTemplate template in rawItemList)
+                {
+                    GetItemRelations(template);
+                    Console.Write("\rFound item relations for " + template.ID);
+                    tempItemTemplates.Add(template);
+                }
+
+                rawItemList.Clear();
+            }
+
+            Console.WriteLine();
+
+            // put the rawitemlist back to its previous state
+            rawItemList = tempItemTemplates;
 
             Console.WriteLine();
             Console.WriteLine("Compacting itemnames.sql");
