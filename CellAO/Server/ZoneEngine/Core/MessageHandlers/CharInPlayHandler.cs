@@ -59,6 +59,7 @@ namespace ZoneEngine.MessageHandlers
             var charInPlayMessage = (CharInPlayMessage)message.Body;
 
             CharacterInPlay.Read(client);
+            client.Character.SendChangedStats();
         }
 
         #endregion
