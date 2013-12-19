@@ -33,7 +33,6 @@ namespace ZoneEngine.Core.PacketHandlers
     using System.Threading;
 
     using CellAO.Core.Actions;
-    using CellAO.Core.Entities;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Enums;
@@ -129,24 +128,7 @@ namespace ZoneEngine.Core.PacketHandlers
             }
 
             // Calculating delay for equip/unequip/switch gear
-            int delay = 0;
-
-            if (itemFrom != null)
-            {
-                delay += itemFrom.GetAttribute(211);
-            }
-
-            if (itemTo != null)
-            {
-                delay += itemTo.GetAttribute(211);
-            }
-
-            if (delay == 0)
-            {
-                delay = 200;
-            }
-
-            int counter;
+            int delay = 20;
 
             cli.Character.DoNotDoTimers = true;
             IItemSlotHandler equipTo = receivingPage as IItemSlotHandler;
@@ -180,15 +162,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
                                 delay = (itemFrom.GetAttribute(211) == 1234567890 ? 20 : itemFrom.GetAttribute(211))
                                         + (itemTo.GetAttribute(211) == 1234567890 ? 20 : itemTo.GetAttribute(211));
-
-                                Thread.Sleep(delay * 10);
-                            }
-                            else
-                            {
-                                Thread.Sleep(200); // social has to wait for 0.2 secs too (for helmet update)
                             }
 
-                            cli.SendCompressed(message);
+                            Thread.Sleep(delay * 10); // social has to wait for 0.2 secs too (for helmet update)
+
+                            cli.Character.Send(message);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
                         }
@@ -230,7 +208,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                 UnEquip.Send(cli, sendingPage, fromPlacement);
                             }
 
-                            cli.SendCompressed(message);
+                            cli.Character.Send(message);
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(cli, receivingPage, toPlacement);
                         }
@@ -260,136 +238,12 @@ namespace ZoneEngine.Core.PacketHandlers
                     }
 
                     UnEquip.Send(cli, sendingPage, fromPlacement);
-                    cli.SendCompressed(message);
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
+                    cli.Character.Send(message);
                 }
             }
 
-            /*
-            switch (fromContainerID)
-            {
-                case 0x68:
-
-                    // from Inventory
-                    if (toPlacement <= 30)
-                    {
-                        // to Weaponspage or Armorpage
-                        // TODO: Send some animation
-                        if (itemTo != null)
-                        {
-                            cli.Character.UnequipItem(itemTo, cli.Character, false, fromPlacement);
-
-                            // send interpolated item
-                            Unequip.Send(cli, itemTo, InventoryPage(toPlacement), toPlacement);
-
-                            // client takes care of hotswap
-                            cli.Character.EquipItem(itemFrom, cli.Character, false, toPlacement);
-                            Equip.Send(cli, itemFrom, InventoryPage(toPlacement), toPlacement);
-                        }
-                        else
-                        {
-                            cli.Character.EquipItem(itemFrom, cli.Character, false, toPlacement);
-                            Equip.Send(cli, itemFrom, InventoryPage(toPlacement), toPlacement);
-                        }
-                    }
-                    else
-                    {
-                        if (toPlacement < 46)
-                        {
-                            if (itemTo == null)
-                            {
-                                cli.Character.EquipItem(itemFrom, cli.Character, false, toPlacement);
-                                Equip.Send(cli, itemFrom, InventoryPage(toPlacement), toPlacement);
-                            }
-                        }
-
-                        // Equiping to social page
-                        if ((toPlacement >= 49) && (toPlacement <= 63))
-                        {
-                            if (itemTo != null)
-                            {
-                                cli.Character.UnequipItem(itemTo, cli.Character, true, fromPlacement);
-
-                                // send interpolated item
-                                cli.Character.EquipItem(itemFrom, cli.Character, true, toPlacement);
-                            }
-                            else
-                            {
-                                cli.Character.EquipItem(itemFrom, cli.Character, true, toPlacement);
-                            }
-
-                            // cli.Character.switchItems(cli, fromplacement, toplacement);
-                        }
-                    }
-
-                    cli.Character.SwitchItems(fromPlacement, toPlacement);
-                    cli.Character.CalculateSkills();
-                    noAppearanceUpdate = false;
-                    break;
-                case 0x66:
-
-                    // from Armorpage
-                    cli.Character.UnequipItem(itemFrom, cli.Character, false, fromPlacement);
-
-                    // send interpolated item
-                    Unequip.Send(cli, itemFrom, InventoryPage(fromPlacement), fromPlacement);
-                    cli.Character.SwitchItems(fromPlacement, toPlacement);
-                    cli.Character.CalculateSkills();
-                    noAppearanceUpdate = false;
-                    break;
-                case 0x65:
-
-                    // from Weaponspage
-                    cli.Character.UnequipItem(itemFrom, cli.Character, false, fromPlacement);
-
-                    // send interpolated item
-                    Unequip.Send(cli, itemFrom, InventoryPage(fromPlacement), fromPlacement);
-                    cli.Character.SwitchItems(fromPlacement, toPlacement);
-                    cli.Character.CalculateSkills();
-                    noAppearanceUpdate = false;
-                    break;
-                case 0x67:
-
-                    // from Implantpage
-                    cli.Character.UnequipItem(itemFrom, cli.Character, false, fromPlacement);
-
-                    // send interpolated item
-                    Unequip.Send(cli, itemFrom, InventoryPage(fromPlacement), fromPlacement);
-                    cli.Character.SwitchItems(fromPlacement, toPlacement);
-                    cli.Character.CalculateSkills();
-                    noAppearanceUpdate = true;
-                    break;
-                case 0x73:
-                    cli.Character.UnequipItem(itemFrom, cli.Character, true, fromPlacement);
-
-                    cli.Character.SwitchItems(fromPlacement, toPlacement);
-                    cli.Character.CalculateSkills();
-                    break;
-                case 0x69:
-                    cli.Character.TransferItemfromBank(fromPlacement, toPlacement);
-                    toPlacement = 0x6f; // setting back to 0x6f for packet reply
-                    noAppearanceUpdate = true;
-                    break;
-                case 0x6c:
-
-                    // KnuBot Trade Window
-                    cli.Character.TransferItemfromKnuBotTrade(fromPlacement, toPlacement);
-                    break;
-                default:
-                    break;
-            }
-        }*/
-
             cli.Character.DoNotDoTimers = false;
-
-            /*
-            SwitchItem.Send(
-                cli,
-                fromContainerID,
-                fromPlacement,
-                new Identity { Type = toIdentity.Type, Instance = toIdentity.Instance },
-                toPlacement);
-             */
 
             cli.Character.Stats.ClearChangedFlags();
 
@@ -398,11 +252,8 @@ namespace ZoneEngine.Core.PacketHandlers
 
             if (!noAppearanceUpdate)
             {
-                AppearanceUpdate.AnnounceAppearanceUpdate((Character)cli.Character);
+                AppearanceUpdate.AnnounceAppearanceUpdate(cli.Character);
             }
-
-            itemFrom = null;
-            itemTo = null;
         }
 
         /// <summary>
@@ -457,37 +308,6 @@ namespace ZoneEngine.Core.PacketHandlers
             }
 
             return action;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="placement">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static int InventoryPage(int placement)
-        {
-            if (placement < 16)
-            {
-                return 0x65;
-            }
-
-            if (placement < 32)
-            {
-                return 0x66;
-            }
-
-            if (placement < 48)
-            {
-                return 0x67;
-            }
-
-            if (placement < 64)
-            {
-                return 0x73;
-            }
-
-            return -1;
         }
 
         #endregion
