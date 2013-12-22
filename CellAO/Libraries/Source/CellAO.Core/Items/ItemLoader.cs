@@ -92,42 +92,5 @@ namespace CellAO.Core.Items
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        /// Copy a stream to another stream with percentage output to console
-        /// </summary>
-        /// <param name="input">
-        /// Input stream
-        /// </param>
-        /// <param name="output">
-        /// Output stream
-        /// </param>
-        private static void CopyStream(Stream input, Stream output)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input", "Input Stream must not be null");
-            }
-
-            if (output == null)
-            {
-                throw new ArgumentNullException("output", "Output Stream must not be null");
-            }
-
-            byte[] buffer = new byte[2097152];
-            int len;
-            while ((len = input.Read(buffer, 0, 2097152)) > 0)
-            {
-                output.Write(buffer, 0, len);
-                Console.Write(
-                    "\rDeflating " + Convert.ToInt32(Math.Floor((double)input.Position / input.Length * 100.0)) + "%");
-            }
-
-            output.Flush();
-            Console.Write("\r                                             \r");
-        }
-
-        #endregion
-    }
+   }
 }

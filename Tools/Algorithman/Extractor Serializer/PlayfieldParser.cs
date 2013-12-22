@@ -32,6 +32,7 @@ namespace Extractor_Serializer
     using System.Collections.Generic;
     using System.IO;
 
+    using CellAO.Core.Items;
     using CellAO.Core.Statels;
 
     using Extractor_Serializer.Structs;
@@ -97,6 +98,18 @@ namespace Extractor_Serializer
                 MemoryStream ms2 = new MemoryStream(buf2);
                 StatelData sd = StatelDataExtractor.ReadFromStream(ms2);
                 ms2.Close();
+                if (sd.Events.Count == 0)
+                {
+                    // Getting the events from the template item if no events are provided in the RDB record
+                    if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
+                    {
+                        ItemTemplate template = ItemLoader.ItemList[sd.TemplateId];
+                        if (template.Events.Count > 0)
+                        {
+                            sd.Events = template.Events;
+                        }
+                    }
+                }
                 statels.Add(sd);
                 count--;
             }

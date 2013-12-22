@@ -37,6 +37,7 @@ namespace ZoneEngine
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
+    using CellAO.Core.Statels;
     using CellAO.Database;
 
     using locales;
@@ -51,6 +52,7 @@ namespace ZoneEngine
 
     using ZoneEngine.Core;
     using ZoneEngine.Core.Functions;
+    using ZoneEngine.Core.Playfields;
     using ZoneEngine.Script;
 
     #endregion
@@ -536,6 +538,24 @@ namespace ZoneEngine
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorReadingNanosFile);
+                Console.WriteLine(e.Message);
+                Colouring.Pop();
+                return false;
+            }
+
+            Colouring.Pop();
+
+            Colouring.Push(ConsoleColor.Green);
+            try
+            {
+                Console.WriteLine("Loaded {0} Playfields", PlayfieldLoader.CacheAllPlayfieldData());
+                Console.WriteLine();
+            }
+            catch (Exception e)
+            {
+                Colouring.Pop();
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine("Error reading statels.dat");
                 Console.WriteLine(e.Message);
                 Colouring.Pop();
                 return false;

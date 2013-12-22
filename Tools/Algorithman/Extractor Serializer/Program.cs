@@ -387,7 +387,7 @@ namespace Extractor_Serializer
                     playfields.First(x => x.PlayfieldId == recnum)
                         .Statels.AddRange(
                             PlayfieldParser.ParseStatels(extractor.GetRecordData(1000026, recnum))
-                                .Where(x => x.Events.Count > 0));
+                               /* .Where(x => x.Events.Count > 0)*/);
                 }
             }
         }
@@ -541,9 +541,6 @@ namespace Extractor_Serializer
             // GetData(@"D:\c#\extractor serializer\data\nanostrains\",0xf4266);
             // GetData(@"D:\c#\extractor serializer\data\perks\",0xf4264);
 
-            List<PlayfieldData> playfields = ExtractPlayfieldData();
-            ExtractPlayfieldStatels(playfields);
-            Console.WriteLine();
 
             /*
             foreach (int recnum in extractor.GetRecordInstances(1000001))
@@ -557,8 +554,6 @@ namespace Extractor_Serializer
             }
 
              */
-            Console.WriteLine("Compressing playfield data...");
-            MessagePackZip.CompressData<PlayfieldData>("playfields.dat", GetVersion(AOPath), playfields);
 
             Console.WriteLine();
             List<NanoFormula> rawNanoList = ReadNanoFormulas();
@@ -604,8 +599,18 @@ namespace Extractor_Serializer
 
             ItemLoader.CacheAllItems("items.dat");
 
+
             Console.WriteLine();
             Console.WriteLine("Items: " + ItemLoader.ItemList.Count + " successfully converted");
+
+            List<PlayfieldData> playfields = ExtractPlayfieldData();
+            ExtractPlayfieldStatels(playfields);
+            Console.WriteLine();
+            Console.WriteLine("Compressing playfield data...");
+            MessagePackZip.CompressData<PlayfieldData>("playfields.dat", GetVersion(AOPath), playfields);
+            Console.WriteLine();
+
+
 
             Console.WriteLine();
             Console.WriteLine("Further Instructions:");

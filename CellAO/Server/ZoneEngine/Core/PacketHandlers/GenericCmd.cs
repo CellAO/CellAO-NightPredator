@@ -29,14 +29,17 @@ namespace ZoneEngine.Core.PacketHandlers
     #region Usings ...
 
     using System;
+    using System.Linq;
 
     using CellAO.Core.Items;
+    using CellAO.Core.Statels;
     using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Packets;
+    using ZoneEngine.Core.Playfields;
 
     #endregion
 
@@ -92,13 +95,35 @@ namespace ZoneEngine.Core.PacketHandlers
                                 client.Character.BaseInventory.RemoveItem(
                                     (int)message.Target.Type, 
                                     message.Target.Instance);
-                                
+
                                 DeleteItem.Send(client, (int)message.Target.Type, message.Target.Instance);
                             }
                         }
 
                         item.PerformAction(client.Character, EventType.OnUse, message.Target.Instance);
                         Reply(message, client);
+                    }
+                    else
+                    {
+                        string s = "Generic Command received:\r\nAction: " + message.Action.ToString() + "("
+                                   + ((int)message.Action).ToString() + ")\r\nTarget: " + message.Target.Type + " "
+                                   + ((int)message.Target.Type).ToString("X8") + ":"
+                                   + message.Target.Instance.ToString("X8");
+                        if (PlayfieldLoader.PFData.ContainsKey(client.Character.Playfield.Identity.Instance))
+                        {
+                            StatelData sd =
+                                PlayfieldLoader.PFData[client.Playfield.Identity.Instance].Statels.FirstOrDefault(
+                                    x =>
+                                        (x.StatelIdentity.Type == message.Target.Type)
+                                        && (x.StatelIdentity.Instance == message.Target.Instance));
+
+                            if (sd != null)
+                            {
+                                s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
+                            }
+                        }
+
+                        client.Character.Send(new ChatTextMessage() { Identity = client.Character.Identity, Text = s });
                     }
 
                     break;

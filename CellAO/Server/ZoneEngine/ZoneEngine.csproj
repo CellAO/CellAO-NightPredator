@@ -70,6 +70,7 @@
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
     <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
+    <Compile Include="ChatCommands\ListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />
+    <Compile Include="Core\Playfields\PlayfieldLoader.cs" />
     <Compile Include="Core\Playfields\Playfields.cs" />
     <Compile Include="Core\TradeSkill.cs" />
     <Compile Include="Core\TradeSkillEntry.cs" />
