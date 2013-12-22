@@ -35,9 +35,7 @@ namespace CellAO.Core.Items
 
     using locales;
 
-    using MsgPack.Serialization;
-
-    using zlib;
+    using Utility;
 
     #endregion
 
@@ -79,59 +77,12 @@ namespace CellAO.Core.Items
         {
             Contract.Requires(!string.IsNullOrEmpty(fname));
             DateTime _now = DateTime.UtcNow;
+
             ItemList = new Dictionary<int, ItemTemplate>();
-            Stream fileStream = new FileStream(fname, FileMode.Open);
-            MemoryStream memoryStream = new MemoryStream();
 
-            ZOutputStream zOutputStream = new ZOutputStream(memoryStream);
-            CopyStream(fileStream, zOutputStream);
+            MessagePackZip.UncompressData<ItemTemplate>(fname).ForEach(x => ItemList.Add(x.ID, x));
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            BinaryReader binaryReader = new BinaryReader(memoryStream);
-            byte versionlength = (byte)memoryStream.ReadByte();
-            char[] version = new char[versionlength];
-            version = binaryReader.ReadChars(versionlength);
-
-            // TODO: Check version and print a warning if not same as config.xml's
-            MessagePackSerializer<ItemTemplate> messagePackSerializer = MessagePackSerializer.Create<ItemTemplate>();
-
-            var buffer = new byte[4];
-            memoryStream.Read(buffer, 0, 4);
-            int packaged = BitConverter.ToInt32(buffer, 0);
-            Console.WriteLine("Reading Items (" + new string(version) + "):");
-            while (true)
-            {
-                try
-                {
-                    List<ItemTemplate> templates = new List<ItemTemplate>();
-                    for (int i = packaged; i > 0; i--)
-                    {
-                        ItemTemplate template = messagePackSerializer.Unpack(memoryStream);
-                        templates.Add(template);
-                        if (template == null)
-                        {
-                            break;
-                        }
-
-                        ItemList.Add(template.ID, template);
-                    }
-
-                    if (templates.Count != packaged)
-                    {
-                        break;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-                Console.Write(
-                    locales.ItemLoaderLoadedItems + " - {1}\r", 
-                    new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
-            }
-
-            Console.Write(
+            Console.WriteLine(
                 locales.ItemLoaderLoadedItems + " - {1}\r", 
                 new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 

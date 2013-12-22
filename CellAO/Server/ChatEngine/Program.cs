@@ -41,6 +41,8 @@ namespace ChatEngine
 
     using ChatEngine.Relay.Common;
 
+    using locales;
+
     using NBug;
     using NBug.Properties;
 
@@ -107,7 +109,7 @@ namespace ChatEngine
                     {
                         if (args[0].ToLower() == "/autostart")
                         {
-                            ct.TextRead("autostart.txt");
+                            Console.WriteLine(locales.ServerConsoleAutostart);
                             chatServer.Start(TCPEnable, UDPEnable);
                         }
 
@@ -115,7 +117,7 @@ namespace ChatEngine
                     }
                 }
 
-                Console.Write(Environment.NewLine + "Server Command >>");
+                Console.Write(Environment.NewLine + locales.ServerConsoleCommand + ">>");
 
                 consoleCommand = Console.ReadLine();
 
@@ -131,7 +133,7 @@ namespace ChatEngine
                         if (chatServer.IsRunning)
                         {
                             Colouring.Push(ConsoleColor.Red);
-                            ct.TextRead("chatisrunning.txt");
+                            Console.WriteLine(locales.ServerConsoleServerIsRunning);
                             Colouring.Pop();
                             break;
                         }
@@ -154,7 +156,7 @@ namespace ChatEngine
                         if (!chatServer.IsRunning)
                         {
                             Colouring.Push(ConsoleColor.Red);
-                            ct.TextRead("chatisnotrunning.txt");
+                            Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
                             Colouring.Pop();
                             break;
                         }
@@ -166,21 +168,21 @@ namespace ChatEngine
                     case "running":
                         if (chatServer.IsRunning)
                         {
-                            ct.TextRead("chatisrunning.txt");
+                            Console.WriteLine(locales.ServerConsoleServerIsRunning);
                             break;
                         }
 
-                        ct.TextRead("chatisnotrunning.txt");
+                        Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
                         break;
 
                     case "help":
                         ct.TextRead("chatcmdhelp.txt");
                         break;
                     case "help start":
-                        ct.TextRead("helpstart.txt");
+                        Console.WriteLine(locales.ServerConsoleCommandHelp_start);
                         break;
                     case "help exit":
-                        ct.TextRead("helpstop.txt");
+                        Console.WriteLine(locales.ServerConsoleCommandHelp_stop);
                         break;
                     case "help running":
                         ct.TextRead("chathelpcmdrunning.txt");
@@ -322,7 +324,7 @@ namespace ChatEngine
             }
             catch (Exception e)
             {
-                ct.TextRead("ip_config_parse_error.txt");
+                Console.WriteLine(locales.ErrorIPAddressParseFailed);
                 Console.Write(e.Message);
                 Console.ReadKey();
                 return false;
@@ -345,7 +347,7 @@ namespace ChatEngine
 
             Console.WriteLine();
 
-            ct.TextRead("main.txt");
+            Console.WriteLine(locales.ServerConsoleMainText, DateTime.Now.Year);
 
             if (!Initialize())
             {

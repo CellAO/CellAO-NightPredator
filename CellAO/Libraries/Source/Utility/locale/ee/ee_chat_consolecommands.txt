@@ -1,1 +1,0 @@
-﻿Sisesta "start" serveri käivitamiseks, "stop" serveri peatamiseks ja "exit" programmi sulgemiseks.

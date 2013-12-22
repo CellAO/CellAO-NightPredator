@@ -1,6 +1,0 @@
-﻿Nendel käskudel on abistav text:
-start
-exit
-running
-Adduser
-setpass

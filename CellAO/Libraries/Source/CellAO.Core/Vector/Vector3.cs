@@ -109,6 +109,15 @@ namespace CellAO.Core.Vector
             this.z = z;
         }
 
+        /// <summary>
+        /// </summary>
+        public Vector3()
+        {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+        }
+
         #endregion
 
         #region Public Properties

@@ -25,11 +25,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BD319BA9-7666-49DD-9CAE-51C23AC78581}"
 	ProjectSection(SolutionItems) = preProject
 		Config\Config.xml = Config\Config.xml
+		Datafiles\itemrelations.txt = Datafiles\itemrelations.txt
 		Datafiles\items.dat = Datafiles\items.dat
 		Datafiles\nanos.dat = Datafiles\nanos.dat
 		Config\NBug.ChatEngine.config = Config\NBug.ChatEngine.config
 		Config\NBug.LoginEngine.config = Config\NBug.LoginEngine.config
 		Config\NBug.ZoneEngine.config = Config\NBug.ZoneEngine.config
+		Datafiles\playfields.dat = Datafiles\playfields.dat
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
@@ -399,9 +401,9 @@ Global
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal

@@ -157,6 +157,7 @@ namespace CellAO.Enums
         /// <summary>
         /// </summary>
         ChangeVariable = 53110, 
+        ChangeVariable2 = 53111,
 
         /// <summary>
         /// </summary>

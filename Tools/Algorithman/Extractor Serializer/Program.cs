@@ -83,10 +83,9 @@ namespace Extractor_Serializer
 
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
+    using CellAO.Core.Playfields;
 
-    using MsgPack.Serialization;
-
-    using zlib;
+    using Utility;
 
     #endregion
 
@@ -245,6 +244,40 @@ namespace Extractor_Serializer
 
         /// <summary>
         /// </summary>
+        /// <param name="ItemNamesSql">
+        /// </param>
+        private static void CompactingItemNamesSql(List<string> ItemNamesSql)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Compacting itemnames.sql");
+            TextWriter itnsql = new StreamWriter("itemnames.sql", true, Encoding.GetEncoding("windows-1252"));
+            while (ItemNamesSql.Count > 0)
+            {
+                int count = 0;
+                string toWrite = string.Empty;
+                while ((count < 20) && (ItemNamesSql.Count > 0))
+                {
+                    if (toWrite.Length > 0)
+                    {
+                        toWrite += ",";
+                    }
+
+                    toWrite += ItemNamesSql[0];
+                    ItemNamesSql.RemoveAt(0);
+                    count++;
+                }
+
+                if (toWrite != string.Empty)
+                {
+                    itnsql.WriteLine("INSERT INTO itemnames VALUES " + toWrite + ";");
+                }
+            }
+
+            itnsql.Close();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         private static bool CopyDatafiles()
@@ -256,38 +289,181 @@ namespace Extractor_Serializer
             if (File.Exists(Path.Combine(pathToDatafiles, "items.dat")))
             {
                 File.Delete(Path.Combine(pathToDatafiles, "items.dat"));
-                File.Copy("items.dat", Path.Combine(pathToDatafiles, "items.dat"));
             }
-            else
-            {
-                Console.WriteLine("Could not find old items.dat in the Datafiles folder.");
-                result = false;
-            }
+
+            File.Copy("items.dat", Path.Combine(pathToDatafiles, "items.dat"));
 
             if (File.Exists(Path.Combine(pathToDatafiles, "nanos.dat")))
             {
                 File.Delete(Path.Combine(pathToDatafiles, "nanos.dat"));
-                File.Copy("nanos.dat", Path.Combine(pathToDatafiles, "nanos.dat"));
             }
-            else
+
+            File.Copy("nanos.dat", Path.Combine(pathToDatafiles, "nanos.dat"));
+
+            if (File.Exists(Path.Combine(pathToDatafiles, "playfields.dat")))
             {
-                Console.WriteLine("Could not find old nanos.dat in the Datafiles folder.");
-                result = false;
+                File.Delete(Path.Combine(pathToDatafiles, "playfields.dat"));
             }
+
+            File.Copy("playfields.dat", Path.Combine(pathToDatafiles, "playfields.dat"));
+
+            if (File.Exists(Path.Combine(pathToDatafiles, "itemrelations.txt")))
+            {
+                File.Delete(Path.Combine(pathToDatafiles, "itemrelations.txt"));
+            }
+
+            File.Copy("itemrelations.txt", Path.Combine(pathToDatafiles, "itemrelations.txt"));
 
             pathToDatafiles = Path.Combine("..", "..", "Libraries", "Source", "CellAO.Database", "SqlTables");
             if (File.Exists(Path.Combine(pathToDatafiles, "itemnames.sql")))
             {
                 File.Delete(Path.Combine(pathToDatafiles, "itemnames.sql"));
-                File.Copy("itemnames.sql", Path.Combine(pathToDatafiles, "itemnames.sql"));
-            }
-            else
-            {
-                Console.WriteLine("Could not find old itemnames.sql in the SqlTables folder.");
-                result = false;
             }
 
+            File.Copy("itemnames.sql", Path.Combine(pathToDatafiles, "itemnames.sql"));
+
             return result;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="ItemNamesSql">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private static List<ItemTemplate> ExtractItemTemplates(List<string> ItemNamesSql)
+        {
+            var np = new NewParser();
+            List<ItemTemplate> rawItemList = new List<ItemTemplate>();
+
+            int counter = 0;
+            foreach (int recnum in extractor.GetRecordInstances(0xF4254))
+            {
+                rawItemList.Add(np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql));
+                if ((counter % 7500) == 0)
+                {
+                    Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
+                }
+
+                counter++;
+            }
+
+            Console.Write("\rItem ID: " + rawItemList[rawItemList.Count - 1].ID.ToString().PadLeft(9));
+
+            Console.WriteLine();
+            return rawItemList;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static List<PlayfieldData> ExtractPlayfieldData()
+        {
+            List<PlayfieldData> playfields = new List<PlayfieldData>();
+            foreach (int recnum in extractor.GetRecordInstances(1000030))
+            {
+                PlayfieldData pf = new PlayfieldData();
+                pf.PlayfieldId = recnum;
+                pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
+                playfields.Add(pf);
+            }
+
+            return playfields;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="playfields">
+        /// </param>
+        private static void ExtractPlayfieldStatels(List<PlayfieldData> playfields)
+        {
+            foreach (int recnum in extractor.GetRecordInstances(1000026))
+            {
+                Console.Write("Parsing Statels for playfield " + recnum + "\r");
+
+                if (playfields.Any(x => x.PlayfieldId == recnum))
+                {
+                    playfields.First(x => x.PlayfieldId == recnum)
+                        .Statels.AddRange(
+                            PlayfieldParser.ParseStatels(extractor.GetRecordData(1000026, recnum))
+                                .Where(x => x.Events.Count > 0));
+                }
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static string GetAOPath()
+        {
+            string AOPath = string.Empty;
+            bool foundAO = false;
+            Console.WriteLine("Enter exit to close program");
+            while (!foundAO)
+            {
+                if (File.Exists("config.txt"))
+                {
+                    TextReader tr = new StreamReader("config.txt");
+                    AOPath = tr.ReadLine();
+                    tr.Close();
+                }
+
+                foundAO = false;
+                Console.Write("Please enter your AO Install Path [" + AOPath + "]:");
+                string temp = Console.ReadLine();
+                if (temp != string.Empty)
+                {
+                    AOPath = temp;
+                }
+
+                if (temp.ToLower() == "exit")
+                {
+                    return string.Empty;
+                }
+
+                if (!Directory.Exists(AOPath))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    extractor = new Extractor(AOPath);
+                    TextWriter tw2 = new StreamWriter("config.txt", false, Encoding.GetEncoding("windows-1252"));
+                    tw2.WriteLine(AOPath);
+                    tw2.Close();
+                    foundAO = true;
+                    Console.WriteLine("Found AO Database on " + AOPath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    foundAO = false;
+                }
+
+                // Try to add cd_image\data\db
+                if (!foundAO)
+                {
+                    try
+                    {
+                        AOPath = Path.Combine(AOPath, "cd_image", "data", "db");
+                        extractor = new Extractor(AOPath);
+                        TextWriter tw2 = new StreamWriter("config.txt", false, Encoding.GetEncoding("windows-1252"));
+                        tw2.WriteLine(AOPath);
+                        tw2.Close();
+                        foundAO = true;
+                        Console.WriteLine("Found AO Database on " + AOPath);
+                    }
+                    catch (Exception)
+                    {
+                        foundAO = false;
+                    }
+                }
+            }
+
+            return AOPath;
         }
 
         /// <summary>
@@ -331,96 +507,27 @@ namespace Extractor_Serializer
         /// </param>
         private static void Main(string[] args)
         {
-            Console.WriteLine("**********************************************************************");
-            Console.WriteLine("**                                                                  **");
-            Console.WriteLine("**  AO Item and Nano Extractor/Serializer v0.85beta                  **");
-            Console.WriteLine("**                                                                  **");
-            Console.WriteLine("**********************************************************************");
+            OnScreenBanner.PrintCellAOBanner(ConsoleColor.White);
 
             Console.WriteLine();
 
-            string AOPath = string.Empty;
-            bool foundAO = false;
-            Console.WriteLine("Enter exit to close program");
-            while (!foundAO)
+            string AOPath = GetAOPath();
+            if (AOPath == string.Empty)
             {
-                if (File.Exists("config.txt"))
-                {
-                    TextReader tr = new StreamReader("config.txt");
-                    AOPath = tr.ReadLine();
-                    tr.Close();
-                }
-
-                foundAO = false;
-                Console.Write("Please enter your AO Install Path [" + AOPath + "]:");
-                string temp = Console.ReadLine();
-                if (temp != string.Empty)
-                {
-                    AOPath = temp;
-                }
-
-                if (temp.ToLower() == "exit")
-                {
-                    return;
-                }
-
-                if (!Directory.Exists(AOPath))
-                {
-                    continue;
-                }
-
-                try
-                {
-                    extractor = new Extractor(AOPath);
-                    TextWriter tw2 = new StreamWriter("config.txt", false, Encoding.GetEncoding("windows-1252"));
-                    tw2.WriteLine(AOPath);
-                    tw2.Close();
-                    foundAO = true;
-                    Console.WriteLine("Found AO Database on " + AOPath);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    foundAO = false;
-                }
-
-                // Try to add cd_image\data\db
-                if (!foundAO)
-                {
-                    try
-                    {
-                        AOPath = Path.Combine(AOPath, "cd_image", "data", "db");
-                        extractor = new Extractor(AOPath);
-                        TextWriter tw2 = new StreamWriter("config.txt", false, Encoding.GetEncoding("windows-1252"));
-                        tw2.WriteLine(AOPath);
-                        tw2.Close();
-                        foundAO = true;
-                        Console.WriteLine("Found AO Database on " + AOPath);
-                    }
-                    catch (Exception)
-                    {
-                        foundAO = false;
-                    }
-                }
+                // Exit
+                return;
             }
 
             Console.WriteLine("Loading item relations...");
             ReadItemRelations();
 
-            TextWriter tw = new StreamWriter("itemnames.sql", false, Encoding.GetEncoding("windows-1252"));
-            tw.WriteLine("DROP TABLE IF EXISTS `itemnames`;");
-            tw.WriteLine("CREATE TABLE `itemnames` (");
-            tw.WriteLine("  `AOID` int(10) NOT NULL,");
-            tw.WriteLine("  `Name` varchar(250) NOT NULL,");
-            tw.WriteLine("  PRIMARY KEY (`AOID`)");
-            tw.WriteLine(") ENGINE=MyIsam DEFAULT CHARSET=latin1;");
-            tw.WriteLine();
-            tw.Close();
+            PrepareItemNamesSQL();
 
             Console.WriteLine("Number of Items to extract: " + extractor.GetRecordInstances(0xF4254).Length);
 
             // ITEM RECORD TYPE
             Console.WriteLine("Number of Nanos to extract: " + extractor.GetRecordInstances(0xFDE85).Length);
+            Console.WriteLine();
 
             // NANO RECORD TYPE
 
@@ -434,9 +541,127 @@ namespace Extractor_Serializer
             // GetData(@"D:\c#\extractor serializer\data\nanostrains\",0xf4266);
             // GetData(@"D:\c#\extractor serializer\data\perks\",0xf4264);
 
+            List<PlayfieldData> playfields = ExtractPlayfieldData();
+            ExtractPlayfieldStatels(playfields);
+            Console.WriteLine();
+
+            /*
+            foreach (int recnum in extractor.GetRecordInstances(1000001))
+            {
+                if (recnum <152)
+                {
+                    continue;
+                }
+                Console.WriteLine("Walls for " + recnum);
+                Walls w = WallExtract.ReadFromStream(new MemoryStream(extractor.GetRecordData(1000001, recnum)));
+            }
+
+             */
+            Console.WriteLine("Compressing playfield data...");
+            MessagePackZip.CompressData<PlayfieldData>("playfields.dat", GetVersion(AOPath), playfields);
+
+            Console.WriteLine();
+            List<NanoFormula> rawNanoList = ReadNanoFormulas();
+            Console.WriteLine();
+            Console.WriteLine("Nanos extracted: " + rawNanoList.Count);
+            Console.WriteLine();
+
+            List<string> ItemNamesSql = new List<string>();
+            List<ItemTemplate> rawItemList = ExtractItemTemplates(ItemNamesSql);
+
+            Console.WriteLine("Items extracted: " + rawItemList.Count);
+
+            SetItemRelations(rawItemList);
+
+            CompactingItemNamesSql(ItemNamesSql);
+
+            // SerializationContext.Default.Serializers.Register(new AOFunctionArgumentsSerializer());
+            Console.WriteLine();
+            Console.WriteLine("Items extracted: " + rawItemList.Count);
+
+            Console.WriteLine();
+            Console.WriteLine("Creating serialized nano data file - please wait");
+
+            string version = GetVersion(AOPath);
+            MessagePackZip.CompressData<NanoFormula>("nanos.dat", version, rawNanoList, 1000);
+
+            Console.WriteLine();
+            Console.WriteLine("Checking Nanos...");
+            Console.WriteLine();
+            NanoLoader.CacheAllNanos("nanos.dat");
+            Console.WriteLine();
+            Console.WriteLine("Nanos: " + NanoLoader.NanoList.Count + " successfully converted");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Creating serialized item data file - please wait");
+
+            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 5000);
+
+            Console.WriteLine();
+            Console.WriteLine("Checking Items...");
+            Console.WriteLine();
+
+            ItemLoader.CacheAllItems("items.dat");
+
+            Console.WriteLine();
+            Console.WriteLine("Items: " + ItemLoader.ItemList.Count + " successfully converted");
+
+            Console.WriteLine();
+            Console.WriteLine("Further Instructions:");
+            Console.WriteLine(
+                "- Copy items.dat, nanos.dat and playfields.dat into your CellAO/Datafiles folder and overwrite.");
+            Console.WriteLine("- Apply itemnames.sql to your database");
+            Console.WriteLine();
+            Console.WriteLine("   OR   ");
+            Console.WriteLine();
+            Console.WriteLine("Let me copy it over to the Source Tree");
+            Console.WriteLine();
+            while (true)
+            {
+                Console.WriteLine("Please choose:");
+                Console.WriteLine("1: Copy the files to CellAO/Datafiles and CellAO/.../CellAO.Database/SqlTables.");
+                Console.WriteLine("2: Exit and copy yourself");
+                Console.WriteLine("[1,2]:");
+                string line = Console.ReadLine();
+                if (line.Trim() == "1")
+                {
+                    if (CopyDatafiles())
+                    {
+                        break;
+                    }
+                }
+
+                if (line.Trim() == "2")
+                {
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void PrepareItemNamesSQL()
+        {
+            TextWriter tw = new StreamWriter("itemnames.sql", false, Encoding.GetEncoding("windows-1252"));
+            tw.WriteLine("DROP TABLE IF EXISTS `itemnames`;");
+            tw.WriteLine("CREATE TABLE `itemnames` (");
+            tw.WriteLine("  `AOID` int(10) NOT NULL,");
+            tw.WriteLine("  `Name` varchar(250) NOT NULL,");
+            tw.WriteLine("  PRIMARY KEY (`AOID`)");
+            tw.WriteLine(") ENGINE=MyIsam DEFAULT CHARSET=latin1;");
+            tw.WriteLine();
+            tw.Close();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        private static List<NanoFormula> ReadNanoFormulas()
+        {
             var np = new NewParser();
-            var rawItemList = new List<ItemTemplate>();
-            var rawNanoList = new List<NanoFormula>();
+            List<NanoFormula> rawNanoList = new List<NanoFormula>();
             int counter = 0;
             foreach (int recnum in extractor.GetRecordInstances(0xFDE85))
             {
@@ -457,33 +682,20 @@ namespace Extractor_Serializer
             Console.Write("\rNano ID: " + rawNanoList[rawNanoList.Count - 1].ID.ToString().PadLeft(9));
 
             File.Delete("temp.sql");
-            Console.WriteLine();
-            Console.WriteLine("Nanos extracted: " + rawNanoList.Count);
+            return rawNanoList;
+        }
 
-            List<string> ItemNamesSql = new List<string>();
-
-            counter = 0;
-            foreach (int recnum in extractor.GetRecordInstances(0xF4254))
-            {
-                Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
-                rawItemList.Add(np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql));
-                if ((counter % 7500) == 0)
-                {
-                    Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
-                }
-
-                counter++;
-            }
-
-            Console.Write("\rItem ID: " + rawItemList[rawItemList.Count - 1].ID.ToString().PadLeft(9));
-
-            Console.WriteLine();
-            Console.WriteLine("Items extracted: " + rawItemList.Count);
-
+        /// <summary>
+        /// </summary>
+        /// <param name="rawItemList">
+        /// </param>
+        private static void SetItemRelations(List<ItemTemplate> rawItemList)
+        {
             List<ItemTemplate> tempItemTemplates = new List<ItemTemplate>();
             Console.WriteLine("Setting item relations");
+
             int perc = Relations.Count / 100;
-            counter = 0;
+            int counter = 0;
             int counter2 = 0;
             foreach (List<int> rels in Relations)
             {
@@ -515,193 +727,49 @@ namespace Extractor_Serializer
             }
 
             Console.WriteLine("\r100% done");
-
             if (rawItemList.Count != 0)
             {
                 foreach (ItemTemplate template in rawItemList)
                 {
                     GetItemRelations(template);
-                    Console.Write("\rFound item relations for " + template.ID);
+                    Console.Write("\rFound missing item relations for " + template.ID);
                     tempItemTemplates.Add(template);
                 }
 
+                Console.WriteLine();
+                Console.Write("Saving new itemrelations...");
+                List<string> newItemrelations = new List<string>();
+                foreach (ItemTemplate it in tempItemTemplates)
+                {
+                    string ir = string.Empty;
+                    foreach (int i in it.Relations)
+                    {
+                        ir += ir == string.Empty ? i.ToString() : " " + i;
+                    }
+
+                    if (!newItemrelations.Contains(ir))
+                    {
+                        newItemrelations.Add(ir);
+                    }
+                }
+
+                newItemrelations.Sort();
+
+                TextWriter tw = new StreamWriter("itemrelations.txt");
+                foreach (string s in newItemrelations)
+                {
+                    tw.WriteLine(s);
+                }
+
+                tw.Close();
                 rawItemList.Clear();
+                Console.WriteLine(" done");
             }
 
             Console.WriteLine();
 
             // put the rawitemlist back to its previous state
-            rawItemList = tempItemTemplates;
-
-            Console.WriteLine();
-            Console.WriteLine("Compacting itemnames.sql");
-            TextWriter itnsql = new StreamWriter("itemnames.sql", true, Encoding.GetEncoding("windows-1252"));
-            while (ItemNamesSql.Count > 0)
-            {
-                int count = 0;
-                string toWrite = string.Empty;
-                while ((count < 20) && (ItemNamesSql.Count > 0))
-                {
-                    if (toWrite.Length > 0)
-                    {
-                        toWrite += ",";
-                    }
-
-                    toWrite += ItemNamesSql[0];
-                    ItemNamesSql.RemoveAt(0);
-                    count++;
-                }
-
-                if (toWrite != string.Empty)
-                {
-                    itnsql.WriteLine("INSERT INTO itemnames VALUES " + toWrite + ";");
-                }
-            }
-
-            itnsql.Close();
-
-            // SerializationContext.Default.Serializers.Register(new AOFunctionArgumentsSerializer());
-            Console.WriteLine();
-            Console.WriteLine("Items extracted: " + rawItemList.Count);
-
-            Console.WriteLine();
-            Console.WriteLine("Creating serialized nano data file - please wait");
-            Stream sf = new FileStream("nanos.dat", FileMode.Create);
-
-            var ds = new ZOutputStream(sf, zlibConst.Z_BEST_COMPRESSION);
-            var sm = new MemoryStream();
-            MessagePackSerializer<NanoFormula> bf = MessagePackSerializer.Create<NanoFormula>();
-
-            var nanoList2 = new List<NanoFormula>();
-
-            int maxnum = 5000;
-            string version = GetVersion(AOPath);
-            if (version == string.Empty)
-            {
-                return;
-            }
-
-            byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
-            sm.WriteByte((byte)versionbuffer.Length);
-            sm.Write(versionbuffer, 0, versionbuffer.Length);
-
-            byte[] buffer = BitConverter.GetBytes(maxnum);
-            sm.Write(buffer, 0, buffer.Length);
-
-            foreach (NanoFormula nanos in rawNanoList)
-            {
-                nanoList2.Add(nanos);
-                if (nanoList2.Count == maxnum)
-                {
-                    for (int i = nanoList2.Count; i > 0; i--)
-                    {
-                        bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
-                    }
-
-                    sm.Flush();
-                    nanoList2.Clear();
-                }
-            }
-
-            for (int i = nanoList2.Count; i > 0; i--)
-            {
-                bf.Pack(sm, nanoList2.ElementAt(nanoList2.Count - i));
-            }
-
-            sm.Seek(0, SeekOrigin.Begin);
-            CopyStream(sm, ds);
-            sm.Close();
-            ds.Close();
-
-            Console.WriteLine();
-            Console.WriteLine("Checking Nanos...");
-            Console.WriteLine();
-            NanoLoader.CacheAllNanos("nanos.dat");
-            Console.WriteLine();
-            Console.WriteLine("Nanos: " + NanoLoader.NanoList.Count + " successfully converted");
-
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Creating serialized item data file - please wait");
-
-            sf = new FileStream("items.dat", FileMode.Create);
-
-            ds = new ZOutputStream(sf, zlibConst.Z_BEST_COMPRESSION);
-            sm = new MemoryStream();
-            MessagePackSerializer<ItemTemplate> bf2 = MessagePackSerializer.Create<ItemTemplate>();
-
-            List<ItemTemplate> items = new List<ItemTemplate>();
-
-            maxnum = 5000;
-            sm.WriteByte((byte)versionbuffer.Length);
-            sm.Write(versionbuffer, 0, versionbuffer.Length);
-
-            buffer = BitConverter.GetBytes(maxnum);
-            sm.Write(buffer, 0, buffer.Length);
-
-            foreach (ItemTemplate it in rawItemList)
-            {
-                items.Add(it);
-                if (items.Count == maxnum)
-                {
-                    for (int i = items.Count; i > 0; i--)
-                    {
-                        bf2.Pack(sm, items.ElementAt(items.Count - i));
-                    }
-
-                    sm.Flush();
-                    items.Clear();
-                }
-            }
-
-            for (int i = items.Count; i > 0; i--)
-            {
-                bf2.Pack(sm, items.ElementAt(items.Count - i));
-            }
-
-            sm.Seek(0, SeekOrigin.Begin);
-            CopyStream(sm, ds);
-            sm.Close();
-            ds.Close();
-
-            Console.WriteLine();
-            Console.WriteLine("Checking Items...");
-            Console.WriteLine();
-
-            ItemLoader.CacheAllItems("items.dat");
-
-            Console.WriteLine();
-            Console.WriteLine("Items: " + ItemLoader.ItemList.Count + " successfully converted");
-
-            Console.WriteLine();
-            Console.WriteLine("Further Instructions:");
-            Console.WriteLine("- Copy items.dat and nanos.dat into your CellAO folder and overwrite.");
-            Console.WriteLine("- Apply itemnames.sql to your database");
-            Console.WriteLine();
-            Console.WriteLine("   OR   ");
-            Console.WriteLine();
-            Console.WriteLine("Let me copy it over to the Source Tree");
-            Console.WriteLine();
-            while (true)
-            {
-                Console.WriteLine("Please choose:");
-                Console.WriteLine("1: Copy the files to CellAO/Datafiles and CellAO/.../CellAO.Database/SqlTables.");
-                Console.WriteLine("2: Exit and copy yourself");
-                Console.WriteLine("[1,2]:");
-                string line = Console.ReadLine();
-                if (line.Trim() == "1")
-                {
-                    if (CopyDatafiles())
-                    {
-                        break;
-                    }
-                }
-
-                if (line.Trim() == "2")
-                {
-                    break;
-                }
-            }
+            rawItemList.AddRange(tempItemTemplates);
         }
 
         #endregion

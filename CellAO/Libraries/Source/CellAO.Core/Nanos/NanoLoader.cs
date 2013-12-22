@@ -35,9 +35,7 @@ namespace CellAO.Core.Nanos
 
     using locales;
 
-    using MsgPack.Serialization;
-
-    using zlib;
+    using Utility;
 
     #endregion
 
@@ -77,65 +75,14 @@ namespace CellAO.Core.Nanos
         public static int CacheAllNanos(string fname)
         {
             Contract.Requires(!string.IsNullOrEmpty(fname));
-            DateTime _now = DateTime.Now;
+            DateTime _now = DateTime.UtcNow;
             NanoList = new Dictionary<int, NanoFormula>();
-            Stream sf = new FileStream(fname, FileMode.Open);
-            MemoryStream memoryStream = new MemoryStream();
 
-            ZOutputStream sm = new ZOutputStream(memoryStream);
-            CopyStream(sf, sm);
+            MessagePackZip.UncompressData<NanoFormula>(fname).ForEach(x => NanoList.Add(x.ID, x));
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            BinaryReader br = new BinaryReader(memoryStream);
-            byte versionlength = (byte)memoryStream.ReadByte();
-            char[] version = new char[versionlength];
-            version = br.ReadChars(versionlength);
-
-            // TODO: Check version and print a warning if not same as config.xml's
-            Console.WriteLine("Reading Nanos (" + new string(version) + "):");
-
-            MessagePackSerializer<NanoFormula> messagePackSerializer = MessagePackSerializer.Create<NanoFormula>();
-
-            byte[] buffer = new byte[4];
-            memoryStream.Read(buffer, 0, 4);
-            int packaged = BitConverter.ToInt32(buffer, 0);
-
-            while (true)
-            {
-                try
-                {
-                    List<NanoFormula> templist = new List<NanoFormula>();
-
-                    for (int i = packaged; i > 0; i++)
-                    {
-                        NanoFormula nanoFormula = messagePackSerializer.Unpack(memoryStream);
-                        templist.Add(nanoFormula);
-                        if (nanoFormula == null)
-                        {
-                            break;
-                        }
-
-                        NanoList.Add(nanoFormula.ID, nanoFormula);
-                    }
-
-                    if (templist.Count != packaged)
-                    {
-                        break;
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-                Console.Write(
-                    locales.NanoLoaderLoadedNanos + " - {1}\r", 
-                    new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
-            }
-
-            Console.Write(
-                locales.NanoLoaderLoadedNanos + " - {1}\r", 
-                new object[] { NanoList.Count, new DateTime((DateTime.Now - _now).Ticks).ToString("mm:ss.ff") });
+            Console.WriteLine(
+                locales.ItemLoaderLoadedItems + " - {1}\r", 
+                new object[] { NanoList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();
             return NanoList.Count;

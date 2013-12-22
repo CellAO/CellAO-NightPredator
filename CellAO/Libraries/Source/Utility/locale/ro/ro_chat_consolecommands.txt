@@ -1,1 +1,0 @@
-﻿Apasati "start" pentru a porni serverul, "stop" pentru oprire sau "exit" pentru a iesi

@@ -97,6 +97,16 @@ namespace CellAO.Core.Vector
         }
 
         /// <summary>
+        /// </summary>
+        public Quaternion()
+        {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.w = 0;
+        }
+
+        /// <summary>
         /// Create a Quaternion representation from a Vector3 (w is 0)
         /// </summary>
         /// <param name="v">

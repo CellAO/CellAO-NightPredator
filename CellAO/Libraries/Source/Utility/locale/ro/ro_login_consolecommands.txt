@@ -1,1 +1,0 @@
-﻿Apasati "start" pentru a porni serverul, "stop" pentru oprire, "adduser" <nume utilizator> <parola> <numar de caractere> <expansion> <gm level> <email> <prenume> <nume> si "exit" pentru a iesi din program

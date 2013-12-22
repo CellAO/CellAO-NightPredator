@@ -1,1 +1,0 @@
-﻿Just type exit to exit the program

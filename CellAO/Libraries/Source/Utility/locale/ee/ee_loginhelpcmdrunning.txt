@@ -1,1 +1,0 @@
-﻿Sisesta "running" et näha kas server on käivitatud või mitte.
