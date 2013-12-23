@@ -110,11 +110,40 @@ namespace Extractor_Serializer
                         }
                     }
                 }
+
                 statels.Add(sd);
                 count--;
             }
 
             return statels;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="p">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal static string ParseName(byte[] p)
+        {
+            MemoryStream ms = new MemoryStream(p);
+            BinaryReader br = new BinaryReader(ms);
+            br.ReadInt32();
+            br.ReadInt32();
+            string name = string.Empty;
+            byte c = 0;
+            while ((c = br.ReadByte()) != 0)
+            {
+                name += (char)c;
+            }
+
+            br.Close();
+            ms.Close();
+            return name;
         }
 
         #endregion

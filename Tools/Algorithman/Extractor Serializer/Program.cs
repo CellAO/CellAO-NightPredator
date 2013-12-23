@@ -361,11 +361,17 @@ namespace Extractor_Serializer
         private static List<PlayfieldData> ExtractPlayfieldData()
         {
             List<PlayfieldData> playfields = new List<PlayfieldData>();
-            foreach (int recnum in extractor.GetRecordInstances(1000030))
+            foreach (int recnum in extractor.GetRecordInstances(1000001))
             {
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
-                pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
+                if (extractor.GetRecordInstances(1000030).Contains(recnum))
+                {
+                    pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
+                }
+
+                pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(1000001, recnum));
+
                 playfields.Add(pf);
             }
 
@@ -387,7 +393,8 @@ namespace Extractor_Serializer
                     playfields.First(x => x.PlayfieldId == recnum)
                         .Statels.AddRange(
                             PlayfieldParser.ParseStatels(extractor.GetRecordData(1000026, recnum))
-                               /* .Where(x => x.Events.Count > 0)*/);
+                        
+                        /* .Where(x => x.Events.Count > 0)*/);
                 }
             }
         }
@@ -541,7 +548,6 @@ namespace Extractor_Serializer
             // GetData(@"D:\c#\extractor serializer\data\nanostrains\",0xf4266);
             // GetData(@"D:\c#\extractor serializer\data\perks\",0xf4264);
 
-
             /*
             foreach (int recnum in extractor.GetRecordInstances(1000001))
             {
@@ -599,7 +605,6 @@ namespace Extractor_Serializer
 
             ItemLoader.CacheAllItems("items.dat");
 
-
             Console.WriteLine();
             Console.WriteLine("Items: " + ItemLoader.ItemList.Count + " successfully converted");
 
@@ -609,8 +614,6 @@ namespace Extractor_Serializer
             Console.WriteLine("Compressing playfield data...");
             MessagePackZip.CompressData<PlayfieldData>("playfields.dat", GetVersion(AOPath), playfields);
             Console.WriteLine();
-
-
 
             Console.WriteLine();
             Console.WriteLine("Further Instructions:");
