@@ -24,53 +24,37 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
     using CellAO.Core.Entities;
-    using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Enums;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using MsgPack;
+
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.Packets;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IInventoryPage : IEntity
+    internal class openbank : FunctionPrototype
     {
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        int FirstSlotNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int MaxSlots { get; set; }
-
-        /// <summary>
-        /// </summary>
-        bool NeedsItemCheck { get; set; }
-
-        /// <summary>
-        /// </summary>
-        int Page { get; set; }
-
-        #endregion
-
-        #region Public Indexers
-
-        /// <summary>
-        /// </summary>
-        /// <param name="index">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IItem this[int index] { get; }
+        public override FunctionType FunctionId
+        {
+            get
+            {
+                return FunctionType.OpenBank;
+            }
+        }
 
         #endregion
 
@@ -78,65 +62,27 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        /// <param name="slot">
+        /// <param name="self">
         /// </param>
-        /// <param name="item">
+        /// <param name="caller">
         /// </param>
-        /// <returns>
-        /// </returns>
-        InventoryError Add(int slot, IItem item);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
+        /// <param name="target">
         /// </param>
-        void CalculateModifiers(Character character);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        int FindFreeSlot();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        IDictionary<int, IItem> List();
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Read();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slotNum">
+        /// <param name="arguments">
         /// </param>
         /// <returns>
         /// </returns>
-        IItem Remove(int slotNum);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        BankSlot[] ToInventoryArray();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool ValidSlot(int slotNum);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        bool Write();
+        public override bool Execute(
+            INamedEntity self, 
+            INamedEntity caller, 
+            IInstancedEntity target, 
+            MessagePackObject[] arguments)
+        {
+            IZoneClient client = ((ICharacter)self).Client;
+            BankMessage bankmessage = OpenBank.Create(client);
+            client.Character.Send(bankmessage);
+            return true;
+        }
 
         #endregion
     }

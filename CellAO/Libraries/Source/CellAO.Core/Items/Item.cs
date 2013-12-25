@@ -387,6 +387,16 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool IsInstanced()
+        {
+            // for now return false til we get the instancing working
+            return false;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="character">
         /// </param>
         /// <param name="eventType">

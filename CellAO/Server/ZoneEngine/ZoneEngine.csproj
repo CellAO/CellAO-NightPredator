@@ -83,6 +83,7 @@
     <Compile Include="Core\Functions\GameFunctions\hit.cs" />
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
+    <Compile Include="Core\Functions\GameFunctions\openbank.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
     <Compile Include="Core\Functions\GameFunctions\teleport.cs" />
     <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Core\Packets\Despawn.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
     <Compile Include="Core\Packets\FullCharacter.cs" />
+    <Compile Include="Core\Packets\OpenBank.cs" />
     <Compile Include="Core\Packets\PlayfieldAnarchyF.cs" />
     <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />

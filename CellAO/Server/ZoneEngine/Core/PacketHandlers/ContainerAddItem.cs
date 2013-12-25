@@ -77,7 +77,7 @@ namespace ZoneEngine.Core.PacketHandlers
              * 0073 Socialpage
              * 0767 Shop Inventory
              * 0790 Playershop Inventory
-             * DEAD Trade Window (incoming)
+             * DEAD Trade Window (incoming) It's bank now (when you put something into the bank)
              */
             var fromContainerID = (int)message.SourceContainer.Type;
             int fromPlacement = message.SourceContainer.Instance;
@@ -89,6 +89,12 @@ namespace ZoneEngine.Core.PacketHandlers
             IItem itemFrom = sendingPage[fromPlacement];
 
             // Receiver of the item (IInstancedEntity, can be mostly all from NPC, Character or Bag, later even playfields)
+            // Turn 0xDEAD into C350 if instance is the same
+            if (toIdentity.Type == IdentityType.IncomingTradeWindow)
+            {
+                toIdentity.Type = IdentityType.CanbeAffected;
+            }
+
             IItemContainer itemReceiver = cli.Playfield.FindByIdentity(toIdentity) as IItemContainer;
             if (itemReceiver == null)
             {
@@ -97,7 +103,15 @@ namespace ZoneEngine.Core.PacketHandlers
             }
 
             // On which inventorypage should the item be added?
-            IInventoryPage receivingPage = itemReceiver.BaseInventory.PageFromSlot(toPlacement);
+            IInventoryPage receivingPage;
+            if ((toPlacement == 0x6f) && (message.Target.Type == IdentityType.IncomingTradeWindow))
+            {
+                receivingPage = itemReceiver.BaseInventory.Pages[(int)IdentityType.Bank];
+            }
+            else
+            {
+                receivingPage = itemReceiver.BaseInventory.PageFromSlot(toPlacement);
+            }
 
             // Get standard page if toplacement cant be found (0x6F for next free slot)
             // TODO: If Entities are not the same (other player, bag etc) then always add to the standard page
@@ -239,6 +253,14 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     UnEquip.Send(cli, sendingPage, fromPlacement);
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
+                    cli.Character.Send(message);
+                }
+                else
+                {
+                    // No equipment page involved, just send ContainerAddItemMessage back
+                    message.TargetPlacement = receivingPage.FindFreeSlot();
+                    IItem item = sendingPage.Remove(fromPlacement);
+                    receivingPage.Add(message.TargetPlacement, item);
                     cli.Character.Send(message);
                 }
             }

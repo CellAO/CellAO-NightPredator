@@ -122,6 +122,12 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        bool IsInstanced();
+
+        /// <summary>
+        /// </summary>
         /// <param name="character">
         /// </param>
         /// <param name="eventType">

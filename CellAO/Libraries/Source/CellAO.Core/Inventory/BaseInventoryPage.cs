@@ -411,6 +411,36 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public BankSlot[] ToInventoryArray()
+        {
+            List<BankSlot> slots = new List<BankSlot>();
+            foreach (KeyValuePair<int, IItem> kv in this.List())
+            {
+                short flags = 0;
+                if (kv.Value.IsInstanced())
+                {
+                    flags = 0xa0;
+                }
+
+                flags |= (short)((kv.Value.LowID == kv.Value.HighID) ? 2 : 1);
+                var slot = new BankSlot();
+                slot.Flags = flags;
+                slot.Count = (short)kv.Value.MultipleCount;
+                slot.Identity = kv.Value.Identity;
+                slot.ItemLowId = kv.Value.LowID;
+                slot.ItemHighId = kv.Value.HighID;
+                slot.Quality = kv.Value.Quality;
+                slot.ItemFlags = 0;
+                slots.Add(slot);
+            }
+
+            return slots.ToArray();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="slotFrom">
         /// </param>
         /// <param name="slotTo">

@@ -24,28 +24,40 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
+    using CellAO.Core.Network;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class BankInventoryPage : BaseInventoryPage
+    public static class OpenBank
     {
-        #region Constructors and Destructors
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="ownerInstance">
+        /// <param name="client">
         /// </param>
-        public BankInventoryPage(int ownerInstance)
-            : base((int)IdentityType.Bank, 50, 0, ownerInstance)
+        /// <returns>
+        /// </returns>
+        public static BankMessage Create(IZoneClient client)
         {
-            this.NeedsItemCheck = false;
+            BankMessage bank = new BankMessage()
+                               {
+                                   Identity = client.Character.Identity, 
+                                   BankSlots =
+                                       client.Character.BaseInventory.Pages[(int)IdentityType.Bank]
+                                       .ToInventoryArray()
+                               };
+
+            return bank;
         }
 
         #endregion

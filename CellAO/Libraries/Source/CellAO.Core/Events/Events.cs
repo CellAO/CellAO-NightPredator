@@ -25,14 +25,15 @@
 #endregion
 
 namespace CellAO.Core.Events
-
 {
     #region Usings ...
 
     using System;
     using System.Collections.Generic;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Functions;
+    using CellAO.Core.Requirements;
 
     #endregion
 
@@ -86,6 +87,37 @@ namespace CellAO.Core.Events
             set
             {
                 this.functions = value;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="self">
+        /// </param>
+        /// <param name="caller">
+        /// </param>
+        public void Perform(ICharacter self, ICharacter caller)
+        {
+            foreach (Functions functions in this.Functions)
+            {
+                bool result = true;
+                foreach (Requirements requirements in functions.Requirements)
+                {
+                    result &= requirements.CheckRequirement(self);
+                    if (!result)
+                    {
+                        break;
+                    }
+                }
+
+                if (result)
+                {
+                    self.Client.CallFunction(functions);
+                }
             }
         }
 

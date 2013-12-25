@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using System;
     using System.Linq;
 
+    using CellAO.Core.Events;
     using CellAO.Core.Items;
     using CellAO.Core.Statels;
     using CellAO.Enums;
@@ -120,6 +121,8 @@ namespace ZoneEngine.Core.PacketHandlers
                             if (sd != null)
                             {
                                 s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
+                                Events onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
+                                onUse.Perform(client.Character, client.Character);
                             }
                         }
 
