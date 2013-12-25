@@ -102,12 +102,13 @@ namespace ZoneEngine.Core.PacketHandlers
                 }
             }
             */
+            
+            // Is this correct? Shouldnt the client input be compared to the prediction and then be overridden to prevent teleportation exploits? 
+            // - Algorithman
+
             client.Character.RawCoordinates = coordinates.coordinate;
             client.Character.RawHeading = heading;
             client.Character.UpdateMoveType(moveType);
-
-            // For now, lets just write rawcoordinates into coordinates
-            client.Character.Coordinates.Update(client.Character.RawCoordinates);
 
             /* Start NV Heading Testing Code
              * Yaw: 0 to 360 Degrees (North turning clockwise to a complete revolution)

@@ -49,7 +49,7 @@ namespace CellAO.Core.Entities
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -157,7 +157,67 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public Coordinate Coordinates { get; set; }
+        public Coordinate Coordinates
+        {
+            get
+            {
+                if ((this.moveDirection == MoveDirections.None) && (this.strafeDirection == SpinOrStrafeDirections.None))
+                {
+                    return new Coordinate(this.RawCoordinates);
+                }
+                else if (this.spinDirection == SpinOrStrafeDirections.None)
+                {
+                    Vector3 moveVector = this.calculateMoveVector();
+
+                    moveVector = moveVector * this.PredictionDuration.TotalSeconds;
+
+                    return new Coordinate(this.RawCoordinates + moveVector);
+                }
+                else
+                {
+                    Vector3 moveVector;
+                    Vector3 positionFromCentreOfTurningCircle;
+                    double turnArcAngle;
+                    double y;
+                    double duration;
+
+                    duration = this.PredictionDuration.TotalSeconds;
+
+                    moveVector = this.calculateMoveVector();
+                    turnArcAngle = this.calculateTurnArcAngle();
+
+                    // This is calculated seperately as height is unaffected by turning
+                    y = this.RawCoordinates.Y + (moveVector.y * duration);
+
+                    if (this.spinDirection == SpinOrStrafeDirections.Left)
+                    {
+                        positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
+                    }
+                    else
+                    {
+                        positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
+                    }
+
+                    return
+                        new Coordinate(
+                            new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
+                            + (Vector3)
+                                Quaternion.RotateVector3(
+                                    new Quaternion(Vector3.AxisY, turnArcAngle), 
+                                    positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
+                }
+            }
+
+            set
+            {
+                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
+                                      {
+                                          X = value.x, 
+                                          Y = value.y, 
+                                          Z = value.z
+                                      };
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -217,7 +277,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public Vector3 RawCoordinates { get; set; }
+        public SmokeLounge.AOtomation.Messaging.GameData.Vector3 RawCoordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -667,6 +727,233 @@ namespace CellAO.Core.Entities
         internal void Send(MessageBody messageBody)
         {
             this.Playfield.Send(this.Client, messageBody);
+        }
+
+        /// <summary>
+        /// Can Character move?
+        /// </summary>
+        /// <returns>Can move=true</returns>
+        private bool CanMove()
+        {
+            if ((this.moveMode == MoveModes.Run) || (this.moveMode == MoveModes.Walk)
+                || (this.moveMode == MoveModes.Swim) || (this.moveMode == MoveModes.Crawl)
+                || (this.moveMode == MoveModes.Sneak) || (this.moveMode == MoveModes.Fly))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Calculate the effective run speed (run, walk, sneak etc)
+        /// </summary>
+        /// <returns>Effective run speed</returns>
+        private int calculateEffectiveRunSpeed()
+        {
+            int effectiveRunSpeed;
+
+            switch (this.moveMode)
+            {
+                case MoveModes.Run:
+                    effectiveRunSpeed = this.Stats[StatIds.runspeed].Value; // Stat #156 = RunSpeed
+                    break;
+
+                case MoveModes.Walk:
+                    effectiveRunSpeed = -500;
+                    break;
+
+                case MoveModes.Swim:
+
+                    // Swim speed is calculated the same as Run Speed except is half as effective
+                    effectiveRunSpeed = this.Stats[StatIds.swim].Value >> 1; // Stat #138 = Swim
+                    break;
+
+                case MoveModes.Crawl:
+                    effectiveRunSpeed = -600;
+                    break;
+
+                case MoveModes.Sneak:
+                    effectiveRunSpeed = -500;
+                    break;
+
+                case MoveModes.Fly:
+                    effectiveRunSpeed = 2200; // NV: TODO: Propper calc for this!
+                    break;
+
+                default:
+
+                    // All other movement modes, sitting, sleeping, lounging, rooted, etc have a speed of 0
+                    // As there is no way to 'force' that this way, we just default to 0 and hope that canMove() has been called to properly check.
+                    effectiveRunSpeed = 0;
+                    break;
+            }
+
+            return effectiveRunSpeed;
+        }
+
+        /// <summary>
+        /// Calculate forward speed
+        /// </summary>
+        /// <returns>forward speed</returns>
+        private double calculateForwardSpeed()
+        {
+            double speed;
+            int effectiveRunSpeed;
+
+            if ((this.moveDirection == MoveDirections.None) || (!this.CanMove()))
+            {
+                return 0;
+            }
+
+            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
+
+            if (this.moveDirection == MoveDirections.Forwards)
+            {
+                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
+                speed = Math.Max(0, (effectiveRunSpeed * 0.005) + 4);
+
+                if (this.moveMode != MoveModes.Swim)
+                {
+                    speed = Math.Min(15, speed); // Forward speed is capped at 15 units/sec for non-swimming
+                }
+            }
+            else
+            {
+                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
+                speed = -Math.Max(0, (effectiveRunSpeed * 0.0035) + 4);
+
+                if (this.moveMode != MoveModes.Swim)
+                {
+                    speed = Math.Max(-15, speed); // Backwards speed is capped at 15 units/sec for non-swimming
+                }
+            }
+
+            return speed;
+        }
+
+        /// <summary>
+        /// Calculate move vector
+        /// </summary>
+        /// <returns>Movevector</returns>
+        private Vector3 calculateMoveVector()
+        {
+            double forwardSpeed;
+            double strafeSpeed;
+            Vector3 forwardMove;
+            Vector3 strafeMove;
+
+            if (!this.CanMove())
+            {
+                return Vector3.Origin;
+            }
+
+            forwardSpeed = this.calculateForwardSpeed();
+            strafeSpeed = this.calculateStrafeSpeed();
+
+            if ((forwardSpeed == 0) && (strafeSpeed == 0))
+            {
+                return Vector3.Origin;
+            }
+
+            if (forwardSpeed != 0)
+            {
+                forwardMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisZ);
+                forwardMove.Magnitude = Math.Abs(forwardSpeed);
+                if (forwardSpeed < 0)
+                {
+                    forwardMove = -forwardMove;
+                }
+            }
+            else
+            {
+                forwardMove = Vector3.Origin;
+            }
+
+            if (strafeSpeed != 0)
+            {
+                strafeMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisX);
+                strafeMove.Magnitude = Math.Abs(strafeSpeed);
+                if (strafeSpeed < 0)
+                {
+                    strafeMove = -strafeMove;
+                }
+            }
+            else
+            {
+                strafeMove = Vector3.Origin;
+            }
+
+            return forwardMove + strafeMove;
+        }
+
+        /// <summary>
+        /// Calculate strafe speed
+        /// </summary>
+        /// <returns>Strafe speed</returns>
+        private double calculateStrafeSpeed()
+        {
+            double speed;
+            int effectiveRunSpeed;
+
+            // Note, you can not strafe while swimming or crawling
+            if ((this.strafeDirection == SpinOrStrafeDirections.None) || (this.moveMode == MoveModes.Swim)
+                || (this.moveMode == MoveModes.Crawl) || (!this.CanMove()))
+            {
+                return 0;
+            }
+
+            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
+
+            // NV: TODO: Update this based off Forward runspeed when that is checked (strafe effective run speed = effective run speed / 2)
+            speed = ((effectiveRunSpeed / 2) * 0.005) + 4;
+
+            if (this.strafeDirection == SpinOrStrafeDirections.Left)
+            {
+                speed = -speed;
+            }
+
+            return speed;
+        }
+
+        /// <summary>
+        /// Calculate Turnangle
+        /// </summary>
+        /// <returns>Turnangle</returns>
+        private double calculateTurnArcAngle()
+        {
+            double turnTime;
+            double angle;
+            double modifiedDuration;
+
+            turnTime = this.calculateTurnTime();
+
+            modifiedDuration = this.PredictionDuration.TotalSeconds % turnTime;
+
+            angle = 2 * Math.PI * modifiedDuration / turnTime;
+
+            return angle;
+        }
+
+        /// <summary>
+        /// Calculate Turn time
+        /// </summary>
+        /// <returns>Turn time</returns>
+        private double calculateTurnTime()
+        {
+            int turnSpeed;
+            double turnTime;
+
+            turnSpeed = this.Stats[StatIds.turnspeed].Value; // Stat #267 TurnSpeed
+
+            if (turnSpeed == 0)
+            {
+                turnSpeed = 40000;
+            }
+
+            turnTime = 70000 / turnSpeed;
+
+            return turnTime;
         }
 
         #endregion
