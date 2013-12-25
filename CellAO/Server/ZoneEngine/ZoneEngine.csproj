@@ -85,6 +85,7 @@
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\openbank.cs" />
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
+    <Compile Include="Core\Functions\GameFunctions\systemtext.cs" />
     <Compile Include="Core\Functions\GameFunctions\teleport.cs" />
     <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
