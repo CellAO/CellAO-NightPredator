@@ -72,6 +72,7 @@
     <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
     <Compile Include="ChatCommands\ListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
+    <Compile Include="ChatCommands\ShowStatel.cs" />
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
