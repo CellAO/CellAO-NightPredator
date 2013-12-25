@@ -31,6 +31,7 @@ namespace CellAO.Core.Statels
     using System.Collections.Generic;
 
     using CellAO.Core.Events;
+    using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -85,6 +86,11 @@ namespace CellAO.Core.Statels
         /// <summary>
         /// </summary>
         public float Z;
+
+        public Coordinate Coord()
+        {
+            return new Coordinate(X, Y, Z);
+        }
 
         #endregion
     }
