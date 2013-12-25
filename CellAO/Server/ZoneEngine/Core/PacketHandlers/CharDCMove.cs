@@ -106,6 +106,9 @@ namespace ZoneEngine.Core.PacketHandlers
             client.Character.RawHeading = heading;
             client.Character.UpdateMoveType(moveType);
 
+            // For now, lets just write rawcoordinates into coordinates
+            client.Character.Coordinates.Update(client.Character.RawCoordinates);
+
             /* Start NV Heading Testing Code
              * Yaw: 0 to 360 Degrees (North turning clockwise to a complete revolution)
              * Roll: Not sure, but is always 0 cause we can't roll in AO
