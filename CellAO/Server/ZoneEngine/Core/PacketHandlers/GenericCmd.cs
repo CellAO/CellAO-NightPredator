@@ -122,7 +122,10 @@ namespace ZoneEngine.Core.PacketHandlers
                             {
                                 s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
                                 Events onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
-                                onUse.Perform(client.Character, client.Character);
+                                if (onUse != null)
+                                {
+                                    onUse.Perform(client.Character, client.Character);
+                                }
                             }
                         }
 
