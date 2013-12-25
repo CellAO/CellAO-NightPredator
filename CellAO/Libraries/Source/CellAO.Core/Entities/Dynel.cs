@@ -144,7 +144,7 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        public virtual void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
         {
             // TODO: Maybe write teleport code for dynels
         }

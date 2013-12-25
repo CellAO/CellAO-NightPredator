@@ -448,7 +448,7 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        public override void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
         {
             this.Playfield.Teleport(this, destination, heading, playfield);
         }

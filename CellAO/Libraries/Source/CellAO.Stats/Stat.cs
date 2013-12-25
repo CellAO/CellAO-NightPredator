@@ -166,22 +166,6 @@ namespace CellAO.Stats
 
         #endregion
 
-        #region Public Events
-
-        /// <summary>
-        /// </summary>
-        public event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        public event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        public event EventHandler<StatChangedEventArgs> CalculateStatEvent;
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>

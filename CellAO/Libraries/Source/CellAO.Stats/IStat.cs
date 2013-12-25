@@ -36,22 +36,6 @@ namespace CellAO.Stats
     /// </summary>
     public interface IStat
     {
-        #region Public Events
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> AfterStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> BeforeStatChangedEvent;
-
-        /// <summary>
-        /// </summary>
-        event EventHandler<StatChangedEventArgs> CalculateStatEvent;
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>

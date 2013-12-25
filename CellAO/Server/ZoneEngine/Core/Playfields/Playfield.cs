@@ -309,7 +309,6 @@ namespace CellAO.Core.Playfields
                     break;
                 case 2:
                     throw new NotImplementedException("Target Wearer not implemented yet");
-                    break;
                 case 3:
                     target = this.FindNamedEntityByIdentity(user.SelectedTarget);
                     break;
