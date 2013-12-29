@@ -37,7 +37,7 @@ namespace Extractor_Serializer.Structs
 
     /// <summary>
     /// </summary>
-    public static class WallExtract
+    public static class DestinationExtractor
     {
         #region Public Methods and Operators
 
@@ -86,8 +86,8 @@ namespace Extractor_Serializer.Structs
 
                 realCounter++;
                 br.BaseStream.Position = br.BaseStream.Position - (7 * 4) - 4;
-                    
-                    // -4 because we already read the 4 bytes to check if it is a counter
+
+                // -4 because we already read the 4 bytes to check if it is a counter
             }
 
             while (destinationCounter > 0)

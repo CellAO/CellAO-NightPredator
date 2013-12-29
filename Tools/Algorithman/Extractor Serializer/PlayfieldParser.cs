@@ -132,7 +132,7 @@ namespace Extractor_Serializer
         internal static DestinationStruct ParseDestinations(byte[] p)
         {
             MemoryStream ms = new MemoryStream(p);
-            return WallExtract.ReadFromStream(ms);
+            return DestinationExtractor.ReadFromStream(ms);
         }
 
         /// <summary>
