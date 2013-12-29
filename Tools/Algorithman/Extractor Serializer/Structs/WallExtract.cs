@@ -29,14 +29,9 @@ namespace Extractor_Serializer.Structs
     #region Usings ...
 
     using System;
-    using System.Diagnostics;
     using System.IO;
 
-    using CellAO.Core.Statels;
-
-    using NiceHexOutput;
-
-    using zlib;
+    using CellAO.Core.Playfields;
 
     #endregion
 
@@ -52,68 +47,71 @@ namespace Extractor_Serializer.Structs
         /// </param>
         /// <returns>
         /// </returns>
-        public static Walls ReadFromStream(Stream stream)
+        public static DestinationStruct ReadFromStream(Stream stream)
         {
-            Walls wall = new Walls();
+            DestinationStruct destinationStruct = new DestinationStruct();
             BinaryReader br = new BinaryReader(stream);
-            wall.Flags = br.ReadInt32();
-            wall.Id = br.ReadInt32();
+            destinationStruct.Version = br.ReadInt32();
+            destinationStruct.Id = br.ReadInt32();
             byte c;
             string temp = string.Empty;
-            while ((c = br.ReadByte()) != 0)
+            int maxcount = 32;
+            while (maxcount > 0)
             {
-                temp += (char)c;
+                c = br.ReadByte();
+                if (c != 0)
+                {
+                    temp += (char)c;
+                }
+
+                if (temp.Length == 32)
+                {
+                    break;
+                }
+
+                maxcount--;
             }
 
-            // read rest of the 32 bytes reserved for name (-1 is for the already read 00)
-            br.ReadBytes(32 - temp.Length - 1);
-
-            br.ReadInt32(); // often playfield id, but not always (see Subway Junction, The Grid 2 and others)
-
-            br.ReadInt32(); // 0x0A
-
-            int counter1 = br.ReadInt32(); // unknown counter (districts?)
-            br.ReadBytes(0x44);
-            int lenCompressed = br.ReadInt32();
-            int lenUnCompressed = br.ReadInt32();
-            byte[] buffer = br.ReadBytes(lenCompressed - 4); // Just read for now, heightmap data probably
-
-            MemoryStream ms = new MemoryStream();
-            ZOutputStream zOutputStream = new ZOutputStream(ms);
-            var xx = new MemoryStream(buffer);
-
-            byte[] buffer2 = new byte[2097152];
-            int len;
-            while ((len = xx.Read(buffer2, 0, 2097152)) > 0)
+            // Do the backward search
+            br.BaseStream.Position = br.BaseStream.Length - 4;
+            int destinationCounter;
+            int realCounter = 0;
+            while (true)
             {
-                zOutputStream.Write(buffer2, 0, len);
-                Console.Write(
-                    "\rDeflating " + Convert.ToInt32(Math.Floor((double)xx.Position / xx.Length * 100.0)) + "%");
+                destinationCounter = br.ReadInt32();
+                if (destinationCounter == realCounter)
+                {
+                    break;
+                }
+
+                realCounter++;
+                br.BaseStream.Position = br.BaseStream.Position - (7 * 4) - 4;
+                    
+                    // -4 because we already read the 4 bytes to check if it is a counter
             }
 
-            zOutputStream.Flush();
-            Console.Write("\r                                             \r");
-
-            ms.Position = 0;
-            Console.WriteLine(NiceHexOutput.Output(ms.GetBuffer()));
-            Console.ReadLine();
-
-            int x3f1 = br.ReadInt32();
-            Debug.Assert(x3f1 % 1009 != 0);
-            br.ReadBytes(0x2e);
-            int counter2 = br.ReadInt32();
-            while (counter2 > 0)
+            while (destinationCounter > 0)
             {
-                int lineId = br.ReadInt32();
-                float X1 = br.ReadSingle();
-                float Y1 = br.ReadSingle();
-                float Z1 = br.ReadSingle();
-                float X2 = br.ReadSingle();
-                float Y2 = br.ReadSingle();
-                float Z2 = br.ReadSingle();
+                // Read the stuff
+
+                PlayfieldDestination pfd = new PlayfieldDestination();
+                pfd.DestinationId = br.ReadInt32();
+                pfd.StartX = br.ReadSingle();
+                pfd.StartY = br.ReadSingle();
+                pfd.StartZ = br.ReadSingle();
+
+                pfd.EndX = br.ReadSingle();
+                pfd.EndY = br.ReadSingle();
+                pfd.EndZ = br.ReadSingle();
+
+                destinationStruct.Destinations.Add(pfd);
+                destinationCounter--;
             }
 
-            return wall;
+            // Should be on end position now
+            Console.WriteLine(temp + ":" + br.BaseStream.Position);
+
+            return destinationStruct;
         }
 
         #endregion

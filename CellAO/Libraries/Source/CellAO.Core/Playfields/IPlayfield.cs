@@ -108,6 +108,12 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        void AnnounceAppearanceUpdate(ICharacter character);
+
+        /// <summary>
+        /// </summary>
         /// <param name="messageBody">
         /// </param>
         /// <param name="dontSend">
@@ -189,7 +195,5 @@ namespace CellAO.Core.Playfields
         void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield);
 
         #endregion
-
-        void AnnounceAppearanceUpdate(ICharacter character);
     }
 }

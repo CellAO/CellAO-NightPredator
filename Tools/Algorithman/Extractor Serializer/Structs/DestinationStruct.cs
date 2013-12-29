@@ -24,17 +24,25 @@
 
 #endregion
 
-namespace CellAO.Core.Statels
+namespace Extractor_Serializer.Structs
 {
+    #region Usings ...
+
+    using System.Collections.Generic;
+
+    using CellAO.Core.Playfields;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    public class Door
+    public class DestinationStruct
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        public int Flags;
+        public List<PlayfieldDestination> Destinations = new List<PlayfieldDestination>();
 
         /// <summary>
         /// </summary>
@@ -42,51 +50,11 @@ namespace CellAO.Core.Statels
 
         /// <summary>
         /// </summary>
-        public short Index;
+        public string Name;
 
         /// <summary>
         /// </summary>
-        public int Index2;
-
-        /// <summary>
-        /// </summary>
-        public short PlayfieldDesignator;
-
-        /// <summary>
-        /// </summary>
-        public int PlayfieldId;
-
-        /// <summary>
-        /// </summary>
-        public float X;
-
-        /// <summary>
-        /// </summary>
-        public float Y;
-
-        /// <summary>
-        /// </summary>
-        public float Z;
-
-        /// <summary>
-        /// </summary>
-        public int unknown1;
-
-        /// <summary>
-        /// </summary>
-        public byte unknown2;
-
-        /// <summary>
-        /// </summary>
-        public int unknown3;
-
-        /// <summary>
-        /// </summary>
-        public short unknown4;
-
-        /// <summary>
-        /// </summary>
-        public int unknown5;
+        public int Version;
 
         #endregion
     }

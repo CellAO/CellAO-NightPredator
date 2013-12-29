@@ -49,7 +49,7 @@ namespace CellAO.Core.Entities
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
-    using Vector3 = CellAO.Core.Vector.Vector3;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -167,7 +167,7 @@ namespace CellAO.Core.Entities
                 }
                 else if (this.spinDirection == SpinOrStrafeDirections.None)
                 {
-                    Vector3 moveVector = this.calculateMoveVector();
+                    Vector.Vector3 moveVector = this.calculateMoveVector();
 
                     moveVector = moveVector * this.PredictionDuration.TotalSeconds;
 
@@ -175,8 +175,8 @@ namespace CellAO.Core.Entities
                 }
                 else
                 {
-                    Vector3 moveVector;
-                    Vector3 positionFromCentreOfTurningCircle;
+                    Vector.Vector3 moveVector;
+                    Vector.Vector3 positionFromCentreOfTurningCircle;
                     double turnArcAngle;
                     double y;
                     double duration;
@@ -191,31 +191,26 @@ namespace CellAO.Core.Entities
 
                     if (this.spinDirection == SpinOrStrafeDirections.Left)
                     {
-                        positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
+                        positionFromCentreOfTurningCircle = new Vector.Vector3(moveVector.z, y, -moveVector.x);
                     }
                     else
                     {
-                        positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
+                        positionFromCentreOfTurningCircle = new Vector.Vector3(-moveVector.z, y, moveVector.x);
                     }
 
                     return
                         new Coordinate(
-                            new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
-                            + (Vector3)
+                            new Vector.Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
+                            + (Vector.Vector3)
                                 Quaternion.RotateVector3(
-                                    new Quaternion(Vector3.AxisY, turnArcAngle), 
+                                    new Quaternion(Vector.Vector3.AxisY, turnArcAngle), 
                                     positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
                 }
             }
 
             set
             {
-                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
-                                      {
-                                          X = value.x, 
-                                          Y = value.y, 
-                                          Z = value.z
-                                      };
+                this.RawCoordinates = new Vector3() { X = value.x, Y = value.y, Z = value.z };
             }
         }
 
@@ -277,7 +272,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public SmokeLounge.AOtomation.Messaging.GameData.Vector3 RawCoordinates { get; set; }
+        public Vector3 RawCoordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -836,16 +831,16 @@ namespace CellAO.Core.Entities
         /// Calculate move vector
         /// </summary>
         /// <returns>Movevector</returns>
-        private Vector3 calculateMoveVector()
+        private Vector.Vector3 calculateMoveVector()
         {
             double forwardSpeed;
             double strafeSpeed;
-            Vector3 forwardMove;
-            Vector3 strafeMove;
+            Vector.Vector3 forwardMove;
+            Vector.Vector3 strafeMove;
 
             if (!this.CanMove())
             {
-                return Vector3.Origin;
+                return Vector.Vector3.Origin;
             }
 
             forwardSpeed = this.calculateForwardSpeed();
@@ -853,12 +848,12 @@ namespace CellAO.Core.Entities
 
             if ((forwardSpeed == 0) && (strafeSpeed == 0))
             {
-                return Vector3.Origin;
+                return Vector.Vector3.Origin;
             }
 
             if (forwardSpeed != 0)
             {
-                forwardMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisZ);
+                forwardMove = (Vector.Vector3)Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisZ);
                 forwardMove.Magnitude = Math.Abs(forwardSpeed);
                 if (forwardSpeed < 0)
                 {
@@ -867,12 +862,12 @@ namespace CellAO.Core.Entities
             }
             else
             {
-                forwardMove = Vector3.Origin;
+                forwardMove = Vector.Vector3.Origin;
             }
 
             if (strafeSpeed != 0)
             {
-                strafeMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisX);
+                strafeMove = (Vector.Vector3)Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisX);
                 strafeMove.Magnitude = Math.Abs(strafeSpeed);
                 if (strafeSpeed < 0)
                 {
@@ -881,7 +876,7 @@ namespace CellAO.Core.Entities
             }
             else
             {
-                strafeMove = Vector3.Origin;
+                strafeMove = Vector.Vector3.Origin;
             }
 
             return forwardMove + strafeMove;

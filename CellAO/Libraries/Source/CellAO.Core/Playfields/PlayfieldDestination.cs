@@ -24,69 +24,42 @@
 
 #endregion
 
-namespace CellAO.Core.Statels
+namespace CellAO.Core.Playfields
 {
     /// <summary>
     /// </summary>
-    public class Door
+    public class PlayfieldDestination
     {
         #region Fields
 
         /// <summary>
+        /// Destination Id is PlayfieldId (as low word) and LineId (as high word)
         /// </summary>
-        public int Flags;
+        public int DestinationId = 0;
 
         /// <summary>
         /// </summary>
-        public int Id;
+        public float EndX;
 
         /// <summary>
         /// </summary>
-        public short Index;
+        public float EndY;
 
         /// <summary>
         /// </summary>
-        public int Index2;
+        public float EndZ;
 
         /// <summary>
         /// </summary>
-        public short PlayfieldDesignator;
+        public float StartX;
 
         /// <summary>
         /// </summary>
-        public int PlayfieldId;
+        public float StartY;
 
         /// <summary>
         /// </summary>
-        public float X;
-
-        /// <summary>
-        /// </summary>
-        public float Y;
-
-        /// <summary>
-        /// </summary>
-        public float Z;
-
-        /// <summary>
-        /// </summary>
-        public int unknown1;
-
-        /// <summary>
-        /// </summary>
-        public byte unknown2;
-
-        /// <summary>
-        /// </summary>
-        public int unknown3;
-
-        /// <summary>
-        /// </summary>
-        public short unknown4;
-
-        /// <summary>
-        /// </summary>
-        public int unknown5;
+        public float StartZ;
 
         #endregion
     }

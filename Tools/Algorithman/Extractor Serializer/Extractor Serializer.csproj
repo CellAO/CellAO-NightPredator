@@ -72,6 +72,7 @@
     <Compile Include="Structs\PFCoordHeading.cs" />
     <Compile Include="Structs\StatelDataExtractor.cs" />
     <Compile Include="Structs\WallExtract.cs" />
+    <Compile Include="Structs\DestinationStruct.cs" />
     <Content Include="..\..\..\CellAO\Datafiles\itemrelations.txt">
       <Link>itemrelations.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

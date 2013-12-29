@@ -365,12 +365,19 @@ namespace Extractor_Serializer
             {
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
+                Console.WriteLine("Parsing PF " + recnum);
                 if (extractor.GetRecordInstances(1000030).Contains(recnum))
                 {
                     pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
                 }
 
                 pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(1000001, recnum));
+                pf.Destinations =
+                    PlayfieldParser.ParseDestinations(extractor.GetRecordData(1000001, recnum)).Destinations;
+                if (extractor.GetRecordInstances(1000021).Contains(recnum))
+                {
+                    pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(1000021, recnum));
+                }
 
                 playfields.Add(pf);
             }
@@ -393,7 +400,7 @@ namespace Extractor_Serializer
                     playfields.First(x => x.PlayfieldId == recnum)
                         .Statels.AddRange(
                             PlayfieldParser.ParseStatels(extractor.GetRecordData(1000026, recnum))
-                        
+
                         /* .Where(x => x.Events.Count > 0)*/);
                 }
             }
@@ -525,6 +532,7 @@ namespace Extractor_Serializer
                 return;
             }
 
+            Console.WriteLine();
             Console.WriteLine("Loading item relations...");
             ReadItemRelations();
 
@@ -547,19 +555,6 @@ namespace Extractor_Serializer
             // GetData(@"D:\c#\extractor serializer\data\playfields\",0xf4241);
             // GetData(@"D:\c#\extractor serializer\data\nanostrains\",0xf4266);
             // GetData(@"D:\c#\extractor serializer\data\perks\",0xf4264);
-
-            /*
-            foreach (int recnum in extractor.GetRecordInstances(1000001))
-            {
-                if (recnum <152)
-                {
-                    continue;
-                }
-                Console.WriteLine("Walls for " + recnum);
-                Walls w = WallExtract.ReadFromStream(new MemoryStream(extractor.GetRecordData(1000001, recnum)));
-            }
-
-             */
 
             Console.WriteLine();
             List<NanoFormula> rawNanoList = ReadNanoFormulas();
@@ -608,6 +603,7 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Items: " + ItemLoader.ItemList.Count + " successfully converted");
 
+            Console.WriteLine("Extracting playfield walls/destinations/statels");
             List<PlayfieldData> playfields = ExtractPlayfieldData();
             ExtractPlayfieldStatels(playfields);
             Console.WriteLine();

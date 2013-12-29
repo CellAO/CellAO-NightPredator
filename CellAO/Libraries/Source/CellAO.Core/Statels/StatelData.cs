@@ -87,9 +87,17 @@ namespace CellAO.Core.Statels
         /// </summary>
         public float Z;
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public Coordinate Coord()
         {
-            return new Coordinate(X, Y, Z);
+            return new Coordinate(this.X, this.Y, this.Z);
         }
 
         #endregion

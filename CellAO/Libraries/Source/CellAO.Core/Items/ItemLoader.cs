@@ -31,7 +31,6 @@ namespace CellAO.Core.Items
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.IO;
 
     using locales;
 
@@ -91,6 +90,5 @@ namespace CellAO.Core.Items
         }
 
         #endregion
-
-   }
+    }
 }

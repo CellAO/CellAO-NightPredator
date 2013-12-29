@@ -135,14 +135,16 @@
     <Compile Include="Network\IZoneClient.cs" />
     <Compile Include="Playfields\IPlayfield.cs" />
     <Compile Include="Playfields\PlayfieldData.cs" />
+    <Compile Include="Playfields\PlayfieldDestination.cs" />
     <Compile Include="Playfields\PlayfieldDistrict.cs" />
+    <Compile Include="Playfields\PlayfieldWall.cs" />
+    <Compile Include="Playfields\PlayfieldWalls.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requirements\IRequirements.cs" />
     <Compile Include="Requirements\RequirementLambdaCreator.cs" />
     <Compile Include="Requirements\Requirements.cs" />
     <Compile Include="Statels\Door.cs" />
     <Compile Include="Statels\StatelData.cs" />
-    <Compile Include="Statels\Walls.cs" />
     <Compile Include="Textures\AOMeshs.cs" />
     <Compile Include="Textures\AOTextures.cs" />
     <Compile Include="Textures\MeshLayers.cs" />

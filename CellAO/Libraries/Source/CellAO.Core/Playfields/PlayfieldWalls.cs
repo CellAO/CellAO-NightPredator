@@ -24,69 +24,23 @@
 
 #endregion
 
-namespace CellAO.Core.Statels
+namespace CellAO.Core.Playfields
 {
+    #region Usings ...
+
+    using System.Collections.Generic;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    public class Door
+    public class PlayfieldWalls
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        public int Flags;
-
-        /// <summary>
-        /// </summary>
-        public int Id;
-
-        /// <summary>
-        /// </summary>
-        public short Index;
-
-        /// <summary>
-        /// </summary>
-        public int Index2;
-
-        /// <summary>
-        /// </summary>
-        public short PlayfieldDesignator;
-
-        /// <summary>
-        /// </summary>
-        public int PlayfieldId;
-
-        /// <summary>
-        /// </summary>
-        public float X;
-
-        /// <summary>
-        /// </summary>
-        public float Y;
-
-        /// <summary>
-        /// </summary>
-        public float Z;
-
-        /// <summary>
-        /// </summary>
-        public int unknown1;
-
-        /// <summary>
-        /// </summary>
-        public byte unknown2;
-
-        /// <summary>
-        /// </summary>
-        public int unknown3;
-
-        /// <summary>
-        /// </summary>
-        public short unknown4;
-
-        /// <summary>
-        /// </summary>
-        public int unknown5;
+        public List<PlayfieldWall> Walls = new List<PlayfieldWall>();
 
         #endregion
     }

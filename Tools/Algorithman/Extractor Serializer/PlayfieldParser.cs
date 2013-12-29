@@ -33,6 +33,7 @@ namespace Extractor_Serializer
     using System.IO;
 
     using CellAO.Core.Items;
+    using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
 
     using Extractor_Serializer.Structs;
@@ -128,6 +129,18 @@ namespace Extractor_Serializer
         /// </param>
         /// <returns>
         /// </returns>
+        internal static DestinationStruct ParseDestinations(byte[] p)
+        {
+            MemoryStream ms = new MemoryStream(p);
+            return WallExtract.ReadFromStream(ms);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="p">
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static string ParseName(byte[] p)
         {
             MemoryStream ms = new MemoryStream(p);
@@ -144,6 +157,43 @@ namespace Extractor_Serializer
             br.Close();
             ms.Close();
             return name;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="p">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        internal static List<PlayfieldWalls> ParseWalls(byte[] p)
+        {
+            BinaryReader br = new BinaryReader(new MemoryStream(p));
+            int counter1 = br.ReadInt32();
+            List<PlayfieldWalls> walls = new List<PlayfieldWalls>();
+            while (counter1 > 0)
+            {
+                PlayfieldWalls pfws = new PlayfieldWalls();
+                br.ReadInt32(); // Filler int32?
+                int counter2 = br.ReadInt32();
+
+                while (counter2 > 0)
+                {
+                    PlayfieldWall pfw = new PlayfieldWall();
+                    pfw.DestinationPlayfield = br.ReadInt16();
+                    pfw.DestinationIndex = br.ReadByte();
+                    pfw.Flags = br.ReadByte();
+                    pfw.X = br.ReadSingle();
+                    pfw.Y = br.ReadSingle();
+                    pfw.Z = br.ReadSingle();
+                    pfws.Walls.Add(pfw);
+                    counter2--;
+                }
+
+                walls.Add(pfws);
+                counter1--;
+            }
+
+            return walls;
         }
 
         #endregion
