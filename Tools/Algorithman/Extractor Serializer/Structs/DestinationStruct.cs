@@ -42,7 +42,7 @@ namespace Extractor_Serializer.Structs
 
         /// <summary>
         /// </summary>
-        public List<PlayfieldDestination> Destinations = new List<PlayfieldDestination>();
+        public Dictionary<byte, PlayfieldDestination> Destinations = new Dictionary<byte, PlayfieldDestination>();
 
         /// <summary>
         /// </summary>

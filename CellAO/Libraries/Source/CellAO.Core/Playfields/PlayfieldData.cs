@@ -41,8 +41,9 @@ namespace CellAO.Core.Playfields
         #region Fields
 
         /// <summary>
+        /// key is destinationIndex
         /// </summary>
-        public List<PlayfieldDestination> Destinations = new List<PlayfieldDestination>();
+        public Dictionary<byte, PlayfieldDestination> Destinations = new Dictionary<byte, PlayfieldDestination>();
 
         /// <summary>
         /// </summary>

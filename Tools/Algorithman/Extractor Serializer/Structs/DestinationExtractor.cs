@@ -95,7 +95,15 @@ namespace Extractor_Serializer.Structs
                 // Read the stuff
 
                 PlayfieldDestination pfd = new PlayfieldDestination();
-                pfd.DestinationId = br.ReadInt32();
+                // We dont need the Destination playfield id here again
+                // so lets skip it
+                br.ReadInt16(); 
+                
+                byte destinationId = br.ReadByte();
+
+                // We also dont need the following 0, lets save some space here
+                br.ReadByte();
+                
                 pfd.StartX = br.ReadSingle();
                 pfd.StartY = br.ReadSingle();
                 pfd.StartZ = br.ReadSingle();
@@ -104,12 +112,9 @@ namespace Extractor_Serializer.Structs
                 pfd.EndY = br.ReadSingle();
                 pfd.EndZ = br.ReadSingle();
 
-                destinationStruct.Destinations.Add(pfd);
+                destinationStruct.Destinations.Add(destinationId, pfd);
                 destinationCounter--;
             }
-
-            // Should be on end position now
-            Console.WriteLine(temp + ":" + br.BaseStream.Position);
 
             return destinationStruct;
         }
