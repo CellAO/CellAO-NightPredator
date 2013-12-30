@@ -71,50 +71,53 @@ namespace CellAO.Stats.SpecialStats
 
         /// <summary>
         /// </summary>
-        public override void CalcTrickle()
+        public override int GetValue
         {
-            int baseIP = 0;
-            int characterLevel = this.Stats[StatIds.level].Value;
-
-            if (characterLevel > 204)
+            get
             {
-                baseIP += (characterLevel - 204) * 600000;
-                characterLevel = 204;
+                int baseIP = 0;
+                int characterLevel = this.Stats[StatIds.level].Value;
+
+                if (characterLevel > 204)
+                {
+                    baseIP += (characterLevel - 204) * 600000;
+                    characterLevel = 204;
+                }
+
+                if (characterLevel > 189)
+                {
+                    baseIP += (characterLevel - 189) * 150000;
+                    characterLevel = 189;
+                }
+
+                if (characterLevel > 149)
+                {
+                    baseIP += (characterLevel - 149) * 80000;
+                    characterLevel = 149;
+                }
+
+                if (characterLevel > 99)
+                {
+                    baseIP += (characterLevel - 99) * 40000;
+                    characterLevel = 99;
+                }
+
+                if (characterLevel > 49)
+                {
+                    baseIP += (characterLevel - 49) * 20000;
+                    characterLevel = 49;
+                }
+
+                if (characterLevel > 14)
+                {
+                    baseIP += (characterLevel - 14) * 10000; // Change 99 => 14 by Wizard
+                    characterLevel = 14;
+                }
+
+                baseIP += 1500 + (characterLevel - 1) * 4000;
+
+                return (baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats)));
             }
-
-            if (characterLevel > 189)
-            {
-                baseIP += (characterLevel - 189) * 150000;
-                characterLevel = 189;
-            }
-
-            if (characterLevel > 149)
-            {
-                baseIP += (characterLevel - 149) * 80000;
-                characterLevel = 149;
-            }
-
-            if (characterLevel > 99)
-            {
-                baseIP += (characterLevel - 99) * 40000;
-                characterLevel = 99;
-            }
-
-            if (characterLevel > 49)
-            {
-                baseIP += (characterLevel - 49) * 20000;
-                characterLevel = 49;
-            }
-
-            if (characterLevel > 14)
-            {
-                baseIP += (characterLevel - 14) * 10000; // Change 99 => 14 by Wizard
-                characterLevel = 14;
-            }
-
-            baseIP += 1500 + (characterLevel - 1) * 4000;
-
-            this.Set((uint)(baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats))));
         }
 
         #endregion

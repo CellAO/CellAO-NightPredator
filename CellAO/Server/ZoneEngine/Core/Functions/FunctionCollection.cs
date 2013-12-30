@@ -35,6 +35,7 @@ namespace ZoneEngine.Core.Functions
     using System.Reflection;
 
     using CellAO.Core.Entities;
+    using CellAO.Enums;
 
     using MsgPack;
 
@@ -101,10 +102,10 @@ namespace ZoneEngine.Core.Functions
         /// <returns>
         /// </returns>
         public bool CallFunction(
-            int functionNumber, 
-            INamedEntity self, 
-            INamedEntity caller, 
-            IInstancedEntity target, 
+            int functionNumber,
+            INamedEntity self,
+            INamedEntity caller,
+            IInstancedEntity target,
             MessagePackObject[] arguments)
         {
             FunctionPrototype func = this.GetFunctionByNumber(functionNumber);
@@ -121,7 +122,7 @@ namespace ZoneEngine.Core.Functions
 
             if (Program.DebugGameFunctions)
             {
-                LogUtil.Debug("Function " + functionNumber + " not found!");
+                LogUtil.Debug("Function " + (FunctionType)functionNumber + "(" + functionNumber + ")" + " not found!");
                 LogUtil.Debug(FunctionArgumentList.List(arguments));
             }
 

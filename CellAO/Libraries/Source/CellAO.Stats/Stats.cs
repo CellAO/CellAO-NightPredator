@@ -3167,7 +3167,7 @@ namespace CellAO.Stats
             this.invadersKilled = new Stat(this, 615, 0, false, false, false);
             this.inventoryId = new Stat(this, 55, 1234567890, false, false, false);
             this.inventoryTimeout = new Stat(this, 50, 1234567890, false, false, false);
-            this.ip = new StatIp(this, 53, 1500, true, false, false);
+            this.ip = new StatIp(this, 53, 1500, false, true, false);
             this.isFightingMe = new Stat(this, 410, 0, false, false, false);
             this.isVehicle = new Stat(this, 658, 1234567890, false, false, false);
             this.itemAnim = new Stat(this, 99, 1234567890, true, false, false);
@@ -4339,7 +4339,6 @@ namespace CellAO.Stats
             this.psychic.Affects.Add(this.nanoDelta.StatId);
             this.stamina.Affects.Add(this.healInterval.StatId);
             this.psychic.Affects.Add(this.nanoInterval.StatId);
-            this.level.Affects.Add(this.ip.StatId);
             this.stamina.Affects.Add(this.bodyDevelopment.StatId);
 
             this.expansion.DoNotDontWriteToSql = true;

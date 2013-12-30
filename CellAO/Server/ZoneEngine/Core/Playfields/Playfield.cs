@@ -38,6 +38,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
     using CellAO.Core.Network;
+    using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
     using CellAO.Enums;
@@ -97,6 +98,8 @@ namespace CellAO.Core.Playfields
         /// </summary>
         private float x;
 
+        private List<StatelData> statels = new List<StatelData>(); 
+
         #endregion
 
         #region Constructors and Destructors
@@ -105,7 +108,7 @@ namespace CellAO.Core.Playfields
         /// </summary>
         /// <param name="zoneServer">
         /// </param>
-        public Playfield(ZoneServer zoneServer)
+        private Playfield(ZoneServer zoneServer)
         {
             this.server = zoneServer;
 
@@ -138,6 +141,7 @@ namespace CellAO.Core.Playfields
             : this(zoneServer)
         {
             this.Identity = playfieldIdentity;
+            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
         }
 
         #endregion
@@ -708,11 +712,26 @@ namespace CellAO.Core.Playfields
                         }
 
                         this.CheckWallCollision(c);
+                        this.CheckStatelCollision(c);
                     }
                 }
             }
 
             this.heartBeat.Change(10, 0);
+        }
+
+        private void CheckStatelCollision(ICharacter c)
+        {
+            foreach (StatelData sd in this.statels)
+            {
+                foreach (Events.Events ev in sd.Events.Where(x=>(x.EventType==(int)EventType.OnCollide) || (x.EventType==(int)EventType.OnEnter)))
+                {
+                    if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
+                    {
+                        ev.Perform(c, c);
+                    }
+                }
+            }
         }
 
         #endregion

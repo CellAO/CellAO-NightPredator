@@ -197,6 +197,7 @@ namespace LoginEngine.Packets
             }
 
             CharacterDao.UpdatePosition(dbCharacter);
+            CharacterDao.SetPlayfield(dbCharacter.Id, (int)IdentityType.Playfield, dbCharacter.Playfield);
         }
 
         #endregion
@@ -242,10 +243,10 @@ namespace LoginEngine.Packets
                 CharacterDao.AddCharacter(
                     new DBCharacter
                     {
-                        FirstName = string.Empty, 
-                        LastName = string.Empty, 
-                        Name = this.Name, 
-                        Username = this.AccountName, 
+                        FirstName = string.Empty,
+                        LastName = string.Empty,
+                        Name = this.Name,
+                        Username = this.AccountName,
                     });
             }
             catch (Exception e)
@@ -271,9 +272,9 @@ namespace LoginEngine.Packets
             stats.Add(
                 new DBStats
                 {
-                    type = 50000, 
-                    instance = charID, 
-                    statid = 215, 
+                    type = 50000,
+                    instance = charID,
+                    statid = 215,
                     statvalue = LoginDataDao.GetByUsername(this.AccountName).GM
                 });
 
@@ -331,6 +332,8 @@ namespace LoginEngine.Packets
             // Set HP and NP auf 1
             stats.Add(new DBStats { type = 50000, instance = charID, statid = 1, statvalue = 1 });
             stats.Add(new DBStats { type = 50000, instance = charID, statid = 214, statvalue = 1 });
+
+            stats.Add(new DBStats { type = 50000, instance = charID, statid = 389, statvalue = LoginDataDao.GetByUsername(this.AccountName).Expansions });
 
             StatDao.BulkReplace(stats);
 

@@ -479,7 +479,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasAnimation()
         {
-            return (this.Flags & (1 << 17)) > 0;
+            return (this.Stats[0] & (1 << 17)) > 0;
         }
 
         /// <summary>
@@ -488,7 +488,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasDamage()
         {
-            return (this.Flags & (1 << 30)) > 0;
+            return (this.Stats[0] & (1 << 30)) > 0;
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasEnergy()
         {
-            return (this.Flags & (1 << 22)) > 0;
+            return (this.Stats[0] & (1 << 22)) > 0;
         }
 
         /// <summary>
@@ -506,7 +506,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasModifiedDescription()
         {
-            return (this.Flags & (1 << 1)) > 0;
+            return (this.Stats[0] & (1 << 1)) > 0;
         }
 
         /// <summary>
@@ -515,7 +515,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasModifiedName()
         {
-            return (this.Flags & (1 << 2)) > 0;
+            return (this.Stats[0] & (1 << 2)) > 0;
         }
 
         /// <summary>
@@ -524,7 +524,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasMultipleCount()
         {
-            return (this.Flags & (1 << 5)) > 0;
+            return (this.Stats[0] & (1 << 5)) > 0;
         }
 
         /// <summary>
@@ -533,7 +533,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasRotation()
         {
-            return (this.Flags & (1 << 18)) > 0;
+            return (this.Stats[0] & (1 << 18)) > 0;
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool HasSentFirstIIR()
         {
-            return (this.Flags & (1 << 21)) > 0;
+            return (this.Stats[0] & (1 << 21)) > 0;
         }
 
         /// <summary>
@@ -551,7 +551,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IllegalForClan()
         {
-            return (this.Flags & (1 << 24)) > 0;
+            return (this.Stats[0] & (1 << 24)) > 0;
         }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IllegalForOmni()
         {
-            return (this.Flags & (1 << 25)) > 0;
+            return (this.Stats[0] & (1 << 25)) > 0;
         }
 
         /// <summary>
@@ -578,7 +578,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsDefaultTarget()
         {
-            return (this.Flags & (1 << 14)) > 0;
+            return (this.Stats[0] & (1 << 14)) > 0;
         }
 
         /// <summary>
@@ -587,7 +587,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsItemSocialArmor()
         {
-            return (this.Flags & (1 << 8)) > 0;
+            return (this.Stats[0] & (1 << 8)) > 0;
         }
 
         /// <summary>
@@ -605,7 +605,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsLocked()
         {
-            return (this.Flags & (1 << 6)) > 0;
+            return (this.Stats[0] & (1 << 6)) > 0;
         }
 
         /// <summary>
@@ -614,7 +614,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsNoDrop()
         {
-            return (this.Flags & (1 << 26)) > 0;
+            return (this.Stats[0] & (1 << 26)) > 0;
         }
 
         /// <summary>
@@ -623,7 +623,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsNull()
         {
-            return (this.Flags & (1 << 16)) > 0;
+            return (this.Stats[0] & (1 << 16)) > 0;
         }
 
         /// <summary>
@@ -632,7 +632,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsOpen()
         {
-            return (this.Flags & (1 << 7)) > 0;
+            return (this.Stats[0] & (1 << 7)) > 0;
         }
 
         /// <summary>
@@ -641,7 +641,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsRepulsive()
         {
-            return (this.Flags & (1 << 13)) > 0;
+            return (this.Stats[0] & (1 << 13)) > 0;
         }
 
         /// <summary>
@@ -659,7 +659,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsStaionary()
         {
-            return (this.Flags & (1 << 12)) > 0;
+            return (this.Stats[0] & (1 << 12)) > 0;
         }
 
         /// <summary>
@@ -686,7 +686,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsUnique()
         {
-            return (this.Flags & (1 << 27)) > 0;
+            return (this.Stats[0] & (1 << 27)) > 0;
         }
 
         /// <summary>
@@ -695,7 +695,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool IsVisible()
         {
-            return (this.Flags & (1 << 0)) > 0;
+            return (this.Stats[0] & (1 << 0)) > 0;
         }
 
         /// <summary>
@@ -704,7 +704,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool MirrorsInLeftHand()
         {
-            return (this.Flags & (1 << 23)) > 0;
+            return (this.Stats[0] & (1 << 23)) > 0;
         }
 
         /// <summary>
@@ -722,7 +722,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool NoSelectionIndicator()
         {
-            return (this.Flags & (1 << 10)) > 0;
+            return (this.Stats[0] & (1 << 10)) > 0;
         }
 
         /// <summary>
@@ -731,7 +731,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool OverrideItemTexture()
         {
-            return (this.Flags & (1 << 15)) > 0;
+            return (this.Stats[0] & (1 << 15)) > 0;
         }
 
         /// <summary>
@@ -740,7 +740,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool StatelCollisionDisabled()
         {
-            return (this.Flags & (1 << 31)) > 0;
+            return (this.Stats[0] & (1 << 31)) > 0;
         }
 
         /// <summary>
@@ -749,7 +749,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool TellCollision()
         {
-            return (this.Flags & (1 << 9)) > 0;
+            return (this.Stats[0] & (1 << 9)) > 0;
         }
 
         /// <summary>
@@ -758,7 +758,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool TurnsOnUse()
         {
-            return (this.Flags & (1 << 4)) > 0;
+            return (this.Stats[0] & (1 << 4)) > 0;
         }
 
         /// <summary>
@@ -767,7 +767,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool UseEmptyDestruct()
         {
-            return (this.Flags & (1 << 11)) > 0;
+            return (this.Stats[0] & (1 << 11)) > 0;
         }
 
         /// <summary>
@@ -785,7 +785,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool WantsCollision()
         {
-            return (this.Flags & (1 << 19)) > 0;
+            return (this.Stats[0] & (1 << 19)) > 0;
         }
 
         /// <summary>
@@ -794,7 +794,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool WantsSignals()
         {
-            return (this.Flags & (1 << 20)) > 0;
+            return (this.Stats[0] & (1 << 20)) > 0;
         }
 
         /// <summary>

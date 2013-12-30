@@ -95,6 +95,7 @@ namespace ZoneEngine.ChatCommands
                             character,
                             o.StatelIdentity.Type.ToString() + " " + ((int)o.StatelIdentity.Type).ToString("X8") + ":"
                             + o.StatelIdentity.Instance.ToString("X8")));
+                    replies.Add(ChatText.Create(character, "Item Template Id: " + o.TemplateId));
                     foreach (Events se in o.Events)
                     {
                         replies.Add(
@@ -117,7 +118,7 @@ namespace ZoneEngine.ChatCommands
                             replies.Add(
                                 ChatText.Create(
                                     character,
-                                    "    Fn: " + ((FunctionType)sf.FunctionType).ToString() + "("+sf.FunctionType.ToString()+ "), # of Args: "
+                                    "    Fn: " + ((FunctionType)sf.FunctionType).ToString() + "(" + sf.FunctionType.ToString() + "), # of Args: "
                                     + sf.Arguments.Values.Count.ToString()));
                             replies.Add(ChatText.Create(character, "    Args: " + Fargs));
 

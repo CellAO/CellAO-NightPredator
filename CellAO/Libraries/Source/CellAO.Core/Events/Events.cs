@@ -129,7 +129,7 @@ namespace CellAO.Core.Events
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Events Copy()
+        public Events Copy()
         {
             Events copy = new Events();
 
