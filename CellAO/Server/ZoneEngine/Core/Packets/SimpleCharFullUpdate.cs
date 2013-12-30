@@ -188,8 +188,8 @@ namespace ZoneEngine.Core.Packets
                     tempNano.Instance = nano.Instance;
                     tempNano.NanoStrain = nano.NanoStrain;
                     tempNano.Nanotype = nano.Nanotype;
-                    tempNano.Time1 = nano.Time1;
-                    tempNano.Time2 = nano.Time2;
+                    tempNano.TickCounter = nano.TickCounter;
+                    tempNano.TickInterval = nano.TickInterval;
                     tempNano.Value3 = nano.Value3;
 
                     nanos.Add(tempNano);
@@ -356,8 +356,8 @@ namespace ZoneEngine.Core.Packets
                     {
                         NanoId = nano.ID, 
                         NanoInstance = nano.Instance, 
-                        Time1 = nano.Time1, 
-                        Time2 = nano.Time2
+                        Time1 = nano.TickCounter, 
+                        Time2 = nano.TickInterval
                     }).ToArray();
 
             // Texture/Cloth Data
