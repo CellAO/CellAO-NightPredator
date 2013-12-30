@@ -347,8 +347,8 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "UPDATE characters SET playfield = @Playfield, X = @X, Y = @Y, Z = @Z WHERE id=@Id", 
-                        new { character.Playfield, character.X, character.Y, character.Z, character.Id });
+                        "UPDATE characters SET X = @X, Y = @Y, Z = @Z, HeadingX=@hX, HeadingY=@hY, HeadingZ=@hZ, HeadingW=@hW WHERE id=@Id",
+                        new { character.X, character.Y, character.Z, character.Id, hX = character.HeadingX, hZ = character.HeadingZ, hY = character.HeadingY, hW = character.HeadingW });
                 }
             }
             catch (Exception e)

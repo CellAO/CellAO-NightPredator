@@ -244,6 +244,15 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        public void AnnounceAppearanceUpdate(ICharacter character)
+        {
+            AppearanceUpdate.AnnounceAppearanceUpdate(character);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="messageBody">
         /// </param>
         /// <param name="dontSend">
@@ -575,17 +584,23 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield)
         {
+            // Prevent client from entering this again
+            if (character.DoNotDoTimers)
+            {
+                return;
+            }
+
+            character.DoNotDoTimers = true;
+
             // Teleport to another playfield
             ZoneEngine.Core.Packets.Teleport.Send(character, destination, heading, playfield);
 
             // Send packet, disconnect, and other playfield waits for connect
-            
+
             DespawnMessage despawnMessage = Despawn.Create(character.Identity);
             this.AnnounceOthers(despawnMessage, character.Identity);
-            character.DoNotDoTimers = true;
             character.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
-            character.Heading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-            character.RawHeading = character.Heading;
+            character.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
             character.Save();
             CharacterDao.SetPlayfield(character.Identity.Instance, (int)playfield.Type, playfield.Instance);
 
@@ -611,12 +626,10 @@ namespace CellAO.Core.Playfields
                                ServerIpAddress = tempIp, 
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
-            this.Send(character.Client, redirect);
-        }
+            character.Client.SendCompressed(redirect);
+            character.DoNotDoTimers = false;
 
-        public void AnnounceAppearanceUpdate(ICharacter character)
-        {
-            AppearanceUpdate.AnnounceAppearanceUpdate(character);
+            // character.Client.Server.DisconnectClient(character.Client);
         }
 
         #endregion

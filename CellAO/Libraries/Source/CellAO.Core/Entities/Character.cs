@@ -219,8 +219,36 @@ namespace CellAO.Core.Entities
         public Identity FightingTarget { get; set; }
 
         /// <summary>
+        /// Heading as Quaternion
         /// </summary>
-        public Quaternion Heading { get; set; }
+        public Quaternion Heading
+        {
+            get
+            {
+                if (this.spinDirection == SpinOrStrafeDirections.None)
+                {
+                    return this.RawHeading;
+                }
+                else
+                {
+                    double turnArcAngle;
+                    Quaternion turnQuaterion;
+                    Quaternion newHeading;
+
+                    turnArcAngle = this.calculateTurnArcAngle();
+                    turnQuaterion = new Quaternion(Vector.Vector3.AxisY, turnArcAngle);
+
+                    newHeading = Quaternion.Hamilton(turnQuaterion, this.RawHeading);
+                    newHeading.Normalize();
+
+                    return newHeading;
+                }
+            }
+
+            set
+            {
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -387,6 +415,8 @@ namespace CellAO.Core.Entities
                 this.Playfield.AnnounceAppearanceUpdate(this);
                 this.ChangedAppearance = false;
             }
+
+            this.DoNotDoTimers = false;
         }
 
         /// <summary>

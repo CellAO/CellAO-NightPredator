@@ -350,7 +350,14 @@ namespace ZoneEngine
 
             consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
 
+            consoleCommands.AddEntry("mf1", MF1);
+
             return true;
+        }
+
+        static void MF1(string[] parts)
+        {
+            
         }
 
         /// <summary>

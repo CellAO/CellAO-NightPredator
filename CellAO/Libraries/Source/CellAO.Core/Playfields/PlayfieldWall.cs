@@ -26,6 +26,8 @@
 
 namespace CellAO.Core.Playfields
 {
+    using System;
+
     /// <summary>
     /// </summary>
     public class PlayfieldWall
@@ -57,5 +59,11 @@ namespace CellAO.Core.Playfields
         public float Z;
 
         #endregion
+
+        public override string ToString()
+        {
+            return "Flags: " + Flags.ToString("X2") + Environment.NewLine + "Playfield: " + DestinationPlayfield
+                   + Environment.NewLine + "Index: " + DestinationIndex.ToString();
+        }
     }
 }

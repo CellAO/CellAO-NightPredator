@@ -113,6 +113,8 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity Target,
             MessagePackObject[] Arguments)
         {
+            // TODO: Use the arguments!!!!!
+
             Coordinate destination=new Coordinate();
             IQuaternion heading = new Quaternion(0.0, 0.0, 0.0, 0.0);
             Identity playfield=new Identity();

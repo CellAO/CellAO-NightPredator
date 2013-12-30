@@ -26,6 +26,8 @@
 
 namespace CellAO.Core.Playfields
 {
+    using System;
+
     /// <summary>
     /// </summary>
     public class PlayfieldDestination
@@ -60,6 +62,13 @@ namespace CellAO.Core.Playfields
         /// <summary>
         /// </summary>
         public float StartZ;
+
+        public override string ToString()
+        {
+            return "Destination Id: " + DestinationId + Environment.NewLine + "StartCoords: " + StartX.ToString("F")
+                   + " " + StartY.ToString("F") + " " + StartZ.ToString("F") + Environment.NewLine + "EndCoords: "
+                   + EndX.ToString("F") + " " + EndY.ToString("F") + " " + EndZ.ToString("F");
+        }
 
         #endregion
     }

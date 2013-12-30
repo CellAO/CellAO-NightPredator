@@ -115,6 +115,7 @@
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
     <Compile Include="Core\PacketHandlers\ContainerAddItem.cs" />
     <Compile Include="Core\PacketHandlers\GenericCmd.cs" />
+    <Compile Include="Core\PacketHandlers\N3Teleport.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
     <Compile Include="Core\Packets\AddTemplate.cs" />
@@ -139,6 +140,8 @@
     <Compile Include="Core\Playfields\Playfield.cs" />
     <Compile Include="Core\Playfields\PlayfieldLoader.cs" />
     <Compile Include="Core\Playfields\Playfields.cs" />
+    <Compile Include="Core\Playfields\WallCollision.cs" />
+    <Compile Include="Core\Playfields\WallCollisionResult.cs" />
     <Compile Include="Core\TradeSkill.cs" />
     <Compile Include="Core\TradeSkillEntry.cs" />
     <Compile Include="Core\TradeSkillSkill.cs" />
