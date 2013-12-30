@@ -712,7 +712,7 @@ namespace CellAO.Core.Playfields
                 }
             }
 
-            this.heartBeat.Change(100, 0);
+            this.heartBeat.Change(10, 0);
         }
 
         #endregion

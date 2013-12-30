@@ -153,10 +153,10 @@ namespace ZoneEngine.Core
         {
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
-                functions.FunctionType, 
-                this.character, 
-                this.character, 
-                this.character, 
+                functions.FunctionType,
+                this.character,
+                this.character,
+                this.character,
                 functions.Arguments.Values.ToArray());
         }
 
@@ -187,9 +187,9 @@ namespace ZoneEngine.Core
             this.character.FirstName = character.FirstName;
             this.character.RawCoordinates = new Vector3 { X = character.X, Y = character.Y, Z = character.Z };
             this.character.RawHeading = new Quaternion(
-                character.HeadingX, 
-                character.HeadingY, 
-                character.HeadingZ, 
+                character.HeadingX,
+                character.HeadingY,
+                character.HeadingZ,
                 character.HeadingW);
 
             this.character.Playfield = this.server.PlayfieldById(character.Playfield);
@@ -206,14 +206,14 @@ namespace ZoneEngine.Core
         {
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = this.server.Id, 
+                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0),
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
+                                      Sender = this.server.Id,
                                       Receiver = this.Character.Identity.Instance
                                   }
                           };
@@ -235,22 +235,26 @@ namespace ZoneEngine.Core
         public void SendCompressed(byte[] buffer)
         {
             // We can not be multithreaded here. packet numbers would be jumbled
-            lock (this.zStream)
+            lock (this.netStream)
             {
-                byte[] pn = BitConverter.GetBytes(this.packetNumber++);
-                buffer[0] = pn[1];
-                buffer[1] = pn[0];
+                // Discard the packet for now, if we can not write to the stream
+                if (this.netStream.CanWrite)
+                {
+                    byte[] pn = BitConverter.GetBytes(this.packetNumber++);
+                    buffer[0] = pn[1];
+                    buffer[1] = pn[0];
 
-                try
-                {
-                    this.zStream.Write(buffer, 0, buffer.Length);
-                    this.zStream.Flush();
-                }
-                catch (Exception e)
-                {
-                    LogUtil.Debug("Error writing to zStream");
-                    LogUtil.ErrorException(e);
-                    this.server.DisconnectClient(this);
+                    try
+                    {
+                        this.zStream.Write(buffer, 0, buffer.Length);
+                        this.zStream.Flush();
+                    }
+                    catch (Exception e)
+                    {
+                        LogUtil.Debug("Error writing to zStream");
+                        LogUtil.ErrorException(e);
+                        this.server.DisconnectClient(this);
+                    }
                 }
             }
 
@@ -269,16 +273,16 @@ namespace ZoneEngine.Core
             // TODO: Investigate if reciever is a timestamp
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = 0xdfdf, 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
+                                      MessageId = 0xdfdf,
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
 
                                       // TODO: Make compression choosable in config.xml
-                                      Sender = 0x01000000, 
+                                      Sender = 0x01000000,
 
                                       // 01000000 = uncompressed, 03000000 = compressed
                                       Receiver = 0 // this.character.Identity.Instance 
@@ -302,7 +306,7 @@ namespace ZoneEngine.Core
                 {
                     // CreateIM the zStream
                     this.netStream = new NetworkStream(this.TcpSocket);
-                    this.zStream = new ZOutputStream(this.netStream, zlibConst.Z_BEST_COMPRESSION);
+                    this.zStream = new ZOutputStream(this.netStream, zlibConst.Z_BEST_SPEED);
                     this.zStream.FlushMode = zlibConst.Z_SYNC_FLUSH;
                     this.zStreamSetup = true;
                 }
@@ -324,10 +328,10 @@ namespace ZoneEngine.Core
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
                           {
-                              Identity = this.Character.Identity, 
-                              Unknown = 0x00, 
-                              Text = text, 
-                              Unknown1 = 0x1000, 
+                              Identity = this.Character.Identity,
+                              Unknown = 0x00,
+                              Text = text,
+                              Unknown1 = 0x1000,
                               Unknown2 = 0x00000000
                           };
 
@@ -402,8 +406,8 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
+                    this,
+                    "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 LogUtil.Debug(NiceHexOutput.Output(packet));
                 return false;
@@ -415,8 +419,8 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
+                    this,
+                    "Client sent unknown message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
