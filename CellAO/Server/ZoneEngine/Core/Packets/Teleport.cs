@@ -119,7 +119,8 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ICharacter character, Coordinate destination, IQuaternion heading, Identity playfield)
         {
-            character.Send(Create(character, destination, heading, playfield));
+            // This needs to be sent immediately!
+            character.Client.SendCompressed(Create(character, destination, heading, playfield));
         }
 
         #endregion

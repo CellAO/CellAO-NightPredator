@@ -28,31 +28,25 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
+    using System.Linq;
+
     using CellAO.Core.Entities;
+    using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
     using CellAO.Enums;
-    using CellAO.Interfaces;
 
     using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using ZoneEngine.Core.Playfields;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    internal class teleport : FunctionPrototype
+    internal class lineteleport : FunctionPrototype
     {
-        #region Constants
-
-        /// <summary>
-        /// </summary>
-        private const FunctionType functionId = FunctionType.Teleport;
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -61,7 +55,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         {
             get
             {
-                return functionId;
+                return FunctionType.LineTeleport;
             }
         }
 
@@ -87,36 +81,36 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             IInstancedEntity target, 
             MessagePackObject[] arguments)
         {
-            lock (target)
+            if (arguments.Count() != 3)
             {
-                return this.FunctionExecute(self, caller, target, arguments);
+                return false;
             }
-        }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="Self">
-        /// </param>
-        /// <param name="Caller">
-        /// </param>
-        /// <param name="Target">
-        /// </param>
-        /// <param name="Arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public bool FunctionExecute(
-            INamedEntity Self, 
-            INamedEntity Caller, 
-            IInstancedEntity Target, 
-            MessagePackObject[] Arguments)
-        {
-            // TODO: Use the arguments!!!!!
+            uint arg1 = arguments[1].AsUInt32();
+            int toPlayfield = arguments[2].AsInt32();
 
-            Coordinate destination = new Coordinate();
-            IQuaternion heading = new Quaternion(0.0, 0.0, 0.0, 0.0);
-            Identity playfield = new Identity();
-            ((Character)Self).Teleport(destination, heading, playfield);
+            byte destinationIndex = (byte)(arg1 >> 16);
+            PlayfieldData pfd = PlayfieldLoader.PFData[toPlayfield];
+            PlayfieldDestination pfDestination = pfd.Destinations[destinationIndex];
+
+            float newX = (pfDestination.EndX - pfDestination.StartX) * 0.5f + pfDestination.StartX;
+            float newZ = (pfDestination.EndZ - pfDestination.StartZ) * 0.5f + pfDestination.StartZ;
+            float dist = WallCollision.Distance(
+                pfDestination.StartX, 
+                pfDestination.StartZ, 
+                pfDestination.EndX, 
+                pfDestination.EndZ);
+            float headDistX = (pfDestination.EndX - pfDestination.StartX) / dist;
+            float headDistZ = (pfDestination.EndZ - pfDestination.StartZ) / dist;
+            newX -= headDistZ * 8;
+            newZ += headDistX * 8;
+
+            Coordinate destCoordinate = new Coordinate(newX, pfDestination.EndY, newZ);
+
+            ((ICharacter)self).Teleport(
+                destCoordinate, 
+                ((ICharacter)self).Heading, 
+                new Identity() { Type = IdentityType.Playfield, Instance = toPlayfield });
             return true;
         }
 

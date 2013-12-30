@@ -70,26 +70,26 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// <returns>
         /// </returns>
         public override bool Execute(
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
+            INamedEntity self, 
+            INamedEntity caller, 
+            IInstancedEntity target, 
             MessagePackObject[] arguments)
         {
             string text = arguments[0].AsString();
             byte b = 0;
             var message = new FormatFeedbackMessage()
-            {
-                Identity = self.Identity,
-                Message = text + (char)b,
-                Unknown1 = 0,
-                DataLength = (short)(text.Length + 0xf),
-                Unknown2 = 0x7e26,
-                Unknown3 = 0x21212122,
-                Unknown4 = 0x3a212121,
-                Unknown5 = 0x293C,
-                Unknown6 = 0x73,
-                Unknown7 = 0
-            };
+                          {
+                              Identity = self.Identity, 
+                              Message = text + (char)b, 
+                              Unknown1 = 0, 
+                              DataLength = (short)(text.Length + 0xf), 
+                              Unknown2 = 0x7e26, 
+                              Unknown3 = 0x21212122, 
+                              Unknown4 = 0x3a212121, 
+                              Unknown5 = 0x293C, 
+                              Unknown6 = 0x73, 
+                              Unknown7 = 0
+                          };
             ((ICharacter)self).Send(message);
             return true;
         }

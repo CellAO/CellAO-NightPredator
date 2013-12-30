@@ -32,7 +32,6 @@ namespace ZoneEngine.ChatCommands
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -88,7 +87,7 @@ namespace ZoneEngine.ChatCommands
             {
                 messList.Add(
                     ChatText.Create(
-                        character,
+                        character, 
                         ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
             }
 

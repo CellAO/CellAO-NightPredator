@@ -51,12 +51,8 @@ namespace ZoneEngine.Core.Packets
         /// </summary>
         /// <param name="client">
         /// </param>
-        public static void Send(IZoneClient client)
-        {
-            // TODO: Let this in for now, it needs to be removed when Character login is rewritten
-            client.SendCompressed(Create(client));
-        }
-
+        /// <returns>
+        /// </returns>
         public static FullCharacterMessage Create(IZoneClient client)
         {
             var fullCharacterMessage = new FullCharacterMessage { Identity = client.Character.Identity, Unknown1 = 25 };
@@ -68,16 +64,16 @@ namespace ZoneEngine.Core.Packets
                 foreach (KeyValuePair<int, IItem> kv in ivp.List())
                 {
                     var temp = new InventorySlot
-                    {
-                        Placement = kv.Key,
-                        Flags = (short)kv.Value.Flags,
-                        Count = (short)kv.Value.MultipleCount,
-                        Identity = kv.Value.Identity,
-                        ItemLowId = kv.Value.LowID,
-                        ItemHighId = kv.Value.HighID,
-                        Quality = kv.Value.Quality,
-                        Unknown = kv.Value.Nothing
-                    };
+                               {
+                                   Placement = kv.Key, 
+                                   Flags = (short)kv.Value.Flags, 
+                                   Count = (short)kv.Value.MultipleCount, 
+                                   Identity = kv.Value.Identity, 
+                                   ItemLowId = kv.Value.LowID, 
+                                   ItemHighId = kv.Value.HighID, 
+                                   Quality = kv.Value.Quality, 
+                                   Unknown = kv.Value.Nothing
+                               };
                     inventory.Add(temp);
                 }
             }
@@ -842,6 +838,16 @@ namespace ZoneEngine.Core.Packets
             return fullCharacterMessage;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        public static void Send(IZoneClient client)
+        {
+            // TODO: Let this in for now, it needs to be removed when Character login is rewritten
+            client.SendCompressed(Create(client));
+        }
+
         #endregion
 
         #region Methods
@@ -878,7 +884,7 @@ namespace ZoneEngine.Core.Packets
 
             var tuple = new GameTuple<byte, short>
                         {
-                            Value1 = (byte)statId,
+                            Value1 = (byte)statId, 
                             Value2 = (short)client.Character.Stats[statId].BaseValue
                         };
 
@@ -902,7 +908,7 @@ namespace ZoneEngine.Core.Packets
 
             var tuple = new GameTuple<byte, byte>
                         {
-                            Value1 = (byte)statId,
+                            Value1 = (byte)statId, 
                             Value2 = (byte)client.Character.Stats[statId].BaseValue
                         };
 

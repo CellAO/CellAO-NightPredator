@@ -102,10 +102,10 @@ namespace ZoneEngine.Core.Functions
         /// <returns>
         /// </returns>
         public bool CallFunction(
-            int functionNumber,
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
+            int functionNumber, 
+            INamedEntity self, 
+            INamedEntity caller, 
+            IInstancedEntity target, 
             MessagePackObject[] arguments)
         {
             FunctionPrototype func = this.GetFunctionByNumber(functionNumber);

@@ -113,7 +113,13 @@ namespace ZoneEngine.Core.PacketHandlers
                             DeleteItem.Send(client, target.Container, target.Placement);
                         }
 
-                        client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, SuccessMessage(sourceItem, targetItem, new Item(quality, ts.ResultLowId, ts.ResultHighId))));
+                        client.Character.Playfield.Publish(
+                            ChatText.CreateIM(
+                                client.Character, 
+                                SuccessMessage(
+                                    sourceItem, 
+                                    targetItem, 
+                                    new Item(quality, ts.ResultLowId, ts.ResultHighId))));
 
                         client.Character.Stats[StatIds.xp].Value += CalculateXP(quality, ts);
                     }
@@ -121,7 +127,10 @@ namespace ZoneEngine.Core.PacketHandlers
             }
             else
             {
-                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "It is not possible to assemble those two items. Maybe the order was wrong?"));
+                client.Character.Playfield.Publish(
+                    ChatText.CreateIM(
+                        client.Character, 
+                        "It is not possible to assemble those two items. Maybe the order was wrong?"));
                 client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "No combination found!"));
             }
         }

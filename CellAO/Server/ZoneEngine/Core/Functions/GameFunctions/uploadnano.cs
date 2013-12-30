@@ -92,15 +92,14 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
             var message = new CharacterActionMessage()
                           {
-                              Identity = self.Identity,
-                              Action = CharacterActionType.UploadNano,
-                              Target = self.Identity,
-                              Parameter1 = (int)IdentityType.NanoProgram,
-                              Parameter2 = temp.NanoId,
+                              Identity = self.Identity, 
+                              Action = CharacterActionType.UploadNano, 
+                              Target = self.Identity, 
+                              Parameter1 = (int)IdentityType.NanoProgram, 
+                              Parameter2 = temp.NanoId, 
                               Unknown = 0
                           };
             ((Character)self).Client.SendCompressed(message);
-
 
             return true;
         }

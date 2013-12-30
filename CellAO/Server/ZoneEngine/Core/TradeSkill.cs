@@ -77,7 +77,7 @@ namespace ZoneEngine.Core
             this.CacheItemNames();
             Console.WriteLine("Cached " + this.ItemNames.Count + " item names");
             this.CacheTradeSkills();
-            Console.WriteLine("\rCached "+this.tradeSkillList.Count+" trade skill entries");
+            Console.WriteLine("\rCached " + this.tradeSkillList.Count + " trade skill entries");
         }
 
         #endregion

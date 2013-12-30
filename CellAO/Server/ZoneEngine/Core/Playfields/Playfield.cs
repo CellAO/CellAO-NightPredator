@@ -36,6 +36,7 @@ namespace CellAO.Core.Playfields
     using System.Threading;
 
     using CellAO.Core.Entities;
+    using CellAO.Core.Events;
     using CellAO.Core.Functions;
     using CellAO.Core.Network;
     using CellAO.Core.Statels;
@@ -96,13 +97,28 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        private float x;
+        private List<StatelData> statels = new List<StatelData>();
 
-        private List<StatelData> statels = new List<StatelData>(); 
+        /// <summary>
+        /// </summary>
+        private float x;
 
         #endregion
 
         #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="zoneServer">
+        /// </param>
+        /// <param name="playfieldIdentity">
+        /// </param>
+        public Playfield(ZoneServer zoneServer, Identity playfieldIdentity)
+            : this(zoneServer)
+        {
+            this.Identity = playfieldIdentity;
+            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
+        }
 
         /// <summary>
         /// </summary>
@@ -129,19 +145,6 @@ namespace CellAO.Core.Playfields
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
             this.Entities = new HashSet<IInstancedEntity>();
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="zoneServer">
-        /// </param>
-        /// <param name="playfieldIdentity">
-        /// </param>
-        public Playfield(ZoneServer zoneServer, Identity playfieldIdentity)
-            : this(zoneServer)
-        {
-            this.Identity = playfieldIdentity;
-            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
         }
 
         #endregion
@@ -652,6 +655,27 @@ namespace CellAO.Core.Playfields
         /// </summary>
         /// <param name="c">
         /// </param>
+        private void CheckStatelCollision(ICharacter c)
+        {
+            foreach (StatelData sd in this.statels)
+            {
+                foreach (
+                    Events ev in
+                        sd.Events.Where(
+                            x => (x.EventType == (int)EventType.OnCollide) || (x.EventType == (int)EventType.OnEnter)))
+                {
+                    if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
+                    {
+                        ev.Perform(c, c);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="c">
+        /// </param>
         private void CheckWallCollision(ICharacter c)
         {
             WallCollisionResult wcr = WallCollision.CheckCollision(c.Coordinates, c.Playfield.Identity.Instance);
@@ -718,20 +742,6 @@ namespace CellAO.Core.Playfields
             }
 
             this.heartBeat.Change(10, 0);
-        }
-
-        private void CheckStatelCollision(ICharacter c)
-        {
-            foreach (StatelData sd in this.statels)
-            {
-                foreach (Events.Events ev in sd.Events.Where(x=>(x.EventType==(int)EventType.OnCollide) || (x.EventType==(int)EventType.OnEnter)))
-                {
-                    if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
-                    {
-                        ev.Perform(c, c);
-                    }
-                }
-            }
         }
 
         #endregion

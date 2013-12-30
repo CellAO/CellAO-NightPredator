@@ -52,11 +52,17 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void AnnounceAppearanceUpdate(ICharacter character)
         {
-            var message = Create(character);
+            AppearanceUpdateMessage message = Create(character);
 
             character.Playfield.Announce(message);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="characterToSend">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static AppearanceUpdateMessage Create(ICharacter characterToSend)
         {
             var character = (Character)characterToSend;
@@ -198,9 +204,9 @@ namespace ZoneEngine.Core.Packets
                     mesh =>
                         new Mesh
                         {
-                            Position = (byte)mesh.Position,
-                            Id = (uint)mesh.Mesh,
-                            OverrideTextureId = mesh.OverrideTexture,
+                            Position = (byte)mesh.Position, 
+                            Id = (uint)mesh.Mesh, 
+                            OverrideTextureId = mesh.OverrideTexture, 
                             Layer = (byte)mesh.Layer
                         }).ToArray();
             message.VisualFlags = (short)VisualFlags;
@@ -208,7 +214,6 @@ namespace ZoneEngine.Core.Packets
 
             return message;
         }
-
 
         #endregion
     }
