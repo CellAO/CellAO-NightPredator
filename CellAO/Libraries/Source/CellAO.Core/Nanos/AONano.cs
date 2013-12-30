@@ -55,12 +55,12 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// Time 1 (Tickcounter?)
         /// </summary>
-        public int Time1;
+        public int TickCounter;
 
         /// <summary>
         /// Time 2 (Tickinterval?)
         /// </summary>
-        public int Time2;
+        public int TickInterval;
 
         /// <summary>
         /// unknown
