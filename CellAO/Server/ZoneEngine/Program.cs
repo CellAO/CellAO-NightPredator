@@ -37,7 +37,6 @@ namespace ZoneEngine
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
-    using CellAO.Core.Statels;
     using CellAO.Database;
 
     using locales;
@@ -80,6 +79,10 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        public static bool DebugZoning;
+
+        /// <summary>
+        /// </summary>
         public static ISComV2Client ISComClient;
 
         /// <summary>
@@ -105,6 +108,8 @@ namespace ZoneEngine
         /// <summary>
         /// Check the database
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void CheckDatabase(string[] parts)
         {
             Misc.CheckDatabase();
@@ -350,14 +355,9 @@ namespace ZoneEngine
 
             consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
 
-            consoleCommands.AddEntry("mf1", MF1);
+            consoleCommands.AddEntry("debugzoning", SetDebugZoning);
 
             return true;
-        }
-
-        static void MF1(string[] parts)
-        {
-            
         }
 
         /// <summary>
@@ -370,7 +370,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
-                    "{0} Game functions loaded",
+                    "{0} Game functions loaded", 
                     FunctionCollection.Instance.NumberofRegisteredFunctions());
             }
             catch (Exception e)
@@ -467,6 +467,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void IsServerRunning(string[] parts)
         {
             Colouring.Push(ConsoleColor.White);
@@ -484,6 +486,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void ListAvailableScripts(string[] parts)
         {
             // list all available scripts, dont remove it since it does what it should
@@ -491,8 +495,8 @@ namespace ZoneEngine
             Console.WriteLine(locales.ServerConsoleAvailableScripts + ":");
 
             string[] files = Directory.GetFiles(
-                "Scripts" + Path.DirectorySeparatorChar,
-                "*.cs",
+                "Scripts" + Path.DirectorySeparatorChar, 
+                "*.cs", 
                 SearchOption.AllDirectories);
             if (files.Length == 0)
             {
@@ -626,6 +630,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void PingChatServer(string[] parts)
         {
             // ChatCom.Server.Ping();
@@ -634,6 +640,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void SetDebugGameFunctions(string[] parts)
         {
             DebugGameFunctions = !DebugGameFunctions;
@@ -652,6 +660,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void SetDebugNetwork(string[] parts)
         {
             DebugNetwork = !DebugNetwork;
@@ -663,6 +673,26 @@ namespace ZoneEngine
             else
             {
                 Console.WriteLine("Debugging of network traffic disabled");
+            }
+
+            Colouring.Pop();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="parts">
+        /// </param>
+        private static void SetDebugZoning(string[] parts)
+        {
+            DebugZoning = !DebugZoning;
+            Colouring.Push(ConsoleColor.Green);
+            if (DebugZoning)
+            {
+                Console.WriteLine("Debugging of zoning enabled");
+            }
+            else
+            {
+                Console.WriteLine("Debugging of zoning disabled");
             }
 
             Colouring.Pop();
@@ -683,6 +713,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void ShowOnlineCharacters(string[] parts)
         {
             if (zoneServer.IsRunning)
@@ -694,7 +726,8 @@ namespace ZoneEngine
                 {
                     foreach (ZoneClient c in zoneServer.Clients)
                     {
-                        Console.WriteLine("Character " + c.Character.Name + " online");
+                        Console.WriteLine(
+                            "Character " + c.Character.Name + " online in PF " + c.Character.Playfield.Identity.Instance);
                     }
                 }
 
@@ -704,6 +737,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void ShutDownServer(string[] parts)
         {
             if (zoneServer.IsRunning)
@@ -717,6 +752,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void StartServer(string[] parts)
         {
             if (zoneServer.IsRunning)
@@ -735,6 +772,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void StartServerMultipleScriptDlls(string[] parts)
         {
             // Multiple dll compile
@@ -770,6 +809,8 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="parts">
+        /// </param>
         private static void StopServer(string[] parts)
         {
             if (!zoneServer.IsRunning)

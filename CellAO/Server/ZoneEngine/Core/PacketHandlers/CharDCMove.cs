@@ -28,21 +28,12 @@ namespace ZoneEngine.Core.PacketHandlers
 {
     #region Usings ...
 
-    using System;
-
-    using CellAO.Core.Entities;
-    using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using Utility;
-
     using ZoneEngine.Core.InternalMessages;
-    using ZoneEngine.Core.Playfields;
 
-    using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
@@ -166,44 +157,6 @@ namespace ZoneEngine.Core.PacketHandlers
                             Unknown3 = tmpInt3
                         };
             client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
-
-
-
-            if (!client.Character.DoNotDoTimers)
-            {
-                WallCollisionResult wcr = WallCollision.CheckCollision(client.Character.Coordinates, client.Character.Playfield.Identity.Instance);
-                if (wcr != null)
-                {
-                    int destPlayfield = wcr.SecondWall.DestinationPlayfield;
-                    if (destPlayfield > 0)
-                    {
-                        LogUtil.Debug(wcr.ToString());
-
-                        PlayfieldDestination dest =
-                            PlayfieldLoader.PFData[destPlayfield].Destinations[wcr.SecondWall.DestinationIndex];
-
-                        LogUtil.Debug(dest.ToString());
-
-
-                        float newX = (dest.EndX - dest.StartX) * wcr.Factor + dest.StartX;
-                        float newZ = (dest.EndZ - dest.StartZ) * wcr.Factor + dest.StartZ;
-                        float dist = WallCollision.Distance(dest.StartX, dest.StartZ, dest.EndX, dest.EndZ);
-                        float headDistX = (dest.EndX - dest.StartX) / dist;
-                        float headDistZ = (dest.EndZ - dest.StartZ) / dist;
-                        newX -= headDistZ * 8;
-                        newZ += headDistX * 8;
-
-                        Coordinate destinationCoordinate = new Coordinate(newX, client.Character.RawCoordinates.Y, newZ);
-
-                        client.Character.Playfield.Teleport(
-                            (Character)client.Character,
-                            destinationCoordinate,
-                            client.Character.RawHeading,
-                            new Identity() { Type = IdentityType.Playfield, Instance = destPlayfield });
-                        return;
-                    }
-                }
-            }
 
             // TODO: rewrite statelscheck
             /*

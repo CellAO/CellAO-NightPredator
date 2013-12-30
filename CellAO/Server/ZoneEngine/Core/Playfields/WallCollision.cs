@@ -45,7 +45,7 @@ namespace ZoneEngine.Core.Playfields
 
         /// <summary>
         /// </summary>
-        private static float WallCollisionThreshold = 4;
+        private static float WallCollisionThreshold = 2;
 
         #endregion
 
@@ -98,11 +98,24 @@ namespace ZoneEngine.Core.Playfields
             return null;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="x1">
+        /// </param>
+        /// <param name="z1">
+        /// </param>
+        /// <param name="x2">
+        /// </param>
+        /// <param name="z2">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static float Distance(float x1, float z1, float x2, float z2)
+        {
+            return (float)Math.Sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
+        }
+
         #endregion
-
-        // Compute the dot product AB . AC
-
-        // Compute the cross product AB x AC
 
         #region Methods
 
@@ -149,10 +162,6 @@ namespace ZoneEngine.Core.Playfields
             return (float)Math.Sqrt(d1 * d1 + d2 * d2);
         }
 
-        public static float Distance(float x1, float z1, float x2, float z2)
-        {
-            return (float)Math.Sqrt((x1 - x2) * (x1 - x2) + (z1 - z2) * (z1 - z2));
-        }
         /// <summary>
         /// </summary>
         /// <param name="w1">
@@ -194,12 +203,12 @@ namespace ZoneEngine.Core.Playfields
         {
             if (DotProduct(w1, w2, x, z) > 0)
             {
-                return Distance(w2, x, z);
+                return 15.0f;
             }
 
             if (DotProduct(w2, w1, x, z) > 0)
             {
-                return Distance(w1, x, z);
+                return 15.0f;
             }
 
             return Math.Abs(CrossProduct(w1, w2, x, z) / Distance(w1, w2.X, w2.Z));

@@ -33,6 +33,7 @@ namespace CellAO.Core.Playfields
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
+    using System.Threading;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
@@ -53,10 +54,12 @@ namespace CellAO.Core.Playfields
 
     using Utility;
 
+    using ZoneEngine;
     using ZoneEngine.Core;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.Packets;
+    using ZoneEngine.Core.Playfields;
 
     using Config = Utility.Config.ConfigReadWrite;
     using Quaternion = CellAO.Core.Vector.Quaternion;
@@ -85,6 +88,10 @@ namespace CellAO.Core.Playfields
         /// <summary>
         /// </summary>
         private List<PlayfieldDistrict> districts = new List<PlayfieldDistrict>();
+
+        /// <summary>
+        /// </summary>
+        private Timer heartBeat;
 
         /// <summary>
         /// </summary>
@@ -118,6 +125,7 @@ namespace CellAO.Core.Playfields
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
             this.Entities = new HashSet<IInstancedEntity>();
+            this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
         }
 
         /// <summary>
@@ -630,6 +638,81 @@ namespace CellAO.Core.Playfields
             character.DoNotDoTimers = false;
 
             // character.Client.Server.DisconnectClient(character.Client);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="c">
+        /// </param>
+        private void CheckWallCollision(ICharacter c)
+        {
+            WallCollisionResult wcr = WallCollision.CheckCollision(c.Coordinates, c.Playfield.Identity.Instance);
+            if (wcr != null)
+            {
+                int destPlayfield = wcr.SecondWall.DestinationPlayfield;
+                if (destPlayfield > 0)
+                {
+                    if (Program.DebugZoning)
+                    {
+                        LogUtil.Debug(wcr.ToString());
+                    }
+
+                    PlayfieldDestination dest =
+                        PlayfieldLoader.PFData[destPlayfield].Destinations[wcr.SecondWall.DestinationIndex];
+
+                    if (Program.DebugZoning)
+                    {
+                        LogUtil.Debug(dest.ToString());
+                    }
+
+                    float newX = (dest.EndX - dest.StartX) * wcr.Factor + dest.StartX;
+                    float newZ = (dest.EndZ - dest.StartZ) * wcr.Factor + dest.StartZ;
+                    float dist = WallCollision.Distance(dest.StartX, dest.StartZ, dest.EndX, dest.EndZ);
+                    float headDistX = (dest.EndX - dest.StartX) / dist;
+                    float headDistZ = (dest.EndZ - dest.StartZ) / dist;
+                    newX -= headDistZ * 8;
+                    newZ += headDistX * 8;
+
+                    Coordinate destinationCoordinate = new Coordinate(newX, c.RawCoordinates.Y, newZ);
+
+                    this.Teleport(
+                        (Character)c, 
+                        destinationCoordinate, 
+                        c.RawHeading, 
+                        new Identity() { Type = IdentityType.Playfield, Instance = destPlayfield });
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        private void HeartBeatTimer(object sender)
+        {
+            lock (this.Entities)
+            {
+                for (int i = this.Entities.Count - 1; i >= 0; i--)
+                {
+                    ICharacter c = (ICharacter)this.Entities.ElementAtOrDefault(i);
+                    if (c != null)
+                    {
+                        if (c.DoNotDoTimers)
+                        {
+                            continue;
+                        }
+
+                        this.CheckWallCollision(c);
+                    }
+                }
+            }
+
+            this.heartBeat.Change(100, 0);
         }
 
         #endregion
