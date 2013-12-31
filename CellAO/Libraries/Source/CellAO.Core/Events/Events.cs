@@ -52,7 +52,7 @@ namespace CellAO.Core.Events
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        private List<Functions> functions = new List<Functions>();
+        private List<Functions> functions = new List<Functions>(10);
 
         #endregion
 

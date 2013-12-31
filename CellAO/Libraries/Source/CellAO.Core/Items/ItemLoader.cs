@@ -48,7 +48,7 @@ namespace CellAO.Core.Items
         /// <summary>
         /// Cache of all item templates
         /// </summary>
-        public static Dictionary<int, ItemTemplate> ItemList = new Dictionary<int, ItemTemplate>();
+        public static Dictionary<int, ItemTemplate> ItemList = new Dictionary<int, ItemTemplate>(130000);
 
         #endregion
 
@@ -77,12 +77,10 @@ namespace CellAO.Core.Items
             Contract.Requires(!string.IsNullOrEmpty(fname));
             DateTime _now = DateTime.UtcNow;
 
-            ItemList = new Dictionary<int, ItemTemplate>();
-
             MessagePackZip.UncompressData<ItemTemplate>(fname).ForEach(x => ItemList.Add(x.ID, x));
 
             Console.WriteLine(
-                locales.ItemLoaderLoadedItems + " - {1}\r", 
+                locales.ItemLoaderLoadedItems + " - {1}\r",
                 new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();

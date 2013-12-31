@@ -54,7 +54,7 @@ namespace Extractor_Serializer
         /// </returns>
         public static List<Door> ParseDoors(byte[] buffer)
         {
-            List<Door> result = new List<Door>();
+            List<Door> result = new List<Door>(100);
             MemoryStream ms = new MemoryStream(buffer);
             BinaryReader br = new BinaryReader(ms);
 
@@ -88,7 +88,7 @@ namespace Extractor_Serializer
         /// </returns>
         public static List<StatelData> ParseStatels(byte[] buffer)
         {
-            List<StatelData> statels = new List<StatelData>();
+            List<StatelData> statels = new List<StatelData>(500);
             MemoryStream ms = new MemoryStream(buffer);
             BinaryReader br = new BinaryReader(ms);
             int count = br.ReadInt32();
@@ -169,7 +169,7 @@ namespace Extractor_Serializer
         {
             BinaryReader br = new BinaryReader(new MemoryStream(p));
             int counter1 = br.ReadInt32();
-            List<PlayfieldWalls> walls = new List<PlayfieldWalls>();
+            List<PlayfieldWalls> walls = new List<PlayfieldWalls>(100);
             while (counter1 > 0)
             {
                 PlayfieldWalls pfws = new PlayfieldWalls();

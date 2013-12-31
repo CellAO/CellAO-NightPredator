@@ -110,6 +110,7 @@ namespace CellAO.Core.Functions
         public void UnpackFromMessage(Unpacker unpacker)
         {
             int numberOfItems = unpacker.LastReadData.AsInt32();
+            this.Values=new List<MessagePackObject>(numberOfItems);
 
             while (numberOfItems > 0)
             {
@@ -117,18 +118,15 @@ namespace CellAO.Core.Functions
 
                 if (unpacker.LastReadData.IsTypeOf(typeof(Int32)) == true)
                 {
-                    int temp = unpacker.LastReadData.AsInt32();
-                    this.Values.Add(temp);
+                    this.Values.Add(unpacker.LastReadData.AsInt32());
                 }
                 else if (unpacker.LastReadData.IsTypeOf(typeof(Single)) == true)
                 {
-                    float temp = unpacker.LastReadData.AsSingle();
-                    this.Values.Add(temp);
+                    this.Values.Add(unpacker.LastReadData.AsSingle());
                 }
                 else if (unpacker.LastReadData.IsTypeOf(typeof(string)) == true)
                 {
-                    string temp = unpacker.LastReadData.AsStringUtf8();
-                    this.Values.Add(temp);
+                    this.Values.Add(unpacker.LastReadData.AsStringUtf8());
                 }
                 else
                 {

@@ -106,7 +106,7 @@ namespace Extractor_Serializer
 
         /// <summary>
         /// </summary>
-        public static List<List<int>> Relations = new List<List<int>>();
+        public static List<List<int>> Relations = new List<List<int>>(100000);
 
         /// <summary>
         /// </summary>
@@ -120,6 +120,10 @@ namespace Extractor_Serializer
         /// The ext.
         /// </summary>
         private static Extractor extractor;
+
+        /// <summary>
+        /// </summary>
+        private static Dictionary<int, ItemTemplate> rawItemDictionary = new Dictionary<int, ItemTemplate>(130000);
 
         #endregion
 
@@ -251,25 +255,29 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Compacting itemnames.sql");
             TextWriter itnsql = new StreamWriter("itemnames.sql", true, Encoding.GetEncoding("windows-1252"));
+            StringBuilder bb = new StringBuilder(51);
+            bool hasData = false;
             while (ItemNamesSql.Count > 0)
             {
                 int count = 0;
-                string toWrite = string.Empty;
-                while ((count < 20) && (ItemNamesSql.Count > 0))
+                while ((count < 100) && (ItemNamesSql.Count > 0))
                 {
-                    if (toWrite.Length > 0)
+                    if (hasData)
                     {
-                        toWrite += ",";
+                        bb.Append(", ");
                     }
 
-                    toWrite += ItemNamesSql[0];
-                    ItemNamesSql.RemoveAt(0);
+                    hasData = true;
+                    bb.Append(ItemNamesSql[ItemNamesSql.Count - 1]);
+                    ItemNamesSql.RemoveAt(ItemNamesSql.Count - 1);
                     count++;
                 }
 
-                if (toWrite != string.Empty)
+                if (hasData)
                 {
-                    itnsql.WriteLine("INSERT INTO itemnames VALUES " + toWrite + ";");
+                    itnsql.WriteLine("INSERT INTO itemnames VALUES " + bb.ToString() + ";");
+                    bb.Clear();
+                    hasData = false;
                 }
             }
 
@@ -334,12 +342,14 @@ namespace Extractor_Serializer
         private static List<ItemTemplate> ExtractItemTemplates(List<string> ItemNamesSql)
         {
             var np = new NewParser();
-            List<ItemTemplate> rawItemList = new List<ItemTemplate>();
-
+            List<ItemTemplate> rawItemList = new List<ItemTemplate>(extractor.GetRecordInstanceCount(0xF4254));
+            rawItemDictionary = new Dictionary<int, ItemTemplate>(extractor.GetRecordInstanceCount(0xF4254));
             int counter = 0;
             foreach (int recnum in extractor.GetRecordInstances(0xF4254))
             {
-                rawItemList.Add(np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql));
+                ItemTemplate xt = np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql);
+                rawItemList.Add(xt);
+                rawItemDictionary.Add(recnum, xt);
                 if ((counter % 7500) == 0)
                 {
                     Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
@@ -360,12 +370,13 @@ namespace Extractor_Serializer
         /// </returns>
         private static List<PlayfieldData> ExtractPlayfieldData()
         {
-            List<PlayfieldData> playfields = new List<PlayfieldData>();
+            List<PlayfieldData> playfields = new List<PlayfieldData>(700);
             foreach (int recnum in extractor.GetRecordInstances(1000001))
             {
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
-                Console.WriteLine("Parsing PF " + recnum);
+
+                // Console.WriteLine("Parsing PF " + recnum);
                 if (extractor.GetRecordInstances(1000030).Contains(recnum))
                 {
                     pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
@@ -562,7 +573,7 @@ namespace Extractor_Serializer
             Console.WriteLine("Nanos extracted: " + rawNanoList.Count);
             Console.WriteLine();
 
-            List<string> ItemNamesSql = new List<string>();
+            List<string> ItemNamesSql = new List<string>(extractor.GetRecordInstanceCount(0xF4254));
             List<ItemTemplate> rawItemList = ExtractItemTemplates(ItemNamesSql);
 
             Console.WriteLine("Items extracted: " + rawItemList.Count);
@@ -695,24 +706,33 @@ namespace Extractor_Serializer
         /// </param>
         private static void SetItemRelations(List<ItemTemplate> rawItemList)
         {
-            List<ItemTemplate> tempItemTemplates = new List<ItemTemplate>();
+            Dictionary<int, ItemTemplate> tp = new Dictionary<int, ItemTemplate>(150000);
+
+            HashSet<ItemTemplate> hsitp = new HashSet<ItemTemplate>(rawItemList);
+
             Console.WriteLine("Setting item relations");
+
+            foreach (ItemTemplate tep in rawItemList)
+            {
+                tp.Add(tep.ID, tep);
+            }
 
             int perc = Relations.Count / 100;
             int counter = 0;
             int counter2 = 0;
-            foreach (List<int> rels in Relations)
+            for (int pos = Relations.Count - 1; pos >= 0; pos--)
             {
+                List<int> rels = Relations[pos];
                 foreach (int id in rels)
                 {
                     try
                     {
-                        ItemTemplate temp = rawItemList.FirstOrDefault(x => x.ID == id);
+                        ItemTemplate temp = tp[id];
+
                         if (temp != null)
                         {
                             temp.Relations = rels;
-                            tempItemTemplates.Add(temp);
-                            rawItemList.Remove(temp);
+                            hsitp.Remove(temp);
                         }
                     }
                     catch (Exception)
@@ -731,19 +751,18 @@ namespace Extractor_Serializer
             }
 
             Console.WriteLine("\r100% done");
-            if (rawItemList.Count != 0)
+            if (hsitp.Count != 0)
             {
-                foreach (ItemTemplate template in rawItemList)
+                foreach (ItemTemplate template in hsitp)
                 {
                     GetItemRelations(template);
                     Console.Write("\rFound missing item relations for " + template.ID);
-                    tempItemTemplates.Add(template);
                 }
 
                 Console.WriteLine();
                 Console.Write("Saving new itemrelations...");
                 List<string> newItemrelations = new List<string>();
-                foreach (ItemTemplate it in tempItemTemplates)
+                foreach (ItemTemplate it in hsitp)
                 {
                     string ir = string.Empty;
                     foreach (int i in it.Relations)
@@ -766,14 +785,10 @@ namespace Extractor_Serializer
                 }
 
                 tw.Close();
-                rawItemList.Clear();
                 Console.WriteLine(" done");
             }
 
             Console.WriteLine();
-
-            // put the rawitemlist back to its previous state
-            rawItemList.AddRange(tempItemTemplates);
         }
 
         #endregion

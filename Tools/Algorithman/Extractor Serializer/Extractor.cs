@@ -355,5 +355,10 @@ namespace Extractor_Serializer
         }
 
         #endregion
+
+        internal int GetRecordInstanceCount(int p)
+        {
+            return this.Records[p].Count;
+        }
     }
 }

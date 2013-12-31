@@ -49,7 +49,7 @@ namespace CellAO.Core.Actions
         /// </summary>
         public Actions()
         {
-            this.Requirements = new List<Requirements>();
+            this.Requirements = new List<Requirements>(15);
         }
 
         #endregion

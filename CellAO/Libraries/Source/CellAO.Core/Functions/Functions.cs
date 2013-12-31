@@ -52,7 +52,7 @@ namespace CellAO.Core.Functions
         public Functions()
         {
             this.Arguments = new FunctionArguments();
-            this.Requirements = new List<Requirements>();
+            this.Requirements = new List<Requirements>(10);
             this.dolocalstats = true;
         }
 

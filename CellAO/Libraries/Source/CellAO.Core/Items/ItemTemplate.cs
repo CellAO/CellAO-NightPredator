@@ -48,12 +48,12 @@ namespace CellAO.Core.Items
         /// <summary>
         /// List of Attack attributes
         /// </summary>
-        public Dictionary<int, int> Attack = new Dictionary<int, int>();
+        public Dictionary<int, int> Attack;
 
         /// <summary>
         /// List of defensive attributes
         /// </summary>
-        public Dictionary<int, int> Defend = new Dictionary<int, int>();
+        public Dictionary<int, int> Defend;
 
         /// <summary>
         /// Item Flags
@@ -87,12 +87,12 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<int> Relations = new List<int>();
+        public List<int> Relations;
 
         /// <summary>
         /// Item attributes
         /// </summary>
-        public Dictionary<int, int> Stats = new Dictionary<int, int>();
+        public Dictionary<int, int> Stats;
 
         #endregion
 
@@ -102,8 +102,12 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            this.Events = new List<Events>();
-            this.Actions = new List<Actions>();
+            Actions = new List<Actions>(4);
+            Events = new List<Events>(4);
+            Attack = new Dictionary<int, int>(6);
+            Defend = new Dictionary<int, int>(3);
+            Stats = new Dictionary<int, int>(20);
+            Relations = new List<int>(6);
         }
 
         #endregion
