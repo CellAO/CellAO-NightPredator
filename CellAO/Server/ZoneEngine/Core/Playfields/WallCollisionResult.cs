@@ -76,7 +76,7 @@ namespace ZoneEngine.Core.Playfields
         /// </returns>
         internal int GetDestinationIndex()
         {
-            return (((int)this.FirstWall.DestinationIndex) << 16) | this.FirstWall.DestinationPlayfield;
+            return (((int)this.FirstWall.DestinationIndex) << 16) | (ushort)this.FirstWall.DestinationPlayfield;
         }
 
         #endregion
