@@ -33,6 +33,7 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 

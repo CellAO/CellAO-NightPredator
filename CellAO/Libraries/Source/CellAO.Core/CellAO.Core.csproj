@@ -80,7 +80,6 @@
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
     <Compile Include="Entities\ICharacter.cs" />
-    <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\IInstancedEntity.cs" />
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />

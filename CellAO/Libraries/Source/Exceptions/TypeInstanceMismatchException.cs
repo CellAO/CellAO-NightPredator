@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -24,23 +24,29 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
+namespace CellAO.Core.Exceptions
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using System;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IEntity
+    [Serializable]
+    public class TypeInstanceMismatchException : ApplicationException
     {
-        #region Public Properties
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        Identity Identity { get; }
+        /// <param name="message">
+        /// </param>
+        public TypeInstanceMismatchException(string message)
+            : base(message)
+        {
+        }
 
         #endregion
     }

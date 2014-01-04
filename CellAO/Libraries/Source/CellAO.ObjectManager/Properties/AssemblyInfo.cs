@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -24,36 +24,31 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
-{
-    #region Usings ...
+#region Usings ...
 
-    using System;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-    using CellAO.Core.Playfields;
-    using CellAO.Interfaces;
-    using CellAO.Stats;
+#endregion
 
-    #endregion
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
 
-    /// <summary>
-    /// </summary>
-    public interface IInstancedEntity : IStats, IEntity, IDisposable
-    {
-        #region Public Properties
+[assembly: AssemblyTitle("CellAO.ObjectManager")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("CellAO.ObjectManager")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-        /// <summary>
-        /// </summary>
-        bool DoNotDoTimers { get; set; }
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
 
-        /// <summary>
-        /// </summary>
-        IPlayfield Playfield { get; set; }
+[assembly: ComVisible(false)]
 
-        /// <summary>
-        /// </summary>
-        bool Starting { get; set; }
+// The following GUID is for the ID of the typelib if this project is exposed to COM
 
-        #endregion
-    }
-}
+[assembly: Guid("03395d77-388f-49f5-a666-48432e13ac02")]

@@ -24,35 +24,23 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
+namespace CellAO.Interfaces
 {
     #region Usings ...
 
-    using System;
-
-    using CellAO.Core.Playfields;
-    using CellAO.Interfaces;
-    using CellAO.Stats;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IInstancedEntity : IStats, IEntity, IDisposable
+    public interface IEntity
     {
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        bool DoNotDoTimers { get; set; }
-
-        /// <summary>
-        /// </summary>
-        IPlayfield Playfield { get; set; }
-
-        /// <summary>
-        /// </summary>
-        bool Starting { get; set; }
+        Identity Identity { get; }
 
         #endregion
     }
