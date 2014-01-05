@@ -186,9 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="chat.ico" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="..\..\Config\NBug.ChatEngine.config">
       <Link>NBug.ChatEngine.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

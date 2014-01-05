@@ -117,9 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="login.ico" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="..\..\Config\NBug.LoginEngine.config">
       <Link>NBug.LoginEngine.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

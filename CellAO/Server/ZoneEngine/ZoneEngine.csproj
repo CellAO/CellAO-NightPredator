@@ -2155,6 +2155,10 @@
     <Content Include="zone.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Config\NBug.ZoneEngine.config">
+      <Link>NBug.ZoneEngine.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\..\Datafiles\items.dat">
       <Link>items.dat</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2163,9 +2167,6 @@
       <Link>nanos.dat</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="..\..\Datafiles\playfields.dat">
       <Link>playfields.dat</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
