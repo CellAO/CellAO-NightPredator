@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -28,7 +28,6 @@ namespace Chatengine.Relay
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -36,7 +35,7 @@ namespace Chatengine.Relay
     using ChatEngine.CoreServer;
     using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
-    
+
     using IrcDotNet;
 
     using Utility;
@@ -50,7 +49,7 @@ namespace Chatengine.Relay
     public class RelayBot : BasicIrcBot
     {
         // List of all currently logged-in Twitter users.
-       // private List<CellAOUsers> cellAoUserses;
+        // private List<CellAOUsers> cellAoUserses;
 
         #region Fields
 
@@ -71,13 +70,13 @@ namespace Chatengine.Relay
         private readonly string username = Config.Instance.CurrentConfig.RelayBotIdent;
 
         /// <summary>
-        /// </summary>
-        private IrcClient client = null;
-
-        /// <summary>
         /// 
         /// </summary>
         private List<CellAoBotUser> cellAoBotUsers;
+
+        /// <summary>
+        /// </summary>
+        private IrcClient client = null;
 
         #endregion
 
@@ -519,24 +518,30 @@ namespace Chatengine.Relay
         /// Need to change Some Information in this code. Probably a Seperate MOTD for IRC or something to have the bot read and send for
         /// connection Info.
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="source"></param>
-        /// <param name="targets"></param>
-        /// <param name="command"></param>
-        /// <param name="parameters"></param>
+        /// <param name="client">
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        /// <param name="targets">
+        /// </param>
+        /// <param name="command">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
         private void ProcessChatCommandServerInfo(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
+            IrcClient client, 
+            IIrcMessageSource source, 
+            IList<IIrcMessageTarget> targets, 
+            string command, 
             IList<string> parameters)
         {
             IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
             client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: TBA");
             client.LocalUser.SendMessage(
-                replyTarget,
-                "This is the address for the server: " + Config.Instance.CurrentConfig.ListenIP+ "  On Port: "+Config.Instance.CurrentConfig.LoginPort);
+                replyTarget, 
+                "This is the address for the server: " + Config.Instance.CurrentConfig.ListenIP + "  On Port: "
+                + Config.Instance.CurrentConfig.LoginPort);
         }
 
         /// <summary>
@@ -575,22 +580,20 @@ namespace Chatengine.Relay
             localUser.SendNotice(target, "This is the {0}, welcome.", ProgramInfo.AssemblyTitle);
             localUser.SendNotice(target, "Message me with '.help' for instructions on how to use me.");
 
-             localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
+            localUser.SendNotice(target, "Remember to log in via a private message and not via the channel.");
         }
 
-
-        //TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
-
-        //private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
-        //{
-        //    var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
-        //    if (twitterUser == null)
-        //        throw new InvalidOperationException(string.Format(
-        //            "User '{0}' is not logged in to Twitter.", ircUser.NickName));
-        //    return twitterUser;
-        //}
-
-
         #endregion
+
+        // TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
+
+        // private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
+        // {
+        // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
+        // if (twitterUser == null)
+        // throw new InvalidOperationException(string.Format(
+        // "User '{0}' is not logged in to Twitter.", ircUser.NickName));
+        // return twitterUser;
+        // }
     }
 }

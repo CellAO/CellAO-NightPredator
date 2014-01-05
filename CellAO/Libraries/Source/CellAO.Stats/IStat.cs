@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -26,12 +26,6 @@
 
 namespace CellAO.Stats
 {
-    #region Usings ...
-
-    using System;
-
-    #endregion
-
     /// <summary>
     /// </summary>
     public interface IStat
@@ -57,6 +51,10 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         int PercentageModifier { get; set; }
+
+        /// <summary>
+        /// </summary>
+        bool ReCalculate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -104,7 +102,6 @@ namespace CellAO.Stats
         /// </param>
         void SetBaseValue(uint value);
 
-        bool ReCalculate { get; set; }
         #endregion
     }
 }

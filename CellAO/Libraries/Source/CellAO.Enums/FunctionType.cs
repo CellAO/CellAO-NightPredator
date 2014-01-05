@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -157,7 +157,10 @@ namespace CellAO.Enums
         /// <summary>
         /// </summary>
         ChangeVariable = 53110, 
-        ChangeVariable2 = 53111,
+
+        /// <summary>
+        /// </summary>
+        ChangeVariable2 = 53111, 
 
         /// <summary>
         /// </summary>

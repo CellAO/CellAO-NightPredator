@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -96,12 +96,15 @@ namespace CellAO.Stats.SpecialStats
             }
         }
 
+        /// <summary>
+        /// </summary>
         public override int Trickle
         {
             get
             {
                 return (int)Math.Floor((double)(this.Stats[StatIds.bodydevelopment].Value / 100));
             }
+
             set
             {
                 base.Trickle = value;

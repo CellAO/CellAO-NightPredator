@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -347,8 +347,18 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "UPDATE characters SET X = @X, Y = @Y, Z = @Z, HeadingX=@hX, HeadingY=@hY, HeadingZ=@hZ, HeadingW=@hW WHERE id=@Id",
-                        new { character.X, character.Y, character.Z, character.Id, hX = character.HeadingX, hZ = character.HeadingZ, hY = character.HeadingY, hW = character.HeadingW });
+                        "UPDATE characters SET X = @X, Y = @Y, Z = @Z, HeadingX=@hX, HeadingY=@hY, HeadingZ=@hZ, HeadingW=@hW WHERE id=@Id", 
+                        new
+                        {
+                            character.X, 
+                            character.Y, 
+                            character.Z, 
+                            character.Id, 
+                            hX = character.HeadingX, 
+                            hZ = character.HeadingZ, 
+                            hY = character.HeadingY, 
+                            hW = character.HeadingW
+                        });
                 }
             }
             catch (Exception e)

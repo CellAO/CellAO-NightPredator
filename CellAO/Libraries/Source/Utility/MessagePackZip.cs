@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -148,9 +148,9 @@ namespace Utility
         /// <exception cref="Exception">
         /// </exception>
         public static void CompressData<T, TU>(
-            string filename,
-            string version,
-            Dictionary<T, TU> dataList,
+            string filename, 
+            string version, 
+            Dictionary<T, TU> dataList, 
             int packCount = 500)
         {
             Console.WriteLine("Compressing " + typeof(TU).Name + "s");
@@ -201,7 +201,8 @@ namespace Utility
             while ((len = input.Read(copyBuffer, 0, CopyBufferLength)) > 0)
             {
                 output.Write(copyBuffer, 0, len);
-                //output.Flush();
+
+                // output.Flush();
                 done += len;
                 Console.Write("\r" + (done * 100 / input.Length).ToString().PadLeft(3) + "% " + text);
             }

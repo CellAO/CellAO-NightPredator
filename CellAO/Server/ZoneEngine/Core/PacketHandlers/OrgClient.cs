@@ -406,15 +406,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    
-
                 case 12:
                     Console.WriteLine("Case 12 Started");
                     break;
 
                     
-
-                    #region /org kick <name>
 
                 case 13:
 
@@ -480,7 +476,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // TODO: Offline Org KICK
                     break;
 
-                    #endregion
+                    
 
                     #region /org invite
 

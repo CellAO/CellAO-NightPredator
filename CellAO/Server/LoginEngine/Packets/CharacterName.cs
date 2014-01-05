@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -243,10 +243,10 @@ namespace LoginEngine.Packets
                 CharacterDao.AddCharacter(
                     new DBCharacter
                     {
-                        FirstName = string.Empty,
-                        LastName = string.Empty,
-                        Name = this.Name,
-                        Username = this.AccountName,
+                        FirstName = string.Empty, 
+                        LastName = string.Empty, 
+                        Name = this.Name, 
+                        Username = this.AccountName, 
                     });
             }
             catch (Exception e)
@@ -272,9 +272,9 @@ namespace LoginEngine.Packets
             stats.Add(
                 new DBStats
                 {
-                    type = 50000,
-                    instance = charID,
-                    statid = 215,
+                    type = 50000, 
+                    instance = charID, 
+                    statid = 215, 
                     statvalue = LoginDataDao.GetByUsername(this.AccountName).GM
                 });
 
@@ -333,7 +333,14 @@ namespace LoginEngine.Packets
             stats.Add(new DBStats { type = 50000, instance = charID, statid = 1, statvalue = 1 });
             stats.Add(new DBStats { type = 50000, instance = charID, statid = 214, statvalue = 1 });
 
-            stats.Add(new DBStats { type = 50000, instance = charID, statid = 389, statvalue = LoginDataDao.GetByUsername(this.AccountName).Expansions });
+            stats.Add(
+                new DBStats
+                {
+                    type = 50000, 
+                    instance = charID, 
+                    statid = 389, 
+                    statvalue = LoginDataDao.GetByUsername(this.AccountName).Expansions
+                });
 
             StatDao.BulkReplace(stats);
 

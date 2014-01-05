@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -67,7 +67,7 @@ namespace CellAO.Stats.SpecialStats
 
         #endregion
 
-        #region Public Methods and Operators
+        #region Public Properties
 
         /// <summary>
         /// </summary>
@@ -116,7 +116,7 @@ namespace CellAO.Stats.SpecialStats
 
                 baseIP += 1500 + (characterLevel - 1) * 4000;
 
-                return (baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats)));
+                return baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats));
             }
         }
 

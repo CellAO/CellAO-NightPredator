@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -52,9 +52,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat,
-            uint valueBeforeChange,
-            uint valueAfterChange,
+            Stat changedStat, 
+            uint valueBeforeChange, 
+            uint valueAfterChange, 
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -95,10 +95,6 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         internal int LastCalculatedValue = -1;
-
-        /// <summary>
-        /// </summary>
-        public bool ReCalculate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -147,11 +143,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList,
-            int number,
-            uint defaultValue,
-            bool sendBaseValue,
-            bool dontWrite,
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
             bool announceToPlayfield)
         {
             this.Stats = statList;
@@ -261,7 +257,7 @@ namespace CellAO.Stats
                 if (value != oldModifier)
                 {
                     this.ReCalculate = true;
-                    var temp = this.Value;
+                    int temp = this.Value;
                 }
             }
         }
@@ -282,10 +278,14 @@ namespace CellAO.Stats
                 if (value != oldPercentageModifier)
                 {
                     this.ReCalculate = true;
-                    var temp = this.Value;
+                    int temp = this.Value;
                 }
             }
         }
+
+        /// <summary>
+        /// </summary>
+        public bool ReCalculate { get; set; }
 
         /// <summary>
         /// </summary>
@@ -326,7 +326,7 @@ namespace CellAO.Stats
                 if (value != oldTrickle)
                 {
                     this.ReCalculate = true;
-                    var temp = this.Value;
+                    int temp = this.Value;
                 }
             }
         }
@@ -402,8 +402,8 @@ namespace CellAO.Stats
                 {
                     foreach (int affectedStat in this.affects)
                     {
-
                         this.Stats[affectedStat].ReCalculate = true;
+
                         // This recalculates values and sets the changed flag so it can be sent to the client if needed (value has changed)
                         int temp = this.Stats[affectedStat].Value;
                     }
@@ -453,6 +453,5 @@ namespace CellAO.Stats
         }
 
         #endregion
-
     }
 }
