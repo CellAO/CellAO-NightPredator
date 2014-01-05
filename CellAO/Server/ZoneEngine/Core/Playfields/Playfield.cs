@@ -718,7 +718,7 @@ namespace CellAO.Core.Playfields
             {
                 if (c != null)
                 {
-                    if (c.DoNotDoTimers)
+                    if (c.DoNotDoTimers || c.Starting)
                     {
                         continue;
                     }

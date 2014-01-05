@@ -214,7 +214,7 @@ namespace CellAO.Database.Dao
             }
             catch (Exception e)
             {
-                LogUtil.ErrorException(e);
+                LogUtil.Debug("Stat "+statId+" for Character "+instance+" not found in database. Empty stat returned.");
 
                 // Log and return an empty stat entry
                 // TODO: Get a DEFAULT value for the stat

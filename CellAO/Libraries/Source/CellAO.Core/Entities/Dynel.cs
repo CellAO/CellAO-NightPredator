@@ -109,6 +109,7 @@ namespace CellAO.Core.Entities
         public override void Dispose()
         {
             this.Dispose(true);
+            base.Dispose();
         }
 
         /// <summary>

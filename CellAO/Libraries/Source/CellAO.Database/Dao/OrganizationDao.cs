@@ -95,6 +95,10 @@ namespace CellAO.Database.Dao
         /// </returns>
         public static int GetGovernmentForm(int orgId)
         {
+            if (orgId == 0)
+            {
+                return 0;
+            }
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())

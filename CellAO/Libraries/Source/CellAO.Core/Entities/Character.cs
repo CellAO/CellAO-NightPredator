@@ -146,6 +146,13 @@ namespace CellAO.Core.Entities
             this.DoNotDoTimers = false;
         }
 
+        /// <summary>
+        /// </summary>
+        ~Character()
+        {
+            Console.WriteLine("Character collected");
+        }
+
         #endregion
 
         #region Public Properties
@@ -435,6 +442,7 @@ namespace CellAO.Core.Entities
             this.DoNotDoTimers = true;
             if (this.Client != null)
             {
+                this.Client.Server.DisconnectClient(this.Client);
                 this.Client.Character = null;
             }
 

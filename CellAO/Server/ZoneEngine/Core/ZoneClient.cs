@@ -120,6 +120,13 @@ namespace ZoneEngine.Core
             this.bus = bus;
         }
 
+        /// <summary>
+        /// </summary>
+        ~ZoneClient()
+        {
+            Console.WriteLine("Client collected");
+        }
+
         #endregion
 
         #region Public Properties
@@ -204,6 +211,13 @@ namespace ZoneEngine.Core
             this.character.Playfield = pf;
             this.Playfield = pf;
             this.character.Stats.Read();
+        }
+
+        /// <summary>
+        /// </summary>
+        public new void Dispose()
+        {
+            this.Dispose(true);
         }
 
         /// <summary>
@@ -361,8 +375,10 @@ namespace ZoneEngine.Core
             if (this.character != null)
             {
                 this.character.StartLogoutTimer();
-                this.character = null;
+                this.character.Client = null;
             }
+
+            this.character = null;
 
             base.Dispose(disposing);
         }

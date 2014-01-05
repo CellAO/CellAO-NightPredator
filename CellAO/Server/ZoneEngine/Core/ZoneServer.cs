@@ -223,6 +223,8 @@ namespace ZoneEngine.Core
                 // Will be saved at character dispose too, but just to be sure...
                 ((IZoneClient)client).Character.Save();
             }
+
+            cli.Dispose();
         }
 
         #endregion
