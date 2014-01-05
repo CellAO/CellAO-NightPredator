@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -26,7 +26,11 @@
 
 namespace CellAO.Core.Playfields
 {
+    #region Usings ...
+
     using System;
+
+    #endregion
 
     /// <summary>
     /// </summary>
@@ -63,11 +67,20 @@ namespace CellAO.Core.Playfields
         /// </summary>
         public float StartZ;
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public override string ToString()
         {
-            return "Destination Id: " + DestinationId + Environment.NewLine + "StartCoords: " + StartX.ToString("F")
-                   + " " + StartY.ToString("F") + " " + StartZ.ToString("F") + Environment.NewLine + "EndCoords: "
-                   + EndX.ToString("F") + " " + EndY.ToString("F") + " " + EndZ.ToString("F");
+            return "Destination Id: " + this.DestinationId + Environment.NewLine + "StartCoords: "
+                   + this.StartX.ToString("F") + " " + this.StartY.ToString("F") + " " + this.StartZ.ToString("F")
+                   + Environment.NewLine + "EndCoords: " + this.EndX.ToString("F") + " " + this.EndY.ToString("F") + " "
+                   + this.EndZ.ToString("F");
         }
 
         #endregion

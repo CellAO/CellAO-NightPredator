@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -80,7 +80,7 @@ namespace CellAO.Core.Items
             MessagePackZip.UncompressData<ItemTemplate>(fname).ForEach(x => ItemList.Add(x.ID, x));
 
             Console.WriteLine(
-                locales.ItemLoaderLoadedItems + " - {1}\r",
+                locales.ItemLoaderLoadedItems + " - {1}\r", 
                 new object[] { ItemList.Count, new DateTime((DateTime.UtcNow - _now).Ticks).ToString("mm:ss.ff") });
 
             GC.Collect();

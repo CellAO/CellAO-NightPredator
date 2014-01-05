@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -31,6 +31,7 @@ namespace CellAO.Core.Entities
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Nanos;
@@ -41,6 +42,7 @@ namespace CellAO.Core.Entities
     using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -66,6 +68,10 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public List<AOTextures> Textures = new List<AOTextures>();
+
+        /// <summary>
+        /// </summary>
+        private Timer logoutTimer = null;
 
         /// <summary>
         /// Caching Mesh layer structure
@@ -99,21 +105,20 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <param name="zoneClient">
+        /// <param name="pooledIn">
         /// </param>
         /// <param name="identity">
         /// </param>
-        public Character(IZoneClient zoneClient, Identity identity)
-            : base(identity)
+        /// <param name="zoneClient">
+        /// </param>
+        public Character(Pool pooledIn, Identity identity, IZoneClient zoneClient)
+            : base(pooledIn, identity)
         {
+            this.DoNotDoTimers = true;
             this.Client = zoneClient;
             this.ActiveNanos = new List<IActiveNano>();
 
             this.UploadedNanos = new List<IUploadedNanos>();
-            foreach (int nano in UploadedNanosDao.ReadNanos(identity.Instance))
-            {
-                this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
-            }
 
             this.BaseInventory = new PlayerInventory(this);
 
@@ -133,10 +138,12 @@ namespace CellAO.Core.Entities
                                  { 1007, 0 }
                              };
 
+            this.Read();
+
             this.meshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
             this.socialMeshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
 
-            this.BaseInventory.Read();
+            this.DoNotDoTimers = false;
         }
 
         #endregion
@@ -153,7 +160,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public IZoneClient Client { get; private set; }
+        public IZoneClient Client { get; set; }
 
         /// <summary>
         /// </summary>
@@ -421,6 +428,24 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        public override void Dispose()
+        {
+            this.DoNotDoTimers = true;
+            this.Save();
+            this.DoNotDoTimers = true;
+            if (this.Client != null)
+            {
+                this.Client.Character = null;
+            }
+
+            this.Client = null;
+            OnlineDao.SetOffline(this.Identity.Instance);
+            this.Playfield.Despawn(this.Identity);
+            base.Dispose();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="nanoId">
         /// </param>
         /// <returns>
@@ -432,11 +457,73 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool InLogoutTimerPeriod()
+        {
+            return this.logoutTimer != null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        public void LogoutTimerCallback(object sender)
+        {
+            if (this.logoutTimer == null)
+            {
+                // Logout Timer has been cancelled
+                return;
+            }
+
+            this.logoutTimer = null;
+            this.Dispose();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override bool Read()
+        {
+            this.DoNotDoTimers = true;
+            DBCharacter daochar = CharacterDao.GetById(this.Identity.Instance).FirstOrDefault();
+            if (daochar != null)
+            {
+                this.Name = daochar.Name;
+                this.LastName = daochar.LastName;
+                this.FirstName = daochar.FirstName;
+                this.RawCoordinates = new Vector3 { X = daochar.X, Y = daochar.Y, Z = daochar.Z };
+                this.RawHeading = new Quaternion(daochar.HeadingX, daochar.HeadingY, daochar.HeadingZ, daochar.HeadingW);
+            }
+
+            foreach (int nano in UploadedNanosDao.ReadNanos(this.Identity.Instance))
+            {
+                this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
+            }
+
+            this.BaseInventory.Read();
+            base.Read();
+            this.DoNotDoTimers = false;
+
+            // Implement error checking
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        public void Reconnect(IZoneClient client)
+        {
+            this.Client = client;
+        }
+
+        /// <summary>
+        /// </summary>
         public void Save()
         {
-            this.WriteStats();
-            this.BaseInventory.Write();
-            CharacterDao.UpdatePosition(this.GetDBCharacter());
+            this.Write();
         }
 
         /// <summary>
@@ -508,6 +595,20 @@ namespace CellAO.Core.Entities
         {
             this.SelectedTarget = identity;
             return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StartLogoutTimer()
+        {
+            this.logoutTimer = new Timer(this.LogoutTimerCallback, null, 30000, 0);
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StopLogoutTimer()
+        {
+            this.logoutTimer = null;
         }
 
         /// <summary>
@@ -705,6 +806,21 @@ namespace CellAO.Core.Entities
             }
 
             // Console.WriteLine((moveDirection != 0 ? moveMode.ToString() : "Stand") + "ing in the direction " + moveDirection.ToString() + (spinDirection != 0 ? " while spinning " + spinDirection.ToString() : "") + (strafeDirection != 0 ? " and strafing " + strafeDirection.ToString() : ""));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override bool Write()
+        {
+            this.BaseInventory.Write();
+            CharacterDao.UpdatePosition(this.GetDBCharacter());
+            CharacterDao.SetPlayfield(
+                this.Identity.Instance, 
+                (int)this.Playfield.Identity.Type, 
+                this.Playfield.Identity.Instance);
+            return base.Write();
         }
 
         /// <summary>

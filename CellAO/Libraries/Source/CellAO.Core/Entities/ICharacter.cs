@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -135,6 +135,12 @@ namespace CellAO.Core.Entities
         /// <exception cref="NotImplementedException">
         /// </exception>
         void CalculateSkills();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool InLogoutTimerPeriod();
 
         /// <summary>
         /// </summary>

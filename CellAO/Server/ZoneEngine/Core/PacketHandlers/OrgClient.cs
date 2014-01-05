@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -332,8 +332,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
                 }
 
-                    
-
                 case 11:
 
                     // demote target player
@@ -410,13 +408,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region unknown org command 12
-
                 case 12:
                     Console.WriteLine("Case 12 Started");
                     break;
 
-                    #endregion
+                    
 
                     #region /org kick <name>
 

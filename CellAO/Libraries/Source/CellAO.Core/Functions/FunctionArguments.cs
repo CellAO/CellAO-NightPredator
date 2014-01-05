@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -110,7 +110,7 @@ namespace CellAO.Core.Functions
         public void UnpackFromMessage(Unpacker unpacker)
         {
             int numberOfItems = unpacker.LastReadData.AsInt32();
-            this.Values=new List<MessagePackObject>(numberOfItems);
+            this.Values = new List<MessagePackObject>(numberOfItems);
 
             while (numberOfItems > 0)
             {

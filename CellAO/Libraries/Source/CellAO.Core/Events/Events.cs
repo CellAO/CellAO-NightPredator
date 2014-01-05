@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -96,6 +96,23 @@ namespace CellAO.Core.Events
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        public Events Copy()
+        {
+            Events copy = new Events();
+
+            copy.EventType = this.EventType;
+            foreach (Functions functions in this.Functions)
+            {
+                copy.Functions.Add(functions.Copy());
+            }
+
+            return copy;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="self">
         /// </param>
         /// <param name="caller">
@@ -119,27 +136,6 @@ namespace CellAO.Core.Events
                     self.Client.CallFunction(functions);
                 }
             }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public Events Copy()
-        {
-            Events copy = new Events();
-
-            copy.EventType = this.EventType;
-            foreach (Functions functions in this.Functions)
-            {
-                copy.Functions.Add(functions.Copy());
-            }
-
-            return copy;
         }
 
         #endregion

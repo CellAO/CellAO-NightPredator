@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -35,6 +35,7 @@ namespace ZoneEngine.Core
 
     using Cell.Core;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
@@ -42,7 +43,6 @@ namespace ZoneEngine.Core
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Component;
-    using ZoneEngine.Core.Packets;
 
     #endregion
 
@@ -214,14 +214,15 @@ namespace ZoneEngine.Core
         /// </param>
         private void ZoneServerClientDisconnected(IClient client, bool forced)
         {
-            Identity charIdentity = ((IZoneClient)client).Character.Identity;
-            OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
-            ((IZoneClient)client).Character.Save();
-            Playfield pf = (Playfield)((IZoneClient)client).Character.Playfield;
-            pf.DisconnectClient(((IZoneClient)client).Character);
+            ZoneClient cli = (ZoneClient)client;
+            if (cli.Character != null)
+            {
+                ((Character)cli.Character).StartLogoutTimer();
+                OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
 
-            // TODO: Send a despawn packet to playfield
-            pf.Announce(Despawn.Create(charIdentity));
+                // Will be saved at character dispose too, but just to be sure...
+                ((IZoneClient)client).Character.Save();
+            }
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -126,8 +126,8 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
 
                     /* this is here to prevent server crash that is caused by
-     * search action if server doesn't reply if something is
-     * found or not */
+ * search action if server doesn't reply if something is
+ * found or not */
                 case 66:
                 {
                     // If action == search
@@ -203,10 +203,10 @@ namespace ZoneEngine.Core.PacketHandlers
 
                         // Uses methods in ZoneEngine\PacketHandlers\OrgClient.cs
                         /* Known packetFlags--
-                                     * 0x40 - No org | 0x41 - Org | 0x43 - Org and towers | 0x47 - Org, towers, player has personal towers | 0x50 - No pvp data shown
-                                     * Bitflags--
-                                     * Bit0 = hasOrg, Bit1 = orgTowers, Bit2 = personalTowers, Bit3 = (Int32) time until supression changes (Byte) type of supression level?, Bit4 = noPvpDataShown, Bit5 = hasFaction, Bit6 = ?, Bit 7 = null.
-                                    */
+                                         * 0x40 - No org | 0x41 - Org | 0x43 - Org and towers | 0x47 - Org, towers, player has personal towers | 0x50 - No pvp data shown
+                                         * Bitflags--
+                                         * Bit0 = hasOrg, Bit1 = orgTowers, Bit2 = personalTowers, Bit3 = (Int32) time until supression changes (Byte) type of supression level?, Bit4 = noPvpDataShown, Bit5 = hasFaction, Bit6 = ?, Bit 7 = null.
+                                        */
 
                         int? orgId;
                         string orgRank;
@@ -287,48 +287,48 @@ namespace ZoneEngine.Core.PacketHandlers
                     {
                         // TODO: NPC's
                         /*
-                                    var npc =
-                                        (NonPlayerCharacterClass)
-                                        FindDynel.FindDynelById(packet.Target);
-                                    if (npc != null)
-                                    {
-                                        var infoPacket = new PacketWriter();
+                                        var npc =
+                                            (NonPlayerCharacterClass)
+                                            FindDynel.FindDynelById(packet.Target);
+                                        if (npc != null)
+                                        {
+                                            var infoPacket = new PacketWriter();
 
-                                        // Start packet header
-                                        infoPacket.PushByte(0xDF);
-                                        infoPacket.PushByte(0xDF);
-                                        infoPacket.PushShort(10);
-                                        infoPacket.PushShort(1);
-                                        infoPacket.PushShort(0);
-                                        infoPacket.PushInt(3086); // sender (server ID)
-                                        infoPacket.PushInt(client.Character.Id.Instance); // receiver 
-                                        infoPacket.PushInt(0x4D38242E); // packet ID
-                                        infoPacket.PushIdentity(npc.Id); // affected identity
-                                        infoPacket.PushByte(0); // ?
+                                            // Start packet header
+                                            infoPacket.PushByte(0xDF);
+                                            infoPacket.PushByte(0xDF);
+                                            infoPacket.PushShort(10);
+                                            infoPacket.PushShort(1);
+                                            infoPacket.PushShort(0);
+                                            infoPacket.PushInt(3086); // sender (server ID)
+                                            infoPacket.PushInt(client.Character.Id.Instance); // receiver 
+                                            infoPacket.PushInt(0x4D38242E); // packet ID
+                                            infoPacket.PushIdentity(npc.Id); // affected identity
+                                            infoPacket.PushByte(0); // ?
 
-                                        // End packet header
-                                        infoPacket.PushByte(0x50); // npc's just have 0x50
-                                        infoPacket.PushByte(1); // esi_001?
-                                        infoPacket.PushByte((byte)npc.Stats.Profession.Value); // Profession
-                                        infoPacket.PushByte((byte)npc.Stats.Level.Value); // Level
-                                        infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value); // Titlelevel
-                                        infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value); // Visual Profession
+                                            // End packet header
+                                            infoPacket.PushByte(0x50); // npc's just have 0x50
+                                            infoPacket.PushByte(1); // esi_001?
+                                            infoPacket.PushByte((byte)npc.Stats.Profession.Value); // Profession
+                                            infoPacket.PushByte((byte)npc.Stats.Level.Value); // Level
+                                            infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value); // Titlelevel
+                                            infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value); // Visual Profession
 
-                                        infoPacket.PushShort(0); // no idea for npc's
-                                        infoPacket.PushUInt(npc.Stats.Health.Value); // Current Health (Health)
-                                        infoPacket.PushUInt(npc.Stats.Life.Value); // Max Health (Life)
-                                        infoPacket.PushInt(0); // BreedHostility?
-                                        infoPacket.PushUInt(0); // org ID
-                                        infoPacket.PushShort(0);
-                                        infoPacket.PushShort(0);
-                                        infoPacket.PushShort(0);
-                                        infoPacket.PushShort(0);
-                                        infoPacket.PushInt(0x499602d2);
-                                        infoPacket.PushInt(0x499602d2);
-                                        infoPacket.PushInt(0x499602d2);
-                                        var infoPacketA = infoPacket.Finish();
-                                        client.SendCompressed(infoPacketA);
-                                    }*/
+                                            infoPacket.PushShort(0); // no idea for npc's
+                                            infoPacket.PushUInt(npc.Stats.Health.Value); // Current Health (Health)
+                                            infoPacket.PushUInt(npc.Stats.Life.Value); // Max Health (Life)
+                                            infoPacket.PushInt(0); // BreedHostility?
+                                            infoPacket.PushUInt(0); // org ID
+                                            infoPacket.PushShort(0);
+                                            infoPacket.PushShort(0);
+                                            infoPacket.PushShort(0);
+                                            infoPacket.PushShort(0);
+                                            infoPacket.PushInt(0x499602d2);
+                                            infoPacket.PushInt(0x499602d2);
+                                            infoPacket.PushInt(0x499602d2);
+                                            var infoPacketA = infoPacket.Finish();
+                                            client.SendCompressed(infoPacketA);
+                                        }*/
                     }
                 }
 
@@ -340,12 +340,12 @@ namespace ZoneEngine.Core.PacketHandlers
                     // Start 30 second logout timer if client is not a GM (statid 215)
                     if (client.Character.Stats[StatIds.gmlevel].Value == 0)
                     {
-                        // client.startLogoutTimer();
+                        ((Character)client.Character).StartLogoutTimer();
                     }
                     else
                     {
                         // If client is a GM, disconnect without timer
-                        client.Server.DisconnectClient(client);
+                        client.Character.Dispose();
                     }
                 }
 
@@ -354,6 +354,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     // If action == Stop Logout
                     // Stop current logout timer and send stop logout packet
+                    ((Character)client.Character).StopLogoutTimer();
                     client.Character.UpdateMoveType((byte)client.Character.PreviousMoveMode);
                     client.Playfield.Announce(packet);
 
@@ -367,6 +368,18 @@ namespace ZoneEngine.Core.PacketHandlers
                     // If action == Stand
                     client.Character.UpdateMoveType(37);
                     client.Playfield.Announce(packet);
+
+                    if (client.Character.InLogoutTimerPeriod())
+                    {
+                        client.Playfield.Send(
+                            client, 
+                            new CharacterActionMessage()
+                            {
+                                Action = CharacterActionType.StopLogout, 
+                                Identity = client.Character.Identity
+                            });
+                        ((Character)client.Character).StopLogoutTimer();
+                    }
 
                     // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
                     // client.StandCancelLogout();
@@ -384,9 +397,9 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     // Leave Team
                     /*
-                                var team = new TeamClass();
-                                team.LeaveTeam(client);
-                                 */
+                                    var team = new TeamClass();
+                                    team.LeaveTeam(client);
+                                     */
                 }
 
                     break;
@@ -401,54 +414,54 @@ namespace ZoneEngine.Core.PacketHandlers
                     // Team Join Request
                     // Send Team Invite Request To Target Player
                     /*
-                                var team = new TeamClass();
-                                team.SendTeamRequest(client, packet.Target);
-                                 */
+                                    var team = new TeamClass();
+                                    team.SendTeamRequest(client, packet.Target);
+                                     */
                 }
 
                     break;
                 case 28:
                 {
                     /*
-                                // Request Reply
-                                // Check if positive or negative response
+                                    // Request Reply
+                                    // Check if positive or negative response
 
-                                // if positive
-                                var team = new TeamClass();
-                                var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
+                                    // if positive
+                                    var team = new TeamClass();
+                                    var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
 
-                                // Destination Client 0 = Sender, 1 = Reciever
+                                    // Destination Client 0 = Sender, 1 = Reciever
 
-                                // Reciever Packets
-                                ///////////////////
+                                    // Reciever Packets
+                                    ///////////////////
 
-                                // CharAction 15
-                                team.TeamRequestReply(client, packet.Target);
+                                    // CharAction 15
+                                    team.TeamRequestReply(client, packet.Target);
 
-                                // CharAction 23
-                                team.TeamRequestReplyCharacterAction23(client, packet.Target);
+                                    // CharAction 23
+                                    team.TeamRequestReplyCharacterAction23(client, packet.Target);
 
-                                // TeamMember Packet
-                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
+                                    // TeamMember Packet
+                                    team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
 
-                                // TeamMemberInfo Packet
-                                team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
+                                    // TeamMemberInfo Packet
+                                    team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
 
-                                // TeamMember Packet
-                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
+                                    // TeamMember Packet
+                                    team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
 
-                                // Sender Packets
-                                /////////////////
+                                    // Sender Packets
+                                    /////////////////
 
-                                // TeamMember Packet
-                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
+                                    // TeamMember Packet
+                                    team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
 
-                                // TeamMemberInfo Packet
-                                team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
+                                    // TeamMemberInfo Packet
+                                    team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
 
-                                // TeamMember Packet
-                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
-                                 */
+                                    // TeamMember Packet
+                                    team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
+                                     */
                 }
 
                     break;
@@ -546,16 +559,12 @@ namespace ZoneEngine.Core.PacketHandlers
                     TradeSkillReceiver.TradeSkillBuildPressed(client, packet.Target.Instance);
                     break;
 
-                    
-
                 default:
                 {
                     client.Playfield.Announce(packet);
                 }
 
                     break;
-
-                    
             }
         }
 

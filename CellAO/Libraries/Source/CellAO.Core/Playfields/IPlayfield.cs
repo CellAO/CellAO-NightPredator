@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -36,6 +36,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
+    using CellAO.ObjectManager;
 
     using MemBus;
 
@@ -56,7 +57,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        HashSet<IInstancedEntity> Entities { get; }
+        Pool Entities { get; }
 
         /// <summary>
         /// </summary>
@@ -119,6 +120,12 @@ namespace CellAO.Core.Playfields
         /// <param name="dontSend">
         /// </param>
         void AnnounceOthers(MessageBody messageBody, Identity dontSend);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        void Despawn(Identity identity);
 
         /// <summary>
         /// </summary>

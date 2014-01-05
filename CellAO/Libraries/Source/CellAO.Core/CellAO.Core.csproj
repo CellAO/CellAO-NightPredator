@@ -175,6 +175,10 @@
       <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CellAO.ObjectManager\CellAO.ObjectManager.csproj">
+      <Project>{65a705b0-f8bf-4d68-a8fd-c630a87dc120}</Project>
+      <Name>CellAO.ObjectManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CellAO.Stats\CellAO.Stats.csproj">
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>

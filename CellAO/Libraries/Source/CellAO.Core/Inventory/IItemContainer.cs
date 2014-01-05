@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -28,7 +28,6 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
     using CellAO.Interfaces;
 
     #endregion

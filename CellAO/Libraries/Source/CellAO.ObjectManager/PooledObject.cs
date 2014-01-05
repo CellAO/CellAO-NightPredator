@@ -24,27 +24,64 @@
 
 #endregion
 
-namespace ZoneEngine.Core.InternalMessages
+namespace CellAO.ObjectManager
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
+    using System;
+
+    using CellAO.Interfaces;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class InternalMessage
+    public class PooledObject : IDisposable, IEntity
     {
+        #region Fields
+
+        /// <summary>
+        /// </summary>
+        private Pool pool;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// </summary>
+        /// <param name="pooledIn">
+        /// </param>
+        /// <param name="id">
+        /// </param>
+        public PooledObject(Pool pooledIn, Identity id)
+        {
+            this.Identity = id;
+            pooledIn.AddObject(this);
+            this.pool = pooledIn;
+        }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// </summary>
-        public InternalMessageBody MessageBody { get; set; }
+        public Identity Identity { get; private set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        public IInstancedEntity Sender { get; set; }
+        public virtual void Dispose()
+        {
+            this.pool.RemoveObject(this);
+            this.pool = null;
+        }
 
         #endregion
     }

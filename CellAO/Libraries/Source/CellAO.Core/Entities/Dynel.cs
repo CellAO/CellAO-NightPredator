@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -34,6 +34,7 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
     using CellAO.Interfaces;
+    using CellAO.ObjectManager;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -42,20 +43,22 @@ namespace CellAO.Core.Entities
 
     /// <summary>
     /// </summary>
-    public partial class Dynel : INamedEntity, IItemContainer
+    public partial class Dynel : PooledObject, INamedEntity, IItemContainer
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
+        /// <param name="pooledIn">
+        /// </param>
         /// <param name="id">
         /// </param>
-        public Dynel(Identity id)
+        public Dynel(Pool pooledIn, Identity id)
+            : base(pooledIn, id)
         {
             this.Starting = true;
             this.DoNotDoTimers = true;
 
-            this.Identity = id;
             this.Stats = new Stats(this.Identity);
             this.InitializeStats();
 
@@ -83,10 +86,6 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public Identity Identity { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public string LastName { get; set; }
 
         /// <summary>
@@ -107,7 +106,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
             this.Dispose(true);
         }
@@ -119,10 +118,7 @@ namespace CellAO.Core.Entities
         public void Dispose(bool disposing)
         {
             // Write stats to database
-            this.Stats.Write();
-
-            // Send last farewell to playfield
-            // TODO: Send vanish packet to all in playfield (ranged)
+            this.Write();
         }
 
         /// <summary>
@@ -131,9 +127,12 @@ namespace CellAO.Core.Entities
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool Read()
+        public virtual bool Read()
         {
-            throw new NotImplementedException();
+            this.DoNotDoTimers = true;
+            this.Stats.Read();
+            this.DoNotDoTimers = false;
+            return true;
         }
 
         /// <summary>
@@ -155,9 +154,12 @@ namespace CellAO.Core.Entities
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool Write()
+        public virtual bool Write()
         {
-            throw new NotImplementedException();
+            this.DoNotDoTimers = true;
+            this.Stats.Write();
+            this.DoNotDoTimers = false;
+            return true;
         }
 
         #endregion

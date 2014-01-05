@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -44,6 +44,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Interfaces;
+    using CellAO.ObjectManager;
 
     using MemBus;
     using MemBus.Configurators;
@@ -143,7 +144,7 @@ namespace CellAO.Core.Playfields
                     this.SendAOtomationMessageBodiesToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
-            this.Entities = new HashSet<IInstancedEntity>();
+            this.Entities = new Pool();
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
         }
 
@@ -168,7 +169,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        public HashSet<IInstancedEntity> Entities { get; private set; }
+        public Pool Entities { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -244,7 +245,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Announce(MessageBody messageBody)
         {
-            foreach (IInstancedEntity entity in this.Entities)
+            foreach (IEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
             {
                 var character = entity as Character;
 
@@ -274,7 +275,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceOthers(MessageBody messageBody, Identity dontSend)
         {
-            foreach (IInstancedEntity entity in this.Entities)
+            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
             {
                 var character = entity as Character;
                 if (character != null)
@@ -291,16 +292,26 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="identity">
+        /// </param>
+        public void Despawn(Identity identity)
+        {
+            this.Announce(ZoneEngine.Core.Packets.Despawn.Create(identity));
+        }
+
+        /// <summary>
+        /// </summary>
         public void DisconnectAllClients()
         {
-            IEnumerable<IInstancedEntity> templist = this.Entities.Where(et => et is Character);
+            IEnumerable<IEntity> templist =
+                this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(et => et is Character).ToList();
             for (int i = templist.Count() - 1; i >= 0; i--)
             {
-                IInstancedEntity entity = templist.ElementAt(i);
+                IEntity entity = templist.ElementAt(i);
                 if ((entity as Character) != null)
                 {
-                    (entity as Character).Client.Server.DisconnectClient((entity as Character).Client);
-                    this.Entities.Remove(entity);
+                    this.server.DisconnectClient((entity as Character).Client);
+                    (entity as Character).Dispose();
                 }
             }
         }
@@ -311,7 +322,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void DisconnectClient(IInstancedEntity entity)
         {
-            this.Entities.Remove(entity);
+            this.Entities.RemoveObject(entity);
         }
 
         /// <summary>
@@ -383,15 +394,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public IInstancedEntity FindByIdentity(Identity identity)
         {
-            foreach (IInstancedEntity entity in this.Entities)
-            {
-                if ((entity.Identity.Instance == identity.Instance) && (entity.Identity.Type == identity.Type))
-                {
-                    return entity;
-                }
-            }
-
-            return null;
+            return this.Entities.GetObject<IInstancedEntity>(identity);
         }
 
         /// <summary>
@@ -404,7 +407,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public T FindByIdentity<T>(Identity identity) where T : Character
         {
-            return this.Entities.SingleOrDefault(x => x is T) as T;
+            return this.Entities.GetObject<T>(identity);
         }
 
         /// <summary>
@@ -415,16 +418,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public INamedEntity FindNamedEntityByIdentity(Identity identity)
         {
-            foreach (IInstancedEntity entity in this.Entities)
-            {
-                if ((entity.Identity.Instance == identity.Instance) && (entity.Identity.Type == identity.Type))
-                {
-                    INamedEntity temp = entity as INamedEntity;
-                    return temp;
-                }
-            }
-
-            return null;
+            return this.Entities.GetObject<INamedEntity>(identity);
         }
 
         /// <summary>
@@ -455,7 +449,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public int NumberOfDynels()
         {
-            return this.Entities.Count;
+            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count();
         }
 
         /// <summary>
@@ -464,16 +458,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public int NumberOfPlayers()
         {
-            int count = 0;
-            foreach (IInstancedEntity instancedEntity in this.Entities)
-            {
-                if ((instancedEntity as IPacketReceivingEntity) != null)
-                {
-                    count++;
-                }
-            }
-
-            return count++;
+            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count(x => x is Character);
         }
 
         /// <summary>
@@ -534,7 +519,10 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void SendAOtomationMessageBodyToClient(IMSendAOtomationMessageBodyToClient msg)
         {
-            msg.client.SendCompressed(msg.Body);
+            if (msg.client != null)
+            {
+                msg.client.SendCompressed(msg.Body);
+            }
         }
 
         /// <summary>
@@ -564,23 +552,21 @@ namespace CellAO.Core.Playfields
             Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
             lock (this.Entities)
             {
-                foreach (IEntity entity in this.Entities)
+                foreach (IEntity entity in
+                    this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is IPacketReceivingEntity))
                 {
                     if (entity.Identity != dontSendTo)
                     {
-                        if (entity.Identity.Type == IdentityType.CanbeAffected)
+                        var temp = entity as Character;
+                        if (temp != null)
                         {
-                            var temp = entity as INamedEntity;
-                            if (temp != null)
-                            {
-                                // TODO: make it NPC-safe
-                                SimpleCharFullUpdateMessage simpleCharFullUpdate =
-                                    SimpleCharFullUpdate.ConstructMessage((Character)temp);
-                                sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
+                            // TODO: make it NPC-safe
+                            SimpleCharFullUpdateMessage simpleCharFullUpdate =
+                                SimpleCharFullUpdate.ConstructMessage(temp);
+                            sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
 
-                                var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
-                                sendSCFUs.toClient.SendCompressed(charInPlay);
-                            }
+                            var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
+                            sendSCFUs.toClient.SendCompressed(charInPlay);
                         }
                     }
                 }
@@ -612,7 +598,7 @@ namespace CellAO.Core.Playfields
 
             // Send packet, disconnect, and other playfield waits for connect
 
-            DespawnMessage despawnMessage = Despawn.Create(character.Identity);
+            DespawnMessage despawnMessage = ZoneEngine.Core.Packets.Despawn.Create(character.Identity);
             this.AnnounceOthers(despawnMessage, character.Identity);
             character.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             character.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
@@ -659,10 +645,9 @@ namespace CellAO.Core.Playfields
         {
             foreach (StatelData sd in this.statels)
             {
-                foreach (
-                    Events ev in
-                        sd.Events.Where(
-                            x => (x.EventType == (int)EventType.OnCollide) || (x.EventType == (int)EventType.OnEnter)))
+                foreach (Events ev in
+                    sd.Events.Where(
+                        x => (x.EventType == (int)EventType.OnCollide) || (x.EventType == (int)EventType.OnEnter)))
                 {
                     if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
                     {
@@ -723,21 +708,23 @@ namespace CellAO.Core.Playfields
         /// </param>
         private void HeartBeatTimer(object sender)
         {
+            IEnumerable<IEntity> temp = null;
             lock (this.Entities)
             {
-                for (int i = this.Entities.Count - 1; i >= 0; i--)
-                {
-                    ICharacter c = (ICharacter)this.Entities.ElementAtOrDefault(i);
-                    if (c != null)
-                    {
-                        if (c.DoNotDoTimers)
-                        {
-                            continue;
-                        }
+                temp = this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is ICharacter);
+            }
 
-                        this.CheckWallCollision(c);
-                        this.CheckStatelCollision(c);
+            foreach (ICharacter c in temp)
+            {
+                if (c != null)
+                {
+                    if (c.DoNotDoTimers)
+                    {
+                        continue;
                     }
+
+                    this.CheckWallCollision(c);
+                    this.CheckStatelCollision(c);
                 }
             }
 

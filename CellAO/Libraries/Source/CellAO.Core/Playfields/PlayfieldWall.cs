@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -26,7 +26,11 @@
 
 namespace CellAO.Core.Playfields
 {
+    #region Usings ...
+
     using System;
+
+    #endregion
 
     /// <summary>
     /// </summary>
@@ -60,10 +64,18 @@ namespace CellAO.Core.Playfields
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         public override string ToString()
         {
-            return "Flags: " + Flags.ToString("X2") + Environment.NewLine + "Playfield: " + DestinationPlayfield
-                   + Environment.NewLine + "Index: " + DestinationIndex.ToString();
+            return "Flags: " + this.Flags.ToString("X2") + Environment.NewLine + "Playfield: "
+                   + this.DestinationPlayfield + Environment.NewLine + "Index: " + this.DestinationIndex.ToString();
         }
+
+        #endregion
     }
 }

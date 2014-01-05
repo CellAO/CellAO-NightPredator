@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -102,12 +102,12 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            Actions = new List<Actions>(4);
-            Events = new List<Events>(4);
-            Attack = new Dictionary<int, int>(6);
-            Defend = new Dictionary<int, int>(3);
-            Stats = new Dictionary<int, int>(20);
-            Relations = new List<int>(6);
+            this.Actions = new List<Actions>(4);
+            this.Events = new List<Events>(4);
+            this.Attack = new Dictionary<int, int>(6);
+            this.Defend = new Dictionary<int, int>(3);
+            this.Stats = new Dictionary<int, int>(20);
+            this.Relations = new List<int>(6);
         }
 
         #endregion

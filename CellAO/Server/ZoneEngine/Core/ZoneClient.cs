@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2013, CellAO Team
+// Copyright (c) 2005-2014, CellAO Team
 // 
 // All rights reserved.
 // 
@@ -55,8 +55,6 @@ namespace ZoneEngine.Core
     using zlib;
 
     using ZoneEngine.Core.Functions;
-
-    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
@@ -168,7 +166,6 @@ namespace ZoneEngine.Core
         /// </exception>
         public void CreateCharacter(int charId)
         {
-            this.character = new Character(this, new Identity { Type = IdentityType.CanbeAffected, Instance = charId });
             IEnumerable<DBCharacter> daochar = CharacterDao.GetById(charId);
             if (daochar.Count() == 0)
             {
@@ -182,19 +179,30 @@ namespace ZoneEngine.Core
             }
 
             DBCharacter character = daochar.First();
-            this.character.Name = character.Name;
-            this.character.LastName = character.LastName;
-            this.character.FirstName = character.FirstName;
-            this.character.RawCoordinates = new Vector3 { X = character.X, Y = character.Y, Z = character.Z };
-            this.character.RawHeading = new Quaternion(
-                character.HeadingX, 
-                character.HeadingY, 
-                character.HeadingZ, 
-                character.HeadingW);
+            IPlayfield pf = this.server.PlayfieldById(character.Playfield);
 
-            this.character.Playfield = this.server.PlayfieldById(character.Playfield);
-            this.Playfield = this.character.Playfield;
-            this.Playfield.Entities.Add(this.character);
+            if (pf.Entities.GetObject<Character>(
+                new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
+            {
+                this.character = new Character(
+                    pf.Entities, 
+                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId }, 
+                    this);
+            }
+            else
+            {
+                this.character =
+                    pf.Entities.GetObject<Character>(
+                        new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
+                this.character.Reconnect(this);
+                LogUtil.Debug("Reconnected to Character " + charId);
+            }
+
+            // Stop pending logouts
+            this.character.StopLogoutTimer();
+
+            this.character.Playfield = pf;
+            this.Playfield = pf;
             this.character.Stats.Read();
         }
 
@@ -342,6 +350,22 @@ namespace ZoneEngine.Core
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="disposing">
+        /// </param>
+        protected override void Dispose(bool disposing)
+        {
+            // Remove reference of character
+            if (this.character != null)
+            {
+                this.character.StartLogoutTimer();
+                this.character = null;
+            }
+
+            base.Dispose(disposing);
+        }
 
         /// <summary>
         /// </summary>

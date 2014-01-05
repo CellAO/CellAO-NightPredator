@@ -183,6 +183,10 @@
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.ObjectManager\CellAO.ObjectManager.csproj">
+      <Project>{65a705b0-f8bf-4d68-a8fd-c630a87dc120}</Project>
+      <Name>CellAO.ObjectManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Stats\CellAO.Stats.csproj">
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>

@@ -47,8 +47,7 @@ namespace CellAO.ObjectManager
 
         /// <summary>
         /// </summary>
-        private Dictionary<int, Dictionary<ulong, IDisposable>> pool =
-            new Dictionary<int, Dictionary<ulong, IDisposable>>();
+        private Dictionary<int, Dictionary<ulong, IEntity>> pool = new Dictionary<int, Dictionary<ulong, IEntity>>();
 
         #endregion
 
@@ -64,7 +63,7 @@ namespace CellAO.ObjectManager
         {
             if (!this.pool.ContainsKey((int)obj.Identity.Type))
             {
-                var temp = new Dictionary<ulong, IDisposable>();
+                var temp = new Dictionary<ulong, IEntity>();
                 temp.Add(obj.Identity.Long(), obj);
                 this.pool.Add((int)obj.Identity.Type, temp);
             }
@@ -79,13 +78,24 @@ namespace CellAO.ObjectManager
         /// </summary>
         public void Dispose()
         {
-            foreach (Dictionary<ulong, IDisposable> list in this.pool.Values)
+            foreach (Dictionary<ulong, IEntity> list in this.pool.Values)
             {
                 foreach (IDisposable disposable in list.Values)
                 {
                     disposable.Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identityType">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IEnumerable<IEntity> GetAll(int identityType)
+        {
+            return this.pool[identityType].Values.ToList();
         }
 
         /// <summary>
@@ -105,7 +115,7 @@ namespace CellAO.ObjectManager
                 ulong id = identity.Long();
                 if (this.pool[(int)identity.Type].ContainsKey(id))
                 {
-                    IDisposable temp = this.pool[(int)identity.Type].First(x => x.Key == id).Value;
+                    IEntity temp = this.pool[(int)identity.Type].First(x => x.Key == id).Value;
                     if (temp is T)
                     {
                         return (T)temp;
@@ -135,7 +145,7 @@ namespace CellAO.ObjectManager
                 ulong id = obj.Identity.Long();
                 if (this.pool[(int)obj.Identity.Type].ContainsKey(id))
                 {
-                    IDisposable temp = this.pool[(int)obj.Identity.Type].First(x => x.Key == id).Value;
+                    IEntity temp = this.pool[(int)obj.Identity.Type].First(x => x.Key == id).Value;
                     if (temp is T)
                     {
                         this.pool[(int)obj.Identity.Type].Remove(obj.Identity.Long());
