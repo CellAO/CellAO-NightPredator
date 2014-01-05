@@ -120,13 +120,6 @@ namespace ZoneEngine.Core
             this.bus = bus;
         }
 
-        /// <summary>
-        /// </summary>
-        ~ZoneClient()
-        {
-            Console.WriteLine("Client collected");
-        }
-
         #endregion
 
         #region Public Properties

@@ -146,13 +146,6 @@ namespace CellAO.Core.Entities
             this.DoNotDoTimers = false;
         }
 
-        /// <summary>
-        /// </summary>
-        ~Character()
-        {
-            Console.WriteLine("Character collected");
-        }
-
         #endregion
 
         #region Public Properties
