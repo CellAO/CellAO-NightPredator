@@ -64,6 +64,9 @@
     </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\IActions.cs" />
+    <Compile Include="Controllers\IController.cs" />
+    <Compile Include="Controllers\NPCController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Encryption\BigInteger.cs" />
     <Compile Include="Components\IBus.cs" />
     <Compile Include="Components\IContainer.cs" />
