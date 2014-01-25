@@ -102,8 +102,8 @@ namespace Chatengine.Relay
             {
                 return new IrcUserRegistrationInfo()
                        {
-                           NickName = this.nickname, 
-                           UserName = this.username, 
+                           NickName = this.nickname,
+                           UserName = this.username,
                            RealName = this.realname
                        };
             }
@@ -112,6 +112,35 @@ namespace Chatengine.Relay
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        public override void IrcClient_ProtocolError(object sender, IrcProtocolErrorEventArgs e)
+        {
+            // on Protocol Error 433 (Nickname in Use) change to an alternate one
+            if (e.Code == 433)
+            {
+                IrcClient client = (IrcClient)sender;
+                string actualName = client.LocalUser.NickName;
+                int temp = -1;
+                if (actualName.Replace(Config.Instance.CurrentConfig.RelayBotNick, string.Empty) != string.Empty)
+                {
+                    int.TryParse(actualName.Replace(Config.Instance.CurrentConfig.RelayBotNick, string.Empty), out temp);
+                    temp++;
+                }
+                else
+                {
+                    temp = 1;
+                }
+
+                actualName = Config.Instance.CurrentConfig.RelayBotNick + temp;
+                client.LocalUser.SetNickName(actualName);
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -304,10 +333,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandHome(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -339,10 +368,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandListUsers(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -374,10 +403,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandLogIn(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             var sourceUser = (IrcUser)source;
@@ -427,10 +456,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandLogOut(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -460,10 +489,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandMentions(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -495,10 +524,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandSend(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -529,17 +558,17 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandServerInfo(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
             client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: TBA");
             client.LocalUser.SendMessage(
-                replyTarget, 
+                replyTarget,
                 "This is the address for the server: " + Config.Instance.CurrentConfig.ListenIP + "  On Port: "
                 + Config.Instance.CurrentConfig.LoginPort);
         }

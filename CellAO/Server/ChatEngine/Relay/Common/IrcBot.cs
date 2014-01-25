@@ -241,6 +241,16 @@ namespace ChatEngine.Relay.Common
 
         /// <summary>
         /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        public virtual void IrcClient_ProtocolError(object sender, IrcProtocolErrorEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
         public virtual void Run()
         {
             this.isRunning = true;
@@ -271,6 +281,7 @@ namespace ChatEngine.Relay.Common
             client.Connected += this.IrcClient_Connected;
             client.Disconnected += this.IrcClient_Disconnected;
             client.Registered += this.IrcClient_Registered;
+            client.ProtocolError += this.IrcClient_ProtocolError;
             client.ChannelListReceived += this.client_ChannelListReceived;
 
             // Wait until connection has succeeded or timed out.
