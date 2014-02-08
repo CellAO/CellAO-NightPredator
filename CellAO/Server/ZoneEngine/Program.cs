@@ -191,6 +191,15 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
+        /// <param name="messageobject">
+        /// </param>
+        private static void ISComClientOnReceiveData(DynamicMessage messageobject)
+        {
+            zoneServer.ProcessISComMessage(messageobject);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         private static bool ISComInitialization()
@@ -210,7 +219,7 @@ namespace ZoneEngine
 
             try
             {
-                ISComClient.OnReceiveData+=ISComClientOnReceiveData;
+                ISComClient.OnReceiveData += ISComClientOnReceiveData;
                 ISComClient.Connect(chatEngineIp, port);
             }
             catch
@@ -219,11 +228,6 @@ namespace ZoneEngine
             }
 
             return true;
-        }
-
-        private static void ISComClientOnReceiveData(DynamicMessage messageobject)
-        {
-            zoneServer.ProcessISComMessage(messageobject);
         }
 
         /// <summary>

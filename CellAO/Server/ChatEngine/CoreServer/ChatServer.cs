@@ -35,10 +35,12 @@ namespace ChatEngine.CoreServer
 
     using Cell.Core;
 
+    using CellAO.Communication.Messages;
     using CellAO.Database.Dao;
 
     using ChatEngine.Channels;
     using ChatEngine.CoreClient;
+    using ChatEngine.Packets;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -196,6 +198,20 @@ namespace ChatEngine.CoreServer
         }
 
         /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="messageObject">
+        /// </param>
+        internal void ISComDataReceived(IClient client, DynamicMessage messageObject)
+        {
+            if (messageObject.DataObject is VicinityChatMessage)
+            {
+                this.DistributeVicinityChat((VicinityChatMessage)messageObject.DataObject);
+            }
+        }
+
+        /// <summary>
         /// The on client connected.
         /// </summary>
         /// <param name="client">
@@ -267,6 +283,39 @@ namespace ChatEngine.CoreServer
         /// </param>
         protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
         {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="vicinityChatMessage">
+        /// </param>
+        private void DistributeVicinityChat(VicinityChatMessage vicinityChatMessage)
+        {
+            byte[] packet = MsgVicinity.Create(
+                (uint)vicinityChatMessage.SenderId, 
+                vicinityChatMessage.Text, 
+                (byte)vicinityChatMessage.MessageType);
+
+            string lookup = CharacterDao.GetCharacterNameById(vicinityChatMessage.SenderId);
+            byte[] nameLookup = NameLookupResult.Create((uint)vicinityChatMessage.SenderId, lookup);
+
+            foreach (int charId in vicinityChatMessage.CharacterIds)
+            {
+                foreach (Client cli in this.ConnectedClients.Values)
+                {
+                    if (cli.Character.CharacterId == charId)
+                    {
+                        if (!cli.KnownClients.Contains((uint)vicinityChatMessage.SenderId))
+                        {
+                            // Name lookup
+                            cli.Send(nameLookup);
+                            cli.KnownClients.Add((uint)vicinityChatMessage.SenderId);
+                        }
+
+                        cli.Send(packet);
+                    }
+                }
+            }
         }
 
         #endregion

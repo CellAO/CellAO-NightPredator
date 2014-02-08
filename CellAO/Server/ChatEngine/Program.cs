@@ -249,6 +249,7 @@ namespace ChatEngine
             try
             {
                 ISCom = new ISComV2Server();
+                ISCom.DataReceived += chatServer.ISComDataReceived;
                 if (Config.Instance.CurrentConfig.ListenIP == "0.0.0.0")
                 {
                     ISCom.TcpEndPoint = new IPEndPoint(IPAddress.Any, Config.Instance.CurrentConfig.CommPort);

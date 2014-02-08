@@ -59,6 +59,7 @@
     <Compile Include="Messages\OnlineCharacters.cs" />
     <Compile Include="Messages\Ping.cs" />
     <Compile Include="Messages\Playfields.cs" />
+    <Compile Include="Messages\VicinityChatMessage.cs" />
     <Compile Include="ZoneComClient.cs" />
     <Compile Include="HandleClientRequest.cs" />
     <Compile Include="OnMessageArgs.cs" />

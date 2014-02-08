@@ -474,8 +474,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     // TODO: Offline Org KICK
                     break;
 
-                    
-
                 case 14:
                 {
                     Character tPlayer = client.Playfield.FindByIdentity<Character>(message.Target);
@@ -508,8 +506,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region Org Join
-
                 case 15:
                 {
                     // target.Instance holds the OrgID of the Org wishing to be joined.
@@ -523,7 +519,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    #endregion
+                    
 
                     #region /org leave
 

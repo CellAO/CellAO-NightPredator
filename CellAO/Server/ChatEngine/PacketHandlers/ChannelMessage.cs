@@ -118,11 +118,12 @@ namespace ChatEngine.PacketHandlers
                 Program.ISCom.BroadCast(
                     new CellAO.Communication.Messages.ChatCommand
                     {
-                        CharacterId = (int)client.Character.CharacterId,
+                        CharacterId = (int)client.Character.CharacterId, 
                         ChatCommandString = text
                     });
                 return true;
             }
+
             return false;
         }
 

@@ -128,7 +128,7 @@ namespace CellAO.Communication.ISComV2Server
                 this.lastClientNumber++;
                 temp = new ISComV2ClientHandler(this, this.bus, this.lastClientNumber);
                 this.clients.Add(temp);
-                ((ISComV2ClientHandler)temp).DataReceived += this.ISComV2Server_DataReceived;
+                ((ISComV2ClientHandler)temp).DataReceived += this.ISComV2ServerDataReceived;
             }
 
             return temp;
@@ -167,7 +167,7 @@ namespace CellAO.Communication.ISComV2Server
         /// </param>
         /// <param name="dataBytes">
         /// </param>
-        private void ISComV2Server_DataReceived(ISComV2ClientHandler client, byte[] dataBytes)
+        private void ISComV2ServerDataReceived(ISComV2ClientHandler client, byte[] dataBytes)
         {
             if (this.DataReceived != null)
             {

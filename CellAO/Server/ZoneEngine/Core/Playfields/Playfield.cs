@@ -428,6 +428,7 @@ namespace CellAO.Core.Playfields
                 {
                     continue;
                 }
+
                 if (((Character)entity).Coordinates.Distance2D(coord) <= range)
                 {
                     temp.Add((Character)entity);

@@ -30,14 +30,15 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Linq;
 
+    using CellAO.Communication.Messages;
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
@@ -57,17 +58,38 @@ namespace ZoneEngine.Core.MessageHandlers
         public void Handle(object sender, Message message)
         {
             ICharacter character = ((IZoneClient)sender).Character;
-            ChatTextMessage ctm = new ChatTextMessage
-            {
-                Identity = character.Identity,
-                Text = ((TextMessage)message.Body).Message.Text
-            };
             IPlayfield playfield = character.Playfield;
-            List<Character> charsInRange = playfield.FindInRange(character, 20.0f);
-            foreach (Character characterInRange in charsInRange)
+
+            float range = 0.0f;
+            switch ((int)((TextMessage)message.Body).Message.Type)
             {
-                
+                case 0x01:
+                    range = 1.5f;
+                    break;
+                case 0x00:
+                    range = 10.0f;
+                    break;
+                case 0x02:
+                    range = 60.0f;
+                    break;
             }
+
+            List<Character> charsInRange = playfield.FindInRange(character, range);
+
+            VicinityChatMessage vicinityChat = new VicinityChatMessage
+                                               {
+                                                   CharacterIds =
+                                                       charsInRange.Select(
+                                                           x => x.Identity.Instance).ToList(), 
+                                                   MessageType =
+                                                       (byte)
+                                                       ((TextMessage)message.Body).Message.Type, 
+                                                   Text =
+                                                       ((TextMessage)message.Body).Message.Text, 
+                                                   SenderId = character.Identity.Instance
+                                               };
+
+            Program.ISComClient.Send(vicinityChat);
         }
 
         #endregion
