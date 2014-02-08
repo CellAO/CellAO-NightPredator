@@ -51,6 +51,7 @@
     <Compile Include="ISComV2Client\ISComV2ClientBase.cs" />
     <Compile Include="ISComV2Server\ISComV2ClientHandler.cs" />
     <Compile Include="ISComV2Server\ISComV2Server.cs" />
+    <Compile Include="Messages\ChatCommand.cs" />
     <Compile Include="Messages\CpuRamLoad.cs" />
     <Compile Include="Messages\DynamicMessage.cs" />
     <Compile Include="Messages\IMessageData.cs" />

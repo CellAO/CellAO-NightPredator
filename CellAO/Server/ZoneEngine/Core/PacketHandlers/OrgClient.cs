@@ -410,8 +410,6 @@ namespace ZoneEngine.Core.PacketHandlers
                     Console.WriteLine("Case 12 Started");
                     break;
 
-                    
-
                 case 13:
 
                     // kick <name> from org
@@ -478,8 +476,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     
 
-                    #region /org invite
-
                 case 14:
                 {
                     Character tPlayer = client.Playfield.FindByIdentity<Character>(message.Target);
@@ -510,7 +506,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
 
-                    #endregion
+                    
 
                     #region Org Join
 

@@ -98,6 +98,22 @@ namespace CellAO.Communication.ISComV2Server
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        public void BroadCast(MessageBase message)
+        {
+            foreach (IClient client in this.clients)
+            {
+                ((ISComV2ClientHandler)client).Send(message);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -155,8 +171,8 @@ namespace CellAO.Communication.ISComV2Server
         {
             if (this.DataReceived != null)
             {
-                MessagePackSerializer<DynamicMessage> ser = MessagePackSerializer.Create<DynamicMessage>();
-                DynamicMessage result = ser.UnpackSingleObject(dataBytes);
+                MessagePackSerializer<DynamicMessage> serializer = MessagePackSerializer.Create<DynamicMessage>();
+                DynamicMessage result = serializer.UnpackSingleObject(dataBytes);
 
                 this.DataReceived(client, result);
             }

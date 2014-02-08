@@ -55,31 +55,7 @@ namespace ChatEngine.PacketHandlers
             byte[] senderId = BitConverter.GetBytes(client.Character.CharacterId);
             Array.Reverse(senderId);
 
-            byte[] newpacket = new byte[packet.Length + 4];
-
-            Array.Copy(packet, 0, newpacket, 0, 9);
-            Array.Copy(senderId, 0, newpacket, 9, 4);
-            Array.Copy(packet, 9, newpacket, 13, packet.Length - 9);
-            newpacket[2] = (byte)(packet.Length >> 8);
-            newpacket[3] = (byte)packet.Length;
-
             ChannelBase channel = client.ChatServer().GetChannel(packet);
-
-            foreach (Client recipient in client.ChatServer().ConnectedClients.Values)
-            {
-                if (recipient.Channels.Contains(channel))
-                {
-                    if (!recipient.KnownClients.Contains(client.Character.CharacterId)
-                        && (recipient.Character.CharacterId != client.Character.CharacterId))
-                    {
-                        byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
-                        recipient.Send(pname);
-                        recipient.KnownClients.Add(client.Character.CharacterId);
-                    }
-
-                    recipient.Send(newpacket);
-                }
-            }
 
             PacketReader reader = new PacketReader(ref packet);
             reader.ReadUInt16();
@@ -90,8 +66,64 @@ namespace ChatEngine.PacketHandlers
             string text = reader.ReadString();
             string channelName = channel.ChannelName;
 
-            client.ChannelMessageReceived(channel, client.Character.characterName, text);
+            // Check if it is a Chat Command (starting with a dot)
+            if (!ProcessServerCommand(text, client))
+            {
+                byte[] newpacket = new byte[packet.Length + 4];
+
+                Array.Copy(packet, 0, newpacket, 0, 9);
+                Array.Copy(senderId, 0, newpacket, 9, 4);
+                Array.Copy(packet, 9, newpacket, 13, packet.Length - 9);
+                newpacket[2] = (byte)(packet.Length >> 8);
+                newpacket[3] = (byte)packet.Length;
+
+                foreach (Client recipient in client.ChatServer().ConnectedClients.Values)
+                {
+                    if (recipient.Channels.Contains(channel))
+                    {
+                        if (!recipient.KnownClients.Contains(client.Character.CharacterId)
+                            && (recipient.Character.CharacterId != client.Character.CharacterId))
+                        {
+                            byte[] pname = PlayerName.Create(client, client.Character.CharacterId);
+                            recipient.Send(pname);
+                            recipient.KnownClients.Add(client.Character.CharacterId);
+                        }
+
+                        recipient.Send(newpacket);
+                    }
+                }
+
+                client.ChannelMessageReceived(channel, client.Character.characterName, text);
+            }
+
             ChatLogger.WriteString(channelName, text, client.Character.characterName);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <param name="text">
+        /// </param>
+        /// <param name="client">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private static bool ProcessServerCommand(string text, Client client)
+        {
+            if (text.StartsWith("."))
+            {
+                Program.ISCom.BroadCast(
+                    new CellAO.Communication.Messages.ChatCommand
+                    {
+                        CharacterId = (int)client.Character.CharacterId,
+                        ChatCommandString = text
+                    });
+                return true;
+            }
+            return false;
         }
 
         #endregion

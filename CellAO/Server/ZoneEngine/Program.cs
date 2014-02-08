@@ -34,6 +34,7 @@ namespace ZoneEngine
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Client;
+    using CellAO.Communication.Messages;
     using CellAO.Core.Components;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
@@ -209,6 +210,7 @@ namespace ZoneEngine
 
             try
             {
+                ISComClient.OnReceiveData+=ISComClientOnReceiveData;
                 ISComClient.Connect(chatEngineIp, port);
             }
             catch
@@ -217,6 +219,11 @@ namespace ZoneEngine
             }
 
             return true;
+        }
+
+        private static void ISComClientOnReceiveData(DynamicMessage messageobject)
+        {
+            zoneServer.ProcessISComMessage(messageobject);
         }
 
         /// <summary>
