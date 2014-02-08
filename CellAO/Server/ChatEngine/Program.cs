@@ -192,11 +192,11 @@ namespace ChatEngine
                         Colouring.Push(ConsoleColor.Green);
                         if (DebugNetwork)
                         {
-                            Console.WriteLine("Debugging Game functions enabled");
+                            Console.WriteLine("Debugging network functions enabled");
                         }
                         else
                         {
-                            Console.WriteLine("Debugging Game functions disabled");
+                            Console.WriteLine("Debugging network functions disabled");
                         }
 
                         Colouring.Pop();
