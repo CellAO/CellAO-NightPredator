@@ -40,6 +40,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using ZoneEngine.Core.PacketHandlers;
+
     #endregion
 
     /// <summary>
@@ -57,6 +59,13 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public void Handle(object sender, Message message)
         {
+            if (((TextMessage)message.Body).Message.Text.StartsWith("."))
+            {
+                // It is a chat command in vicinity chat, lets process it
+                ChatCommandHandler.Read(((TextMessage)message.Body).Message.Text.TrimStart('.'), (ZoneClient)sender);
+                return;
+            }
+
             ICharacter character = ((IZoneClient)sender).Character;
             IPlayfield playfield = character.Playfield;
 
