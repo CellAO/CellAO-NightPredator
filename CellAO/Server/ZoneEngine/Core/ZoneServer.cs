@@ -35,6 +35,7 @@ namespace ZoneEngine.Core
 
     using Cell.Core;
 
+    using CellAO.Communication.Messages;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
@@ -43,6 +44,7 @@ namespace ZoneEngine.Core
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Component;
+    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
@@ -156,6 +158,19 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
+        /// <param name="messageobject">
+        /// </param>
+        internal void ProcessISComMessage(DynamicMessage messageobject)
+        {
+            // Switch to handlers
+            if (messageobject.DataObject is ChatCommand)
+            {
+                this.HandleChatCommand((ChatCommand)messageobject.DataObject);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
@@ -204,6 +219,26 @@ namespace ZoneEngine.Core
         protected override void OnSendTo(IPEndPoint clientIP, int num_bytes)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="chatCommand">
+        /// </param>
+        private void HandleChatCommand(ChatCommand chatCommand)
+        {
+            foreach (Playfield playfield in this.playfields)
+            {
+                IInstancedEntity character =
+                    playfield.FindByIdentity(
+                        new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
+                if (character != null)
+                {
+                    ChatCommandHandler.Read(
+                        chatCommand.ChatCommandString.TrimStart('.'), 
+                        (ZoneClient)((Character)character).Client);
+                }
+            }
         }
 
         /// <summary>

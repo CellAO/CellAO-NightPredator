@@ -24,52 +24,21 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace CellAO.Communication.Messages
 {
-    #region Usings ...
-
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    #endregion
-
     /// <summary>
     /// </summary>
-    public class ChatCommandHandler
+    public class ChatCommand : MessageBase
     {
-        #region Public Methods and Operators
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public static void Read(ChatCmdMessage message, ZoneClient client)
-        {
-            string fullArgs = message.Command.TrimEnd(char.MinValue);
-            Read(fullArgs, client);
-        }
+        public int CharacterId { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="fullArgs">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public static void Read(string fullArgs, ZoneClient client)
-        {
-            string temp = string.Empty;
-            do
-            {
-                temp = fullArgs;
-                fullArgs = fullArgs.Replace("  ", " ");
-            }
-            while (temp != fullArgs);
-
-            string[] cmdArgs = fullArgs.Trim().Split(' ');
-
-            Program.csc.CallChatCommand(cmdArgs[0].ToLower(), client, client.Character.Identity, cmdArgs);
-        }
+        public string ChatCommandString { get; set; }
 
         #endregion
     }

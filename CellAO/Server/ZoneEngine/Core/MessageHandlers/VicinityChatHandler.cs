@@ -28,12 +28,17 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Linq;
 
+    using CellAO.Communication.Messages;
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Network;
+    using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.PacketHandlers;
 
@@ -42,7 +47,7 @@ namespace ZoneEngine.Core.MessageHandlers
     /// <summary>
     /// </summary>
     [Export(typeof(IHandleMessage))]
-    public class CharacterActionHandler : IHandleMessage<CharacterActionMessage>
+    public class VicinityChatHandler : IHandleMessage<TextMessage>
     {
         #region Public Methods and Operators
 
@@ -54,17 +59,46 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public void Handle(object sender, Message message)
         {
-            var client = (ZoneClient)sender;
-            var characterActionMessage = (CharacterActionMessage)message.Body;
-
-            CharacterAction.Read(characterActionMessage, client);
-            if (client != null)
+            if (((TextMessage)message.Body).Message.Text.StartsWith("."))
             {
-                if (client.Character != null)
-                {
-                    client.Character.SendChangedStats();
-                }
+                // It is a chat command in vicinity chat, lets process it
+                ChatCommandHandler.Read(((TextMessage)message.Body).Message.Text.TrimStart('.'), (ZoneClient)sender);
+                return;
             }
+
+            ICharacter character = ((IZoneClient)sender).Character;
+            IPlayfield playfield = character.Playfield;
+
+            float range = 0.0f;
+            switch ((int)((TextMessage)message.Body).Message.Type)
+            {
+                case 0x01:
+                    range = 1.5f;
+                    break;
+                case 0x00:
+                    range = 10.0f;
+                    break;
+                case 0x02:
+                    range = 60.0f;
+                    break;
+            }
+
+            List<Character> charsInRange = playfield.FindInRange(character, range);
+
+            VicinityChatMessage vicinityChat = new VicinityChatMessage
+                                               {
+                                                   CharacterIds =
+                                                       charsInRange.Select(
+                                                           x => x.Identity.Instance).ToList(), 
+                                                   MessageType =
+                                                       (byte)
+                                                       ((TextMessage)message.Body).Message.Type, 
+                                                   Text =
+                                                       ((TextMessage)message.Body).Message.Text, 
+                                                   SenderId = character.Identity.Instance
+                                               };
+
+            Program.ISComClient.Send(vicinityChat);
         }
 
         #endregion

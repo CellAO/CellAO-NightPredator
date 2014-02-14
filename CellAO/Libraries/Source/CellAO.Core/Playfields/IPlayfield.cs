@@ -151,6 +151,16 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="range">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        List<Character> FindInRange(ICharacter character, float range);
+
+        /// <summary>
+        /// </summary>
         /// <returns>
         /// </returns>
         bool IsInstancedPlayfield();

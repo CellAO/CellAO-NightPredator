@@ -436,7 +436,10 @@ namespace CellAO.Core.Entities
             if (this.Client != null)
             {
                 this.Client.Server.DisconnectClient(this.Client);
-                this.Client.Character = null;
+                if (this.Client != null)
+                {
+                    this.Client.Character = null;
+                }
             }
 
             this.Client = null;

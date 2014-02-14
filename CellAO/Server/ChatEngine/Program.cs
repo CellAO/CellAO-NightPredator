@@ -192,11 +192,11 @@ namespace ChatEngine
                         Colouring.Push(ConsoleColor.Green);
                         if (DebugNetwork)
                         {
-                            Console.WriteLine("Debugging Game functions enabled");
+                            Console.WriteLine("Debugging network functions enabled");
                         }
                         else
                         {
-                            Console.WriteLine("Debugging Game functions disabled");
+                            Console.WriteLine("Debugging network functions disabled");
                         }
 
                         Colouring.Pop();
@@ -249,6 +249,7 @@ namespace ChatEngine
             try
             {
                 ISCom = new ISComV2Server();
+                ISCom.DataReceived += chatServer.ISComDataReceived;
                 if (Config.Instance.CurrentConfig.ListenIP == "0.0.0.0")
                 {
                     ISCom.TcpEndPoint = new IPEndPoint(IPAddress.Any, Config.Instance.CurrentConfig.CommPort);

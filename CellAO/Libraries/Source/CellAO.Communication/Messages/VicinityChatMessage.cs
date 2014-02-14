@@ -24,52 +24,36 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace CellAO.Communication.Messages
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using System.Collections.Generic;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ChatCommandHandler
+    public class VicinityChatMessage : MessageBase
     {
-        #region Public Methods and Operators
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public static void Read(ChatCmdMessage message, ZoneClient client)
-        {
-            string fullArgs = message.Command.TrimEnd(char.MinValue);
-            Read(fullArgs, client);
-        }
+        public List<int> CharacterIds { get; set; }
+
+        // say (1), whisper (0) and shout (2)
+        /// <summary>
+        /// </summary>
+        public int MessageType { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="fullArgs">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public static void Read(string fullArgs, ZoneClient client)
-        {
-            string temp = string.Empty;
-            do
-            {
-                temp = fullArgs;
-                fullArgs = fullArgs.Replace("  ", " ");
-            }
-            while (temp != fullArgs);
+        public int SenderId { get; set; }
 
-            string[] cmdArgs = fullArgs.Trim().Split(' ');
-
-            Program.csc.CallChatCommand(cmdArgs[0].ToLower(), client, client.Character.Identity, cmdArgs);
-        }
+        /// <summary>
+        /// </summary>
+        public string Text { get; set; }
 
         #endregion
     }

@@ -109,6 +109,7 @@
     <Compile Include="Core\MessageHandlers\LookAtHandler.cs" />
     <Compile Include="Core\MessageHandlers\SkillHandler.cs" />
     <Compile Include="Core\MessageHandlers\SocialActionCmdHandler.cs" />
+    <Compile Include="Core\MessageHandlers\VicinityChatHandler.cs" />
     <Compile Include="Core\MessageHandlers\ZoneLoginMessageHandler.cs" />
     <Compile Include="Core\PacketHandlers\CharacterAction.cs" />
     <Compile Include="Core\PacketHandlers\CharacterInPlay.cs" />

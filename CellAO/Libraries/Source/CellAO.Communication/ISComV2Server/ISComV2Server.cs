@@ -98,6 +98,22 @@ namespace CellAO.Communication.ISComV2Server
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        public void BroadCast(MessageBase message)
+        {
+            foreach (IClient client in this.clients)
+            {
+                ((ISComV2ClientHandler)client).Send(message);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -112,7 +128,7 @@ namespace CellAO.Communication.ISComV2Server
                 this.lastClientNumber++;
                 temp = new ISComV2ClientHandler(this, this.bus, this.lastClientNumber);
                 this.clients.Add(temp);
-                ((ISComV2ClientHandler)temp).DataReceived += this.ISComV2Server_DataReceived;
+                ((ISComV2ClientHandler)temp).DataReceived += this.ISComV2ServerDataReceived;
             }
 
             return temp;
@@ -151,12 +167,12 @@ namespace CellAO.Communication.ISComV2Server
         /// </param>
         /// <param name="dataBytes">
         /// </param>
-        private void ISComV2Server_DataReceived(ISComV2ClientHandler client, byte[] dataBytes)
+        private void ISComV2ServerDataReceived(ISComV2ClientHandler client, byte[] dataBytes)
         {
             if (this.DataReceived != null)
             {
-                MessagePackSerializer<DynamicMessage> ser = MessagePackSerializer.Create<DynamicMessage>();
-                DynamicMessage result = ser.UnpackSingleObject(dataBytes);
+                MessagePackSerializer<DynamicMessage> serializer = MessagePackSerializer.Create<DynamicMessage>();
+                DynamicMessage result = serializer.UnpackSingleObject(dataBytes);
 
                 this.DataReceived(client, result);
             }

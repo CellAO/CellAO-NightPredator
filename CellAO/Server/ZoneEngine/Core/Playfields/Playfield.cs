@@ -412,6 +412,34 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="range">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public List<Character> FindInRange(ICharacter character, float range)
+        {
+            List<Character> temp = new List<Character>();
+            Coordinate coord = character.Coordinates;
+            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            {
+                if (entity == character)
+                {
+                    continue;
+                }
+
+                if (((Character)entity).Coordinates.Distance2D(coord) <= range)
+                {
+                    temp.Add((Character)entity);
+                }
+            }
+
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="identity">
         /// </param>
         /// <returns>

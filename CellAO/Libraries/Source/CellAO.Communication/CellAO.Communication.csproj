@@ -51,6 +51,7 @@
     <Compile Include="ISComV2Client\ISComV2ClientBase.cs" />
     <Compile Include="ISComV2Server\ISComV2ClientHandler.cs" />
     <Compile Include="ISComV2Server\ISComV2Server.cs" />
+    <Compile Include="Messages\ChatCommand.cs" />
     <Compile Include="Messages\CpuRamLoad.cs" />
     <Compile Include="Messages\DynamicMessage.cs" />
     <Compile Include="Messages\IMessageData.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Messages\OnlineCharacters.cs" />
     <Compile Include="Messages\Ping.cs" />
     <Compile Include="Messages\Playfields.cs" />
+    <Compile Include="Messages\VicinityChatMessage.cs" />
     <Compile Include="ZoneComClient.cs" />
     <Compile Include="HandleClientRequest.cs" />
     <Compile Include="OnMessageArgs.cs" />

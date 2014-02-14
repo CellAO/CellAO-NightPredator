@@ -154,11 +154,11 @@ namespace CellAO.Communication.ISComV2Client
         {
             MessagePackSerializer<object> serializer = MessagePackSerializer.Create<object>();
             byte[] data = serializer.PackSingleObject(dataObject);
-            byte[] header = new byte[8];
-            BitConverter.GetBytes(0x00ff55aa).CopyTo(header, 0);
-            BitConverter.GetBytes(data.Length).CopyTo(header, 4);
-            this.clientBase.Send(header);
-            this.clientBase.Send(data);
+            byte[] finalData = new byte[8 + data.Length];
+            BitConverter.GetBytes(0x00ff55aa).CopyTo(finalData, 0);
+            BitConverter.GetBytes(data.Length).CopyTo(finalData, 4);
+            Array.Copy(data, 0, finalData, 8, data.Length);
+            this.clientBase.Send(finalData);
         }
 
         /// <summary>

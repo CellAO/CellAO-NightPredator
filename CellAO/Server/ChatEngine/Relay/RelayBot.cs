@@ -115,6 +115,35 @@ namespace Chatengine.Relay
 
         /// <summary>
         /// </summary>
+        /// <param name="sender">
+        /// </param>
+        /// <param name="e">
+        /// </param>
+        public override void IrcClient_ProtocolError(object sender, IrcProtocolErrorEventArgs e)
+        {
+            // on Protocol Error 433 (Nickname in Use) change to an alternate one
+            if (e.Code == 433)
+            {
+                IrcClient client = (IrcClient)sender;
+                string actualName = client.LocalUser.NickName;
+                int temp = -1;
+                if (actualName.Replace(Config.Instance.CurrentConfig.RelayBotNick, string.Empty) != string.Empty)
+                {
+                    int.TryParse(actualName.Replace(Config.Instance.CurrentConfig.RelayBotNick, string.Empty), out temp);
+                    temp++;
+                }
+                else
+                {
+                    temp = 1;
+                }
+
+                actualName = Config.Instance.CurrentConfig.RelayBotNick + temp;
+                client.LocalUser.SetNickName(actualName);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="chatServer">
         /// </param>
         public void Run(ChatServer chatServer)
