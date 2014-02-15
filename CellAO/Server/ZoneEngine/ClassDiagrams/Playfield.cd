@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ZoneEngine.Core.Playfields.DistrictInfo">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAACAAAABAAIAAAAAAQAIAAAQ=</HashCode>
+      <FileName>Core\Playfields\Playfields.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ZoneEngine.Core.Playfields.PlayfieldInfo">
+    <Position X="2.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAEIAAAABAAAEAAAAEAABAAABAAQAAAgA=</HashCode>
+      <FileName>Core\Playfields\Playfields.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ZoneEngine.Core.Playfields.Playfields">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAIAAAACEAQAAIAAgAAAAQAAAAABQAAA=</HashCode>
+      <FileName>Core\Playfields\Playfields.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="playfields" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="CellAO.Core.Playfields.Playfield">
+    <Position X="4.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAKA4gQEAEACAAAIMICFADCAIAIgiEAAcVABIAIQEM=</HashCode>
+      <FileName>Core\Playfields\Playfield.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="districts" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Playfields.PlayfieldDistrict">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

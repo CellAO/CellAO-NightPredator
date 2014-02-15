@@ -309,6 +309,7 @@
       <Link>playfields.dat</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ClassDiagrams\Playfield.cd" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
