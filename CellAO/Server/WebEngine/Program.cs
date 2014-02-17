@@ -17,7 +17,7 @@ namespace WebEngine
     {
         static void Main(string[] args)
         {
-            HttpServer myServer = default(HttpServer);
+            var myServer = default(HttpServer);
             myServer = new HttpServer();
         }
     }
