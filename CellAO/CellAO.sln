@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEngine\ChatEngine.csproj", "{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -101,6 +101,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translations", "Libraries\Source\Translations\Translations.csproj", "{4BBD60C6-AED0-4347-B4CA-A262D3474826}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.ObjectManager", "Libraries\Source\CellAO.ObjectManager\CellAO.ObjectManager.csproj", "{65A705B0-F8BF-4D68-A8FD-C630A87DC120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEngine", "Server\WebEngine\WebEngine.csproj", "{A8218B30-C168-4949-B482-3C6800F04A63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -396,6 +398,20 @@ Global
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|x64.ActiveCfg = Release|Any CPU
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|x86.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x64.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -420,9 +436,9 @@ Global
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_UpdateAssemblyVersion = True
 		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
 	EndGlobalSection
 EndGlobal

@@ -31,4 +31,8 @@
   <RelayBotIdent>CellAO</RelayBotIdent>
   <IRCChannel>#CellAORelay</IRCChannel>
   <RelayIngameChannel>CellAO-Relay</RelayIngameChannel>
+  <!-- WebEngine Setup -->
+  <WebHostName>test.aocell.info</WebHostName>
+  <WebHostPort>8181</WebHostPort>
+  <WebHostRoot>./htdocs</WebHostRoot>
 </Config>
