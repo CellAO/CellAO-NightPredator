@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Web;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -15,6 +11,10 @@ using _config = Utility.Config.ConfigReadWrite;
 namespace WebEngine
 {
     using System.Xml.Linq;
+
+    using MathNet.Numerics;
+
+    using WebEngine.ASPX;
 
     public class HttpServer
     {
@@ -30,6 +30,8 @@ namespace WebEngine
         readonly object randObj = new object();
 
         string serverName;
+
+        private char Constants;
 
         public HttpServer()
         {
@@ -180,13 +182,14 @@ namespace WebEngine
         {
             while (true)
             {
-                var sockets = myListener.AcceptSocket();
+                Socket sockets = myListener.AcceptSocket();
                 var listening = new Thread(HttpThread);
+             
                 listening.Start(sockets);
             }
         }
         //Process the requests
-        private void HttpThread()
+        private void HttpThread(Socket sockets)
         {
             string request = null;
             string requestedFile = "";
@@ -231,8 +234,12 @@ namespace WebEngine
                 }
 
                 //Get other request parameters
-                string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
-                foreach (string param in @params)
+                //string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
+                var @params = sBuffer.Split(
+                    new char[] { Constants.NewLine });
+                    //(new char[] { Constants.vbNewLine });
+
+                foreach (var param in @params)
                 {
                     //Get User-Agent
                     if (param.Trim().StartsWith("User-Agent"))
@@ -300,16 +307,16 @@ namespace WebEngine
                 filePath = serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
                 //If the file among forbidden files send the error message
-                foreach (XElement forbidden in xdoc.Element("configuration").Element("Forbidden").Elements("Path"))
-                {
-                    if (filePath.StartsWith(forbidden.Value))
-                    {
-                        SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
-                        SendData(errorMessage, ref sockets);
-                        sockets.Close();
-                        return;
-                    }
-                }
+                //foreach (XElement forbidden in xdoc.Element("configuration").Element("Forbidden").Elements("Path"))
+                //{
+                //    if (filePath.StartsWith(forbidden.Value))
+                //    {
+                //        SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                //        SendData(errorMessage, ref sockets);
+                //        sockets.Close();
+                //        return;
+                //    }
+                //}
 
                 //If there is no such file send error message
                 if (File.Exists(filePath) == false)
@@ -326,9 +333,9 @@ namespace WebEngine
                     if (ext == ".aspx")
                     {
                         //Create an instance of Host class
-                        Host aspxHost = new Host();
+                        var aspxHost = new Host();
                         //Pass to it filename and query string
-                        string htmlOut = aspxHost.CreateHost(requestedFile, serverRoot, queryString);
+                        var htmlOut = aspxHost.CreateHost(requestedFile, serverRoot, queryString);
                         erMesLen = htmlOut.Length;
                         SendHeader(serverProtocol, mimeType, erMesLen, " 200 OK", ref sockets);
                         SendData(htmlOut, ref sockets);
@@ -350,8 +357,8 @@ namespace WebEngine
                     }
                     else
                     {
-                        FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        byte[] bytes = new byte[fs.Length + 1];
+                        var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var bytes = new byte[fs.Length + 1];
                         erMesLen = bytes.Length;
                         fs.Read(bytes, 0, erMesLen);
                         fs.Close();
