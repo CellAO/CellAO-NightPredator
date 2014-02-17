@@ -34,5 +34,7 @@
   <!-- WebEngine Setup -->
   <WebHostName>test.aocell.info</WebHostName>
   <WebHostPort>8181</WebHostPort>
-  <WebHostRoot>./htdocs</WebHostRoot>
+  <WebHostRoot>htdocs</WebHostRoot>
+  <WebHostDefaultPage>index.php</WebHostDefaultPage>
+  <WebHostPhpPath>php</WebHostPhpPath>
 </Config>
