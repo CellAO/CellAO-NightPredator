@@ -153,7 +153,17 @@ namespace Utility.Config
         /// <summary>
         /// 
         /// </summary>
-        WebHostRoot
+        WebHostRoot,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostDefaultPage,
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostPhpPath
 
     }
 
@@ -294,6 +304,16 @@ namespace Utility.Config
         public int WebHostPort { get; set; }
 
         public string WebHostRoot { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WebHostDefaultPage { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WebHostPhpPath { get; set; }
         #endregion
     }
 
