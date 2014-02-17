@@ -12,9 +12,6 @@ using _config = Utility.Config.ConfigReadWrite;
 
 namespace WebEngine
 {
-    using System.Xml.Linq;
-
-    using MathNet.Numerics;
 
     using WebEngine.ASPX;
 
@@ -238,7 +235,7 @@ namespace WebEngine
                 //Get other request parameters
                 //string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
                 var @params = sBuffer.Split(
-                    new char[] { Constants.NewLine });
+                    new char[] { Constants });
                     //(new char[] { Constants.vbNewLine });
 
                 foreach (var param in @params)
@@ -265,8 +262,6 @@ namespace WebEngine
                     case "POST":
                         requestedFile = request.Replace("/", "\\").Trim();
                         queryString = @params[@params.Length - 1].Trim();
-                        break; // TODO: might not be correct. Was : Exit Select
-
                         break;
                     case "GET":
                         lastPos = request.IndexOf('?');
@@ -279,12 +274,8 @@ namespace WebEngine
                         {
                             requestedFile = request.Substring(0).Replace("/", "\\");
                         }
-                        break; // TODO: might not be correct. Was : Exit Select
-
                         break;
                     case "HEAD":
-                        break; // TODO: might not be correct. Was : Exit Select
-
                         break;
                     default:
                         SendHeader(serverProtocol, "", badMesLen, "400 Bad Request", ref sockets);
@@ -292,7 +283,6 @@ namespace WebEngine
                         sockets.Close();
                         return;
 
-                        break;
                 }
 
                 //Get the full name of the requested file
