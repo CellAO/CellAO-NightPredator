@@ -181,10 +181,10 @@ namespace WebEngine
         {
             while (true)
             {
-                Socket sockets = myListener.AcceptSocket();
-                var listening = new Thread(HttpThread);
-             
-                listening.Start(sockets);
+                Socket sockets = this.myListener.AcceptSocket();
+                var listening = new Thread(() => HttpThread(sockets));
+
+                listening.Start();
             }
         }
         //Process the requests
@@ -235,8 +235,7 @@ namespace WebEngine
                 //Get other request parameters
                 //string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
                 var @params = sBuffer.Split(
-                    new char[] { Constants });
-                    //(new char[] { Constants.vbNewLine });
+                    new char[] { Convert.ToChar(Environment.NewLine) });
 
                 foreach (var param in @params)
                 {
