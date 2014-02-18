@@ -105,10 +105,10 @@ namespace WebEngine
             {
                 // Setup and enable NLog logging to file
                 LogUtil.SetupConsoleLogging(LogLevel.Debug);
-                LogUtil.SetupFileLogging("${basedir}/LoginEngineLog.txt", LogLevel.Trace);
+                LogUtil.SetupFileLogging("${basedir}/WebEngineLog.txt", LogLevel.Trace);
 
                 // NBug initialization
-                SettingsOverride.LoadCustomSettings("NBug.LoginEngine.config");
+                SettingsOverride.LoadCustomSettings("NBug.WebEngine.config");
                 Settings.WriteLogToDisk = true;
                 AppDomain.CurrentDomain.UnhandledException += Handler.UnhandledException;
                 TaskScheduler.UnobservedTaskException += Handler.UnobservedTaskException;
