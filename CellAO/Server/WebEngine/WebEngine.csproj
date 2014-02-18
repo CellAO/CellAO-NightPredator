@@ -34,11 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="NBug">
       <HintPath>..\..\packages\NBug.1.2.2\lib\net40-client\NBug.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=2.1.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NLog.2.1.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI">
+      <HintPath>..\..\packages\SharpSvn.1.8-x86.1.8005.2830\lib\net20\SharpSvn.UI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,9 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASPX\Host.cs" />
+    <Compile Include="Checks.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
