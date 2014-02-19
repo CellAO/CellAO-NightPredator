@@ -537,7 +537,8 @@ namespace WebEngine
         /// </param>
         private void SendData(string data, ref Socket sockets)
         {
-            SendData(Encoding.Default.GetBytes(data), ref sockets);
+            //SendData(Encoding.Default.GetBytes(data), ref sockets);
+            SendData(Encoding.GetEncoding("windows-1252").GetBytes(data), ref sockets);
         }
 
         // Send the headers
