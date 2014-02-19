@@ -239,7 +239,7 @@ namespace WebEngine
 
                 //Get other request parameters
                 //string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
-                string[] @params = sBuffer.Split(new char[] { Convert.ToChar(Environment.NewLine) });
+                string[] @params = sBuffer.Replace("\r\n","\n").Split('\n');
 
                 foreach (string param in @params)
                 {
