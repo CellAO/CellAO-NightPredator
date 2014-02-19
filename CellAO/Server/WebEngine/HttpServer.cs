@@ -440,7 +440,7 @@ namespace WebEngine
             }
             ss.Append(serverProtocol);
             ss.Append(statusCode).AppendLine();
-            ss.AppendLine("Sever: EugeneServer");
+            ss.AppendLine("Sever: CellAO WebEngine");
             ss.Append("Content-Type: ");
             ss.Append(mimeType).AppendLine();
             ss.Append("Accept-Ranges: bytes").AppendLine();
