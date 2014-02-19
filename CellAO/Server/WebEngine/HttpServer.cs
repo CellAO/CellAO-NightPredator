@@ -225,9 +225,11 @@ namespace WebEngine
             proc.StartInfo.CreateNoWindow = true;
 
             proc.Start();
+
             var str = proc.StandardOutput.ReadToEnd();
             var errors = proc.StandardError.ReadToEnd();
-            str = str + " /n " + errors;
+
+            str = str + Environment.NewLine + errors + Environment.NewLine;
             Console.WriteLine(str);
             proc.Close();
             proc.Dispose();
