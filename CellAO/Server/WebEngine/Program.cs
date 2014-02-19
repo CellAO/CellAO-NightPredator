@@ -210,7 +210,7 @@ namespace WebEngine
             consoleCommands.AddEntry("quit", ShutDownServer);
             consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
 
-            // consoleCommands.AddEntry("checkphp", CheckPHP);
+            consoleCommands.AddEntry("checkphp", CheckPphp);
             // consoleCommands.AddEntry("checkWebCore", CheckWebCore);
             return true;
         }
@@ -385,6 +385,11 @@ namespace WebEngine
             }
         }
 
+        private static void CheckPphp(string[] obj)
+        {
+            var _checks = new Checks();
+            _checks.CheckPhp();
+        }
         /// <summary>
         /// </summary>
         /// <param name="obj">

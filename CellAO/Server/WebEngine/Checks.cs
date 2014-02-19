@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _config = Utility.Config.ConfigReadWrite;
-
+﻿
 namespace WebEngine
 {
     using System.ComponentModel;
     using System.IO;
     using System.Net;
+    using Ionic.Zip;
+    using System;
+    using _config = Utility.Config.ConfigReadWrite;
 
     public  class Checks
     {
@@ -17,8 +14,13 @@ namespace WebEngine
         {
             if (Directory.Exists(_config.Instance.CurrentConfig.WebHostPhpPath) == false)
             {
+                Console.WriteLine();
+                Console.WriteLine("Creating Directory...");
+                Directory.CreateDirectory(_config.Instance.CurrentConfig.WebHostPhpPath);
+                Console.WriteLine("Done");
                  var url = new WebClient();
-
+                 Console.WriteLine();
+                Console.WriteLine("Downloading php..." );
                  url.DownloadFileCompleted += new AsyncCompletedEventHandler(this.UrlDownloadFileCompleted);
                  url.DownloadFile("http://windows.php.net/downloads/releases/php-5.5.9-nts-Win32-VC11-x86.zip", "php-5.5.9-nts-Win32-VC11-x86.zip");
                  
@@ -26,17 +28,24 @@ namespace WebEngine
             else { Console.WriteLine("Php exists.");}
         }
 
-        private  void UrlDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private void UrlDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Error != null) return;
-
+            Console.WriteLine("Download Complete.");
+            Console.WriteLine();
+            Console.WriteLine("Unzipping File...");
             this.Unzip("php-5.5.9-nts-Win32-VC11-x86.zip");
-
         }
 
         private void Unzip(string file)
         {
-            
+            using (var zip = ZipFile.Read(file))
+            {
+                foreach (ZipEntry ze in zip)
+                {
+                    ze.Extract(_config.Instance.CurrentConfig.WebHostPhpPath, ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
         }
 
         public void CheckWebCore()
