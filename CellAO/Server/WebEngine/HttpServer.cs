@@ -204,6 +204,7 @@ namespace WebEngine
             {
                 proc.StartInfo.FileName = cgiFile;
                 proc.StartInfo.Arguments = queryString;
+                
             }
 
             string scriptName = cgiFile.Substring(cgiFile.LastIndexOf('\\') + 1);
@@ -220,11 +221,14 @@ namespace WebEngine
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.RedirectStandardInput = true;
+            proc.StartInfo.RedirectStandardError = true;
             proc.StartInfo.CreateNoWindow = true;
-            string str = string.Empty;
 
             proc.Start();
-            str = proc.StandardOutput.ReadToEnd();
+            var str = proc.StandardOutput.ReadToEnd();
+            var errors = proc.StandardError.ReadToEnd();
+            str = str + " /n " + errors;
+            Console.WriteLine(str);
             proc.Close();
             proc.Dispose();
 
@@ -479,7 +483,7 @@ namespace WebEngine
                 sockets.Close();
 
                 Monitor.Enter(this.randObj);
-                logStream = new StreamWriter("Server.log", true);
+                logStream = new StreamWriter("WebEngine-Server.log", true);
 
                 // Output to the server log
                 logStream.WriteLine(DateTime.Now.ToString());
@@ -603,7 +607,5 @@ namespace WebEngine
         }
 
         #endregion
-
-        // Process the requests
     }
 }
