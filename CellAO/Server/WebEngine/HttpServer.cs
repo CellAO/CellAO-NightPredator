@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,10 +21,8 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
 
 #endregion
-
 
 namespace WebEngine
 {
@@ -44,87 +38,166 @@ namespace WebEngine
     using System.Threading;
     using System.Xml.Linq;
 
+    using Utility;
+
     using WebEngine.ASPX;
 
     using _config = Utility.Config.ConfigReadWrite;
+
     #endregion
 
+    /// <summary>
+    /// </summary>
     public class HttpServer
     {
+        #region Static Fields
+
+        /// <summary>
+        /// </summary>
+        public static HttpServer instance = null;
+
+        #endregion
+
         #region Fields
 
+        /// <summary>
+        /// </summary>
+        public bool isRunning = false;
+
+        /// <summary>
+        /// </summary>
         private readonly string badRequest;
 
+        /// <summary>
+        /// </summary>
         private readonly string errorMessage;
 
+        /// <summary>
+        /// </summary>
         private readonly TcpListener myListener;
 
+        /// <summary>
+        /// </summary>
         private readonly object randObj = new object();
 
+        /// <summary>
+        /// </summary>
         private readonly string serverRoot;
 
+        /// <summary>
+        /// </summary>
         private readonly XDocument xdoc;
 
+        /// <summary>
+        /// </summary>
         private string serverName;
+
+        /// <summary>
+        /// </summary>
+        private bool stopServer = false;
 
         #endregion
 
         #region Constructors and Destructors
 
+        /// <summary>
+        /// </summary>
         public HttpServer()
         {
             try
             {
                 this.xdoc = XDocument.Load("MimeTypes.xml");
-                //two messages about errors
+
+                // two messages about errors
                 this.errorMessage = "<html><body><h2>Requested file not found</h2></body></html>";
                 this.badRequest = "<html><body><h2>Bad Request</h2></body></html>";
-                //define the port
+
+                // define the port
                 int port = Convert.ToInt32(_config.Instance.CurrentConfig.WebHostPort);
 
                 this.serverName = _config.Instance.CurrentConfig.WebHostName;
-                //define the directory of the web pages
+
+                // define the directory of the web pages
                 this.serverRoot = _config.Instance.CurrentConfig.WebHostRoot;
 
                 this.myListener = new TcpListener(IPAddress.Any, port);
-                this.myListener.Start();
-                var thread = new Thread(new ThreadStart(this.StartListen));
-                thread.Start();
-                Console.WriteLine("WebEngine runs...");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.ReadLine();
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        public void StartServer()
+        {
+            this.stopServer = false;
+            Thread mainLoop = new Thread(this.StartListen);
+            mainLoop.Start();
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StopServer()
+        {
+            this.stopServer = true;
         }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// </summary>
+        /// <param name="cgiFile">
+        /// </param>
+        /// <param name="queryString">
+        /// </param>
+        /// <param name="ext">
+        /// </param>
+        /// <param name="remoteAddress">
+        /// </param>
+        /// <param name="serverProtocol">
+        /// </param>
+        /// <param name="referer">
+        /// </param>
+        /// <param name="requestedMethod">
+        /// </param>
+        /// <param name="userAgent">
+        /// </param>
+        /// <param name="request">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private string GetCgiData(
-            string cgiFile,
-            string queryString,
-            string ext,
-            string remoteAddress,
-            string serverProtocol,
-            string referer,
-            string requestedMethod,
-            string userAgent,
+            string cgiFile, 
+            string queryString, 
+            string ext, 
+            string remoteAddress, 
+            string serverProtocol, 
+            string referer, 
+            string requestedMethod, 
+            string userAgent, 
             string request)
         {
             var proc = new Process();
 
-            //indicate the executable to get stdout
+            // indicate the executable to get stdout
             if (ext == ".php")
             {
                 proc.StartInfo.FileName = _config.Instance.CurrentConfig.WebHostPhpPath + "\\\\php-cgi.exe";
-                //if path to the php is not defined
+
+                // if path to the php is not defined
                 if (!File.Exists(proc.StartInfo.FileName))
                 {
                     return this.errorMessage;
                 }
+
                 proc.StartInfo.Arguments = " -q " + cgiFile + " " + queryString;
             }
             else
@@ -132,8 +205,10 @@ namespace WebEngine
                 proc.StartInfo.FileName = cgiFile;
                 proc.StartInfo.Arguments = queryString;
             }
+
             string scriptName = cgiFile.Substring(cgiFile.LastIndexOf('\\') + 1);
-            //Set some global variables and output parameters
+
+            // Set some global variables and output parameters
             proc.StartInfo.EnvironmentVariables.Add("REMOTE_ADDR", remoteAddress.ToString(CultureInfo.InvariantCulture));
             proc.StartInfo.EnvironmentVariables.Add("SCRIPT_NAME", scriptName);
             proc.StartInfo.EnvironmentVariables.Add("USER_AGENT", userAgent);
@@ -146,7 +221,7 @@ namespace WebEngine
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.RedirectStandardInput = true;
             proc.StartInfo.CreateNoWindow = true;
-            string str = "";
+            string str = string.Empty;
 
             proc.Start();
             str = proc.StandardOutput.ReadToEnd();
@@ -156,18 +231,31 @@ namespace WebEngine
             return str;
         }
 
-        //Get MIME of the file
+        // Get MIME of the file
 
-        //Get default web pages
+        // Get default web pages
+        /// <summary>
+        /// </summary>
+        /// <param name="serverFolder">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private string GetDefaultPage(string serverFolder)
         {
             if (File.Exists(serverFolder + "\\" + _config.Instance.CurrentConfig.WebHostDefaultPage))
             {
                 return _config.Instance.CurrentConfig.WebHostDefaultPage;
             }
-            return "";
+
+            return string.Empty;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="extention">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private string GetMimeType(string extention)
         {
             XElement xElement1 = this.xdoc.Element("configuration");
@@ -190,30 +278,36 @@ namespace WebEngine
                     }
                 }
             }
+
             return "text/html";
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="sockets">
+        /// </param>
         private void HttpThread(Socket sockets)
         {
             string request = null;
-            string requestedFile = "";
-            string mimeType = "";
-            string filePath = "";
-            string queryString = "";
-            string REQUESTED_METHOD = "";
-            string referer = "";
-            string userAgent = "";
+            string requestedFile = string.Empty;
+            string mimeType = string.Empty;
+            string filePath = string.Empty;
+            string queryString = string.Empty;
+            string REQUESTED_METHOD = string.Empty;
+            string referer = string.Empty;
+            string userAgent = string.Empty;
             string serverProtocol = "HTTP/1.1";
             int erMesLen = this.errorMessage.Length;
             int badMesLen = this.badRequest.Length;
             StreamWriter logStream = null;
-            string remoteAddress = "";
+            string remoteAddress = string.Empty;
 
             if (sockets.Connected == true)
             {
                 remoteAddress = sockets.RemoteEndPoint.ToString();
                 Console.WriteLine("Connected to {0}", remoteAddress);
-                //get request from the client and decode it
+
+                // get request from the client and decode it
                 var received = new byte[1025];
                 int i = sockets.Receive(received, received.Length, 0);
                 string sBuffer = Encoding.ASCII.GetString(received);
@@ -223,11 +317,11 @@ namespace WebEngine
                     return;
                 }
 
-                //Sure that is HTTP -request and get its version
+                // Sure that is HTTP -request and get its version
                 int startPos = sBuffer.IndexOf("HTTP", 1, StringComparison.Ordinal);
                 if (startPos == -1)
                 {
-                    this.SendHeader(serverProtocol, "", badMesLen, "400 Bad Request", ref sockets);
+                    this.SendHeader(serverProtocol, string.Empty, badMesLen, "400 Bad Request", ref sockets);
                     SendData(this.badRequest, ref sockets);
                     sockets.Close();
                     return;
@@ -237,17 +331,18 @@ namespace WebEngine
                     serverProtocol = sBuffer.Substring(startPos, 8);
                 }
 
-                //Get other request parameters
-                //string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
-                string[] @params = sBuffer.Replace("\r\n","\n").Split('\n');
+                // Get other request parameters
+                // string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
+                string[] @params = sBuffer.Replace("\r\n", "\n").Split('\n');
 
                 foreach (string param in @params)
                 {
-                    //Get User-Agent
+                    // Get User-Agent
                     if (param.Trim().StartsWith("User-Agent"))
                     {
                         userAgent = param.Substring(12);
-                        //Get Refferer
+
+                        // Get Refferer
                     }
                     else if (param.Trim().StartsWith("Referer"))
                     {
@@ -255,7 +350,7 @@ namespace WebEngine
                     }
                 }
 
-                //Get request method
+                // Get request method
                 REQUESTED_METHOD = sBuffer.Substring(0, sBuffer.IndexOf(" ", StringComparison.Ordinal));
                 int lastPos = sBuffer.IndexOf('/') + 1;
                 request = sBuffer.Substring(lastPos, startPos - lastPos - 1);
@@ -277,23 +372,24 @@ namespace WebEngine
                         {
                             requestedFile = request.Substring(0).Replace("/", "\\");
                         }
+
                         break;
                     case "HEAD":
                         break;
                     default:
-                        this.SendHeader(serverProtocol, "", badMesLen, "400 Bad Request", ref sockets);
+                        this.SendHeader(serverProtocol, string.Empty, badMesLen, "400 Bad Request", ref sockets);
                         SendData(this.badRequest, ref sockets);
                         sockets.Close();
                         return;
                 }
 
-                //Get the full name of the requested file
+                // Get the full name of the requested file
                 if (requestedFile.Length == 0)
                 {
                     requestedFile = this.GetDefaultPage(this.serverRoot);
                     if (string.IsNullOrEmpty(requestedFile))
                     {
-                        this.SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                        this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
                         SendData(this.errorMessage, ref sockets);
                     }
                 }
@@ -301,7 +397,7 @@ namespace WebEngine
                 filePath = this.serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
 
-                //If the file among forbidden files send the error message
+                // If the file among forbidden files send the error message
                 XElement xElement = this.xdoc.Element("configuration");
                 if (xElement != null)
                 {
@@ -312,7 +408,7 @@ namespace WebEngine
                         {
                             if (filePath.StartsWith(forbidden.Value))
                             {
-                                this.SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                                this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
                                 this.SendData(this.errorMessage, ref sockets);
                                 sockets.Close();
                                 return;
@@ -321,10 +417,10 @@ namespace WebEngine
                     }
                 }
 
-                //If there is no such file send error message
+                // If there is no such file send error message
                 if (File.Exists(filePath) == false)
                 {
-                    this.SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                    this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
                     SendData(this.errorMessage, ref sockets);
                 }
                 else
@@ -332,12 +428,13 @@ namespace WebEngine
                     string ext = new FileInfo(filePath).Extension.ToLower();
                     mimeType = this.GetMimeType(ext);
 
-                    //process web pages
+                    // process web pages
                     if (ext == ".aspx")
                     {
-                        //Create an instance of Host class
+                        // Create an instance of Host class
                         var aspxHost = new Host();
-                        //Pass to it filename and query string
+
+                        // Pass to it filename and query string
                         string htmlOut = aspxHost.CreateHost(requestedFile, this.serverRoot, queryString);
                         erMesLen = htmlOut.Length;
                         this.SendHeader(serverProtocol, mimeType, erMesLen, " 200 OK", ref sockets);
@@ -346,18 +443,18 @@ namespace WebEngine
                     else if (ext == ".php" || ext == ".exe")
                     {
                         string cgi2html = this.GetCgiData(
-                            filePath,
-                            queryString,
-                            ext,
-                            remoteAddress,
-                            serverProtocol,
-                            referer,
-                            REQUESTED_METHOD,
-                            userAgent,
+                            filePath, 
+                            queryString, 
+                            ext, 
+                            remoteAddress, 
+                            serverProtocol, 
+                            referer, 
+                            REQUESTED_METHOD, 
+                            userAgent, 
                             request);
                         if (cgi2html == this.errorMessage)
                         {
-                            this.SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                            this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
                             SendData(this.errorMessage, ref sockets);
                         }
                         else
@@ -378,11 +475,13 @@ namespace WebEngine
                         SendData(bytes, ref sockets);
                     }
                 }
+
                 sockets.Close();
 
                 Monitor.Enter(this.randObj);
                 logStream = new StreamWriter("Server.log", true);
-                //Output to the server log
+
+                // Output to the server log
                 logStream.WriteLine(DateTime.Now.ToString());
                 logStream.WriteLine("Connected to {0}", remoteAddress);
                 logStream.WriteLine("Requested path {0}", request);
@@ -393,7 +492,13 @@ namespace WebEngine
             }
         }
 
-        //Send content
+        // Send content
+        /// <summary>
+        /// </summary>
+        /// <param name="data">
+        /// </param>
+        /// <param name="sockets">
+        /// </param>
         private void SendData(byte[] data, ref Socket sockets)
         {
             const int NumberOfBytes = 0;
@@ -417,19 +522,37 @@ namespace WebEngine
             }
         }
 
-        //Overloaded method
+        // Overloaded method
+        /// <summary>
+        /// </summary>
+        /// <param name="data">
+        /// </param>
+        /// <param name="sockets">
+        /// </param>
         private void SendData(string data, ref Socket sockets)
         {
             SendData(Encoding.Default.GetBytes(data), ref sockets);
         }
 
-        //Send the headers
+        // Send the headers
 
+        /// <summary>
+        /// </summary>
+        /// <param name="serverProtocol">
+        /// </param>
+        /// <param name="mimeType">
+        /// </param>
+        /// <param name="totalBytes">
+        /// </param>
+        /// <param name="statusCode">
+        /// </param>
+        /// <param name="sockets">
+        /// </param>
         private void SendHeader(
-            string serverProtocol,
-            string mimeType,
-            int totalBytes,
-            string statusCode,
+            string serverProtocol, 
+            string mimeType, 
+            int totalBytes, 
+            string statusCode, 
             ref Socket sockets)
         {
             var ss = new StringBuilder();
@@ -438,6 +561,7 @@ namespace WebEngine
             {
                 mimeType = "text/html";
             }
+
             ss.Append(serverProtocol);
             ss.Append(statusCode).AppendLine();
             ss.AppendLine("Sever: CellAO WebEngine");
@@ -453,20 +577,33 @@ namespace WebEngine
             Console.WriteLine("{0} bytes have been sent", totalBytes.ToString(CultureInfo.InvariantCulture));
         }
 
-        //Listen incoming connections
+        // Listen incoming connections
+        /// <summary>
+        /// </summary>
         private void StartListen()
         {
-            while (true)
+            this.myListener.Start();
+            this.isRunning = true;
+            try
             {
-                Socket sockets = this.myListener.AcceptSocket();
-                var listening = new Thread(() => this.HttpThread(sockets));
+                while (!this.stopServer)
+                {
+                    Socket sockets = this.myListener.AcceptSocket();
+                    var listening = new Thread(() => this.HttpThread(sockets));
 
-                listening.Start();
+                    listening.Start();
+                }
             }
+            catch (Exception e)
+            {
+                LogUtil.ErrorException(e);
+            }
+
+            this.isRunning = false;
         }
 
         #endregion
 
-        //Process the requests
+        // Process the requests
     }
 }

@@ -2,17 +2,13 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
-// 
 // All rights reserved.
 // 
-// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,7 +21,6 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
 
 #endregion
 
@@ -40,10 +35,22 @@ namespace WebEngine.ASPX
 
     #endregion
 
+    /// <summary>
+    /// </summary>
     public class Host : MarshalByRefObject
     {
         #region Public Methods and Operators
 
+        /// <summary>
+        /// </summary>
+        /// <param name="filename">
+        /// </param>
+        /// <param name="serverRoot">
+        /// </param>
+        /// <param name="queryString">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public string CreateHost(string filename, string serverRoot, string queryString)
         {
             var myHost = (Host)ApplicationHost.CreateApplicationHost(typeof(Host), "/", serverRoot);
@@ -54,6 +61,14 @@ namespace WebEngine.ASPX
 
         #region Methods
 
+        /// <summary>
+        /// </summary>
+        /// <param name="filename">
+        /// </param>
+        /// <param name="queryString">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private string ProcessFile(string filename, string queryString)
         {
             var sw = new StringWriter();
