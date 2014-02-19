@@ -12,13 +12,14 @@ using _config = Utility.Config.ConfigReadWrite;
 
 namespace WebEngine
 {
+    using System.Globalization;
+    using System.Xml.Linq;
 
     using WebEngine.ASPX;
 
     public class HttpServer
     {
         private readonly TcpListener myListener;
-       // private XDocument xdoc;
 
         readonly string serverRoot;
 
@@ -30,19 +31,20 @@ namespace WebEngine
 
         string serverName;
 
-        private char Constants;
+        readonly XDocument xdoc;
 
         public HttpServer()
         {
             try
             {
+                xdoc = XDocument.Load("MimeTypes.xml");
                 //two messages about errors
                 errorMessage = "<html><body><h2>Requested file not found</h2></body></html>";
                 badRequest = "<html><body><h2>Bad Request</h2></body></html>";
                 //define the port
                 var port = Convert.ToInt32(_config.Instance.CurrentConfig.WebHostPort);
 
-                this.serverName = _config.Instance.CurrentConfig.WebHostName;
+                serverName = _config.Instance.CurrentConfig.WebHostName;
                 //define the directory of the web pages
                 serverRoot = _config.Instance.CurrentConfig.WebHostRoot;
 
@@ -62,11 +64,26 @@ namespace WebEngine
         //Get MIME of the file
         private string GetMimeType(string extention)
         {
-            //foreach (XElement xel in xdoc.Element("configuration").Element("Mime").Elements("Values"))
-            //{
-            //    if (xel.Element("Ext").Value == extention)
-            //        return xel.Element("Type").Value;
-            //}
+            var xElement1 = this.xdoc.Element("configuration");
+            if (xElement1 != null)
+            {
+                var element1 = xElement1.Element("Mime");
+                if (element1 != null)
+                {
+                    foreach (XElement xel in element1.Elements("Values"))
+                    {
+                        var xElement = xel.Element("Ext");
+                        if (xElement != null && xElement.Value == extention)
+                        {
+                            var element = xel.Element("Type");
+                            if (element != null)
+                            {
+                                return element.Value;
+                            }
+                        }
+                    }
+                }
+            }
             return "text/html";
         }
 
@@ -115,8 +132,7 @@ namespace WebEngine
             var ss = new StringBuilder();
 
             if (string.IsNullOrEmpty(mimeType))
-                mimeType = "text/html";
-
+            mimeType = "text/html";
             ss.Append(serverProtocol);
             ss.Append(statusCode).AppendLine();
             ss.AppendLine("Sever: EugeneServer");
@@ -129,10 +145,10 @@ namespace WebEngine
             byte[] dataToSend = Encoding.Default.GetBytes(ss.ToString());
             ss.Clear();
             SendData(dataToSend, ref sockets);
-            Console.WriteLine("{0} bytes have been sent", totalBytes.ToString());
+            Console.WriteLine("{0} bytes have been sent", totalBytes.ToString(CultureInfo.InvariantCulture));
         }
 
-        private string GetCgiData(string cgiFile, string QUERY_STRING, string ext, string remote_address, string SERVER_PROTOCOL, string REFERER, string REQUESTED_METHOD, string USER_AGENT, string request)
+        private string GetCgiData(string cgiFile, string queryString, string ext, string remoteAddress, string serverProtocol, string referer, string requestedMethod, string userAgent, string request)
         {
             var proc = new Process();
 
@@ -145,21 +161,21 @@ namespace WebEngine
                 {
                     return errorMessage;
                 }
-                proc.StartInfo.Arguments = " -q " + cgiFile + " " + QUERY_STRING;
+                proc.StartInfo.Arguments = " -q " + cgiFile + " " + queryString;
             }
             else
             {
                 proc.StartInfo.FileName = cgiFile;
-                proc.StartInfo.Arguments = QUERY_STRING;
+                proc.StartInfo.Arguments = queryString;
             }
             string scriptName = cgiFile.Substring(cgiFile.LastIndexOf('\\') + 1);
             //Set some global variables and output parameters
-            proc.StartInfo.EnvironmentVariables.Add("REMOTE_ADDR", remote_address.ToString());
+            proc.StartInfo.EnvironmentVariables.Add("REMOTE_ADDR", remoteAddress.ToString(CultureInfo.InvariantCulture));
             proc.StartInfo.EnvironmentVariables.Add("SCRIPT_NAME", scriptName);
-            proc.StartInfo.EnvironmentVariables.Add("USER_AGENT", USER_AGENT);
-            proc.StartInfo.EnvironmentVariables.Add("REQUESTED_METHOD", REQUESTED_METHOD);
-            proc.StartInfo.EnvironmentVariables.Add("REFERER", REFERER);
-            proc.StartInfo.EnvironmentVariables.Add("SERVER_PROTOCOL", SERVER_PROTOCOL);
+            proc.StartInfo.EnvironmentVariables.Add("USER_AGENT", userAgent);
+            proc.StartInfo.EnvironmentVariables.Add("REQUESTED_METHOD", requestedMethod);
+            proc.StartInfo.EnvironmentVariables.Add("REFERER", referer);
+            proc.StartInfo.EnvironmentVariables.Add("SERVER_PROTOCOL", serverProtocol);
             proc.StartInfo.EnvironmentVariables.Add("QUERY_STRING", request);
 
             proc.StartInfo.UseShellExecute = false;
@@ -297,17 +313,26 @@ namespace WebEngine
 
                 filePath = serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
+
                 //If the file among forbidden files send the error message
-                //foreach (XElement forbidden in xdoc.Element("configuration").Element("Forbidden").Elements("Path"))
-                //{
-                //    if (filePath.StartsWith(forbidden.Value))
-                //    {
-                //        SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
-                //        SendData(errorMessage, ref sockets);
-                //        sockets.Close();
-                //        return;
-                //    }
-                //}
+                var xElement = this.xdoc.Element("configuration");
+                if (xElement != null)
+                {
+                    var element = xElement.Element("Forbidden");
+                    if (element != null)
+                    {
+                        foreach (XElement forbidden in element.Elements("Path"))
+                        {
+                            if (filePath.StartsWith(forbidden.Value))
+                            {
+                                this.SendHeader(serverProtocol, "", erMesLen, "404 Not Found", ref sockets);
+                                this.SendData(this.errorMessage, ref sockets);
+                                sockets.Close();
+                                return;
+                            }
+                        }
+                    }
+                }
 
                 //If there is no such file send error message
                 if (File.Exists(filePath) == false)
