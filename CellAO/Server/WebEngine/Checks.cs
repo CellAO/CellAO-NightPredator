@@ -92,6 +92,7 @@ namespace WebEngine
                 File.Delete(file);
                 Console.WriteLine();
                 Console.WriteLine("Done.");
+                Checkoutsvn();
             }
         }
 
@@ -99,10 +100,14 @@ namespace WebEngine
         {
             Console.WriteLine();
             Console.WriteLine("Checking out SVN...");
-            Process.Start(@"svn-win32-1.7.5\bin\svn.exe", "co https://simplesqlcellaowebcore.googlecode.com/svn/trunk/webcore" + " " + _config.Instance.CurrentConfig.WebHostRoot);
+            var proc = Process.Start(@"svn-win32-1.7.5\bin\svn.exe", "co https://simplesqlcellaowebcore.googlecode.com/svn/trunk/webcore" + " " + _config.Instance.CurrentConfig.WebHostRoot);
+            if (proc != null)
+            {
+                proc.WaitForExit();
+            }
             Console.WriteLine();
             Console.WriteLine("Done.");
-            Directory.Delete("svn-win32-1.7.5");
+            Directory.Delete("svn-win32-1.7.5", true);
         }
     }
 }
