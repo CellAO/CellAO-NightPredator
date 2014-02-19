@@ -52,6 +52,7 @@ namespace WebEngine
                 Console.WriteLine("Deleting "+ Convert.ToString(file) + "...");
                 File.Delete(file);
                 Console.WriteLine();
+                File.Copy(_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini-production",_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini");
                 Console.WriteLine("Done.");
             }
         }
