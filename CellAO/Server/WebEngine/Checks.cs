@@ -4,6 +4,8 @@ namespace WebEngine
     using System.ComponentModel;
     using System.IO;
     using System.Net;
+    using System.Security.Policy;
+
     using Ionic.Zip;
     using System;
     using _config = Utility.Config.ConfigReadWrite;
@@ -15,22 +17,19 @@ namespace WebEngine
             if (Directory.Exists(_config.Instance.CurrentConfig.WebHostPhpPath) == false)
             {
                 Console.WriteLine();
-                Console.WriteLine("Creating Directory...");
-                Directory.CreateDirectory(_config.Instance.CurrentConfig.WebHostPhpPath);
-                Console.WriteLine("Done");
                  var url = new WebClient();
                  Console.WriteLine();
                 Console.WriteLine("Downloading php..." );
-                 url.DownloadFileCompleted += new AsyncCompletedEventHandler(this.UrlDownloadFileCompleted);
                  url.DownloadFile("http://windows.php.net/downloads/releases/php-5.5.9-nts-Win32-VC11-x86.zip", "php-5.5.9-nts-Win32-VC11-x86.zip");
-                 
+                url.Dispose();
+                this.UrlDownloadFileCompleted();
             }
             else { Console.WriteLine("Php exists.");}
         }
 
-        private void UrlDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private void UrlDownloadFileCompleted()
         {
-            if (e.Error != null) return;
+            
             Console.WriteLine("Download Complete.");
             Console.WriteLine();
             Console.WriteLine("Unzipping File...");
@@ -45,6 +44,13 @@ namespace WebEngine
                 {
                     ze.Extract(_config.Instance.CurrentConfig.WebHostPhpPath, ExtractExistingFileAction.OverwriteSilently);
                 }
+                zip.Dispose();
+                Console.WriteLine("Done.");
+                Console.WriteLine();
+                Console.WriteLine("Deleting "+ Convert.ToString(file) + "...");
+                File.Delete(file);
+                Console.WriteLine();
+                Console.WriteLine("Done.");
             }
         }
 
