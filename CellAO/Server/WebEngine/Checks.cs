@@ -22,9 +22,11 @@ namespace WebEngine
                  var url = new WebClient();
                  Console.WriteLine();
                 Console.WriteLine("Downloading php..." );
-                 url.DownloadFile("http://windows.php.net/downloads/releases/php-5.5.9-nts-Win32-VC11-x86.zip", "php-5.5.9-nts-Win32-VC11-x86.zip");
+                url.DownloadFile("http://windows.php.net/downloads/releases/php-5.5.9-nts-Win32-VC11-x86.zip", "php-5.5.9-nts-Win32-VC11-x86.zip");
+                //url.DownloadFile("http://windows.php.net/downloads/releases/archives/php-5.3.3-Win32-VC9-x86.zip", "php-5.3.3-Win32-VC9-x86.zip");
                 url.Dispose();
                 this.UrlDownloadFileCompleted("php-5.5.9-nts-Win32-VC11-x86.zip");
+                //this.UrlDownloadFileCompleted("php-5.3.3-Win32-VC9-x86.zip");
             }
             else { Console.WriteLine("Php exists.");}
         }
@@ -52,7 +54,10 @@ namespace WebEngine
                 Console.WriteLine("Deleting "+ Convert.ToString(file) + "...");
                 File.Delete(file);
                 Console.WriteLine();
-                File.Copy(_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini-production",_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini");
+                var url = new WebClient();
+                url.DownloadFile("http://www.aocell.info/php.ini", _config.Instance.CurrentConfig.WebHostPhpPath + @"\php.ini");
+                //File.Copy(_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini-production",_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini");
+                Directory.CreateDirectory("c:/temp");
                 Console.WriteLine("Done.");
             }
         }
