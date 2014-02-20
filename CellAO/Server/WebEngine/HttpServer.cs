@@ -324,7 +324,7 @@ namespace WebEngine
                 }
 
                 // Sure that is HTTP -request and get its version
-                int startPos = sBuffer.IndexOf("HTTP", 1, StringComparison.Ordinal);
+                int startPos = sBuffer.IndexOf("HTTP", 1);
                 if (startPos == -1)
                 {
                     this.SendHeader(serverProtocol, string.Empty, badMesLen, "400 Bad Request", ref sockets);
@@ -357,7 +357,7 @@ namespace WebEngine
                 }
 
                 // Get request method
-                REQUESTED_METHOD = sBuffer.Substring(0, sBuffer.IndexOf(" ", StringComparison.Ordinal));
+                REQUESTED_METHOD = sBuffer.Substring(0, sBuffer.IndexOf(" "));
                 int lastPos = sBuffer.IndexOf('/') + 1;
                 request = sBuffer.Substring(lastPos, startPos - lastPos - 1);
 
