@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CellAO.Core.Entities.Character">
+    <Position X="3" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>jAgAAPEQCOBmDgjIBEoAAACgIBTFkQCUIAAABzEAAAY=</HashCode>
+      <FileName>Entities\Character.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MainInventory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Entities.Dynel">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAEAAECEAAAAACAAAAAQgEAAABAAAAAAABAEAABg=</HashCode>
+      <FileName>Entities\Dynel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BaseInventory" />
+      <Property Name="Stats" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.183" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.BaseInventoryPages" Collapsed="true">
+    <Position X="5.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAACAAAAAAAggKAAAAASgAAAAAAAEgIIAAAEAAAA=</HashCode>
+      <FileName>Inventory\BaseInventoryPages.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.PlayerInventory">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\PlayerInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.UnitInventory" Collapsed="true">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <InheritanceLine Type="CellAO.Core.Inventory.BaseInventoryPages" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="1.312" />
+        <Point X="6" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\UnitInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.ArmorInventoryPage" Collapsed="true">
+    <Position X="7.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Inventory\ArmorInventoryPage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.BackPackInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\BackPackInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.BankInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\BankInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.BaseInventoryPage" Collapsed="true">
+    <Position X="8.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAADAgAoAQAEQAKAAABEAiAAAABACgAEAAAIFIAAI=</HashCode>
+      <FileName>Inventory\BaseInventoryPage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.221" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.ImplantInventoryPage" Collapsed="true">
+    <Position X="7.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Inventory\ImplantInventoryPage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.IncomingTradeInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\IncomingTradeInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.KnuBotTradeInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\KnuBotTradeInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.OutgoingTradeInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\OutgoingTradeInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.OverflowInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\OverflowInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.PlayerShopInventoryPage" Collapsed="true">
+    <Position X="10.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\PlayerShopInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CellAO.Core.Inventory.SocialArmorInventoryPage" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.5" />
+    <InheritanceLine Type="CellAO.Core.Inventory.BaseInventoryPage" FixedToPoint="true">
+      <Path>
+        <Point X="9.25" Y="1.312" />
+        <Point X="9.25" Y="1.625" />
+        <Point X="8" Y="1.625" />
+        <Point X="8" Y="2" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Inventory\SocialArmorInventoryPage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Core.Inventory.WeaponInventoryPage" Collapsed="true">
+    <Position X="7.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Inventory\WeaponInventoryPage.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CellAO.Stats.Stats" Collapsed="true">
+    <Position X="0.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="CellAO.Core.Inventory.IInventoryPage">
+    <Position X="6" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAABAgAAAQAAQAKAAABAAiAAAABACAAAAAAAEAAAI=</HashCode>
+      <FileName>Inventory\IInventoryPage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CellAO.Core.Inventory.IInventoryPages" Collapsed="true">
+    <Position X="0.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAACAAAAAAAggKAAAAASgAAAAAAAEgIIAAAEAAAA=</HashCode>
+      <FileName>Inventory\IInventoryPages.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CellAO.Stats.IStatList">
+    <Position X="0.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
