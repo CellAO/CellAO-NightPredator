@@ -57,7 +57,7 @@ namespace WebEngine
                 var url = new WebClient();
                 url.DownloadFile("http://www.aocell.info/php.ini", _config.Instance.CurrentConfig.WebHostPhpPath + @"\php.ini");
                 //File.Copy(_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini-production",_config.Instance.CurrentConfig.WebHostPhpPath+@"\php.ini");
-                Directory.CreateDirectory("c:/temp");
+                Directory.CreateDirectory(@"c:\temp");
                 Console.WriteLine("Done.");
             }
         }
