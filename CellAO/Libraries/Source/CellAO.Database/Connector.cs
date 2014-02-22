@@ -80,6 +80,8 @@ namespace CellAO.Database
         /// <summary>
         /// Get IDbConnection depending on configuration file
         /// </summary>
+        /// <param name="existingConnection">
+        /// </param>
         /// <returns>
         /// IDbConnection to the database
         /// </returns>
@@ -89,40 +91,47 @@ namespace CellAO.Database
         /// <exception cref="ConnectionStringErrorException">
         /// Connection could not be established (check config.xml)
         /// </exception>
-        public static IDbConnection GetConnection()
+        public static IDbConnection GetConnection(IDbConnection existingConnection = null)
         {
-            IDbConnection conn = null;
-            if (connector == null)
-            {
-                if (sqlType == "MySql")
-                {
-                    connector = new MySQLConnector(ConnectionStringMySql);
-                }
-
-                if (sqlType == "MsSql")
-                {
-                    connector = new MSSqlConnector(ConnectionStringMssql);
-                }
-
-                if (sqlType == "PostgreSQL")
-                {
-                    connector = new NpgsqlConnector(ConnectionStringPostGreSql);
-                }
-            }
-
-            if (connector == null)
-            {
-                throw new DatabaseCouldNotBeDeterminedException("Could not determine your database");
-            }
-
-            conn = connector.GetConnection();
-
+            IDbConnection conn = existingConnection;
             if (conn == null)
             {
-                throw new ConnectionStringErrorException("ConnectionString error");
+                if (connector == null)
+                {
+                    if (sqlType == "MySql")
+                    {
+                        connector = new MySQLConnector(ConnectionStringMySql);
+                    }
+
+                    if (sqlType == "MsSql")
+                    {
+                        connector = new MSSqlConnector(ConnectionStringMssql);
+                    }
+
+                    if (sqlType == "PostgreSQL")
+                    {
+                        connector = new NpgsqlConnector(ConnectionStringPostGreSql);
+                    }
+                }
+
+                if (connector == null)
+                {
+                    throw new DatabaseCouldNotBeDeterminedException("Could not determine your database");
+                }
+
+                conn = connector.GetConnection();
+
+                if (conn == null)
+                {
+                    throw new ConnectionStringErrorException("ConnectionString error");
+                }
             }
 
-            conn.Open();
+            if ((conn.State == ConnectionState.Closed) || (conn.State == ConnectionState.Broken))
+            {
+                conn.Open();
+            }
+
             return conn;
         }
 

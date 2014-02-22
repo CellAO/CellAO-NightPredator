@@ -26,12 +26,22 @@
 
 namespace CellAO.Database.Dao
 {
+    #region Usings ...
+
+    using CellAO.Database.Entities;
+
+    #endregion
+
     /// <summary>
     /// Data object for non instanced items
     /// </summary>
-    public class DBItem
+    public class DBItem : IDBEntity
     {
         #region Public Properties
+
+        /// <summary>
+        /// </summary>
+        public int Id { get; set; }
 
         /// <summary>
         /// Instance id of the container

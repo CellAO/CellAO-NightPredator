@@ -324,7 +324,7 @@ namespace CellAO.Core.Inventory
         {
             int containerType = (int)this.Identity.Type;
 
-            foreach (DBItem item in ItemDao.GetAllInContainer(containerType, this.Identity.Instance))
+            foreach (DBItem item in ItemDao.Instance.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -390,7 +390,7 @@ namespace CellAO.Core.Inventory
 
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.RemoveItem(containerType, this.Identity.Instance, slotNum);
+                ItemDao.Instance.Delete(new DynamicParameters(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum }));
             }
             else
             {
@@ -534,8 +534,8 @@ namespace CellAO.Core.Inventory
                 }
             }
 
-            ItemDao.Save(DBuninstanced);
-            InstancedItemDao.Save(DBinstanced);
+            ItemDao.Instance.Save(DBuninstanced);
+            InstancedItemDao.Instance.Save(DBinstanced);
             return true;
         }
 

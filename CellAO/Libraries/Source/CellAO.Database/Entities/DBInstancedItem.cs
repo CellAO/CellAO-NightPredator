@@ -40,6 +40,10 @@ namespace CellAO.Database.Dao
     public class DBInstancedItem : IDBEntity
     {
         #region Public Properties
+        /// <summary>
+        /// Instance id of the item
+        /// </summary>
+        public int Id { get; set; }
 
         /// <summary>
         /// Instance of the container
@@ -82,11 +86,6 @@ namespace CellAO.Database.Dao
         public int highid { get; set; }
 
         /// <summary>
-        /// Instance id of the item
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Type id of the instance
         /// </summary>
         public int itemtype { get; set; }
@@ -107,7 +106,7 @@ namespace CellAO.Database.Dao
         public int quality { get; set; }
 
         /// <summary>
-        /// Item's stats
+        /// Item's stats held as blob from msgpack serialization
         /// </summary>
         public Binary stats { get; set; }
 

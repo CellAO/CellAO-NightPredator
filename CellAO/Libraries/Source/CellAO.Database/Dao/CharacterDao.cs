@@ -45,6 +45,7 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Character Data Access Object
     /// </summary>
+    [Tablename("characters")]
     public class CharacterDao : Dao<DBCharacter> // , IDao<DBCharacter> // WTF
     {
 
@@ -58,39 +59,37 @@ namespace CellAO.Database.Dao
             }
         }
 
-        public CharacterDao() {
-            this.TableName = "characters"; //  a bit annoying, maybe move to class attribute at one point in time....
-        } 
-
         #endregion
 
         /// <summary>
         /// </summary>
         /// <param name="id">
         /// </param>
-        public new void Delete(int id) // NEW AND FUUUUUCK YOU VS
+        /// <param name="connection"></param>
+        /// <param name="transaction"></param>
+        public new void Delete(int id, IDbConnection connection = null, IDbTransaction transaction = null) // NEW AND FUUUUUCK YOU VS
         {
 
-            using (IDbConnection conn = Connector.GetConnection())
+            using (IDbConnection conn = Connector.GetConnection(connection))
             {
                 // TODO : move these two to their own DAOs
 
                 // remove this character from organisations
-                conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id });
+                conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id }, transaction);
 
                 // empty this characters inventory
-                conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id });
+                conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id }, transaction);
             }
 
             // deletes this character
-            base.Delete(id);
+            base.Delete(id, connection, transaction);
 
             // delete characters stats
             StatDao.DeleteStats(50000, id);
 
         }
 
-         /// <summary>
+        /// <summary>
         /// Does the Character exist
         /// </summary>
         /// <param name="name">
@@ -101,7 +100,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public bool ExistsByName(string name)
         {
-            return GetByCharName(name) != null; 
+            return GetByCharName(name) != null;
         }
 
         /// <summary>
@@ -132,7 +131,7 @@ namespace CellAO.Database.Dao
             return CharacterDao.Instance.GetAll(new DynamicParameters(new { name = name })).FirstOrDefault();
         }
 
-       
+
 
         /// <summary>
         /// Get the name of a character by id
@@ -153,7 +152,7 @@ namespace CellAO.Database.Dao
                     conn.Query<string>(SQL, new { characterId })
                         .FirstOrDefault();
             }
-            if (name == null) 
+            if (name == null)
                 name = string.Empty;
             return name;
         }
@@ -177,7 +176,7 @@ namespace CellAO.Database.Dao
                 p.Add("characterId", characterId);
                 result = conn.Query<int>(SQL, p).Count() == 1;
             }
-           return result;
+            return result;
         }
 
         /// <summary>
@@ -188,22 +187,16 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="pfNum">
         /// </param>
-        public void SetPlayfield(int charId, int pfType, int pfNum)
+        /// <param name="connection"></param>
+        /// <param name="transaction"></param>
+        public void SetPlayfield(int charId, int pfType, int pfNum, IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            // TODO: Use CharacterDao.Instance.Save instead....
 
-            const string SQL = "UPDATE characters SET playfield=@PF WHERE ID=@characterId";
-            int rowsAffected = 0;
-            using (IDbConnection conn = Connector.GetConnection())
-            {
-                // TODO: extend character table for GameServerId, SgId and playfield type
-                rowsAffected = conn.Execute(
-                    SQL, 
-                    new { PF = pfNum, characterId = charId });
+            // TODO: extend character table for GameServerId, SgId and playfield type
+            int rowsAffected = CharacterDao.Instance.Save(new DBCharacter { Id = charId }, new DynamicParameters(new { Playfield = pfNum }));
 
-                // should ensure that rowsAffected == 1 otherwise ???
-            }
-           
+            // should ensure that rowsAffected == 1 otherwise ???
+
         }
 
         #region Buddies
@@ -225,7 +218,7 @@ namespace CellAO.Database.Dao
                 // saves to the database
                 DynamicParameters parameters = new DynamicParameters(character);
                 parameters.Add("BuddyList", character.BuddyList);
-                this.Save( character, parameters );
+                this.Save(character, parameters);
             }
         }
 
@@ -246,7 +239,7 @@ namespace CellAO.Database.Dao
                 // saves to the database
                 DynamicParameters parameters = new DynamicParameters(character);
                 parameters.Add("BuddyList", character.BuddyList);
-                this.Save( character, parameters );
+                this.Save(character, parameters);
             }
         }
 

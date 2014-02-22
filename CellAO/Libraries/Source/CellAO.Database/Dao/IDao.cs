@@ -50,19 +50,40 @@ namespace CellAO.Database.Dao
         /// </summary>
         /// <param name="dbentity">
         /// </param>
+        /// <param name="connection">
+        /// </param>
         /// <param name="transaction">
         /// </param>
         /// <returns>
         /// </returns>
-        int Add(T dbentity, IDbTransaction transaction = null);
+        int Add(T dbentity, IDbConnection connection = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// </summary>
         /// <param name="entityId">
         /// </param>
+        /// <param name="connection">
+        /// </param>
         /// <param name="transaction">
         /// </param>
-        void Delete(int entityId, IDbTransaction transaction = null);
+        /// <returns>
+        /// </returns>
+        int Delete(int entityId, IDbConnection connection = null, IDbTransaction transaction = null);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="whereParameters">
+        /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        int Delete(
+            DynamicParameters whereParameters, 
+            IDbConnection connection = null, 
+            IDbTransaction transaction = null);
 
         /// <summary>
         /// </summary>
@@ -84,11 +105,9 @@ namespace CellAO.Database.Dao
         /// </summary>
         /// <param name="parameters">
         /// </param>
-        /// <param name="transaction">
-        /// </param>
         /// <returns>
         /// </returns>
-        IEnumerable<T> GetAll(DynamicParameters parameters = null, IDbTransaction transaction = null);
+        IEnumerable<T> GetAll(DynamicParameters parameters = null);
 
         /// <summary>
         /// </summary>
@@ -96,11 +115,17 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="parameters">
         /// </param>
+        /// <param name="connection">
+        /// </param>
         /// <param name="transaction">
         /// </param>
         /// <returns>
         /// </returns>
-        int Save(T dbentity, DynamicParameters parameters = null, IDbTransaction transaction = null);
+        int Save(
+            T dbentity, 
+            DynamicParameters parameters = null, 
+            IDbConnection connection = null, 
+            IDbTransaction transaction = null);
 
         #endregion
     }
