@@ -31,6 +31,7 @@ namespace CellAO.Database.Dao
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
 
     using Dapper;
 
@@ -47,12 +48,17 @@ namespace CellAO.Database.Dao
 
         /// <summary>
         /// </summary>
-        public static new InstancedItemDao Instance
+        public static InstancedItemDao Instance
         {
-            // NEW AND FUCK U LOL
             get
             {
-                return (InstancedItemDao)Dao<DBInstancedItem>.Instance; // THIS IS VICIOUS
+                if (_instance == null)
+                {
+                    _instance = new InstancedItemDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (InstancedItemDao)_instance;
             }
         }
 

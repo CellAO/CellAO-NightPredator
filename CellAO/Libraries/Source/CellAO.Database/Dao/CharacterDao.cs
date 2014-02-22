@@ -45,17 +45,22 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Character Data Access Object
     /// </summary>
-    [Tablename("characters")]
     public class CharacterDao : Dao<DBCharacter> // , IDao<DBCharacter> // WTF
     {
 
         #region Required
 
-        public static new CharacterDao Instance // NEW AND FUCK U LOL
+        public static CharacterDao Instance
         {
             get
             {
-                return (CharacterDao)Dao<DBCharacter>.Instance; // THIS IS VICIOUS
+                if (_instance == null)
+                {
+                    _instance = new CharacterDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (CharacterDao)_instance;
             }
         }
 

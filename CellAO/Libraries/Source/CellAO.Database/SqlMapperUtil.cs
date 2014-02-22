@@ -11,6 +11,8 @@ using Dapper;
 
 namespace CellAO.Database
 {
+    using Utility.Config;
+
     public static class SqlMapperUtil
     {
 
@@ -43,9 +45,20 @@ namespace CellAO.Database
             return p;
         }
 
+        private static string scopeIdentity = string.Empty;
         public static void SetIdentity<T>(IDbConnection connection, Action<T> setId, IDbTransaction transaction = null)
         {
-            dynamic identity = connection.Query("SELECT @@SCOPE_IDENTITY AS Id", transaction: transaction).Single();
+            if (scopeIdentity == string.Empty)
+            {
+                scopeIdentity = ConfigReadWrite.Instance.CurrentConfig.SQLType.ToLower() == "mysql"
+                    ? "LAST_INSERT_ID()"
+                    : ConfigReadWrite.Instance.CurrentConfig.SQLType.ToLower() == "mssql"
+                        ? "@@SCOPE_IDENTITY"
+                        : "LASTVAL()";
+            }
+
+            dynamic identity =
+                connection.Query(string.Concat("SELECT ", scopeIdentity, " AS Id"), transaction: transaction).Single();
             T newId = (T)identity.Id;
             setId(newId);
         }
@@ -210,13 +223,19 @@ namespace CellAO.Database
             StringBuilder sb = new StringBuilder(string.Concat("INSERT INTO ", tablename, " ( "));
             foreach (string pname in parameters.ParameterNames)
             {
-                sb.AppendFormat("{0},", pname);
+                if (pname.ToLower() != "id")
+                {
+                    sb.AppendFormat("{0},", pname);
+                }
             }
             sb.Remove(sb.Length - 1, 1); //  remove last ','
             sb.Append(" ) VALUES ( ");
             foreach (string pname in parameters.ParameterNames)
             {
-                sb.AppendFormat("@{0},", pname);
+                if (pname.ToLower() != "id")
+                {
+                    sb.AppendFormat("@{0},", pname);
+                }
             }
             sb.Remove(sb.Length - 1, 1); //  remove last ','
             sb.Append(" ) ");

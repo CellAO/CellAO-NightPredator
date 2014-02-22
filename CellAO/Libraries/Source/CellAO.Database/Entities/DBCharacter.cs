@@ -27,9 +27,12 @@
 using System.Collections.Generic;
 namespace CellAO.Database.Entities
 {
+    using CellAO.Database.Dao;
+
     /// <summary>
     /// Data object for Character DAO
     /// </summary>
+    [Tablename("characters")]
     public class DBCharacter : IDBEntity
     {
         #region Public Properties

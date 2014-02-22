@@ -35,6 +35,7 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data object for non instanced items
     /// </summary>
+    [Tablename("items")]
     public class DBItem : IDBEntity
     {
         #region Public Properties

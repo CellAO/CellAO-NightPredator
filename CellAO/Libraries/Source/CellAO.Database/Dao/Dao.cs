@@ -28,10 +28,12 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
 
     using CellAO.Core.Exceptions;
     using CellAO.Database.Entities;
@@ -55,7 +57,7 @@ namespace CellAO.Database.Dao
 
         /// <summary>
         /// </summary>
-        private static Dao<T> instance = default(Dao<T>);
+        protected static Dao<T> _instance = default(Dao<T>);
 
         #endregion
 
@@ -63,24 +65,6 @@ namespace CellAO.Database.Dao
 
         /// <summary>
         /// </summary>
-        public static Dao<T> Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Dao<T>();
-                    if (typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).Any())
-                    {
-                        instance.TableName =
-                            ((TablenameAttribute)typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).First())
-                                .Tablename;
-                    }
-                }
-
-                return instance;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -103,7 +87,7 @@ namespace CellAO.Database.Dao
                     lock (cachedProperties)
                     {
                         cachedProperties.Clear();
-                        foreach (PropertyInfo property in typeof(T).GetProperties())
+                        foreach (PropertyInfo property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
                         {
                             cachedProperties.Add(property.Name, property);
                         }
@@ -112,6 +96,15 @@ namespace CellAO.Database.Dao
 
                 return cachedProperties;
             }
+        }
+
+        protected static string getTablename()
+        {
+            if (!typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).Any())
+            {
+                throw new Exception("You forgot to set the TablenameAttribute on class " + typeof(T).FullName);
+            }
+            return ((TablenameAttribute)typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).First()).Tablename;
         }
 
         #endregion
@@ -137,7 +130,7 @@ namespace CellAO.Database.Dao
             using (IDbConnection conn = Connector.GetConnection(connection))
             {
                 rowsAffected = conn.Execute(
-                    SqlMapperUtil.CreateInsertSQL(this.TableName, this.getAllParameters()),
+                    SqlMapperUtil.CreateInsertSQL(this.TableName, this.getAllParameters(entity)),
                     entity,
                     transaction);
 
@@ -283,13 +276,13 @@ namespace CellAO.Database.Dao
         {
             int rowsAffected = 0;
 
-            using (IDbConnection conn = Connector.GetConnection())
+            using (IDbConnection conn = Connector.GetConnection(connection))
             {
                 rowsAffected =
                     conn.Execute(
                         SqlMapperUtil.CreateUpdateSQL(
                             this.TableName,
-                            parameters ?? this.getAllParameters()),
+                            parameters ?? this.getAllParameters(entity)), parameters ?? this.getAllParameters(entity),
                         transaction);
             }
 
@@ -310,7 +303,7 @@ namespace CellAO.Database.Dao
                     foreach (T entity in entities)
                     {
                         Delete(entity.Id);
-                        rowsAffected+=Save(entity, null, conn, trans);
+                        rowsAffected += Save(entity, null, conn, trans);
                     }
                     trans.Commit();
                 }
@@ -326,12 +319,12 @@ namespace CellAO.Database.Dao
         /// </summary>
         /// <returns>
         /// </returns>
-        private DynamicParameters getAllParameters()
+        private DynamicParameters getAllParameters(T item)
         {
             DynamicParameters parameters = new DynamicParameters(this);
             foreach (string propertyName in CachedProperties.Keys)
             {
-                parameters.Add(propertyName, CachedProperties[propertyName].GetValue(this, null));
+                parameters.Add(propertyName, CachedProperties[propertyName].GetValue(item, null));
             }
 
             return parameters;
