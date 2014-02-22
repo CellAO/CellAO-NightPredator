@@ -75,6 +75,7 @@
     <Compile Include="Dao\OrganizationDao.cs" />
     <Compile Include="Dao\RecentMessagesDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
+    <Compile Include="Dao\TablenameAttribute.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
     <Compile Include="Dao\UploadedNanosDao.cs" />
     <Compile Include="Entities\DBMobTemplate.cs" />

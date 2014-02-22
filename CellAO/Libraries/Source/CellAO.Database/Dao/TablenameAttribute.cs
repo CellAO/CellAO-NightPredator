@@ -28,79 +28,33 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-    using System.Data;
-
-    using CellAO.Database.Entities;
-
-    using Dapper;
+    using System;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    /// <typeparam name="T">
-    /// </typeparam>
-    public interface IDao<T>
-        where T : IDBEntity
+    [AttributeUsage(AttributeTargets.Class)]
+    public class TablenameAttribute : Attribute
     {
-        #region Public Methods and Operators
+        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        /// <param name="dbentity">
+        /// <param name="tablename">
         /// </param>
-        /// <param name="transaction">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int Add(T dbentity, IDbTransaction transaction = null);
+        public TablenameAttribute(string tablename)
+        {
+            this.Tablename = tablename;
+        }
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// </summary>
-        /// <param name="entityId">
-        /// </param>
-        /// <param name="transaction">
-        /// </param>
-        void Delete(int entityId, IDbTransaction transaction = null);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="entityId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool Exists(int entityId);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="entityId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        T Get(int entityId);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="parameters">
-        /// </param>
-        /// <param name="transaction">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        IEnumerable<T> GetAll(DynamicParameters parameters = null, IDbTransaction transaction = null);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="dbentity">
-        /// </param>
-        /// <param name="parameters">
-        /// </param>
-        /// <param name="transaction">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        int Save(T dbentity, DynamicParameters parameters = null, IDbTransaction transaction = null);
+        public string Tablename { get; set; }
 
         #endregion
     }

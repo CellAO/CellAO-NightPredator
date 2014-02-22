@@ -30,12 +30,14 @@ namespace CellAO.Database.Dao
 
     using System.Data.Linq;
 
+    using CellAO.Database.Entities;
+
     #endregion
 
     /// <summary>
     /// Data object for instanced items
     /// </summary>
-    public class DBInstancedItem
+    public class DBInstancedItem : IDBEntity
     {
         #region Public Properties
 
@@ -82,7 +84,7 @@ namespace CellAO.Database.Dao
         /// <summary>
         /// Instance id of the item
         /// </summary>
-        public int iteminstance { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Type id of the instance
@@ -125,5 +127,6 @@ namespace CellAO.Database.Dao
         public float z { get; set; }
 
         #endregion
+
     }
 }

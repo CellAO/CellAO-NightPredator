@@ -41,31 +41,9 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for instanced items
     /// </summary>
-    public static class InstancedItemDao
+    public class InstancedItemDao : Dao<DBInstancedItem>
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        /// Load all instanced items
-        /// </summary>
-        /// <returns>
-        /// Collection of DBInstancedItem
-        /// </returns>
-        public static IEnumerable<DBInstancedItem> GetAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBInstancedItem>("SELECT * FROM instanceditems");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
 
         /// <summary>
         /// Load all instanced items in a specific container
@@ -89,33 +67,6 @@ namespace CellAO.Database.Dao
                         conn.Query<DBInstancedItem>(
                             "SELECT * FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance", 
                             new { containertype, containerinstance });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Load instanced item by id
-        /// </summary>
-        /// <param name="itemid">
-        /// id of the item to load
-        /// </param>
-        /// <returns>
-        /// Collection of DBInstancedItem
-        /// </returns>
-        public static IEnumerable<DBInstancedItem> GetById(int itemid)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBInstancedItem>(
-                        "SELECT * FROM instanceditems where id = @id", 
-                        new { id = itemid });
                 }
             }
             catch (Exception e)
@@ -156,51 +107,6 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
-        /// Insert a DBInstancedItem into table
-        /// </summary>
-        /// <param name="item">
-        /// Item to write
-        /// </param>
-        public static void Save(DBInstancedItem item)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
-                        + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
-                        + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)", 
-                        new
-                        {
-                            conttype = item.containertype, 
-                            continstance = item.containerinstance, 
-                            contplacement = item.containerplacement, 
-                            itype = item.itemtype, 
-                            iinstance = item.iteminstance, 
-                            low = item.lowid, 
-                            high = item.highid, 
-                            ql = item.quality, 
-                            mc = item.multiplecount, 
-                            ix = item.x, 
-                            iy = item.y, 
-                            iz = item.z, 
-                            hx = item.headingx, 
-                            hy = item.headingy, 
-                            hz = item.headingz, 
-                            hw = item.headingw, 
-                            st = item.stats
-                        });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
         /// Insert a list of DBInstancedItems to table
         /// </summary>
         /// <param name="items">
@@ -226,7 +132,7 @@ namespace CellAO.Database.Dao
                         foreach (DBInstancedItem item in items)
                         {
                             conn.Execute(
-                                "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
+                                "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,Id"
                                 + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
                                 + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)", 
                                 new
@@ -235,7 +141,7 @@ namespace CellAO.Database.Dao
                                     continstance = item.containerinstance, 
                                     contplacement = item.containerplacement, 
                                     itype = item.itemtype, 
-                                    iinstance = item.iteminstance, 
+                                    iinstance = item.Id, 
                                     low = item.lowid, 
                                     high = item.highid, 
                                     ql = item.quality, 

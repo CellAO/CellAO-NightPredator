@@ -43,9 +43,9 @@ namespace CellAO.Database
             return p;
         }
 
-        public static void SetIdentity<T>(IDbConnection connection, Action<T> setId)
+        public static void SetIdentity<T>(IDbConnection connection, Action<T> setId, IDbTransaction transaction = null)
         {
-            dynamic identity = connection.Query("SELECT @@SCOPE_IDENTITY AS Id").Single();
+            dynamic identity = connection.Query("SELECT @@SCOPE_IDENTITY AS Id", transaction: transaction).Single();
             T newId = (T)identity.Id;
             setId(newId);
         }
@@ -191,13 +191,13 @@ namespace CellAO.Database
             if (parameters == null)
                 throw new ArgumentNullException("Cannot create Update SQL statement without parameters");
 
-            StringBuilder sb = new StringBuilder(string.Concat("UPDATE " , tablename , " SET "));
+            StringBuilder sb = new StringBuilder(string.Concat("UPDATE ", tablename, " SET "));
             foreach (string pname in parameters.ParameterNames)
             {
                 if (pname.ToLower() != "id")
                     sb.AppendFormat("{0} = @{0},", pname);
             }
-            sb.Remove(sb.Length-1, 1);
+            sb.Remove(sb.Length - 1, 1);
             sb.Append(" WHERE id=@id ");
             return sb.ToString();
         }
@@ -223,9 +223,24 @@ namespace CellAO.Database
             return sb.ToString();
         }
 
-        public static string CreateDeleteSQL(string tablename)
+
+        public static string CreateDeleteSQL(string tablename, DynamicParameters whereParameters = null)
         {
-            return string.Concat("DELETE FROM ", tablename, " WHERE Id = @Id "); // just to make it consistent :p
+            StringBuilder sb = new StringBuilder(string.Format("DELETE FROM {0}", tablename));
+            if (whereParameters == null)
+            {
+                sb.Append(" WHERE Id = @Id ");
+            }
+            else
+            {
+                sb.Append(" WHERE ");
+                foreach (string pname in whereParameters.ParameterNames)
+                {
+                    sb.AppendFormat(" ( {0} = @{0} ) AND", pname); // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
+                }
+                sb.Remove(sb.Length - 3, 3); //  remove trailing 'AND'
+            }
+            return sb.ToString();
         }
 
         public static string CreateGetSQL(string tablename, DynamicParameters whereParameters = null)
