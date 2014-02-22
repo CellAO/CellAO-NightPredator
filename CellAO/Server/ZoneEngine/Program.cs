@@ -808,7 +808,7 @@ namespace ZoneEngine
         {
             // TODO: Read playfield data, check which playfields have to be created, and create them
             // TODO: Cache neccessary Spawns and Mobs
-            // TODO: Cache neccessary Doors
+            // TODO: Cache neccessary Doors 
             // TODO: Cache neccessary statels
             // TODO: Cache Vendors
 

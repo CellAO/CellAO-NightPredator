@@ -53,7 +53,7 @@ namespace LoginEngine.QueryBase
         {
             var characters = new List<CharacterEntry>();
 
-            foreach (DBCharacter ch in CharacterDao.GetAllForUser(accountName))
+            foreach (DBCharacter ch in CharacterDao.Instance.GetAllForUser(accountName))
             {
                 var charentry = new CharacterEntry();
                 charentry.Id = ch.Id;

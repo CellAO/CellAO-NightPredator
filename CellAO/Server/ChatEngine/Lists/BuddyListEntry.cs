@@ -26,25 +26,25 @@
 
 namespace ChatEngine.Lists
 {
-    /// <summary>
-    /// The buddy list entry.
-    /// </summary>
-    public class BuddyListEntry
-    {
-        #region Public Properties
+    ///// <summary>
+    ///// The buddy list entry.
+    ///// </summary>
+    //public class BuddyListEntry
+    //{
+    //    #region Public Properties
 
-        /// <summary>
-        /// The buddy id.
-        /// </summary>
-        public uint BuddyId { get; set; }
+    //    /// <summary>
+    //    /// The buddy id.
+    //    /// </summary>
+    //    public uint BuddyId { get; set; }
 
-        /// <summary>
-        /// The player id.
-        /// </summary>
-        public uint PlayerId { get; set; }
+    //    /// <summary>
+    //    /// The player id.
+    //    /// </summary>
+    //    public uint PlayerId { get; set; }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
     /// <summary>
     /// The recent msgs entry.

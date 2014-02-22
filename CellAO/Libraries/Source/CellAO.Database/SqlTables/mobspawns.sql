@@ -21,3 +21,9 @@ CREATE TABLE  `mobspawns` (
   `AdditionalMeshs` blob,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+
+
+--
+-- Below is an example set of a few mob spawns, this must be updated during level design.
+--
+

@@ -14,6 +14,10 @@ CREATE TABLE `vendors` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Below is an example set of a few vendors, this must be updated during level design.
+--
+
 INSERT INTO `vendors` (`ID`,`Playfield`,`X`,`Y`,`Z`,`HeadingX`,`HeadingY`,`HeadingZ`,`HeadingW`,`Name`,`TemplateID`,`Hash`) VALUES (77332496,1180,197.016,5.01,203.013,0,0.709066,0,0.705142,'',90562,'TraCB');
 INSERT INTO `vendors` (`ID`,`Playfield`,`X`,`Y`,`Z`,`HeadingX`,`HeadingY`,`HeadingZ`,`HeadingW`,`Name`,`TemplateID`,`Hash`) VALUES (77332497,1180,197.01,5.01,198.96,0,0.698414,0,0.715694,'',90564,'SolCB');
 INSERT INTO `vendors` (`ID`,`Playfield`,`X`,`Y`,`Z`,`HeadingX`,`HeadingY`,`HeadingZ`,`HeadingW`,`Name`,`TemplateID`,`Hash`) VALUES (77332495,1180,197.01,5.01,207.01,0,0.712582,0,0.701589,'',90589,'AdvCB');

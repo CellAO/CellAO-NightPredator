@@ -83,7 +83,7 @@ namespace CellAO.Database.Dao
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    character = CharacterDao.GetById(charId).First();
+                    character = CharacterDao.Instance.Get(charId);
                     DynamicParameters p = new DynamicParameters();
                     p.Add("username", character.Username);
                     return conn.Query<DBLoginData>("SELECT * FROM login WHERE Username=@username", p).First();
@@ -136,7 +136,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void LogoffChars(string user)
         {
-            IEnumerable<DBCharacter> characters = CharacterDao.GetAllForUser(user);
+            IEnumerable<DBCharacter> characters = CharacterDao.Instance.GetAllForUser(user); // LOL
             foreach (DBCharacter character in characters)
             {
                 OnlineDao.SetOffline(character.Id);

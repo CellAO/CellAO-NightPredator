@@ -1,5 +1,6 @@
 CREATE TABLE  `charactersmeshs` (
-  `ID` int(11) NOT NULL,
+	`ID` int(32) NOT NULL AUTO_INCREMENT,
+	-- charID ??
   `playfield` int(11) NOT NULL,
   `meshvalue1` int(11) NOT NULL,
   `meshvalue2` int(11) NOT NULL,

@@ -651,7 +651,7 @@ namespace CellAO.Core.Playfields
             dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
             dynel.Save();
-            CharacterDao.SetPlayfield(dynel.Identity.Instance, (int)playfield.Type, playfield.Instance);
+            CharacterDao.Instance.SetPlayfield(dynel.Identity.Instance, (int)playfield.Type, playfield.Instance);
 
             // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
             // for now, just transmit our ip and port

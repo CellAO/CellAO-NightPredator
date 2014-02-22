@@ -54,7 +54,7 @@ namespace ChatEngine.Packets
         public static byte[] Create(string username)
         {
             PacketWriter writer = new PacketWriter(0x07);
-            IEnumerable<DBCharacter> chars = CharacterDao.GetAllForUser(username);
+            IEnumerable<DBCharacter> chars = CharacterDao.Instance.GetAllForUser(username);
 
             byte[] numberOfCharacters = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)chars.Count()));
             writer.WriteBytes(numberOfCharacters);

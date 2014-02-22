@@ -308,7 +308,7 @@ namespace CellAO.Core.Entities
         public override bool Read()
         {
             this.DoNotDoTimers = true;
-            DBCharacter daochar = CharacterDao.GetById(this.Identity.Instance).FirstOrDefault();
+            DBCharacter daochar = CharacterDao.Instance.Get(this.Identity.Instance);
             if (daochar != null)
             {
                 this.Name = daochar.Name;
@@ -339,11 +339,14 @@ namespace CellAO.Core.Entities
         public override bool Write()
         {
             this.BaseInventory.Write();
-            CharacterDao.UpdatePosition(this.GetDBCharacter());
-            CharacterDao.SetPlayfield(
+
+            CharacterDao.Instance.Save(this.GetDBCharacter()); 
+
+            CharacterDao.Instance.SetPlayfield(
                 this.Identity.Instance,
                 (int)this.Playfield.Identity.Type,
                 this.Playfield.Identity.Instance);
+
             return base.Write();
         }
 

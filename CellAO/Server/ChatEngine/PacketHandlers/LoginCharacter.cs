@@ -76,7 +76,7 @@ namespace ChatEngine.PacketHandlers
                 OnlineDao.SetOnline((int)playerId);
             }
 
-            DBCharacter character = CharacterDao.GetById((int)playerId).First();
+            DBCharacter character = CharacterDao.Instance.Get((int)playerId);
 
             client.Character.CharacterId = playerId;
             client.Character.characterName = character.Name;

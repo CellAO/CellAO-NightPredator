@@ -84,12 +84,13 @@ namespace ChatEngine.CoreClient
         /// </returns>
         public bool ReadNames()
         {
-            List<DBCharacter> chars = new List<DBCharacter>(CharacterDao.GetById((int)this.CharacterId));
-            if (chars.Count > 0)
+            bool success = false;
+            DBCharacter character = CharacterDao.Instance.Get((int)this.CharacterId);
+            if (character != null)
             {
-                this.characterName = chars[0].Name;
-                this.characterFirstName = chars[0].FirstName;
-                this.characterLastName = chars[0].LastName;
+                this.characterName = character.Name;
+                this.characterFirstName = character.FirstName;
+                this.characterLastName = character.LastName;
 
                 DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
                 if (clan != null)
@@ -97,13 +98,11 @@ namespace ChatEngine.CoreClient
                     DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
                     this.orgName = org.Name;
                 }
-            }
-            else
-            {
-                return false;
-            }
 
-            return true;
+                success = true;
+            }
+           
+            return success;
         }
 
         #endregion

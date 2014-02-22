@@ -71,7 +71,7 @@ namespace ChatEngine.CoreClient
 
             if (characterId != 0)
             {
-                this.characterName = CharacterDao.GetCharacterNameById((int)characterId);
+                this.characterName = CharacterDao.Instance.GetCharacterNameById((int)characterId);
             }
         }
 

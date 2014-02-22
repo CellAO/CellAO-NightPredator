@@ -62,11 +62,11 @@ using System.Runtime.InteropServices;
 
 #endregion
 
-[assembly: AssemblyTitle("Exceptions")]
+[assembly: AssemblyTitle("CellAO.Exceptions")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Exceptions")]
+[assembly: AssemblyProduct("CellAO.Exceptions")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

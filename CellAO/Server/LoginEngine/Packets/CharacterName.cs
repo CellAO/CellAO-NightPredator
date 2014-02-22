@@ -118,7 +118,7 @@ namespace LoginEngine.Packets
         public int CheckAgainstDatabase()
         {
             /* name in use */
-            if (CharacterDao.CharExists(this.Name) > 0)
+            if (! CharacterDao.Instance.ExistsByName(this.Name))
             {
                 return 0;
             }
@@ -134,7 +134,7 @@ namespace LoginEngine.Packets
         {
             try
             {
-                CharacterDao.DeleteCharacter(charid);
+                CharacterDao.Instance.Delete(charid);
             }
             catch (Exception e)
             {
@@ -187,17 +187,31 @@ namespace LoginEngine.Packets
         /// </param>
         public void SendNameToStartPlayfield(bool startInSL, int charid)
         {
-            DBCharacter dbCharacter = new DBCharacter { Id = charid, Playfield = 4001, X = 850, Y = 43, Z = 565 };
-            if (!startInSL)
+            int playfield, x, y, z;
+
+            if (startInSL) {
+                playfield = 4001;
+                x = 850; 
+                y = 43; 
+                z = 565;
+            } 
+            else 
             {
-                dbCharacter.Playfield = 4582;
-                dbCharacter.X = 939;
-                dbCharacter.Y = 20;
-                dbCharacter.Z = 732;
+                playfield = 4582;
+                x = 939;
+                y = 20;
+                z = 732;
             }
 
-            CharacterDao.UpdatePosition(dbCharacter);
-            CharacterDao.SetPlayfield(dbCharacter.Id, (int)IdentityType.Playfield, dbCharacter.Playfield);
+            DBCharacter character = CharacterDao.Instance.Get(charid);
+            if (character != null)
+            {
+                CharacterDao.Instance.Save(
+                    character // woo....
+                    , new Dapper.DynamicParameters(new { Id = charid, Playfield = playfield, X = x, Y = y, Z = z }));
+
+                CharacterDao.Instance.SetPlayfield(charid, (int)IdentityType.Playfield, playfield);
+            }
         }
 
         #endregion
@@ -207,10 +221,27 @@ namespace LoginEngine.Packets
         /// <summary>
         /// </summary>
         /// <returns>
+        /// charID
         /// </returns>
         private int CreateNewChar()
         {
-            int charID = 0;
+            
+
+
+            DBCharacter newCharacter = new DBCharacter
+            {
+                FirstName = string.Empty,
+                LastName = string.Empty,
+                Name = this.Name,
+                Username = this.AccountName,
+            };
+
+            CharacterDao.Instance.Add(newCharacter);
+
+            int charID = newCharacter.Id;
+
+            #region Statistics
+
             switch (this.Breed)
             {
                 case 0x1: /* solitus */
@@ -230,51 +261,15 @@ namespace LoginEngine.Packets
                     break;
             }
 
-            /*
-             * Note, all default values are not specified here as defaults are handled
-             * in the CharacterStats Class for us automatically. Also minimises SQL
-             * usage for default stats that are never changed from their default value
-             *           ~NV
-             */
-            // Delete orphaned stats for charID
-            StatDao.DeleteStats(50000, charID);
-            try
-            {
-                CharacterDao.AddCharacter(
-                    new DBCharacter
-                    {
-                        FirstName = string.Empty, 
-                        LastName = string.Empty, 
-                        Name = this.Name, 
-                        Username = this.AccountName, 
-                    });
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                return 0;
-            }
-
-            try
-            {
-                /* select new char id */
-                charID = CharacterDao.GetByCharName(this.Name).Id;
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                return 0;
-            }
-
             List<DBStats> stats = new List<DBStats>();
 
             // Transmit GM level into stats table
             stats.Add(
                 new DBStats
                 {
-                    type = 50000, 
-                    instance = charID, 
-                    statid = 215, 
+                    type = 50000,
+                    instance = charID,
+                    statid = 215,
                     statvalue = LoginDataDao.GetByUsername(this.AccountName).GM
                 });
 
@@ -336,13 +331,15 @@ namespace LoginEngine.Packets
             stats.Add(
                 new DBStats
                 {
-                    type = 50000, 
-                    instance = charID, 
-                    statid = 389, 
+                    type = 50000,
+                    instance = charID,
+                    statid = 389,
                     statvalue = LoginDataDao.GetByUsername(this.AccountName).Expansions
                 });
 
             StatDao.BulkReplace(stats);
+
+            #endregion
 
             return charID;
         }

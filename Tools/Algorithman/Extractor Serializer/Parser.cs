@@ -1081,7 +1081,7 @@ namespace Extractor_Serializer
                     switch (br.ReadInt32("ParseSetsKeyNum"))
                     {
                         case 2:
-                            this.ParseFunctionSet(ref flag4);
+                            this.ParseFunctionSet(ref flag4); 
                             break;
                         case 3:
                         case 5:

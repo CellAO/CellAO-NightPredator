@@ -13,6 +13,9 @@ CREATE TABLE `vendortemplate` (
   PRIMARY KEY (`ID`,`Hash`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- This list is not complete and should be filled up.
+--
 
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AdvNB', 1, 'Basic Adventurer Crystals', 43580, 'AdvN', 1, 50, 0.04, 1.05, 161);
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AgeNB', 1, 'Basic Agent Crystals', 43579, 'AgeN', 1, 50, 0.04, 1.05, 161);

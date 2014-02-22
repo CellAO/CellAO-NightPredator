@@ -27,6 +27,9 @@ CREATE TABLE `mobtemplate` (
   PRIMARY KEY (`Hash`)
 ) ENGINE=MyIsam DEFAULT CHARSET=latin1;
 
+--
+-- This list is not complete and should be filled up.
+--
 
 INSERT INTO `mobtemplate` (`Hash`,`MinLvl`,`MaxLvl`,`Side`,`Fatness`,`Breed`,`Sex`,`Race`,`Name`,`Flags`,`NPCFamily`,`Health`,`MonsterData`,`MonsterScale`,`TextureHands`,`TextureBody`,`TextureFeet`,`TextureArms`,`TextureLegs`,`HeadMesh`,`MobMeshs`,`AdditionalMeshs`,`DropHashes`,`DropSlots`,`DropRates`) VALUES ('GAOI',190,200,3,1,6,0,1,'Guardian of Strife',268964353,207,70000,214973,100,0,0,0,0,0,0,'','',"","","");
 INSERT INTO `mobtemplate` (`Hash`,`MinLvl`,`MaxLvl`,`Side`,`Fatness`,`Breed`,`Sex`,`Race`,`Name`,`Flags`,`NPCFamily`,`Health`,`MonsterData`,`MonsterScale`,`TextureHands`,`TextureBody`,`TextureFeet`,`TextureArms`,`TextureLegs`,`HeadMesh`,`MobMeshs`,`AdditionalMeshs`,`DropHashes`,`DropSlots`,`DropRates`) VALUES ('ABRO',130,150,3,1,6,0,1,'Abyssal Roamer',268964353,183,19670,209361,75,0,0,0,0,0,0,'','',"","","");

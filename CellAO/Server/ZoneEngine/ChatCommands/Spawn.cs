@@ -129,6 +129,7 @@ Filter will be applied to mob name"));
                     //NonPlayerCharacterHandler.SpawnMonster(client, args[1], uint.Parse(args[2]));
                 }
             }
+            
 
             // this.CommandHelp(client);
 
