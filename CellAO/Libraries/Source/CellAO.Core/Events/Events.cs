@@ -34,6 +34,7 @@ namespace CellAO.Core.Events
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     #endregion
 
@@ -47,12 +48,12 @@ namespace CellAO.Core.Events
         /// <summary>
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        private int eventType;
+        // private int eventType;
 
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        private List<Functions> functions = new List<Functions>(10);
+        //private List<Functions> functions = new List<Functions>(10);
 
         #endregion
 
@@ -61,36 +62,18 @@ namespace CellAO.Core.Events
         /// <summary>
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        public int EventType
-        {
-            get
-            {
-                return this.eventType;
-            }
-
-            set
-            {
-                this.eventType = value;
-            }
-        }
+        public EventType EventType { get; set; }
 
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        public List<Functions> Functions
-        {
-            get
-            {
-                return this.functions;
-            }
-
-            set
-            {
-                this.functions = value;
-            }
-        }
+        public List<Functions> Functions { get; set; }
 
         #endregion
+
+        public Events() {
+            this.Functions = new List<Functions>(10);
+        }
 
         #region Public Methods and Operators
 

@@ -43,14 +43,31 @@ namespace CellAO.Core.Entities
     using ZoneEngine.Core;
 
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface ICharacter : IPacketReceivingEntity, INamedEntity, ISummoner, IItemContainer, ITargetingEntity
+    public interface ICharacter : IDynel, ISummoner, ITargetingEntity
     {
-        #region Public Properties
+        /// <summary>
+        /// </summary>
+        string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        string LastName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        void Teleport(Coordinate destination, IQuaternion heading, Identity playfield);
 
         /// <summary>
         /// Active Nanos list
@@ -58,60 +75,21 @@ namespace CellAO.Core.Entities
         List<IActiveNano> ActiveNanos { get; }
 
         /// <summary>
+        /// Caching Mesh layer for social tab items
         /// </summary>
-        bool ChangedAppearance { get; set; }
+        MeshLayers SocialMeshLayer { get; }
 
         /// <summary>
+        /// Uploaded Nanos list
         /// </summary>
-        IZoneClient Client { get; }
+        List<IUploadedNanos> UploadedNanos { get; }
 
-        /// <summary>
-        /// </summary>
-        Coordinate Coordinates { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Quaternion Heading { get; set; }
-
-        /// <summary>
-        /// </summary>
-        IInventoryPage MainInventory { get; }
-
-        /// <summary>
-        /// Caching Mesh layer structure
-        /// </summary>
-        MeshLayers MeshLayer { get; }
 
         /// <summary>
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        MoveModes MoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string OrganizationName { get; }
-
-        /// <summary>
-        /// </summary>
-        TimeSpan PredictionDuration { get; }
-
-        /// <summary>
-        /// </summary>
-        MoveModes PreviousMoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Vector3 RawCoordinates { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Quaternion RawHeading { get; set; }
-
-        /// <summary>
-        /// Caching Mesh layer for social tab items
-        /// </summary>
-        MeshLayers SocialMeshLayer { get; }
+        void CalculateSkills();
 
         /// <summary>
         /// </summary>
@@ -122,60 +100,20 @@ namespace CellAO.Core.Entities
         TradeSkillInfo TradeSkillTarget { get; set; }
 
         /// <summary>
-        /// Uploaded Nanos list
         /// </summary>
-        List<IUploadedNanos> UploadedNanos { get; }
-
-        #endregion
-
-        #region Public Methods and Operators
+        MoveModes MoveMode { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        void CalculateSkills();
+        MoveModes PreviousMoveMode { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool InLogoutTimerPeriod();
-
-        /// <summary>
-        /// </summary>
-        void Save();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        void Send(MessageBody messageBody, bool announceToPlayfield = false);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        void Send(SystemMessage message);
-
-        /// <summary>
-        /// </summary>
-        void SendChangedStats();
-
-        /// <summary>
-        /// Update move type
-        /// </summary>
-        /// <param name="moveType">
-        /// new move type
-        /// </param>
         void UpdateMoveType(byte moveType);
 
+
         /// <summary>
         /// </summary>
-        void WriteStats();
-
-        #endregion
+        bool InLogoutTimerPeriod();
     }
 }

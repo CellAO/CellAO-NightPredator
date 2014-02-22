@@ -59,14 +59,14 @@ namespace ZoneEngine.Core.Packets
         /// <returns>
         /// </returns>
         public static N3TeleportMessage Create(
-            ICharacter character, 
+            IDynel dynel, 
             Coordinate destination, 
             IQuaternion heading, 
             Identity playfield)
         {
             return new N3TeleportMessage()
                    {
-                       Identity = character.Identity, 
+                       Identity = dynel.Identity, 
                        Destination =
                            new Vector3()
                            {
@@ -90,8 +90,8 @@ namespace ZoneEngine.Core.Packets
                                Instance = playfield.Instance
                            }, 
                        ChangePlayfield =
-                           ((playfield.Instance != character.Playfield.Identity.Instance)
-                            || (playfield.Type != character.Playfield.Identity.Type))
+                           ((playfield.Instance != dynel.Playfield.Identity.Instance)
+                            || (playfield.Type != dynel.Playfield.Identity.Type))
                                ? new Identity
                                  {
                                      Type = IdentityType.Playfield2, 
@@ -117,10 +117,12 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public static void Send(ICharacter character, Coordinate destination, IQuaternion heading, Identity playfield)
+        public static void Send(IDynel dynel, Coordinate destination, IQuaternion heading, Identity playfield)
         {
             // This needs to be sent immediately!
-            character.Client.SendCompressed(Create(character, destination, heading, playfield));
+            dynel.Client.SendCompressed(
+                Create(dynel, destination, heading, playfield)
+            );
         }
 
         #endregion

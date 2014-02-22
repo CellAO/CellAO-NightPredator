@@ -219,7 +219,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
+        public void CheckAdd(int slot, ItemTemplate item, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -234,7 +234,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
+        public void CheckRemove(int slot, ItemTemplate templ, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -320,7 +320,9 @@ namespace CellAO.Core.Inventory
         /// </returns>
         public bool Read()
         {
-            foreach (DBItem item in ItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            int containerType = (int)this.Identity.Type;
+
+            foreach (DBItem item in ItemDao.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -331,8 +333,7 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in
-                InstancedItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            foreach (DBInstancedItem item in InstancedItemDao.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -383,13 +384,15 @@ namespace CellAO.Core.Inventory
             }
 
             IItem temp = this.Content[slotNum];
+            int containerType = (int)this.Identity.Type;
+
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                ItemDao.RemoveItem(containerType, this.Identity.Instance, slotNum);
             }
             else
             {
-                InstancedItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                InstancedItemDao.RemoveItem(containerType, this.Identity.Instance, slotNum);
             }
 
             this.Content.Remove(slotNum);
@@ -449,7 +452,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        public void TryHotSwap(int slotFrom, int slotTo, InventoryError err)
         {
             throw new NotImplementedException();
         }

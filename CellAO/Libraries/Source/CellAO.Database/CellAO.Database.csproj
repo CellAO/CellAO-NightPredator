@@ -65,6 +65,7 @@
     <Compile Include="Connector.cs" />
     <Compile Include="Dao\BuddyListDao.cs" />
     <Compile Include="Dao\CharacterDao.cs" />
+    <Compile Include="Dao\MobTemplateDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
     <Compile Include="Dao\ItemNamesDao.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Dao\StatDao.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
     <Compile Include="Dao\UploadedNanosDao.cs" />
+    <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBBuddyListEntry.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />

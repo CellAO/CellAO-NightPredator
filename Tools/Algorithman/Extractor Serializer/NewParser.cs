@@ -413,24 +413,31 @@ namespace Extractor_Serializer
                 rawreqs rr = rreqs[i];
                 Requirements aor = new Requirements();
 
-                aor.Target = 0x13;
+                aor.Target = ItemTarget.Self; // 0x13
                 aor.Statnumber = rr.stat;
-                aor.Operator = rr.ops;
+                aor.Operator = (Operator) Enum.ToObject(typeof(Operator), rr.ops);
                 aor.Value = rr.val;
-                aor.ChildOperator = 255;
+                aor.ChildOperator = Operator.Unknown;
 
                 if ((i < numreqs - 1)
-                    && ((aor.Operator == 0x12) || (aor.Operator == 0x13) || (aor.Operator == 0x1a)
-                        || (aor.Operator == 0x1b) || (aor.Operator == 0x1c) || (aor.Operator == 0x1d)
-                        || (aor.Operator == 0x1e) || (aor.Operator == 0x25) || (aor.Operator == 0x64)
-                        || (aor.Operator == 110)))
+                    && (
+                    (aor.Operator == Operator.OnTarget) 
+                    || (aor.Operator == Operator.OnSelf) 
+                    || (aor.Operator == Operator.OnUser)
+                        || (aor.Operator == Operator.OnValidTarget) 
+                        || (aor.Operator == Operator.OnInvalidTarget) 
+                        || (aor.Operator == Operator.OnValidUser)
+                        || (aor.Operator == Operator.OnInvalidUser) 
+                        || (aor.Operator == Operator.OnGeneralBeholder) 
+                        || (aor.Operator == Operator.OnCaster)
+                        || (aor.Operator == Operator.Unknown2)))
                 {
-                    aor.Target = aor.Operator;
+                    aor.Target = (ItemTarget) (int)aor.Operator;
                     i++;
                     rr = rreqs[i];
                     aor.Statnumber = rr.stat;
                     aor.Value = rr.val;
-                    aor.Operator = rr.ops;
+                    aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 }
 
                 if (!((i >= numreqs - 1) || (numreqs == 2)))
@@ -439,9 +446,9 @@ namespace Extractor_Serializer
                     int aval = rreqs[i + 1].val;
                     int aop = rreqs[i + 1].ops;
 
-                    if ((((aop == 3) || (aop == 4)) || (aop == 0x2a)) && (anum == 0))
+                    if ((((aop == (int)Operator.Or) || (aop == (int)Operator.And)) || (aop == (int)Operator.Not)) && (anum == (int)Operator.EqualTo))
                     {
-                        aor.ChildOperator = aop;
+                        aor.ChildOperator = (Operator)Enum.ToObject(typeof(Operator), aop);
                         i++;
                     }
                 }
@@ -557,8 +564,10 @@ namespace Extractor_Serializer
                     }
 
                     int actionNum = this.br.ReadInt32();
+
                     Actions aoa = new Actions();
-                    aoa.ActionType = actionNum;
+                    aoa.ActionType = (ActionType) Enum.ToObject(typeof(ActionType), actionNum);
+
                     int numreqs = this.br.Read3F1();
                     List<Requirements> cookedreqs = this.ReadReqs(numreqs);
                     foreach (Requirements REQ in cookedreqs)
@@ -790,7 +799,7 @@ namespace Extractor_Serializer
         /// </param>
         private void ParseFunctionSet(List<Events> retlist)
         {
-            int eventNum = this.br.ReadInt32();
+            int eventTypeValue = this.br.ReadInt32();
             int num = this.br.Read3F1();
             List<Functions> list = new List<Functions>();
             int arg_2F_0 = 0;
@@ -837,7 +846,8 @@ namespace Extractor_Serializer
             }
 
             Events aoe = new Events();
-            aoe.EventType = eventNum;
+            aoe.EventType = (EventType) Enum.ToObject(typeof(EventType), eventTypeValue);
+
             foreach (Functions ff in list)
             {
                 aoe.Functions.Add(ff);
@@ -865,7 +875,7 @@ namespace Extractor_Serializer
             int num2 = num;
             int num3 = arg_2D_0;
             Events aoe = new Events();
-            aoe.EventType = eventNum;
+            aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventNum);
             checked
             {
                 while (true)

@@ -57,12 +57,12 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Child operator
         /// </summary>
-        public int ChildOperator { get; set; }
+        public Operator ChildOperator { get; set; }
 
         /// <summary>
         /// Operator
         /// </summary>
-        public int Operator { get; set; }
+        public Operator Operator { get; set; }
 
         /// <summary>
         /// Stat to check against
@@ -72,7 +72,7 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Target, from constants
         /// </summary>
-        public int Target { get; set; }
+        public ItemTarget Target { get; set; }
 
         /// <summary>
         /// Value to check against
@@ -102,13 +102,13 @@ namespace CellAO.Core.Requirements
                 {
                     LogUtil.Debug("Could not create lambda for a requirement.");
                     LogUtil.Debug("Values:");
-                    LogUtil.Debug("Target:       " + ((ItemTarget)this.Target));
+                    LogUtil.Debug("Target:       " + (this.Target));
                     LogUtil.Debug(
                         "StatId:       " + (this.Statnumber + " (" + StatNamesDefaults.GetStatName(this.Statnumber))
                         + ")");
-                    LogUtil.Debug("Operator:     " + ((Operator)this.Operator));
+                    LogUtil.Debug("Operator:     " + (this.Operator));
                     LogUtil.Debug("Value:        " + this.Value);
-                    LogUtil.Debug("ChildOperator:" + ((Operator)this.ChildOperator));
+                    LogUtil.Debug("ChildOperator:" + (this.ChildOperator));
                     return false;
                 }
             }

@@ -54,11 +54,11 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static ChatTextMessage Create(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
+        public static ChatTextMessage Create(IDynel dynel, string text, short unknown1 = 0, int unknown2 = 0)
         {
             return new ChatTextMessage()
                    {
-                       Identity = character.Identity, 
+                       Identity = dynel.Identity, 
                        Text = text, 
                        Unknown1 = unknown1, 
                        Unknown2 = unknown2
@@ -78,15 +78,15 @@ namespace ZoneEngine.Core.Packets
         /// <returns>
         /// </returns>
         public static IMSendAOtomationMessageBodyToClient CreateIM(
-            ICharacter character, 
+            IDynel dynel, 
             string text, 
             short unknown1 = 0, 
             int unknown2 = 0)
         {
             return new IMSendAOtomationMessageBodyToClient()
                    {
-                       Body = Create(character, text, unknown1, unknown2), 
-                       client = character.Client
+                       Body = Create(dynel, text, unknown1, unknown2),
+                       client = dynel.Client
                    };
         }
 

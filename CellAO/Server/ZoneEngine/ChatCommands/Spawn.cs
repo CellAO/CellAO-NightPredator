@@ -125,12 +125,12 @@ Filter will be applied to mob name"));
                 // try spawning mob
                 if (args.Length == 3) {
                     // DBMobTemplate mt = MobTemplateDao.GetMobTemplateByHash(args[1])
-                    character.Playfield.Despawn
+                    // character.Playfield.Despawn
                     //NonPlayerCharacterHandler.SpawnMonster(client, args[1], uint.Parse(args[2]));
                 }
             }
 
-            this.CommandHelp(client);
+            // this.CommandHelp(client);
 
             //var check = new List<Type> { typeof(float), typeof(float), typeof(int) };
 

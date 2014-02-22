@@ -83,7 +83,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     break;
             }
 
-            List<Character> charsInRange = playfield.FindInRange(character, range);
+            List<IDynel> charsInRange = playfield.FindInRange((IDynel)character, range);
 
             VicinityChatMessage vicinityChat = new VicinityChatMessage
                                                {

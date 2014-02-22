@@ -59,7 +59,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static SimpleCharFullUpdateMessage ConstructMessage(ICharacter character)
+        public static SimpleCharFullUpdateMessage ConstructMessage(Character character)
         {
             // Character Variables
             bool socialonly;
@@ -165,21 +165,21 @@ namespace ZoneEngine.Core.Packets
                 currentMovementMode = character.Stats[StatIds.currentmovementmode].Value;
                 runSpeedBaseValue = character.Stats[StatIds.runspeed].BaseValue;
 
-                texturesCount = ((Character)character).Textures.Count;
+                texturesCount = character.Textures.Count;
 
-                headMeshValue = ((Character)character).Stats[StatIds.headmesh].Value;
+                headMeshValue = character.Stats[StatIds.headmesh].Value;
 
-                foreach (int num in ((Character)character).SocialTab.Keys)
+                foreach (int num in character.SocialTab.Keys)
                 {
-                    socialTab.Add(num, ((Character)character).SocialTab[num]);
+                    socialTab.Add(num, character.SocialTab[num]);
                 }
 
-                foreach (AOTextures at in ((Character)character).Textures)
+                foreach (AOTextures at in character.Textures)
                 {
                     textures.Add(new AOTextures(at.place, at.Texture));
                 }
 
-                meshs = MeshLayers.GetMeshs((Character)character, showsocial, socialonly);
+                meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
 
                 foreach (AONano nano in character.ActiveNanos)
                 {
@@ -438,7 +438,7 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="receiver">
         /// </param>
-        public static void SendToOne(ICharacter character, IZoneClient receiver)
+        public static void SendToOne(Character character, IZoneClient receiver)
         {
             SimpleCharFullUpdateMessage message = ConstructMessage(character);
             receiver.Character.Send(message);

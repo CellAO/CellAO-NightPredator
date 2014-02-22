@@ -42,6 +42,7 @@ namespace CellAO.Core.Playfields
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+    using System;
 
     #endregion
 
@@ -147,7 +148,7 @@ namespace CellAO.Core.Playfields
         /// </typeparam>
         /// <returns>
         /// </returns>
-        T FindByIdentity<T>(Identity identity) where T : Character;
+        T FindByIdentity<T>(Identity identity) where T : class, IDisposable, IEntity;
 
         /// <summary>
         /// </summary>
@@ -157,7 +158,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         /// <returns>
         /// </returns>
-        List<Character> FindInRange(ICharacter character, float range);
+        List<IDynel> FindInRange(IDynel dynel, float range);
 
         /// <summary>
         /// </summary>
@@ -209,7 +210,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         /// <param name="playfield">
         /// </param>
-        void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield);
+        void Teleport(Dynel dynel, Coordinate destination, IQuaternion heading, Identity playfield);
 
         #endregion
     }

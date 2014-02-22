@@ -30,7 +30,6 @@ namespace CellAO.Interfaces
     /// </summary>
     public interface IDatabaseObject
     {
-        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -44,6 +43,5 @@ namespace CellAO.Interfaces
         /// </returns>
         bool Write();
 
-        #endregion
     }
 }

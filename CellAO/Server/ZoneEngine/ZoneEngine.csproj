@@ -13,12 +13,17 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
     <OutputPath>..\..\Built\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -35,6 +40,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>zone.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MemBus, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -69,8 +83,10 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
-    <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
-    <Compile Include="ChatCommands\ListStatels.cs" />
+    <Compile Include="ChatCommands\Spawn.cs" />
+    <Compile Include="ChatCommands\TeleportDynel.cs" />
+    <Compile Include="ChatCommands\Teleport.cs" />
+    <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
     <Compile Include="Component\ClientFactory.cs" />

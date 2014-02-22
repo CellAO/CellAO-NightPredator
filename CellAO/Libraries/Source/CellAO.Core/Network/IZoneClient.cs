@@ -45,7 +45,7 @@ namespace CellAO.Core.Network
 
         /// <summary>
         /// </summary>
-        ICharacter Character { get; set; }
+        Character Character { get; set; }
 
         #endregion
 

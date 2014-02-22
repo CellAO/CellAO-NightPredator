@@ -126,7 +126,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        public ICharacter Character
+        public Character Character
         {
             get
             {

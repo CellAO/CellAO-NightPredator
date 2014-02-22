@@ -31,26 +31,32 @@ namespace CellAO.Enums
     public enum ItemTarget : int
     {
         /// <summary>
+        /// 14 , 0x0E
         /// </summary>
         Fightingtarget = 14, 
 
         /// <summary>
+        /// 23 , 0x17
         /// </summary>
         Selectedtarget = 23, 
 
         /// <summary>
+        /// 19 , 0x13
         /// </summary>
         Self = 19, 
 
         /// <summary>
+        /// 3 , 0x03
         /// </summary>
         Target = 3, 
 
         /// <summary>
+        /// 1 , 0x01
         /// </summary>
         User = 1, 
 
         /// <summary>
+        /// 2 , 0x02
         /// </summary>
         Wearer = 2, 
     }

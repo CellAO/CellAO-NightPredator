@@ -59,7 +59,7 @@ namespace CellAO.Core.Actions
         /// <summary>
         /// Type of Action (constants in ItemLoader)
         /// </summary>
-        public int ActionType { get; set; }
+        public ActionType ActionType { get; set; }
 
         /// <summary>
         /// List of Requirements for this action
@@ -81,7 +81,7 @@ namespace CellAO.Core.Actions
             bool result = true;
             foreach (Requirements requirements in this.Requirements)
             {
-                if (requirements.ChildOperator == (int)Operator.And)
+                if (requirements.ChildOperator == Operator.And)
                 {
                     result &= requirements.CheckRequirement(entity);
                 }

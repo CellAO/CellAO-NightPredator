@@ -24,40 +24,99 @@
 
 #endregion
 
-using CellAO.Enums;
-namespace CellAO.Core.Requirements
+namespace CellAO.Core.Entities
 {
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Network;
+    using CellAO.Core.Textures;
+    using CellAO.Core.Vector;
+    using CellAO.Enums;
+    using CellAO.Interfaces;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
+
+    using ZoneEngine.Core;
+
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    public interface IRequirements
+    public interface IDynel : IPacketReceivingEntity, INamedEntity, IItemContainer
     {
-        #region Public Properties
+        /// <summary>
+        /// </summary>
+        IZoneClient Client { get; set; }
 
         /// <summary>
-        /// Child operator
         /// </summary>
-        Operator ChildOperator { get; set; }
+        bool ChangedAppearance { get; set; }
 
         /// <summary>
-        /// Operator
         /// </summary>
-        Operator Operator { get; set; }
+        Coordinate Coordinates { get; set; }
 
         /// <summary>
-        /// Stat to check against
         /// </summary>
-        int Statnumber { get; set; }
+        Quaternion Heading { get; set; }
 
         /// <summary>
-        /// Target, from constants
         /// </summary>
-        ItemTarget Target { get; set; }
+        IInventoryPage MainInventory { get; }
 
         /// <summary>
-        /// Value to check against
+        /// Caching Mesh layer structure
         /// </summary>
-        int Value { get; set; }
+        MeshLayers MeshLayer { get; }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        TimeSpan PredictionDuration { get; }
+
+        /// <summary>
+        /// </summary>
+        Vector3 RawCoordinates { get; set; }
+
+        /// <summary>
+        /// </summary>
+        Quaternion RawHeading { get; set; }
+
+        /// <summary>
+        /// </summary>
+        string OrganizationName { get; }
+
+
+
+        /// <summary>
+        /// </summary>
+        void Save();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        void Send(MessageBody messageBody, bool announceToPlayfield = false);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        void Send(SystemMessage message);
+
+        /// <summary>
+        /// </summary>
+        void SendChangedStats();
+
+        /// <summary>
+        /// </summary>
+        void WriteStats();
     }
 }
