@@ -26,6 +26,7 @@
 
 namespace Utility.Config
 {
+    using System.Net;
 
     #region enum
 
@@ -137,7 +138,33 @@ namespace Utility.Config
         /// <summary>
         /// 
         /// </summary>
-        UseIRCRelay
+        UseIRCRelay,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostName,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostPort,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostRoot,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostDefaultPage,
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        WebHostPhpPath
+
     }
 
     #endregion
@@ -266,6 +293,27 @@ namespace Utility.Config
         /// </summary>
         public int ZonePort { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WebHostName { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int WebHostPort { get; set; }
+
+        public string WebHostRoot { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WebHostDefaultPage { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string WebHostPhpPath { get; set; }
         #endregion
     }
 

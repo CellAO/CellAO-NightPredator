@@ -30,6 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Datafiles\nanos.dat = Datafiles\nanos.dat
 		Config\NBug.ChatEngine.config = Config\NBug.ChatEngine.config
 		Config\NBug.LoginEngine.config = Config\NBug.LoginEngine.config
+		Config\NBug.WebEngine.config = Config\NBug.WebEngine.config
 		Config\NBug.ZoneEngine.config = Config\NBug.ZoneEngine.config
 		Datafiles\playfields.dat = Datafiles\playfields.dat
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
@@ -101,6 +102,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translations", "Libraries\Source\Translations\Translations.csproj", "{4BBD60C6-AED0-4347-B4CA-A262D3474826}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.ObjectManager", "Libraries\Source\CellAO.ObjectManager\CellAO.ObjectManager.csproj", "{65A705B0-F8BF-4D68-A8FD-C630A87DC120}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEngine", "Server\WebEngine\WebEngine.csproj", "{A8218B30-C168-4949-B482-3C6800F04A63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -396,6 +399,20 @@ Global
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|x64.ActiveCfg = Release|Any CPU
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120}.Release|x86.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x64.ActiveCfg = Release|Any CPU
+		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
