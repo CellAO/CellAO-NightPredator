@@ -48,7 +48,7 @@ Installation instructions follow soon.
 - **Moose**
 - **Ruffus**
 - and the guys at **WCell**
-- We would also like to give a warm and special thank you to [funcom](http://www.funcom.com) for giving us [Anarchy Online](http://www.anarchy-online.com)
+- We would also like to give a warm and special thank you to [Funcom](http://www.funcom.com) for giving us [Anarchy Online](http://www.anarchy-online.com)
 
 
 If you feel your name should be in here, just pester me on IRC or email: darkkitten@gmail.com I will eventualy add you I guess ;)
