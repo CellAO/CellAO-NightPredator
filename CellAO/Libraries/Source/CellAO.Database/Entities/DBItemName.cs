@@ -34,7 +34,7 @@ namespace CellAO.Database.Entities
 
         /// <summary>
         /// </summary>
-        public int AOID { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// </summary>

@@ -183,7 +183,7 @@ namespace ZoneEngine.Core
         {
             foreach (DBItemName itemName in ItemNamesDao.GetNames())
             {
-                this.ItemNames.Add(itemName.AOID, itemName.Name);
+                this.ItemNames.Add(itemName.Id, itemName.Name);
             }
         }
 

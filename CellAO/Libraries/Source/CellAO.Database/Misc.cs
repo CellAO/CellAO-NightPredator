@@ -205,7 +205,16 @@ namespace CellAO.Database
                                                     {
                                                         Buffer.Remove(Buffer.Length - 2, 2);
                                                         Buffer.Append(";");
-                                                        conn.Execute(Buffer.ToString());
+                                                        try
+                                                        {
+                                                            conn.Execute(Buffer.ToString());
+                                                        }
+                                                        catch (Exception)
+                                                        {
+                                                            Console.WriteLine(Buffer.ToString().Substring(0,300));
+                                                            throw;
+                                                        }
+                                                        
                                                         Buffer.Clear();
                                                         Buffer.Append(buf1);
                                                         string lp2 =
