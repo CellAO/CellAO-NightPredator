@@ -90,11 +90,11 @@ namespace ZoneEngine.Core.Playfields
                     if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
                     {
                         if (ItemLoader.ItemList[sd.TemplateId].WantsCollision()
-                            && (!sd.Events.Any(x => x.EventType == (int)EventType.OnCollide))
-                            && sd.Events.Any(x => x.EventType == (int)EventType.OnUse))
+                            && (!sd.Events.Any(x => x.EventType == EventType.OnCollide))
+                            && sd.Events.Any(x => x.EventType == EventType.OnUse))
                         {
-                            Events ev = sd.Events.First(x => x.EventType == (int)EventType.OnUse).Copy();
-                            ev.EventType = (int)EventType.OnCollide;
+                            Events ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
+                            ev.EventType = EventType.OnCollide;
                             sd.Events.Add(ev);
                         }
                     }

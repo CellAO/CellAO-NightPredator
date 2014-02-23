@@ -39,34 +39,8 @@ namespace CellAO.Core.Entities
     /// </summary>
     public interface INamedEntity : IInstancedEntity
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        string FirstName { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string LastName { get; set; }
-
         /// <summary>
         /// </summary>
         string Name { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="destination">
-        /// </param>
-        /// <param name="heading">
-        /// </param>
-        /// <param name="playfield">
-        /// </param>
-        void Teleport(Coordinate destination, IQuaternion heading, Identity playfield);
-
-        #endregion
     }
 }

@@ -1,12 +1,12 @@
 ﻿CREATE TABLE `items` (
-	`containertype` INT(10) NOT NULL,
-	`containerinstance` INT(10) NOT NULL,
-	`containerplacement` INT(10) NOT NULL,
-	`lowid` INT(10) NOT NULL,
-	`highid` INT(10) NOT NULL,
-	`quality` INT(10) NOT NULL,
-	`multiplecount` INT(10) NOT NULL,
-	UNIQUE INDEX `Key1` (`containertype`, `containerinstance`, `containerplacement`)
+	`ContainerType` INT(32) NOT NULL,
+	`ContainerInstance` INT(32) NOT NULL,
+	`ContainerPlacement` INT(32) NOT NULL,
+	`LowId` INT(32) NOT NULL,
+	`HighId` INT(32) NOT NULL,
+	`Quality` INT(32) NOT NULL,
+	`MultipleCount` INT(32) NOT NULL,
+	UNIQUE INDEX `Key1` (`ContainerType`, `ContainerInstance`, `ContainerPlacement`)
 )
 COMMENT='Non instanced items go here'
 COLLATE='latin1_general_ci'

@@ -256,6 +256,7 @@ namespace LoginEngine.CoreClient
                     this, 
                     "Client sent malformed message {0}", 
                     messageNumber.ToString(CultureInfo.InvariantCulture));
+                LogUtil.Debug(NiceHexOutput.Output(packet)); 
                 return false;
             }
 

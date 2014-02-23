@@ -24,19 +24,35 @@
 
 #endregion
 
+using System.Collections.Generic;
 namespace CellAO.Database.Entities
 {
+    using CellAO.Database.Dao;
+
     /// <summary>
     /// Data object for Character DAO
     /// </summary>
-    public class DBCharacter
+    [Tablename("characters")]
+    public class DBCharacter : IDBEntity
     {
         #region Public Properties
 
+        public int Id { get; set; }
+
         /// <summary>
-        /// First name of the character
+        /// Coordinates (X)
         /// </summary>
-        public string FirstName { get; set; }
+        public float X { get; set; }
+
+        /// <summary>
+        /// Coordinates (Y)
+        /// </summary>
+        public float Y { get; set; }
+
+        /// <summary>
+        /// Coordinates (Z)
+        /// </summary>
+        public float Z { get; set; }
 
         /// <summary>
         /// Heading (W)
@@ -58,15 +74,12 @@ namespace CellAO.Database.Entities
         /// </summary>
         public float HeadingZ { get; set; }
 
-        /// <summary>
-        /// Id (instance) of the character
-        /// </summary>
-        public int Id { get; set; }
 
         /// <summary>
-        /// Last name of the character
+        /// Username of the character
         /// </summary>
-        public string LastName { get; set; }
+        [ForeignKey]
+        public string Username { get; set; }
 
         /// <summary>
         /// Name of the character
@@ -74,6 +87,17 @@ namespace CellAO.Database.Entities
         public string Name { get; set; }
 
         /// <summary>
+        /// First name of the character
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// Last name of the character
+        /// </summary>
+        public string LastName { get; set; }
+
+        /// <summary>
+        /// 0 by default (int)
         /// </summary>
         public int Online { get; set; }
 
@@ -108,25 +132,43 @@ namespace CellAO.Database.Entities
         public int Textures4 { get; set; }
 
         /// <summary>
-        /// Username of the character
+        /// CSV list of players ID that are buddies of meeee
         /// </summary>
-        public string Username { get; set; }
-
-        /// <summary>
-        /// Coordinates (X)
-        /// </summary>
-        public float X { get; set; }
-
-        /// <summary>
-        /// Coordinates (Y)
-        /// </summary>
-        public float Y { get; set; }
-
-        /// <summary>
-        /// Coordinates (Z)
-        /// </summary>
-        public float Z { get; set; }
+        public string BuddyList { get; set; }
 
         #endregion
+
+        #region Buddies intelligence - cos my buddies are intelligent otherwise they wouldnt be my buddies :)
+
+        public List<int> GetBuddiesIds()
+        {
+            List<int> buddiesIds = new List<int>();
+            foreach (string strId in this.BuddyList.Split(','))
+                buddiesIds.Add(int.Parse(strId));
+            return buddiesIds;
+        }
+
+        public void AddBuddy(int buddyId)
+        {
+            List<string> buddies = new List<string>();
+            buddies.AddRange(this.BuddyList.Split(','));
+            if (!buddies.Contains(buddyId.ToString()))
+                buddies.Add(buddyId.ToString());
+
+            this.BuddyList = string.Join(",", buddies);
+        }
+
+        public void RemoveBuddy(int buddyId)
+        {
+            List<string> buddies = new List<string>();
+            buddies.AddRange(this.BuddyList.Split(','));
+            if (buddies.Contains(buddyId.ToString()))
+                buddies.Remove(buddyId.ToString());
+
+            this.BuddyList = string.Join(",", buddies);
+        }
+
+        #endregion
+
     }
 }

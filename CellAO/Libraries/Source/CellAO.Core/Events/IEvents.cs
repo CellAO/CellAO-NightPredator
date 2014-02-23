@@ -31,6 +31,7 @@ namespace CellAO.Core.Events
     using System.Collections.Generic;
 
     using CellAO.Core.Functions;
+    using CellAO.Enums;
 
     #endregion
 
@@ -43,7 +44,7 @@ namespace CellAO.Core.Events
         /// <summary>
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        int EventType { get; set; }
+        EventType EventType { get; set; }
 
         /// <summary>
         /// List of Functions of the Event

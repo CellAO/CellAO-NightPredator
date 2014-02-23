@@ -74,7 +74,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(character, "Syntax: /get <stat name|stat id> <new stat value>"));
+                ChatText.CreateIM(character, "Syntax: /set <stat name|stat id> <new stat value>"));
         }
 
         /// <summary>

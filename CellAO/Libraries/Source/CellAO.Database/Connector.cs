@@ -80,6 +80,8 @@ namespace CellAO.Database
         /// <summary>
         /// Get IDbConnection depending on configuration file
         /// </summary>
+        /// <param name="existingConnection">
+        /// </param>
         /// <returns>
         /// IDbConnection to the database
         /// </returns>
@@ -122,7 +124,9 @@ namespace CellAO.Database
                 throw new ConnectionStringErrorException("ConnectionString error");
             }
 
+
             conn.Open();
+
             return conn;
         }
 

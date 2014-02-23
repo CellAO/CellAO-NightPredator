@@ -36,13 +36,11 @@ namespace CellAO.Core.Inventory
     /// </summary>
     public interface IItemContainer : IEntity, IDatabaseObject
     {
-        #region Public Properties
 
         /// <summary>
         /// The inventory of this Container
         /// </summary>
         IInventoryPages BaseInventory { get; }
 
-        #endregion
     }
 }

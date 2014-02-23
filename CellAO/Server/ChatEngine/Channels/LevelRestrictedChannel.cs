@@ -85,8 +85,8 @@ namespace ChatEngine.Channels
             Client cl = (Client)client;
 
             int charLevel =
-                StatDao.GetById(50000, (int)cl.Character.CharacterId, StatNamesDefaults.GetStatNumber("Level"))
-                    .statvalue;
+                StatDao.Instance.GetById(50000, (int)cl.Character.CharacterId, StatNamesDefaults.GetStatNumber("Level"))
+                    .StatValue;
 
             if ((charLevel >= this.MinLevel) && (charLevel <= this.MaxLevel))
             {

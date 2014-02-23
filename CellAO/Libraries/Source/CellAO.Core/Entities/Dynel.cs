@@ -29,6 +29,7 @@ namespace CellAO.Core.Entities
     #region Usings ...
 
     using System;
+    using System.Threading;
 
     using CellAO.Core.Inventory;
     using CellAO.Core.Playfields;
@@ -38,13 +39,163 @@ namespace CellAO.Core.Entities
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using CellAO.Core.Network;
+    using CellAO.Enums;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages;
+    using CellAO.Core.Textures;
+    using CellAO.Database.Dao;
+    using System.Collections.Generic;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public partial class Dynel : PooledObject, INamedEntity, IItemContainer
+    public partial class Dynel : PooledObject, IDynel
     {
+        #region Fields and Properties
+
+        /// <summary>
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public IPlayfield Playfield { get; set; }
+
+        public IZoneClient Client { get; set; }
+
+        /// <summary>
+        /// </summary>
+        protected SpinOrStrafeDirections spinDirection;
+
+        /// <summary>
+        /// Caching Mesh layer structure
+        /// </summary>
+        protected MeshLayers meshLayer = new MeshLayers();
+
+        /// <summary>
+        /// </summary>
+        public List<AOTextures> Textures = new List<AOTextures>();
+
+
+        /// <summary>
+        /// </summary>
+        public bool DoNotDoTimers { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public bool Starting { get; set; }
+
+
+        /// <summary>
+        /// </summary>
+        public virtual Coordinate Coordinates
+        {
+            get
+            {
+                return new Coordinate(this.RawCoordinates);
+            }
+
+            set
+            {
+                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3() { X = value.x, Y = value.y, Z = value.z };
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public TimeSpan PredictionDuration { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public SmokeLounge.AOtomation.Messaging.GameData.Vector3 RawCoordinates { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public CellAO.Core.Vector.Quaternion RawHeading { get; set; }
+
+        /// <summary>
+        /// Heading as Quaternion
+        /// </summary>
+        public CellAO.Core.Vector.Quaternion Heading
+        {
+            get
+            {
+                if (this.spinDirection == SpinOrStrafeDirections.None)
+                {
+                    return this.RawHeading;
+                }
+                else
+                {
+                    double turnArcAngle;
+                    CellAO.Core.Vector.Quaternion turnQuaterion;
+                    CellAO.Core.Vector.Quaternion newHeading;
+
+                    turnArcAngle = this.calculateTurnArcAngle();
+                    turnQuaterion = new CellAO.Core.Vector.Quaternion(Vector.Vector3.AxisY, turnArcAngle);
+
+                    newHeading = CellAO.Core.Vector.Quaternion.Hamilton(turnQuaterion, this.RawHeading);
+                    newHeading.Normalize();
+
+                    return newHeading;
+                }
+            }
+
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public IInventoryPage MainInventory { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public IInventoryPages BaseInventory { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public MeshLayers MeshLayer
+        {
+            get
+            {
+                return this.meshLayer;
+            }
+
+            private set
+            {
+                this.meshLayer = value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string OrganizationName
+        {
+            get
+            {
+                try
+                {
+                    return OrganizationDao.GetOrganizationData(this.Stats[StatIds.clan].Value).Name;
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// </summary>
+        public bool ChangedAppearance { get; set; }
+
+
+
+        #endregion
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -70,39 +221,106 @@ namespace CellAO.Core.Entities
 
         #endregion
 
-        #region Public Properties
+
+        #region Positioning
 
         /// <summary>
+        /// Calculate Turn time
         /// </summary>
-        public IInventoryPages BaseInventory { get; set; }
+        /// <returns>Turn time</returns>
+        private double calculateTurnTime()
+        {
+            int turnSpeed;
+            double turnTime;
 
-        /// <summary>
-        /// </summary>
-        public bool DoNotDoTimers { get; set; }
+            turnSpeed = this.Stats[StatIds.turnspeed].Value; // Stat #267 TurnSpeed
 
-        /// <summary>
-        /// </summary>
-        public string FirstName { get; set; }
+            if (turnSpeed == 0)
+            {
+                turnSpeed = 40000;
+            }
 
-        /// <summary>
-        /// </summary>
-        public string LastName { get; set; }
+            turnTime = 70000 / turnSpeed;
 
+            return turnTime;
+        }
         /// <summary>
+        /// Calculate Turnangle
         /// </summary>
-        public string Name { get; set; }
+        /// <returns>Turnangle</returns>
+        protected double calculateTurnArcAngle()
+        {
+            double turnTime;
+            double angle;
+            double modifiedDuration;
 
-        /// <summary>
-        /// </summary>
-        public IPlayfield Playfield { get; set; }
+            turnTime = this.calculateTurnTime();
 
-        /// <summary>
-        /// </summary>
-        public bool Starting { get; set; }
+            modifiedDuration = this.PredictionDuration.TotalSeconds % turnTime;
+
+            angle = 2 * Math.PI * modifiedDuration / turnTime;
+
+            return angle;
+        }
 
         #endregion
 
-        #region Public Methods and Operators
+
+        #region Object
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public virtual bool Read()
+        {
+            this.DoNotDoTimers = true;
+            this.Stats.Read();
+
+            // load depending on identity type
+            switch (this.Identity.Type)
+            {
+               //case IdentityType.
+
+            }
+
+            this.BaseInventory.Read();
+            
+            //base.Read();
+            
+            this.DoNotDoTimers = false;
+            return true;
+        }
+
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public virtual bool Write()
+        {
+            this.DoNotDoTimers = true;
+            this.Stats.Write();
+            
+            // write dynel properties to database ??
+
+            this.DoNotDoTimers = false;
+            return true;
+        }
+
+
+        /// <summary>
+        /// Wrapper for this.Write()
+        /// </summary>
+        public void Save()
+        {
+            this.Write();
+        }
+
 
         /// <summary>
         /// </summary>
@@ -122,19 +340,42 @@ namespace CellAO.Core.Entities
             this.Write();
         }
 
+        #endregion
+
+
+        #region Statistics
+
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public virtual bool Read()
+        public void WriteStats()
         {
-            this.DoNotDoTimers = true;
-            this.Stats.Read();
-            this.DoNotDoTimers = false;
-            return true;
+            this.Stats.Write();
         }
+
+        /// <summary>
+        /// </summary>
+        public void SendChangedStats()
+        {
+            var message = new StatMessage() { Identity = this.Identity, };
+            message.Stats = this.Stats.ChangedAnnouncingStats;
+            if (message.Stats.Length > 0)
+            {
+                this.Playfield.AnnounceOthers(message, this.Identity);
+            }
+
+            message.Stats = this.Stats.ChangedStats;
+            if (message.Stats.Length > 0)
+            {
+                this.Playfield.Send(this.Client, message);
+            }
+        }
+
+
+        #endregion
+
+        #region Teleporting
 
         /// <summary>
         /// </summary>
@@ -144,25 +385,55 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public virtual void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
         {
-            // TODO: Maybe write teleport code for dynels
+            this.Playfield.Teleport(this, destination, heading, playfield);
+        }
+
+        #endregion
+
+        #region Messaging
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        public void Send(SystemMessage message)
+        {
+            this.Playfield.Send(this.Client, message);
         }
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public virtual bool Write()
+        /// <param name="messageBody">
+        /// </param>
+        public void Send(MessageBody messageBody)
         {
-            this.DoNotDoTimers = true;
-            this.Stats.Write();
-            this.DoNotDoTimers = false;
-            return true;
+            this.Playfield.Send(this.Client, messageBody);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Send(MessageBody messageBody, bool announceToPlayfield)
+        {
+            if (!announceToPlayfield)
+            {
+                this.Send(messageBody);
+                return;
+            }
+
+            this.Playfield.Announce(messageBody);
+        }
+        
         #endregion
+
+
+        
     }
 }

@@ -155,7 +155,7 @@ namespace AO.Core.Encryption
         /// </returns>
         public bool IsCharacterOnAccount(string UserName, uint CharacterID)
         {
-            return CharacterDao.IsCharacterOnAccount(UserName, CharacterID);
+            return CharacterDao.Instance.IsCharacterOnAccount(UserName, CharacterID);
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace AO.Core.Encryption
         /// </returns>
         private string GetLoginPassword(string RecvLogin)
         {
-            DBLoginData loginPassword = LoginDataDao.GetByUsername(RecvLogin);
+            DBLoginData loginPassword = LoginDataDao.Instance.GetByUsername(RecvLogin);
 
             if (loginPassword != null)
             {

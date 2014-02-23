@@ -46,7 +46,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="err">
         /// </param>
-        void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err);
+        void TryHotSwap(int slotFrom, int slotTo, InventoryError err);
 
         #endregion
     }

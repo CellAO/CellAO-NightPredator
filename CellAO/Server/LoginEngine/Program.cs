@@ -216,7 +216,7 @@ namespace LoginEngine
             bool result = true;
             try
             {
-                LoginDataDao.GetAll();
+                LoginDataDao.Instance.GetAll();
             }
             catch (Exception)
             {
@@ -758,7 +758,7 @@ namespace LoginEngine
             }
             else
             {
-                LoginDataDao.LogoffChars(obj[1]);
+                LoginDataDao.Instance.LogoffChars(obj[1]);
             }
         }
 

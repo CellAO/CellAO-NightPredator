@@ -24,94 +24,108 @@
 
 #endregion
 
-namespace ZoneEngine.ChatCommands
+namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
+    using System.Data;
 
-    using CellAO.Core.Entities;
-    using CellAO.Core.Statels;
+    using CellAO.Database.Entities;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
-
-    using ZoneEngine.Core.Packets;
-    using ZoneEngine.Core.Playfields;
+    using Dapper;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ListStatels : AOChatCommand
+    /// <typeparam name="T">
+    /// </typeparam>
+    public interface IDao<T>
+        where T : IDBEntity
     {
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="args">
+        /// <param name="dbentity">
+        /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
         /// </param>
         /// <returns>
         /// </returns>
-        public override bool CheckCommandArguments(string[] args)
-        {
-            return true;
-        }
+        int Add(T dbentity, IDbConnection connection = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
+        /// <param name="entityId">
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public override void CommandHelp(ICharacter character)
-        {
-            // No help needed, no arguments can be given
-            character.Playfield.Publish(ChatText.CreateIM(character, "Lists all extracted statels in this playfield"));
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
+        /// <param name="connection">
         /// </param>
-        /// <param name="target">
+        /// <param name="transaction">
         /// </param>
-        /// <param name="args">
-        /// </param>
-        public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
-        {
-            List<StatelData> sd = PlayfieldLoader.PFData[character.Playfield.Identity.Instance].Statels;
-            var messList = new List<MessageBody>();
-            foreach (StatelData s in sd)
-            {
-                messList.Add(
-                    ChatText.Create(
-                        character, 
-                        ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
-            }
-
-            character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));
-        }
-
-        /// <summary>
-        /// </summary>
         /// <returns>
         /// </returns>
-        public override int GMLevelNeeded()
-        {
-            return 1;
-        }
+        int Delete(int entityId, IDbConnection connection = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// </summary>
+        /// <param name="whereParameters">
+        /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
         /// <returns>
         /// </returns>
-        public override List<string> ListCommands()
-        {
-            var temp = new List<string> { "statels", "liststatels" };
-            return temp;
-        }
+        int Delete(
+            object whereParameters, 
+            IDbConnection connection = null, 
+            IDbTransaction transaction = null);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entityId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool Exists(int entityId);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="entityId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        T Get(int entityId);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="parameters">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        IEnumerable<T> GetAll(object parameters = null);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dbentity">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        int Save(
+            T dbentity, 
+            object parameters = null, 
+            IDbConnection connection = null, 
+            IDbTransaction transaction = null);
 
         #endregion
     }

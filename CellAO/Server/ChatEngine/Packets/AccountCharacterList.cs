@@ -54,7 +54,7 @@ namespace ChatEngine.Packets
         public static byte[] Create(string username)
         {
             PacketWriter writer = new PacketWriter(0x07);
-            IEnumerable<DBCharacter> chars = CharacterDao.GetAllForUser(username);
+            IEnumerable<DBCharacter> chars = CharacterDao.Instance.GetAllForUser(username);
 
             byte[] numberOfCharacters = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)chars.Count()));
             writer.WriteBytes(numberOfCharacters);
@@ -72,7 +72,7 @@ namespace ChatEngine.Packets
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                writer.WriteUInt32((UInt32)StatDao.GetById(50000, character.Id, 54).statvalue);
+                writer.WriteUInt32((UInt32)StatDao.Instance.GetById(50000, character.Id, 54).StatValue);
             }
 
             writer.WriteBytes(numberOfCharacters);

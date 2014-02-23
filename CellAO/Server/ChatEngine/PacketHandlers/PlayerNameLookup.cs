@@ -84,7 +84,7 @@ namespace ChatEngine.PacketHandlers
                 playerName);
             reader.Finish();
 
-            DBCharacter character = CharacterDao.GetByCharName(playerName);
+            DBCharacter character = CharacterDao.Instance.GetByCharName(playerName);
             if (character != null)
             {
                 playerId = (uint)character.Id;

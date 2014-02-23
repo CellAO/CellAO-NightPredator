@@ -13,12 +13,17 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
     <OutputPath>..\..\Built\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -36,7 +41,20 @@
   <PropertyGroup>
     <ApplicationIcon>zone.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.12.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Dapper.1.13\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="MemBus, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
@@ -69,8 +87,10 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
-    <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
-    <Compile Include="ChatCommands\ListStatels.cs" />
+    <Compile Include="ChatCommands\Spawn.cs" />
+    <Compile Include="ChatCommands\TeleportDynel.cs" />
+    <Compile Include="ChatCommands\Teleport.cs" />
+    <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
     <Compile Include="Component\ClientFactory.cs" />
@@ -192,9 +212,9 @@
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\Exceptions\Exceptions.csproj">
+    <ProjectReference Include="..\..\Libraries\Source\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
-      <Name>Exceptions</Name>
+      <Name>CellAO.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>

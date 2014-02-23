@@ -1,7 +1,8 @@
 CREATE TABLE  `characterstimers` (
-  `ID` int(10) NOT NULL,
-  `strain` int(10) NOT NULL,
-  `timespan` int(10) NOT NULL,
-  `function` blob NOT NULL,
-  PRIMARY KEY (`ID`)
+	`Id` int(32) NOT NULL AUTO_INCREMENT,
+	`CharacterId` int(32) NOT NULL,
+  `Strain` int(32) NOT NULL,
+  `Timespan` int(32) NOT NULL,
+  `Function` blob NOT NULL,
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

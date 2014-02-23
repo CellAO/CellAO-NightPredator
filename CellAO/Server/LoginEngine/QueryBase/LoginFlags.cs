@@ -68,7 +68,7 @@ namespace LoginEngine.QueryBase
         /// </param>
         public void GetLoginFlags(string recvLogin)
         {
-            DBLoginData login = LoginDataDao.GetByUsername(recvLogin);
+            DBLoginData login = LoginDataDao.Instance.GetByUsername(recvLogin);
             if (login != null)
             {
                 this.flagsL = login.Flags;

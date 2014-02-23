@@ -60,7 +60,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="err">
         /// </param>
-        void CheckAdd(int slot, ItemTemplate item, ref InventoryError err);
+        void CheckAdd(int slot, ItemTemplate item, InventoryError err);
 
         /// <summary>
         /// Is called before removing the given item to check whether it may actually be removed
@@ -71,7 +71,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="err">
         /// </param>
-        void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err);
+        void CheckRemove(int slot, ItemTemplate templ, InventoryError err);
 
         /// <summary>
         /// </summary>

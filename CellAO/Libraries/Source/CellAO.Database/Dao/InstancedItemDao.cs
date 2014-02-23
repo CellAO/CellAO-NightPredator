@@ -31,6 +31,7 @@ namespace CellAO.Database.Dao
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
 
     using Dapper;
 
@@ -41,225 +42,23 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for instanced items
     /// </summary>
-    public static class InstancedItemDao
+    public class InstancedItemDao : Dao<DBInstancedItem>
     {
-        #region Public Methods and Operators
+        #region Public Properties
 
         /// <summary>
-        /// Load all instanced items
         /// </summary>
-        /// <returns>
-        /// Collection of DBInstancedItem
-        /// </returns>
-        public static IEnumerable<DBInstancedItem> GetAll()
+        public static InstancedItemDao Instance
         {
-            try
+            get
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                if (_instance == null)
                 {
-                    return conn.Query<DBInstancedItem>("SELECT * FROM instanceditems");
+                    _instance = new InstancedItemDao();
+                    _instance.TableName = getTablename();
                 }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
 
-        /// <summary>
-        /// Load all instanced items in a specific container
-        /// </summary>
-        /// <param name="containertype">
-        /// Type of the container
-        /// </param>
-        /// <param name="containerinstance">
-        /// Instance of the container
-        /// </param>
-        /// <returns>
-        /// Collection of DBInstancedItem
-        /// </returns>
-        public static IEnumerable<DBInstancedItem> GetAllInContainer(int containertype, int containerinstance)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBInstancedItem>(
-                            "SELECT * FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance", 
-                            new { containertype, containerinstance });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Load instanced item by id
-        /// </summary>
-        /// <param name="itemid">
-        /// id of the item to load
-        /// </param>
-        /// <returns>
-        /// Collection of DBInstancedItem
-        /// </returns>
-        public static IEnumerable<DBInstancedItem> GetById(int itemid)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBInstancedItem>(
-                        "SELECT * FROM instanceditems where id = @id", 
-                        new { id = itemid });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Remove item from table
-        /// </summary>
-        /// <param name="containertype">
-        /// Type of the container
-        /// </param>
-        /// <param name="containerinstance">
-        /// Instance of the container
-        /// </param>
-        /// <param name="containerplacement">
-        /// slot in the container
-        /// </param>
-        public static void RemoveItem(int containertype, int containerinstance, int containerplacement)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement", 
-                        new { containertype, containerinstance, containerplacement });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Insert a DBInstancedItem into table
-        /// </summary>
-        /// <param name="item">
-        /// Item to write
-        /// </param>
-        public static void Save(DBInstancedItem item)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
-                        + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
-                        + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)", 
-                        new
-                        {
-                            conttype = item.containertype, 
-                            continstance = item.containerinstance, 
-                            contplacement = item.containerplacement, 
-                            itype = item.itemtype, 
-                            iinstance = item.iteminstance, 
-                            low = item.lowid, 
-                            high = item.highid, 
-                            ql = item.quality, 
-                            mc = item.multiplecount, 
-                            ix = item.x, 
-                            iy = item.y, 
-                            iz = item.z, 
-                            hx = item.headingx, 
-                            hy = item.headingy, 
-                            hz = item.headingz, 
-                            hw = item.headingw, 
-                            st = item.stats
-                        });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Insert a list of DBInstancedItems to table
-        /// </summary>
-        /// <param name="items">
-        /// List of DBInstancedItems
-        /// </param>
-        public static void Save(List<DBInstancedItem> items)
-        {
-            if (items.Count == 0)
-            {
-                return;
-            }
-
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    using (IDbTransaction trans = conn.BeginTransaction())
-                    {
-                        conn.Execute(
-                            "DELETE FROM instanceditems WHERE containertype=@containertype AND containerinstance=@containerinstance", 
-                            new { items[0].containertype, items[0].containerinstance }, 
-                            transaction: trans);
-                        foreach (DBInstancedItem item in items)
-                        {
-                            conn.Execute(
-                                "INSERT INTO instanceditems (containertype,containerinstance,containerplacement,itemtype,iteminstance"
-                                + ",lowid,highid,quality,multiplecount,x,y,z,headingx,headingy,headingz,headingw,stats) VALUES (@conttype,"
-                                + " @continstance, @contplacement, @itype, @iinstance, @low, @high, @ql, @mc, @ix, @iy, @iz, @hx, @hy, @hz, @hw, @st)", 
-                                new
-                                {
-                                    conttype = item.containertype, 
-                                    continstance = item.containerinstance, 
-                                    contplacement = item.containerplacement, 
-                                    itype = item.itemtype, 
-                                    iinstance = item.iteminstance, 
-                                    low = item.lowid, 
-                                    high = item.highid, 
-                                    ql = item.quality, 
-                                    mc = item.multiplecount, 
-                                    ix = item.x, 
-                                    iy = item.y, 
-                                    iz = item.z, 
-                                    hx = item.headingx, 
-                                    hy = item.headingy, 
-                                    hz = item.headingz, 
-                                    hw = item.headingw, 
-                                    st = item.stats
-                                }, 
-                                transaction: trans);
-                        }
-
-                        trans.Commit();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
+                return (InstancedItemDao)_instance;
             }
         }
 

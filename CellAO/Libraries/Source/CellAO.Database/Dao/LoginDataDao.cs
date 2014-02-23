@@ -44,31 +44,26 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for LoginData
     /// </summary>
-    public static class LoginDataDao
+    public class LoginDataDao : Dao<DBLoginData>
     {
-        #region Public Methods and Operators
 
         /// <summary>
-        /// Get all data from login table
         /// </summary>
-        /// <returns>
-        /// Collection of DBLoginData
-        /// </returns>
-        public static IEnumerable<DBLoginData> GetAll()
+        public static LoginDataDao Instance
         {
-            try
+            get
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                if (_instance == null)
                 {
-                    return conn.Query<DBLoginData>("SELECT * FROM login");
+                    _instance = new LoginDataDao();
+                    _instance.TableName = getTablename();
                 }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
+
+                return (LoginDataDao)_instance;
             }
         }
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -76,32 +71,9 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static DBLoginData GetByCharacterId(int charId)
+        public DBLoginData GetByCharacterId(int charId)
         {
-            DBCharacter character = null;
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    character = CharacterDao.GetById(charId).First();
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("username", character.Username);
-                    return conn.Query<DBLoginData>("SELECT * FROM login WHERE Username=@username", p).First();
-                }
-            }
-            catch (Exception)
-            {
-                if (character == null)
-                {
-                    LogUtil.Debug("No character " + charId + " in database. huh?");
-                }
-                else
-                {
-                    LogUtil.Debug("No Account found for Character " + character.Name + " (" + character.Id + ")");
-                }
-
-                throw;
-            }
+            return GetAll(new { CharacterDao.Instance.Get(charId).Username }).FirstOrDefault();
         }
 
         /// <summary>
@@ -113,30 +85,18 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// DBLogindata object
         /// </returns>
-        public static DBLoginData GetByUsername(string username)
+        public DBLoginData GetByUsername(string username)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBLoginData>("SELECT * FROM login where Username=@user", new { user = username })
-                            .First();
-                }
-            }
-            catch
-            {
-                return null;
-            }
+            return GetAll(new { Username = username }).FirstOrDefault();
         }
 
         /// <summary>
         /// </summary>
         /// <param name="user">
         /// </param>
-        public static void LogoffChars(string user)
+        public void LogoffChars(string user)
         {
-            IEnumerable<DBCharacter> characters = CharacterDao.GetAllForUser(user);
+            IEnumerable<DBCharacter> characters = CharacterDao.Instance.GetAllForUser(user); // LOL
             foreach (DBCharacter character in characters)
             {
                 OnlineDao.SetOffline(character.Id);
@@ -177,19 +137,19 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)", 
+                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
                         new
                         {
-                            creationdate = DateTime.Now, 
-                            email = login.Email, 
-                            firstname = login.FirstName, 
-                            lastname = login.LastName, 
-                            username = login.Username, 
-                            password = login.Password, 
-                            allowed_characters = login.Allowed_Characters, 
-                            flags = login.Flags, 
-                            accountflags = login.AccountFlags, 
-                            expansions = login.Expansions, 
+                            creationdate = DateTime.Now,
+                            email = login.Email,
+                            firstname = login.FirstName,
+                            lastname = login.LastName,
+                            username = login.Username,
+                            password = login.Password,
+                            allowed_characters = login.Allowed_Characters,
+                            flags = login.Flags,
+                            accountflags = login.AccountFlags,
+                            expansions = login.Expansions,
                             gm = login.GM
                         });
                 }
@@ -216,7 +176,7 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     return conn.Execute(
-                        "UPDATE login SET password=@pwd WHERE Username=@user LIMIT 1", 
+                        "UPDATE login SET password=@pwd WHERE Username=@user LIMIT 1",
                         new { pwd = login.Password, user = login.Username });
                 }
             }

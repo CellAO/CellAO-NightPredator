@@ -405,7 +405,7 @@ namespace CellAO.Core.Items
         /// </param>
         public void PerformAction(ICharacter character, EventType eventType, int itemSlot)
         {
-            foreach (Events events in this.ItemEvents.Where(x => x.EventType == (int)eventType))
+            foreach (Events events in this.ItemEvents.Where(x => x.EventType == eventType))
             {
                 foreach (Functions functions in events.Functions)
                 {

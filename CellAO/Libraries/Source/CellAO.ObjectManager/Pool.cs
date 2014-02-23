@@ -95,7 +95,12 @@ namespace CellAO.ObjectManager
         /// </returns>
         public IEnumerable<IEntity> GetAll(int identityType)
         {
-            return this.pool[identityType].Values.ToList();
+            List<IEntity> temp = new List<IEntity>();
+            if (this.pool.ContainsKey(identityType))
+            {
+                temp.AddRange((this.pool[identityType].Values.ToArray()));
+            }
+            return temp;
         }
 
         /// <summary>

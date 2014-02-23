@@ -74,7 +74,7 @@ namespace CellAO.Core.Inventory
                 IItem item = this[itemSlot];
                 if (item != null)
                 {
-                    foreach (Events events in item.ItemEvents.Where(x => x.EventType == (int)EventType.OnWear))
+                    foreach (Events events in item.ItemEvents.Where(x => x.EventType == EventType.OnWear))
                     {
                         foreach (Functions functions in events.Functions)
                         {

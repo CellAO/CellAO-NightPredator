@@ -26,33 +26,38 @@
 
 namespace CellAO.Database.Dao
 {
+    using CellAO.Database.Entities;
+
     /// <summary>
     /// Data object for stats
     /// </summary>
-    public class DBStats
+    [Tablename("stats")]
+    public class DBStats : IDBEntity
     {
         #region Public Properties
 
         /// <summary>
-        /// Instance of the stat's owner
-        /// </summary>
-        public int instance { get; set; }
-
-        /// <summary>
         /// Stat number 
         /// </summary>
-        public int statid { get; set; }
+        public int StatId { get; set; }
 
         /// <summary>
         /// Stat's value
         /// </summary>
-        public int statvalue { get; set; }
+        public int StatValue { get; set; }
 
         /// <summary>
         /// Type id of the stat's owner
         /// </summary>
-        public int type { get; set; }
+        [ForeignKey]
+        public int Type { get; set; }
 
+        [ForeignKey]
+        public int Instance { get; set; }
         #endregion
+        /// <summary>
+        /// Instance of the stat's owner
+        /// </summary>
+        public int Id { get; set; }
     }
 }

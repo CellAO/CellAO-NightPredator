@@ -73,7 +73,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                return LoginDataDao.GetByCharacterId(this.Stats.Owner.Instance).GM;
+                return LoginDataDao.Instance.GetByCharacterId(this.Stats.Owner.Instance).GM;
             }
         }
 

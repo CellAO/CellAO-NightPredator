@@ -37,6 +37,8 @@ namespace CellAO.Core.Inventory
     using CellAO.Database.Dao;
     using CellAO.Enums;
 
+    using Dapper;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -219,7 +221,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
+        public void CheckAdd(int slot, ItemTemplate item, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -234,7 +236,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
+        public void CheckRemove(int slot, ItemTemplate templ, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -320,7 +322,9 @@ namespace CellAO.Core.Inventory
         /// </returns>
         public bool Read()
         {
-            foreach (DBItem item in ItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            int containerType = (int)this.Identity.Type;
+
+            foreach (DBItem item in ItemDao.Instance.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -331,14 +335,13 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in
-                InstancedItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new { containertype = containerType, containerinstance = this.identity.Instance }))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
                 Identity temp = new Identity();
                 temp.Type = (IdentityType)item.itemtype;
-                temp.Instance = item.iteminstance;
+                temp.Instance = item.Id;
                 newItem.Identity = temp;
 
                 byte[] binaryStats = item.stats.ToArray();
@@ -383,13 +386,15 @@ namespace CellAO.Core.Inventory
             }
 
             IItem temp = this.Content[slotNum];
+            int containerType = (int)this.Identity.Type;
+
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                ItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
             }
             else
             {
-                InstancedItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                InstancedItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
             }
 
             this.Content.Remove(slotNum);
@@ -449,7 +454,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        public void TryHotSwap(int slotFrom, int slotTo, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -498,15 +503,15 @@ namespace CellAO.Core.Inventory
                 {
                     DBInstancedItem dbi = new DBInstancedItem
                                           {
-                                              containerinstance = this.Identity.Instance, 
-                                              containertype = (int)this.Identity.Type, 
-                                              containerplacement = kv.Key, 
-                                              itemtype = (int)kv.Value.Identity.Type, 
-                                              iteminstance = kv.Value.Identity.Instance, 
-                                              lowid = kv.Value.LowID, 
-                                              highid = kv.Value.HighID, 
-                                              quality = kv.Value.Quality, 
-                                              multiplecount = kv.Value.MultipleCount, 
+                                              containerinstance = this.Identity.Instance,
+                                              containertype = (int)this.Identity.Type,
+                                              containerplacement = kv.Key,
+                                              itemtype = (int)kv.Value.Identity.Type,
+                                              Id = kv.Value.Identity.Instance,
+                                              lowid = kv.Value.LowID,
+                                              highid = kv.Value.HighID,
+                                              quality = kv.Value.Quality,
+                                              multiplecount = kv.Value.MultipleCount,
                                               stats = new Binary(kv.Value.GetItemAttributes())
                                           };
 
@@ -516,12 +521,12 @@ namespace CellAO.Core.Inventory
                 {
                     DBItem dbi = new DBItem
                                  {
-                                     containerinstance = this.Identity.Instance, 
-                                     containertype = (int)this.Identity.Type, 
-                                     containerplacement = kv.Key, 
-                                     lowid = kv.Value.LowID, 
-                                     highid = kv.Value.HighID, 
-                                     quality = kv.Value.Quality, 
+                                     containerinstance = this.Identity.Instance,
+                                     containertype = (int)this.Identity.Type,
+                                     containerplacement = kv.Key,
+                                     lowid = kv.Value.LowID,
+                                     highid = kv.Value.HighID,
+                                     quality = kv.Value.Quality,
                                      multiplecount = kv.Value.MultipleCount
                                  };
 
@@ -529,8 +534,8 @@ namespace CellAO.Core.Inventory
                 }
             }
 
-            ItemDao.Save(DBuninstanced);
-            InstancedItemDao.Save(DBinstanced);
+            ItemDao.Instance.Save(DBuninstanced);
+            InstancedItemDao.Instance.Save(DBinstanced);
             return true;
         }
 

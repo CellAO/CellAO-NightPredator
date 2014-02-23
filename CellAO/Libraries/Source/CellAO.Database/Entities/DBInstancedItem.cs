@@ -30,14 +30,21 @@ namespace CellAO.Database.Dao
 
     using System.Data.Linq;
 
+    using CellAO.Database.Entities;
+
     #endregion
 
     /// <summary>
     /// Data object for instanced items
     /// </summary>
-    public class DBInstancedItem
+    [Tablename("instanceditems")]
+    public class DBInstancedItem : IDBEntity
     {
         #region Public Properties
+        /// <summary>
+        /// Instance id of the item
+        /// </summary>
+        public int Id { get; set; }
 
         /// <summary>
         /// Instance of the container
@@ -80,11 +87,6 @@ namespace CellAO.Database.Dao
         public int highid { get; set; }
 
         /// <summary>
-        /// Instance id of the item
-        /// </summary>
-        public int iteminstance { get; set; }
-
-        /// <summary>
         /// Type id of the instance
         /// </summary>
         public int itemtype { get; set; }
@@ -105,7 +107,7 @@ namespace CellAO.Database.Dao
         public int quality { get; set; }
 
         /// <summary>
-        /// Item's stats
+        /// Item's stats held as blob from msgpack serialization
         /// </summary>
         public Binary stats { get; set; }
 
@@ -125,5 +127,6 @@ namespace CellAO.Database.Dao
         public float z { get; set; }
 
         #endregion
+
     }
 }

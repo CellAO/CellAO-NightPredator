@@ -1,24 +1,24 @@
 CREATE TABLE `mobtemplate` (
   `Hash` varchar(4) NOT NULL,
-  `MinLvl` int(10) NOT NULL DEFAULT '1',
-  `MaxLvl` int(10) NOT NULL DEFAULT '255',
-  `Side` int(10) NOT NULL DEFAULT '3',
-  `Fatness` int(10) NOT NULL DEFAULT '0',
-  `Breed` int(10) NOT NULL DEFAULT '0',
-  `Sex` int(10) NOT NULL DEFAULT '0',
-  `Race` int(10) NOT NULL DEFAULT '1',
+  `MinLvl` int(32) NOT NULL DEFAULT '1',
+  `MaxLvl` int(32) NOT NULL DEFAULT '255',
+  `Side` int(32) NOT NULL DEFAULT '3',
+  `Fatness` int(32) NOT NULL DEFAULT '0',
+  `Breed` int(32) NOT NULL DEFAULT '0',
+  `Sex` int(32) NOT NULL DEFAULT '0',
+  `Race` int(32) NOT NULL DEFAULT '1',
   `Name` varchar(256) NOT NULL DEFAULT '""',
-  `Flags` int(10) NOT NULL DEFAULT '0',
-  `NPCFamily` int(10) NOT NULL DEFAULT '0',
-  `Health` int(10) NOT NULL DEFAULT '1',
-  `MonsterData` int(10) NOT NULL DEFAULT '0',
-  `MonsterScale` int(10) NOT NULL DEFAULT '100',
-  `TextureHands` int(10) NOT NULL DEFAULT '0',
-  `TextureBody` int(10) NOT NULL DEFAULT '0',
-  `TextureFeet` int(10) NOT NULL DEFAULT '0',
-  `TextureArms` int(10) NOT NULL DEFAULT '0',
-  `TextureLegs` int(10) NOT NULL DEFAULT '0',
-  `HeadMesh` int(10) unsigned NOT NULL DEFAULT '0',
+  `Flags` int(32) NOT NULL DEFAULT '0',
+  `NPCFamily` int(32) NOT NULL DEFAULT '0',
+  `Health` int(32) NOT NULL DEFAULT '1',
+  `MonsterData` int(32) NOT NULL DEFAULT '0',
+  `MonsterScale` int(32) NOT NULL DEFAULT '100',
+  `TextureHands` int(32) NOT NULL DEFAULT '0',
+  `TextureBody` int(32) NOT NULL DEFAULT '0',
+  `TextureFeet` int(32) NOT NULL DEFAULT '0',
+  `TextureArms` int(32) NOT NULL DEFAULT '0',
+  `TextureLegs` int(32) NOT NULL DEFAULT '0',
+  `HeadMesh` int(32) unsigned NOT NULL DEFAULT '0',
   `MobMeshs` blob NOT NULL,
   `AdditionalMeshs` blob NOT NULL,
   `DropHashes` text NOT NULL COMMENT 'Comma-delimited item hashes from mobdroptable. Hashes can be added to form a union of items. e.g. HASH01+HASH02, HASH03+HASH04, HASH05',
@@ -27,6 +27,9 @@ CREATE TABLE `mobtemplate` (
   PRIMARY KEY (`Hash`)
 ) ENGINE=MyIsam DEFAULT CHARSET=latin1;
 
+--
+-- This list is not complete and should be filled up.
+--
 
 INSERT INTO `mobtemplate` (`Hash`,`MinLvl`,`MaxLvl`,`Side`,`Fatness`,`Breed`,`Sex`,`Race`,`Name`,`Flags`,`NPCFamily`,`Health`,`MonsterData`,`MonsterScale`,`TextureHands`,`TextureBody`,`TextureFeet`,`TextureArms`,`TextureLegs`,`HeadMesh`,`MobMeshs`,`AdditionalMeshs`,`DropHashes`,`DropSlots`,`DropRates`) VALUES ('GAOI',190,200,3,1,6,0,1,'Guardian of Strife',268964353,207,70000,214973,100,0,0,0,0,0,0,'','',"","","");
 INSERT INTO `mobtemplate` (`Hash`,`MinLvl`,`MaxLvl`,`Side`,`Fatness`,`Breed`,`Sex`,`Race`,`Name`,`Flags`,`NPCFamily`,`Health`,`MonsterData`,`MonsterScale`,`TextureHands`,`TextureBody`,`TextureFeet`,`TextureArms`,`TextureLegs`,`HeadMesh`,`MobMeshs`,`AdditionalMeshs`,`DropHashes`,`DropSlots`,`DropRates`) VALUES ('ABRO',130,150,3,1,6,0,1,'Abyssal Roamer',268964353,183,19670,209361,75,0,0,0,0,0,0,'','',"","","");

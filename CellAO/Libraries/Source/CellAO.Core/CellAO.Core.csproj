@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\..\packages\Dapper.1.13\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
@@ -83,6 +86,7 @@
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
     <Compile Include="Entities\ICharacter.cs" />
+    <Compile Include="Entities\IDynel.cs" />
     <Compile Include="Entities\IInstancedEntity.cs" />
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />
@@ -201,9 +205,9 @@
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+    <ProjectReference Include="..\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
-      <Name>Exceptions</Name>
+      <Name>CellAO.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>

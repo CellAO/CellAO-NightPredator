@@ -1,5 +1,7 @@
 CREATE TABLE  `charactersuploadednanos` (
-  `ID` int(11) NOT NULL,
+	`Id` int(32) NOT NULL AUTO_INCREMENT,
+	`CharacterId` int(32) NOT NULL,
+
   `Nano` int(11) NOT NULL,
   PRIMARY KEY (`ID`,`Nano`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

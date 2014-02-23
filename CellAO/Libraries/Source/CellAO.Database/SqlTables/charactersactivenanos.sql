@@ -1,6 +1,7 @@
 CREATE TABLE  `charactersactivenanos` (
-  `ID` int(10) unsigned NOT NULL,
-  `nanoID` int(10) unsigned NOT NULL,
-  `strain` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`ID`)
+	`Id` int(32) NOT NULL AUTO_INCREMENT,
+	`CharacterId` int(32) NOT NULL,
+	`NanoId` int(32) unsigned NOT NULL,
+	`Strain` int(32) unsigned NOT NULL,
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

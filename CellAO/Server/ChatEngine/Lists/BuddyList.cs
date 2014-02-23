@@ -51,9 +51,9 @@ namespace ChatEngine.Lists
         /// <returns>
         /// Buddy list
         /// </returns>
-        public static IEnumerable<DBBuddyListEntry> LoadBuddyList(int charId)
+        public static List<int> LoadBuddyList(int charId)
         {
-            return BuddyListDao.LoadBuddyList(charId);
+            return CharacterDao.Instance.Get(charId).GetBuddiesIds();
         }
 
         // LoadRecentMsgsList unused?

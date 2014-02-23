@@ -405,26 +405,46 @@ namespace CellAO.Core.Playfields
         /// </typeparam>
         /// <returns>
         /// </returns>
-        public T FindByIdentity<T>(Identity identity) where T : Character
+        public T FindByIdentity<T>(Identity identity) where T : class, IDisposable, IEntity
         {
             return this.Entities.GetObject<T>(identity);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
+        /// <param name="dynel">
         /// </param>
         /// <param name="range">
         /// </param>
         /// <returns>
         /// </returns>
-        public List<Character> FindInRange(ICharacter character, float range)
+        public List<IDynel> FindInRange(IDynel dynel, float range)
         {
-            List<Character> temp = new List<Character>();
-            Coordinate coord = character.Coordinates;
+            List<IDynel> temp = new List<IDynel>();
+            Coordinate coord = dynel.Coordinates;
             foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
             {
-                if (entity == character)
+                if (entity == dynel)
+                {
+                    continue;
+                }
+
+                if (((Dynel)entity).Coordinates.Distance2D(coord) <= range)
+                {
+                    temp.Add((Dynel)entity);
+                }
+            }
+
+            return temp;
+        }
+
+        public List<ICharacter> FindCharacterInRange(IDynel dynel, float range)
+        {
+            List<ICharacter> temp = new List<ICharacter>();
+            Coordinate coord = dynel.Coordinates;
+            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            {
+                if (entity == dynel)
                 {
                     continue;
                 }
@@ -603,7 +623,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
+        /// <param name="dynel">
         /// </param>
         /// <param name="destination">
         /// </param>
@@ -611,27 +631,27 @@ namespace CellAO.Core.Playfields
         /// </param>
         /// <param name="playfield">
         /// </param>
-        public void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield)
+        public void Teleport(Dynel dynel, Coordinate destination, IQuaternion heading, Identity playfield)
         {
             // Prevent client from entering this again
-            if (character.DoNotDoTimers)
+            if (dynel.DoNotDoTimers)
             {
                 return;
             }
 
-            character.DoNotDoTimers = true;
+            dynel.DoNotDoTimers = true;
 
             // Teleport to another playfield
-            ZoneEngine.Core.Packets.Teleport.Send(character, destination, heading, playfield);
+            ZoneEngine.Core.Packets.Teleport.Send(dynel, destination, heading, playfield);
 
             // Send packet, disconnect, and other playfield waits for connect
 
-            DespawnMessage despawnMessage = ZoneEngine.Core.Packets.Despawn.Create(character.Identity);
-            this.AnnounceOthers(despawnMessage, character.Identity);
-            character.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
-            character.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-            character.Save();
-            CharacterDao.SetPlayfield(character.Identity.Instance, (int)playfield.Type, playfield.Instance);
+            DespawnMessage despawnMessage = ZoneEngine.Core.Packets.Despawn.Create(dynel.Identity);
+            this.AnnounceOthers(despawnMessage, dynel.Identity);
+            dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
+            dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
+            dynel.Save();
+            CharacterDao.Instance.SetPlayfield(dynel.Identity.Instance, (int)playfield.Type, playfield.Instance);
 
             // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
             // for now, just transmit our ip and port
@@ -655,8 +675,8 @@ namespace CellAO.Core.Playfields
                                ServerIpAddress = tempIp, 
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
-            character.Client.SendCompressed(redirect);
-            character.DoNotDoTimers = false;
+            dynel.Client.SendCompressed(redirect);
+            dynel.DoNotDoTimers = false;
 
             // character.Client.Server.DisconnectClient(character.Client);
         }
@@ -667,19 +687,19 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="c">
+        /// <param name="dynel">
         /// </param>
-        private void CheckStatelCollision(ICharacter c)
+        private void CheckStatelCollision(ICharacter dynel)
         {
             foreach (StatelData sd in this.statels)
             {
                 foreach (Events ev in
                     sd.Events.Where(
-                        x => (x.EventType == (int)EventType.OnCollide) || (x.EventType == (int)EventType.OnEnter)))
+                        x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
                 {
-                    if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
+                    if (sd.Coord().Distance3D(dynel.Coordinates) < 2.0)
                     {
-                        ev.Perform(c, c);
+                        ev.Perform(dynel, dynel);
                     }
                 }
             }
@@ -687,11 +707,11 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="c">
+        /// <param name="dynel">
         /// </param>
-        private void CheckWallCollision(ICharacter c)
+        private void CheckWallCollision(ICharacter dynel)
         {
-            WallCollisionResult wcr = WallCollision.CheckCollision(c.Coordinates, c.Playfield.Identity.Instance);
+            WallCollisionResult wcr = WallCollision.CheckCollision(dynel.Coordinates, dynel.Playfield.Identity.Instance);
             if (wcr != null)
             {
                 int destPlayfield = wcr.SecondWall.DestinationPlayfield;
@@ -718,12 +738,12 @@ namespace CellAO.Core.Playfields
                     newX -= headDistZ * 8;
                     newZ += headDistX * 8;
 
-                    Coordinate destinationCoordinate = new Coordinate(newX, c.RawCoordinates.Y, newZ);
+                    Coordinate destinationCoordinate = new Coordinate(newX, dynel.RawCoordinates.Y, newZ);
 
                     this.Teleport(
-                        (Character)c, 
+                        (Character)dynel, 
                         destinationCoordinate, 
-                        c.RawHeading, 
+                        dynel.RawHeading, 
                         new Identity() { Type = IdentityType.Playfield, Instance = destPlayfield });
                     return;
                 }
@@ -736,23 +756,23 @@ namespace CellAO.Core.Playfields
         /// </param>
         private void HeartBeatTimer(object sender)
         {
-            IEnumerable<IEntity> temp = null;
+            IEnumerable<IEntity> dynels = null;
             lock (this.Entities)
             {
-                temp = this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is ICharacter);
+                dynels = this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is ICharacter);
             }
 
-            foreach (ICharacter c in temp)
+            foreach (ICharacter dynel in dynels)
             {
-                if (c != null)
+                if (dynel != null)
                 {
-                    if (c.DoNotDoTimers || c.Starting)
+                    if (dynel.DoNotDoTimers || dynel.Starting)
                     {
                         continue;
                     }
 
-                    this.CheckWallCollision(c);
-                    this.CheckStatelCollision(c);
+                    this.CheckWallCollision(dynel);
+                    this.CheckStatelCollision(dynel);
                 }
             }
 

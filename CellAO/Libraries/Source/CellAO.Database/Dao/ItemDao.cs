@@ -32,6 +32,7 @@ namespace CellAO.Database.Dao
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Dapper;
 
@@ -42,63 +43,30 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Items (not instanced)
     /// </summary>
-    public static class ItemDao
+    public class ItemDao : Dao<DBItem>
     {
+        #region Public Properties
+
+        /// <summary>
+        /// </summary>
+        public static ItemDao Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new ItemDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (ItemDao)_instance;
+            }
+        }
+
+
+        #endregion
+
         #region Public Methods and Operators
-
-        /// <summary>
-        /// Load all items from table
-        /// </summary>
-        /// <returns>
-        /// Collection of DBItem
-        /// </returns>
-        public static IEnumerable<DBItem> GetAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBItem>("SELECT * FROM items");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-
-            return new List<DBItem>();
-        }
-
-        /// <summary>
-        /// Load all items of a specific container
-        /// </summary>
-        /// <param name="containerType">
-        /// Type of the container
-        /// </param>
-        /// <param name="containerInstance">
-        /// Instance of the container
-        /// </param>
-        /// <returns>
-        /// Collection of DBItem
-        /// </returns>
-        public static IEnumerable<DBItem> GetAllInContainer(int containerType, int containerInstance)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBItem>(
-                            "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance", 
-                            new { containerType, containerInstance });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
 
         /// <summary>
         /// Load a specific item
@@ -115,76 +83,54 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// DBItem object
         /// </returns>
-        public static DBItem ReadItem(int containerType, int containerInstance, int containerPlacement)
+        public DBItem ReadItem(int containerType, int containerInstance, int containerPlacement)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBItem>(
-                            "SELECT * FROM items WHERE containertype=@containerType AND containerinstance=@containerInstance AND containerplacement=@containerPlacement", 
-                            new { containerType, containerInstance, containerPlacement }).Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
+            return
+                Instance.GetAll(
 
-            return null;
+                        new
+                        {
+                            containertype = containerType,
+                            containerinstance = containerInstance,
+                            containerplacement = containerPlacement
+                        }).FirstOrDefault();
         }
 
         /// <summary>
         /// Remove item from table
         /// </summary>
-        /// <param name="containertype">
-        /// Type of the container
+        /// <param name="containerType">
         /// </param>
-        /// <param name="containerinstance">
-        /// Instance of the container
+        /// <param name="containerInstance">
         /// </param>
-        /// <param name="containerplacement">
-        /// Slot of the item
+        /// <param name="containerPlacement">
         /// </param>
-        public static void RemoveItem(int containertype, int containerinstance, int containerplacement)
+        public void RemoveItem(int containerType, int containerInstance, int containerPlacement)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance AND containerplacement=@containerplacement", 
-                        new { containertype, containerinstance, containerplacement });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
+            int rowsAffected =
+                Instance.Delete(
+                        new
+                        {
+                            containertype = containerType,
+                            containerinstance = containerInstance,
+                            containerplacement = containerPlacement
+                        });
         }
 
         /// <summary>
-        /// Insert one DBItem into tabl
+        /// Insert one DBItem into table
         /// </summary>
         /// <param name="item">
         /// DBItem to write
         /// </param>
-        public static void Save(DBItem item)
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        public void Save(DBItem item, IDbConnection connection, IDbTransaction transaction)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "REPLACE INTO items VALUES (@containerType, @containerInstance, @containerPlacement, @lowid, @highid, @quality, @multiplecount)", 
-                        new { item });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
+            int affectedRows = ItemDao.Instance.Save(item, null, connection, transaction);
+            // Check for 0 rows?
         }
 
         /// <summary>
@@ -193,50 +139,52 @@ namespace CellAO.Database.Dao
         /// <param name="items">
         /// List of DBItem
         /// </param>
-        public static void Save(List<DBItem> items)
+        public void Save(List<DBItem> items, IDbConnection connection, IDbTransaction transaction)
         {
-            if (items.Count == 0)
+            if (items.Count > 0)
             {
-                return;
-            }
 
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
+                using (IDbConnection conn = connection ?? Connector.GetConnection())
                 {
-                    using (IDbTransaction trans = conn.BeginTransaction())
+                    using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
                     {
-                        conn.Execute(
-                            "DELETE FROM items WHERE containertype=@containertype AND containerinstance=@containerinstance", 
-                            new { items[0].containertype, items[0].containerinstance }, 
-                            transaction: trans);
                         foreach (DBItem item in items)
                         {
-                            conn.Execute(
-                                "INSERT INTO items (containertype,containerinstance,containerplacement"
-                                + ",lowid,highid,quality,multiplecount) VALUES (@conttype,"
-                                + " @continstance, @contplacement, @low, @high, @ql, @mc)", 
-                                new
-                                {
-                                    conttype = item.containertype, 
-                                    continstance = item.containerinstance, 
-                                    contplacement = item.containerplacement, 
-                                    low = item.lowid, 
-                                    high = item.highid, 
-                                    ql = item.quality, 
-                                    mc = item.multiplecount, 
-                                }, 
-                                transaction: trans);
+                            Instance.Delete(
+                                    new
+                                    {
+                                        items[0].containertype,
+                                        items[0].containerinstance,
+                                        items[0].Id
+                                    },
+                                connection,
+                                transaction);
+                            Instance.Save(item, new { item.containertype, item.containerinstance, item.Id }, connection, transaction);
                         }
 
                         trans.Commit();
                     }
                 }
             }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
+        }
+
+        /// <summary>
+        /// Load all items of a specific container
+        /// </summary>
+        /// <param name="containerType">
+        /// Type of the container
+        /// </param>
+        /// <param name="containerInstance">
+        /// Instance of the container
+        /// </param>
+        /// <returns>
+        /// Collection of DBItem
+        /// </returns>
+        public IEnumerable<DBItem> GetAllInContainer(int containerType, int containerInstance)
+        {
+            return
+                Instance.GetAll(
+                    new { containertype = containerType, containerinstance = containerInstance });
         }
 
         #endregion

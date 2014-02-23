@@ -31,6 +31,7 @@ namespace CellAO.Core.Actions
     using System.Collections.Generic;
 
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     #endregion
 
@@ -43,7 +44,7 @@ namespace CellAO.Core.Actions
         /// <summary>
         /// Type of Action (constants in ItemLoader)
         /// </summary>
-        int ActionType { get; set; }
+        ActionType ActionType { get; set; }
 
         /// <summary>
         /// List of Requirements for this action

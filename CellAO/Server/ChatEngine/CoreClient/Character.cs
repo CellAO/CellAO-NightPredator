@@ -71,7 +71,7 @@ namespace ChatEngine.CoreClient
 
             if (characterId != 0)
             {
-                this.characterName = CharacterDao.GetCharacterNameById((int)characterId);
+                this.characterName = CharacterDao.Instance.GetCharacterNameById((int)characterId);
             }
         }
 
@@ -98,7 +98,7 @@ namespace ChatEngine.CoreClient
             {
                 if (this.characterGMLevel == -1)
                 {
-                    this.characterGMLevel = LoginDataDao.GetByCharacterId((int)this.CharacterId).GM;
+                    this.characterGMLevel = LoginDataDao.Instance.GetByCharacterId((int)this.CharacterId).GM;
                 }
 
                 return this.characterGMLevel;
@@ -109,19 +109,28 @@ namespace ChatEngine.CoreClient
         /// </summary>
         public int CharacterSide
         {
+
+            // TODO: This does need to be transferred into Stats class
             get
             {
                 if (this.characterSide == -1)
                 {
                     try
                     {
-                        this.characterSide = StatDao.GetById(50000, (int)this.CharacterId, (int)StatIds.side).statvalue;
+                        this.characterSide = StatDao.Instance.GetById(50000, (int)this.CharacterId, (int)StatIds.side).StatValue;
                     }
                     catch (Exception)
                     {
                         // Has no side in database yet
                         this.characterSide = (int)Side.Neutral;
-                        StatDao.AddStat(50000, (int)this.CharacterId, (int)StatIds.side, (int)Side.Neutral);
+                        StatDao.Instance.Add(
+                            new DBStats()
+                            {
+                                Type = 50000,
+                                Instance = (int)this.CharacterId,
+                                StatId = (int)StatIds.side,
+                                StatValue = (int)Side.Neutral
+                            });
                     }
                 }
 
@@ -140,7 +149,7 @@ namespace ChatEngine.CoreClient
         {
             get
             {
-                return StatDao.GetById(50000, (int)this.CharacterId, 5).statvalue;
+                return StatDao.Instance.GetById(50000, (int)this.CharacterId, 5).StatValue;
             }
         }
 

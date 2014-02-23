@@ -24,6 +24,7 @@
 
 #endregion
 
+using CellAO.Enums;
 namespace CellAO.Core.Requirements
 {
     /// <summary>
@@ -35,12 +36,12 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Child operator
         /// </summary>
-        int ChildOperator { get; set; }
+        Operator ChildOperator { get; set; }
 
         /// <summary>
         /// Operator
         /// </summary>
-        int Operator { get; set; }
+        Operator Operator { get; set; }
 
         /// <summary>
         /// Stat to check against
@@ -50,7 +51,7 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Target, from constants
         /// </summary>
-        int Target { get; set; }
+        ItemTarget Target { get; set; }
 
         /// <summary>
         /// Value to check against

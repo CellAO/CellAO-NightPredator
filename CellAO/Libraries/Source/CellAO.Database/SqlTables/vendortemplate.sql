@@ -1,18 +1,21 @@
 CREATE TABLE `vendortemplate` (
   `Hash` varchar(7) NOT NULL,
-  `Lvl` int(10) NOT NULL DEFAULT '1',
+  `Lvl` int(32) NOT NULL DEFAULT '1',
   `Name` varchar(256) NOT NULL DEFAULT "",
-  `itemtemplate` int(10) NOT NULL DEFAULT '0',
+  `ItemTemplate` int(32) NOT NULL DEFAULT '0',
   `ShopInvHash` varchar(4) NOT NULL,
-  `minQL` int(11) DEFAULT '1',
-  `maxQL` int(11) DEFAULT '1',
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `buy` float(3,2) NOT NULL default '0.05', -- Price Modifiere Sell item to Shop
-  `sell` float(3,2) NOT NULL default '1.00', -- Price Modifiere Buy item from Shop
-  `skill` int(3) DEFAULT '161', -- Skill that change the Basic Price of a Item CompLiter(161) for Machines, Psychology(162) for Humans (SL Garden Shops)
-  PRIMARY KEY (`ID`,`Hash`) USING BTREE
+  `MinQL` int(32) DEFAULT '1',
+  `MaxQL` int(32) DEFAULT '1',
+  `Id` int(32) unsigned NOT NULL AUTO_INCREMENT,
+  `Buy` float(5,5) NOT NULL default '0.05', -- Price Modifiere Sell item to Shop
+  `Sell` float(5,5) NOT NULL default '1.00', -- Price Modifiere Buy item from Shop
+  `Skill` int(3) DEFAULT '161', -- Skill that change the Basic Price of a Item CompLiter(161) for Machines, Psychology(162) for Humans (SL Garden Shops)
+  PRIMARY KEY (`Id`,`Hash`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- This list is not complete and should be filled up.
+--
 
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AdvNB', 1, 'Basic Adventurer Crystals', 43580, 'AdvN', 1, 50, 0.04, 1.05, 161);
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AgeNB', 1, 'Basic Agent Crystals', 43579, 'AgeN', 1, 50, 0.04, 1.05, 161);

@@ -98,7 +98,7 @@ namespace LoginEngine.MessageHandlers
                number of characters allowed (num. of chars doesn't work)*/
             string sqlQuery = "SELECT `Expansions`,`Allowed_Characters` FROM `login` WHERE Username = '"
                               + client.AccountName + "'";
-            DBLoginData loginData = LoginDataDao.GetByUsername(client.AccountName);
+            DBLoginData loginData = LoginDataDao.Instance.GetByUsername(client.AccountName);
             expansions = loginData.Expansions;
             allowedCharacters = loginData.Allowed_Characters;
 

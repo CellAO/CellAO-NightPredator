@@ -30,6 +30,10 @@ namespace CellAO.Enums
     /// </summary>
     public enum Operator : int
     {
+        Unknown = 255,
+        Unknown2 = 272,
+        Unknown3 = 110,
+
         /// <summary>
         /// </summary>
         And = 4, 

@@ -30,15 +30,13 @@ namespace ZoneEngine.ChatCommands
 
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Vector;
+    using CellAO.Core.Statels;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
-    using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -46,7 +44,7 @@ namespace ZoneEngine.ChatCommands
 
     /// <summary>
     /// </summary>
-    public class ChatCommandteleport : AOChatCommand
+    public class ChatCommandListStatels : AOChatCommand
     {
         #region Public Methods and Operators
 
@@ -58,18 +56,7 @@ namespace ZoneEngine.ChatCommands
         /// </returns>
         public override bool CheckCommandArguments(string[] args)
         {
-            var check = new List<Type> { typeof(float), typeof(float), typeof(int) };
-            bool check1 = CheckArgumentHelper(check, args);
-
-            check.Clear();
-            check.Add(typeof(float));
-            check.Add(typeof(float));
-            check.Add(typeof(string));
-            check.Add(typeof(float));
-            check.Add(typeof(int));
-            check1 |= CheckArgumentHelper(check, args);
-
-            return check1;
+            return true;
         }
 
         /// <summary>
@@ -80,11 +67,8 @@ namespace ZoneEngine.ChatCommands
         /// </exception>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(
-                ChatText.CreateIM(
-                    character, 
-                    "Teleports you\r\n" + "Usage: /tp [float] [float] [int] (X, Z, Playfield)\r\n"
-                    + "Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)"));
+            // No help needed, no arguments can be given
+            character.Playfield.Publish(ChatText.CreateIM(character, "Lists all extracted statels in this playfield"));
         }
 
         /// <summary>
@@ -97,56 +81,17 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
-            var check = new List<Type> { typeof(float), typeof(float), typeof(int) };
-
-            var coord = new Coordinate();
-            int pf = character.Playfield.Identity.Instance;
-            if (CheckArgumentHelper(check, args))
+            List<StatelData> sd = PlayfieldLoader.PFData[character.Playfield.Identity.Instance].Statels;
+            var messList = new List<MessageBody>();
+            foreach (StatelData s in sd)
             {
-                coord = new Coordinate(
-                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    character.Coordinates.y, 
-                    float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
-                pf = int.Parse(args[3]);
+                messList.Add(
+                    ChatText.Create(
+                        character, 
+                        ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
             }
 
-            check.Clear();
-            check.Add(typeof(float));
-            check.Add(typeof(float));
-            check.Add(typeof(string));
-            check.Add(typeof(float));
-            check.Add(typeof(int));
-
-            if (CheckArgumentHelper(check, args))
-            {
-                coord = new Coordinate(
-                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    float.Parse(args[4], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
-                pf = int.Parse(args[5]);
-            }
-
-            if (!Playfields.ValidPlayfield(pf))
-            {
-                character.Playfield.Publish(
-                    new IMSendAOtomationMessageBodyToClient()
-                    {
-                        Body =
-                            new FeedbackMessage()
-                            {
-                                CategoryId = 110, 
-                                MessageId = 188845972
-                            }, 
-                        client = character.Client
-                    });
-                return;
-            }
-
-            character.Playfield.Teleport(
-                (Character)character, 
-                coord, 
-                character.Heading, 
-                new Identity() { Type = IdentityType.Playfield, Instance = pf });
+            character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));
         }
 
         /// <summary>
@@ -164,7 +109,7 @@ namespace ZoneEngine.ChatCommands
         /// </returns>
         public override List<string> ListCommands()
         {
-            var temp = new List<string> { "tp", "teleport" };
+            var temp = new List<string> { "statels", "liststatels" };
             return temp;
         }
 

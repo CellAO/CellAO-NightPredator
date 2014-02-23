@@ -1,6 +1,6 @@
 CREATE TABLE `vendors` (
-  `ID` int(10) NOT NULL,
-  `Playfield` int(10) NOT NULL DEFAULT '100',
+  `Id` int(32) NOT NULL,
+  `Playfield` int(32) NOT NULL DEFAULT '100',
   `X` float NOT NULL DEFAULT '0',
   `Y` float NOT NULL DEFAULT '0',
   `Z` float NOT NULL DEFAULT '0',
@@ -9,10 +9,14 @@ CREATE TABLE `vendors` (
   `HeadingZ` float NOT NULL DEFAULT '0',
   `HeadingW` float NOT NULL DEFAULT '0',
   `Name` varchar(256) NOT NULL DEFAULT '',
-  `TemplateID` int(10) NOT NULL DEFAULT '0',
+  `TemplateId` int(32) NOT NULL DEFAULT '0',
   `Hash` varchar(7) NOT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Below is an example set of a few vendors, this must be updated during level design.
+--
 
 INSERT INTO `vendors` (`ID`,`Playfield`,`X`,`Y`,`Z`,`HeadingX`,`HeadingY`,`HeadingZ`,`HeadingW`,`Name`,`TemplateID`,`Hash`) VALUES (77332496,1180,197.016,5.01,203.013,0,0.709066,0,0.705142,'',90562,'TraCB');
 INSERT INTO `vendors` (`ID`,`Playfield`,`X`,`Y`,`Z`,`HeadingX`,`HeadingY`,`HeadingZ`,`HeadingW`,`Name`,`TemplateID`,`Hash`) VALUES (77332497,1180,197.01,5.01,198.96,0,0.698414,0,0.715694,'',90564,'SolCB');

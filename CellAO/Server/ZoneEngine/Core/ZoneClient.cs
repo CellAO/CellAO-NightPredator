@@ -126,7 +126,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        public ICharacter Character
+        public Character Character
         {
             get
             {
@@ -166,19 +166,12 @@ namespace ZoneEngine.Core
         /// </exception>
         public void CreateCharacter(int charId)
         {
-            IEnumerable<DBCharacter> daochar = CharacterDao.GetById(charId);
-            if (daochar.Count() == 0)
+            DBCharacter character = CharacterDao.Instance.Get(charId);
+            if (character == null)
             {
                 throw new Exception("Character " + charId + " not found.");
             }
 
-            if (daochar.Count() > 1)
-            {
-                throw new Exception(
-                    daochar.Count() + " Characters with id " + charId + " found??? Check Database setup!");
-            }
-
-            DBCharacter character = daochar.First();
             IPlayfield pf = this.server.PlayfieldById(character.Playfield);
 
             if (pf.Entities.GetObject<Character>(

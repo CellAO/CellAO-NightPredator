@@ -140,7 +140,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             orgLeaderID = orgData.LeaderID;
                         }
 
-                        orgLeaderName = CharacterDao.GetCharacterNameById(orgLeaderID);
+                        orgLeaderName = CharacterDao.Instance.GetCharacterNameById(orgLeaderID);
 
                         string textGovForm = null;
                         if (orgGoverningForm == 0)
@@ -417,7 +417,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     // create the t_player Client namespace, using CmdStr to find character id, in replacement of target.Instance
                     uint kickedFrom = client.Character.Stats[StatIds.clan].BaseValue;
-                    DBCharacter kickChar = CharacterDao.GetByCharName(message.CommandArgs);
+                    DBCharacter kickChar = CharacterDao.Instance.GetByCharName(message.CommandArgs);
                     if (kickChar == null)
                     {
                         client.Character.Playfield.Publish(

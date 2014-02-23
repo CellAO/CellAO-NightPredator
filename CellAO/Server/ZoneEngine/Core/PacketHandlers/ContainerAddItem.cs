@@ -295,7 +295,7 @@ namespace ZoneEngine.Core.PacketHandlers
             // TODO: Add special check for social page
             if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
             {
-                action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWear);
+                action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWear);
                 if (action == null)
                 {
                     return new Actions();
@@ -304,7 +304,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             if (page is WeaponInventoryPage)
             {
-                action = item.ItemActions.SingleOrDefault(x => x.ActionType == (int)ActionType.ToWield);
+                action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWield);
                 if (action == null)
                 {
                     return new Actions();
