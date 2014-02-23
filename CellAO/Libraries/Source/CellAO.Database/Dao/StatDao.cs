@@ -42,42 +42,25 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Stats
     /// </summary>
-    public static class StatDao
+    public class StatDao : Dao<DBStats>
     {
-        #region Public Methods and Operators
-
         /// <summary>
-        /// Add a Stat to table
         /// </summary>
-        /// <param name="type">
-        /// Type id of the owner
-        /// </param>
-        /// <param name="instance">
-        /// Instance of the owner
-        /// </param>
-        /// <param name="num">
-        /// Stat id number
-        /// </param>
-        /// <param name="value">
-        /// Value of the stat
-        /// </param>
-        public static void AddStat(int type, int instance, int num, int value)
+        public static StatDao Instance
         {
-            try
+            get
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                if (_instance == null)
                 {
-                    conn.Execute(
-                        "REPLACE INTO stats (type, instance, statid, statvalue) VALUES (@t, @i, @statid, @statvalue)", 
-                        new { t = type, i = instance, statid = num, statvalue = value });
+                    _instance = new StatDao();
+                    _instance.TableName = getTablename();
                 }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
+
+                return (StatDao)_instance;
             }
         }
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// Bulk insert/replace of stats
@@ -85,50 +68,47 @@ namespace CellAO.Database.Dao
         /// <param name="stats">
         /// List of DBStats
         /// </param>
-        public static void BulkReplace(List<DBStats> stats)
+        public void BulkReplace(List<DBStats> stats, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             try
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                IDbConnection conn = connection;
+                try
                 {
-                    using (IDbTransaction trans = conn.BeginTransaction())
+                    conn = conn ?? Connector.GetConnection();
+                    IDbTransaction trans = transaction;
+                    try
                     {
+                        trans = trans ?? conn.BeginTransaction();
                         // Do it in one transaction, so no stats can be lost
-                        conn.Execute(
-                            "DELETE FROM stats WHERE type=@type AND instance=@instance", 
-                            stats[0], 
-                            transaction: trans);
-                        conn.Execute(
-                            "INSERT INTO stats (type, instance, statid, statvalue) VALUES (@type, @instance, @statid, @statvalue)", 
-                            stats, 
-                            transaction: trans);
-                        trans.Commit();
+                        this.Delete(new { Type = stats[0].Type, Instance = stats[0].Id }, conn, trans);
+                        foreach (DBStats stat in stats)
+                        {
+                            this.Add(stat, conn, trans);
+                        }
                     }
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
+                    finally
+                    {
+                        if (transaction == null)
+                        {
+                            if (trans != null)
+                            {
+                                trans.Commit();
+                                trans.Dispose();
+                            }
+                        }
+                    }
 
-        /// <summary>
-        /// Delete stats
-        /// </summary>
-        /// <param name="type">
-        /// Type id of the owner
-        /// </param>
-        /// <param name="instance">
-        /// Instance of the owner
-        /// </param>
-        public static void DeleteStats(int type, int instance)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
+                }
+                finally
                 {
-                    conn.Execute("DELETE FROM stats WHERE type=@type AND instance=@instance", new { type, instance });
+                    if (connection == null)
+                    {
+                        if (conn != null)
+                        {
+                            conn.Dispose();
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -147,35 +127,13 @@ namespace CellAO.Database.Dao
         public static void DisbandOrganization(int orgId)
         {
             // This only takes care of the offline characters. Characters currently online have to be notified as well (setting their stats + message)
+            // This also does not belong here
+
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute("UPDATE stats SET statvalue=0 WHERE statid=5 AND statvalue=@orgId", new { orgId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Get all Stats
-        /// </summary>
-        /// <returns>
-        /// Collection of DBStats
-        /// </returns>
-        public static IEnumerable<DBStats> GetAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBStats>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
                 }
             }
             catch (Exception e)
@@ -200,57 +158,10 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// DBStats object
         /// </returns>
-        public static DBStats GetById(int type, int instance, int statId)
+        public DBStats GetById(int type, int instance, int statId)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBStats>(
-                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance AND statid=@statId)", 
-                            new { type, instance, statId }).First();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.Debug("Stat "+statId+" for Character "+instance+" not found in database. Empty stat returned.");
-
-                // Log and return an empty stat entry
-                // TODO: Get a DEFAULT value for the stat
-                return new DBStats { type = type, instance = instance, statid = statId, statvalue = 0 };
-            }
-        }
-
-        /// <summary>
-        /// Get list of stats by character type/instance
-        /// </summary>
-        /// <param name="type">
-        /// Type id of the character
-        /// </param>
-        /// <param name="instance">
-        /// Instance of the character
-        /// </param>
-        /// <returns>
-        /// Collection of DBStats
-        /// </returns>
-        public static IEnumerable<DBStats> GetById(int type, int instance)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBStats>(
-                            "SELECT statid, statvalue FROM stats where (type=@type AND instance=@instance)", 
-                            new { type, instance });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            // Return stat or new DBStat with value of 0
+            return StatDao.Instance.GetAll(new { Type = type, Instance = instance, StatId = statId }).FirstOrDefault() ?? new DBStats { Type = type, Instance = instance, StatId = statId, StatValue = 0 };
         }
 
         #endregion

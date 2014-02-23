@@ -127,24 +127,57 @@ namespace CellAO.Database.Dao
         {
             int rowsAffected = 0;
 
-            using (IDbConnection conn = Connector.GetConnection(connection))
+            IDbConnection conn = connection;
+            try
             {
-                rowsAffected = conn.Execute(
-                    SqlMapperUtil.CreateInsertSQL(this.TableName, entity),
-                    entity,
-                    transaction);
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    trans = trans ?? conn.BeginTransaction();
+                    rowsAffected = conn.Execute(
+                        SqlMapperUtil.CreateInsertSQL(this.TableName, entity),
+                        entity,
+                        transaction);
 
-                // we must retrive the Id anyway here. we need to standardise the id as we started to do.
-                if (rowsAffected == 1)
-                {
-                    SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id, transaction);
+
+                    // Does this need to be inside of the transaction or outside?? -- Algorithman
+
+                    // we must retrive the Id anyway here. we need to standardise the id as we started to do.
+                    if (rowsAffected == 1)
+                    {
+                        SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id, transaction);
+                    }
+                    else
+                    {
+                        throw new DataBaseException(
+                            string.Format("Failed to create new record on table '{0}'", this.TableName));
+                    }
                 }
-                else
+                finally
                 {
-                    throw new DataBaseException(
-                        string.Format("Failed to create new record on table '{0}'", this.TableName));
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
                 }
             }
+
 
             return rowsAffected;
         }
@@ -163,10 +196,40 @@ namespace CellAO.Database.Dao
         public int Delete(int entityId, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
-            using (IDbConnection conn = Connector.GetConnection(connection))
+            IDbConnection conn = connection;
+            try
             {
-                rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName), new { id = entityId }, transaction);
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    trans = trans ?? conn.BeginTransaction();
+                    rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName), new { id = entityId }, transaction);
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+
             }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+
             return rowsAffected;
         }
 
@@ -184,9 +247,38 @@ namespace CellAO.Database.Dao
         public int Delete(object whereParameters, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
-            using (IDbConnection conn = Connector.GetConnection(connection))
+            IDbConnection conn = connection;
+            try
             {
-                rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters), transaction: transaction);
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    trans = trans ?? conn.BeginTransaction();
+                    rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters), whereParameters, transaction);
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
             }
             return rowsAffected;
 
@@ -274,14 +366,43 @@ namespace CellAO.Database.Dao
         {
             int rowsAffected = 0;
 
-            using (IDbConnection conn = Connector.GetConnection(connection))
+            IDbConnection conn = connection;
+            try
             {
-                rowsAffected =
-                    conn.Execute(
-                        SqlMapperUtil.CreateUpdateSQL(
-                            this.TableName,
-                            parameters ?? entity), parameters ?? entity,
-                        transaction);
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    trans = trans ?? conn.BeginTransaction();
+                    rowsAffected =
+                        conn.Execute(
+                            SqlMapperUtil.CreateUpdateSQL(
+                                this.TableName,
+                                parameters ?? entity), parameters ?? entity,
+                            transaction);
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
             }
 
             return rowsAffected;
@@ -294,16 +415,41 @@ namespace CellAO.Database.Dao
             IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
-            using (IDbConnection conn = Connector.GetConnection(connection))
+
+            IDbConnection conn = connection;
+            try
             {
-                using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
                 {
+                    trans = trans ?? conn.BeginTransaction();
                     foreach (T entity in entities)
                     {
-                        Delete(entity.Id);
                         rowsAffected += Save(entity, null, conn, trans); // Pass parameters instead of null here? 
                     }
-                    trans.Commit();
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
                 }
             }
             return rowsAffected;

@@ -92,10 +92,10 @@ namespace ChatEngine.CoreClient
                 this.characterFirstName = character.FirstName;
                 this.characterLastName = character.LastName;
 
-                DBStats clan = StatDao.GetById(50000, (int)this.CharacterId, 5);
+                DBStats clan = StatDao.Instance.GetById(50000, (int)this.CharacterId, 5);
                 if (clan != null)
                 {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.statvalue);
+                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.StatValue);
                     this.orgName = org.Name;
                 }
 

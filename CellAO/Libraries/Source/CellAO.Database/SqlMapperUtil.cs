@@ -31,11 +31,11 @@ namespace CellAO.Database
             }
         }
 
-        public static DynamicParameters GetParametersFromObject(object obj, string[] propertyNamesToIgnore)
+        public static DynamicParameters GetParametersFromObject(object obj, string[] propertyNamesToIgnore, bool removeForeignKeys)
         {
             if (propertyNamesToIgnore == null) propertyNamesToIgnore = new string[] { String.Empty };
             DynamicParameters p = new DynamicParameters();
-            PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => !x.GetCustomAttributes(typeof(ForeignKeyAttribute), false).Any()).ToArray();
+            PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => (!x.GetCustomAttributes(typeof(ForeignKeyAttribute), false).Any() || !removeForeignKeys)).ToArray();
 
             foreach (PropertyInfo prop in properties)
             {
@@ -205,7 +205,7 @@ namespace CellAO.Database
                 throw new ArgumentNullException("Cannot create Update SQL statement without parameters");
 
             StringBuilder sb = new StringBuilder(string.Concat("UPDATE ", tablename, " SET "));
-            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null, true).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                     sb.AppendFormat("{0} = @{0},", pname);
@@ -221,7 +221,7 @@ namespace CellAO.Database
                 throw new ArgumentNullException("Cannot create Insert SQL statement without parameters");
 
             StringBuilder sb = new StringBuilder(string.Concat("INSERT INTO ", tablename, " ( "));
-            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null, false).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                 {
@@ -230,7 +230,7 @@ namespace CellAO.Database
             }
             sb.Remove(sb.Length - 1, 1); //  remove last ','
             sb.Append(" ) VALUES ( ");
-            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null, false).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                 {
@@ -253,7 +253,7 @@ namespace CellAO.Database
             else
             {
                 sb.Append(" WHERE ");
-                foreach (string pname in GetParametersFromObject(whereParameters, null).ParameterNames)
+                foreach (string pname in GetParametersFromObject(whereParameters, null, false).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname); // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }
@@ -267,7 +267,7 @@ namespace CellAO.Database
             StringBuilder sb = new StringBuilder(string.Concat("SELECT * FROM ", tablename, (whereParameters != null) ? " WHERE " : String.Empty));
             if (whereParameters != null)
             {
-                foreach (string pname in GetParametersFromObject(whereParameters, null).ParameterNames)
+                foreach (string pname in GetParametersFromObject(whereParameters, null, false).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname); // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }

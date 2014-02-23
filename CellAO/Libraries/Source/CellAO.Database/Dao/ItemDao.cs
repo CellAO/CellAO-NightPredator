@@ -144,7 +144,7 @@ namespace CellAO.Database.Dao
             if (items.Count > 0)
             {
 
-                using (IDbConnection conn = Connector.GetConnection(connection))
+                using (IDbConnection conn = connection ?? Connector.GetConnection())
                 {
                     using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
                     {

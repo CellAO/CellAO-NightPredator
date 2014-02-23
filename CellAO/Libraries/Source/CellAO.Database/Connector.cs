@@ -91,46 +91,41 @@ namespace CellAO.Database
         /// <exception cref="ConnectionStringErrorException">
         /// Connection could not be established (check config.xml)
         /// </exception>
-        public static IDbConnection GetConnection(IDbConnection existingConnection = null)
+        public static IDbConnection GetConnection()
         {
-            IDbConnection conn = existingConnection;
+            IDbConnection conn = null;
+            if (connector == null)
+            {
+                if (sqlType == "MySql")
+                {
+                    connector = new MySQLConnector(ConnectionStringMySql);
+                }
+
+                if (sqlType == "MsSql")
+                {
+                    connector = new MSSqlConnector(ConnectionStringMssql);
+                }
+
+                if (sqlType == "PostgreSQL")
+                {
+                    connector = new NpgsqlConnector(ConnectionStringPostGreSql);
+                }
+            }
+
+            if (connector == null)
+            {
+                throw new DatabaseCouldNotBeDeterminedException("Could not determine your database");
+            }
+
+            conn = connector.GetConnection();
+
             if (conn == null)
             {
-                if (connector == null)
-                {
-                    if (sqlType == "MySql")
-                    {
-                        connector = new MySQLConnector(ConnectionStringMySql);
-                    }
-
-                    if (sqlType == "MsSql")
-                    {
-                        connector = new MSSqlConnector(ConnectionStringMssql);
-                    }
-
-                    if (sqlType == "PostgreSQL")
-                    {
-                        connector = new NpgsqlConnector(ConnectionStringPostGreSql);
-                    }
-                }
-
-                if (connector == null)
-                {
-                    throw new DatabaseCouldNotBeDeterminedException("Could not determine your database");
-                }
-
-                conn = connector.GetConnection();
-
-                if (conn == null)
-                {
-                    throw new ConnectionStringErrorException("ConnectionString error");
-                }
+                throw new ConnectionStringErrorException("ConnectionString error");
             }
 
-            if ((conn.State == ConnectionState.Closed) || (conn.State == ConnectionState.Broken))
-            {
-                conn.Open();
-            }
+
+            conn.Open();
 
             return conn;
         }

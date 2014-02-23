@@ -72,7 +72,7 @@ namespace ChatEngine.Packets
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                writer.WriteUInt32((UInt32)StatDao.GetById(50000, character.Id, 54).statvalue);
+                writer.WriteUInt32((UInt32)StatDao.Instance.GetById(50000, character.Id, 54).StatValue);
             }
 
             writer.WriteBytes(numberOfCharacters);

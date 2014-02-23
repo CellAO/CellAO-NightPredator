@@ -59,10 +59,10 @@ namespace LoginEngine.QueryBase
                 charentry.Id = ch.Id;
                 charentry.Name = ch.Name;
                 charentry.Playfield = ch.Playfield;
-                charentry.Level = StatDao.GetById(50000, ch.Id, 54).statvalue; // 54 = Level
-                charentry.Breed = StatDao.GetById(50000, ch.Id, 4).statvalue; // 4 = Breed
-                charentry.Gender = StatDao.GetById(50000, ch.Id, 59).statvalue; // 59 = Sex
-                charentry.Profession = StatDao.GetById(50000, ch.Id, 60).statvalue; // 60 = Profession
+                charentry.Level = StatDao.Instance.GetById(50000, ch.Id, 54).StatValue; // 54 = Level
+                charentry.Breed = StatDao.Instance.GetById(50000, ch.Id, 4).StatValue; // 4 = Breed
+                charentry.Gender = StatDao.Instance.GetById(50000, ch.Id, 59).StatValue; // 59 = Sex
+                charentry.Profession = StatDao.Instance.GetById(50000, ch.Id, 60).StatValue; // 60 = Profession
                 characters.Add(charentry);
             }
 

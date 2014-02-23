@@ -20,7 +20,7 @@ CREATE TABLE  `characters` (
   `HeadingW` float NOT NULL,
   `Online` smallint(6) DEFAULT '0',
 
-  `BuddyList` varchar(500) NOT NULL DEFAULT '', -- csv list of buddy player ID
+  `BuddyList` varchar(500) NULL DEFAULT '', -- csv list of buddy player ID
 
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;

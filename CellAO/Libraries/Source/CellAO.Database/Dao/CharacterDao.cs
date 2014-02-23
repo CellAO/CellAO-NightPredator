@@ -119,7 +119,7 @@ namespace CellAO.Database.Dao
 
                     // TODO: refactor StatDao
                     // delete characters stats
-                    StatDao.DeleteStats(50000, id);
+                    StatDao.Instance.Delete(new { type = 50000, Id = id });
                     if (transaction == null)
                     {
                         trans.Commit();

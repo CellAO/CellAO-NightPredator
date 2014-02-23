@@ -5406,7 +5406,7 @@ namespace CellAO.Stats
                         temp.Add(
                             new GameTuple<CharacterStat, uint>()
                             {
-                                Value1 = (CharacterStat)stat.StatId, 
+                                Value1 = (CharacterStat)stat.StatId,
                                 Value2 =
                                     stat.SendBaseValue
                                         ? stat.BaseValue
@@ -5433,7 +5433,7 @@ namespace CellAO.Stats
                         temp.Add(
                             new GameTuple<CharacterStat, uint>()
                             {
-                                Value1 = (CharacterStat)stat.StatId, 
+                                Value1 = (CharacterStat)stat.StatId,
                                 Value2 =
                                     stat.SendBaseValue
                                         ? stat.BaseValue
@@ -11731,9 +11731,9 @@ namespace CellAO.Stats
         public void ReadStatsfromSql(Identity identity)
         {
             foreach (DBStats dbStats in
-                StatDao.GetById((int)identity.Type, identity.Instance))
+                StatDao.Instance.GetAll(new{Type=(int)identity.Type, Instance=identity.Instance}))
             {
-                this.SetBaseValueWithoutTriggering(dbStats.statid, (uint)dbStats.statvalue);
+                this.SetBaseValueWithoutTriggering(dbStats.StatId, (uint)dbStats.StatValue);
             }
         }
 
@@ -12036,21 +12036,21 @@ namespace CellAO.Stats
                     temp.Add(
                         new DBStats
                         {
-                            statid = stat.StatId, 
-                            statvalue = (int)stat.BaseValue, 
-                            type = typ, 
-                            instance = inst
+                            StatId = stat.StatId,
+                            StatValue = (int)stat.BaseValue,
+                            Type = typ,
+                            Instance = inst
                         });
                 }
             }
 
             if (temp.Count == 0)
             {
-                StatDao.DeleteStats(typ, inst);
+                StatDao.Instance.Delete(new { type = typ, Id = inst });
             }
             else
             {
-                StatDao.BulkReplace(temp);
+                StatDao.Instance.BulkReplace(temp);
             }
 
             return true;
