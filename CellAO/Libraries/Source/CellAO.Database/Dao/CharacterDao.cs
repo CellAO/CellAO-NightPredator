@@ -83,7 +83,10 @@ namespace CellAO.Database.Dao
                 // saves to the database
                 // DynamicParameters parameters = new DynamicParameters(character);  new{character.BuddyList should do it too
                 // parameters.Add("BuddyList", character.BuddyList); not needed, AddBuddy already adds the id to the CSV string
-                this.Save(character, new{character.BuddyList});
+                // this.Save(character, new { character.BuddyList });
+
+                // New: (we need to pass the id as parameter here)
+                this.Save(character, new { character.BuddyList, character.Id });
             }
         }
 
@@ -98,22 +101,31 @@ namespace CellAO.Database.Dao
         public new void Delete(int id, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             // NEW AND FUUUUUCK YOU VS
-            using (IDbConnection conn = Connector.GetConnection(connection))
+            using (IDbConnection conn = connection ?? Connector.GetConnection())
             {
-                // TODO : move these two to their own DAOs
+                using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
+                {
+                    // TODO : move these two to their own DAOs
 
-                // remove this character from organisations
-                conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id }, transaction);
+                    // remove this character from organisations
+                    conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id }, trans);
 
-                // empty this characters inventory
-                conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id }, transaction);
+                    // empty this characters inventory
+                    conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id }, trans);
+
+                    // deletes this character
+                    base.Delete(id, conn, trans);
+
+
+                    // TODO: refactor StatDao
+                    // delete characters stats
+                    StatDao.DeleteStats(50000, id);
+                    if (transaction == null)
+                    {
+                        trans.Commit();
+                    }
+                }
             }
-
-            // deletes this character
-            base.Delete(id, connection, transaction);
-
-            // delete characters stats
-            StatDao.DeleteStats(50000, id);
         }
 
         /// <summary>
@@ -141,7 +153,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            return Instance.GetAll(new { username= username  });
+            return Instance.GetAll(new { username = username });
         }
 
         /// <summary>
@@ -156,7 +168,7 @@ namespace CellAO.Database.Dao
         public DBCharacter GetByCharName(string name)
         {
             return
-                Instance.GetAll(new { Name=name })
+                Instance.GetAll(new { Name = name })
                     .FirstOrDefault();
         }
 
@@ -200,7 +212,7 @@ namespace CellAO.Database.Dao
             bool result;
             using (IDbConnection conn = Connector.GetConnection())
             {
-                result = conn.Query<int>(SQL, new {userName,characterId }).Count() == 1;
+                result = conn.Query<int>(SQL, new { userName, characterId }).Count() == 1;
             }
 
             return result;
@@ -222,7 +234,14 @@ namespace CellAO.Database.Dao
 
                 // saves to the database
                 // parameters.Add("BuddyList", character.BuddyList); Obsolete, RemoveBuddy removes from character object already
-                this.Save(character, character);
+
+                // CAUTION
+                // This could lead to a nasty multithreading issue
+                // RemoveBuddy reads, char logs (and saves) out and RemoveBuddy saves over it again
+                // this.Save(character, character);
+
+                // New:
+                this.Save(character, new { character.BuddyList, character.Id });
             }
         }
 
@@ -248,7 +267,7 @@ namespace CellAO.Database.Dao
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
                 new DBCharacter(), // completely empty one is enough here, parameters have higher priority
-                new { Playfield = pfNum, Id=charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
+                new { Playfield = pfNum, Id = charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
 
             // should ensure that rowsAffected == 1 otherwise ???
         }
