@@ -137,7 +137,7 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, Allowed_Characters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
+                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, AllowedCharacters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
                         new
                         {
                             creationdate = DateTime.Now,
@@ -146,7 +146,7 @@ namespace CellAO.Database.Dao
                             lastname = login.LastName,
                             username = login.Username,
                             password = login.Password,
-                            allowed_characters = login.Allowed_Characters,
+                            allowed_characters = login.AllowedCharacters,
                             flags = login.Flags,
                             accountflags = login.AccountFlags,
                             expansions = login.Expansions,

@@ -50,7 +50,7 @@ namespace CellAO.Database.Dao
         /// <summary>
         /// Number of allowed characters
         /// </summary>
-        public int Allowed_Characters { get; set; }
+        public int AllowedCharacters { get; set; }
 
         /// <summary>
         /// Date of account creation

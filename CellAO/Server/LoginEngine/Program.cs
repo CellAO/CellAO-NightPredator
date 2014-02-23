@@ -117,7 +117,7 @@ namespace LoginEngine
                                 {
                                     Username = obj[1], 
                                     AccountFlags = 0, 
-                                    Allowed_Characters = int.Parse(obj[3]), 
+                                    AllowedCharacters = int.Parse(obj[3]), 
                                     CreationDate = DateTime.Now, 
                                     Email = obj[6], 
                                     Expansions = int.Parse(obj[4]), 
@@ -507,7 +507,7 @@ namespace LoginEngine
                                                            {
                                                                Username = username,
                                                                AccountFlags = 0,
-                                                               Allowed_Characters = numChars,
+                                                               AllowedCharacters = numChars,
                                                                CreationDate = DateTime.Now,
                                                                Email = email,
                                                                Expansions = expansions,

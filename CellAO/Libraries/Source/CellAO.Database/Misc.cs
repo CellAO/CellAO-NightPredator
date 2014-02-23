@@ -155,8 +155,15 @@ namespace CellAO.Database
 
                                         counter++;
                                     }
-
-                                    conn.Execute(sqlQuery);
+                                    try
+                                    {
+                                        conn.Execute(sqlQuery);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Console.WriteLine(sqlQuery);
+                                        throw;
+                                    }
 
                                     counter++;
                                     string buf1 = string.Empty;
