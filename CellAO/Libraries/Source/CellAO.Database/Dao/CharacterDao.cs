@@ -247,7 +247,7 @@ namespace CellAO.Database.Dao
         {
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
-                new DBCharacter { Id = charId },
+                new DBCharacter(), // completely empty one is enough here, parameters have higher priority
                 new { Playfield = pfNum, Id=charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
 
             // should ensure that rowsAffected == 1 otherwise ???

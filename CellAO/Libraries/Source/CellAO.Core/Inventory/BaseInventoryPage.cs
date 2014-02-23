@@ -335,7 +335,7 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new DynamicParameters(new { containertype = containerType, containerinstance = this.identity.Instance })))
+            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new { containertype = containerType, containerinstance = this.identity.Instance }))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -390,11 +390,11 @@ namespace CellAO.Core.Inventory
 
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.Instance.Delete(new DynamicParameters(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum }));
+                ItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
             }
             else
             {
-                InstancedItemDao.Instance.Delete(new DynamicParameters(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum }));
+                InstancedItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
             }
 
             this.Content.Remove(slotNum);

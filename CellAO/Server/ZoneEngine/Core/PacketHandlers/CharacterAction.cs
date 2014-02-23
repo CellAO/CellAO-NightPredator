@@ -469,12 +469,12 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
 
                 case 0x70: // Remove/Delete item
-                    ItemDao.Instance.Delete(new DynamicParameters(new
+                    ItemDao.Instance.Delete(new
                     {
                         containertype = (int)packet.Target.Type,
                         containerinstance = client.Character.Identity.Instance,
                         Id = packet.Target.Instance
-                    }));
+                    });
                     client.Character.BaseInventory.RemoveItem((int)packet.Target.Type, packet.Target.Instance);
                     client.SendCompressed(packet);
                     break;
