@@ -81,7 +81,7 @@ namespace CellAO.Database.Dao
                     {
                         trans = trans ?? conn.BeginTransaction();
                         // Do it in one transaction, so no stats can be lost
-                        this.Delete(new { Type = stats[0].Type, Instance = stats[0].Id }, conn, trans);
+                        this.Delete(new { Type = stats[0].Type, Instance = stats[0].Instance }, conn, trans);
                         foreach (DBStats stat in stats)
                         {
                             this.Add(stat, conn, trans);
