@@ -11,6 +11,8 @@ using Dapper;
 
 namespace CellAO.Database
 {
+    using CellAO.Database.Entities;
+
     using Utility.Config;
 
     public static class SqlMapperUtil
@@ -35,7 +37,7 @@ namespace CellAO.Database
         {
             if (propertyNamesToIgnore == null) propertyNamesToIgnore = new string[] { String.Empty };
             DynamicParameters p = new DynamicParameters();
-            PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => !x.GetCustomAttributes(typeof(ForeignKeyAttribute), false).Any()).ToArray();
 
             foreach (PropertyInfo prop in properties)
             {

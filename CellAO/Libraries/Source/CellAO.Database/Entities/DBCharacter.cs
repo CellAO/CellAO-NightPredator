@@ -78,6 +78,7 @@ namespace CellAO.Database.Entities
         /// <summary>
         /// Username of the character
         /// </summary>
+        [ForeignKey]
         public string Username { get; set; }
 
         /// <summary>

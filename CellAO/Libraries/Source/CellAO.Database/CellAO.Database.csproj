@@ -89,6 +89,7 @@
     <Compile Include="Entities\DBRecentMessages.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Entities\DBTradeSkill.cs" />
+    <Compile Include="Entities\ForeignKeyAttribute.cs" />
     <Compile Include="Entities\IDBEntity.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
