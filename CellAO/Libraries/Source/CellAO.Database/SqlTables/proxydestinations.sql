@@ -1,12 +1,12 @@
 CREATE TABLE  `proxydestinations` (
-  `playfield` int(11) NOT NULL AUTO_INCREMENT,
+  `Playfield` int(32) NOT NULL AUTO_INCREMENT,
   `X` float NOT NULL,
   `Y` float NOT NULL,
   `Z` float NOT NULL,
-  `rotx` float NOT NULL,
-  `roty` float NOT NULL,
-  `rotz` float NOT NULL,
-  `rotw` float NOT NULL,
+  `RotX` float NOT NULL,
+  `RotY` float NOT NULL,
+  `RotZ` float NOT NULL,
+  `RotW` float NOT NULL,
   PRIMARY KEY (`playfield`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6056 DEFAULT CHARSET=latin1;
 

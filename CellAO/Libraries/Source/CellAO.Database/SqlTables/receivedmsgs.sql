@@ -1,6 +1,6 @@
 ﻿CREATE TABLE `receivedmsgs` (
-	`PlayerID` INT(32) NOT NULL,
-	`ReceivedID` INT(32) NOT NULL,
-	INDEX `index1` (`PlayerID`)
+	`PlayerId` INT(32) NOT NULL,
+	`ReceivedId` INT(32) NOT NULL,
+	INDEX `index1` (`PlayerId`)
 )
 ENGINE=InnoDB;

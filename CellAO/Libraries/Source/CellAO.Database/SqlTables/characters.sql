@@ -1,5 +1,5 @@
 CREATE TABLE  `characters` (
-  `ID` int(32) NOT NULL AUTO_INCREMENT, -- PK
+  `Id` int(32) NOT NULL AUTO_INCREMENT, -- PK
 
   `Username` varchar(32) NOT NULL,
   `Name` varchar(32) NOT NULL,
@@ -22,5 +22,5 @@ CREATE TABLE  `characters` (
 
   `BuddyList` varchar(500) NULL DEFAULT '', -- csv list of buddy player ID
 
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;

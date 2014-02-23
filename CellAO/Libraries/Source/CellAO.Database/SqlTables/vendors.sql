@@ -1,6 +1,6 @@
 CREATE TABLE `vendors` (
-  `ID` int(10) NOT NULL,
-  `Playfield` int(10) NOT NULL DEFAULT '100',
+  `Id` int(32) NOT NULL,
+  `Playfield` int(32) NOT NULL DEFAULT '100',
   `X` float NOT NULL DEFAULT '0',
   `Y` float NOT NULL DEFAULT '0',
   `Z` float NOT NULL DEFAULT '0',
@@ -9,9 +9,9 @@ CREATE TABLE `vendors` (
   `HeadingZ` float NOT NULL DEFAULT '0',
   `HeadingW` float NOT NULL DEFAULT '0',
   `Name` varchar(256) NOT NULL DEFAULT '',
-  `TemplateID` int(10) NOT NULL DEFAULT '0',
+  `TemplateId` int(32) NOT NULL DEFAULT '0',
   `Hash` varchar(7) NOT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --

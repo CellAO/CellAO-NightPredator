@@ -5,7 +5,7 @@ CREATE TABLE `stats` (
 	`StatId` INT(32) NOT NULL,
 	`StatValue` INT(32) NOT NULL,
 	UNIQUE INDEX `main` (`Type`, `Instance`, `StatId`),
-	PRIMARY KEY (`ID`)
+	PRIMARY KEY (`Id`)
 )
 COLLATE='latin1_general_ci'
 ENGINE=InnoDB;
