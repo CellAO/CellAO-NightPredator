@@ -181,7 +181,7 @@ namespace ZoneEngine.Core
         /// </summary>
         private void CacheItemNames()
         {
-            foreach (DBItemName itemName in ItemNamesDao.GetNames())
+            foreach (DBItemName itemName in ItemNamesDao.Instance.GetAll())
             {
                 this.ItemNames.Add(itemName.Id, itemName.Name);
             }
@@ -193,7 +193,7 @@ namespace ZoneEngine.Core
         {
             int i = 0;
             this.tradeSkillList.Clear();
-            foreach (DBTradeSkill tradeSkill in TradeSkillDao.ReadTradeSkills())
+            foreach (DBTradeSkill tradeSkill in TradeSkillDao.Instance.ReadTradeSkills())
             {
                 this.tradeSkillList.Add(TradeSkillEntry.ConvertFromDB(tradeSkill));
                 i++;

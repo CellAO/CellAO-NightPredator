@@ -73,7 +73,7 @@
     <Compile Include="Dao\LoginDataDao.cs" />
     <Compile Include="Dao\OnlineDao.cs" />
     <Compile Include="Dao\OrganizationDao.cs" />
-    <Compile Include="Dao\RecentMessagesDao.cs" />
+    <Compile Include="Dao\ReceivedMessagesDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
     <Compile Include="Dao\TablenameAttribute.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
@@ -84,9 +84,8 @@
     <Compile Include="Entities\DBItem.cs" />
     <Compile Include="Entities\DBItemName.cs" />
     <Compile Include="Entities\DBLoginData.cs" />
-    <Compile Include="Entities\DBOnline.cs" />
     <Compile Include="Entities\DBOrganization.cs" />
-    <Compile Include="Entities\DBRecentMessages.cs" />
+    <Compile Include="Entities\DBReceivedMessages.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Entities\DBTradeSkill.cs" />
     <Compile Include="Entities\ForeignKeyAttribute.cs" />

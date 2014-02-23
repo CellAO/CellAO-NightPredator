@@ -67,9 +67,9 @@ namespace ChatEngine.Lists
         /// <returns>
         /// List of received messages
         /// </returns>
-        public static IEnumerable<DBRecentMessages> LoadRecentMsgsList(uint charId)
+        public static IEnumerable<DBReceivedMessages> LoadRecentMsgsList(uint charId)
         {
-            return RecentMessagesDao.LoadRecentMessageses((int)charId);
+            return ReceivedMessagesDao.Instance.LoadRecentMessageses((int)charId);
         }
 
         #endregion

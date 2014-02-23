@@ -44,7 +44,6 @@ namespace CellAO.Database.Dao
     /// </summary>
     public class InstancedItemDao : Dao<DBInstancedItem>
     {
-        #region Public Properties
 
         /// <summary>
         /// </summary>
@@ -62,6 +61,5 @@ namespace CellAO.Database.Dao
             }
         }
 
-        #endregion
     }
 }

@@ -26,9 +26,12 @@
 
 namespace CellAO.Database.Entities
 {
+    using CellAO.Database.Dao;
+
     /// <summary>
     /// </summary>
-    public class DBItemName
+    [Tablename("itemnames")]
+    public class DBItemName : IDBEntity
     {
         #region Public Properties
 

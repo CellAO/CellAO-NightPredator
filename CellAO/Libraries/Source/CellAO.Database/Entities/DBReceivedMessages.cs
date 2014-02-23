@@ -24,20 +24,24 @@
 
 #endregion
 
-namespace CellAO.Database.Dao
+namespace CellAO.Database.Entities
 {
     /// <summary>
-    /// Data object for online status
     /// </summary>
-    public class DBOnline
+    public class DBReceivedMessages: IDBEntity
     {
         #region Public Properties
 
         /// <summary>
-        /// Online status
         /// </summary>
-        public int Online { get; set; }
+        public int PlayerID { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int ReceivedID { get; set; }
 
         #endregion
+
+        public int Id { get; set; }
     }
 }

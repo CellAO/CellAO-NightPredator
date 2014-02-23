@@ -74,7 +74,7 @@ namespace ChatEngine.PacketHandlers
                     client.Send(
                         BuddyOnlineStatus.Create(
                             (uint)tellClient.Character.CharacterId, 
-                            (uint)OnlineDao.IsOnline((int)tellClient.Character.CharacterId).Online, 
+                            (uint)OnlineDao.IsOnline((int)tellClient.Character.CharacterId), 
                             new byte[] { 0x00, 0x01, 0x00 }));
                 }
 

@@ -81,7 +81,7 @@ namespace LoginEngine.MessageHandlers
                 return;
             }
 
-            if (OnlineDao.IsOnline(selectCharacterMessage.CharacterId).Online == 1)
+            if (OnlineDao.IsOnline(selectCharacterMessage.CharacterId) == 1)
             {
                 Console.WriteLine(
                     "Client '" + client.AccountName
