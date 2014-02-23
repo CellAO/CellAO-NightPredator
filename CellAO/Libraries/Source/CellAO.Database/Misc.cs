@@ -302,12 +302,10 @@ namespace CellAO.Database
                             " AND `ID` NOT IN (SELECT `ID` FROM `characters_stats` WHERE `Stat` = '48' AND `Value` = '0')";
                     }
 
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("@orgId");
                     orgMembers.AddRange(
                         conn.Query<int>(
                             "SELECT `ID` FROM `characters_stats` WHERE `Stat` = '5' AND `Value` = @orgId " + pres, 
-                            p));
+                            orgId));
                 }
             }
             catch (Exception e)

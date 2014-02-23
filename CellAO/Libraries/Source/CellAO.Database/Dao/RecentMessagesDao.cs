@@ -58,10 +58,7 @@ namespace CellAO.Database.Dao
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("charId", charId);
-                    p.Add("receivedId", ReceivedFrom);
-                    conn.Execute("INSERT INTO `receivedmsgs` VALUES (@charId, @receivedId)", p);
+                    conn.Execute("INSERT INTO `receivedmsgs` VALUES (@charId, @receivedId)", new { charId, receivedId = ReceivedFrom });
                 }
             }
             catch (Exception e)
@@ -82,12 +79,10 @@ namespace CellAO.Database.Dao
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("charId", charId);
                     return
                         conn.Query<DBRecentMessages>(
-                            "SELECT `ReceivedID` FROM `receivedmsgs` WHERE PlayerID = @charId", 
-                            p);
+                            "SELECT `ReceivedID` FROM `receivedmsgs` WHERE PlayerID = @charId",
+                            charId);
                 }
             }
             catch (Exception e)
@@ -107,9 +102,7 @@ namespace CellAO.Database.Dao
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("charId", charId);
-                    conn.Execute("DELETE FROM `receivedmsgs` WHERE PlayerID = @charId OR ReceivedID = @charId", p);
+                    conn.Execute("DELETE FROM `receivedmsgs` WHERE PlayerID = @charId OR ReceivedID = @charId", charId);
                 }
             }
             catch (Exception e)

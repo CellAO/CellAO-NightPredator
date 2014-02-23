@@ -130,7 +130,7 @@ namespace CellAO.Database.Dao
             using (IDbConnection conn = Connector.GetConnection(connection))
             {
                 rowsAffected = conn.Execute(
-                    SqlMapperUtil.CreateInsertSQL(this.TableName, this.getAllParameters(entity)),
+                    SqlMapperUtil.CreateInsertSQL(this.TableName, entity),
                     entity,
                     transaction);
 
@@ -181,7 +181,7 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// optional transaction for the delete
         /// </param>
-        public int Delete(DynamicParameters whereParameters, IDbConnection connection = null, IDbTransaction transaction = null)
+        public int Delete(object whereParameters, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
             using (IDbConnection conn = Connector.GetConnection(connection))
@@ -226,10 +226,8 @@ namespace CellAO.Database.Dao
             T entity = default(T);
             using (IDbConnection conn = Connector.GetConnection())
             {
-                DynamicParameters whereParameters = new DynamicParameters();
-                whereParameters.Add("Id", entityId);
                 entity =
-                    conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, whereParameters), whereParameters)
+                    conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, new { Id = entityId }), new { Id = entityId })
                         .SingleOrDefault();
             }
 
@@ -246,7 +244,7 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// Collection of DBCharacter
         /// </returns>
-        public IEnumerable<T> GetAll(DynamicParameters parameters = null)
+        public IEnumerable<T> GetAll(object parameters = null)
         {
             IEnumerable<T> entities = null;
             using (IDbConnection conn = Connector.GetConnection())
@@ -272,7 +270,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public int Save(T entity, DynamicParameters parameters = null, IDbConnection connection = null, IDbTransaction transaction = null)
+        public int Save(T entity, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
 
@@ -282,7 +280,7 @@ namespace CellAO.Database.Dao
                     conn.Execute(
                         SqlMapperUtil.CreateUpdateSQL(
                             this.TableName,
-                            parameters ?? this.getAllParameters(entity)), parameters ?? this.getAllParameters(entity),
+                            parameters ?? entity), parameters ?? entity,
                         transaction);
             }
 
@@ -291,7 +289,7 @@ namespace CellAO.Database.Dao
 
         public int Save(
             List<T> entities,
-            DynamicParameters parameters = null,
+            object parameters = null,
             IDbConnection connection = null,
             IDbTransaction transaction = null)
         {
@@ -303,7 +301,7 @@ namespace CellAO.Database.Dao
                     foreach (T entity in entities)
                     {
                         Delete(entity.Id);
-                        rowsAffected += Save(entity, null, conn, trans);
+                        rowsAffected += Save(entity, null, conn, trans); // Pass parameters instead of null here? 
                     }
                     trans.Commit();
                 }
@@ -321,7 +319,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         private DynamicParameters getAllParameters(T item)
         {
-            DynamicParameters parameters = new DynamicParameters(this);
+            DynamicParameters parameters = new DynamicParameters();
             foreach (string propertyName in CachedProperties.Keys)
             {
                 parameters.Add(propertyName, CachedProperties[propertyName].GetValue(item, null));

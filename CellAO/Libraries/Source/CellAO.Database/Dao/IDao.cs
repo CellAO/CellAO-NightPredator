@@ -81,7 +81,7 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// </returns>
         int Delete(
-            DynamicParameters whereParameters, 
+            object whereParameters, 
             IDbConnection connection = null, 
             IDbTransaction transaction = null);
 
@@ -107,7 +107,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        IEnumerable<T> GetAll(DynamicParameters parameters = null);
+        IEnumerable<T> GetAll(object parameters = null);
 
         /// <summary>
         /// </summary>
@@ -123,7 +123,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         int Save(
             T dbentity, 
-            DynamicParameters parameters = null, 
+            object parameters = null, 
             IDbConnection connection = null, 
             IDbTransaction transaction = null);
 

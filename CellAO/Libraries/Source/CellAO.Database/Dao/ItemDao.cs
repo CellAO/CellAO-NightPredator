@@ -87,13 +87,13 @@ namespace CellAO.Database.Dao
         {
             return
                 Instance.GetAll(
-                    new DynamicParameters(
+
                         new
                         {
                             containertype = containerType,
                             containerinstance = containerInstance,
                             containerplacement = containerPlacement
-                        })).FirstOrDefault();
+                        }).FirstOrDefault();
         }
 
         /// <summary>
@@ -109,13 +109,12 @@ namespace CellAO.Database.Dao
         {
             int rowsAffected =
                 Instance.Delete(
-                    new DynamicParameters(
                         new
                         {
                             containertype = containerType,
                             containerinstance = containerInstance,
                             containerplacement = containerPlacement
-                        }));
+                        });
         }
 
         /// <summary>
@@ -152,16 +151,15 @@ namespace CellAO.Database.Dao
                         foreach (DBItem item in items)
                         {
                             Instance.Delete(
-                                new DynamicParameters(
                                     new
                                     {
                                         items[0].containertype,
                                         items[0].containerinstance,
                                         items[0].Id
-                                    }),
+                                    },
                                 connection,
                                 transaction);
-                            Instance.Save(item, new DynamicParameters(new { item }), connection, transaction);
+                            Instance.Save(item, new { item.containertype, item.containerinstance, item.Id }, connection, transaction);
                         }
 
                         trans.Commit();
@@ -186,7 +184,7 @@ namespace CellAO.Database.Dao
         {
             return
                 Instance.GetAll(
-                    new DynamicParameters(new { containertype = containerType, containerinstance = containerInstance }));
+                    new { containertype = containerType, containerinstance = containerInstance });
         }
 
         #endregion

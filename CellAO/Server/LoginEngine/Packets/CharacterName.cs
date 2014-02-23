@@ -118,7 +118,7 @@ namespace LoginEngine.Packets
         public int CheckAgainstDatabase()
         {
             /* name in use */
-            if (! CharacterDao.Instance.ExistsByName(this.Name))
+            if (CharacterDao.Instance.ExistsByName(this.Name))
             {
                 return 0;
             }
@@ -208,7 +208,7 @@ namespace LoginEngine.Packets
             {
                 CharacterDao.Instance.Save(
                     character // woo....
-                    , new Dapper.DynamicParameters(new { Id = charid, Playfield = playfield, X = x, Y = y, Z = z }));
+                    , new { Id = charid, Playfield = playfield, X = x, Y = y, Z = z });
 
                 CharacterDao.Instance.SetPlayfield(charid, (int)IdentityType.Playfield, playfield);
             }

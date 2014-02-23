@@ -28,7 +28,6 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
@@ -37,19 +36,18 @@ namespace CellAO.Database.Dao
 
     using Dapper;
 
-    using Utility;
-    using System.Text;
-
     #endregion
 
     /// <summary>
     /// Character Data Access Object
     /// </summary>
-    public class CharacterDao : Dao<DBCharacter> // , IDao<DBCharacter> // WTF
+    public class CharacterDao : Dao<DBCharacter>
     {
+        // , IDao<DBCharacter> // WTF
+        #region Public Properties
 
-        #region Required
-
+        /// <summary>
+        /// </summary>
         public static CharacterDao Instance
         {
             get
@@ -66,15 +64,40 @@ namespace CellAO.Database.Dao
 
         #endregion
 
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        /// <param name="buddyId">
+        /// </param>
+        public void AddBuddy(int characterId, int buddyId)
+        {
+            DBCharacter character = this.Get(characterId);
+            if (character != null)
+            {
+                // add the buddy to the character 
+                character.AddBuddy(buddyId);
+
+                // saves to the database
+                // DynamicParameters parameters = new DynamicParameters(character);  new{character.BuddyList should do it too
+                // parameters.Add("BuddyList", character.BuddyList); not needed, AddBuddy already adds the id to the CSV string
+                this.Save(character, new{character.BuddyList});
+            }
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="id">
         /// </param>
-        /// <param name="connection"></param>
-        /// <param name="transaction"></param>
-        public new void Delete(int id, IDbConnection connection = null, IDbTransaction transaction = null) // NEW AND FUUUUUCK YOU VS
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        public new void Delete(int id, IDbConnection connection = null, IDbTransaction transaction = null)
         {
-
+            // NEW AND FUUUUUCK YOU VS
             using (IDbConnection conn = Connector.GetConnection(connection))
             {
                 // TODO : move these two to their own DAOs
@@ -91,7 +114,6 @@ namespace CellAO.Database.Dao
 
             // delete characters stats
             StatDao.DeleteStats(50000, id);
-
         }
 
         /// <summary>
@@ -105,7 +127,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public bool ExistsByName(string name)
         {
-            return GetByCharName(name) != null;
+            return this.GetByCharName(name) != null;
         }
 
         /// <summary>
@@ -119,7 +141,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            return CharacterDao.Instance.GetAll(new DynamicParameters(new { username = username }));
+            return Instance.GetAll(new { username= username  });
         }
 
         /// <summary>
@@ -133,10 +155,10 @@ namespace CellAO.Database.Dao
         /// </returns>
         public DBCharacter GetByCharName(string name)
         {
-            return CharacterDao.Instance.GetAll(new DynamicParameters(new { name = name })).FirstOrDefault();
+            return
+                Instance.GetAll(new { Name=name })
+                    .FirstOrDefault();
         }
-
-
 
         /// <summary>
         /// Get the name of a character by id
@@ -153,12 +175,14 @@ namespace CellAO.Database.Dao
             string name = null;
             using (IDbConnection conn = Connector.GetConnection())
             {
-                name =
-                    conn.Query<string>(SQL, new { characterId })
-                        .FirstOrDefault();
+                name = conn.Query<string>(SQL, new { characterId }).FirstOrDefault();
             }
+
             if (name == null)
+            {
                 name = string.Empty;
+            }
+
             return name;
         }
 
@@ -176,12 +200,30 @@ namespace CellAO.Database.Dao
             bool result;
             using (IDbConnection conn = Connector.GetConnection())
             {
-                DynamicParameters p = new DynamicParameters();
-                p.Add("userName", userName);
-                p.Add("characterId", characterId);
-                result = conn.Query<int>(SQL, p).Count() == 1;
+                result = conn.Query<int>(SQL, new {userName,characterId }).Count() == 1;
             }
+
             return result;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        /// <param name="buddyId">
+        /// </param>
+        public void RemoveBuddy(int characterId, int buddyId)
+        {
+            DBCharacter character = this.Get(characterId);
+            if (character != null)
+            {
+                // remove the buddy from the character 
+                character.RemoveBuddy(buddyId);
+
+                // saves to the database
+                // parameters.Add("BuddyList", character.BuddyList); Obsolete, RemoveBuddy removes from character object already
+                this.Save(character, character);
+            }
         }
 
         /// <summary>
@@ -192,60 +234,23 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="pfNum">
         /// </param>
-        /// <param name="connection"></param>
-        /// <param name="transaction"></param>
-        public void SetPlayfield(int charId, int pfType, int pfNum, IDbConnection connection = null, IDbTransaction transaction = null)
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        public void SetPlayfield(
+            int charId,
+            int pfType,
+            int pfNum,
+            IDbConnection connection = null,
+            IDbTransaction transaction = null)
         {
-
             // TODO: extend character table for GameServerId, SgId and playfield type
-            int rowsAffected = CharacterDao.Instance.Save(new DBCharacter { Id = charId }, new DynamicParameters(new { Playfield = pfNum }));
+            int rowsAffected = Instance.Save(
+                new DBCharacter { Id = charId },
+                new { Playfield = pfNum, Id=charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
 
             // should ensure that rowsAffected == 1 otherwise ???
-
-        }
-
-        #region Buddies
-
-        /// <summary>
-        /// </summary>
-        /// <param name="charId">
-        /// </param>
-        /// <param name="buddyId">
-        /// </param>
-        public void AddBuddy(int characterId, int buddyId)
-        {
-            DBCharacter character = Get(characterId);
-            if (character != null)
-            {
-                // add the buddy to the character 
-                character.AddBuddy(buddyId);
-
-                // saves to the database
-                DynamicParameters parameters = new DynamicParameters(character);
-                parameters.Add("BuddyList", character.BuddyList);
-                this.Save(character, parameters);
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="charId">
-        /// </param>
-        /// <param name="buddyId">
-        /// </param>
-        public void RemoveBuddy(int characterId, int buddyId)
-        {
-            DBCharacter character = Get(characterId);
-            if (character != null)
-            {
-                // add the buddy to the character 
-                character.RemoveBuddy(buddyId);
-
-                // saves to the database
-                DynamicParameters parameters = new DynamicParameters(character);
-                parameters.Add("BuddyList", character.BuddyList);
-                this.Save(character, parameters);
-            }
         }
 
         #endregion

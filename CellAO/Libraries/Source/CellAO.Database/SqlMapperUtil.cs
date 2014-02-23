@@ -199,13 +199,13 @@ namespace CellAO.Database
 
         #region Custom for CellAO DAO
 
-        public static string CreateUpdateSQL(string tablename, DynamicParameters parameters)
+        public static string CreateUpdateSQL(string tablename, object parameters)
         {
             if (parameters == null)
                 throw new ArgumentNullException("Cannot create Update SQL statement without parameters");
 
             StringBuilder sb = new StringBuilder(string.Concat("UPDATE ", tablename, " SET "));
-            foreach (string pname in parameters.ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                     sb.AppendFormat("{0} = @{0},", pname);
@@ -215,13 +215,13 @@ namespace CellAO.Database
             return sb.ToString();
         }
 
-        public static string CreateInsertSQL(string tablename, DynamicParameters parameters)
+        public static string CreateInsertSQL(string tablename, object parameters)
         {
             if (parameters == null)
                 throw new ArgumentNullException("Cannot create Insert SQL statement without parameters");
 
             StringBuilder sb = new StringBuilder(string.Concat("INSERT INTO ", tablename, " ( "));
-            foreach (string pname in parameters.ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                 {
@@ -230,7 +230,7 @@ namespace CellAO.Database
             }
             sb.Remove(sb.Length - 1, 1); //  remove last ','
             sb.Append(" ) VALUES ( ");
-            foreach (string pname in parameters.ParameterNames)
+            foreach (string pname in GetParametersFromObject(parameters, null).ParameterNames)
             {
                 if (pname.ToLower() != "id")
                 {
@@ -243,7 +243,7 @@ namespace CellAO.Database
         }
 
 
-        public static string CreateDeleteSQL(string tablename, DynamicParameters whereParameters = null)
+        public static string CreateDeleteSQL(string tablename, object whereParameters = null)
         {
             StringBuilder sb = new StringBuilder(string.Format("DELETE FROM {0}", tablename));
             if (whereParameters == null)
@@ -253,7 +253,7 @@ namespace CellAO.Database
             else
             {
                 sb.Append(" WHERE ");
-                foreach (string pname in whereParameters.ParameterNames)
+                foreach (string pname in GetParametersFromObject(whereParameters, null).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname); // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }
@@ -262,12 +262,12 @@ namespace CellAO.Database
             return sb.ToString();
         }
 
-        public static string CreateGetSQL(string tablename, DynamicParameters whereParameters = null)
+        public static string CreateGetSQL(string tablename, object whereParameters = null)
         {
             StringBuilder sb = new StringBuilder(string.Concat("SELECT * FROM ", tablename, (whereParameters != null) ? " WHERE " : String.Empty));
             if (whereParameters != null)
             {
-                foreach (string pname in whereParameters.ParameterNames)
+                foreach (string pname in GetParametersFromObject(whereParameters, null).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname); // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }

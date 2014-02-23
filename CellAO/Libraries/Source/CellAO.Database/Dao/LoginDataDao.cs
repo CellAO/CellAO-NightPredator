@@ -84,9 +84,7 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     character = CharacterDao.Instance.Get(charId);
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("username", character.Username);
-                    return conn.Query<DBLoginData>("SELECT * FROM login WHERE Username=@username", p).First();
+                    return conn.Query<DBLoginData>("SELECT * FROM login WHERE Username=@username", new{character.Username}).First();
                 }
             }
             catch (Exception)
