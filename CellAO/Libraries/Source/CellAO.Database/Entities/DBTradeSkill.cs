@@ -26,9 +26,12 @@
 
 namespace CellAO.Database.Entities
 {
+    using CellAO.Database.Dao;
+
     /// <summary>
     /// </summary>
-    public class DBTradeSkill
+    [Tablename("tradeskill")]
+    public class DBTradeSkill:IDBEntity
     {
         #region Public Properties
 
@@ -85,5 +88,7 @@ namespace CellAO.Database.Entities
         public string SkillPercent { get; set; }
 
         #endregion
+
+        public int Id { get; set; }
     }
 }

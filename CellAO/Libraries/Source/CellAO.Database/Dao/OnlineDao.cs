@@ -32,6 +32,8 @@ namespace CellAO.Database.Dao
     using System.Data;
     using System.Linq;
 
+    using CellAO.Database.Entities;
+
     using Dapper;
 
     using Utility;
@@ -52,25 +54,10 @@ namespace CellAO.Database.Dao
         /// Id of the character
         /// </param>
         /// <returns>
-        /// DBOnline object
         /// </returns>
-        public static DBOnline IsOnline(int id)
+        public static int IsOnline(int id)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBOnline>("SELECT Online from characters WHERE id=@charid", new { charid = id })
-                            .First();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-
-            return new DBOnline { Online = 0 };
+            return CharacterDao.Instance.Get(id).Online;
         }
 
         /// <summary>
@@ -79,18 +66,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void SetOffline(int id)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("UPDATE characters SET online=0 WHERE id=@charid", new { charid = id });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            CharacterDao.Instance.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
         }
 
         /// <summary>
@@ -101,18 +77,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public static void SetOnline(int id)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute("UPDATE characters SET online=1 WHERE id=@charid", new { charid = id });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            CharacterDao.Instance.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
         }
 
         #endregion

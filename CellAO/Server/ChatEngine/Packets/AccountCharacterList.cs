@@ -78,7 +78,7 @@ namespace ChatEngine.Packets
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                writer.WriteUInt32((UInt32)OnlineDao.IsOnline(character.Id).Online);
+                writer.WriteUInt32((uint)OnlineDao.IsOnline(character.Id));
             }
 
             return writer.Finish();

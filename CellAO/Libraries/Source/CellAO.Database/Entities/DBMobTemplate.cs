@@ -27,10 +27,13 @@
 using System.Data.Linq;
 namespace CellAO.Database.Dao
 {
+    using CellAO.Database.Entities;
+
     /// <summary>
     /// Data object for mobTemplate data
     /// </summary>
-    public class DBMobTemplate
+    [Tablename("mobtemplate")]
+    public class DBMobTemplate:IDBEntity
     {
         /// <summary>
         /// Primary Key, 4 letter code
@@ -93,5 +96,7 @@ namespace CellAO.Database.Dao
         /// Comma-delimited % * 100 for each item hash. 10000 = 100.0%, 1250 = 12.5% etc., must have same number of commas as above
         /// </summary>
         public string DropRates { get; set; }
+
+        public int Id { get; set; }
     }
 }

@@ -450,7 +450,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                         // They are part of the org, so begin the processing...
                         // First we check if the player is online...
-                        int onlineStatus = OnlineDao.IsOnline(client.Character.Identity.Instance).Online;
+                        int onlineStatus = OnlineDao.IsOnline(client.Character.Identity.Instance);
 
                         if (onlineStatus == 0)
                         {

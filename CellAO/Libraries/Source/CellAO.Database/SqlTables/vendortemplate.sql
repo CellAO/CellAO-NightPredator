@@ -4,13 +4,13 @@ CREATE TABLE `vendortemplate` (
   `Name` varchar(256) NOT NULL DEFAULT "",
   `ItemTemplate` int(32) NOT NULL DEFAULT '0',
   `ShopInvHash` varchar(4) NOT NULL,
-  `MinQL` int(32) DEFAULT '1',
-  `MaxQL` int(32) DEFAULT '1',
+  `MinQl` int(32) DEFAULT '1',
+  `MaxQl` int(32) DEFAULT '1',
   `Id` int(32) unsigned NOT NULL AUTO_INCREMENT,
-  `Buy` float(5,5) NOT NULL default '0.05', -- Price Modifiere Sell item to Shop
-  `Sell` float(5,5) NOT NULL default '1.00', -- Price Modifiere Buy item from Shop
+  `Buy` float(3,2) NOT NULL default '0.05', -- Price Modifiere Sell item to Shop
+  `Sell` float(3,2) NOT NULL default '1.00', -- Price Modifiere Buy item from Shop
   `Skill` int(3) DEFAULT '161', -- Skill that change the Basic Price of a Item CompLiter(161) for Machines, Psychology(162) for Humans (SL Garden Shops)
-  PRIMARY KEY (`Id`,`Hash`) USING BTREE
+  PRIMARY KEY (`ID`,`Hash`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --

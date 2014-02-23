@@ -42,29 +42,31 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public static class TradeSkillDao
+    public class TradeSkillDao : Dao<DBTradeSkill>
     {
+        public static TradeSkillDao Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new TradeSkillDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (TradeSkillDao)_instance;
+            }
+        }
+
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
         /// <returns>
         /// </returns>
-        public static IEnumerable<DBTradeSkill> ReadTradeSkills()
+        public IEnumerable<DBTradeSkill> ReadTradeSkills()
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBTradeSkill>("SELECT * from tradeskill");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
-
-            return new List<DBTradeSkill>();
+            return this.GetAll();
         }
 
         #endregion

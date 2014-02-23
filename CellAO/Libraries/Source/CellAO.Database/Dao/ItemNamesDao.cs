@@ -42,31 +42,20 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class ItemNamesDao
+    public class ItemNamesDao : Dao<DBItemName>
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public static IEnumerable<DBItemName> GetNames()
+        public static ItemNamesDao Instance
         {
-            try
+            get
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                if (_instance == null)
                 {
-                    return conn.Query<DBItemName>("SELECT * from itemnames");
+                    _instance = new ItemNamesDao();
+                    _instance.TableName = getTablename();
                 }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-            }
 
-            return new List<DBItemName>();
+                return (ItemNamesDao)_instance;
+            }
         }
-
-        #endregion
     }
 }

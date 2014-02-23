@@ -24,21 +24,72 @@
 
 #endregion
 
-namespace CellAO.Database.Entities
+namespace CellAO.Database.Dao
 {
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+
+    using CellAO.Database.Entities;
+
+    using Dapper;
+
+    using Utility;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    public class DBRecentMessages
+    public class ReceivedMessagesDao:Dao<DBReceivedMessages>
     {
-        #region Public Properties
+        public static ReceivedMessagesDao Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new ReceivedMessagesDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (ReceivedMessagesDao)_instance;
+            }
+        }
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        public int PlayerID { get; set; }
+        /// <param name="charId">
+        /// </param>
+        /// <param name="ReceivedFrom">
+        /// </param>
+        public void AddReceivedMessage(int charId, int ReceivedFrom)
+        {
+            this.Add(new DBReceivedMessages() { PlayerID = charId, ReceivedID = ReceivedFrom });
+        }
 
         /// <summary>
         /// </summary>
-        public int ReceivedID { get; set; }
+        /// <param name="charId">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IEnumerable<DBReceivedMessages> LoadRecentMessageses(int charId)
+        {
+            return this.GetAll(new { charId = charId });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="charId">
+        /// </param>
+        public void RemovePlayer(int charId)
+        {
+            this.Delete(new { PlayerId = charId });
+        }
 
         #endregion
     }
