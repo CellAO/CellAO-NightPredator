@@ -98,7 +98,7 @@ namespace ChatEngine.CoreClient
             {
                 if (this.characterGMLevel == -1)
                 {
-                    this.characterGMLevel = LoginDataDao.GetByCharacterId((int)this.CharacterId).GM;
+                    this.characterGMLevel = LoginDataDao.Instance.GetByCharacterId((int)this.CharacterId).GM;
                 }
 
                 return this.characterGMLevel;

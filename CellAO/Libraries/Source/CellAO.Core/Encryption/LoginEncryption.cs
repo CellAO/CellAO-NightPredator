@@ -402,7 +402,7 @@ namespace AO.Core.Encryption
         /// </returns>
         private string GetLoginPassword(string RecvLogin)
         {
-            DBLoginData loginPassword = LoginDataDao.GetByUsername(RecvLogin);
+            DBLoginData loginPassword = LoginDataDao.Instance.GetByUsername(RecvLogin);
 
             if (loginPassword != null)
             {

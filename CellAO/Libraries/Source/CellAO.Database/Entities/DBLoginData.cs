@@ -30,12 +30,15 @@ namespace CellAO.Database.Dao
 
     using System;
 
+    using CellAO.Database.Entities;
+
     #endregion
 
     /// <summary>
     /// Data object for Login data
     /// </summary>
-    public class DBLoginData
+    [Tablename("login")]
+    public class DBLoginData : IDBEntity
     {
         #region Public Properties
 
@@ -80,11 +83,6 @@ namespace CellAO.Database.Dao
         public int GM { get; set; }
 
         /// <summary>
-        /// Account id
-        /// </summary>
-        public int ID { get; set; }
-
-        /// <summary>
         /// Account owner last name
         /// </summary>
         public string LastName { get; set; }
@@ -100,5 +98,7 @@ namespace CellAO.Database.Dao
         public string Username { get; set; }
 
         #endregion
+
+        public int Id { get; set; }
     }
 }

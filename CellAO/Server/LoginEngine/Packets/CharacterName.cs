@@ -270,7 +270,7 @@ namespace LoginEngine.Packets
                     Type = 50000,
                     Instance = charID,
                     StatId = 215,
-                    StatValue = LoginDataDao.GetByUsername(this.AccountName).GM
+                    StatValue = LoginDataDao.Instance.GetByUsername(this.AccountName).GM
                 });
 
             // Flags
@@ -334,7 +334,7 @@ namespace LoginEngine.Packets
                     Type = 50000,
                     Instance = charID,
                     StatId = 389,
-                    StatValue = LoginDataDao.GetByUsername(this.AccountName).Expansions
+                    StatValue = LoginDataDao.Instance.GetByUsername(this.AccountName).Expansions
                 });
 
             StatDao.Instance.BulkReplace(stats);

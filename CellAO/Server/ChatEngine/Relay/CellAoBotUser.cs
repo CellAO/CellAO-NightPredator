@@ -95,7 +95,7 @@ namespace ChatEngine.Relay
         {
             try
             {
-                string dUser = LoginDataDao.GetByUsername(username).Username;
+                string dUser = LoginDataDao.Instance.GetByUsername(username).Username;
 
                 if (dUser != username)
                 {

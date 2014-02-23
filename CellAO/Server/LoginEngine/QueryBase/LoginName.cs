@@ -67,10 +67,10 @@ namespace LoginEngine.QueryBase
         public void GetLoginName(string recvLogin)
         {
             this.loginN = null;
-            DBLoginData temp = LoginDataDao.GetByUsername(recvLogin);
+            DBLoginData temp = LoginDataDao.Instance.GetByUsername(recvLogin);
             if (temp != null)
             {
-                this.loginN = LoginDataDao.GetByUsername(recvLogin).Username;
+                this.loginN = LoginDataDao.Instance.GetByUsername(recvLogin).Username;
             }
         }
 
