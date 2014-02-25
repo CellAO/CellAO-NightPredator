@@ -1,10 +1,12 @@
 CREATE TABLE IF NOT EXISTS `mobdroptable` (
+  `Id` int(32) NOT NULL AUTO_INCREMENT,
   `Hash` tinytext NOT NULL,
-  `LowID` int(11) unsigned NOT NULL,
-  `HighID` int(11) unsigned NOT NULL,
-  `MinQL` int(10) unsigned NOT NULL,
-  `MaxQL` int(10) unsigned NOT NULL,
-  `RangeCheck` int(10) unsigned NOT NULL COMMENT '0 = can drop regardless of mob level (insignias, quest items, etc.), 1 = check against mob level'
+  `LowId` int(11) unsigned NOT NULL,
+  `HighId` int(11) unsigned NOT NULL,
+  `MinQl` int(10) unsigned NOT NULL,
+  `MaxQl` int(10) unsigned NOT NULL,
+  `RangeCheck` int(10) unsigned NOT NULL COMMENT '0 = can drop regardless of mob level (insignias, quest items, etc.), 1 = check against mob level',
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

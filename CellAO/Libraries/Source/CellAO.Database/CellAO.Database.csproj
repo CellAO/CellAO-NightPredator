@@ -66,6 +66,8 @@
     <Compile Include="Dao\CharacterDao.cs" />
     <Compile Include="Dao\Dao.cs" />
     <Compile Include="Dao\IDao.cs" />
+    <Compile Include="Dao\MobDroptableDao.cs" />
+    <Compile Include="Dao\MobSpawnDao.cs" />
     <Compile Include="Dao\MobTemplateDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
@@ -73,10 +75,15 @@
     <Compile Include="Dao\LoginDataDao.cs" />
     <Compile Include="Dao\OrganizationDao.cs" />
     <Compile Include="Dao\ReceivedMessagesDao.cs" />
+    <Compile Include="Dao\ShopInventoryTemplateDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
     <Compile Include="Dao\TablenameAttribute.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
     <Compile Include="Dao\UploadedNanosDao.cs" />
+    <Compile Include="Dao\VendorDao.cs" />
+    <Compile Include="Dao\VendorTemplateDao.cs" />
+    <Compile Include="Entities\DBMobDroptable.cs" />
+    <Compile Include="Entities\DBMobSpawn.cs" />
     <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />
@@ -85,9 +92,12 @@
     <Compile Include="Entities\DBLoginData.cs" />
     <Compile Include="Entities\DBOrganization.cs" />
     <Compile Include="Entities\DBReceivedMessages.cs" />
+    <Compile Include="Entities\DBShopInventoryTemplate.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Entities\DBTradeSkill.cs" />
     <Compile Include="Entities\DBUploadedNano.cs" />
+    <Compile Include="Entities\DBVendor.cs" />
+    <Compile Include="Entities\DBVendorTemplate.cs" />
     <Compile Include="Entities\ForeignKeyAttribute.cs" />
     <Compile Include="Entities\IDBEntity.cs" />
     <Compile Include="Misc.cs" />
