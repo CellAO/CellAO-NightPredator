@@ -71,7 +71,6 @@
     <Compile Include="Dao\ItemDao.cs" />
     <Compile Include="Dao\ItemNamesDao.cs" />
     <Compile Include="Dao\LoginDataDao.cs" />
-    <Compile Include="Dao\OnlineDao.cs" />
     <Compile Include="Dao\OrganizationDao.cs" />
     <Compile Include="Dao\ReceivedMessagesDao.cs" />
     <Compile Include="Dao\StatDao.cs" />

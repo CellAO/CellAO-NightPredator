@@ -73,7 +73,7 @@ namespace ChatEngine.PacketHandlers
 
             if (client.IsBot)
             {
-                OnlineDao.SetOnline((int)playerId);
+                CharacterDao.Instance.SetOnline((int)playerId);
             }
 
             DBCharacter character = CharacterDao.Instance.Get((int)playerId);

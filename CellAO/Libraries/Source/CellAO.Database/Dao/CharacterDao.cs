@@ -43,7 +43,6 @@ namespace CellAO.Database.Dao
     /// </summary>
     public class CharacterDao : Dao<DBCharacter>
     {
-        // , IDao<DBCharacter> // WTF
         #region Public Properties
 
         /// <summary>
@@ -61,10 +60,8 @@ namespace CellAO.Database.Dao
                 return (CharacterDao)_instance;
             }
         }
-
+        
         #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -116,7 +113,6 @@ namespace CellAO.Database.Dao
                     // deletes this character
                     base.Delete(id, conn, trans);
 
-
                     // TODO: refactor StatDao
                     // delete characters stats
                     StatDao.Instance.Delete(new { type = 50000, Id = id });
@@ -167,9 +163,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public DBCharacter GetByCharName(string name)
         {
-            return
-                Instance.GetAll(new { Name = name })
-                    .FirstOrDefault();
+            return Instance.GetAll(new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -258,20 +252,54 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// </param>
         public void SetPlayfield(
-            int charId,
-            int pfType,
-            int pfNum,
-            IDbConnection connection = null,
+            int charId, 
+            int pfType, 
+            int pfNum, 
+            IDbConnection connection = null, 
             IDbTransaction transaction = null)
         {
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
-                new DBCharacter(), // completely empty one is enough here, parameters have higher priority
-                new { Playfield = pfNum, Id = charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
+                new DBCharacter(), 
+                // completely empty one is enough here, parameters have higher priority
+                new { Playfield = pfNum, Id = charId });
+                
+                // Needed to add charId here too, else it cant be passed as a parameter value. not nice
 
             // should ensure that rowsAffected == 1 otherwise ???
         }
 
-        #endregion
+        /// <summary>
+        /// Check if character (id) is online
+        /// </summary>
+        /// <param name="id">
+        /// Id of the character
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int IsOnline(int id)
+        {
+            return this.Get(id).Online;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// </param>
+        public void SetOffline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+        }
+
+        /// <summary>
+        /// Set online flag in table
+        /// </summary>
+        /// <param name="id">
+        /// Id of the character
+        /// </param>
+        public void SetOnline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+        }
     }
 }

@@ -367,7 +367,7 @@ namespace CellAO.Core.Entities
             }
 
             this.Client = null;
-            OnlineDao.SetOffline(this.Identity.Instance);
+            CharacterDao.Instance.SetOffline(this.Identity.Instance);
             this.Playfield.Despawn(this.Identity);
             base.Dispose();
         }

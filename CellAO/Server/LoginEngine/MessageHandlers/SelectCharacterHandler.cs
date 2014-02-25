@@ -81,7 +81,7 @@ namespace LoginEngine.MessageHandlers
                 return;
             }
 
-            if (OnlineDao.IsOnline(selectCharacterMessage.CharacterId) == 1)
+            if (CharacterDao.Instance.IsOnline(selectCharacterMessage.CharacterId) == 1)
             {
                 Console.WriteLine(
                     "Client '" + client.AccountName
@@ -91,7 +91,7 @@ namespace LoginEngine.MessageHandlers
                 return;
             }
 
-            OnlineDao.SetOnline(selectCharacterMessage.CharacterId);
+            CharacterDao.Instance.SetOnline(selectCharacterMessage.CharacterId);
 
             IPAddress zoneIpAdress;
             if (IPAddress.TryParse(ConfigReadWrite.Instance.CurrentConfig.ZoneIP, out zoneIpAdress) == false)

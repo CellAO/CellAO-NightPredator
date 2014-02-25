@@ -253,7 +253,7 @@ namespace ZoneEngine.Core
             if (cli.Character != null)
             {
                 ((Character)cli.Character).StartLogoutTimer();
-                OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
+                CharacterDao.Instance.SetOffline(((IZoneClient)client).Character.Identity.Instance);
 
                 // Will be saved at character dispose too, but just to be sure...
                 ((IZoneClient)client).Character.Save();

@@ -94,8 +94,8 @@ namespace ChatEngine.PacketHandlers
             client.Send(namelookup);
             client.Send(
                 BuddyOnlineStatus.Create(
-                    playerId, 
-                    (uint)OnlineDao.IsOnline((int)playerId), 
+                    playerId,
+                    (uint)CharacterDao.Instance.IsOnline((int)playerId), 
                     new byte[] { 0x00, 0x01, 0x00 }));
             client.KnownClients.Add(playerId);
         }

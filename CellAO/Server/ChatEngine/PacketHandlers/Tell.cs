@@ -73,8 +73,8 @@ namespace ChatEngine.PacketHandlers
                     // TODO: Check if status bytes are correct even for offline chars
                     client.Send(
                         BuddyOnlineStatus.Create(
-                            (uint)tellClient.Character.CharacterId, 
-                            (uint)OnlineDao.IsOnline((int)tellClient.Character.CharacterId), 
+                            (uint)tellClient.Character.CharacterId,
+                            (uint)CharacterDao.Instance.IsOnline((int)tellClient.Character.CharacterId), 
                             new byte[] { 0x00, 0x01, 0x00 }));
                 }
 

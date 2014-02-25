@@ -133,7 +133,7 @@ namespace ChatEngine.CoreServer
             Client cl = (Client)client;
             if (cl.Character.CharacterId != 0)
             {
-                OnlineDao.SetOffline((int)cl.Character.CharacterId);
+                CharacterDao.Instance.SetOffline((int)cl.Character.CharacterId);
                 this.ConnectedClients.Remove(cl.Character.CharacterId);
             }
         }
