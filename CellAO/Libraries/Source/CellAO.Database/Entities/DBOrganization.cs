@@ -37,6 +37,7 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data object for organization data
     /// </summary>
+    [Tablename("organizations")]
     public class DBOrganization : IDBEntity
     {
         /// <summary>
