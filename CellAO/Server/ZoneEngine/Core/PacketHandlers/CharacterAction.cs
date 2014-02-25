@@ -197,7 +197,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             int orgGoverningForm = 0;
                             try
                             {
-                                orgGoverningForm = OrganizationDao.GetGovernmentForm(tChar.Stats[StatIds.clan].Value);
+                                orgGoverningForm = OrganizationDao.Instance.GetGovernmentForm(tChar.Stats[StatIds.clan].Value);
                             }
                             catch (Exception)
                             {

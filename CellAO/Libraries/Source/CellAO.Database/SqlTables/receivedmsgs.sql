@@ -1,4 +1,4 @@
-﻿CREATE TABLE `receivedmsgs` (
+﻿CREATE TABLE `receivedmessages` (
 	`Id` INT(32) NOT NULL AUTO_INCREMENT,
 	`PlayerId` INT(32) NOT NULL,
 	`ReceivedId` INT(32) NOT NULL,

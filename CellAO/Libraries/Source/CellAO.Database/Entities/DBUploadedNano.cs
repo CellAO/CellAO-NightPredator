@@ -24,62 +24,25 @@
 
 #endregion
 
-namespace CellAO.Database.Dao
+namespace CellAO.Database.Entities
 {
-    #region Usings ...
-
-    using System;
-    using System.Data;
-    using System.Linq;
-
-    using CellAO.Database.Entities;
-
-    using Dapper;
-
-    using Utility;
-
-    #endregion
+    using CellAO.Database.Dao;
 
     /// <summary>
-    /// Data access object to check online status of characters
     /// </summary>
-    public static class OnlineDao
+    [Tablename("charactersuploadednanos")]
+    public class DBUploadedNano : IDBEntity
     {
-        #region Public Methods and Operators
-
         /// <summary>
-        /// Check if character (id) is online
         /// </summary>
-        /// <param name="id">
-        /// Id of the character
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static int IsOnline(int id)
-        {
-            return CharacterDao.Instance.Get(id).Online;
-        }
+        public int Id { get; set; }
 
         /// <summary>
         /// </summary>
-        /// <param name="id">
-        /// </param>
-        public static void SetOffline(int id)
-        {
-            CharacterDao.Instance.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
-        }
+        public int CharacterId { get; set; }
 
         /// <summary>
-        /// Set online flag in table
         /// </summary>
-        /// <param name="id">
-        /// Id of the character
-        /// </param>
-        public static void SetOnline(int id)
-        {
-            CharacterDao.Instance.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
-        }
-
-        #endregion
+        public int NanoId { get; set; }
     }
 }

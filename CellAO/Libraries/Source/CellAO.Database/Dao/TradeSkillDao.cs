@@ -28,15 +28,7 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-
     using CellAO.Database.Entities;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
@@ -44,6 +36,8 @@ namespace CellAO.Database.Dao
     /// </summary>
     public class TradeSkillDao : Dao<DBTradeSkill>
     {
+        /// <summary>
+        /// </summary>
         public static TradeSkillDao Instance
         {
             get
@@ -57,18 +51,5 @@ namespace CellAO.Database.Dao
                 return (TradeSkillDao)_instance;
             }
         }
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public IEnumerable<DBTradeSkill> ReadTradeSkills()
-        {
-            return this.GetAll();
-        }
-
-        #endregion
     }
 }

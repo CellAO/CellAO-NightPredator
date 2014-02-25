@@ -193,7 +193,7 @@ namespace ZoneEngine.Core
         {
             int i = 0;
             this.tradeSkillList.Clear();
-            foreach (DBTradeSkill tradeSkill in TradeSkillDao.Instance.ReadTradeSkills())
+            foreach (DBTradeSkill tradeSkill in TradeSkillDao.Instance.GetAll())
             {
                 this.tradeSkillList.Add(TradeSkillEntry.ConvertFromDB(tradeSkill));
                 i++;

@@ -33,6 +33,7 @@ namespace CellAO.Database.Dao
     using System.Linq;
 
     using CellAO.Database.Entities;
+    using CellAO.Enums;
 
     using Dapper;
 
@@ -43,7 +44,6 @@ namespace CellAO.Database.Dao
     /// </summary>
     public class CharacterDao : Dao<DBCharacter>
     {
-        // , IDao<DBCharacter> // WTF
         #region Public Properties
 
         /// <summary>
@@ -61,10 +61,8 @@ namespace CellAO.Database.Dao
                 return (CharacterDao)_instance;
             }
         }
-
+        
         #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
@@ -108,16 +106,25 @@ namespace CellAO.Database.Dao
                     // TODO : move these two to their own DAOs
 
                     // remove this character from organisations
-                    conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id }, trans);
 
-                    // empty this characters inventory
-                    conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id }, trans);
+                    DBOrganization org = OrganizationDao.Instance.GetAll(new { LeaderId = id }).FirstOrDefault();
+                    if (org != null)
+                    {
+                        // What to do if the leader deletes himself?
+                        // Lets remove the org for now, later on should it switch to secondhighest char in org?
+                        OrganizationDao.Instance.Delete(org.Id, conn, trans);
 
+                        // Remove the org's Stat from the other characters in the org too
+                        StatDao.Instance.Delete(new { StatValue = org.Id, StatId = (int)StatIds.clan });
+                    }
+
+                    // empty this characters inventory (items and instanced items)
+                    ItemDao.Instance.Delete(new { ContainerInstance = id });
+                    InstancedItemDao.Instance.Delete(new { ContainerInstance = id });
+                    
                     // deletes this character
                     base.Delete(id, conn, trans);
 
-
-                    // TODO: refactor StatDao
                     // delete characters stats
                     StatDao.Instance.Delete(new { type = 50000, Id = id });
                     if (transaction == null)
@@ -153,7 +160,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            return Instance.GetAll(new { username = username });
+            return Instance.GetAll(new { Username = username });
         }
 
         /// <summary>
@@ -167,9 +174,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public DBCharacter GetByCharName(string name)
         {
-            return
-                Instance.GetAll(new { Name = name })
-                    .FirstOrDefault();
+            return Instance.GetAll(new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -210,6 +215,7 @@ namespace CellAO.Database.Dao
         {
             const string SQL = "SELECT id FROM characters where username=@userName AND id=@characterId";
             bool result;
+
             using (IDbConnection conn = Connector.GetConnection())
             {
                 result = conn.Query<int>(SQL, new { userName, characterId }).Count() == 1;
@@ -258,20 +264,52 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// </param>
         public void SetPlayfield(
-            int charId,
-            int pfType,
-            int pfNum,
-            IDbConnection connection = null,
+            int charId, 
+            int pfType, 
+            int pfNum, 
+            IDbConnection connection = null, 
             IDbTransaction transaction = null)
         {
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
-                new DBCharacter(), // completely empty one is enough here, parameters have higher priority
-                new { Playfield = pfNum, Id = charId }); // Needed to add charId here too, else it cant be passed as a parameter value. not nice
-
+                new DBCharacter(), 
+                // completely empty one is enough here, parameters have higher priority
+                new { Playfield = pfNum, Id = charId });
+                
             // should ensure that rowsAffected == 1 otherwise ???
         }
 
-        #endregion
+        /// <summary>
+        /// Check if character (id) is online
+        /// </summary>
+        /// <param name="id">
+        /// Id of the character
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int IsOnline(int id)
+        {
+            return this.Get(id).Online;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// </param>
+        public void SetOffline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+        }
+
+        /// <summary>
+        /// Set online flag in table
+        /// </summary>
+        /// <param name="id">
+        /// Id of the character
+        /// </param>
+        public void SetOnline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+        }
     }
 }

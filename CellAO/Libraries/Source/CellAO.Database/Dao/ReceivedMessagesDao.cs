@@ -28,22 +28,18 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
-    using System.Data;
 
     using CellAO.Database.Entities;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ReceivedMessagesDao:Dao<DBReceivedMessages>
+    public class ReceivedMessagesDao : Dao<DBReceivedMessages>
     {
+        /// <summary>
+        /// </summary>
         public static ReceivedMessagesDao Instance
         {
             get
@@ -68,7 +64,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public void AddReceivedMessage(int charId, int ReceivedFrom)
         {
-            this.Add(new DBReceivedMessages() { PlayerID = charId, ReceivedID = ReceivedFrom });
+            this.Add(new DBReceivedMessages() { PlayerId = charId, ReceivedId = ReceivedFrom });
         }
 
         /// <summary>
@@ -79,7 +75,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBReceivedMessages> LoadRecentMessageses(int charId)
         {
-            return this.GetAll(new { charId = charId });
+            return this.GetAll(new { PlayerId = charId });
         }
 
         /// <summary>

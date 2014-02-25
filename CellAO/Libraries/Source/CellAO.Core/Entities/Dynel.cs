@@ -178,7 +178,7 @@ namespace CellAO.Core.Entities
             {
                 try
                 {
-                    return OrganizationDao.GetOrganizationData(this.Stats[StatIds.clan].Value).Name;
+                    return OrganizationDao.Instance.Get(this.Stats[StatIds.clan].Value).Name;
                 }
                 catch (Exception)
                 {

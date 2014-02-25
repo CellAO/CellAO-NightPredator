@@ -68,53 +68,49 @@ namespace CellAO.Database.Dao
         /// <param name="stats">
         /// List of DBStats
         /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
         public void BulkReplace(List<DBStats> stats, IDbConnection connection = null, IDbTransaction transaction = null)
         {
+            IDbConnection conn = connection;
             try
             {
-                IDbConnection conn = connection;
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
                 try
                 {
-                    conn = conn ?? Connector.GetConnection();
-                    IDbTransaction trans = transaction;
-                    try
+                    trans = trans ?? conn.BeginTransaction();
+                    // Do it in one transaction, so no stats can be lost
+                    this.Delete(new { Type = stats[0].Type, Instance = stats[0].Instance }, conn, trans);
+                    foreach (DBStats stat in stats)
                     {
-                        trans = trans ?? conn.BeginTransaction();
-                        // Do it in one transaction, so no stats can be lost
-                        this.Delete(new { Type = stats[0].Type, Instance = stats[0].Instance }, conn, trans);
-                        foreach (DBStats stat in stats)
-                        {
-                            this.Add(stat, conn, trans);
-                        }
+                        this.Add(stat, conn, trans);
                     }
-                    finally
-                    {
-                        if (transaction == null)
-                        {
-                            if (trans != null)
-                            {
-                                trans.Commit();
-                                trans.Dispose();
-                            }
-                        }
-                    }
-
                 }
                 finally
                 {
-                    if (connection == null)
+                    if (transaction == null)
                     {
-                        if (conn != null)
+                        if (trans != null)
                         {
-                            conn.Dispose();
+                            trans.Commit();
+                            trans.Dispose();
                         }
                     }
                 }
+
             }
-            catch (Exception e)
+            finally
             {
-                LogUtil.ErrorException(e);
-                throw;
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
             }
         }
 

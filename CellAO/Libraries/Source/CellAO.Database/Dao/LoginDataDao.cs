@@ -99,7 +99,7 @@ namespace CellAO.Database.Dao
             IEnumerable<DBCharacter> characters = CharacterDao.Instance.GetAllForUser(user); // LOL
             foreach (DBCharacter character in characters)
             {
-                OnlineDao.SetOffline(character.Id);
+                CharacterDao.Instance.SetOffline(character.Id);
             }
         }
 
