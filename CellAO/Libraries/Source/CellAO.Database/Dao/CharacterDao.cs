@@ -33,6 +33,7 @@ namespace CellAO.Database.Dao
     using System.Linq;
 
     using CellAO.Database.Entities;
+    using CellAO.Enums;
 
     using Dapper;
 
@@ -105,15 +106,25 @@ namespace CellAO.Database.Dao
                     // TODO : move these two to their own DAOs
 
                     // remove this character from organisations
-                    conn.Execute("DELETE FROM `organizations` WHERE ID = @id", new { id = id }, trans);
 
-                    // empty this characters inventory
-                    conn.Execute("DELETE FROM `inventory` WHERE ID = @id", new { id = id }, trans);
+                    DBOrganization org = OrganizationDao.Instance.GetAll(new { LeaderId = id }).FirstOrDefault();
+                    if (org != null)
+                    {
+                        // What to do if the leader deletes himself?
+                        // Lets remove the org for now, later on should it switch to secondhighest char in org?
+                        OrganizationDao.Instance.Delete(org.Id, conn, trans);
 
+                        // Remove the org's Stat from the other characters in the org too
+                        StatDao.Instance.Delete(new { StatValue = org.Id, StatId = (int)StatIds.clan });
+                    }
+
+                    // empty this characters inventory (items and instanced items)
+                    ItemDao.Instance.Delete(new { ContainerInstance = id });
+                    InstancedItemDao.Instance.Delete(new { ContainerInstance = id });
+                    
                     // deletes this character
                     base.Delete(id, conn, trans);
 
-                    // TODO: refactor StatDao
                     // delete characters stats
                     StatDao.Instance.Delete(new { type = 50000, Id = id });
                     if (transaction == null)
@@ -149,7 +160,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            return Instance.GetAll(new { username = username });
+            return Instance.GetAll(new { Username = username });
         }
 
         /// <summary>
@@ -204,6 +215,7 @@ namespace CellAO.Database.Dao
         {
             const string SQL = "SELECT id FROM characters where username=@userName AND id=@characterId";
             bool result;
+
             using (IDbConnection conn = Connector.GetConnection())
             {
                 result = conn.Query<int>(SQL, new { userName, characterId }).Count() == 1;
@@ -264,8 +276,6 @@ namespace CellAO.Database.Dao
                 // completely empty one is enough here, parameters have higher priority
                 new { Playfield = pfNum, Id = charId });
                 
-                // Needed to add charId here too, else it cant be passed as a parameter value. not nice
-
             // should ensure that rowsAffected == 1 otherwise ???
         }
 

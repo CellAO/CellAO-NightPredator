@@ -87,6 +87,7 @@
     <Compile Include="Entities\DBReceivedMessages.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Entities\DBTradeSkill.cs" />
+    <Compile Include="Entities\DBUploadedNano.cs" />
     <Compile Include="Entities\ForeignKeyAttribute.cs" />
     <Compile Include="Entities\IDBEntity.cs" />
     <Compile Include="Misc.cs" />
@@ -100,6 +101,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}</Project>
+      <Name>CellAO.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>

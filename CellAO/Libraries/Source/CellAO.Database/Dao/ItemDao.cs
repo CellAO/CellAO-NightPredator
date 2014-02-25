@@ -139,6 +139,10 @@ namespace CellAO.Database.Dao
         /// <param name="items">
         /// List of DBItem
         /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
         public void Save(List<DBItem> items, IDbConnection connection, IDbTransaction transaction)
         {
             if (items.Count > 0)
@@ -175,7 +179,7 @@ namespace CellAO.Database.Dao
         /// Type of the container
         /// </param>
         /// <param name="containerInstance">
-        /// Instance of the container
+        /// Instance of the container (the character's instance for example)
         /// </param>
         /// <returns>
         /// Collection of DBItem

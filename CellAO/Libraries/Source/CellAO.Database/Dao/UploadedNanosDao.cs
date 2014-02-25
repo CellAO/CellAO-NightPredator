@@ -28,23 +28,33 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
-    using System.Data;
+    using System.Linq;
 
+    using CellAO.Database.Entities;
     using CellAO.Interfaces;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class UploadedNanosDao
+    public class UploadedNanosDao : Dao<DBUploadedNano>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public static UploadedNanosDao Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new UploadedNanosDao();
+                    _instance.TableName = getTablename();
+                }
+
+                return (UploadedNanosDao)_instance;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -52,22 +62,9 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static IEnumerable<int> ReadNanos(int charId)
+        public IEnumerable<int> ReadNanos(int charId)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<int>(
-                        "SELECT Nano from charactersuploadednanos where id=@characterId", 
-                        new { characterId = charId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetAll(new { CharacterId = charId }).Select(x => x.NanoId).ToList();
         }
 
         /// <summary>
@@ -76,24 +73,15 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="nanos">
         /// </param>
-        public static void WriteNano(int charId, IUploadedNanos nanos)
+        public void WriteNano(int charId, IUploadedNanos nanos)
         {
-            try
+            if (!this.ReadNanos(charId).Contains(nanos.NanoId))
             {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "REPLACE INTO charactersuploadednanos (ID, Nano) VALUES (@charid, @nano)", 
-                        new { charid = charId, nano = nanos.NanoId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
+                DBUploadedNano temp = new DBUploadedNano();
+                temp.CharacterId = charId;
+                temp.NanoId = nanos.NanoId;
+                this.Save(temp);
             }
         }
-
-        #endregion
     }
 }

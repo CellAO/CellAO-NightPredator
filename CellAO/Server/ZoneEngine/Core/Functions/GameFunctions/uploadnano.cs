@@ -88,7 +88,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         {
             var temp = new UploadedNano() { NanoId = arguments[0].AsInt32() };
             ((Character)self).UploadedNanos.Add(temp);
-            UploadedNanosDao.WriteNano(((Character)self).Identity.Instance, temp);
+            UploadedNanosDao.Instance.WriteNano(((Character)self).Identity.Instance, temp);
 
             var message = new CharacterActionMessage()
                           {
@@ -99,6 +99,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                               Parameter2 = temp.NanoId, 
                               Unknown = 0
                           };
+
             ((Character)self).Client.SendCompressed(message);
 
             return true;

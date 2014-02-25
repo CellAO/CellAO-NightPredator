@@ -26,22 +26,27 @@
 
 namespace CellAO.Database.Entities
 {
+    #region Usings ...
+
+    using CellAO.Database.Dao;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    public class DBReceivedMessages: IDBEntity
+    [Tablename("receivedmessages")]
+    public class DBReceivedMessages : IDBEntity
     {
-        #region Public Properties
-
         /// <summary>
         /// </summary>
-        public int PlayerID { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public int ReceivedID { get; set; }
-
-        #endregion
-
         public int Id { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int PlayerId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int ReceivedId { get; set; }
     }
 }

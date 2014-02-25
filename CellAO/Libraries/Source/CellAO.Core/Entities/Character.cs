@@ -318,7 +318,7 @@ namespace CellAO.Core.Entities
                 this.RawHeading = new Quaternion(daochar.HeadingX, daochar.HeadingY, daochar.HeadingZ, daochar.HeadingW);
             }
 
-            foreach (int nano in UploadedNanosDao.ReadNanos(this.Identity.Instance))
+            foreach (int nano in UploadedNanosDao.Instance.ReadNanos(this.Identity.Instance))
             {
                 this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
             }
