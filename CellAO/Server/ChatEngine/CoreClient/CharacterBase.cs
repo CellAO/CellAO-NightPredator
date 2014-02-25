@@ -95,7 +95,7 @@ namespace ChatEngine.CoreClient
                 DBStats clan = StatDao.Instance.GetById(50000, (int)this.CharacterId, 5);
                 if (clan != null)
                 {
-                    DBOrganization org = OrganizationDao.GetOrganizationData(clan.StatValue);
+                    DBOrganization org = OrganizationDao.Instance.Get(clan.StatValue);
                     this.orgName = org.Name;
                 }
 

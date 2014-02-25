@@ -66,7 +66,7 @@ namespace ZoneEngine.Core.PacketHandlers
                              * name of org is message.CommandArgs
                              */
 
-                    if (OrganizationDao.CreateOrganization(
+                    if (OrganizationDao.Instance.CreateOrganization(
                         message.CommandArgs, 
                         DateTime.UtcNow, 
                         client.Character.Identity.Instance))
@@ -74,7 +74,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         client.Character.Playfield.Publish(
                             ChatText.CreateIM(client.Character, "You have created the guild: " + message.CommandArgs));
 
-                        int orgID = OrganizationDao.GetOrganizationId(message.CommandArgs);
+                        int orgID = OrganizationDao.Instance.GetOrganizationId(message.CommandArgs);
 
                         // Make sure the order of these next two lines is not swapped -NV
                         client.Character.Stats[StatIds.clanlevel].Value = 0;
@@ -102,7 +102,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     }
 
                     int governingForm =
-                        OrganizationDao.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
+                        OrganizationDao.Instance.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
 
                     client.Character.Playfield.Publish(
                         ChatText.CreateIM(client.Character, "Current Rank Structure: " + GetRankList(governingForm)));
@@ -129,7 +129,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         int orgGoverningForm = 0, orgLeaderID = 0;
 
                         DBOrganization orgData =
-                            OrganizationDao.GetOrganizationData((int)tPlayer.Stats[StatIds.clan].BaseValue);
+                            OrganizationDao.Instance.Get((int)tPlayer.Stats[StatIds.clan].BaseValue);
 
                         if (orgData != null)
                         {
@@ -137,7 +137,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             orgObjective = orgData.Objective;
                             orgHistory = orgData.History;
                             orgGoverningForm = orgData.GovernmentForm;
-                            orgLeaderID = orgData.LeaderID;
+                            orgLeaderID = orgData.LeaderId;
                         }
 
                         orgLeaderName = CharacterDao.Instance.GetCharacterNameById(orgLeaderID);
@@ -211,7 +211,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     // Add Org Bank to prez
                     DBOrganization orgDisband =
-                        OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                        OrganizationDao.Instance.Get((int)client.Character.Stats[StatIds.clan].BaseValue);
                     client.Character.Stats[StatIds.cash].BaseValue += (uint)orgDisband.Bank;
 
                     // Clear stat 5 (Clan) from all chars where value=orgId
@@ -264,7 +264,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                             // First we get the details about the org itself
                             DBOrganization orgPromote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                                OrganizationDao.Instance.Get((int)client.Character.Stats[StatIds.clan].BaseValue);
 
                             int promoteGovForm = -1;
                             string promotedToRank = string.Empty;
@@ -280,7 +280,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                                  * Reset OrgName to set changes
                                                  */
 
-                                    OrganizationDao.SetNewPrez(orgPromote.ID, toPromote.Identity.Instance);
+                                    OrganizationDao.Instance.SetNewPrez(orgPromote.Id, toPromote.Identity.Instance);
                                     toPromote.Stats[StatIds.clanlevel].Value = 0;
                                     client.Character.Stats[StatIds.clanlevel].Value = 1;
 
@@ -360,7 +360,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
                             // First we get the details about the org itself
                             DBOrganization orgDemote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                                OrganizationDao.Instance.Get((int)client.Character.Stats[StatIds.clan].BaseValue);
                             int demoteGovForm = -1;
                             string demotedToRank = string.Empty;
                             if (orgDemote == null)
@@ -510,7 +510,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     // target.Instance holds the OrgID of the Org wishing to be joined.
                     int orgIdtoJoin = message.Target.Instance;
-                    int gov_form = OrganizationDao.GetGovernmentForm(orgIdtoJoin);
+                    int gov_form = OrganizationDao.Instance.GetGovernmentForm(orgIdtoJoin);
 
                     // Make sure the order of these next two lines is not swapped -NV
                     client.Character.Stats[StatIds.clanlevel].Value = GetLowestRank(gov_form);
@@ -532,7 +532,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     // Just because something happens on TL, doesnt mean its a good idea. Really tbh id prefer it if you had to explicitly type /org disband to disband rather than /org leave doing it... -NV
                     // Agreeing with NV.  Org Leader can't leave without passing lead on.  org disband requires /org disband to specifically be issued, with a Yes/No box.
 
-                    int govern_form = OrganizationDao.GetGovernmentForm(client.Character.Stats[StatIds.clan].Value);
+                    int govern_form = OrganizationDao.Instance.GetGovernmentForm(client.Character.Stats[StatIds.clan].Value);
 
                     if ((client.Character.Stats[StatIds.clanlevel].Value == 0) && (govern_form != 4))
                     {
@@ -544,7 +544,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     else
                     {
                         int oldOrgId = client.Character.Stats[StatIds.clan].Value;
-                        string orgName = OrganizationDao.GetOrganizationData(oldOrgId).Name;
+                        string orgName = OrganizationDao.Instance.Get(oldOrgId).Name;
                         client.Character.Playfield.Publish(
                             ChatText.CreateIM(client.Character, "You left the organization " + orgName + "."));
                     }

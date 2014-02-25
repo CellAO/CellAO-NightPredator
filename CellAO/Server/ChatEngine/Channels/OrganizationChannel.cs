@@ -61,8 +61,8 @@ namespace ChatEngine.Channels
             : base(
                 ChannelFlags.NoInternational | ChannelFlags.GroupOnName, 
                 ChannelType.Organization, 
-                (uint)orgId, 
-                OrganizationDao.GetOrganizationData(orgId).Name)
+                (uint)orgId,
+                OrganizationDao.Instance.Get(orgId).Name)
         {
         }
 
