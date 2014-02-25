@@ -36,8 +36,7 @@ namespace ChatEngine.CoreClient
     using ChatEngine.Channels;
     using ChatEngine.CoreServer;
 
-    using NiceHexOutput;
-
+    
     using Utility;
 
     #endregion
@@ -145,7 +144,7 @@ namespace ChatEngine.CoreClient
 
             if (Program.DebugNetwork)
             {
-                LogUtil.Debug("\r\nSent:\r\n" + NiceHexOutput.Output(packetBytes));
+                LogUtil.Debug("\r\nSent:\r\n" + HexOutput.Output(packetBytes));
             }
 
             if (packetBytes.Length % 4 > 0)
@@ -203,7 +202,7 @@ namespace ChatEngine.CoreClient
                 Array.Copy(buffer.SegmentData, 0, packet, 0, this._remainingLength);
                 if (Program.DebugNetwork)
                 {
-                    LogUtil.Debug("\r\nReceived:\r\n" + NiceHexOutput.Output(packet));
+                    LogUtil.Debug("\r\nReceived:\r\n" + HexOutput.Output(packet));
                 }
 
                 ushort messageNumber = this.GetMessageNumber(packet);

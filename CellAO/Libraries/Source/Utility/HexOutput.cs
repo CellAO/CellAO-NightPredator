@@ -24,75 +24,87 @@
 
 #endregion
 
-namespace ChatEngine.PacketHandlers
+namespace Utility
 {
     #region Usings ...
 
-    using System.IO;
-    using System.Net;
+    using System;
     using System.Text;
-
-    using AO.Core.Encryption;
-
-    using ChatEngine.CoreClient;
-    using ChatEngine.Packets;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
-    /// The authenticate bot.
     /// </summary>
-    public static class AuthenticateBot
+    public static class HexOutput
     {
         #region Public Methods and Operators
 
         /// <summary>
-        /// The read.
         /// </summary>
-        /// <param name="client">
-        /// </param>
         /// <param name="packet">
         /// </param>
-        public static void Read(Client client, byte[] packet)
+        /// <returns>
+        /// </returns>
+        public static string Output(byte[] packet)
         {
-            if (Program.DebugNetwork)
+            if (packet == null)
             {
-                LogUtil.Debug("\r\nReceived:\r\n" + HexOutput.Output(packet));
+                return string.Empty;
             }
 
-            MemoryStream m_stream = new MemoryStream(packet);
-            BinaryReader m_reader = new BinaryReader(m_stream);
+            StringBuilder builder = new StringBuilder();
+            int counter = 0;
 
-            // now we should do password check and then send OK or Error
-            // sending OK now
-            m_stream.Position = 8;
+            builder.AppendLine("Packet length: "+packet.Length);
 
-            short userNameLength = IPAddress.NetworkToHostOrder(m_reader.ReadInt16());
-            string userName = Encoding.ASCII.GetString(m_reader.ReadBytes(userNameLength));
-            short loginKeyLength = IPAddress.NetworkToHostOrder(m_reader.ReadInt16());
-            string loginKey = Encoding.ASCII.GetString(m_reader.ReadBytes(loginKeyLength));
-
-            LoginEncryption loginEncryption = new LoginEncryption();
-
-            if (loginEncryption.IsValidLogin(loginKey, client.ServerSalt, userName))
+            while (counter < packet.Length)
             {
-                client.IsBot = true;
-                byte[] chars = AccountCharacterList.Create(userName);
-                if (Program.DebugNetwork)
+                builder.Append(" ");
+                if (packet.Length - counter > 16)
                 {
-                    LogUtil.Debug("\r\nReceived:\r\n" + HexOutput.Output(chars));
+                    byte[] temp = new byte[16];
+                    Array.Copy(packet, counter, temp, 0, 16);
+                    builder.Append(BitConverter.ToString(temp).Replace("-", " ").PadRight(52));
+                    foreach (byte b in temp)
+                    {
+                        builder.Append(ToSafeAscii(b));
+                    }
+
+                    builder.AppendLine();
+                }
+                else
+                {
+                    byte[] temp = new byte[packet.Length - counter];
+                    Array.Copy(packet, counter, temp, 0, packet.Length - counter);
+                    builder.Append(BitConverter.ToString(temp).Replace("-", " ").PadRight(52));
+                    foreach (byte b in temp)
+                    {
+                        builder.Append(ToSafeAscii(b));
+                    }
+
+                    builder.AppendLine();
                 }
 
-                client.Send(chars);
+                counter += 16;
             }
-            else
+
+            return builder.ToString();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="b">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static char ToSafeAscii(int b)
+        {
+            if (b >= 32 && b <= 126)
             {
-                byte[] loginerr = LoginError.Create();
-                client.Send(loginerr);
-                client.Server.DisconnectClient(client);
+                return (char)b;
             }
+
+            return '.';
         }
 
         #endregion

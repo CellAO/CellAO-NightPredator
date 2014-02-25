@@ -4,5 +4,5 @@ CREATE TABLE  `charactersuploadednanos` (
 
   `NanoId` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `Nanos` (`CharacterId`, `Nano`)
+  INDEX `Nanos` (`CharacterId`, `NanoId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -35,8 +35,6 @@ namespace CellAO.Communication.ISComV2Client
 
     using Cell.Core;
 
-    using NiceHexOutput;
-
     using Utility;
 
     #endregion
@@ -441,7 +439,7 @@ namespace CellAO.Communication.ISComV2Client
                     LogUtil.Debug("Malformed packet received: ");
                     byte[] data = new byte[this._remainingLength];
                     buffer.SegmentData.CopyTo(data, this._remainingLength);
-                    LogUtil.Debug(NiceHexOutput.Output(data));
+                    LogUtil.Debug(HexOutput.Output(data));
                     this._remainingLength = 0;
                     this._offset = 0;
 

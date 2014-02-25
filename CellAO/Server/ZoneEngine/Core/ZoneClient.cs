@@ -44,8 +44,6 @@ namespace ZoneEngine.Core
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
 
-    using NiceHexOutput;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -268,7 +266,7 @@ namespace ZoneEngine.Core
 
             if (Program.DebugNetwork)
             {
-                LogUtil.Debug(NiceHexOutput.Output(buffer));
+                LogUtil.Debug(HexOutput.Output(buffer));
             }
         }
 
@@ -300,7 +298,7 @@ namespace ZoneEngine.Core
 
             if (Program.DebugNetwork)
             {
-                LogUtil.Debug(NiceHexOutput.Output(buffer));
+                LogUtil.Debug(HexOutput.Output(buffer));
             }
 
             this.packetNumber = 1;
@@ -420,7 +418,7 @@ namespace ZoneEngine.Core
 
             if (Program.DebugNetwork)
             {
-                LogUtil.Debug("\r\nReceived: \r\n" + NiceHexOutput.Output(packet));
+                LogUtil.Debug("\r\nReceived: \r\n" + HexOutput.Output(packet));
             }
 
             this._remainingLength = 0;
@@ -435,7 +433,7 @@ namespace ZoneEngine.Core
                     this, 
                     "Client sent malformed message {0}", 
                     messageNumber.ToString(CultureInfo.InvariantCulture));
-                LogUtil.Debug(NiceHexOutput.Output(packet));
+                LogUtil.Debug(HexOutput.Output(packet));
                 return false;
             }
 

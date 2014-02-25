@@ -36,8 +36,6 @@ namespace LoginEngine.CoreClient
     using CellAO.Core.Components;
     using CellAO.Core.EventHandlers.Events;
 
-    using NiceHexOutput;
-
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Utility;
@@ -176,7 +174,7 @@ namespace LoginEngine.CoreClient
 
             if (Program.DebugNetwork)
             {
-                LogUtil.Debug("Sent:\r\n" + NiceHexOutput.Output(buffer));
+                LogUtil.Debug("Sent:\r\n" + HexOutput.Output(buffer));
             }
 
             if (buffer.Length % 4 > 0)
@@ -241,7 +239,7 @@ namespace LoginEngine.CoreClient
             if (Program.DebugNetwork)
             {
                 LogUtil.Debug("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-                LogUtil.Debug(NiceHexOutput.Output(packet));
+                LogUtil.Debug(HexOutput.Output(packet));
             }
 
             this._remainingLength = 0;
@@ -256,7 +254,7 @@ namespace LoginEngine.CoreClient
                     this, 
                     "Client sent malformed message {0}", 
                     messageNumber.ToString(CultureInfo.InvariantCulture));
-                LogUtil.Debug(NiceHexOutput.Output(packet)); 
+                LogUtil.Debug(HexOutput.Output(packet)); 
                 return false;
             }
 

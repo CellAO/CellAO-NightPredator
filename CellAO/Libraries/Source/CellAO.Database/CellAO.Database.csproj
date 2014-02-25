@@ -187,7 +187,7 @@
     <Content Include="SqlTables\proxydestinations.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SqlTables\receivedmsgs.sql">
+    <Content Include="SqlTables\receivedmessages.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SqlTables\shopinventorytemplates.sql">

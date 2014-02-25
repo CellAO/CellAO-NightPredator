@@ -61,7 +61,7 @@ namespace CellAO.Database.Dao
                 return (CharacterDao)_instance;
             }
         }
-        
+
         #endregion
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace CellAO.Database.Dao
                     // empty this characters inventory (items and instanced items)
                     ItemDao.Instance.Delete(new { ContainerInstance = id });
                     InstancedItemDao.Instance.Delete(new { ContainerInstance = id });
-                    
+
                     // deletes this character
                     base.Delete(id, conn, trans);
 
@@ -264,18 +264,18 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// </param>
         public void SetPlayfield(
-            int charId, 
-            int pfType, 
-            int pfNum, 
-            IDbConnection connection = null, 
+            int charId,
+            int pfType,
+            int pfNum,
+            IDbConnection connection = null,
             IDbTransaction transaction = null)
         {
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
-                new DBCharacter(), 
+                new DBCharacter(),
                 // completely empty one is enough here, parameters have higher priority
                 new { Playfield = pfNum, Id = charId });
-                
+
             // should ensure that rowsAffected == 1 otherwise ???
         }
 
@@ -298,7 +298,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public void SetOffline(int id)
         {
-            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+            this.Save(new DBCharacter() { Id = id, Online = 0 }, new { Id = id, Online = 0 });
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace CellAO.Database.Dao
         /// </param>
         public void SetOnline(int id)
         {
-            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id });
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id, Online = 1 });
         }
     }
 }

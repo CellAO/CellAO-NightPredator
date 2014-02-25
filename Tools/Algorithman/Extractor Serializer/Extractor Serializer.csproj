@@ -106,10 +106,6 @@
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
-      <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
-      <Name>NiceHexOutput</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>

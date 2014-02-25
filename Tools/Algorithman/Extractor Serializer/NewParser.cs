@@ -43,7 +43,7 @@ namespace Extractor_Serializer
 
     using MsgPack;
 
-    using NiceHexOutput;
+    using Utility;
 
     #endregion
 
@@ -607,7 +607,7 @@ namespace Extractor_Serializer
             if (flag)
             {
                 TextWriter lastitem = new StreamWriter("lastitem.txt");
-                lastitem.WriteLine(NiceHexOutput.Output(this.br.Buffer));
+                lastitem.WriteLine(HexOutput.Output(this.br.Buffer));
                 lastitem.Close();
                 throw new IndexOutOfRangeException("Not handled function " + funcNum.ToString());
             }

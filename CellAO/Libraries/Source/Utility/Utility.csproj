@@ -58,6 +58,7 @@
     <Compile Include="ConsoleText.cs" />
     <Compile Include="CpuRamUtilization.cs" />
     <Compile Include="FunctionArgumentList.cs" />
+    <Compile Include="HexOutput.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="MessagePackZip.cs" />
     <Compile Include="OnScreenBanner.cs" />

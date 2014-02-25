@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEngine\ChatEngine.csproj", "{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CA8044C8-3283-4382-8B47-3CA7972692F9} = {CA8044C8-3283-4382-8B47-3CA7972692F9}
@@ -58,8 +60,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Interfaces", "Libraries\Source\CellAO.Interfaces\CellAO.Interfaces.csproj", "{D53F0612-FEFE-4EAF-80AA-480F25C8DD76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Enums", "Libraries\Source\CellAO.Enums\CellAO.Enums.csproj", "{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NiceHexOutput", "Libraries\Source\NiceHexOutput\NiceHexOutput.csproj", "{2EA014B6-1118-4AD0-8602-33D476EFDD24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.Stats", "Libraries\Source\CellAO.Stats\CellAO.Stats.csproj", "{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}"
 EndProject
@@ -285,20 +285,6 @@ Global
 		{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}.Release|x64.ActiveCfg = Release|Any CPU
 		{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}.Release|x86.ActiveCfg = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|Itanium.ActiveCfg = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|Itanium.ActiveCfg = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|x64.ActiveCfg = Release|Any CPU
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24}.Release|x86.ActiveCfg = Release|Any CPU
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB}.Debug|Itanium.ActiveCfg = Debug|Any CPU
@@ -424,7 +410,6 @@ Global
 		{77D1AEF7-AA59-4B5A-B114-E0C1EBE1B3C9} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{D53F0612-FEFE-4EAF-80AA-480F25C8DD76} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
-		{2EA014B6-1118-4AD0-8602-33D476EFDD24} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3E414ED6-3CAD-4C99-A35D-1802255DE3CB} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{55F93BC4-61C6-42F3-A8CB-788221059917} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
@@ -435,9 +420,9 @@ Global
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal
