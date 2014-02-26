@@ -31,8 +31,12 @@ namespace CellAO.Core.Controllers
     using System;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Inventory;
-    using CellAO.Core.Items;
+    using CellAO.Core.Vector;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
@@ -40,114 +44,215 @@ namespace CellAO.Core.Controllers
     /// </summary>
     internal class PlayerController : IController
     {
-        #region Public Properties
-
         /// <summary>
         /// </summary>
         public ICharacter Character { get; set; }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
         /// <param name="nanoId">
         /// </param>
+        /// <param name="target">
+        /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool CastNano(int nanoId)
+        public bool CastNano(int nanoId, Identity target)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="page">
+        /// <param name="action">
         /// </param>
-        /// <param name="slot">
+        /// <param name="target">
+        /// </param>
+        /// <param name="parameter1">
+        /// </param>
+        /// <param name="parameter2">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool DeleteItem(IInventoryPage page, int slot)
+        public bool CharacterAction(CharacterActionType action, Identity target, int parameter1, int parameter2)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageFrom">
+        /// <param name="command">
         /// </param>
-        /// <param name="fromSlot">
-        /// </param>
-        /// <param name="pageTo">
-        /// </param>
-        /// <param name="toSlot">
+        /// <param name="target">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool EquipItem(IInventoryPage pageFrom, int fromSlot, IInventoryPage pageTo, int toSlot)
+        public bool ChatCommand(string command, Identity target)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="pageFrom">
+        /// <param name="moveType">
         /// </param>
-        /// <param name="fromSlot">
+        /// <param name="newCoordinates">
         /// </param>
-        /// <param name="pageTo">
-        /// </param>
-        /// <param name="toSlot">
+        /// <param name="heading">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool UnequipItem(IInventoryPage pageFrom, int fromSlot, IInventoryPage pageTo, int toSlot)
+        public bool Move(int moveType, Coordinate newCoordinates, Quaternion heading)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="item">
+        /// <param name="sourceContainerType">
+        /// </param>
+        /// <param name="sourcePlacement">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="targetPlacement">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool UseItem(Item item)
+        public bool ContainerAddItem(int sourceContainerType, int sourcePlacement, Identity target, int targetPlacement)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="item1Page">
-        /// </param>
-        /// <param name="item1Slot">
-        /// </param>
-        /// <param name="item2Page">
-        /// </param>
-        /// <param name="item2Slot">
+        /// <param name="target">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool UseItemOnItem(IInventoryPage item1Page, int item1Slot, IInventoryPage item2Page, int item2Slot)
+        public bool Follow(Identity target)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="action">
+        /// </param>
+        /// <param name="count">
+        /// </param>
+        /// <param name="user">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool GenericCommand(GenericCmdAction action, int count, Identity user, Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool LookAt(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool InviteToTeam(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool Logout()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool Login()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action">
+        /// </param>
+        /// <param name="parameter1">
+        /// </param>
+        /// <param name="parameter2">
+        /// </param>
+        /// <param name="parameter3">
+        /// </param>
+        /// <param name="parameter4">
+        /// </param>
+        /// <param name="parameter5">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool SocialAction(
+            SocialAction action, 
+            byte parameter1, 
+            byte parameter2, 
+            byte parameter3, 
+            byte parameter4, 
+            int parameter5)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool Trade(Identity target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

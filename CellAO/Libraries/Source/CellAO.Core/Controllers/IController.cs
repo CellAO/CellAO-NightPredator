@@ -28,9 +28,17 @@ namespace CellAO.Core.Controllers
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Core.Entities;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
+    using CellAO.Core.Vector;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
@@ -41,6 +49,7 @@ namespace CellAO.Core.Controllers
         #region Public Properties
 
         /// <summary>
+        /// ICharacter object connected to this Controller
         /// </summary>
         ICharacter Character { get; set; }
 
@@ -48,73 +57,29 @@ namespace CellAO.Core.Controllers
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// </summary>
-        /// <param name="nanoId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool CastNano(int nanoId);
+        bool CastNano(int nanoId, Identity target);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="page">
-        /// </param>
-        /// <param name="slot">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool DeleteItem(IInventoryPage page, int slot);
+        bool CharacterAction(CharacterActionType action, Identity target, int parameter1, int parameter2);
+        
+        bool Move(int moveType, Coordinate newCoordinates, Quaternion heading);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="pageFrom">
-        /// </param>
-        /// <param name="fromSlot">
-        /// </param>
-        /// <param name="pageTo">
-        /// </param>
-        /// <param name="toSlot">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool EquipItem(IInventoryPage pageFrom, int fromSlot, IInventoryPage pageTo, int toSlot);
+        bool ContainerAddItem(int sourceContainerType, int sourcePlacement, Identity target, int targetPlacement);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="pageFrom">
-        /// </param>
-        /// <param name="fromSlot">
-        /// </param>
-        /// <param name="pageTo">
-        /// </param>
-        /// <param name="toSlot">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool UnequipItem(IInventoryPage pageFrom, int fromSlot, IInventoryPage pageTo, int toSlot);
+        bool Follow(Identity target);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool UseItem(Item item);
+        bool GenericCommand(GenericCmdAction action, int count, Identity user, Identity target);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="item1Page">
-        /// </param>
-        /// <param name="item1Slot">
-        /// </param>
-        /// <param name="item2Page">
-        /// </param>
-        /// <param name="item2Slot">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool UseItemOnItem(IInventoryPage item1Page, int item1Slot, IInventoryPage item2Page, int item2Slot);
+        bool LookAt(Identity target);
+
+        bool InviteToTeam(Identity target);
+
+        bool Logout();
+
+        bool Login();
+
+        bool SocialAction(SocialAction action, byte parameter1, byte parameter2, byte parameter3, byte parameter4, int parameter5);
+
+        bool Trade(Identity target);
 
         #endregion
     }
