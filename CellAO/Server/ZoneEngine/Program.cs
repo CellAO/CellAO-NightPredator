@@ -126,8 +126,9 @@ namespace ZoneEngine
             {
                 zoneServer = Container.GetInstance<ZoneServer>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return false;
             }
 
@@ -212,8 +213,9 @@ namespace ZoneEngine
                 chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
                 port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return false;
             }
 
@@ -222,8 +224,9 @@ namespace ZoneEngine
                 ISComClient.OnReceiveData += ISComClientOnReceiveData;
                 ISComClient.Connect(chatEngineIp, port);
             }
-            catch
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return true;
             }
 
@@ -415,6 +418,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingNLogNBug);
                 Console.WriteLine(e.Message);
@@ -435,8 +440,10 @@ namespace ZoneEngine
             {
                 csc = new ScriptCompiler();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 return false;
             }
 
@@ -465,11 +472,14 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e); 
+                
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorIPAddressParseFailed);
                 Console.Write(e.Message);
                 Colouring.Pop();
                 Console.ReadKey();
+                
                 return false;
             }
 
@@ -539,6 +549,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorReadingItemsFile);
@@ -557,6 +569,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorReadingNanosFile);
@@ -575,6 +589,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error reading statels.dat");
@@ -598,8 +614,10 @@ namespace ZoneEngine
             {
                 int temp = TradeSkill.Instance.ItemNames.Count;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 return false;
             }
 

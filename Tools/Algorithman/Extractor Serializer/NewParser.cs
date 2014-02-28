@@ -145,13 +145,14 @@ namespace Extractor_Serializer
         /// <param name="data">
         /// The data.
         /// </param>
-        /// <param name="itemnamessql">
+        /// <param name="itemNamesSqlList">
         /// </param>
         /// <returns>
         /// The <see cref="AOItem"/>.
         /// </returns>
-        public ItemTemplate ParseItem(int rectype, int recnum, byte[] data, List<string> itemnamessql)
+        public ItemTemplate ParseItem(Extractor.RecordType recordType, int recnum, byte[] data, List<string> itemNamesSqlList)
         {
+            int rectype = (int)recordType;
             this.br = new BufferedReader(rectype, recnum, data);
             ItemTemplate aoi = new ItemTemplate();
             aoi.ID = recnum;
@@ -196,9 +197,13 @@ namespace Extractor_Serializer
                 itemname = this.br.ReadString(num5);
             }
 
-            if (itemnamessql != null)
+            if (itemNamesSqlList != null)
             {
-                itemnamessql.Add("(" + recnum + ",'" + itemname.Replace("'", "''") + "')");
+                itemNamesSqlList.Add(string.Format("( {0} , '{1}' , '{2}' ) ",
+                    recnum,
+                    itemname.Replace("'", "''"),
+                    Enum.GetName(typeof(Extractor.RecordType), recordType)
+                    ));
             }
 
             if (num6 > 0)
@@ -211,7 +216,7 @@ namespace Extractor_Serializer
             {
                 while (this.br.Ptr < this.br.Buffer.Length - 8 && flag4)
                 {
-                    switch (this.br.ReadInt32())
+                    switch (this.br.ReadInt32()) // what are these ints ?
                     {
                         case 2:
                             this.ParseFunctionSet(aoi.Events);
@@ -286,9 +291,9 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="AONanos"/>.
         /// </returns>
-        public NanoFormula ParseNano(int rectype, int recnum, byte[] data, string sqlFile)
+        public NanoFormula ParseNano(int recnum, byte[] data, string sqlFile)
         {
-            this.br = new BufferedReader(rectype, recnum, data);
+            this.br = new BufferedReader((int)Extractor.RecordType.Nano, recnum, data);
             NanoFormula aon = new NanoFormula();
             aon.ID = recnum;
             this.br.Skip(16);
