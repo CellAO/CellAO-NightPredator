@@ -38,22 +38,26 @@ namespace WebEngine
             {
                 Process proc = new Process();
                 proc.StartInfo.FileName = _config.Instance.CurrentConfig.WebHostPhpPath + "\\\\php-cgi.exe";
-                proc.StartInfo.Arguments = fileName + " " + envVariables["query_string"];
                 proc.StartInfo.EnvironmentVariables.Add("REMOTE_ADDR", envVariables["remote_addr"]);
                 proc.StartInfo.EnvironmentVariables.Add("SCRIPT_NAME", this.scriptName);
                 proc.StartInfo.EnvironmentVariables.Add("USER_AGENT", envVariables["user_agent"]);
-                proc.StartInfo.EnvironmentVariables.Add("REQUESTED_METHOD", envVariables["requested_method"]);
+                proc.StartInfo.EnvironmentVariables.Add("REQUEST_METHOD", envVariables["request_method"]);
                 proc.StartInfo.EnvironmentVariables.Add("REFERER", envVariables["referer"]);
                 proc.StartInfo.EnvironmentVariables.Add("SERVER_PROTOCOL", envVariables["server_protocol"]);
                 proc.StartInfo.EnvironmentVariables.Add("QUERY_STRING", envVariables["query_string"]);
                 proc.StartInfo.EnvironmentVariables.Add("HTTP_COOKIE", envVariables["cookie"]);
+                proc.StartInfo.EnvironmentVariables.Add("SCRIPT_FILENAME", this.fullFilePath);
+                proc.StartInfo.EnvironmentVariables.Add("REDIRECT_STATUS", "200");
+                proc.StartInfo.EnvironmentVariables.Add("CONTENT_LENGTH", envVariables["post"].Length.ToString());
+                proc.StartInfo.EnvironmentVariables.Add("CONTENT_TYPE", "application/x-www-form-urlencoded");
+                proc.StartInfo.EnvironmentVariables.Add("HTTP_RAW_POST_DATA", envVariables["post"]);
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.StartInfo.RedirectStandardInput = true;
                 proc.StartInfo.RedirectStandardError = true;
                 proc.StartInfo.CreateNoWindow = true;
                 proc.Start();
-
+                proc.StandardInput.WriteLine(envVariables["post"]);
                 this.phpOutput = proc.StandardOutput.ReadToEnd();
                 this.phpErrorOutput = proc.StandardError.ReadToEnd();
                 proc.Close();
