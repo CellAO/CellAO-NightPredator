@@ -37,6 +37,7 @@ namespace WebEngine
     using System.Text;
     using System.Threading;
     using System.Xml.Linq;
+    using System.Collections.Generic;
 
     using Utility;
 
@@ -63,14 +64,6 @@ namespace WebEngine
         /// <summary>
         /// </summary>
         public bool isRunning = false;
-
-        /// <summary>
-        /// </summary>
-        private readonly string badRequest;
-
-        /// <summary>
-        /// </summary>
-        private readonly string errorMessage;
 
         /// <summary>
         /// </summary>
@@ -107,10 +100,6 @@ namespace WebEngine
             try
             {
                 this.xdoc = XDocument.Load("MimeTypes.xml");
-
-                // two messages about errors
-                this.errorMessage = "<html><body><h2>Requested file not found</h2></body></html>";
-                this.badRequest = "<html><body><h2>Bad Request</h2></body></html>";
 
                 // define the port
                 int port = Convert.ToInt32(_config.Instance.CurrentConfig.WebHostPort);
@@ -152,93 +141,6 @@ namespace WebEngine
 
         #region Methods
 
-        /// <summary>
-        /// </summary>
-        /// <param name="cgiFile">
-        /// </param>
-        /// <param name="queryString">
-        /// </param>
-        /// <param name="ext">
-        /// </param>
-        /// <param name="remoteAddress">
-        /// </param>
-        /// <param name="serverProtocol">
-        /// </param>
-        /// <param name="referer">
-        /// </param>
-        /// <param name="requestedMethod">
-        /// </param>
-        /// <param name="userAgent">
-        /// </param>
-        /// <param name="request">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private string GetCgiData(
-            string cgiFile, 
-            string queryString, 
-            string ext, 
-            string remoteAddress, 
-            string serverProtocol, 
-            string referer, 
-            string requestedMethod, 
-            string userAgent, 
-            string request)
-        {
-            var proc = new Process();
-
-            // indicate the executable to get stdout
-            if (ext == ".php")
-            {
-                proc.StartInfo.FileName = _config.Instance.CurrentConfig.WebHostPhpPath + "\\\\php-cgi.exe";
-
-                // if path to the php is not defined
-                if (!File.Exists(proc.StartInfo.FileName))
-                {
-                    return this.errorMessage;
-                }
-
-                proc.StartInfo.Arguments = " -q " + cgiFile + " " + queryString;
-            }
-            else
-            {
-                proc.StartInfo.FileName = cgiFile;
-                proc.StartInfo.Arguments = queryString;
-                
-            }
-
-            string scriptName = cgiFile.Substring(cgiFile.LastIndexOf('\\') + 1);
-
-            // Set some global variables and output parameters
-            proc.StartInfo.EnvironmentVariables.Add("REMOTE_ADDR", remoteAddress.ToString(CultureInfo.InvariantCulture));
-            proc.StartInfo.EnvironmentVariables.Add("SCRIPT_NAME", scriptName);
-            proc.StartInfo.EnvironmentVariables.Add("USER_AGENT", userAgent);
-            proc.StartInfo.EnvironmentVariables.Add("REQUESTED_METHOD", requestedMethod);
-            proc.StartInfo.EnvironmentVariables.Add("REFERER", referer);
-            proc.StartInfo.EnvironmentVariables.Add("SERVER_PROTOCOL", serverProtocol);
-            proc.StartInfo.EnvironmentVariables.Add("QUERY_STRING", request);
-
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.RedirectStandardInput = true;
-            proc.StartInfo.RedirectStandardError = true;
-            proc.StartInfo.CreateNoWindow = true;
-
-            proc.Start();
-
-            var str = proc.StandardOutput.ReadToEnd();
-            var errors = proc.StandardError.ReadToEnd();
-
-            str = str + Environment.NewLine + errors + Environment.NewLine;
-            Console.WriteLine(str);
-            proc.Close();
-            proc.Dispose();
-
-            return str;
-        }
-
-        // Get MIME of the file
-
         // Get default web pages
         /// <summary>
         /// </summary>
@@ -254,6 +156,33 @@ namespace WebEngine
             }
 
             return string.Empty;
+        }
+
+        private void SendError400(ref Socket sockets)
+        {
+            try
+            {
+                Error400 error = new Error400();
+                SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
+                sockets.Close();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void SendError404(ref Socket sockets)
+        {
+            try
+            {
+                Error404 error = new Error404();
+                SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
+                sockets.Close();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -303,10 +232,9 @@ namespace WebEngine
             string referer = string.Empty;
             string userAgent = string.Empty;
             string serverProtocol = "HTTP/1.1";
-            int erMesLen = this.errorMessage.Length;
-            int badMesLen = this.badRequest.Length;
             StreamWriter logStream = null;
             string remoteAddress = string.Empty;
+            string cookie = string.Empty;
 
             if (sockets.Connected == true)
             {
@@ -327,9 +255,7 @@ namespace WebEngine
                 int startPos = sBuffer.IndexOf("HTTP", 1);
                 if (startPos == -1)
                 {
-                    this.SendHeader(serverProtocol, string.Empty, badMesLen, "400 Bad Request", ref sockets);
-                    SendData(this.badRequest, ref sockets);
-                    sockets.Close();
+                    this.SendError400(ref sockets);
                     return;
                 }
                 else
@@ -353,6 +279,10 @@ namespace WebEngine
                     else if (param.Trim().StartsWith("Referer"))
                     {
                         referer = param.Trim().Substring(9);
+                    }
+                    else if (param.Trim().StartsWith("Cookie: "))
+                    {
+                        cookie = param.Trim().Substring(8);
                     }
                 }
 
@@ -383,51 +313,35 @@ namespace WebEngine
                     case "HEAD":
                         break;
                     default:
-                        this.SendHeader(serverProtocol, string.Empty, badMesLen, "400 Bad Request", ref sockets);
-                        SendData(this.badRequest, ref sockets);
-                        sockets.Close();
+                        this.SendError400(ref sockets);
                         return;
                 }
 
                 // Get the full name of the requested file
-                if (requestedFile.Length == 0)
+                if (requestedFile.EndsWith("\\") || String.IsNullOrEmpty(requestedFile))
                 {
-                    requestedFile = this.GetDefaultPage(this.serverRoot);
+                    foreach(String fileName in new String[] {"index.php", "index.aspx", "index.html", "index.htm", "index.txt"}){
+                       String tmpFileName = _config.Instance.CurrentConfig.WebHostRoot + "\\" + requestedFile + fileName;
+                       if(File.Exists(tmpFileName)){
+                           requestedFile = requestedFile + fileName;
+                           break;
+                       }
+                    }
                     if (string.IsNullOrEmpty(requestedFile))
                     {
-                        this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
-                        SendData(this.errorMessage, ref sockets);
+                        this.SendError404(ref sockets);
+                        return;
                     }
                 }
 
                 filePath = this.serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
 
-                // If the file among forbidden files send the error message
-                XElement xElement = this.xdoc.Element("configuration");
-                if (xElement != null)
-                {
-                    XElement element = xElement.Element("Forbidden");
-                    if (element != null)
-                    {
-                        foreach (XElement forbidden in element.Elements("Path"))
-                        {
-                            if (filePath.StartsWith(forbidden.Value))
-                            {
-                                this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
-                                this.SendData(this.errorMessage, ref sockets);
-                                sockets.Close();
-                                return;
-                            }
-                        }
-                    }
-                }
-
                 // If there is no such file send error message
                 if (File.Exists(filePath) == false)
                 {
-                    this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
-                    SendData(this.errorMessage, ref sockets);
+                    this.SendError404(ref sockets);
+                    return;
                 }
                 else
                 {
@@ -437,48 +351,31 @@ namespace WebEngine
                     // process web pages
                     if (ext == ".aspx")
                     {
-                        // Create an instance of Host class
-                        var aspxHost = new Host();
+                        Dictionary<String, String> requestOptions = new Dictionary<String, String>();
+                        requestOptions.Add("server_root", this.serverRoot);
+                        requestOptions.Add("query_string", queryString);
+                        ASPXHandler aspxHandler = new ASPXHandler(requestedFile, requestOptions);
 
-                        // Pass to it filename and query string
-                        string htmlOut = aspxHost.CreateHost(requestedFile, this.serverRoot, queryString);
-                        erMesLen = htmlOut.Length;
-                        this.SendHeader(serverProtocol, mimeType, erMesLen, " 200 OK", ref sockets);
-                        SendData(htmlOut, ref sockets);
                     }
                     else if (ext == ".php" || ext == ".exe")
                     {
-                        string cgi2html = this.GetCgiData(
-                            filePath, 
-                            queryString, 
-                            ext, 
-                            remoteAddress, 
-                            serverProtocol, 
-                            referer, 
-                            REQUESTED_METHOD, 
-                            userAgent, 
-                            request);
-                        if (cgi2html == this.errorMessage)
-                        {
-                            this.SendHeader(serverProtocol, string.Empty, erMesLen, "404 Not Found", ref sockets);
-                            SendData(this.errorMessage, ref sockets);
-                        }
-                        else
-                        {
-                            erMesLen = cgi2html.Length;
-                            this.SendHeader(serverProtocol, mimeType, erMesLen, " 200 OK", ref sockets);
-                            SendData(cgi2html, ref sockets);
-                        }
+                        Dictionary<String, String> requestOptions = new Dictionary<string, string>();
+                        requestOptions.Add("remote_addr", remoteAddress.ToString(CultureInfo.InvariantCulture));
+                        requestOptions.Add("user_agent", userAgent);
+                        requestOptions.Add("requested_method", REQUESTED_METHOD);
+                        requestOptions.Add("referer", referer);
+                        requestOptions.Add("server_protocol", serverProtocol);
+                        requestOptions.Add("query_string", request);
+                        requestOptions.Add("cookie", cookie);
+                        PHPHandler phpHandler = new PHPHandler(filePath, requestOptions);
+                        SendData(phpHandler.getResponseHeaders(), ref sockets);
+                        SendData(phpHandler.getResponseBody(), ref sockets);
                     }
                     else
                     {
-                        var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        var bytes = new byte[fs.Length + 1];
-                        erMesLen = bytes.Length;
-                        fs.Read(bytes, 0, erMesLen);
-                        fs.Close();
-                        this.SendHeader(serverProtocol, mimeType, erMesLen, "200 OK", ref sockets);
-                        SendData(bytes, ref sockets);
+                        FileHandler fileHandler = new FileHandler(filePath);
+                        SendData(fileHandler.getResponseHeader(), ref sockets);
+                        SendData(fileHandler.getResponseBody(), ref sockets);
                     }
                 }
 
@@ -491,7 +388,6 @@ namespace WebEngine
                 logStream.WriteLine(DateTime.Now.ToString());
                 logStream.WriteLine("Connected to {0}", remoteAddress);
                 logStream.WriteLine("Requested path {0}", request);
-                logStream.WriteLine("Total bytes {0}", erMesLen);
                 logStream.Flush();
                 logStream.Close();
                 Monitor.Exit(this.randObj);
@@ -538,49 +434,6 @@ namespace WebEngine
         private void SendData(string data, ref Socket sockets)
         {
             SendData(Encoding.GetEncoding("windows-1252").GetBytes(data), ref sockets);
-        }
-
-        // Send the headers
-
-        /// <summary>
-        /// </summary>
-        /// <param name="serverProtocol">
-        /// </param>
-        /// <param name="mimeType">
-        /// </param>
-        /// <param name="totalBytes">
-        /// </param>
-        /// <param name="statusCode">
-        /// </param>
-        /// <param name="sockets">
-        /// </param>
-        private void SendHeader(
-            string serverProtocol, 
-            string mimeType, 
-            int totalBytes, 
-            string statusCode, 
-            ref Socket sockets)
-        {
-            var ss = new StringBuilder();
-
-            if (string.IsNullOrEmpty(mimeType))
-            {
-                mimeType = "text/html";
-            }
-
-            ss.Append(serverProtocol);
-            ss.Append(statusCode).AppendLine();
-            ss.AppendLine("Sever: CellAO WebEngine");
-            ss.Append("Content-Type: ");
-            ss.Append(mimeType).AppendLine();
-            ss.Append("Accept-Ranges: bytes").AppendLine();
-            ss.Append("Content-Length: ");
-            ss.Append(totalBytes).AppendLine().AppendLine();
-
-            byte[] dataToSend = Encoding.Default.GetBytes(ss.ToString());
-            ss.Clear();
-            SendData(dataToSend, ref sockets);
-            Console.WriteLine("{0} bytes have been sent", totalBytes.ToString(CultureInfo.InvariantCulture));
         }
 
         // Listen incoming connections

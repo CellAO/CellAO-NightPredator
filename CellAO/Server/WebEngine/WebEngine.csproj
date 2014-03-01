@@ -54,17 +54,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASPXHandler.cs" />
     <Compile Include="ASPX\Host.cs" />
     <Compile Include="Checks.cs" />
+    <Compile Include="Error400.cs" />
+    <Compile Include="Error404.cs" />
+    <Compile Include="FileHandler.cs" />
     <Compile Include="HttpServer.cs" />
+    <Compile Include="PHPHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResponseHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="..\..\Config\NBug.WebEngine.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
