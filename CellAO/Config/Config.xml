@@ -35,7 +35,7 @@
   <WebHostName>test.aocell.info</WebHostName>
   <WebHostPort>8181</WebHostPort>
   <WebHostRoot>htdocs</WebHostRoot>
-  <WebCoreRepo>https://github.com/gaddie-3/CellAO-WebCore/archive/master.zip</WebCoreRepo>
+  <WebCoreRepo>https://github.com/CellAO/CellAO-WebCore/archive/master.zip</WebCoreRepo>
   <WebHostDefaultPage>index.php</WebHostDefaultPage>
   <WebHostPhpPath>php</WebHostPhpPath>
 </Config>

@@ -266,7 +266,6 @@ namespace WebEngine
                 // Get other request parameters
                 // string[] @params = sBuffer.Split(new char[] { Constants.vbNewLine });
                 string[] @params = sBuffer.Replace("\r\n", "\n").Split('\n');
-
                 foreach (string param in @params)
                 {
                     // Get User-Agent
@@ -285,7 +284,7 @@ namespace WebEngine
                         cookie = param.Trim().Substring(8);
                     }
                 }
-
+                //string postData = @params[@params.Length - 1].Replace("\0", "");
                 // Get request method
                 REQUESTED_METHOD = sBuffer.Substring(0, sBuffer.IndexOf(" "));
                 int lastPos = sBuffer.IndexOf('/') + 1;
@@ -295,7 +294,7 @@ namespace WebEngine
                 {
                     case "POST":
                         requestedFile = request.Replace("/", "\\").Trim();
-                        queryString = @params[@params.Length - 1].Trim();
+                        queryString = @params[@params.Length - 1].Trim().Replace("\0", "");
                         break;
                     case "GET":
                         lastPos = request.IndexOf('?');
@@ -362,11 +361,12 @@ namespace WebEngine
                         Dictionary<String, String> requestOptions = new Dictionary<string, string>();
                         requestOptions.Add("remote_addr", remoteAddress.ToString(CultureInfo.InvariantCulture));
                         requestOptions.Add("user_agent", userAgent);
-                        requestOptions.Add("requested_method", REQUESTED_METHOD);
+                        requestOptions.Add("request_method", REQUESTED_METHOD);
                         requestOptions.Add("referer", referer);
                         requestOptions.Add("server_protocol", serverProtocol);
-                        requestOptions.Add("query_string", request);
+                        requestOptions.Add("query_string", queryString);
                         requestOptions.Add("cookie", cookie);
+                        requestOptions.Add("post", queryString);
                         PHPHandler phpHandler = new PHPHandler(filePath, requestOptions);
                         SendData(phpHandler.getResponseHeaders(), ref sockets);
                         SendData(phpHandler.getResponseBody(), ref sockets);
