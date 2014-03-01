@@ -67,21 +67,41 @@ namespace WebEngine
             if (Directory.Exists(_config.Instance.CurrentConfig.WebHostRoot) == false)
             {
                 var url = new WebClient();
-                Console.WriteLine("Downloading SVN...");
-                url.DownloadFile("http://downloads.sourceforge.net/project/win32svn/1.7.5/svn-win32-1.7.5.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fwin32svn%2Ffiles%2F1.7.5%2F&ts=1392843117&use_mirror=softlayer-dal", "svn.zip");
-                UrlDownloadFileCompleted2("svn.zip");
+                Console.WriteLine("Downloading WebCore...");
+                url.DownloadFile(_config.Instance.CurrentConfig.WebCoreRepo, "WebCore.zip");
+                Console.WriteLine("Download Complete.");
+                Console.WriteLine();
+                Console.WriteLine("Unzipping File...");
+                this.Unzip2("WebCore.zip");
+                string[] coreDirectories = System.IO.Directory.GetDirectories(_config.Instance.CurrentConfig.WebHostRoot);
+
+                foreach (string coreDirectory in coreDirectories)
+                {
+                    string[] files = System.IO.Directory.GetFiles(coreDirectory);
+                    // Copy the files and overwrite destination files if they already exist. 
+                    foreach (string s in files)
+                    {
+                        // Use static Path methods to extract only the file name from the path.
+                        string fileName = System.IO.Path.GetFileName(s);
+                        string destFile = System.IO.Path.Combine(_config.Instance.CurrentConfig.WebHostRoot, fileName);
+                        System.IO.File.Move(s, destFile);
+                    }
+
+                    files = System.IO.Directory.GetDirectories(coreDirectory);
+                    // Copy the files and overwrite destination files if they already exist. 
+                    foreach (string s in files)
+                    {
+                        // Use static Path methods to extract only the file name from the path.
+                        string fileName = System.IO.Path.GetFileName(s);
+                        string destFile = System.IO.Path.Combine(_config.Instance.CurrentConfig.WebHostRoot, fileName);
+                        System.IO.Directory.Move(s, destFile);
+                    }
+                    System.IO.Directory.Delete(coreDirectory);
+                }
             }
             else { Console.WriteLine("Webcore Exists.");}
         }
 
-        private void UrlDownloadFileCompleted2(string file)
-        {
-
-            Console.WriteLine("Download Complete.");
-            Console.WriteLine();
-            Console.WriteLine("Unzipping File...");
-            this.Unzip2(file);
-        }
 
         private void Unzip2(string file)
         {
@@ -89,31 +109,11 @@ namespace WebEngine
             {
                 foreach (ZipEntry ze in zip)
                 {
-                    ze.Extract(ExtractExistingFileAction.OverwriteSilently);
+                    ze.Extract(_config.Instance.CurrentConfig.WebHostRoot, ExtractExistingFileAction.OverwriteSilently);
                 }
                 zip.Dispose();
                 Console.WriteLine("Done.");
-                Console.WriteLine();
-                Console.WriteLine("Deleting " + Convert.ToString(file) + "...");
-                File.Delete(file);
-                Console.WriteLine();
-                Console.WriteLine("Done.");
-                Checkoutsvn();
             }
-        }
-
-        private void Checkoutsvn()
-        {
-            Console.WriteLine();
-            Console.WriteLine("Checking out SVN...");
-            var proc = Process.Start(@"svn-win32-1.7.5\bin\svn.exe", "co https://simplesqlcellaowebcore.googlecode.com/svn/trunk/webcore" + " " + _config.Instance.CurrentConfig.WebHostRoot);
-            if (proc != null)
-            {
-                proc.WaitForExit();
-            }
-            Console.WriteLine();
-            Console.WriteLine("Done.");
-            Directory.Delete("svn-win32-1.7.5", true);
         }
     }
 }
