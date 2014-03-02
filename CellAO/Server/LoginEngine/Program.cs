@@ -186,21 +186,21 @@ namespace LoginEngine
 
             if (!int.TryParse(obj[5], out temp))
             {
-                Console.WriteLine("Error: <GM Level> must be number between 0 and 511");
+                Console.WriteLine("Error: <GM Level> must be a number between 0 and 511");
                 failed = true;
             }
             else
             {
                 if ((temp < 0) || (temp > 511))
                 {
-                    Console.WriteLine("Error: <GM Level> must be number between 0 and 511");
+                    Console.WriteLine("Error: <GM Level> must be a number between 0 and 511");
                     failed = true;
                 }
             }
 
             if (!TestEmailRegex.TestEmail(obj[6]))
             {
-                Console.WriteLine("Error: <Email> You must supply an valid email address for this account");
+                Console.WriteLine("Error: <Email> You must supply a valid email address for this account");
                 failed = true;
             }
 
