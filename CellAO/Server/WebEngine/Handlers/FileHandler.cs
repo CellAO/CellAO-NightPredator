@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebEngine.ErrorHandlers;
 
-namespace WebEngine
+namespace WebEngine.Handlers
 {
     #region Usings ...
 
@@ -71,7 +72,7 @@ namespace WebEngine
             }
             else
             {
-                Error404 error = new Error404();
+                var error = new Error404();
                 this.responseHeader = error.getResponseHeader();
                 this.responseBody = Encoding.ASCII.GetBytes(error.getResponseBody());
             }

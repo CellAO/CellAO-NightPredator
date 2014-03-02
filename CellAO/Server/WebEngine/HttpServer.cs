@@ -38,9 +38,9 @@ namespace WebEngine
     using System.Threading;
     using System.Xml.Linq;
     using System.Collections.Generic;
-
+    using WebEngine.ErrorHandlers;
+    using WebEngine.Handlers;
     using Utility;
-
     using WebEngine.ASPX;
 
     using _config = Utility.Config.ConfigReadWrite;
@@ -162,7 +162,7 @@ namespace WebEngine
         {
             try
             {
-                Error400 error = new Error400();
+                var error = new Error400();
                 SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
                 sockets.Close();
             }
@@ -176,7 +176,7 @@ namespace WebEngine
         {
             try
             {
-                Error404 error = new Error404();
+                var error = new Error404();
                 SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
                 sockets.Close();
             }
@@ -367,13 +367,13 @@ namespace WebEngine
                         requestOptions.Add("query_string", queryString);
                         requestOptions.Add("cookie", cookie);
                         requestOptions.Add("post", queryString);
-                        PHPHandler phpHandler = new PHPHandler(filePath, requestOptions);
+                        var phpHandler = new PHPHandler(filePath, requestOptions);
                         SendData(phpHandler.getResponseHeaders(), ref sockets);
                         SendData(phpHandler.getResponseBody(), ref sockets);
                     }
                     else
                     {
-                        FileHandler fileHandler = new FileHandler(filePath);
+                        var fileHandler = new FileHandler(filePath);
                         SendData(fileHandler.getResponseHeader(), ref sockets);
                         SendData(fileHandler.getResponseBody(), ref sockets);
                     }
