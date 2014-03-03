@@ -81,7 +81,7 @@ namespace WebEngine.Handlers
             if (File.Exists(fileName))
             {
                 var fs = new FileStream(this.fullFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                this.responseBody = new byte[fs.Length + 1];
+                this.responseBody = new byte[fs.Length];
                 this.responseBodyLength = this.responseBody.Length;
                 fs.Read(this.responseBody, 0, this.responseBodyLength);
                 fs.Close();

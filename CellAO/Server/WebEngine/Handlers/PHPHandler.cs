@@ -37,6 +37,7 @@ namespace WebEngine.Handlers
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Net.Mime;
 
     using WebEngine.ErrorHandlers;
 
@@ -79,6 +80,14 @@ namespace WebEngine.Handlers
                 proc.StartInfo.EnvironmentVariables.Add("CONTENT_LENGTH", envVariables["post"].Length.ToString());
                 proc.StartInfo.EnvironmentVariables.Add("CONTENT_TYPE", "application/x-www-form-urlencoded");
                 proc.StartInfo.EnvironmentVariables.Add("HTTP_RAW_POST_DATA", envVariables["post"]);
+                if (proc.StartInfo.EnvironmentVariables.ContainsKey("PHPRC"))
+                {
+                    proc.StartInfo.EnvironmentVariables["PHPRC"] = _config.Instance.CurrentConfig.WebHostPhpPath;
+                }
+                else
+                {
+                    proc.StartInfo.EnvironmentVariables.Add("PHPRC", _config.Instance.CurrentConfig.WebHostPhpPath);
+                }
                 proc.StartInfo.UseShellExecute = false;
                 proc.StartInfo.RedirectStandardOutput = true;
                 proc.StartInfo.RedirectStandardInput = true;
