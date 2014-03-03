@@ -193,18 +193,18 @@ namespace WebEngine
         /// </returns>
         private string GetMimeType(string extention)
         {
-            XElement xElement1 = this.xdoc.Element("configuration");
+            var xElement1 = this.xdoc.Element("configuration");
             if (xElement1 != null)
             {
-                XElement element1 = xElement1.Element("Mime");
+                var element1 = xElement1.Element("Mime");
                 if (element1 != null)
                 {
-                    foreach (XElement xel in element1.Elements("Values"))
+                    foreach (var xel in element1.Elements("Values"))
                     {
-                        XElement xElement = xel.Element("Ext");
+                        var xElement = xel.Element("Ext");
                         if (xElement != null && xElement.Value == extention)
                         {
-                            XElement element = xel.Element("Type");
+                            var element = xel.Element("Type");
                             if (element != null)
                             {
                                 return element.Value;
@@ -350,15 +350,17 @@ namespace WebEngine
                     // process web pages
                     if (ext == ".aspx")
                     {
-                        Dictionary<String, String> requestOptions = new Dictionary<String, String>();
-                        requestOptions.Add("server_root", this.serverRoot);
-                        requestOptions.Add("query_string", queryString);
-                        ASPXHandler aspxHandler = new ASPXHandler(requestedFile, requestOptions);
+                        var requestOptions = new Dictionary<String, String>
+                                             {
+                                                 { "server_root", this.serverRoot },
+                                                 { "query_string", queryString }
+                                             };
+                        var aspxHandler = new ASPXHandler(requestedFile, requestOptions);
 
                     }
                     else if (ext == ".php" || ext == ".exe")
                     {
-                        Dictionary<String, String> requestOptions = new Dictionary<string, string>();
+                        var requestOptions = new Dictionary<string, string>();
                         requestOptions.Add("remote_addr", remoteAddress.ToString(CultureInfo.InvariantCulture));
                         requestOptions.Add("user_agent", userAgent);
                         requestOptions.Add("request_method", REQUESTED_METHOD);
