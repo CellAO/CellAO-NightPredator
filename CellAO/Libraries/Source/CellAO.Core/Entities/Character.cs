@@ -75,7 +75,6 @@ namespace CellAO.Core.Entities
         /// </summary>
         private Timer logoutTimer = null;
 
-
         /// <summary>
         /// </summary>
         private MoveDirections moveDirection;
@@ -109,7 +108,8 @@ namespace CellAO.Core.Entities
 
             this.UploadedNanos = new List<IUploadedNanos>();
 
-            this.BaseInventory = new PlayerInventory(this);
+            this.BaseInventory = new PlayerInventory(this, pooledIn);
+            
 
             this.SocialTab = new Dictionary<int, int>
                              {

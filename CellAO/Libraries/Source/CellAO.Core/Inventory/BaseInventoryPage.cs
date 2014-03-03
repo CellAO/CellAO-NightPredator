@@ -36,6 +36,7 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using Dapper;
 
@@ -45,17 +46,14 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public abstract class BaseInventoryPage : IInventoryPage
+    public abstract class BaseInventoryPage : PooledObject, IInventoryPage
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        private readonly IDictionary<int, IItem> Content;
+        private readonly IDictionary<int, IItem> Content = new Dictionary<int, IItem>();
 
-        /// <summary>
-        /// </summary>
-        private Identity identity;
 
         #endregion
 
@@ -71,21 +69,11 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="ownerInstance">
         /// </param>
-        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance)
-            : this()
+        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance, Pool pooledIn)
+            :base(pooledIn, new Identity(){Type = (IdentityType)ownerInstance,Instance=pagenum})
         {
-            this.identity.Type = (IdentityType)pagenum;
-            this.identity.Instance = ownerInstance;
             this.MaxSlots = maxslots;
             this.FirstSlotNumber = firstslotnumber;
-        }
-
-        /// <summary>
-        /// </summary>
-        private BaseInventoryPage()
-        {
-            this.Identity = new Identity();
-            this.Content = new Dictionary<int, IItem>();
         }
 
         #endregion
@@ -96,20 +84,6 @@ namespace CellAO.Core.Inventory
         /// </summary>
         public int FirstSlotNumber { get; set; }
 
-        /// <summary>
-        /// </summary>
-        public Identity Identity
-        {
-            get
-            {
-                return this.identity;
-            }
-
-            set
-            {
-                this.identity = value;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -125,13 +99,14 @@ namespace CellAO.Core.Inventory
         {
             get
             {
-                return (int)this.identity.Type;
+                return (int)this.Identity.Type;
             }
 
-            set
+            // Commenting this for now, we probably wont need it
+            /*set
             {
-                this.identity.Type = (IdentityType)value;
-            }
+                this.Identity.Type = (IdentityType)value;
+            }*/
         }
 
         #endregion
@@ -335,7 +310,7 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new { containertype = containerType, containerinstance = this.identity.Instance }))
+            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new { containertype = containerType, containerinstance = this.Identity.Instance }))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -390,11 +365,11 @@ namespace CellAO.Core.Inventory
 
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
+                ItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.Identity.Instance, containerplacement = slotNum });
             }
             else
             {
-                InstancedItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.identity.Instance, containerplacement = slotNum });
+                InstancedItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.Identity.Instance, containerplacement = slotNum });
             }
 
             this.Content.Remove(slotNum);

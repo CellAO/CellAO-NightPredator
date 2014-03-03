@@ -28,6 +28,8 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using CellAO.ObjectManager;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -42,8 +44,10 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public BackPackInventoryPage(int ownerInstance)
-            : base((int)IdentityType.Backpack, 30, 0, ownerInstance)
+        /// <param name="pooledIn">
+        /// </param>
+        public BackPackInventoryPage(int ownerInstance, Pool pooledIn)
+            : base((int)IdentityType.Backpack, 30, 0, ownerInstance, pooledIn)
         {
         }
 

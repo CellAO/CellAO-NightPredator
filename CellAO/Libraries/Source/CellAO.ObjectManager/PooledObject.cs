@@ -40,15 +40,9 @@ namespace CellAO.ObjectManager
     /// </summary>
     public class PooledObject : IDisposable, IEntity
     {
-        #region Fields
-
         /// <summary>
         /// </summary>
         private Pool pool;
-
-        #endregion
-
-        #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
@@ -63,26 +57,19 @@ namespace CellAO.ObjectManager
             this.pool = pooledIn;
         }
 
-        #endregion
-
-        #region Public Properties
-
         /// <summary>
         /// </summary>
         public Identity Identity { get; private set; }
-
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
         public virtual void Dispose()
         {
-            this.pool.RemoveObject(this);
-            this.pool = null;
+            if (this.pool != null)
+            {
+                this.pool.RemoveObject(this);
+                this.pool = null;
+            }
         }
-
-        #endregion
     }
 }
