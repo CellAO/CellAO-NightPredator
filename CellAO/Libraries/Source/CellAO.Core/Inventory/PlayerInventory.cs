@@ -28,6 +28,8 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using CellAO.ObjectManager;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -42,15 +44,15 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="owner">
         /// </param>
-        public PlayerInventory(IItemContainer owner)
-            : base(owner)
+        public PlayerInventory(IItemContainer owner, Pool pooledIn)
+            : base(owner, pooledIn)
         {
             this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance, pooledIn));
         }
 
         #endregion

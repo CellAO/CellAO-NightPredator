@@ -28,6 +28,8 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using CellAO.ObjectManager;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -42,13 +44,13 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="owner">
         /// </param>
-        public UnitInventory(IItemContainer owner)
+        public UnitInventory(IItemContainer owner, Pool pooledIn)
             : base(0, owner)
         {
-            this.StandardPage = 0x40;
-            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity.Instance));
+            this.StandardPage = (int)IdentityType.Inventory;
+            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity.Instance, pooledIn));
         }
-
+        
         #endregion
     }
 }

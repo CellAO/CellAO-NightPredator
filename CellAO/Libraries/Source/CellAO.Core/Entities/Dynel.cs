@@ -213,7 +213,8 @@ namespace CellAO.Core.Entities
             this.Stats = new Stats(this.Identity);
             this.InitializeStats();
 
-            this.BaseInventory = new UnitInventory(this);
+            // The subclasses will initialize their own BaseInventory
+            // this.BaseInventory = new UnitInventory(this, pooledIn);
 
             this.DoNotDoTimers = false;
             this.Starting = false;
@@ -282,14 +283,14 @@ namespace CellAO.Core.Entities
             // load depending on identity type
             switch (this.Identity.Type)
             {
-               //case IdentityType.
+                //case IdentityType.
 
             }
 
             this.BaseInventory.Read();
-            
+
             //base.Read();
-            
+
             this.DoNotDoTimers = false;
             return true;
         }
@@ -305,7 +306,7 @@ namespace CellAO.Core.Entities
         {
             this.DoNotDoTimers = true;
             this.Stats.Write();
-            
+
             // write dynel properties to database ??
 
             this.DoNotDoTimers = false;
@@ -430,10 +431,10 @@ namespace CellAO.Core.Entities
 
             this.Playfield.Announce(messageBody);
         }
-        
+
         #endregion
 
 
-        
+
     }
 }

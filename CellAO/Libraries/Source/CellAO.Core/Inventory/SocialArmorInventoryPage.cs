@@ -36,6 +36,7 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Items;
     using CellAO.Core.Requirements;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using MsgPack;
 
@@ -53,8 +54,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public SocialArmorInventoryPage(int ownerInstance)
-            : base((int)IdentityType.SocialPage, 15, 0x31, ownerInstance)
+        public SocialArmorInventoryPage(int ownerInstance, Pool pooledIn)
+            : base((int)IdentityType.SocialPage, 15, 0x31, ownerInstance, pooledIn)
         {
             this.NeedsItemCheck = true;
         }

@@ -59,7 +59,7 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        int Page { get; set; }
+        int Page { get; }
 
         #endregion
 
