@@ -110,6 +110,7 @@ namespace ChatEngine
                         if (args[0].ToLower() == "/autostart")
                         {
                             Console.WriteLine(locales.ServerConsoleAutostart);
+                            StartRelayBot();
                             chatServer.Start(TCPEnable, UDPEnable);
                         }
 
@@ -138,18 +139,7 @@ namespace ChatEngine
                             break;
                         }
 
-                        if (Config.Instance.CurrentConfig.UseIRCRelay == true)
-                        {
-                            Console.WriteLine("Starting RelayBot. Version {0}", ProgramInfo.AssemblyVersion);
-
-                            // Call the IRC Bot stuff here..
-                            RelayBot ircbot = new RelayBot();
-
-                            ircbot.Run(chatServer);
-                            chatServer.Start(TCPEnable, UDPEnable);
-                            break;
-                        }
-
+                        StartRelayBot();
                         chatServer.Start(TCPEnable, UDPEnable);
                         break;
                     case "stop":
@@ -202,6 +192,19 @@ namespace ChatEngine
                         Colouring.Pop();
                         break;
                 }
+            }
+        }
+
+        private static void StartRelayBot()
+        {
+            if (Config.Instance.CurrentConfig.UseIRCRelay == true)
+            {
+                Console.WriteLine("Starting RelayBot. Version {0}", ProgramInfo.AssemblyVersion);
+
+                // Call the IRC Bot stuff here..
+                RelayBot ircbot = new RelayBot();
+
+                ircbot.Run(chatServer);
             }
         }
 
