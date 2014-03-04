@@ -70,7 +70,12 @@ namespace Extractor_Serializer
             /// <summary>
             /// 1000026
             /// </summary>
-            Statel = 1000026
+            Statel = 1000026,
+            
+            /// <summary>
+            /// 1010008
+            /// </summary>
+            Icon = 1010008
 
         }
 

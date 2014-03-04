@@ -42,7 +42,7 @@ namespace CellAO.Core.Controllers
 
     /// <summary>
     /// </summary>
-    internal class PlayerController : IController
+    internal class PlayerController
     {
         /// <summary>
         /// </summary>
@@ -60,27 +60,47 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool CastNano(int nanoId, Identity target)
         {
+            // Procedure:
+            // 1. Check if nano can be casted
+            // 2. Lock nanocasting ability
+            // 3. Wait for cast attack delay
+            // 4. Check target's restance to the nano
+            // 5. Execute nanos gamefunctions
+            // 6. Wait for nano recharge delay
+            // 7. Unlock nano casting
+
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="action">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="parameter1">
-        /// </param>
-        /// <param name="parameter2">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public bool CharacterAction(CharacterActionType action, Identity target, int parameter1, int parameter2)
+        public bool DeleteItem()
         {
+            // Procedure:
+            // 1. Check container id (only bags and main inventory are valid for deleting)
+            // 2. Remove item from database
+
             throw new NotImplementedException();
         }
+
+
+        public bool Search()
+        {
+            // Procedure:
+            // 1. Gather stealthed entities inside range
+            // 2. Check against each entities concealment skill
+            // 3. Unhide successful found entities
+            // 4. Lock search action for ?? seconds
+            throw new NotImplementedException();
+        }
+
+        public bool GetTargetInfo(Identity target)
+        {
+            // Procedure:
+            // 1. Gather data
+            // 2. Send to client
+
+            throw new NotImplementedException();
+        }
+
 
         /// <summary>
         /// </summary>
@@ -199,6 +219,98 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool Logout()
         {
+            // Procedure: 
+            // 1. Sit down (if not already)
+            // 2. Check if we are a GM
+            // 2.1. Save character and logout immediately
+            // 3. Start logout timer
+            // 4. Save character
+            // 5. Logout
+
+            throw new NotImplementedException();
+        }
+
+        public bool StopLogout()
+        {
+            // Procedure:
+            // 1. Stop pending logout timer
+            // 2. Go back to previous move mode (dunno if really needed)
+
+            throw new NotImplementedException();
+        }
+
+        public bool Stand()
+        {
+            // Procedure:
+            // 1. Update characters move mode
+            // 2. Announce the action to the playfield (or range)
+            // 3. If logout timer pending, cancel pending logout timer
+
+            throw new NotImplementedException();
+        }
+
+        public bool KickTeamMember(Identity target)
+        {
+            // Procedure:
+            // 1. Kick Team member
+            // 2. Send Team update message
+
+            throw new NotImplementedException();
+        }
+
+        public bool LeaveTeam()
+        {
+            // Procedure:
+            // 1. Leave the team
+            // 2. Send Team update message
+
+            throw new NotImplementedException();
+        }
+
+        public bool TransferTeamLeadership(Identity target)
+        {
+            // Procedure:
+            // 1. Transfer Leadership
+            // 2. Send Team update message
+
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinRequest(Identity target)
+        {
+            // Procedure:
+            // 1. Send target the invite
+
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinReply(bool accept, Identity requester)
+        {
+            // Procedure:
+            // 1. If accept==true
+            // 2.    Call requester's TeamJoinAccepted
+            // 3. else
+            // 4.    Call requester's TeamJoinRejected
+
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinAccepted(Identity newTeamMember)
+        {
+            // Procedure:
+            // 1. If on team exists yet, create one
+            // 2. Add yourself as TeamLeader
+            // 3. Add newTeamMember
+            // 4. Send out TeamMemberInfo etc. to all team members
+
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinRejected(Identity rejectingIdentity)
+        {
+            // Procedure: 
+            // 1. Send back negative reply
+
             throw new NotImplementedException();
         }
 
@@ -232,11 +344,11 @@ namespace CellAO.Core.Controllers
         /// <exception cref="NotImplementedException">
         /// </exception>
         public bool SocialAction(
-            SocialAction action, 
-            byte parameter1, 
-            byte parameter2, 
-            byte parameter3, 
-            byte parameter4, 
+            SocialAction action,
+            byte parameter1,
+            byte parameter2,
+            byte parameter3,
+            byte parameter4,
             int parameter5)
         {
             throw new NotImplementedException();

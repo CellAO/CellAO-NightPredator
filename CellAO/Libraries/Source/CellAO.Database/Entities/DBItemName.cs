@@ -43,6 +43,9 @@ namespace CellAO.Database.Entities
         /// </summary>
         public string Name { get; set; }
 
+        public string ItemType { get; set; }
+        public string Icon { get; set; }
+
         #endregion
     }
 }

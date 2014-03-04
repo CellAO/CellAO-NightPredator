@@ -199,11 +199,11 @@ namespace Extractor_Serializer
 
             if (itemNamesSqlList != null)
             {
-                itemNamesSqlList.Add(string.Format("( {0} , '{1}' , '{2}' ) ",
+                itemNamesSqlList.Add(string.Format("( {0} , '{1}' , '{2}', '{3}' ) ",
                     recnum,
                     itemname.Replace("'", "''"),
-                    Enum.GetName(typeof(Extractor.RecordType), recordType)
-                    ));
+                    Enum.GetName(typeof(Extractor.RecordType), recordType), 
+                    aoi.getItemAttribute(79)));
             }
 
             if (num6 > 0)
@@ -241,12 +241,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aoi.Attack, aoi.Defend);
                             break;
                         case 6:
-                        {
-                            this.br.Skip(4);
-                            int count = this.br.Read3F1() * 8;
-                            this.br.Skip(count);
-                            break;
-                        }
+                            {
+                                this.br.Skip(4);
+                                int count = this.br.Read3F1() * 8;
+                                this.br.Skip(count);
+                                break;
+                            }
 
                         case 14:
                             this.ParseAnimSoundSet(1, aoi);
@@ -265,7 +265,7 @@ namespace Extractor_Serializer
                     }
 
                     continue;
-                    IL_4BF:
+                IL_4BF:
                     flag4 = false;
                 }
             }
@@ -366,12 +366,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aon.Attack, aon.Defend);
                             break;
                         case 6:
-                        {
-                            this.br.Skip(4);
-                            int count = this.br.Read3F1() * 8;
-                            this.br.Skip(count);
-                            break;
-                        }
+                            {
+                                this.br.Skip(4);
+                                int count = this.br.Read3F1() * 8;
+                                this.br.Skip(count);
+                                break;
+                            }
 
                         case 14:
                             this.ParseAnimSoundSet(1, null);
@@ -390,7 +390,7 @@ namespace Extractor_Serializer
                     }
 
                     continue;
-                    IL_4BF:
+                IL_4BF:
                     flag4 = false;
                 }
             }
@@ -420,24 +420,24 @@ namespace Extractor_Serializer
 
                 aor.Target = ItemTarget.Self; // 0x13
                 aor.Statnumber = rr.stat;
-                aor.Operator = (Operator) Enum.ToObject(typeof(Operator), rr.ops);
+                aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 aor.Value = rr.val;
                 aor.ChildOperator = Operator.Unknown;
 
                 if ((i < numreqs - 1)
                     && (
-                    (aor.Operator == Operator.OnTarget) 
-                    || (aor.Operator == Operator.OnSelf) 
+                    (aor.Operator == Operator.OnTarget)
+                    || (aor.Operator == Operator.OnSelf)
                     || (aor.Operator == Operator.OnUser)
-                        || (aor.Operator == Operator.OnValidTarget) 
-                        || (aor.Operator == Operator.OnInvalidTarget) 
+                        || (aor.Operator == Operator.OnValidTarget)
+                        || (aor.Operator == Operator.OnInvalidTarget)
                         || (aor.Operator == Operator.OnValidUser)
-                        || (aor.Operator == Operator.OnInvalidUser) 
-                        || (aor.Operator == Operator.OnGeneralBeholder) 
+                        || (aor.Operator == Operator.OnInvalidUser)
+                        || (aor.Operator == Operator.OnGeneralBeholder)
                         || (aor.Operator == Operator.OnCaster)
                         || (aor.Operator == Operator.Unknown2)))
                 {
-                    aor.Target = (ItemTarget) (int)aor.Operator;
+                    aor.Target = (ItemTarget)(int)aor.Operator;
                     i++;
                     rr = rreqs[i];
                     aor.Statnumber = rr.stat;
@@ -571,7 +571,7 @@ namespace Extractor_Serializer
                     int actionNum = this.br.ReadInt32();
 
                     Actions aoa = new Actions();
-                    aoa.ActionType = (ActionType) Enum.ToObject(typeof(ActionType), actionNum);
+                    aoa.ActionType = (ActionType)Enum.ToObject(typeof(ActionType), actionNum);
 
                     int numreqs = this.br.Read3F1();
                     List<Requirements> cookedreqs = this.ReadReqs(numreqs);
@@ -851,7 +851,7 @@ namespace Extractor_Serializer
             }
 
             Events aoe = new Events();
-            aoe.EventType = (EventType) Enum.ToObject(typeof(EventType), eventTypeValue);
+            aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventTypeValue);
 
             foreach (Functions ff in list)
             {
