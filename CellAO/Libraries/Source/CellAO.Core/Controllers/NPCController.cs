@@ -48,12 +48,27 @@ namespace CellAO.Core.Controllers
     {
         public ICharacter Character { get; set; }
 
+        public bool LookAt(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool CastNano(int nanoId, Identity target)
         {
             throw new NotImplementedException();
         }
 
-        public bool CharacterAction(CharacterActionType action, Identity target, int parameter1, int parameter2)
+        public bool Search()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Sneak()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ChangeVisualFlag(int visualFlag)
         {
             throw new NotImplementedException();
         }
@@ -73,27 +88,7 @@ namespace CellAO.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool GenericCommand(GenericCmdAction action, int count, Identity user, Identity target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool LookAt(Identity target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool InviteToTeam(Identity target)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Logout()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Login()
+        public bool Stand()
         {
             throw new NotImplementedException();
         }
@@ -110,6 +105,111 @@ namespace CellAO.Core.Controllers
         }
 
         public bool Trade(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UseItem(Identity itemPosition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteItem(int container)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SplitItemStack(Identity targetItem, int stackCount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool JoinItemStack(Identity sourceItem, Identity targetItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CombineItems(Identity sourceItem, Identity targetItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TradeSkillSourceChanged(int inventoryPageId, int slotNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TradeSkillTargetChanged(int inventoryPageId, int slotNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TradeSkillBuildPressed(Identity targetItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ChatCommand(string command, Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Logout()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Login()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool StopLogout()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool GetTargetInfo(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamInvite(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamKickMember(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamLeave()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TransferTeamLeadership(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinRequest(Identity target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinReply(bool accept, Identity requester)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinAccepted(Identity newTeamMember)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TeamJoinRejected(Identity rejectingIdentity)
         {
             throw new NotImplementedException();
         }

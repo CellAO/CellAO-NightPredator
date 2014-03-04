@@ -31,8 +31,6 @@ namespace CellAO.Core.Controllers
     using System;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Inventory;
-    using CellAO.Core.Items;
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -44,42 +42,322 @@ namespace CellAO.Core.Controllers
 
     /// <summary>
     /// </summary>
-    public interface IController
+    internal interface IController
     {
-        #region Public Properties
-
         /// <summary>
         /// ICharacter object connected to this Controller
         /// </summary>
         ICharacter Character { get; set; }
 
-        #endregion
+        #region Generic character actions
 
-        #region Public Methods and Operators
-
-        bool CastNano(int nanoId, Identity target);
-
-        bool CharacterAction(CharacterActionType action, Identity target, int parameter1, int parameter2);
-        
-        bool Move(int moveType, Coordinate newCoordinates, Quaternion heading);
-
-        bool ContainerAddItem(int sourceContainerType, int sourcePlacement, Identity target, int targetPlacement);
-
-        bool Follow(Identity target);
-
-        bool GenericCommand(GenericCmdAction action, int count, Identity user, Identity target);
-
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         bool LookAt(Identity target);
 
-        bool InviteToTeam(Identity target);
+        /// <summary>
+        /// </summary>
+        /// <param name="nanoId">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool CastNano(int nanoId, Identity target);
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Search();
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Sneak();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="visualFlag">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool ChangeVisualFlag(int visualFlag);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="moveType">
+        /// </param>
+        /// <param name="newCoordinates">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Move(int moveType, Coordinate newCoordinates, Quaternion heading);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceContainerType">
+        /// </param>
+        /// <param name="sourcePlacement">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="targetPlacement">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool ContainerAddItem(int sourceContainerType, int sourcePlacement, Identity target, int targetPlacement);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Follow(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Stand();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action">
+        /// </param>
+        /// <param name="parameter1">
+        /// </param>
+        /// <param name="parameter2">
+        /// </param>
+        /// <param name="parameter3">
+        /// </param>
+        /// <param name="parameter4">
+        /// </param>
+        /// <param name="parameter5">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool SocialAction(
+            SocialAction action, 
+            byte parameter1, 
+            byte parameter2, 
+            byte parameter3, 
+            byte parameter4, 
+            int parameter5);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        bool Trade(Identity target);
+
+        #endregion
+
+        #region Player specific actions
+
+        /// <summary>
+        /// </summary>
+        /// <param name="itemPosition">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool UseItem(Identity itemPosition);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="container">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool DeleteItem(int container);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetItem">
+        /// </param>
+        /// <param name="stackCount">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool SplitItemStack(Identity targetItem, int stackCount);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceItem">
+        /// </param>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool JoinItemStack(Identity sourceItem, Identity targetItem);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceItem">
+        /// </param>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool CombineItems(Identity sourceItem, Identity targetItem);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="inventoryPageId">
+        /// </param>
+        /// <param name="slotNumber">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TradeSkillSourceChanged(int inventoryPageId, int slotNumber);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="inventoryPageId">
+        /// </param>
+        /// <param name="slotNumber">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TradeSkillTargetChanged(int inventoryPageId, int slotNumber);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TradeSkillBuildPressed(Identity targetItem);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="command">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool ChatCommand(string command, Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         bool Logout();
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
         bool Login();
 
-        bool SocialAction(SocialAction action, byte parameter1, byte parameter2, byte parameter3, byte parameter4, int parameter5);
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool StopLogout();
 
-        bool Trade(Identity target);
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool GetTargetInfo(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamInvite(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamKickMember(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        bool TeamLeave();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TransferTeamLeadership(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamJoinRequest(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="accept">
+        /// </param>
+        /// <param name="requester">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamJoinReply(bool accept, Identity requester);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="newTeamMember">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamJoinAccepted(Identity newTeamMember);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="rejectingIdentity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool TeamJoinRejected(Identity rejectingIdentity);
 
         #endregion
     }

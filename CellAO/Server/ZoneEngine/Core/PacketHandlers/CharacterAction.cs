@@ -469,6 +469,7 @@ namespace ZoneEngine.Core.PacketHandlers
                     break;
 
                 case 0x70: // Remove/Delete item
+                    // Probably wrong, check type/instance of the container!! - Algorithman
                     ItemDao.Instance.Delete(new
                     {
                         containertype = (int)packet.Target.Type,

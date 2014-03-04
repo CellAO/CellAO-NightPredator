@@ -42,11 +42,26 @@ namespace CellAO.Core.Controllers
 
     /// <summary>
     /// </summary>
-    internal class PlayerController
+    internal class PlayerController : IController
     {
         /// <summary>
         /// </summary>
         public ICharacter Character { get; set; }
+
+        #region Generic character actions 
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool LookAt(Identity target)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// </summary>
@@ -72,16 +87,12 @@ namespace CellAO.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool DeleteItem()
-        {
-            // Procedure:
-            // 1. Check container id (only bags and main inventory are valid for deleting)
-            // 2. Remove item from database
-
-            throw new NotImplementedException();
-        }
-
-
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public bool Search()
         {
             // Procedure:
@@ -92,28 +103,34 @@ namespace CellAO.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool GetTargetInfo(Identity target)
-        {
-            // Procedure:
-            // 1. Gather data
-            // 2. Send to client
-
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// </summary>
-        /// <param name="command">
-        /// </param>
-        /// <param name="target">
-        /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool ChatCommand(string command, Identity target)
+        public bool Sneak()
         {
+            // Procedure: 
+            // 1. Gather surrounding mobs/players
+            // 2. Check concealment against their perception skill
+            // 3. Vanish for successful rolled chars/mobs
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="visualFlag">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool ChangeVisualFlag(int visualFlag)
+        {
+            // Procedure:
+            // 1. Set visualFlags stat
+            // 2. Send AppearanceUpdate
+
             throw new NotImplementedException();
         }
 
@@ -168,19 +185,45 @@ namespace CellAO.Core.Controllers
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool Stand()
+        {
+            // Procedure:
+            // 1. Update characters move mode
+            // 2. Announce the action to the playfield (or range)
+            // 3. If logout timer pending, cancel pending logout timer
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="action">
         /// </param>
-        /// <param name="count">
+        /// <param name="parameter1">
         /// </param>
-        /// <param name="user">
+        /// <param name="parameter2">
         /// </param>
-        /// <param name="target">
+        /// <param name="parameter3">
+        /// </param>
+        /// <param name="parameter4">
+        /// </param>
+        /// <param name="parameter5">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool GenericCommand(GenericCmdAction action, int count, Identity user, Identity target)
+        public bool SocialAction(
+            SocialAction action, 
+            byte parameter1, 
+            byte parameter2, 
+            byte parameter3, 
+            byte parameter4, 
+            int parameter5)
         {
             throw new NotImplementedException();
         }
@@ -193,20 +236,165 @@ namespace CellAO.Core.Controllers
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool LookAt(Identity target)
+        public bool Trade(Identity target)
         {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Player specific actions
+
+        public bool UseItem(Identity itemPosition)
+        {
+            // Procedure:
+            // 1. Check if item exists at this position
+            // 2. Check if item is usable and/or consumable
+            // 2. Decrease stack if consumable
+            // 3. Delete consumable item if stack==0
+            // 4. Send the TemplateAction to client
+            // 5. Execute the item's gamefunctions
+
             throw new NotImplementedException();
         }
 
         /// <summary>
         /// </summary>
+        /// <param name="container">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool DeleteItem(int container)
+        {
+            // Procedure:
+            // 1. Check container id (only bags and main inventory are valid for deleting)
+            // 2. Remove item from inventory/bag
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetItem">
+        /// </param>
+        /// <param name="stackCount">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool SplitItemStack(Identity targetItem, int stackCount)
+        {
+            // Procedure:
+            // 1. Check if Item exists
+            // 2. Check if stackCount<item's stack - 1
+            // 3. Create new item from old item with stack=stackCount
+            // 4. Decrease old item's stack
+            // 5. Add new item to inventory
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceItem">
+        /// </param>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool JoinItemStack(Identity sourceItem, Identity targetItem)
+        {
+            // Procedure:
+            // 1. Check if items are the same itemid's
+            // 2. Add sourceItem stack to targetItem
+            // 3. Delete sourceItem
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sourceItem">
+        /// </param>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool CombineItems(Identity sourceItem, Identity targetItem)
+        {
+            // Procedure: 
+            // See TradeSkillReceiver.TradeSkillBuildPressed
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="inventoryPageId">
+        /// </param>
+        /// <param name="slotNumber">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TradeSkillSourceChanged(int inventoryPageId, int slotNumber)
+        {
+            // Procedure see TradeSkillReceiver.TradeSkillSourceChanged
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="inventoryPageId">
+        /// </param>
+        /// <param name="slotNumber">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TradeSkillTargetChanged(int inventoryPageId, int slotNumber)
+        {
+            // Procedure see TradeSkillReceiver.TradeSkillTargetChanged
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetItem">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TradeSkillBuildPressed(Identity targetItem)
+        {
+            // Procedure see TradeSkillReceiver.TradeSkillBuildPressed
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="command">
+        /// </param>
         /// <param name="target">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool InviteToTeam(Identity target)
+        public bool ChatCommand(string command, Identity target)
         {
             throw new NotImplementedException();
         }
@@ -230,90 +418,6 @@ namespace CellAO.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool StopLogout()
-        {
-            // Procedure:
-            // 1. Stop pending logout timer
-            // 2. Go back to previous move mode (dunno if really needed)
-
-            throw new NotImplementedException();
-        }
-
-        public bool Stand()
-        {
-            // Procedure:
-            // 1. Update characters move mode
-            // 2. Announce the action to the playfield (or range)
-            // 3. If logout timer pending, cancel pending logout timer
-
-            throw new NotImplementedException();
-        }
-
-        public bool KickTeamMember(Identity target)
-        {
-            // Procedure:
-            // 1. Kick Team member
-            // 2. Send Team update message
-
-            throw new NotImplementedException();
-        }
-
-        public bool LeaveTeam()
-        {
-            // Procedure:
-            // 1. Leave the team
-            // 2. Send Team update message
-
-            throw new NotImplementedException();
-        }
-
-        public bool TransferTeamLeadership(Identity target)
-        {
-            // Procedure:
-            // 1. Transfer Leadership
-            // 2. Send Team update message
-
-            throw new NotImplementedException();
-        }
-
-        public bool TeamJoinRequest(Identity target)
-        {
-            // Procedure:
-            // 1. Send target the invite
-
-            throw new NotImplementedException();
-        }
-
-        public bool TeamJoinReply(bool accept, Identity requester)
-        {
-            // Procedure:
-            // 1. If accept==true
-            // 2.    Call requester's TeamJoinAccepted
-            // 3. else
-            // 4.    Call requester's TeamJoinRejected
-
-            throw new NotImplementedException();
-        }
-
-        public bool TeamJoinAccepted(Identity newTeamMember)
-        {
-            // Procedure:
-            // 1. If on team exists yet, create one
-            // 2. Add yourself as TeamLeader
-            // 3. Add newTeamMember
-            // 4. Send out TeamMemberInfo etc. to all team members
-
-            throw new NotImplementedException();
-        }
-
-        public bool TeamJoinRejected(Identity rejectingIdentity)
-        {
-            // Procedure: 
-            // 1. Send back negative reply
-
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// </summary>
         /// <returns>
@@ -327,29 +431,45 @@ namespace CellAO.Core.Controllers
 
         /// <summary>
         /// </summary>
-        /// <param name="action">
-        /// </param>
-        /// <param name="parameter1">
-        /// </param>
-        /// <param name="parameter2">
-        /// </param>
-        /// <param name="parameter3">
-        /// </param>
-        /// <param name="parameter4">
-        /// </param>
-        /// <param name="parameter5">
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool StopLogout()
+        {
+            // Procedure:
+            // 1. Stop pending logout timer
+            // 2. Go back to previous move mode (dunno if really needed)
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
         /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool SocialAction(
-            SocialAction action,
-            byte parameter1,
-            byte parameter2,
-            byte parameter3,
-            byte parameter4,
-            int parameter5)
+        public bool GetTargetInfo(Identity target)
+        {
+            // Procedure:
+            // 1. Gather data
+            // 2. Send to client
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamInvite(Identity target)
         {
             throw new NotImplementedException();
         }
@@ -362,9 +482,119 @@ namespace CellAO.Core.Controllers
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool Trade(Identity target)
+        public bool TeamKickMember(Identity target)
         {
+            // Procedure:
+            // 1. Kick Team member
+            // 2. Send Team update message
+
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamLeave()
+        {
+            // Procedure:
+            // 1. Leave the team
+            // 2. Send Team update message
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TransferTeamLeadership(Identity target)
+        {
+            // Procedure:
+            // 1. Transfer Leadership
+            // 2. Send Team update message
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamJoinRequest(Identity target)
+        {
+            // Procedure:
+            // 1. Send target the invite
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="accept">
+        /// </param>
+        /// <param name="requester">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamJoinReply(bool accept, Identity requester)
+        {
+            // Procedure:
+            // 1. If accept==true
+            // 2.    Call requester's TeamJoinAccepted
+            // 3. else
+            // 4.    Call requester's TeamJoinRejected
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="newTeamMember">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamJoinAccepted(Identity newTeamMember)
+        {
+            // Procedure:
+            // 1. If on team exists yet, create one
+            // 2. Add yourself as TeamLeader
+            // 3. Add newTeamMember
+            // 4. Send out TeamMemberInfo etc. to all team members
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="rejectingIdentity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool TeamJoinRejected(Identity rejectingIdentity)
+        {
+            // Procedure: 
+            // 1. Send back negative reply
+
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
