@@ -74,10 +74,13 @@ namespace Extractor_Serializer
 
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Net.Mime;
     using System.Text;
     using System.Text.RegularExpressions;
 
@@ -168,8 +171,8 @@ namespace Extractor_Serializer
             foreach (int item in items)
             {
                 var fileStream = new FileStream(
-                    path + item.ToString(CultureInfo.InvariantCulture), 
-                    FileMode.Create, 
+                    path + item.ToString(CultureInfo.InvariantCulture),
+                    FileMode.Create,
                     FileAccess.Write);
 
                 byte[] data = extractor.GetRecordData(recordtype, item);
@@ -350,10 +353,10 @@ namespace Extractor_Serializer
             {
                 byte[] data = extractor.GetRecordData(Extractor.RecordType.Item, recnum);
                 ItemTemplate xt = np.ParseItem(Extractor.RecordType.Item, recnum, data, itemNamesSqls);
-                
+
                 rawItemList.Add(xt);
                 rawItemDictionary.Add(recnum, xt);
-                
+
                 if ((counter % 7500) == 0)
                 {
                     Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
@@ -386,15 +389,15 @@ namespace Extractor_Serializer
                 if (doors.Contains(recnum))
                 {
                     byte[] doorData = extractor.GetRecordData(Extractor.RecordType.Door, recnum);
-                    pf.Doors1 = PlayfieldParser.ParseDoors(doorData); 
+                    pf.Doors1 = PlayfieldParser.ParseDoors(doorData);
                 }
 
-                pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum)); 
+                pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum));
                 pf.Destinations = PlayfieldParser.ParseDestinations(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum)).Destinations;
 
                 if (extractor.GetRecordInstances(Extractor.RecordType.Wall).Contains(recnum))
                 {
-                    pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(Extractor.RecordType.Wall, recnum)); 
+                    pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(Extractor.RecordType.Wall, recnum));
                 }
 
                 playfields.Add(pf);
@@ -664,8 +667,98 @@ namespace Extractor_Serializer
                 }
             }
 
+            while (true)
+            {
+                Console.WriteLine("Do you want to extract the icons for WebCore? [Y/N]");
+                string line = Console.ReadLine();
+                if (line.Trim().ToLower() == "y")
+                {
+                    ExtractIcons();
+                    break;
+                }
+                if (line.Trim().ToLower() == "n")
+                {
+                    break;
+                }
+            }
+
             Console.WriteLine("Press a key to exit.");
             Console.ReadLine();
+        }
+
+        private static void ExtractIcons()
+        {
+            if (!Directory.Exists("icons"))
+            {
+                Directory.CreateDirectory("icons");
+            }
+
+            // Delete all pngs in that folder (makes conversion much faster)
+            string [] filesToDelete=Directory.GetFiles("icons", "*.png", SearchOption.TopDirectoryOnly);
+            foreach (string file in filesToDelete)
+            {
+                File.Delete(file);
+            }
+
+            int GCcount = 0;
+            foreach (ItemTemplate template in ItemLoader.ItemList.Values)
+            {
+                string pngName = Path.Combine("icons", template.getItemAttribute(79) + ".png");
+                if (!File.Exists(pngName))
+                {
+                    byte[] icon;
+                    try
+                    {
+                        icon = extractor.GetRecordData(Extractor.RecordType.Icon, template.getItemAttribute(79));
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    FileStream fs = new FileStream(
+                        pngName,
+                        FileMode.Create,
+                        FileAccess.ReadWrite);
+                    fs.Write(icon, 0, icon.Length);
+                    fs.Close();
+
+                    MakeTransparent(pngName);
+                    GCcount++;
+                    if (GCcount % 100 == 0)
+                    {
+                        GC.Collect();
+                    }
+                }
+            }
+        }
+
+        private static void MakeTransparent(string p)
+        {
+            FileStream fs = new FileStream(p, FileMode.Open, FileAccess.Read);
+            using (Image original = new Bitmap(fs))
+            {
+                fs.Close();
+
+                using (Bitmap image = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb))
+                {
+                    Graphics g = Graphics.FromImage(image);
+                    ImageAttributes ia = new ImageAttributes();
+                    ia.SetColorKey(Color.FromArgb(0, 255, 0), Color.FromArgb(0, 255, 0));
+                    g.DrawImage(
+                        original,
+                        new Rectangle(0, 0, original.Width, original.Height),
+                        0,
+                        0,
+                        original.Width,
+                        original.Height,
+                        GraphicsUnit.Pixel,
+                        ia);
+                    g.Dispose();
+                    ia.Dispose();
+                    image.Save(p, ImageFormat.Png);
+                }
+            }
         }
 
         /// <summary>
@@ -678,6 +771,7 @@ namespace Extractor_Serializer
             tw.WriteLine("  `Id` int(10) NOT NULL,");
             tw.WriteLine("  `Name` varchar(250) NOT NULL,");
             tw.WriteLine("  `ItemType` varchar(50) NOT NULL,");
+            tw.WriteLine("  `Icon` varchar(20) NOT NULL,");
             tw.WriteLine("  PRIMARY KEY (`Id`)");
             tw.WriteLine(") ENGINE=MyIsam DEFAULT CHARSET=latin1;");
             tw.WriteLine();
