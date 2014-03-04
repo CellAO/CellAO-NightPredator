@@ -40,6 +40,7 @@ Installation instructions follow soon.
 - **Spectrome** - <+Spectrome> i havn't done anything <+Spectrome> ive scratched my ass at the code and annoy chris
 - **iphoneprodigy** - For giving us our webcore.
 - **T0t4r4** - Thank you coming soon(tm)
+- **Estrid** - For continueing the support of the Webcore.
 
 
 **Others:**
