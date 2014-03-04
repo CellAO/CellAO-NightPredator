@@ -166,9 +166,9 @@ namespace WebEngine
                 SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
                 sockets.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
         }
 
@@ -180,8 +180,9 @@ namespace WebEngine
                 SendData(error.getResponseHeader().getResponseHeaders(), ref sockets);
                 sockets.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
         }
 
