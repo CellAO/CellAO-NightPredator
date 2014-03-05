@@ -744,7 +744,7 @@ namespace Extractor_Serializer
                 {
                     Graphics g = Graphics.FromImage(image);
                     ImageAttributes ia = new ImageAttributes();
-                    ia.SetColorKey(Color.FromArgb(0, 255, 0), Color.FromArgb(0, 255, 0));
+                    ia.SetColorKey(Color.FromArgb(0, 0xde, 0), Color.FromArgb(33, 255, 5));
                     g.DrawImage(
                         original,
                         new Rectangle(0, 0, original.Width, original.Height),
