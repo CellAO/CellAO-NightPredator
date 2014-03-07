@@ -355,6 +355,8 @@ namespace CellAO.Core.Entities
         public override void Dispose()
         {
             this.DoNotDoTimers = true;
+            CharacterDao.Instance.SetOffline(this.Identity.Instance);
+            this.Playfield.Despawn(this.Identity);
             this.Save();
             this.DoNotDoTimers = true;
             if (this.Client != null)
@@ -367,8 +369,6 @@ namespace CellAO.Core.Entities
             }
 
             this.Client = null;
-            CharacterDao.Instance.SetOffline(this.Identity.Instance);
-            this.Playfield.Despawn(this.Identity);
             base.Dispose();
         }
 
