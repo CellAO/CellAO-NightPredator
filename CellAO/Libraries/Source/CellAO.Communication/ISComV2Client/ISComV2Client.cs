@@ -180,7 +180,7 @@ namespace CellAO.Communication.ISComV2Client
             this.closing = true;
             while (this.connectorThread.IsAlive)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
         }
 
@@ -217,9 +217,11 @@ namespace CellAO.Communication.ISComV2Client
                     {
                     }
                 }
-
-                Thread.Sleep(5000);
-                this.Send(ping);
+                if (!this.closing)
+                {
+                    Thread.Sleep(5000);
+                    this.Send(ping);
+                }
             }
         }
 

@@ -31,6 +31,7 @@ namespace ZoneEngine
     using System;
     using System.IO;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Client;
@@ -171,6 +172,10 @@ namespace ZoneEngine
                         ShowCommandHelp();
                     }
                 }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
         }
 
@@ -185,6 +190,7 @@ namespace ZoneEngine
             if (zoneServer != null)
             {
                 exited = true;
+                ISComClient.ShutDown();
                 zoneServer.DisconnectAllClients();
                 LogUtil.Debug("Shutting down ZoneEngine hard");
             }
