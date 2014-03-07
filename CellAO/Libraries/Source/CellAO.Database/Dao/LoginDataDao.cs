@@ -44,25 +44,8 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for LoginData
     /// </summary>
-    public class LoginDataDao : Dao<DBLoginData>
+    public class LoginDataDao : Dao<DBLoginData, LoginDataDao>
     {
-
-        /// <summary>
-        /// </summary>
-        public static LoginDataDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new LoginDataDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (LoginDataDao)_instance;
-            }
-        }
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -73,7 +56,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public DBLoginData GetByCharacterId(int charId)
         {
-            return GetAll(new { CharacterDao.Instance.Get(charId).Username }).FirstOrDefault();
+            return this.GetAll(new { CharacterDao.Instance.Get(charId).Username }).FirstOrDefault();
         }
 
         /// <summary>
@@ -87,7 +70,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public DBLoginData GetByUsername(string username)
         {
-            return GetAll(new { Username = username }).FirstOrDefault();
+            return this.GetAll(new { Username = username }).FirstOrDefault();
         }
 
         /// <summary>
@@ -137,19 +120,19 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     conn.Execute(
-                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, AllowedCharacters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)",
+                        "INSERT INTO login (CreationDate, Email, FirstName, LastName, Username, Password, AllowedCharacters, Flags, AccountFlags, Expansions, GM) VALUES (@creationdate, @email, @firstname, @lastname,@username, @password, @allowed_characters, @flags, @accountflags, @expansions, @gm)", 
                         new
                         {
-                            creationdate = DateTime.Now,
-                            email = login.Email,
-                            firstname = login.FirstName,
-                            lastname = login.LastName,
-                            username = login.Username,
-                            password = login.Password,
-                            allowed_characters = login.AllowedCharacters,
-                            flags = login.Flags,
-                            accountflags = login.AccountFlags,
-                            expansions = login.Expansions,
+                            creationdate = DateTime.Now, 
+                            email = login.Email, 
+                            firstname = login.FirstName, 
+                            lastname = login.LastName, 
+                            username = login.Username, 
+                            password = login.Password, 
+                            allowed_characters = login.AllowedCharacters, 
+                            flags = login.Flags, 
+                            accountflags = login.AccountFlags, 
+                            expansions = login.Expansions, 
                             gm = login.GM
                         });
                 }
@@ -176,7 +159,7 @@ namespace CellAO.Database.Dao
                 using (IDbConnection conn = Connector.GetConnection())
                 {
                     return conn.Execute(
-                        "UPDATE login SET password=@pwd WHERE Username=@user LIMIT 1",
+                        "UPDATE login SET password=@pwd WHERE Username=@user LIMIT 1", 
                         new { pwd = login.Password, user = login.Username });
                 }
             }

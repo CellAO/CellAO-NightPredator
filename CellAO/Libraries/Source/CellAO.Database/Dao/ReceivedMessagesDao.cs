@@ -36,24 +36,8 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class ReceivedMessagesDao : Dao<DBReceivedMessages>
+    public class ReceivedMessagesDao : Dao<DBReceivedMessages, ReceivedMessagesDao>
     {
-        /// <summary>
-        /// </summary>
-        public static ReceivedMessagesDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ReceivedMessagesDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (ReceivedMessagesDao)_instance;
-            }
-        }
-
         #region Public Methods and Operators
 
         /// <summary>

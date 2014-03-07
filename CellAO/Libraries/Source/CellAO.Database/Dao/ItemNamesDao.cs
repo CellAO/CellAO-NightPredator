@@ -28,34 +28,13 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-
     using CellAO.Database.Entities;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ItemNamesDao : Dao<DBItemName>
+    public class ItemNamesDao : Dao<DBItemName, ItemNamesDao>
     {
-        public static ItemNamesDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ItemNamesDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (ItemNamesDao)_instance;
-            }
-        }
     }
 }

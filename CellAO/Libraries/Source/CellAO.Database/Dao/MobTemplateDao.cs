@@ -29,13 +29,13 @@ namespace CellAO.Database.Dao
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Linq;
 
     using Dapper;
 
     using Utility;
-    using System.Collections.Generic;
 
     #endregion
 
@@ -45,20 +45,25 @@ namespace CellAO.Database.Dao
     public static class MobTemplateDao
     {
         // note in the following SQL MobMeshs,AdditionalMeshs are not included (big objects)
-        const string SQL = "SELECT Hash,MinLvl,MaxLvl,Side,Fatness,Breed,Sex,Race,Name,Flags,NPCFamily,Health,MonsterData,MonsterScale,TextureHands,TextureBody,TextureFeet,TextureArms,TextureLegs,HeadMesh,DropHashes,DropSlots,DropRates FROM mobTemplate ";
-      
+        /// <summary>
+        /// </summary>
+        private const string SQL =
+            "SELECT Hash,MinLvl,MaxLvl,Side,Fatness,Breed,Sex,Race,Name,Flags,NPCFamily,Health,MonsterData,MonsterScale,TextureHands,TextureBody,TextureFeet,TextureArms,TextureLegs,HeadMesh,DropHashes,DropSlots,DropRates FROM mobTemplate ";
+
         /// <summary>
         /// Retrieves a mob template by its hash code 
         /// </summary>
+        /// <param name="hash">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static DBMobTemplate GetMobTemplateByHash(string hash)
         {
             try
-            {                
+            {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    return
-                        conn.Query<DBMobTemplate>(SQL + "WHERE Hash like @hash", new { hash })
-                            .SingleOrDefault();
+                    return conn.Query<DBMobTemplate>(SQL + "WHERE Hash like @hash", new { hash }).SingleOrDefault();
                 }
             }
             catch (Exception e)
@@ -72,20 +77,28 @@ namespace CellAO.Database.Dao
         /// <summary>
         /// List mob templates containing by name
         /// </summary>
+        /// <param name="name">
+        /// </param>
+        /// <param name="strictFind">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static IEnumerable<DBMobTemplate> GetMobTemplatesByName(string name, bool strictFind)
         {
             try
             {
                 using (IDbConnection conn = Connector.GetConnection())
                 {
-                    return conn.Query<DBMobTemplate>(
-                        string.Concat( SQL , "WHERE Name like " ,
-                        strictFind ? string.Empty : "'%' + ",
-                        " @name ", 
-                        strictFind ? string.Empty : "'%' ",
-                        " ORDER BY Name ASC"),
-                        new { name }
-                    );
+                    return
+                        conn.Query<DBMobTemplate>(
+                            string.Concat(
+                                SQL, 
+                                "WHERE Name like ", 
+                                strictFind ? string.Empty : "'%' + ", 
+                                " @name ", 
+                                strictFind ? string.Empty : "'%' ", 
+                                " ORDER BY Name ASC"), 
+                            new { name });
                 }
             }
             catch (Exception e)
@@ -95,7 +108,5 @@ namespace CellAO.Database.Dao
                 throw;
             }
         }
-
-      
     }
 }

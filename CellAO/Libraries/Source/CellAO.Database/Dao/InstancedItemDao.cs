@@ -26,40 +26,10 @@
 
 namespace CellAO.Database.Dao
 {
-    #region Usings ...
-
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Linq;
-
-    using Dapper;
-
-    using Utility;
-
-    #endregion
-
     /// <summary>
     /// Data access object for instanced items
     /// </summary>
-    public class InstancedItemDao : Dao<DBInstancedItem>
+    public class InstancedItemDao : Dao<DBInstancedItem, InstancedItemDao>
     {
-
-        /// <summary>
-        /// </summary>
-        public static InstancedItemDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new InstancedItemDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (InstancedItemDao)_instance;
-            }
-        }
-
     }
 }

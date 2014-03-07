@@ -36,24 +36,8 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Organization queries
     /// </summary>
-    public class OrganizationDao : Dao<DBOrganization>
+    public class OrganizationDao : Dao<DBOrganization, OrganizationDao>
     {
-        /// <summary>
-        /// </summary>
-        public static OrganizationDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new OrganizationDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (OrganizationDao)_instance;
-            }
-        }
-
         #region Public Methods and Operators
 
         /// <summary>

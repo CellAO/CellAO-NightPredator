@@ -42,28 +42,8 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Character Data Access Object
     /// </summary>
-    public class CharacterDao : Dao<DBCharacter>
+    public class CharacterDao : Dao<DBCharacter, CharacterDao>
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public static CharacterDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new CharacterDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (CharacterDao)_instance;
-            }
-        }
-
-        #endregion
-
         /// <summary>
         /// </summary>
         /// <param name="characterId">
@@ -264,15 +244,15 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// </param>
         public void SetPlayfield(
-            int charId,
-            int pfType,
-            int pfNum,
-            IDbConnection connection = null,
+            int charId, 
+            int pfType, 
+            int pfNum, 
+            IDbConnection connection = null, 
             IDbTransaction transaction = null)
         {
             // TODO: extend character table for GameServerId, SgId and playfield type
             int rowsAffected = Instance.Save(
-                new DBCharacter(),
+                new DBCharacter(), 
                 // completely empty one is enough here, parameters have higher priority
                 new { Playfield = pfNum, Id = charId });
 

@@ -34,22 +34,7 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class MobSpawnDao : Dao<DBMobSpawn>
+    public class MobSpawnDao : Dao<DBMobSpawn, MobSpawnDao>
     {
-        /// <summary>
-        /// </summary>
-        public static MobSpawnDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new MobSpawnDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (MobSpawnDao)_instance;
-            }
-        }
     }
 }

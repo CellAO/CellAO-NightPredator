@@ -34,22 +34,7 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class ShopInventoryTemplateDao : Dao<DBShopInventoryTemplate>
+    public class ShopInventoryTemplateDao : Dao<DBShopInventoryTemplate, ShopInventoryTemplateDao>
     {
-        /// <summary>
-        /// </summary>
-        public static ShopInventoryTemplateDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ShopInventoryTemplateDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (ShopInventoryTemplateDao)_instance;
-            }
-        }
     }
 }

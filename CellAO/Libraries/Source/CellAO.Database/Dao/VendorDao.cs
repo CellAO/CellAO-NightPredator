@@ -34,22 +34,7 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class VendorDao : Dao<DBVendor>
+    public class VendorDao : Dao<DBVendor, VendorDao>
     {
-        /// <summary>
-        /// </summary>
-        public static VendorDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new VendorDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (VendorDao)_instance;
-            }
-        }
     }
 }

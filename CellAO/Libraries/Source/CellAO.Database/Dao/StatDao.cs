@@ -42,24 +42,8 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Stats
     /// </summary>
-    public class StatDao : Dao<DBStats>
+    public class StatDao : Dao<DBStats, StatDao>
     {
-        /// <summary>
-        /// </summary>
-        public static StatDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new StatDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (StatDao)_instance;
-            }
-        }
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -82,6 +66,7 @@ namespace CellAO.Database.Dao
                 try
                 {
                     trans = trans ?? conn.BeginTransaction();
+
                     // Do it in one transaction, so no stats can be lost
                     this.Delete(new { Type = stats[0].Type, Instance = stats[0].Instance }, conn, trans);
                     foreach (DBStats stat in stats)
@@ -100,7 +85,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -157,7 +141,8 @@ namespace CellAO.Database.Dao
         public DBStats GetById(int type, int instance, int statId)
         {
             // Return stat or new DBStat with value of 0
-            return StatDao.Instance.GetAll(new { Type = type, Instance = instance, StatId = statId }).FirstOrDefault() ?? new DBStats { Type = type, Instance = instance, StatId = statId, StatValue = 0 };
+            return Instance.GetAll(new { Type = type, Instance = instance, StatId = statId }).FirstOrDefault()
+                   ?? new DBStats { Type = type, Instance = instance, StatId = statId, StatValue = 0 };
         }
 
         #endregion

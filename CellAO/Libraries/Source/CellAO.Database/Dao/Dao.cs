@@ -33,7 +33,6 @@ namespace CellAO.Database.Dao
     using System.Data;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.CompilerServices;
 
     using CellAO.Core.Exceptions;
     using CellAO.Database.Entities;
@@ -46,18 +45,41 @@ namespace CellAO.Database.Dao
     /// </summary>
     /// <typeparam name="T">
     /// </typeparam>
-    public class Dao<T> : IDao<T>
-        where T : IDBEntity, new()
+    /// <typeparam name="TU">
+    /// </typeparam>
+    public class Dao<T, TU> : IDao<T>
+        where T : IDBEntity, new() where TU : class, IDao<T>
     {
+        /// <summary>
+        /// </summary>
+        private class SingletonCreator
+        {
+            /// <summary>
+            /// </summary>
+            static SingletonCreator()
+            {
+            }
+
+            /// <summary>
+            /// </summary>
+            internal static readonly TU instance = Activator.CreateInstance<TU>();
+        }
+
+        /// <summary>
+        /// </summary>
+        public static TU Instance
+        {
+            get
+            {
+                return SingletonCreator.instance;
+            }
+        }
+
         #region Static Fields
 
         /// <summary>
         /// </summary>
         private static Dictionary<string, PropertyInfo> cachedProperties = null;
-
-        /// <summary>
-        /// </summary>
-        protected static Dao<T> _instance = default(Dao<T>);
 
         #endregion
 
@@ -65,10 +87,15 @@ namespace CellAO.Database.Dao
 
         /// <summary>
         /// </summary>
-
         /// <summary>
         /// </summary>
-        public string TableName { get; set; }
+        public string TableName
+        {
+            get
+            {
+                return getTablename();
+            }
+        }
 
         #endregion
 
@@ -87,7 +114,9 @@ namespace CellAO.Database.Dao
                     lock (cachedProperties)
                     {
                         cachedProperties.Clear();
-                        foreach (PropertyInfo property in typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                        foreach (
+                            PropertyInfo property in
+                                typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance))
                         {
                             cachedProperties.Add(property.Name, property);
                         }
@@ -98,13 +127,21 @@ namespace CellAO.Database.Dao
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
         protected static string getTablename()
         {
             if (!typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).Any())
             {
                 throw new Exception("You forgot to set the TablenameAttribute on class " + typeof(T).FullName);
             }
-            return ((TablenameAttribute)typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).First()).Tablename;
+
+            return
+                ((TablenameAttribute)typeof(T).GetCustomAttributes(typeof(TablenameAttribute), false).First()).Tablename;
         }
 
         #endregion
@@ -136,10 +173,9 @@ namespace CellAO.Database.Dao
                 {
                     trans = trans ?? conn.BeginTransaction();
                     rowsAffected = conn.Execute(
-                        SqlMapperUtil.CreateInsertSQL(this.TableName, entity),
-                        entity,
+                        SqlMapperUtil.CreateInsertSQL(this.TableName, entity), 
+                        entity, 
                         transaction);
-
 
                     // Does this need to be inside of the transaction or outside?? -- Algorithman
 
@@ -165,7 +201,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -177,7 +212,6 @@ namespace CellAO.Database.Dao
                     }
                 }
             }
-
 
             return rowsAffected;
         }
@@ -193,6 +227,8 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// optional transaction for the delete
         /// </param>
+        /// <returns>
+        /// </returns>
         public int Delete(int entityId, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
@@ -204,7 +240,10 @@ namespace CellAO.Database.Dao
                 try
                 {
                     trans = trans ?? conn.BeginTransaction();
-                    rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName), new { id = entityId }, transaction);
+                    rowsAffected = conn.Execute(
+                        SqlMapperUtil.CreateDeleteSQL(this.TableName), 
+                        new { id = entityId }, 
+                        transaction);
                 }
                 finally
                 {
@@ -217,7 +256,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -244,6 +282,8 @@ namespace CellAO.Database.Dao
         /// <param name="transaction">
         /// optional transaction for the delete
         /// </param>
+        /// <returns>
+        /// </returns>
         public int Delete(object whereParameters, IDbConnection connection = null, IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
@@ -255,7 +295,10 @@ namespace CellAO.Database.Dao
                 try
                 {
                     trans = trans ?? conn.BeginTransaction();
-                    rowsAffected = conn.Execute(SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters), whereParameters, transaction);
+                    rowsAffected = conn.Execute(
+                        SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters), 
+                        whereParameters, 
+                        transaction);
                 }
                 finally
                 {
@@ -268,7 +311,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -280,8 +322,8 @@ namespace CellAO.Database.Dao
                     }
                 }
             }
-            return rowsAffected;
 
+            return rowsAffected;
         }
 
         /// <summary>
@@ -297,7 +339,7 @@ namespace CellAO.Database.Dao
             {
                 exists =
                     conn.Query<int>(
-                        string.Format("SELECT ID FROM {0} where ID = @id", this.TableName),
+                        string.Format("SELECT ID FROM {0} where ID = @id", this.TableName), 
                         new { id = entityId }).Count() == 1;
             }
 
@@ -319,8 +361,9 @@ namespace CellAO.Database.Dao
             using (IDbConnection conn = Connector.GetConnection())
             {
                 entity =
-                    conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, new { Id = entityId }), new { Id = entityId })
-                        .SingleOrDefault();
+                    conn.Query<T>(
+                        SqlMapperUtil.CreateGetSQL(this.TableName, new { Id = entityId }), 
+                        new { Id = entityId }).SingleOrDefault();
             }
 
             return entity;
@@ -331,8 +374,6 @@ namespace CellAO.Database.Dao
         /// </summary>
         /// <param name="parameters">
         /// </param>
-        /// <param name="transaction">
-        /// </param>
         /// <returns>
         /// Collection of DBCharacter
         /// </returns>
@@ -341,10 +382,7 @@ namespace CellAO.Database.Dao
             IEnumerable<T> entities = null;
             using (IDbConnection conn = Connector.GetConnection())
             {
-                entities = conn.Query<T>(
-                    SqlMapperUtil.CreateGetSQL(this.TableName, parameters),
-                    parameters
-                    );
+                entities = conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, parameters), parameters);
             }
 
             return entities;
@@ -362,7 +400,11 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public int Save(T entity, object parameters = null, IDbConnection connection = null, IDbTransaction transaction = null)
+        public int Save(
+            T entity, 
+            object parameters = null, 
+            IDbConnection connection = null, 
+            IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
 
@@ -374,12 +416,10 @@ namespace CellAO.Database.Dao
                 try
                 {
                     trans = trans ?? conn.BeginTransaction();
-                    rowsAffected =
-                        conn.Execute(
-                            SqlMapperUtil.CreateUpdateSQL(
-                                this.TableName,
-                                parameters ?? entity), parameters ?? entity,
-                            transaction);
+                    rowsAffected = conn.Execute(
+                        SqlMapperUtil.CreateUpdateSQL(this.TableName, parameters ?? entity), 
+                        parameters ?? entity, 
+                        transaction);
                 }
                 finally
                 {
@@ -392,7 +432,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -408,10 +447,22 @@ namespace CellAO.Database.Dao
             return rowsAffected;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="entities">
+        /// </param>
+        /// <param name="parameters">
+        /// </param>
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public int Save(
-            List<T> entities,
-            object parameters = null,
-            IDbConnection connection = null,
+            List<T> entities, 
+            object parameters = null, 
+            IDbConnection connection = null, 
             IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
@@ -440,7 +491,6 @@ namespace CellAO.Database.Dao
                         }
                     }
                 }
-
             }
             finally
             {
@@ -452,6 +502,7 @@ namespace CellAO.Database.Dao
                     }
                 }
             }
+
             return rowsAffected;
         }
 
@@ -461,6 +512,8 @@ namespace CellAO.Database.Dao
 
         /// <summary>
         /// </summary>
+        /// <param name="item">
+        /// </param>
         /// <returns>
         /// </returns>
         private DynamicParameters getAllParameters(T item)

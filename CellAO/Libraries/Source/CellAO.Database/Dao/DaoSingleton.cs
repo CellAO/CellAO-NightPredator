@@ -28,13 +28,40 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using CellAO.Database.Entities;
+    using System;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class TradeSkillDao : Dao<DBTradeSkill, TradeSkillDao>
+    /// <typeparam name="T">
+    /// </typeparam>
+    public class DaoSingleton<T>
+        where T : class
     {
+        /// <summary>
+        /// </summary>
+        private class SingletonCreator
+        {
+            /// <summary>
+            /// </summary>
+            static SingletonCreator()
+            {
+            }
+
+            /// <summary>
+            /// </summary>
+            internal static readonly T instance = Activator.CreateInstance<T>();
+        }
+
+        /// <summary>
+        /// </summary>
+        public static T Instance
+        {
+            get
+            {
+                return SingletonCreator.instance;
+            }
+        }
     }
 }

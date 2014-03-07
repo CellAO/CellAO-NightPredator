@@ -33,8 +33,6 @@ namespace CellAO.Database.Dao
 
     using CellAO.Database.Entities;
 
-    using Dapper;
-
     #endregion
 
     /// <summary>
@@ -80,10 +78,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        int Delete(
-            object whereParameters, 
-            IDbConnection connection = null, 
-            IDbTransaction transaction = null);
+        int Delete(object whereParameters, IDbConnection connection = null, IDbTransaction transaction = null);
 
         /// <summary>
         /// </summary>

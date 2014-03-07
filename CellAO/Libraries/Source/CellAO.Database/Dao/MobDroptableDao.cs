@@ -34,22 +34,7 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class MobDroptableDao : Dao<DBMobDroptable>
+    public class MobDroptableDao : Dao<DBMobDroptable, MobDroptableDao>
     {
-        /// <summary>
-        /// </summary>
-        public static MobDroptableDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new MobDroptableDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (MobDroptableDao)_instance;
-            }
-        }
     }
 }

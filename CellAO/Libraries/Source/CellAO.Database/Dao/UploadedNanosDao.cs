@@ -38,24 +38,8 @@ namespace CellAO.Database.Dao
 
     /// <summary>
     /// </summary>
-    public class UploadedNanosDao : Dao<DBUploadedNano>
+    public class UploadedNanosDao : Dao<DBUploadedNano, UploadedNanosDao>
     {
-        /// <summary>
-        /// </summary>
-        public static UploadedNanosDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new UploadedNanosDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (UploadedNanosDao)_instance;
-            }
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="charId">

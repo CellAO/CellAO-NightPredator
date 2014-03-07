@@ -28,44 +28,17 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    using System.Runtime.CompilerServices;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// Data access object for Items (not instanced)
     /// </summary>
-    public class ItemDao : Dao<DBItem>
+    public class ItemDao : Dao<DBItem, ItemDao>
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public static ItemDao Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new ItemDao();
-                    _instance.TableName = getTablename();
-                }
-
-                return (ItemDao)_instance;
-            }
-        }
-
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -87,13 +60,12 @@ namespace CellAO.Database.Dao
         {
             return
                 Instance.GetAll(
-
-                        new
-                        {
-                            containertype = containerType,
-                            containerinstance = containerInstance,
-                            containerplacement = containerPlacement
-                        }).FirstOrDefault();
+                    new
+                    {
+                        containertype = containerType, 
+                        containerinstance = containerInstance, 
+                        containerplacement = containerPlacement
+                    }).FirstOrDefault();
         }
 
         /// <summary>
@@ -109,12 +81,12 @@ namespace CellAO.Database.Dao
         {
             int rowsAffected =
                 Instance.Delete(
-                        new
-                        {
-                            containertype = containerType,
-                            containerinstance = containerInstance,
-                            containerplacement = containerPlacement
-                        });
+                    new
+                    {
+                        containertype = containerType, 
+                        containerinstance = containerInstance, 
+                        containerplacement = containerPlacement
+                    });
         }
 
         /// <summary>
@@ -129,7 +101,8 @@ namespace CellAO.Database.Dao
         /// </param>
         public void Save(DBItem item, IDbConnection connection, IDbTransaction transaction)
         {
-            int affectedRows = ItemDao.Instance.Save(item, null, connection, transaction);
+            int affectedRows = Instance.Save(item, null, connection, transaction);
+
             // Check for 0 rows?
         }
 
@@ -147,7 +120,6 @@ namespace CellAO.Database.Dao
         {
             if (items.Count > 0)
             {
-
                 using (IDbConnection conn = connection ?? Connector.GetConnection())
                 {
                     using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
@@ -155,15 +127,14 @@ namespace CellAO.Database.Dao
                         foreach (DBItem item in items)
                         {
                             Instance.Delete(
-                                    new
-                                    {
-                                        items[0].containertype,
-                                        items[0].containerinstance,
-                                        items[0].Id
-                                    },
-                                connection,
+                                new { items[0].containertype, items[0].containerinstance, items[0].Id }, 
+                                connection, 
                                 transaction);
-                            Instance.Save(item, new { item.containertype, item.containerinstance, item.Id }, connection, transaction);
+                            Instance.Save(
+                                item, 
+                                new { item.containertype, item.containerinstance, item.Id }, 
+                                connection, 
+                                transaction);
                         }
 
                         trans.Commit();
@@ -186,9 +157,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         public IEnumerable<DBItem> GetAllInContainer(int containerType, int containerInstance)
         {
-            return
-                Instance.GetAll(
-                    new { containertype = containerType, containerinstance = containerInstance });
+            return Instance.GetAll(new { containertype = containerType, containerinstance = containerInstance });
         }
 
         #endregion

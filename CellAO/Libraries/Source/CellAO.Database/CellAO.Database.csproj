@@ -65,6 +65,7 @@
     <Compile Include="Connector.cs" />
     <Compile Include="Dao\CharacterDao.cs" />
     <Compile Include="Dao\Dao.cs" />
+    <Compile Include="Dao\DaoSingleton.cs" />
     <Compile Include="Dao\IDao.cs" />
     <Compile Include="Dao\MobDroptableDao.cs" />
     <Compile Include="Dao\MobSpawnDao.cs" />
