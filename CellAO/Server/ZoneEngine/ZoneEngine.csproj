@@ -120,6 +120,8 @@
     <Compile Include="Core\InternalMessages\IMSendPlayerSCFUs.cs" />
     <Compile Include="Core\InternalMessages\InternalMessage.cs" />
     <Compile Include="Core\InternalMessages\InternalMessageBody.cs" />
+    <Compile Include="Core\MessageHandlers\AddTemplateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\BankMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharacterActionHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharDCMoveHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharInPlayHandler.cs" />
@@ -141,7 +143,6 @@
     <Compile Include="Core\PacketHandlers\N3Teleport.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
-    <Compile Include="Core\Packets\AddTemplate.cs" />
     <Compile Include="Core\Packets\AppearanceUpdate.cs" />
     <Compile Include="Core\PacketHandlers\ChatCommandHandler.cs" />
     <Compile Include="Core\Packets\Bulk.cs" />
@@ -151,7 +152,6 @@
     <Compile Include="Core\Packets\Despawn.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
     <Compile Include="Core\Packets\FullCharacter.cs" />
-    <Compile Include="Core\Packets\OpenBank.cs" />
     <Compile Include="Core\Packets\PlayfieldAnarchyF.cs" />
     <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />

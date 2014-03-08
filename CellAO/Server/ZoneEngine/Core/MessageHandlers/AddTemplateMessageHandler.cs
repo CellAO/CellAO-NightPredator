@@ -24,55 +24,57 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using CellAO.Core.Items;
-    using CellAO.Core.Network;
+    using System;
 
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class AddTemplate
+    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public AddTemplateMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="item">
         /// </param>
-        /// <returns>
-        /// </returns>
-        public static AddTemplateMessage Create(IZoneClient client, Item item)
+        public void Send(ICharacter character, Item item)
         {
-            return new AddTemplateMessage
-                   {
-                       Identity = client.Character.Identity, 
-                       Unknown = 0x00, 
-                       LowId = item.LowID, 
-                       HighId = item.HighID, 
-                       Quality = item.Quality, 
-                       Count = item.MultipleCount
-                   };
+            this.Send(character, AddItem(character.Identity, item), false);
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        public static void Send(IZoneClient client, Item item)
+        private static MessageDataFiller AddItem(Identity identity, Item item)
         {
-            client.Character.Playfield.Send(client, Create(client, item));
+            return x =>
+            {
+                x.Unknown = 0;
+                x.Identity = identity;
+                x.HighId = item.HighID;
+                x.LowId = item.LowID;
+                x.Quality = item.Quality;
+                x.Count = item.MultipleCount;
+            };
         }
-
         #endregion
     }
 }

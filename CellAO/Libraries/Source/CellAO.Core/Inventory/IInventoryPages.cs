@@ -28,6 +28,7 @@ namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
+    using System;
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
@@ -38,7 +39,7 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public interface IInventoryPages
+    public interface IInventoryPages : IDisposable
     {
         #region Public Properties
 

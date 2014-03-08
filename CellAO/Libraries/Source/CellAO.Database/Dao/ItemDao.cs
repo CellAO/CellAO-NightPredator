@@ -127,12 +127,11 @@ namespace CellAO.Database.Dao
                         foreach (DBItem item in items)
                         {
                             Instance.Delete(
-                                new { items[0].containertype, items[0].containerinstance, items[0].Id }, 
+                                new { items[0].containertype, items[0].containerinstance}, 
                                 connection, 
                                 transaction);
-                            Instance.Save(
+                            Instance.Add(
                                 item, 
-                                new { item.containertype, item.containerinstance, item.Id }, 
                                 connection, 
                                 transaction);
                         }

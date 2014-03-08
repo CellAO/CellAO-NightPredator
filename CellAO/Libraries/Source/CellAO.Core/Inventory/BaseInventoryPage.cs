@@ -299,6 +299,9 @@ namespace CellAO.Core.Inventory
         {
             int containerType = (int)this.Identity.Type;
 
+            // omg, i forgot to clear before read... - Algorithman
+            this.Content.Clear();
+
             foreach (DBItem item in ItemDao.Instance.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
@@ -509,8 +512,8 @@ namespace CellAO.Core.Inventory
                 }
             }
 
-            ItemDao.Instance.Save(DBuninstanced);
-            InstancedItemDao.Instance.Save(DBinstanced);
+            ItemDao.Instance.Save(DBuninstanced,null,null);
+            InstancedItemDao.Instance.Save(DBinstanced,null,null);
             return true;
         }
 

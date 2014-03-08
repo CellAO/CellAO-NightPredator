@@ -24,65 +24,66 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
-    using CellAO.Enums;
 
-    using MsgPack;
-
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.MessageHandlers;
-    using ZoneEngine.Core.Packets;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    internal class openbank : FunctionPrototype
+    /// <typeparam name="T">
+    /// </typeparam>
+    public abstract class AbstractMessageHandler<T> : IMessageHandler<T>
+        where T : MessageBody, new()
     {
-        #region Public Properties
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        public delegate void MessageDataFiller(T message);
 
         /// <summary>
         /// </summary>
-        public override FunctionType FunctionId
-        {
-            get
-            {
-                return FunctionType.OpenBank;
-            }
-        }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
+        /// <param name="character">
         /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
+        /// <param name="messageDataFiller">
         /// </param>
         /// <returns>
         /// </returns>
-        public override bool Execute(
-            INamedEntity self, 
-            INamedEntity caller, 
-            IInstancedEntity target, 
-            MessagePackObject[] arguments)
-        {
-            BankMessageHandler.Default.Send((ICharacter)self);
-            return true;
-        }
+        protected abstract T Create(ICharacter character, MessageDataFiller messageDataFiller);
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <param name="client">
+        /// </param>
+        protected abstract void Read(T message, IZoneClient client);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        /// <param name="updateCharacterStats">
+        /// </param>
+        public abstract void Receive(IZoneClient client, Message message, bool updateCharacterStats = false);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="messageDataFiller">
+        /// </param>
+        /// <param name="annouceToPlayfield">
+        /// </param>
+        public abstract void Send(ICharacter character, MessageDataFiller messageDataFiller, bool annouceToPlayfield = false);
     }
 }

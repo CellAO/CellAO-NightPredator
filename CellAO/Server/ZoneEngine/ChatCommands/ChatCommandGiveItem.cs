@@ -38,6 +38,7 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -133,7 +134,7 @@ namespace ZoneEngine.ChatCommands
 
                 if (targetEntity as Character != null)
                 {
-                    AddTemplate.Send((targetEntity as Character).Client, item);
+                    AddTemplateMessageHandler.Default.Send((ICharacter)targetEntity, item);
                 }
             }
             else

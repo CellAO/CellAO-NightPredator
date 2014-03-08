@@ -24,63 +24,53 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Network;
-    using CellAO.Enums;
 
-    using MsgPack;
-
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.MessageHandlers;
-    using ZoneEngine.Core.Packets;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    internal class openbank : FunctionPrototype
+    public class BankMessageHandler : BaseMessageHandler<BankMessage, BankMessageHandler>
     {
-        #region Public Properties
-
         /// <summary>
         /// </summary>
-        public override FunctionType FunctionId
+        public BankMessageHandler()
         {
-            get
-            {
-                return FunctionType.OpenBank;
-            }
+            this.Direction = MessageHandlerDirection.OutboundOnly;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="self">
+        /// <param name="character">
         /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
+        public void Send(ICharacter character)
+        {
+            this.Send(character, FillBankMessage(character));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
         /// </param>
         /// <returns>
         /// </returns>
-        public override bool Execute(
-            INamedEntity self, 
-            INamedEntity caller, 
-            IInstancedEntity target, 
-            MessagePackObject[] arguments)
+        private static MessageDataFiller FillBankMessage(ICharacter character)
         {
-            BankMessageHandler.Default.Send((ICharacter)self);
-            return true;
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.BankSlots = character.BaseInventory.Pages[(int)IdentityType.Bank].ToInventoryArray();
+            };
         }
 
         #endregion

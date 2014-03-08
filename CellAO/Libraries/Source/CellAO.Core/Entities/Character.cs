@@ -355,9 +355,11 @@ namespace CellAO.Core.Entities
         public override void Dispose()
         {
             this.DoNotDoTimers = true;
-            CharacterDao.Instance.SetOffline(this.Identity.Instance);
             this.Playfield.Despawn(this.Identity);
             this.Save();
+            // SetOffline has to be called AFTER save
+            CharacterDao.Instance.SetOffline(this.Identity.Instance);
+            this.BaseInventory.Dispose();
             this.DoNotDoTimers = true;
             if (this.Client != null)
             {

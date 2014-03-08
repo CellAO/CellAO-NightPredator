@@ -319,5 +319,13 @@ namespace CellAO.Core.Inventory
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            foreach (KeyValuePair<int, IInventoryPage> kv in this.Pages)
+            {
+                kv.Value.Dispose();
+            }
+        }
     }
 }

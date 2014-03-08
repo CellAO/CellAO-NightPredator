@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using CellAO.Core.Items;
     using CellAO.Enums;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -97,8 +98,8 @@ namespace ZoneEngine.Core.PacketHandlers
                     InventoryError inventoryError = client.Character.BaseInventory.TryAdd(newItem);
                     if (inventoryError == InventoryError.OK)
                     {
-                        AddTemplate.Send(client, newItem);
-
+                        AddTemplateMessageHandler.Default.Send(client.Character, newItem);
+                        
                         // Delete source?
                         if ((ts.DeleteFlag & 1) == 1)
                         {

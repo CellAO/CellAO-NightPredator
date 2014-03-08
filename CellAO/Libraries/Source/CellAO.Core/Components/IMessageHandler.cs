@@ -24,42 +24,20 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
-    using CellAO.Core.Network;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class OpenBank
+    /// <typeparam name="T">
+    /// </typeparam>
+    public interface IMessageHandler<T>
+        where T : MessageBody, new()
     {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static BankMessage Create(IZoneClient client)
-        {
-            BankMessage bank = new BankMessage()
-                               {
-                                   Identity = client.Character.Identity, 
-                                   BankSlots =
-                                       client.Character.BaseInventory.Pages[(int)IdentityType.Bank]
-                                       .ToInventoryArray()
-                               };
-
-            return bank;
-        }
-
-        #endregion
     }
 }
