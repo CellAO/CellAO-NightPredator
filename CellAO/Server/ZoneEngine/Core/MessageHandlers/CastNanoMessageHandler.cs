@@ -24,60 +24,63 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using CellAO.Core.Network;
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class SendFeedback
+    public class CastNanoSpellMessageHandler : BaseMessageHandler<CastNanoSpellMessage, CastNanoSpellMessageHandler>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="MsgCategory">
-        /// </param>
-        /// <param name="MsgNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static FeedbackMessage Create(IZoneClient client, int MsgCategory, int MsgNum)
+        public CastNanoSpellMessageHandler()
         {
-            return new FeedbackMessage
-                   {
-                       Identity = client.Character.Identity, 
-                       Unknown = 0x01, 
-                       Unknown1 = 0x00000000, 
-                       CategoryId = MsgCategory, 
-                       MessageId = MsgNum
-                   };
+            this.Direction = MessageHandlerDirection.All;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
-        /// <param name="MsgCategory">
+        /// <param name="nanoId">
         /// </param>
-        /// <param name="MsgNum">
+        /// <param name="target">
+        /// </param>
+        public void Send(ICharacter character, int nanoId, Identity target)
+        {
+            this.Send(character, Filler(character, nanoId, target), true);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="nanoId">
+        /// </param>
+        /// <param name="target">
         /// </param>
         /// <returns>
         /// </returns>
-        public static bool Send(IZoneClient client, int MsgCategory, int MsgNum)
+        private static MessageDataFiller Filler(ICharacter character, int nanoId, Identity target)
         {
-            client.Character.Send(Create(client, MsgCategory, MsgNum));
-            return true;
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Caster = character.Identity;
+                x.Target = target;
+                x.NanoId = nanoId;
+                x.Unknown = 0;
+                x.Unknown1 = 0;
+            };
         }
-
-        #endregion
     }
 }

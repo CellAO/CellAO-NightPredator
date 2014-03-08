@@ -40,6 +40,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -135,7 +136,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         // If action == search
                         /* Msg 110:136744723 = "No hidden objects found." */
                         // TODO: SEARCH!!
-                        SendFeedback.Send(client, 110, 136744723);
+                        FeedbackMessageHandler.Default.Send(client.Character, 110, 136744723);
                     }
 
                     break;

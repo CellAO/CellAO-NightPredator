@@ -39,6 +39,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -82,7 +83,7 @@ namespace ZoneEngine.ChatCommands
         {
             character.Playfield.Publish(
                 ChatText.CreateIM(
-                    character, 
+                    character,
                     "Teleports you\r\n" + "Usage: /tp [float] [float] [int] (X, Z, Playfield)\r\n"
                     + "Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)"));
         }
@@ -104,8 +105,8 @@ namespace ZoneEngine.ChatCommands
             if (CheckArgumentHelper(check, args))
             {
                 coord = new Coordinate(
-                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    character.Coordinates.y, 
+                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture),
+                    character.Coordinates.y,
                     float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
                 pf = int.Parse(args[3]);
             }
@@ -120,33 +121,24 @@ namespace ZoneEngine.ChatCommands
             if (CheckArgumentHelper(check, args))
             {
                 coord = new Coordinate(
-                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture), 
-                    float.Parse(args[4], NumberStyles.Any, CultureInfo.InvariantCulture), 
+                    float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture),
+                    float.Parse(args[4], NumberStyles.Any, CultureInfo.InvariantCulture),
                     float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
                 pf = int.Parse(args[5]);
             }
 
             if (!Playfields.ValidPlayfield(pf))
             {
-                character.Playfield.Publish(
-                    new IMSendAOtomationMessageBodyToClient()
-                    {
-                        Body =
-                            new FeedbackMessage()
-                            {
-                                CategoryId = 110, 
-                                MessageId = 188845972
-                            }, 
-                        client = character.Client
-                    });
-                return;
+                FeedbackMessageHandler.Default.Send(character, 110, 188845972);
             }
-
-            character.Playfield.Teleport(
-                (Character)character, 
-                coord, 
-                character.Heading, 
+            else
+            {
+                character.Playfield.Teleport(
+                (Character)character,
+                coord,
+                character.Heading,
                 new Identity() { Type = IdentityType.Playfield, Instance = pf });
+            }
         }
 
         /// <summary>

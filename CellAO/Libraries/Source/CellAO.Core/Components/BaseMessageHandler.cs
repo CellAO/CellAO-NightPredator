@@ -165,20 +165,20 @@ namespace CellAO.Core.Components
         /// </param>
         /// <param name="messageDataFiller">
         /// </param>
-        /// <param name="annouceToPlayfield">
+        /// <param name="announceToPlayfield">
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void Send(
+        protected override void Send(
             ICharacter character, 
             MessageDataFiller messageDataFiller, 
-            bool annouceToPlayfield = false)
+            bool announceToPlayfield = false)
         {
             if ((this.Direction == MessageHandlerDirection.All)
                 || (this.Direction == MessageHandlerDirection.OutboundOnly))
             {
                 T mb = this.Create(character, messageDataFiller);
-                character.Send(mb, annouceToPlayfield);
+                character.Send(mb, announceToPlayfield);
             }
             else
             {
@@ -190,30 +190,22 @@ namespace CellAO.Core.Components
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="dataMessageDataFiller">
+        /// <param name="messageDataFiller">
         /// </param>
-        public void SendToPlayfield(ICharacter character, MessageDataFiller dataMessageDataFiller)
-        {
-            this.Send(character, dataMessageDataFiller, false);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="receiver">
-        /// </param>
-        /// <param name="dataMessageDataFiller">
+        /// <param name="announceToPlayfield">
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public virtual void Send(ICharacter character, ICharacter receiver, MessageDataFiller dataMessageDataFiller)
+        public void SendToPlayfield(
+            ICharacter character, 
+            MessageDataFiller messageDataFiller, 
+            bool announceToPlayfield = false)
         {
             if ((this.Direction == MessageHandlerDirection.All)
                 || (this.Direction == MessageHandlerDirection.OutboundOnly))
             {
-                T mb = this.Create(character, dataMessageDataFiller);
-                receiver.Send(mb);
+                T mb = this.Create(character, messageDataFiller);
+                character.Send(mb, announceToPlayfield);
             }
             else
             {

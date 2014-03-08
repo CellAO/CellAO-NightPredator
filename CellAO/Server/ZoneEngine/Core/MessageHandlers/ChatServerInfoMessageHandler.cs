@@ -24,66 +24,84 @@
 
 #endregion
 
-namespace CellAO.Core.Components
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
-    using CellAO.Core.Network;
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+
+    using Utility.Config;
 
     #endregion
 
     /// <summary>
+    ///     Chat server info packet writer
     /// </summary>
-    /// <typeparam name="T">
-    /// </typeparam>
-    public abstract class AbstractMessageHandler<T> : IMessageHandler<T>
-        where T : MessageBody, new()
+    // [Export(typeof(IHandleMessage))]
+    public class ChatServerInfoMessageHandler : BaseMessageHandler<ChatServerInfoMessage, ChatServerInfoMessageHandler>
     {
         /// <summary>
         /// </summary>
-        /// <param name="message">
-        /// </param>
-        public delegate void MessageDataFiller(T message);
+        public ChatServerInfoMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="messageDataFiller">
+        public void Send(ICharacter character)
+        {
+            this.Send(character, Filler(character));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
         /// </param>
         /// <returns>
         /// </returns>
-        protected abstract T Create(ICharacter character, MessageDataFiller messageDataFiller);
+        private static MessageDataFiller Filler(ICharacter character)
+        {
+            /* get chat settings from config */
+            string chatServerIp = string.Empty;
+            IPAddress tempIp;
+            if (IPAddress.TryParse(ConfigReadWrite.Instance.CurrentConfig.ChatIP, out tempIp))
+            {
+                chatServerIp = ConfigReadWrite.Instance.CurrentConfig.ChatIP;
+            }
+            else
+            {
+                IPHostEntry chatHost = Dns.GetHostEntry(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
+                foreach (IPAddress ip in chatHost.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        chatServerIp = ip.ToString();
+                        break;
+                    }
+                }
+            }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        protected abstract void Read(T message, IZoneClient client);
+            int chatPort = Convert.ToInt32(ConfigReadWrite.Instance.CurrentConfig.ChatPort);
 
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        /// <param name="updateCharacterStats">
-        /// </param>
-        public abstract void Receive(IZoneClient client, Message message, bool updateCharacterStats = false);
+            return x =>
+            {
+                x.HostName = chatServerIp;
+                x.Port = chatPort;
+            };
+        }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="messageDataFiller">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        protected abstract void Send(ICharacter character, MessageDataFiller messageDataFiller, bool announceToPlayfield = false);
+        #endregion
     }
 }

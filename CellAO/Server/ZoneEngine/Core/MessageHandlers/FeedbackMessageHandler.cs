@@ -24,69 +24,47 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
 
-    using CellAO.Core.Network;
+    using Dapper;
 
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
-
-    using Utility.Config;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
-    ///     Chat server info packet writer
     /// </summary>
-    public static class ChatServerInfo
+    public class FeedbackMessageHandler : BaseMessageHandler<FeedbackMessage, FeedbackMessageHandler>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public static ChatServerInfoMessage Create()
+        public FeedbackMessageHandler()
         {
-            /* get chat settings from config */
-            string chatServerIp = string.Empty;
-            IPAddress tempIp;
-            if (IPAddress.TryParse(ConfigReadWrite.Instance.CurrentConfig.ChatIP, out tempIp))
-            {
-                chatServerIp = ConfigReadWrite.Instance.CurrentConfig.ChatIP;
-            }
-            else
-            {
-                IPHostEntry chatHost = Dns.GetHostEntry(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
-                foreach (IPAddress ip in chatHost.AddressList)
-                {
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        chatServerIp = ip.ToString();
-                        break;
-                    }
-                }
-            }
-
-            int chatPort = Convert.ToInt32(ConfigReadWrite.Instance.CurrentConfig.ChatPort);
-
-            return new ChatServerInfoMessage { HostName = chatServerIp, Port = chatPort };
+            this.Direction = MessageHandlerDirection.OutboundOnly;
         }
 
-        /// <summary>
-        /// Sends chat server info to client
-        /// </summary>
-        /// <param name="client">
-        /// Client that gets the info
-        /// </param>
-        public static void Send(IZoneClient client)
+        #region Outbound
+
+        public void Send(ICharacter character, int categoryId, int messageId)
         {
-            client.Character.Send(Create());
+            this.Send(character, Filler(character, categoryId, messageId));
+        }
+
+        private static MessageDataFiller Filler(ICharacter character, int categoryId, int messageId)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Unknown = 1;
+                x.Unknown1 = 0;
+                x.CategoryId = categoryId;
+                x.MessageId = messageId;
+            };
         }
 
         #endregion
