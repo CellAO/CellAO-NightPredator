@@ -407,16 +407,16 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<Requirements> ParseReqs(List<rawreqs> rreqs)
+        public List<Requirement> ParseReqs(List<rawreqs> rreqs)
         {
             int numreqs = rreqs.Count;
 
-            List<Requirements> output = new List<Requirements>();
+            List<Requirement> output = new List<Requirement>();
 
             for (int i = 0; i < numreqs; i++)
             {
                 rawreqs rr = rreqs[i];
-                Requirements aor = new Requirements();
+                Requirement aor = new Requirement();
 
                 aor.Target = ItemTarget.Self; // 0x13
                 aor.Statnumber = rr.stat;
@@ -478,7 +478,7 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<Requirements> ReadReqs(int numreqs)
+        public List<Requirement> ReadReqs(int numreqs)
         {
             int num4 = numreqs;
             bool flag = num4 > 0;
@@ -511,7 +511,7 @@ namespace Extractor_Serializer
                 return this.ParseReqs(list);
             }
 
-            return new List<Requirements>();
+            return new List<Requirement>();
         }
 
         #endregion
@@ -546,7 +546,7 @@ namespace Extractor_Serializer
         /// </param>
         /// <exception cref="Exception">
         /// </exception>
-        private void ParseActionSet(List<Actions> actions)
+        private void ParseActionSet(List<AOAction> actions)
         {
             bool flag = this.br.ReadInt32() != 36;
             if (flag)
@@ -570,19 +570,19 @@ namespace Extractor_Serializer
 
                     int actionNum = this.br.ReadInt32();
 
-                    Actions aoa = new Actions();
+                    AOAction aoa = new AOAction();
                     aoa.ActionType = (ActionType)Enum.ToObject(typeof(ActionType), actionNum);
 
                     int numreqs = this.br.Read3F1();
-                    List<Requirements> cookedreqs = this.ReadReqs(numreqs);
-                    foreach (Requirements REQ in cookedreqs)
+                    List<Requirement> cookedreqs = this.ReadReqs(numreqs);
+                    foreach (Requirement REQ in cookedreqs)
                     {
                         aoa.Requirements.Add(REQ);
                     }
 
                     if (actions == null)
                     {
-                        actions = new List<Actions>();
+                        actions = new List<AOAction>();
                     }
 
                     actions.Add(aoa);
@@ -802,11 +802,11 @@ namespace Extractor_Serializer
         /// <param name="retlist">
         /// The retlist.
         /// </param>
-        private void ParseFunctionSet(List<Events> retlist)
+        private void ParseFunctionSet(List<Event> retlist)
         {
             int eventTypeValue = this.br.ReadInt32();
             int num = this.br.Read3F1();
-            List<Functions> list = new List<Functions>();
+            List<Function> list = new List<Function>();
             int arg_2F_0 = 0;
             bool R;
             int num2 = num - 1;
@@ -820,7 +820,7 @@ namespace Extractor_Serializer
                     break;
                 }
 
-                Functions func = new Functions();
+                Function func = new Function();
 
                 func.FunctionType = this.br.ReadInt32();
                 this.br.Skip(8);
@@ -828,7 +828,7 @@ namespace Extractor_Serializer
                 bool flag = num5 > 0;
                 if (flag)
                 {
-                    foreach (Requirements ur in this.ReadReqs(num5))
+                    foreach (Requirement ur in this.ReadReqs(num5))
                     {
                         func.Requirements.Add(ur);
                     }
@@ -850,17 +850,17 @@ namespace Extractor_Serializer
                 num3++;
             }
 
-            Events aoe = new Events();
+            Event aoe = new Event();
             aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventTypeValue);
 
-            foreach (Functions ff in list)
+            foreach (Function ff in list)
             {
                 aoe.Functions.Add(ff);
             }
 
             if (retlist == null)
             {
-                retlist = new List<Events>();
+                retlist = new List<Event>();
             }
 
             retlist.Add(aoe);
@@ -872,14 +872,14 @@ namespace Extractor_Serializer
         /// <param name="events">
         /// The events.
         /// </param>
-        private void ParseShopHash(List<Events> events)
+        private void ParseShopHash(List<Event> events)
         {
             int eventNum = this.br.ReadInt32();
             int num = this.br.Read3F1();
             int arg_2D_0 = 1;
             int num2 = num;
             int num3 = arg_2D_0;
-            Events aoe = new Events();
+            Event aoe = new Event();
             aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventNum);
             checked
             {
@@ -905,7 +905,7 @@ namespace Extractor_Serializer
                     int count = Math.Min(11, this.br.Buffer.Length - this.br.Ptr);
                     this.br.Skip(count);
 
-                    Functions aof = new Functions();
+                    Function aof = new Function();
                     aof.Arguments.Values.Add(text);
                     aof.Arguments.Values.Add(num5);
                     aof.Arguments.Values.Add(num6);
@@ -921,7 +921,7 @@ namespace Extractor_Serializer
 
             if (events == null)
             {
-                events = new List<Events>();
+                events = new List<Event>();
             }
 
             events.Add(aoe);

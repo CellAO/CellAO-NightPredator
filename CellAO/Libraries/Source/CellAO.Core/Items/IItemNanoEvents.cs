@@ -46,7 +46,7 @@ namespace CellAO.Core.Items
         /// <summary>
         /// List of Game Events (onWear, onCollide etc)
         /// </summary>
-        List<Events> Events { get; }
+        List<Event> Events { get; }
 
         #endregion
     }

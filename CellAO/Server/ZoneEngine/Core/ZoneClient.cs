@@ -145,7 +145,7 @@ namespace ZoneEngine.Core
         /// </summary>
         /// <param name="functions">
         /// </param>
-        public void CallFunction(CellAO.Core.Functions.Functions functions)
+        public void CallFunction(CellAO.Core.Functions.Function functions)
         {
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
@@ -329,7 +329,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <returns>
         /// </returns>
-        public bool dSendChatText(string text)
+        public bool SendChatText(string text)
         {
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage

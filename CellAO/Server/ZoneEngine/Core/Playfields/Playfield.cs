@@ -174,7 +174,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        public List<Functions> EnvironmentFunctions { get; private set; }
+        public List<Function> EnvironmentFunctions { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -694,7 +694,7 @@ namespace CellAO.Core.Playfields
         {
             foreach (StatelData sd in this.statels)
             {
-                foreach (Events ev in
+                foreach (Event ev in
                     sd.Events.Where(
                         x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
                 {

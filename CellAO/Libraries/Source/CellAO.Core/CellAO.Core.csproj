@@ -70,6 +70,7 @@
     <Compile Include="Components\AbstractMessageHandler.cs" />
     <Compile Include="Components\BaseMessageHandler.cs" />
     <Compile Include="Components\IMessageHandler.cs" />
+    <Compile Include="Components\MessageWrapper.cs" />
     <Compile Include="Controllers\IController.cs" />
     <Compile Include="Controllers\NPCController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />

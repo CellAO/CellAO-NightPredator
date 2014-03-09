@@ -24,44 +24,51 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
+
+    // TODO: Change Actions to something more suitable (maybe EntityAction?)
 
     using System;
     using System.Linq;
     using System.Threading;
 
-    using CellAO.Core.Actions;
+    using CellAO.Core.Components;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class ContainerAddItem
+    public class ContainerAddItemMessageHandler :
+        BaseMessageHandler<ContainerAddItemMessage, ContainerAddItemMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public ContainerAddItemMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
         /// <param name="message">
         /// </param>
-        /// <param name="cli">
+        /// <param name="client">
         /// </param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// </exception>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public static void AddItemToContainer(ContainerAddItemMessage message, ZoneClient cli)
+        protected override void Read(ContainerAddItemMessage message, IZoneClient client)
         {
             bool noAppearanceUpdate = false;
 
@@ -86,7 +93,7 @@ namespace ZoneEngine.Core.PacketHandlers
             int toPlacement = message.TargetPlacement;
 
             // Where and what does need to be moved/added?
-            IInventoryPage sendingPage = cli.Character.BaseInventory.Pages[fromContainerID];
+            IInventoryPage sendingPage = client.Character.BaseInventory.Pages[fromContainerID];
             IItem itemFrom = sendingPage[fromPlacement];
 
             // Receiver of the item (IInstancedEntity, can be mostly all from NPC, Character or Bag, later even playfields)
@@ -96,7 +103,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 toIdentity.Type = IdentityType.CanbeAffected;
             }
 
-            IItemContainer itemReceiver = cli.Playfield.FindByIdentity(toIdentity) as IItemContainer;
+            IItemContainer itemReceiver = client.Character.Playfield.FindByIdentity(toIdentity) as IItemContainer;
             if (itemReceiver == null)
             {
                 throw new ArgumentOutOfRangeException(
@@ -116,7 +123,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // Get standard page if toplacement cant be found (0x6F for next free slot)
             // TODO: If Entities are not the same (other player, bag etc) then always add to the standard page
-            if ((receivingPage == null) || (itemReceiver.GetType() != cli.Character.GetType()))
+            if ((receivingPage == null) || (itemReceiver.GetType() != client.Character.GetType()))
             {
                 receivingPage = itemReceiver.BaseInventory.Pages[itemReceiver.BaseInventory.StandardPage];
             }
@@ -145,7 +152,7 @@ namespace ZoneEngine.Core.PacketHandlers
             // Calculating delay for equip/unequip/switch gear
             int delay = 20;
 
-            cli.Character.DoNotDoTimers = true;
+            client.Character.DoNotDoTimers = true;
             IItemSlotHandler equipTo = receivingPage as IItemSlotHandler;
             IItemSlotHandler unequipFrom = sendingPage as IItemSlotHandler;
 
@@ -162,11 +169,11 @@ namespace ZoneEngine.Core.PacketHandlers
                 {
                     if (receivingPage.NeedsItemCheck)
                     {
-                        Actions action = GetAction(sendingPage, itemFrom);
+                        Action action = this.getAction(sendingPage, itemFrom);
 
-                        if (action.CheckRequirements(cli.Character))
+                        if (action.CheckRequirements(client.Character))
                         {
-                            UnEquip.Send(cli, receivingPage, toPlacement);
+                            UnEquip.Send(client, receivingPage, toPlacement);
                             if (!noAppearanceUpdate)
                             {
                                 // Equipmentpages need delays
@@ -181,9 +188,9 @@ namespace ZoneEngine.Core.PacketHandlers
 
                             Thread.Sleep(delay * 10); // social has to wait for 0.2 secs too (for helmet update)
 
-                            cli.Character.Send(message);
+                            client.Character.Send(message);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
-                            Equip.Send(cli, receivingPage, toPlacement);
+                            Equip.Send(client, receivingPage, toPlacement);
                         }
                     }
                 }
@@ -196,9 +203,9 @@ namespace ZoneEngine.Core.PacketHandlers
                             throw new NullReferenceException("itemFrom can not be null, possible inventory error");
                         }
 
-                        Actions action = GetAction(receivingPage, itemFrom);
+                        Action action = this.getAction(receivingPage, itemFrom);
 
-                        if (action.CheckRequirements(cli.Character))
+                        if (action.CheckRequirements(client.Character))
                         {
                             if (!noAppearanceUpdate)
                             {
@@ -220,12 +227,12 @@ namespace ZoneEngine.Core.PacketHandlers
                             if (sendingPage == receivingPage)
                             {
                                 // Switch rings for example
-                                UnEquip.Send(cli, sendingPage, fromPlacement);
+                                UnEquip.Send(client, sendingPage, fromPlacement);
                             }
 
-                            cli.Character.Send(message);
+                            client.Character.Send(message);
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
-                            Equip.Send(cli, receivingPage, toPlacement);
+                            Equip.Send(client, receivingPage, toPlacement);
                         }
                     }
                 }
@@ -252,9 +259,9 @@ namespace ZoneEngine.Core.PacketHandlers
                         Thread.Sleep(delay * 10);
                     }
 
-                    UnEquip.Send(cli, sendingPage, fromPlacement);
+                    UnEquip.Send(client, sendingPage, fromPlacement);
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
-                    cli.Character.Send(message);
+                    client.Character.Send(message);
                 }
                 else
                 {
@@ -262,20 +269,20 @@ namespace ZoneEngine.Core.PacketHandlers
                     message.TargetPlacement = receivingPage.FindFreeSlot();
                     IItem item = sendingPage.Remove(fromPlacement);
                     receivingPage.Add(message.TargetPlacement, item);
-                    cli.Character.Send(message);
+                    client.Character.Send(message);
                 }
             }
 
-            cli.Character.DoNotDoTimers = false;
+            client.Character.DoNotDoTimers = false;
 
-            cli.Character.Stats.ClearChangedFlags();
+            client.Character.Stats.ClearChangedFlags();
 
             // Apply item functions before sending the appearanceupdate message
-            cli.Character.CalculateSkills();
+            client.Character.CalculateSkills();
 
             if (!noAppearanceUpdate)
             {
-                AppearanceUpdateMessageHandler.Default.Send(cli.Character);
+                AppearanceUpdateMessageHandler.Default.Send(client.Character);
             }
         }
 
@@ -287,11 +294,9 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        /// <exception cref="NotSupportedException">
-        /// </exception>
-        public static Actions GetAction(IInventoryPage page, IItem item)
+        private Action getAction(IInventoryPage page, IItem item)
         {
-            Actions action = null;
+            Action action = null;
 
             // TODO: Add special check for social page
             if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
@@ -299,7 +304,7 @@ namespace ZoneEngine.Core.PacketHandlers
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWear);
                 if (action == null)
                 {
-                    return new Actions();
+                    return new Action();
                 }
             }
 
@@ -308,20 +313,20 @@ namespace ZoneEngine.Core.PacketHandlers
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWield);
                 if (action == null)
                 {
-                    return new Actions();
+                    return new Action();
                 }
             }
 
             if (page is PlayerInventoryPage)
             {
                 // No checks needed for unequipping
-                return new Actions();
+                return new Action();
             }
 
             if (page is SocialArmorInventoryPage)
             {
                 // TODO: Check for side, sex, breed conditionals
-                return new Actions();
+                return new Action();
             }
 
             if (action == null)

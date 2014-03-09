@@ -37,13 +37,14 @@ namespace ZoneEngine.CoreMessageHandlers
 
     using ZoneEngine.Core;
     using ZoneEngine.Core.PacketHandlers;
+    using CellAO.Core.Network;
 
     #endregion
 
     /// <summary>
     /// </summary>
     [Export(typeof(IHandleMessage))]
-    public class ZoneLoginMessageHandler : IHandleMessage<ZoneLoginMessage>
+    public class ZoneLoginMessageHandler : BaseMessageHandler<ZoneLoginMessage, ZoneLoginMessageHandler>
     {
         #region Public Methods and Operators
 
@@ -53,17 +54,16 @@ namespace ZoneEngine.CoreMessageHandlers
         /// </param>
         /// <param name="message">
         /// </param>
-        public void Handle(object sender, Message message)
+        protected override void Read(ZoneLoginMessage message, IZoneClient client)
         {
-            var zoneLoginMessage = (ZoneLoginMessage)message.Body;
-            var client = (ZoneClient)sender;
-            client.CreateCharacter(zoneLoginMessage.CharacterId);
-            client.SendInitiateCompressionMessage(new InitiateCompressionMessage());
+            ZoneClient zc = (ZoneClient)client;
+            zc.CreateCharacter(message.CharacterId);
+            zc.SendInitiateCompressionMessage(new InitiateCompressionMessage());
 
-            client.Character.Playfield = client.Playfield;
+            client.Character.Playfield = zc.Playfield;
 
             ClientConnected tmpClientConnected = new ClientConnected();
-            tmpClientConnected.Read(zoneLoginMessage.CharacterId, client);
+            tmpClientConnected.Read(message.CharacterId, zc);
         }
 
         #endregion

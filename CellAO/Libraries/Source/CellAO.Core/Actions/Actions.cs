@@ -41,15 +41,15 @@ namespace CellAO.Core.Actions
     /// AOActions covers all action types, with their reqs
     /// </summary>
     [Serializable]
-    public class Actions : IActions
+    public class AOAction : IAOAction
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        public Actions()
+        public AOAction()
         {
-            this.Requirements = new List<Requirements>(15);
+            this.Requirements = new List<Requirement>(15);
         }
 
         #endregion
@@ -64,7 +64,7 @@ namespace CellAO.Core.Actions
         /// <summary>
         /// List of Requirements for this action
         /// </summary>
-        public List<Requirements> Requirements { get; set; }
+        public List<Requirement> Requirements { get; set; }
 
         #endregion
 
@@ -79,7 +79,7 @@ namespace CellAO.Core.Actions
         public bool CheckRequirements(IInstancedEntity entity)
         {
             bool result = true;
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 if (requirements.ChildOperator == Operator.And)
                 {
@@ -103,11 +103,11 @@ namespace CellAO.Core.Actions
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Actions Copy()
+        internal AOAction Copy()
         {
-            Actions copy = new Actions();
+            AOAction copy = new AOAction();
             copy.ActionType = this.ActionType;
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 copy.Requirements.Add(requirements.Copy());
             }

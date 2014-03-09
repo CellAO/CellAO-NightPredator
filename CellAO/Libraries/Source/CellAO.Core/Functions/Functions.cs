@@ -43,16 +43,16 @@ namespace CellAO.Core.Functions
     /// AOFunctions
     /// </summary>
     [Serializable]
-    public class Functions : IFunctions
+    public class Function : IFunction
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        public Functions()
+        public Function()
         {
             this.Arguments = new FunctionArguments();
-            this.Requirements = new List<Requirements>(10);
+            this.Requirements = new List<Requirement>(10);
             this.dolocalstats = true;
         }
 
@@ -73,7 +73,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// Requirements to execute this function
         /// </summary>
-        public List<Requirements> Requirements { get; set; }
+        public List<Requirement> Requirements { get; set; }
 
         /// <summary>
         /// TargetType (constants in ItemLoader)
@@ -105,9 +105,9 @@ namespace CellAO.Core.Functions
         /// </param>
         /// <returns>
         /// </returns>
-        public static Functions Deserialize(MemoryStream ms)
+        public static Function Deserialize(MemoryStream ms)
         {
-            MessagePackSerializer<Functions> fromByte = MessagePackSerializer.Create<Functions>();
+            MessagePackSerializer<Function> fromByte = MessagePackSerializer.Create<Function>();
             return fromByte.Unpack(ms);
         }
 
@@ -117,7 +117,7 @@ namespace CellAO.Core.Functions
         /// </returns>
         public string Serialize()
         {
-            MessagePackSerializer<Functions> toByte = MessagePackSerializer.Create<Functions>();
+            MessagePackSerializer<Function> toByte = MessagePackSerializer.Create<Function>();
             var ms = new MemoryStream();
             toByte.Pack(ms, this);
 
@@ -129,12 +129,12 @@ namespace CellAO.Core.Functions
         /// Copy Function
         /// </summary>
         /// <returns>new copy</returns>
-        public IFunctions ShallowCopy()
+        public IFunction ShallowCopy()
         {
-            IFunctions newAOF = new Functions();
-            foreach (Requirements aor in this.Requirements)
+            IFunction newAOF = new Function();
+            foreach (Requirement aor in this.Requirements)
             {
-                Requirements newAOR = new Requirements();
+                Requirement newAOR = new Requirement();
                 newAOR.ChildOperator = aor.ChildOperator;
                 newAOR.Operator = aor.Operator;
                 newAOR.Statnumber = aor.Statnumber;
@@ -181,11 +181,11 @@ namespace CellAO.Core.Functions
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Functions Copy()
+        internal Function Copy()
         {
-            Functions copy = new Functions();
+            Function copy = new Function();
 
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 copy.Requirements.Add(requirements.Copy());
             }

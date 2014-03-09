@@ -30,9 +30,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
 
     using CellAO.Core.Components;
+    using CellAO.Core.Network;
     using CellAO.Enums;
     using CellAO.Stats;
 
@@ -46,22 +46,25 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class SkillHandler : IHandleMessage<SkillMessage>
+    public class SkillMessageHandler : BaseMessageHandler<SkillMessage, SkillMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public SkillMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="skillMessage">
         /// </param>
-        /// <param name="message">
+        /// <param name="client">
         /// </param>
-        public void Handle(object sender, Message message)
+        protected override void Read(SkillMessage skillMessage, IZoneClient client)
         {
-            var client = (ZoneClient)sender;
-            var skillMessage = (SkillMessage)message.Body;
-
             uint baseIp = 0;
 
             uint characterLevel = client.Character.Stats[StatIds.level].BaseValue;
@@ -137,11 +140,11 @@ namespace ZoneEngine.Core.MessageHandlers
                             Skills = newStats.ToArray()
                         };
 
-            client.Playfield.Publish(new IMSendAOtomationMessageBodyToClient { client = client, Body = reply });
+            client.Character.Playfield.Publish(
+                new IMSendAOtomationMessageBodyToClient { client = client, Body = reply });
 
             // and save the changes to the statsdb
             client.Character.WriteStats();
-            client.Character.SendChangedStats();
         }
 
         #endregion

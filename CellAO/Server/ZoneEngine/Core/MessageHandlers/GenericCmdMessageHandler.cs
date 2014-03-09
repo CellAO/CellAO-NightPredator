@@ -24,32 +24,42 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    // TODO: Make this to EntityEnvent or something like this
     using System;
     using System.Linq;
 
-    using CellAO.Core.Events;
+    using CellAO.Core.Components;
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Core.Statels;
     using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.MessageHandlers;
-    using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
+
+    using ZoneEngine.Core.Packets;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class GenericCmd
+    public class GenericCmdMessageHandler : BaseMessageHandler<GenericCmdMessage, GenericCmdMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public GenericCmdMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
@@ -59,7 +69,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <exception cref="NullReferenceException">
         /// </exception>
-        public static void Read(GenericCmdMessage message, ZoneClient client)
+        protected override void Read(GenericCmdMessage message, IZoneClient client)
         {
             switch (message.Action)
             {
@@ -87,7 +97,12 @@ namespace ZoneEngine.Core.PacketHandlers
                                 "No item found at " + message.Target.Type + "/" + message.Target.Instance);
                         }
 
-                        TemplateActionMessageHandler.Default.Send(client.Character, item, (int)message.Target.Type, message.Target.Instance);
+                        TemplateActionMessageHandler.Default.Send(
+                            client.Character, 
+                            item, 
+                            (int)message.Target.Type, // container
+                            message.Target.Instance // placement
+                            );
 
                         if (ItemLoader.ItemList[item.HighID].IsConsumable())
                         {
@@ -96,14 +111,27 @@ namespace ZoneEngine.Core.PacketHandlers
                             {
                                 client.Character.BaseInventory.RemoveItem(
                                     (int)message.Target.Type, 
-                                    message.Target.Instance);
+                                    // pageNum
+                                    message.Target.Instance // slotNum
+                                    );
 
-                                DeleteItem.Send(client, (int)message.Target.Type, message.Target.Instance);
+                                DeleteItem.Send(
+                                    (ZoneClient) client, 
+                                    (int)message.Target.Type,
+                                    message.Target.Instance 
+                               );
                             }
                         }
 
                         item.PerformAction(client.Character, EventType.OnUse, message.Target.Instance);
-                        Reply(message, client);
+
+                        // Acknowledge action
+                        message.Identity = client.Character.Identity;
+                        message.Temp1 = 1;
+                        message.Unknown = 0;
+
+                        // client.SendCompressed(message);
+                        client.Character.Send(message);
                     }
                     else
                     {
@@ -114,15 +142,16 @@ namespace ZoneEngine.Core.PacketHandlers
                         if (PlayfieldLoader.PFData.ContainsKey(client.Character.Playfield.Identity.Instance))
                         {
                             StatelData sd =
-                                PlayfieldLoader.PFData[client.Playfield.Identity.Instance].Statels.FirstOrDefault(
-                                    x =>
-                                        (x.StatelIdentity.Type == message.Target.Type)
-                                        && (x.StatelIdentity.Instance == message.Target.Instance));
+                                PlayfieldLoader.PFData[client.Character.Playfield.Identity.Instance].Statels
+                                    .FirstOrDefault(
+                                        x =>
+                                            (x.StatelIdentity.Type == message.Target.Type)
+                                            && (x.StatelIdentity.Instance == message.Target.Instance));
 
                             if (sd != null)
                             {
                                 s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
-                                Events onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
+                                Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
                                 if (onUse != null)
                                 {
                                     onUse.Perform(client.Character, client.Character);
@@ -135,25 +164,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     break;
             }
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        private static void Reply(GenericCmdMessage message, ZoneClient client)
-        {
-            // Acknowledge action
-            message.Identity = client.Character.Identity;
-            message.Temp1 = 1;
-            message.Unknown = 0;
-            client.SendCompressed(message);
         }
 
         #endregion

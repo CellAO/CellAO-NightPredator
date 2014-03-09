@@ -45,6 +45,13 @@ namespace ZoneEngine.Core
 
     using ZoneEngine.Component;
     using ZoneEngine.Core.PacketHandlers;
+    using CellAO.Core.Components;
+    using MemBus;
+    using MemBus.Configurators;
+    using MemBus.Support;
+    using ZoneEngine.Core.MessageHandlers;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
 
@@ -53,6 +60,8 @@ namespace ZoneEngine.Core
     [Export]
     public class ZoneServer : ServerBase
     {
+        
+
         #region Fields
 
         /// <summary>
@@ -71,6 +80,10 @@ namespace ZoneEngine.Core
         /// </summary>
         private readonly List<IPlayfield> playfields = new List<IPlayfield>();
 
+        private readonly DisposeContainer memBusDisposeContainer = new DisposeContainer();
+
+        private readonly MemBus.IBus zoneBus;
+
         #endregion
 
         #region Constructors and Destructors
@@ -86,6 +99,14 @@ namespace ZoneEngine.Core
             this.Id = 0x356;
             this.clientFactory = clientFactory;
             this.ClientDisconnected += this.ZoneServerClientDisconnected;
+
+            // New Bus initialization
+            this.zoneBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
+
+            this.memBusDisposeContainer.Add(
+                this.zoneBus.Subscribe<MessageWrapper<CharacterActionMessage>>(CharacterActionMessageHandler.Default.Receive));
+
+            
         }
 
         #endregion
@@ -178,6 +199,8 @@ namespace ZoneEngine.Core
         protected override IClient CreateClient()
         {
             return this.clientFactory.Create(this);
+
+
         }
 
         /// <summary>
@@ -234,7 +257,7 @@ namespace ZoneEngine.Core
                         new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
                 if (character != null)
                 {
-                    ChatCommandHandler.Read(
+                    ChatCmdMessageHandler.Default.Read(
                         chatCommand.ChatCommandString.TrimStart('.'), 
                         (ZoneClient)((Character)character).Client);
                 }

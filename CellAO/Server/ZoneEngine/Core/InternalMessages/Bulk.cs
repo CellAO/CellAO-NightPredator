@@ -24,41 +24,35 @@
 
 #endregion
 
-namespace ZoneEngine.Core.MessageHandlers
+namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
-    using CellAO.Core.Components;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class ContainerAddItemHandler : IHandleMessage<ContainerAddItemMessage>
+    public static class Bulk
     {
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="client">
         /// </param>
-        /// <param name="message">
+        /// <param name="messages">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <returns>
+        /// </returns>
+        public static IMSendAOtomationMessageBodiesToClient CreateIM(IZoneClient client, MessageBody[] messages)
         {
-            var client = (ZoneClient)sender;
-            var containerAddItemMessage = (ContainerAddItemMessage)message.Body;
-
-            ContainerAddItem.AddItemToContainer(containerAddItemMessage, client);
-            client.Character.SendChangedStats();
+            return new IMSendAOtomationMessageBodiesToClient() { Bodies = messages, client = client };
         }
 
         #endregion

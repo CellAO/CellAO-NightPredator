@@ -28,37 +28,50 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class GenericCmdHandler : IHandleMessage<GenericCmdMessage>
+    public class LookAtMessageHandler : BaseMessageHandler<LookAtMessage, LookAtMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public LookAtMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly; 
+            this.UpdateCharacterStatsOnReceive = true;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="client">
         /// </param>
         /// <param name="message">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="updateCharacterStats">
+        /// </param>
+        public override void Read(Message message, IZoneClient client)
         {
-            var client = (ZoneClient)sender;
-            var genericCmdMessage = (GenericCmdMessage)message.Body;
+            var lookAtMessage = (LookAtMessage)message.Body;
 
-            GenericCmd.Read(genericCmdMessage, client);
-            client.Character.SendChangedStats();
+            var dynel = (ITargetingEntity)client.Character.Playfield.FindByIdentity(lookAtMessage.Identity);
+
+            if (dynel == null)
+            {
+                return;
+            }
+
+            dynel.SetTarget(lookAtMessage.Target);
+
         }
 
         #endregion

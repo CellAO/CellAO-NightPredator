@@ -24,52 +24,54 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using CellAO.Enums;
+    using CellAO.Core.Components;
+    using CellAO.Core.Network;
 
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class CharacterInPlay
+    public class ChatCmdMessageHandler : BaseMessageHandler<ChatCmdMessage, ChatCmdMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public ChatCmdMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
+
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
+        /// <param name="message">
+        /// </param>
         /// <param name="client">
         /// </param>
-        public static void Read(ZoneClient client)
+        protected override void Read(ChatCmdMessage message, IZoneClient client)
         {
-            // client got all the needed data and
-            // wants to enter the world. After we
-            // reply to this, the character will really be in game
-            var announce = new CharInPlayMessage { Identity = client.Character.Identity, Unknown = 0x00 };
-            client.Playfield.Announce(announce);
+            string fullArgs = message.Command.TrimEnd(char.MinValue);
 
-            // Player is in game now, starting is over, set stats normally now
-            client.Character.Starting = false;
-
-            // Needed fix, so gmlevel will be loaded
-            client.Character.Stats[StatIds.gmlevel].Value = client.Character.Stats[StatIds.gmlevel].Value;
-
-            // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
-            // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
-            // walk the same waypoints.
-            // TODO: Fix it
-            /*foreach (MobType mob in NPCPool.Mobs)
+            string temp = string.Empty;
+            do
             {
-                // TODO: Make cache - use pf indexing somehow.
-                if (mob.pf == client.Character.pf)
-                {
-                    mob.SendToClient(client);
-                }
-            }*/
+                temp = fullArgs;
+                fullArgs = fullArgs.Replace("  ", " ");
+            }
+            while (temp != fullArgs);
+
+            string[] cmdArgs = fullArgs.Trim().Split(' ');
+
+            Program.csc.CallChatCommand(cmdArgs[0].ToLower(), (ZoneClient) client, client.Character.Identity, cmdArgs);
         }
 
         #endregion

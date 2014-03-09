@@ -28,43 +28,61 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Network;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class CharacterActionHandler : IHandleMessage<CharacterActionMessage>
+    public class CharInPlayMessageHandler : BaseMessageHandler<CharInPlayMessage, CharInPlayMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public CharInPlayMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
-        /// </param>
         /// <param name="message">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="client">
+        /// </param>
+        protected override void Read(CharInPlayMessage message, IZoneClient client)
         {
-            var client = (ZoneClient)sender;
-            var characterActionMessage = (CharacterActionMessage)message.Body;
+            // client got all the needed data and
+            // wants to enter the world. After we
+            // reply to this, the character will really be in game
+            var announce = new CharInPlayMessage { Identity = client.Character.Identity, Unknown = 0x00 };
+            client.Character.Playfield.Announce(announce);
 
-            CharacterAction.Read(characterActionMessage, client);
-            if (client != null)
+            // Player is in game now, starting is over, set stats normally now
+            client.Character.Starting = false;
+
+            // Needed fix, so gmlevel will be loaded
+            client.Character.Stats[StatIds.gmlevel].Value = client.Character.Stats[StatIds.gmlevel].Value;
+
+            // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
+            // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
+            // walk the same waypoints.
+            // TODO: Fix it
+            /*foreach (MobType mob in NPCPool.Mobs)
             {
-                if (client.Character != null)
+                // TODO: Make cache - use pf indexing somehow.
+                if (mob.pf == client.Character.pf)
                 {
-                    client.Character.SendChangedStats();
+                    mob.SendToClient(client);
                 }
-            }
+            }*/
         }
 
         #endregion

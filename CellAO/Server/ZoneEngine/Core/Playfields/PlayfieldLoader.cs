@@ -93,7 +93,7 @@ namespace ZoneEngine.Core.Playfields
                             && (!sd.Events.Any(x => x.EventType == EventType.OnCollide))
                             && sd.Events.Any(x => x.EventType == EventType.OnUse))
                         {
-                            Events ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
+                            Event ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
                             ev.EventType = EventType.OnCollide;
                             sd.Events.Add(ev);
                         }

@@ -44,7 +44,7 @@ namespace CellAO.Core.Components
     /// <typeparam name="TU">
     /// </typeparam>
     public class BaseMessageHandler<T, TU> : AbstractMessageHandler<T>
-        where T : MessageBody, new() where TU : IMessageHandler<T>, new()
+        where T : MessageBody, new() where TU : new()
     {
         /// <summary>
         /// </summary>
@@ -98,6 +98,8 @@ namespace CellAO.Core.Components
 
         #region Inbound
 
+        protected bool UpdateCharacterStatsOnReceive = false;
+
         /// <summary>
         /// </summary>
         /// <param name="client">
@@ -108,17 +110,21 @@ namespace CellAO.Core.Components
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void Receive(IZoneClient client, Message message, bool updateCharacterStats = false)
+        //public override void Receive(IZoneClient client, Message message)
+        public override void Receive(MessageWrapper<T> messageWrapper)
         {
+            IZoneClient client = messageWrapper.Client;
+            MessageBody messageBody = (messageWrapper.Message != null) ? messageWrapper.Message.Body : messageWrapper.MessageBody;
+
             if ((this.Direction == MessageHandlerDirection.All)
                 || (this.Direction == MessageHandlerDirection.InboundOnly))
             {
-                T body = message.Body as T;
+                T body = messageBody as T;
                 if (body != null)
                 {
                     this.Read(body, client);
 
-                    if (updateCharacterStats)
+                    if (this.UpdateCharacterStatsOnReceive)
                     {
                         if (client != null)
                         {
@@ -132,7 +138,7 @@ namespace CellAO.Core.Components
                 else
                 {
                     throw new NotImplementedException(
-                        "Don't throw other messagetypes on me (" + message.Body.GetType() + " instead of " + typeof(T)
+                        "Don't throw other messagetypes on me (" + messageBody.GetType() + " instead of " + typeof(T)
                         + ")");
                 }
             }
@@ -154,6 +160,7 @@ namespace CellAO.Core.Components
         {
             throw new NotImplementedException();
         }
+
 
         #endregion
 
@@ -196,21 +203,11 @@ namespace CellAO.Core.Components
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void SendToPlayfield(
+        protected void SendToPlayfield(
             ICharacter character, 
-            MessageDataFiller messageDataFiller, 
-            bool announceToPlayfield = false)
+            MessageDataFiller messageDataFiller)
         {
-            if ((this.Direction == MessageHandlerDirection.All)
-                || (this.Direction == MessageHandlerDirection.OutboundOnly))
-            {
-                T mb = this.Create(character, messageDataFiller);
-                character.Send(mb, announceToPlayfield);
-            }
-            else
-            {
-                throw new NotImplementedException("This message handler cannot send outboud messages");
-            }
+            this.Send(character, messageDataFiller, true);
         }
 
         /// <summary>

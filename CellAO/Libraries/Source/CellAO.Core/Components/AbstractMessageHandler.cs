@@ -39,9 +39,10 @@ namespace CellAO.Core.Components
     /// </summary>
     /// <typeparam name="T">
     /// </typeparam>
-    public abstract class AbstractMessageHandler<T> : IMessageHandler<T>
+    public abstract class AbstractMessageHandler<T> // ; IMessageHandler
         where T : MessageBody, new()
     {
+
         /// <summary>
         /// </summary>
         /// <param name="message">
@@ -74,7 +75,8 @@ namespace CellAO.Core.Components
         /// </param>
         /// <param name="updateCharacterStats">
         /// </param>
-        public abstract void Receive(IZoneClient client, Message message, bool updateCharacterStats = false);
+        // public abstract void Receive(IZoneClient client, Message message);
+        public abstract void Receive(MessageWrapper<T> messageWrapper);
 
         /// <summary>
         /// </summary>

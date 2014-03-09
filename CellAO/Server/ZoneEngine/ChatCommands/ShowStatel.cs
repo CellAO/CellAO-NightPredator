@@ -129,7 +129,7 @@ namespace ZoneEngine.ChatCommands
                             o.StatelIdentity.Type.ToString() + " " + ((int)o.StatelIdentity.Type).ToString("X8") + ":"
                             + o.StatelIdentity.Instance.ToString("X8")));
                     replies.Add(ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o.TemplateId));
-                    foreach (Events se in o.Events)
+                    foreach (Event se in o.Events)
                     {
                         replies.Add(
                             ChatTextMessageHandler.Default.Create(
@@ -137,7 +137,7 @@ namespace ZoneEngine.ChatCommands
                                 "Event: " + se.EventType.ToString() + " # of Functions: "
                                 + se.Functions.Count.ToString()));
 
-                        foreach (Functions sf in se.Functions)
+                        foreach (Function sf in se.Functions)
                         {
                             string Fargs = string.Empty;
                             foreach (MessagePackObject obj in sf.Arguments.Values)
@@ -158,7 +158,7 @@ namespace ZoneEngine.ChatCommands
                                     + sf.Arguments.Values.Count.ToString()));
                             replies.Add(ChatTextMessageHandler.Default.Create(character, "    Args: " + Fargs));
 
-                            foreach (Requirements sfr in sf.Requirements)
+                            foreach (Requirement sfr in sf.Requirements)
                             {
                                 string req;
                                 req = "Attr: " + sfr.Statnumber.ToString() + " Value: " + sfr.Value.ToString()

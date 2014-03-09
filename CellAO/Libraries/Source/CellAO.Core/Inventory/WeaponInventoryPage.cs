@@ -75,12 +75,12 @@ namespace CellAO.Core.Inventory
                 IItem item = this[itemSlot];
                 if (item != null)
                 {
-                    foreach (Events events in item.ItemEvents.Where(x => x.EventType == EventType.OnWear))
+                    foreach (Event events in item.ItemEvents.Where(x => x.EventType == EventType.OnWear))
                     {
-                        foreach (Functions functions in events.Functions)
+                        foreach (Function functions in events.Functions)
                         {
                             bool result = true;
-                            foreach (Requirements requirements in functions.Requirements)
+                            foreach (Requirement requirements in functions.Requirements)
                             {
                                 result &= requirements.CheckRequirement(character);
                                 if (!result)
@@ -91,7 +91,7 @@ namespace CellAO.Core.Inventory
 
                             if (result)
                             {
-                                Functions copy = functions.Copy();
+                                Function copy = functions.Copy();
                                 MessagePackObject mpo = new MessagePackObject();
                                 mpo = itemSlot;
                                 copy.Arguments.Values.Add(mpo);
