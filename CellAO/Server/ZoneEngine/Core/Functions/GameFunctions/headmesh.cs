@@ -35,6 +35,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
     using MsgPack;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -129,7 +130,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                 }
             }
 
-            AppearanceUpdate.AnnounceAppearanceUpdate((Character)Self);
+            AppearanceUpdateMessageHandler.Default.Send((Character)Self);
 
             return true;
         }

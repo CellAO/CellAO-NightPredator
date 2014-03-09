@@ -37,6 +37,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -67,7 +68,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             // No help needed, no arguments can be given
-            character.Playfield.Publish(ChatText.CreateIM(character, "Lists all playfields and their id's"));
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Lists all playfields and their id's"));
         }
 
         /// <summary>
@@ -84,7 +85,7 @@ namespace ZoneEngine.ChatCommands
             var messList = new List<MessageBody>();
             foreach (KeyValuePair<Identity, string> pf in list)
             {
-                messList.Add(ChatText.Create(character, pf.Key.Instance.ToString().PadLeft(8) + ": " + pf.Value));
+                messList.Add(ChatTextMessageHandler.Default.Create(character, pf.Key.Instance.ToString().PadLeft(8) + ": " + pf.Value));
             }
 
             character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));

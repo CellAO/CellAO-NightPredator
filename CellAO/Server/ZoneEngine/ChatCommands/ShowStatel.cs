@@ -44,6 +44,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -73,7 +74,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(ChatText.CreateIM(character, "Usage: /command showstatel"));
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Usage: /command showstatel"));
             return;
         }
 
@@ -89,12 +90,12 @@ namespace ZoneEngine.ChatCommands
         {
             List<MessageBody> replies = new List<MessageBody>();
             string reply = "Looking up for statel in playfield " + character.Playfield.Identity.Instance;
-            replies.Add(ChatText.Create(character, reply));
+            replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             StatelData o = null;
             if (!PlayfieldLoader.PFData.ContainsKey(character.Playfield.Identity.Instance))
             {
                 reply = "Could not find data for playfield " + character.Playfield.Identity.Instance;
-                replies.Add(ChatText.Create(character, reply));
+                replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             }
             else
             {
@@ -118,20 +119,20 @@ namespace ZoneEngine.ChatCommands
                 if (o == null)
                 {
                     replies.Add(
-                        ChatText.Create(character, "No statel on this playfield... Very odd, where exactly are you???"));
+                        ChatTextMessageHandler.Default.Create(character, "No statel on this playfield... Very odd, where exactly are you???"));
                 }
                 else
                 {
                     replies.Add(
-                        ChatText.Create(
+                        ChatTextMessageHandler.Default.Create(
                             character, 
                             o.StatelIdentity.Type.ToString() + " " + ((int)o.StatelIdentity.Type).ToString("X8") + ":"
                             + o.StatelIdentity.Instance.ToString("X8")));
-                    replies.Add(ChatText.Create(character, "Item Template Id: " + o.TemplateId));
+                    replies.Add(ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o.TemplateId));
                     foreach (Events se in o.Events)
                     {
                         replies.Add(
-                            ChatText.Create(
+                            ChatTextMessageHandler.Default.Create(
                                 character, 
                                 "Event: " + se.EventType.ToString() + " # of Functions: "
                                 + se.Functions.Count.ToString()));
@@ -150,19 +151,19 @@ namespace ZoneEngine.ChatCommands
                             }
 
                             replies.Add(
-                                ChatText.Create(
+                                ChatTextMessageHandler.Default.Create(
                                     character, 
                                     "    Fn: " + ((FunctionType)sf.FunctionType).ToString() + "("
                                     + sf.FunctionType.ToString() + "), # of Args: "
                                     + sf.Arguments.Values.Count.ToString()));
-                            replies.Add(ChatText.Create(character, "    Args: " + Fargs));
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, "    Args: " + Fargs));
 
                             foreach (Requirements sfr in sf.Requirements)
                             {
                                 string req;
                                 req = "Attr: " + sfr.Statnumber.ToString() + " Value: " + sfr.Value.ToString()
                                       + " Target: " + sfr.Target.ToString() + " Op: " + sfr.Operator.ToString();
-                                replies.Add(ChatText.Create(character, req));
+                                replies.Add(ChatTextMessageHandler.Default.Create(character, req));
                             }
                         }
                     }

@@ -36,6 +36,7 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -74,7 +75,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(character, "Syntax: /set <stat name|stat id> <new stat value>"));
+                ChatTextMessageHandler.Default.CreateIM(character, "Syntax: /set <stat name|stat id> <new stat value>"));
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace ZoneEngine.ChatCommands
 
             if (statId == 1234567890)
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat name " + args[1]));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unknown Stat name " + args[1]));
                 return;
             }
 
@@ -143,7 +144,7 @@ namespace ZoneEngine.ChatCommands
             }
             catch
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Unknown StatId " + statId));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unknown StatId " + statId));
                 return;
             }
 
@@ -157,7 +158,7 @@ namespace ZoneEngine.ChatCommands
                               + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
             response += " Old: " + statOldValue;
             response += " New: " + statNewValue;
-            character.Playfield.Publish(ChatText.CreateIM(character, response));
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, response));
         }
 
         /// <summary>

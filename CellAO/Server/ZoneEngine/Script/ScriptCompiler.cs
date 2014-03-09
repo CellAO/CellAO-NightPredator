@@ -28,6 +28,8 @@
 
 namespace ZoneEngine.Script
 {
+    using ZoneEngine.Core.MessageHandlers;
+
     #region Usings ...
 
     #region Usings ...
@@ -341,7 +343,7 @@ namespace ZoneEngine.Script
                                 && (aoc.GMLevelNeeded() > 0))
                             {
                                 client.Character.Playfield.Publish(
-                                    ChatText.CreateIM(
+                                    ChatTextMessageHandler.Default.CreateIM(
                                         client.Character, 
                                         "You are not authorized to use this command!. This incident will be recorded."));
 
@@ -374,7 +376,7 @@ namespace ZoneEngine.Script
             }
             else
             {
-                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "Available Commands:"));
+                client.Character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(client.Character, "Available Commands:"));
                 string[] scriptNames = this.chatCommands.Keys.ToArray();
                 for (int i = 0; i < scriptNames.Length; i++)
                 {
@@ -396,7 +398,7 @@ namespace ZoneEngine.Script
                         if (client.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
                         {
                             client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
+                                ChatTextMessageHandler.Default.CreateIM(
                                     client.Character, 
                                     scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal))));
                         }

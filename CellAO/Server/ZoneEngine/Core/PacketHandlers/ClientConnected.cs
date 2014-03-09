@@ -92,7 +92,7 @@ namespace ZoneEngine.Core.PacketHandlers
             ChatServerInfoMessageHandler.Default.Send(client.Character);
 
             /* send playfield info to client */
-            PlayfieldAnarchyF.Send(client);
+            PlayfieldAnarchyFMessageHandler.Default.Send(client.Character);
 
             var sendSCFUs = new IMSendPlayerSCFUs { toClient = client };
             ((Playfield)client.Playfield).SendSCFUsToClient(sendSCFUs);
@@ -187,11 +187,11 @@ namespace ZoneEngine.Core.PacketHandlers
             // client.Character.ProcessTimers(DateTime.Now + TimeSpan.FromMilliseconds(200));
             client.Character.CalculateSkills();
 
-            AppearanceUpdate.AnnounceAppearanceUpdate((Character)client.Character);
+            AppearanceUpdateMessageHandler.Default.Send(client.Character);
 
             // done, so we call a hook.
             // Call all OnConnect script Methods
-            Program.csc.CallMethod("OnConnect", (Character)client.Character);
+            Program.csc.CallMethod("OnConnect", client.Character);
         }
 
         #endregion

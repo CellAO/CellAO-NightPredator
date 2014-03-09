@@ -82,7 +82,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(
+                ChatTextMessageHandler.Default.CreateIM(
                     character,
                     "Teleports you\r\n" + "Usage: /tp [float] [float] [int] (X, Z, Playfield)\r\n"
                     + "Or:    /tp [float] [float] y [float] [int] (X, Z, Y, Playfield)"));

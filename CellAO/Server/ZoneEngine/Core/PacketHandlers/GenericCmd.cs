@@ -39,6 +39,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -86,7 +87,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                 "No item found at " + message.Target.Type + "/" + message.Target.Instance);
                         }
 
-                        TemplateAction.Send(client, item, (int)message.Target.Type, message.Target.Instance);
+                        TemplateActionMessageHandler.Default.Send(client.Character, item, (int)message.Target.Type, message.Target.Instance);
 
                         if (ItemLoader.ItemList[item.HighID].IsConsumable())
                         {

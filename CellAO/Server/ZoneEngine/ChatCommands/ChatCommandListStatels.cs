@@ -37,6 +37,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -68,7 +69,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             // No help needed, no arguments can be given
-            character.Playfield.Publish(ChatText.CreateIM(character, "Lists all extracted statels in this playfield"));
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Lists all extracted statels in this playfield"));
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace ZoneEngine.ChatCommands
             foreach (StatelData s in sd)
             {
                 messList.Add(
-                    ChatText.Create(
+                    ChatTextMessageHandler.Default.Create(
                         character, 
                         ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
             }

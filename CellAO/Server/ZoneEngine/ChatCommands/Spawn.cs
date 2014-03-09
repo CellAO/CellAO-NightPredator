@@ -39,6 +39,7 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 using CellAO.Database.Dao;
@@ -88,7 +89,7 @@ using System.Text;
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(
+                ChatTextMessageHandler.Default.CreateIM(
                     character,
 @"Usage: /command Spawn hash level
 For a list of available templates: /command spawn list [filter1,filter2...]
@@ -117,7 +118,7 @@ Filter will be applied to mob name"));
                 }
 
                 character.Playfield.Publish(
-                ChatText.CreateIM(
+                ChatTextMessageHandler.Default.CreateIM(
                     character,
                     text.ToString()));
 

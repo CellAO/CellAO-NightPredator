@@ -24,12 +24,14 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
@@ -38,56 +40,64 @@ namespace ZoneEngine.Core.Packets
 
     /// <summary>
     /// </summary>
-    public static class ChatText
+    public class DespawnMessageHandler : BaseMessageHandler<DespawnMessage, DespawnMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public DespawnMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="text">
+        /// <param name="identity">
         /// </param>
-        /// <param name="unknown1">
-        /// </param>
-        /// <param name="unknown2">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static ChatTextMessage Create(IDynel dynel, string text, short unknown1 = 0, int unknown2 = 0)
+        public void Send(ICharacter character, Identity identity)
         {
-            return new ChatTextMessage()
-                   {
-                       Identity = dynel.Identity, 
-                       Text = text, 
-                       Unknown1 = unknown1, 
-                       Unknown2 = unknown2
-                   };
+            this.Send(character, Filler(identity), false);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="text">
-        /// </param>
-        /// <param name="unknown1">
-        /// </param>
-        /// <param name="unknown2">
+        /// <param name="identity">
         /// </param>
         /// <returns>
         /// </returns>
-        public static IMSendAOtomationMessageBodyToClient CreateIM(
-            IDynel dynel, 
-            string text, 
-            short unknown1 = 0, 
-            int unknown2 = 0)
+        private static MessageDataFiller Filler(Identity identity)
         {
-            return new IMSendAOtomationMessageBodyToClient()
-                   {
-                       Body = Create(dynel, text, unknown1, unknown2),
-                       client = dynel.Client
-                   };
+            return x =>
+            {
+                x.Identity = identity;
+                x.Unknown = 1;
+            };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="targetIdentity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IMSendAOtomationMessageToPlayfieldOthers CreateIM(Identity targetIdentity)
+        {
+            DespawnMessage message = this.Create(null, Filler(targetIdentity));
+            return new IMSendAOtomationMessageToPlayfieldOthers() { Body = message, Identity = targetIdentity };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public DespawnMessage Create(Identity identity)
+        {
+            return this.Create(null, Filler(identity));
         }
 
         #endregion

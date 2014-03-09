@@ -549,7 +549,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         client.Character.Stats[StatIds.visualflags].Value = args2;
 
                         // client.SendChatText("Setting Visual Flag to "+unknown3.ToString());
-                        AppearanceUpdate.AnnounceAppearanceUpdate((Character)client.Character);
+                        AppearanceUpdateMessageHandler.Default.Send(client.Character);
                         break;
                     }
 

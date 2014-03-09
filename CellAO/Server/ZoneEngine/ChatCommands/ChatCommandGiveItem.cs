@@ -71,7 +71,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(
+                ChatTextMessageHandler.Default.CreateIM(
                     character, 
                     "Usage: Select target and /command giveitem id ql\r\nIt doesn't matter if high or low id is given"));
             return;
@@ -105,13 +105,13 @@ namespace ZoneEngine.ChatCommands
                 int ql;
                 if (!int.TryParse(args[1], out lowId))
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "LowId is no number"));
+                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "LowId is no number"));
                     return;
                 }
 
                 if (!int.TryParse(args[2], out ql))
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "QualityLevel is no number"));
+                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "QualityLevel is no number"));
                     return;
                 }
 
@@ -129,7 +129,7 @@ namespace ZoneEngine.ChatCommands
                 if (err != InventoryError.OK)
                 {
                     character.Playfield.Publish(
-                        ChatText.CreateIM(character, "Could not add to inventory. (" + err + ")"));
+                        ChatTextMessageHandler.Default.CreateIM(character, "Could not add to inventory. (" + err + ")"));
                 }
 
                 if (targetEntity as Character != null)
@@ -139,7 +139,7 @@ namespace ZoneEngine.ChatCommands
             }
             else
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Target has no Inventory."));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Target has no Inventory."));
             }
         }
 

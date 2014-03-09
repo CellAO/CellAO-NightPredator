@@ -115,7 +115,7 @@ namespace ZoneEngine.Core.PacketHandlers
                         }
 
                         client.Character.Playfield.Publish(
-                            ChatText.CreateIM(
+                            ChatTextMessageHandler.Default.CreateIM(
                                 client.Character, 
                                 SuccessMessage(
                                     sourceItem, 
@@ -129,10 +129,10 @@ namespace ZoneEngine.Core.PacketHandlers
             else
             {
                 client.Character.Playfield.Publish(
-                    ChatText.CreateIM(
+                    ChatTextMessageHandler.Default.CreateIM(
                         client.Character, 
                         "It is not possible to assemble those two items. Maybe the order was wrong?"));
-                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "No combination found!"));
+                client.Character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(client.Character, "No combination found!"));
             }
         }
 

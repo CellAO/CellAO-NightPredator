@@ -31,8 +31,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
 
-    using Dapper;
-
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -50,11 +48,29 @@ namespace ZoneEngine.Core.MessageHandlers
 
         #region Outbound
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="categoryId">
+        /// </param>
+        /// <param name="messageId">
+        /// </param>
         public void Send(ICharacter character, int categoryId, int messageId)
         {
             this.Send(character, Filler(character, categoryId, messageId));
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="categoryId">
+        /// </param>
+        /// <param name="messageId">
+        /// </param>
+        /// <returns>
+        /// </returns>
         private static MessageDataFiller Filler(ICharacter character, int categoryId, int messageId)
         {
             return x =>

@@ -56,6 +56,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
         #region Outbound
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
         public void Send(ICharacter character)
         {
             this.Send(character, character);
@@ -793,8 +797,6 @@ namespace ZoneEngine.Core.MessageHandlers
                 /* BeltSlots */
                 AddStat88(client, statGroup3, 45);
 
-                
-
                 /* Byte stat number
                Int16 (short) stat value */
                 var statGroup4 = new List<GameTuple<byte, short>>();
@@ -846,8 +848,6 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 /* ChangeSideCount */
                 AddStat816(client, statGroup4, 237);
-
-                
 
                 /* Attach stat groups to FullCharacterMessage */
 

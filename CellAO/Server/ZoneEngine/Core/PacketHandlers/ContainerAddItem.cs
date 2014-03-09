@@ -40,6 +40,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -274,7 +275,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             if (!noAppearanceUpdate)
             {
-                AppearanceUpdate.AnnounceAppearanceUpdate(cli.Character);
+                AppearanceUpdateMessageHandler.Default.Send(cli.Character);
             }
         }
 

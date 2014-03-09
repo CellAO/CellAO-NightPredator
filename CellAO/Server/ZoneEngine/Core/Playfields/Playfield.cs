@@ -61,6 +61,7 @@ namespace CellAO.Core.Playfields
     using ZoneEngine.Core;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -264,7 +265,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceAppearanceUpdate(ICharacter character)
         {
-            AppearanceUpdate.AnnounceAppearanceUpdate(character);
+            AppearanceUpdateMessageHandler.Default.Send(character);
         }
 
         /// <summary>
@@ -296,7 +297,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Despawn(Identity identity)
         {
-            this.Announce(ZoneEngine.Core.Packets.Despawn.Create(identity));
+            this.Announce(DespawnMessageHandler.Default.Create(identity));
         }
 
         /// <summary>
@@ -646,7 +647,7 @@ namespace CellAO.Core.Playfields
 
             // Send packet, disconnect, and other playfield waits for connect
 
-            DespawnMessage despawnMessage = ZoneEngine.Core.Packets.Despawn.Create(dynel.Identity);
+            DespawnMessage despawnMessage = DespawnMessageHandler.Default.Create(dynel.Identity);
             this.AnnounceOthers(despawnMessage, dynel.Identity);
             dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);

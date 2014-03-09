@@ -30,20 +30,20 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Items;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
+    public class ChatTextMessageHandler : BaseMessageHandler<ChatTextMessage, ChatTextMessageHandler>
     {
         /// <summary>
         /// </summary>
-        public AddTemplateMessageHandler()
+        public ChatTextMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
         }
@@ -54,32 +54,83 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="text">
         /// </param>
-        public void Send(ICharacter character, Item item)
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        public void Send(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
         {
-            this.Send(character, AddItem(character.Identity, item), false);
+            this.Send(character, Filler(character, text, unknown1, unknown2));
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="text">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(Identity identity, Item item)
+        private static MessageDataFiller Filler(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
         {
             return x =>
             {
-                x.Unknown = 0;
-                x.Identity = identity;
-                x.HighId = item.HighID;
-                x.LowId = item.LowID;
-                x.Quality = item.Quality;
-                x.Count = item.MultipleCount;
+                x.Identity = character.Identity;
+                x.Text = text;
+                x.Unknown1 = unknown1;
+                x.Unknown2 = unknown2;
             };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public ChatTextMessage Create(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
+        {
+            return this.Create(character, Filler(character, text, unknown1, unknown2));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IMSendAOtomationMessageBodyToClient CreateIM(
+            ICharacter character, 
+            string text, 
+            short unknown1 = 0, 
+            int unknown2 = 0)
+        {
+            return new IMSendAOtomationMessageBodyToClient()
+                   {
+                       Body =
+                           this.Create(
+                               character, 
+                               Filler(character, text, unknown1, unknown2)), 
+                       client = character.Client
+                   };
         }
 
         #endregion

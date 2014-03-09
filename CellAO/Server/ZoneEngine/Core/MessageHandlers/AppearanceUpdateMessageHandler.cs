@@ -24,13 +24,14 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
     using System.Collections.Generic;
     using System.Linq;
 
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Textures;
     using CellAO.Enums;
@@ -42,39 +43,39 @@ namespace ZoneEngine.Core.Packets
 
     /// <summary>
     /// </summary>
-    public static class AppearanceUpdate
+    public class AppearanceUpdateMessageHandler :
+        BaseMessageHandler<AppearanceUpdateMessage, AppearanceUpdateMessageHandler>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
-        /// <param name="character">
-        /// </param>
-        public static void AnnounceAppearanceUpdate(ICharacter character)
+        public AppearanceUpdateMessageHandler()
         {
-            AppearanceUpdateMessage message = Create(character);
-
-            character.Playfield.Announce(message);
+            this.Direction = MessageHandlerDirection.OutboundOnly;
         }
 
+        #region Outbound
+
         /// <summary>
         /// </summary>
-        /// <param name="characterToSend">
+        /// <param name="iCharacter">
         /// </param>
         /// <returns>
         /// </returns>
-        public static AppearanceUpdateMessage Create(ICharacter characterToSend)
+        private static MessageDataFiller Filler(ICharacter iCharacter)
         {
-            var character = (Character)characterToSend;
-            var message = new AppearanceUpdateMessage { Identity = character.Identity, Unknown = 0x00, };
+            return message =>
+            {
+                Character character = (Character)iCharacter;
+                message.Identity = character.Identity;
+                message.Unknown = 0;
 
-            List<AOMeshs> meshs;
-            int counter;
+                List<AOMeshs> meshs;
+                int counter;
 
-            bool socialonly;
-            bool showsocial;
+                bool socialonly;
+                bool showsocial;
 
-            /*
+                /*
             bool showhelmet;
             bool LeftPadVisible;
             bool RightPadVisible;
@@ -92,12 +93,12 @@ namespace ZoneEngine.Core.Packets
             int BackMeshValue;
             int ShoulderMeshRightValue;
              */
-            // int ShoulderMeshRightValue;
-            int VisualFlags;
-            int PlayField;
-            int bodyMesh = 0;
+                // int ShoulderMeshRightValue;
+                int VisualFlags;
+                int PlayField;
+                int bodyMesh = 0;
 
-            /*
+                /*
             int OverrideTextureHead;
             int OverrideTextureWeaponRight;
             int OverrideTextureWeaponLeft;
@@ -106,19 +107,19 @@ namespace ZoneEngine.Core.Packets
             int OverrideTextureBack;
             int OverrideTextureAttractor;
             */
-            var textures = new List<AOTextures>();
+                var textures = new List<AOTextures>();
 
-            var socialTab = new Dictionary<int, int>();
+                var socialTab = new Dictionary<int, int>();
 
-            lock (character)
-            {
-                VisualFlags = character.Stats[StatIds.visualflags].Value;
+                lock (character)
+                {
+                    VisualFlags = character.Stats[StatIds.visualflags].Value;
 
-                socialonly = (VisualFlags & 0x40) > 0;
-                showsocial = (VisualFlags & 0x20) > 0;
-                bodyMesh = character.Stats[StatIds.mesh].Value;
+                    socialonly = (VisualFlags & 0x40) > 0;
+                    showsocial = (VisualFlags & 0x20) > 0;
+                    bodyMesh = character.Stats[StatIds.mesh].Value;
 
-                /*
+                    /*
                 showhelmet = ((character.Stats.VisualFlags.Value & 0x4) > 0);
                 LeftPadVisible = ((character.Stats.VisualFlags.Value & 0x1) > 0);
                 RightPadVisible = ((character.Stats.VisualFlags.Value & 0x2) > 0);
@@ -137,8 +138,8 @@ namespace ZoneEngine.Core.Packets
                 BackMeshValue = character.Stats.BackMesh.Value;
                 ShoulderMeshRightValue = character.Stats.ShoulderMeshRight.Value;
                  */
-                // ShoulderMeshLeftValue = character.Stats.ShoulderMeshLeft.Value;
-                /*
+                    // ShoulderMeshLeftValue = character.Stats.ShoulderMeshLeft.Value;
+                    /*
                 OverrideTextureHead = character.Stats.OverrideTextureHead.Value;
                 OverrideTextureWeaponRight = character.Stats.OverrideTextureWeaponRight.Value;
                 OverrideTextureWeaponLeft = character.Stats.OverrideTextureWeaponLeft.Value;
@@ -147,72 +148,82 @@ namespace ZoneEngine.Core.Packets
                 OverrideTextureBack = character.Stats.OverrideTextureBack.Value;
                 OverrideTextureAttractor = character.Stats.OverrideTextureAttractor.Value;
                 */
-                PlayField = character.Playfield.Identity.Instance;
+                    PlayField = character.Playfield.Identity.Instance;
 
-                foreach (int num in character.SocialTab.Keys)
-                {
-                    socialTab.Add(num, character.SocialTab[num]);
-                }
-
-                foreach (AOTextures texture in character.Textures)
-                {
-                    textures.Add(new AOTextures(texture.place, texture.Texture));
-                }
-
-                meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
-            }
-
-            var texturesToSend = new List<Texture>();
-
-            var aotemp = new AOTextures(0, 0);
-            for (counter = 0; counter < 5; counter++)
-            {
-                aotemp.Texture = 0;
-                aotemp.place = counter;
-                int c2;
-                for (c2 = 0; c2 < textures.Count; c2++)
-                {
-                    if (textures[c2].place == counter)
+                    foreach (int num in character.SocialTab.Keys)
                     {
-                        aotemp.Texture = textures[c2].Texture;
-                        break;
+                        socialTab.Add(num, character.SocialTab[num]);
                     }
+
+                    foreach (AOTextures texture in character.Textures)
+                    {
+                        textures.Add(new AOTextures(texture.place, texture.Texture));
+
+                        // REFACT why recreating a AOTexture ???
+                    }
+
+                    meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
                 }
 
-                if (showsocial)
+                var texturesToSend = new List<Texture>();
+
+                var aotemp = new AOTextures(0, 0);
+                for (counter = 0; counter < 5; counter++)
                 {
-                    if (socialonly)
+                    aotemp.Texture = 0;
+                    aotemp.place = counter;
+                    int c2;
+                    for (c2 = 0; c2 < textures.Count; c2++)
                     {
-                        aotemp.Texture = socialTab[counter];
+                        if (textures[c2].place == counter)
+                        {
+                            aotemp.Texture = textures[c2].Texture;
+                            break;
+                        }
                     }
-                    else
+
+                    if (showsocial)
                     {
-                        if (socialTab[counter] != 0)
+                        if (socialonly)
                         {
                             aotemp.Texture = socialTab[counter];
                         }
+                        else
+                        {
+                            if (socialTab[counter] != 0)
+                            {
+                                aotemp.Texture = socialTab[counter];
+                            }
+                        }
                     }
+
+                    texturesToSend.Add(new Texture { Place = aotemp.place, Id = aotemp.Texture, Unknown = 0 });
                 }
 
-                texturesToSend.Add(new Texture { Place = aotemp.place, Id = aotemp.Texture, Unknown = 0 });
-            }
+                message.Textures = texturesToSend.ToArray();
 
-            message.Textures = texturesToSend.ToArray();
+                message.Meshes =
+                    meshs.Select(
+                        mesh =>
+                            new Mesh
+                            {
+                                Position = (byte)mesh.Position, 
+                                Id = (uint)mesh.Mesh, 
+                                OverrideTextureId = mesh.OverrideTexture, 
+                                Layer = (byte)mesh.Layer
+                            }).ToArray();
+                message.VisualFlags = (short)VisualFlags;
+                message.Unknown1 = (byte)bodyMesh;
+            };
+        }
 
-            message.Meshes =
-                meshs.Select(
-                    mesh =>
-                        new Mesh
-                        {
-                            Position = (byte)mesh.Position, 
-                            Id = (uint)mesh.Mesh, 
-                            OverrideTextureId = mesh.OverrideTexture, 
-                            Layer = (byte)mesh.Layer
-                        }).ToArray();
-            message.VisualFlags = (short)VisualFlags;
-            message.Unknown1 = (byte)bodyMesh;
-
-            return message;
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        public void Send(ICharacter character)
+        {
+            this.Send(character, Filler(character), true);
         }
 
         #endregion

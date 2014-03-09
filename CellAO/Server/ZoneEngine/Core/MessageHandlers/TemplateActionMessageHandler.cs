@@ -24,12 +24,13 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
     using CellAO.Core.Items;
-    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -38,13 +39,20 @@ namespace ZoneEngine.Core.Packets
 
     /// <summary>
     /// </summary>
-    public static class TemplateAction
+    public class TemplateActionMessageHandler : BaseMessageHandler<TemplateActionMessage, TemplateActionMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public TemplateActionMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="item">
         /// </param>
@@ -54,28 +62,23 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <returns>
         /// </returns>
-        public static TemplateActionMessage Create(IZoneClient client, Item item, int container, int placement)
+        private static MessageDataFiller Filler(ICharacter character, Item item, int container, int placement)
         {
-            return new TemplateActionMessage()
-                   {
-                       Identity = client.Character.Identity, 
-                       ItemHighId = item.HighID, 
-                       ItemLowId = item.LowID, 
-                       Quality = item.Quality, 
-                       Placement =
-                           new Identity()
-                           {
-                               Type = (IdentityType)container, 
-                               Instance = placement
-                           }, 
-                       Unknown1 = 1, 
-                       Unknown2 = 3
-                   };
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.ItemHighId = item.HighID;
+                x.ItemLowId = item.LowID;
+                x.Quality = item.Quality;
+                x.Placement = new Identity() { Type = (IdentityType)container, Instance = placement };
+                x.Unknown1 = 1;
+                x.Unknown2 = 3;
+            };
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
+        /// <param name="character">
         /// </param>
         /// <param name="item">
         /// </param>
@@ -83,9 +86,9 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="placement">
         /// </param>
-        public static void Send(IZoneClient client, Item item, int container, int placement)
+        public void Send(ICharacter character, Item item, int container, int placement)
         {
-            client.Character.Send(Create(client, item, container, placement));
+            this.Send(character, Filler(character, item, container, placement));
         }
 
         #endregion

@@ -37,6 +37,7 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
 
     #endregion
@@ -72,7 +73,7 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(ChatText.CreateIM(character, "Syntax: /get <stat name|stat id>"));
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Syntax: /get <stat name|stat id>"));
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace ZoneEngine.ChatCommands
 
             if (target.Type != IdentityType.CanbeAffected)
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Target must be player/monster/NPC"));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Target must be player/monster/NPC"));
                 return;
             }
 
@@ -121,7 +122,7 @@ namespace ZoneEngine.ChatCommands
 
                 if (statId == 1234567890)
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat name " + args[1]));
+                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unknown Stat name " + args[1]));
                     return;
                 }
 
@@ -140,7 +141,7 @@ namespace ZoneEngine.ChatCommands
                 }
                 catch (StatDoesNotExistException)
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat Id " + statId));
+                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unknown Stat Id " + statId));
                     return;
                 }
 
@@ -155,12 +156,12 @@ namespace ZoneEngine.ChatCommands
                 }
 
                 response += "\r\nTrickle: " + trickle + " Modificator: " + mod + " Percentage: " + perc;
-                character.Playfield.Publish(ChatText.CreateIM(character, response));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, response));
             }
             else
             {
                 // Shouldnt be happen again (fallback to self)
-                character.Playfield.Publish(ChatText.CreateIM(character, "Unable to find target."));
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unable to find target."));
             }
         }
 
