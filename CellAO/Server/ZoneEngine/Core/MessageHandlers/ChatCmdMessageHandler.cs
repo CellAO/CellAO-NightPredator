@@ -34,6 +34,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Script;
+
     #endregion
 
     /// <summary>
@@ -71,7 +73,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             string[] cmdArgs = fullArgs.Trim().Split(' ');
 
-            Program.csc.CallChatCommand(cmdArgs[0].ToLower(), (ZoneClient) client, client.Character.Identity, cmdArgs);
+            ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), client, client.Character.Identity, cmdArgs);
         }
 
         #endregion

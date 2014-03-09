@@ -9,8 +9,8 @@ namespace CellAO.Core.Components
 {
     public class MessageWrapper<T> where T : MessageBody
     {
-        public IZoneClient Client;
-        public Message Message;
-        public T MessageBody;
+        public IZoneClient Client { get; set; }
+        public Message Message { get; set; }
+        public T MessageBody { get; set; }
     }
 }

@@ -44,6 +44,8 @@ namespace ZoneEngine.Core
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
 
+    using MemBus;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -72,7 +74,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private IBus bus;
+        private MemBus.IBus bus;
 
         /// <summary>
         /// </summary>
@@ -80,7 +82,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private IMessageSerializer messageSerializer;
+        private readonly IMessageSerializer messageSerializer;
 
         /// <summary>
         /// </summary>
@@ -110,7 +112,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <param name="bus">
         /// </param>
-        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, IBus bus)
+        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, MemBus.IBus bus)
             : base(server)
         {
             this.server = server;
@@ -448,8 +450,18 @@ namespace ZoneEngine.Core
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
+            
+            // FUUUUUGLY
+            
+            Type wrapperType = typeof(MessageWrapper<>);
+            Type genericWrapperType = wrapperType.MakeGenericType(message.Body.GetType());
 
-            this.bus.Publish(new MessageReceivedEvent(this, message));
+            object wrapped = Activator.CreateInstance(genericWrapperType);
+            wrapped.GetType().GetProperty("Client").SetValue(wrapped, (IZoneClient)this, null);
+            wrapped.GetType().GetProperty("Message").SetValue(wrapped, message, null);
+            wrapped.GetType().GetProperty("MessageBody").SetValue(wrapped, message.Body, null);                
+
+            this.bus.Publish(wrapped);
 
             return true;
         }

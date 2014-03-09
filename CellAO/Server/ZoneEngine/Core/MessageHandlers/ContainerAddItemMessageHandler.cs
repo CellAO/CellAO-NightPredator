@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using System.Linq;
     using System.Threading;
 
+    using CellAO.Core.Actions;
     using CellAO.Core.Components;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
@@ -169,7 +170,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 {
                     if (receivingPage.NeedsItemCheck)
                     {
-                        Action action = this.getAction(sendingPage, itemFrom);
+                        AOAction action = this.getAction(sendingPage, itemFrom);
 
                         if (action.CheckRequirements(client.Character))
                         {
@@ -203,7 +204,7 @@ namespace ZoneEngine.Core.MessageHandlers
                             throw new NullReferenceException("itemFrom can not be null, possible inventory error");
                         }
 
-                        Action action = this.getAction(receivingPage, itemFrom);
+                        AOAction action = this.getAction(receivingPage, itemFrom);
 
                         if (action.CheckRequirements(client.Character))
                         {
@@ -294,9 +295,9 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private Action getAction(IInventoryPage page, IItem item)
+        private AOAction getAction(IInventoryPage page, IItem item)
         {
-            Action action = null;
+            AOAction action = null;
 
             // TODO: Add special check for social page
             if ((page is ArmorInventoryPage) || (page is ImplantInventoryPage))
@@ -304,7 +305,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWear);
                 if (action == null)
                 {
-                    return new Action();
+                    return new AOAction();
                 }
             }
 
@@ -313,20 +314,20 @@ namespace ZoneEngine.Core.MessageHandlers
                 action = item.ItemActions.SingleOrDefault(x => x.ActionType == ActionType.ToWield);
                 if (action == null)
                 {
-                    return new Action();
+                    return new AOAction();
                 }
             }
 
             if (page is PlayerInventoryPage)
             {
                 // No checks needed for unequipping
-                return new Action();
+                return new AOAction();
             }
 
             if (page is SocialArmorInventoryPage)
             {
                 // TODO: Check for side, sex, breed conditionals
-                return new Action();
+                return new AOAction();
             }
 
             if (action == null)

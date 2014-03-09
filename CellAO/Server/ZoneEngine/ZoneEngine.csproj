@@ -94,7 +94,6 @@
     <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
-    <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
     <Compile Include="Core\Functions\GameFunctions\applytexture.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Core\MessageHandlers\BankMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\CastNanoMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharacterActionMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CharacterInfoPacketMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharDCMoveMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\CharInPlayMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ChatCmdMessageHandler.cs" />
@@ -148,7 +148,6 @@
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
     <Compile Include="Core\Packets\Bulk.cs" />
-    <Compile Include="Core\Packets\DeleteItem.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
     <Compile Include="Core\Packets\Stat.cs" />
@@ -328,6 +327,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Component\" />
     <Folder Include="Core\InternalMessageHandler\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

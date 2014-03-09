@@ -24,7 +24,7 @@
 
 #endregion
 
-namespace ZoneEngine.CoreMessageHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
@@ -35,6 +35,8 @@ namespace ZoneEngine.CoreMessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
+    using Utility;
+
     using ZoneEngine.Core;
     using ZoneEngine.Core.PacketHandlers;
     using CellAO.Core.Network;
@@ -43,9 +45,13 @@ namespace ZoneEngine.CoreMessageHandlers
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
     public class ZoneLoginMessageHandler : BaseMessageHandler<ZoneLoginMessage, ZoneLoginMessageHandler>
     {
+        public ZoneLoginMessageHandler()
+        {
+            this.Direction=MessageHandlerDirection.InboundOnly;
+        }
+
         #region Public Methods and Operators
 
         /// <summary>

@@ -29,22 +29,22 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     // TODO: Make this to EntityEnvent or something like this
+
     using System;
     using System.Linq;
 
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Events;
     using CellAO.Core.Items;
     using CellAO.Core.Network;
     using CellAO.Core.Statels;
     using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Playfields;
-
-    using ZoneEngine.Core.Packets;
 
     #endregion
 
@@ -56,7 +56,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public GenericCmdMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.Direction = MessageHandlerDirection.All;
         }
 
         #region Inbound
@@ -100,7 +100,8 @@ namespace ZoneEngine.Core.MessageHandlers
                         TemplateActionMessageHandler.Default.Send(
                             client.Character, 
                             item, 
-                            (int)message.Target.Type, // container
+                            (int)message.Target.Type, 
+                            // container
                             message.Target.Instance // placement
                             );
 
@@ -114,12 +115,10 @@ namespace ZoneEngine.Core.MessageHandlers
                                     // pageNum
                                     message.Target.Instance // slotNum
                                     );
-
-                                DeleteItem.Send(
-                                    (ZoneClient) client, 
-                                    (int)message.Target.Type,
-                                    message.Target.Instance 
-                               );
+                                CharacterActionMessageHandler.Default.SendDeleteItem(
+                                    client.Character, 
+                                    (int)message.Target.Type, 
+                                    message.Target.Instance);
                             }
                         }
 
@@ -135,8 +134,8 @@ namespace ZoneEngine.Core.MessageHandlers
                     }
                     else
                     {
-                        string s = "Generic Command received:\r\nAction: " + message.Action.ToString() + "("
-                                   + ((int)message.Action).ToString() + ")\r\nTarget: " + message.Target.Type + " "
+                        string s = "Generic Command received:\r\nAction: " + message.Action + "("
+                                   + ((int)message.Action) + ")\r\nTarget: " + message.Target.Type + " "
                                    + ((int)message.Target.Type).ToString("X8") + ":"
                                    + message.Target.Instance.ToString("X8");
                         if (PlayfieldLoader.PFData.ContainsKey(client.Character.Playfield.Identity.Instance))
@@ -159,11 +158,44 @@ namespace ZoneEngine.Core.MessageHandlers
                             }
                         }
 
-                        client.Character.Send(new ChatTextMessage() { Identity = client.Character.Identity, Text = s });
+                        ChatTextMessageHandler.Default.Send(client.Character, s);
                     }
 
                     break;
             }
+        }
+
+        #endregion
+
+        #region Outbound
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public void Acknowledge(ICharacter character, GenericCmdMessage message, bool announceToPlayfield = false)
+        {
+            this.Send(character, this.Reply(message), announceToPlayfield);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller Reply(GenericCmdMessage message)
+        {
+            return x =>
+            {
+                x = message;
+                x.Temp1 = 1;
+                x.Unknown = 0;
+            };
         }
 
         #endregion

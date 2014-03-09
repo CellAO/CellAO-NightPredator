@@ -32,7 +32,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -45,7 +44,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public LookAtMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.InboundOnly; 
+            this.Direction = MessageHandlerDirection.InboundOnly;
             this.UpdateCharacterStatsOnReceive = true;
         }
 
@@ -53,25 +52,20 @@ namespace ZoneEngine.Core.MessageHandlers
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
-        /// </param>
         /// <param name="message">
         /// </param>
-        /// <param name="updateCharacterStats">
+        /// <param name="client">
         /// </param>
-        public override void Read(Message message, IZoneClient client)
+        protected override void Read(LookAtMessage message, IZoneClient client)
         {
-            var lookAtMessage = (LookAtMessage)message.Body;
-
-            var dynel = (ITargetingEntity)client.Character.Playfield.FindByIdentity(lookAtMessage.Identity);
+            var dynel = (ITargetingEntity)client.Character.Playfield.FindByIdentity(message.Identity);
 
             if (dynel == null)
             {
                 return;
             }
 
-            dynel.SetTarget(lookAtMessage.Target);
-
+            dynel.SetTarget(message.Target);
         }
 
         #endregion

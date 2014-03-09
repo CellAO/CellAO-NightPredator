@@ -30,8 +30,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
 
+    using CellAO.Core.Components;
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Enums;
 
     using ZoneEngine.Core.MessageHandlers;
@@ -66,10 +69,10 @@ namespace ZoneEngine.Core.PacketHandlers
         public static string SuccessMessage(Item sourceItem, Item targetItem, Item newItem)
         {
             return string.Format(
-                "You combined \"{0}\" with \"{1}\" and the result is a quality level {2} \"{3}\".", 
-                TradeSkill.Instance.GetItemName(sourceItem.LowID, sourceItem.HighID, sourceItem.Quality), 
-                TradeSkill.Instance.GetItemName(targetItem.LowID, targetItem.HighID, targetItem.Quality), 
-                newItem.Quality, 
+                "You combined \"{0}\" with \"{1}\" and the result is a quality level {2} \"{3}\".",
+                TradeSkill.Instance.GetItemName(sourceItem.LowID, sourceItem.HighID, sourceItem.Quality),
+                TradeSkill.Instance.GetItemName(targetItem.LowID, targetItem.HighID, targetItem.Quality),
+                newItem.Quality,
                 TradeSkill.Instance.GetItemName(newItem.LowID, newItem.HighID, newItem.Quality));
         }
 
@@ -79,7 +82,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <param name="quality">
         /// </param>
-        public static void TradeSkillBuildPressed(ZoneClient client, int quality)
+        public static void TradeSkillBuildPressed(IZoneClient client, int quality)
         {
             TradeSkillInfo source = client.Character.TradeSkillSource;
             TradeSkillInfo target = client.Character.TradeSkillTarget;
@@ -89,9 +92,9 @@ namespace ZoneEngine.Core.PacketHandlers
 
             TradeSkillEntry ts = TradeSkill.Instance.GetTradeSkillEntry(sourceItem.HighID, targetItem.HighID);
 
-            quality = Math.Min(quality, ItemLoader.ItemList[ts.ResultHighId].Quality);
             if (ts != null)
             {
+                quality = Math.Min(quality, ItemLoader.ItemList[ts.ResultHighId].Quality);
                 if (WindowBuild(client, quality, ts, sourceItem, targetItem))
                 {
                     Item newItem = new Item(quality, ts.ResultLowId, ts.ResultHighId);
@@ -99,28 +102,24 @@ namespace ZoneEngine.Core.PacketHandlers
                     if (inventoryError == InventoryError.OK)
                     {
                         AddTemplateMessageHandler.Default.Send(client.Character, newItem);
-                        
+
                         // Delete source?
                         if ((ts.DeleteFlag & 1) == 1)
                         {
                             client.Character.BaseInventory.RemoveItem(source.Container, source.Placement);
-                            DeleteItem.Send(client, source.Container, source.Placement);
+                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Character, source.Container, source.Placement);
                         }
 
                         // Delete target?
                         if ((ts.DeleteFlag & 2) == 2)
                         {
                             client.Character.BaseInventory.RemoveItem(target.Container, target.Placement);
-                            DeleteItem.Send(client, target.Container, target.Placement);
+                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Character, target.Container, target.Placement);
                         }
 
-                        client.Character.Playfield.Publish(
-                            ChatTextMessageHandler.Default.CreateIM(
-                                client.Character, 
-                                SuccessMessage(
-                                    sourceItem, 
-                                    targetItem, 
-                                    new Item(quality, ts.ResultLowId, ts.ResultHighId))));
+                        ChatTextMessageHandler.Default.Send(client.Character, SuccessMessage(sourceItem,
+                                    targetItem,
+                                    new Item(quality, ts.ResultLowId, ts.ResultHighId)));
 
                         client.Character.Stats[StatIds.xp].Value += CalculateXP(quality, ts);
                     }
@@ -128,13 +127,11 @@ namespace ZoneEngine.Core.PacketHandlers
             }
             else
             {
-                client.Character.Playfield.Publish(
-                    ChatTextMessageHandler.Default.CreateIM(
-                        client.Character, 
-                        "It is not possible to assemble those two items. Maybe the order was wrong?"));
-                client.Character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(client.Character, "No combination found!"));
+                ChatTextMessageHandler.Default.Send(client.Character, "It is not possible to assemble those two items. Maybe the order was wrong?");
+                ChatTextMessageHandler.Default.Send(client.Character, "No combination found!");
             }
         }
+
 
         /// <summary>
         /// </summary>
@@ -144,7 +141,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <param name="placement">
         /// </param>
-        public static void TradeSkillSourceChanged(ZoneClient client, int container, int placement)
+        public static void TradeSkillSourceChanged(IZoneClient client, int container, int placement)
         {
             if ((container != 0) && (placement != 0))
             {
@@ -169,7 +166,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <param name="placement">
         /// </param>
-        public static void TradeSkillTargetChanged(ZoneClient client, int container, int placement)
+        public static void TradeSkillTargetChanged(IZoneClient client, int container, int placement)
         {
             if ((container != 0) && (placement != 0))
             {
@@ -217,7 +214,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </summary>
         /// <param name="client">
         /// </param>
-        private static void TradeSkillChanged(ZoneClient client)
+        private static void TradeSkillChanged(IZoneClient client)
         {
             TradeSkillInfo source = client.Character.TradeSkillSource;
             TradeSkillInfo target = client.Character.TradeSkillTarget;
@@ -275,22 +272,22 @@ namespace ZoneEngine.Core.PacketHandlers
                                     Math.Min(
                                         Convert.ToInt32(
                                             (client.Character.Stats[tsSkill.StatId].Value
-                                             - (tsSkill.Percent / 100M * targetItem.Quality)) / tsSkill.SkillPerBump), 
+                                             - (tsSkill.Percent / 100M * targetItem.Quality)) / tsSkill.SkillPerBump),
                                         maxbump);
                             }
                         }
 
                         TradeSkillPacket.SendResult(
-                            client.Character, 
-                            targetItem.Quality, 
-                            Math.Min(targetItem.Quality + leastbump, ItemLoader.ItemList[ts.ResultHighId].Quality), 
-                            ts.ResultLowId, 
+                            client.Character,
+                            targetItem.Quality,
+                            Math.Min(targetItem.Quality + leastbump, ItemLoader.ItemList[ts.ResultHighId].Quality),
+                            ts.ResultLowId,
                             ts.ResultHighId);
                     }
                     else
                     {
                         TradeSkillPacket.SendOutOfRange(
-                            client.Character, 
+                            client.Character,
                             Convert.ToInt32(
                                 Math.Round((double)targetItem.Quality - ts.QLRangePercent * targetItem.Quality / 100)));
                     }
@@ -317,10 +314,10 @@ namespace ZoneEngine.Core.PacketHandlers
         /// <returns>
         /// </returns>
         private static bool WindowBuild(
-            ZoneClient client, 
-            int desiredQuality, 
-            TradeSkillEntry ts, 
-            Item sourceItem, 
+            IZoneClient client,
+            int desiredQuality,
+            TradeSkillEntry ts,
+            Item sourceItem,
             Item targetItem)
         {
             if (!((ts.MinTargetQL >= targetItem.Quality) || (ts.MinTargetQL == 0)))

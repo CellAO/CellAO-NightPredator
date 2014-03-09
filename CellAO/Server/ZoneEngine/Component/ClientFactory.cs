@@ -32,6 +32,8 @@ namespace ZoneEngine.Component
 
     using CellAO.Core.Components;
 
+    using MemBus;
+
     using ZoneEngine.Core;
 
     #endregion
@@ -80,6 +82,8 @@ namespace ZoneEngine.Component
         /// </returns>
         public ZoneClient Create(ZoneServer server)
         {
+            ZoneClient zc = new ZoneClient(server, this.messageSerializer, this.bus);
+            zc.zoneBus = server.zoneBus;
             return new ZoneClient(server, this.messageSerializer, this.bus);
         }
 

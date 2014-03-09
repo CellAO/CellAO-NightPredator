@@ -38,7 +38,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -66,11 +66,22 @@ using SmokeLounge.AOtomation.Messaging.GameData;
         {
             if (message.Message.Text.StartsWith("."))
             {
-                MessageWrapper<ChatCmdMessage> wrapper = new MessageWrapper<ChatCmdMessage>() { Client = client, Message = null, MessageBody = message.ChatMessage };
+                MessageWrapper<ChatCmdMessage> wrapper = new MessageWrapper<ChatCmdMessage>()
+                {
+                    Client = client,
+                    Message = null,
+                    MessageBody = new ChatCmdMessage()
+                                  {
+                                      Command = message.Message.Text,
+                                      Identity = client.Character.Identity,
+                                      Target = client.Character.SelectedTarget
+                                  }
+                };
                 // It is a chat command in vicinity chat, lets process it
                 ChatCmdMessageHandler.Default.Receive(wrapper); // manually call the receive()
             }
-            else {
+            else
+            {
                 ICharacter character = client.Character;
                 IPlayfield playfield = character.Playfield;
 
@@ -94,9 +105,9 @@ using SmokeLounge.AOtomation.Messaging.GameData;
                                                    {
                                                        CharacterIds =
                                                            charsInRange.Select(
-                                                               x => x.Identity.Instance).ToList(), 
-                                                       MessageType = (byte)message.Message.Type, 
-                                                       Text = message.Message.Text, 
+                                                               x => x.Identity.Instance).ToList(),
+                                                       MessageType = (byte)message.Message.Type,
+                                                       Text = message.Message.Text,
                                                        SenderId = character.Identity.Instance
                                                    };
 

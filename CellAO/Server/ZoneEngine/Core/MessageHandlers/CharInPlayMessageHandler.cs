@@ -35,6 +35,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -59,6 +61,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(CharInPlayMessage message, IZoneClient client)
         {
+            LogUtil.Debug("Client connected...");
             // client got all the needed data and
             // wants to enter the world. After we
             // reply to this, the character will really be in game
