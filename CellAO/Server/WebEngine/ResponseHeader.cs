@@ -34,6 +34,7 @@ namespace WebEngine
     #region Usings ...
 
     using System;
+    using System.IO;
 
     #endregion
 
@@ -54,6 +55,30 @@ namespace WebEngine
             this.setResponseHeaders(responseHeaders);
         }
 
+        public ResponseHeader(String responseHeaders, String scriptFilePath)
+        {
+            if (this.getKeyValue("Status: ", responseHeaders) == "")
+            {
+                if (File.Exists(scriptFilePath))
+                {
+                    this.setResponseStatus("200 OK");
+                    this.setResponseCode("Status: 200 OK");
+                }
+                else
+                {
+                    this.setResponseCode("Status: 404");
+                    this.setResponseStatus("404");
+                }
+            }
+            else
+            {
+                this.setResponseStatus(this.getKeyValue("Status: ", responseHeaders));
+                this.setResponseCode("Status: " + this.getKeyValue("Status: ", responseHeaders));
+            }
+            
+            this.setResponseHeaders(responseHeaders);
+        }
+
         public void setResponseHeaders(String responseHeaders)
         {
             this.responseHeaders = "HTTP/1.1 " + this.getResponseStatus() + "\r\n";
@@ -67,6 +92,10 @@ namespace WebEngine
             string tmpHeaders = this.responseHeaders;
             if (this.getResponseCode() == 200 && this.contentLength > -1)
             {
+                if (!tmpHeaders.EndsWith("\r\n"))
+                {
+                    tmpHeaders += "\r\n";
+                }
                 tmpHeaders += "Content-Length: " + this.contentLength;
             }
             tmpHeaders += "\r\n\r\n";
@@ -134,13 +163,10 @@ namespace WebEngine
             String value = "";
             if (haystack.Contains(needle))
             {
-                int one = haystack.IndexOf(needle) + needle.Length;
-                int two = haystack.IndexOf("\r\n", haystack.IndexOf(needle));
-
                 value =
                     haystack.Substring(
                         haystack.IndexOf(needle) + needle.Length,
-                        haystack.IndexOf("\r\n", haystack.IndexOf(needle)) - needle.Length).Trim();
+                        haystack.IndexOf("\r\n", haystack.IndexOf(needle)) - (haystack.IndexOf(needle) + needle.Length)).Trim();
             }
             return value;
         }

@@ -101,7 +101,7 @@ namespace WebEngine.Handlers
                 proc.Dispose();
 
                 this.responseHeaders =
-                    new ResponseHeader(this.phpOutput.Substring(0, this.phpOutput.IndexOf("\r\n\r\n")));
+                    new ResponseHeader(this.phpOutput.Substring(0, this.phpOutput.IndexOf("\r\n\r\n")), this.fullFilePath);
                 this.setResponseBody(this.phpOutput.Substring(this.phpOutput.IndexOf("\r\n\r\n")));
                 this.responseHeaders.setContentLength(this.getContentLength());
             }
