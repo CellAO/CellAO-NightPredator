@@ -295,7 +295,7 @@ using SmokeLounge.AOtomation.Messaging.Messages;
                 CharacterDao.Instance.SetOffline(((IZoneClient)client).Character.Identity.Instance);
 
                 // Will be saved at character dispose too, but just to be sure...
-                ((IZoneClient)client).Character.Save();
+                // ((IZoneClient)client).Character.Save();
             }
 
             cli.Dispose();

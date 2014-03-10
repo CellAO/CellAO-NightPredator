@@ -43,6 +43,7 @@ namespace ZoneEngine.Core
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
+    using CellAO.Enums;
 
     using MemBus;
 
@@ -360,8 +361,19 @@ namespace ZoneEngine.Core
             // Remove reference of character
             if (this.character != null)
             {
-                this.character.StartLogoutTimer();
-                this.character.Client = null;
+
+                // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
+                // only how should i find out..... - Algorithman
+                /*
+                if (this.character.Stats[StatIds.gmlevel].Value == 0)
+                {
+                    this.character.StartLogoutTimer();
+                }
+                 */
+                //if (this == this.character.Client)
+               // {
+                    //this.character.Client = null;
+               // }
             }
 
             this.character = null;

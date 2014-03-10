@@ -639,6 +639,9 @@ namespace CellAO.Core.Playfields
             {
                 return;
             }
+            Thread.Sleep(200);
+            int dynelId = dynel.Identity.Instance;
+            
 
             dynel.DoNotDoTimers = true;
 
@@ -651,8 +654,22 @@ namespace CellAO.Core.Playfields
             this.AnnounceOthers(despawnMessage, dynel.Identity);
             dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-            dynel.Save();
-            CharacterDao.Instance.SetPlayfield(dynel.Identity.Instance, (int)playfield.Type, playfield.Instance);
+            
+            // IMPORTANT!!
+            // Dispose the character object, save new playfield data and then recreate it
+            // else you would end up at weird coordinates in the same playfield
+
+            // Save client object
+            ZoneClient client = (ZoneClient)dynel.Client; 
+            
+            // Set client=null so dynel can really dispose
+            dynel.Client = null;
+            dynel.Dispose();
+
+            CharacterDao.Instance.SetPlayfield(dynelId, (int)playfield.Type, playfield.Instance);
+            LogUtil.Debug("Saving to pf " + playfield.Instance);
+            Thread.Sleep(1000);
+            
 
             // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
             // for now, just transmit our ip and port
@@ -676,10 +693,8 @@ namespace CellAO.Core.Playfields
                                ServerIpAddress = tempIp, 
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
-            dynel.Client.SendCompressed(redirect);
-            dynel.DoNotDoTimers = false;
-
-            // character.Client.Server.DisconnectClient(character.Client);
+            client.SendCompressed(redirect);
+            // client.Server.DisconnectClient(client);
         }
 
         #endregion

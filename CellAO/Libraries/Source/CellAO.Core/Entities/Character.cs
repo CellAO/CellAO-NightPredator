@@ -48,6 +48,8 @@ namespace CellAO.Core.Entities
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using Utility;
+
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
@@ -109,7 +111,7 @@ namespace CellAO.Core.Entities
             this.UploadedNanos = new List<IUploadedNanos>();
 
             this.BaseInventory = new PlayerInventory(this, pooledIn);
-            
+
 
             this.SocialTab = new Dictionary<int, int>
                              {
@@ -171,15 +173,6 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public TradeSkillInfo TradeSkillTarget { get; set; }
-
-
-        /// <summary>
-        /// Wrapper for Dynel.Playfield
-        /// </summary>
-        public IPlayfield Playfield {
-            get { return base.Playfield; }
-            set { base.Playfield = value; }
-        }
 
         /// <summary>
         /// </summary>
@@ -309,6 +302,7 @@ namespace CellAO.Core.Entities
         {
             this.DoNotDoTimers = true;
             DBCharacter daochar = CharacterDao.Instance.Get(this.Identity.Instance);
+            LogUtil.Debug("Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z+"/"+daochar.Playfield);
             if (daochar != null)
             {
                 this.Name = daochar.Name;
@@ -339,8 +333,9 @@ namespace CellAO.Core.Entities
         public override bool Write()
         {
             this.BaseInventory.Write();
-
-            CharacterDao.Instance.Save(this.GetDBCharacter()); 
+            DBCharacter temp = this.GetDBCharacter();
+            LogUtil.Debug("Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z+"/"+temp.Playfield);
+            CharacterDao.Instance.Save(this.GetDBCharacter());
 
             CharacterDao.Instance.SetPlayfield(
                 this.Identity.Instance,
@@ -366,7 +361,10 @@ namespace CellAO.Core.Entities
                 this.Client.Server.DisconnectClient(this.Client);
                 if (this.Client != null)
                 {
-                    this.Client.Character = null;
+                    if (this.Client.Character == this)
+                    {
+                        this.Client.Character = null;
+                    }
                 }
             }
 
@@ -461,7 +459,7 @@ namespace CellAO.Core.Entities
         {
             return this.UploadedNanos.Any(x => x.NanoId == nanoId);
         }
-       
+
         #endregion
 
         #region Methods
@@ -890,6 +888,10 @@ namespace CellAO.Core.Entities
         /// </summary>
         public void StopLogoutTimer()
         {
+            if (this.logoutTimer != null)
+            {
+                this.logoutTimer.Dispose();
+            }
             this.logoutTimer = null;
         }
 
@@ -914,6 +916,7 @@ namespace CellAO.Core.Entities
                 return;
             }
 
+            this.logoutTimer.Dispose();
             this.logoutTimer = null;
             this.Dispose();
         }

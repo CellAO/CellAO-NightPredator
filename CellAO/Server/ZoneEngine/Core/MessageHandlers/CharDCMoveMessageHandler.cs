@@ -65,6 +65,10 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(CharDCMoveMessage message, IZoneClient client)
         {
+            if (client.Character.DoNotDoTimers)
+            {
+                return;
+            }
             byte moveType = message.MoveType;
             var heading = new Quaternion(message.Heading.X, message.Heading.Y, message.Heading.Z, message.Heading.W);
             Coordinate coordinates = new Coordinate(message.Coordinates);

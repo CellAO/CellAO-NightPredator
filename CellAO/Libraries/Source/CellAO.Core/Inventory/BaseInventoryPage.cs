@@ -517,6 +517,11 @@ namespace CellAO.Core.Inventory
             return true;
         }
 
+        public void Dispose()
+        {
+            base.Dispose();
+        }
+
         #endregion
     }
 }

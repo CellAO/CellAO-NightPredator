@@ -326,6 +326,7 @@ namespace CellAO.Core.Inventory
             {
                 kv.Value.Dispose();
             }
+            this.Pages.Clear();
         }
     }
 }
