@@ -72,7 +72,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     Message = null,
                     MessageBody = new ChatCmdMessage()
                                   {
-                                      Command = message.Message.Text,
+                                      Command = message.Message.Text.TrimStart('.'),
                                       Identity = client.Character.Identity,
                                       Target = client.Character.SelectedTarget
                                   }

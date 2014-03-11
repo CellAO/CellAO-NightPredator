@@ -61,7 +61,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(ChatCmdMessage message, IZoneClient client)
         {
-            string fullArgs = message.Command.TrimEnd(char.MinValue);
+            string fullArgs = message.Command.TrimEnd(char.MinValue).TrimStart('.').TrimStart('/');
 
             string temp = string.Empty;
             do
