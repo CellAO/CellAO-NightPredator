@@ -154,7 +154,6 @@
     <Compile Include="Core\MessageHandlers\VicinityChatMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ZoneLoginMessageHandler.cs" />
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
-    <Compile Include="Core\PacketHandlers\N3Teleport.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
     <Compile Include="Core\Packets\Bulk.cs" />
