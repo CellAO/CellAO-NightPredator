@@ -32,18 +32,17 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
+    public class KnuBotTradeMessageHandler : BaseMessageHandler<KnuBotTradeMessage, KnuBotTradeMessageHandler>
     {
         /// <summary>
         /// </summary>
-        public AddTemplateMessageHandler()
+        public KnuBotTradeMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
         }
@@ -58,27 +57,24 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public void Send(ICharacter character, Item item)
         {
-            this.Send(character, AddItem(character, item), false);
+            this.Send(character, KnuBotTrade(character, item), false);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
         /// <param name="item">
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(ICharacter character, Item item)
+        private static MessageDataFiller KnuBotTrade(ICharacter character, Item item)
         {
             return x =>
             {
-                x.Unknown = 0;
                 x.Identity = character.Identity;
-                x.HighId = item.HighID;
-                x.LowId = item.LowID;
-                x.Quality = item.Quality;
-                x.Count = item.MultipleCount;
+
+                // TODO: Figure out the rest of the parameters :)
             };
         }
 

@@ -28,9 +28,10 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Collections.Generic;
+
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Items;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -39,49 +40,54 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
+    internal class KnuBotAnswerListMessageHandler :
+        BaseMessageHandler<KnuBotAnswerListMessage, KnuBotAnswerListMessageHandler>
     {
         /// <summary>
         /// </summary>
-        public AddTemplateMessageHandler()
+        public KnuBotAnswerListMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
         }
-
-        #region Outbound
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Send(ICharacter character, Item item)
+        /// <param name="choices">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, string[] choices)
         {
-            this.Send(character, AddItem(character, item), false);
+            this.Send(character, this.KnuBotAnswerList(character, knubotTarget, choices), false);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="choices">
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(ICharacter character, Item item)
+        private MessageDataFiller KnuBotAnswerList(ICharacter character, Identity knubotTarget, string[] choices)
         {
             return x =>
             {
-                x.Unknown = 0;
                 x.Identity = character.Identity;
-                x.HighId = item.HighID;
-                x.LowId = item.LowID;
-                x.Quality = item.Quality;
-                x.Count = item.MultipleCount;
+                x.Target = knubotTarget;
+                List<KnuBotDialogOption> temp = new List<KnuBotDialogOption>();
+                foreach (string choice in choices)
+                {
+                    temp.Add(new KnuBotDialogOption() { Text = choice });
+                }
+
+                x.DialogOptions = temp.ToArray();
+                x.Unknown1 = 2;
             };
         }
-
-        #endregion
     }
 }

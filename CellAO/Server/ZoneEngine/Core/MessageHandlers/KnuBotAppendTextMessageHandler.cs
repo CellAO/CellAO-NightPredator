@@ -30,7 +30,6 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Items;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -39,49 +38,48 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
+    internal class KnuBotAppendTextMessageHandler :
+        BaseMessageHandler<KnuBotAppendTextMessage, KnuBotAppendTextMessageHandler>
     {
         /// <summary>
         /// </summary>
-        public AddTemplateMessageHandler()
+        public KnuBotAppendTextMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
         }
-
-        #region Outbound
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Send(ICharacter character, Item item)
+        /// <param name="text">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, string text)
         {
-            this.Send(character, AddItem(character, item), false);
+            this.Send(character, this.KnuBotAppendText(character, knubotTarget, text), false);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="text">
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(ICharacter character, Item item)
+        private MessageDataFiller KnuBotAppendText(ICharacter character, Identity knubotTarget, string text)
         {
             return x =>
             {
-                x.Unknown = 0;
                 x.Identity = character.Identity;
-                x.HighId = item.HighID;
-                x.LowId = item.LowID;
-                x.Quality = item.Quality;
-                x.Count = item.MultipleCount;
+                x.Target = knubotTarget;
+                x.Text = text;
+                x.Unknown1 = 2;
             };
         }
-
-        #endregion
     }
 }

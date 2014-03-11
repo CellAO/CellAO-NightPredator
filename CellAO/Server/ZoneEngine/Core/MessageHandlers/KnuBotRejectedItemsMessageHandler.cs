@@ -28,6 +28,8 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Collections.Generic;
+
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
@@ -39,49 +41,56 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
+    public class KnuBotRejectedItemsMessageHandler :
+        BaseMessageHandler<KnuBotRejectedItemsMessage, KnuBotRejectedItemsMessageHandler>
     {
         /// <summary>
         /// </summary>
-        public AddTemplateMessageHandler()
+        public KnuBotRejectedItemsMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
         }
-
-        #region Outbound
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Send(ICharacter character, Item item)
+        /// <param name="items">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, IEnumerable<Item> items)
         {
-            this.Send(character, AddItem(character, item), false);
+            this.Send(character, this.RejectedItems(character, knubotTarget, items), false);
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
-        /// <param name="item">
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="items">
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(ICharacter character, Item item)
+        private MessageDataFiller RejectedItems(ICharacter character, Identity knubotTarget, IEnumerable<Item> items)
         {
             return x =>
             {
-                x.Unknown = 0;
+                x.Unknown1 = 2;
+                x.Target = knubotTarget;
                 x.Identity = character.Identity;
-                x.HighId = item.HighID;
-                x.LowId = item.LowID;
-                x.Quality = item.Quality;
-                x.Count = item.MultipleCount;
+                List<KnuBotRejectedItem> temp = new List<KnuBotRejectedItem>();
+                foreach (Item item in items)
+                {
+                    // TODO: Find out what the unknown in rejecteditem is
+                    temp.Add(
+                        new KnuBotRejectedItem() { HighId = item.HighID, LowId = item.LowID, Quality = item.Quality });
+                }
+
+                x.Items = temp.ToArray();
             };
         }
-
-        #endregion
     }
 }
