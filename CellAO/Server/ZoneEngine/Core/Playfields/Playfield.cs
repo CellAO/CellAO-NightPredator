@@ -380,10 +380,10 @@ namespace CellAO.Core.Playfields
             }
 
             FunctionCollection.Instance.CallFunction(
-                imExecuteFunction.Function.FunctionType, 
-                (INamedEntity)user, 
-                (INamedEntity)user, 
-                target, 
+                imExecuteFunction.Function.FunctionType,
+                (INamedEntity)user,
+                (INamedEntity)user,
+                target,
                 imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
@@ -641,12 +641,12 @@ namespace CellAO.Core.Playfields
             }
             Thread.Sleep(200);
             int dynelId = dynel.Identity.Instance;
-            
+
 
             dynel.DoNotDoTimers = true;
 
             // Teleport to another playfield
-            ZoneEngine.Core.Packets.Teleport.Send(dynel, destination, heading, playfield);
+            TeleportMessageHandler.Default.Send(dynel as ICharacter, destination.coordinate, (Quaternion)heading, playfield);
 
             // Send packet, disconnect, and other playfield waits for connect
 
@@ -654,14 +654,14 @@ namespace CellAO.Core.Playfields
             this.AnnounceOthers(despawnMessage, dynel.Identity);
             dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
             dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-            
+
             // IMPORTANT!!
             // Dispose the character object, save new playfield data and then recreate it
             // else you would end up at weird coordinates in the same playfield
 
             // Save client object
-            ZoneClient client = (ZoneClient)dynel.Client; 
-            
+            ZoneClient client = (ZoneClient)dynel.Client;
+
             // Set client=null so dynel can really dispose
             dynel.Client = null;
             dynel.Dispose();
@@ -669,7 +669,7 @@ namespace CellAO.Core.Playfields
             CharacterDao.Instance.SetPlayfield(dynelId, (int)playfield.Type, playfield.Instance);
             LogUtil.Debug("Saving to pf " + playfield.Instance);
             Thread.Sleep(1000);
-            
+
 
             // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
             // for now, just transmit our ip and port
@@ -690,7 +690,7 @@ namespace CellAO.Core.Playfields
 
             var redirect = new ZoneRedirectionMessage
                            {
-                               ServerIpAddress = tempIp, 
+                               ServerIpAddress = tempIp,
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
             client.SendCompressed(redirect);
@@ -757,9 +757,9 @@ namespace CellAO.Core.Playfields
                     Coordinate destinationCoordinate = new Coordinate(newX, dynel.RawCoordinates.Y, newZ);
 
                     this.Teleport(
-                        (Character)dynel, 
-                        destinationCoordinate, 
-                        dynel.RawHeading, 
+                        (Character)dynel,
+                        destinationCoordinate,
+                        dynel.RawHeading,
                         new Identity() { Type = IdentityType.Playfield, Instance = destPlayfield });
                     return;
                 }

@@ -140,13 +140,16 @@
     <Compile Include="Core\MessageHandlers\KnuBotAnswerMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAppendTextMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotCloseChatWindowMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotFinishTradeMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotOpenChatWindowMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotRejectedItemsMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotStartTradeMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotTradeMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\LookAtMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\PlayfieldAnarchyFMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\SkillMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\SocialActionCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\TeleportMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TemplateActionMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\VicinityChatMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ZoneLoginMessageHandler.cs" />
@@ -158,7 +161,6 @@
     <Compile Include="Core\Packets\Equip.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
     <Compile Include="Core\Packets\Stat.cs" />
-    <Compile Include="Core\Packets\Teleport.cs" />
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />

@@ -45,6 +45,7 @@ namespace ZoneEngine.Core.MessageHandlers
         public KnuBotTradeMessageHandler()
         {
             this.Direction = MessageHandlerDirection.OutboundOnly;
+            
         }
 
         #region Outbound
