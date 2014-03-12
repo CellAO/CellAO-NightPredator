@@ -71,6 +71,7 @@ namespace CellAO.Stats.SpecialStats
         /// </summary>
         public override int GetValue
         {
+            // TODO: Check function
             get
             {
                 int level = this.Stats[StatIds.level].Value;

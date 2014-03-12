@@ -45,7 +45,7 @@ namespace CellAO.Core.Statels
 
         /// <summary>
         /// </summary>
-        public List<Events> Events = new List<Events>();
+        public List<Event> Events = new List<Event>();
 
         /// <summary>
         /// </summary>

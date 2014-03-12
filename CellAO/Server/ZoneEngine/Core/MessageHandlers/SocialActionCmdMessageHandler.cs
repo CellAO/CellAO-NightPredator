@@ -24,51 +24,57 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
+    using CellAO.Core.Network;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class ChatCommandHandler
+    public class SocialActionCmdMessageHandler :
+        BaseMessageHandler<SocialActionCmdMessage, SocialActionCmdMessageHandler>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        public static void Read(ChatCmdMessage message, ZoneClient client)
+        public SocialActionCmdMessageHandler()
         {
-            string fullArgs = message.Command.TrimEnd(char.MinValue);
-            Read(fullArgs, client);
+            this.Direction = MessageHandlerDirection.InboundOnly;
         }
 
+        #region Inbound
+
         /// <summary>
         /// </summary>
-        /// <param name="fullArgs">
+        /// <param name="body">
         /// </param>
         /// <param name="client">
         /// </param>
-        public static void Read(string fullArgs, ZoneClient client)
+        protected override void Read(SocialActionCmdMessage body, IZoneClient client)
         {
-            string temp = string.Empty;
-            do
-            {
-                temp = fullArgs;
-                fullArgs = fullArgs.Replace("  ", " ");
-            }
-            while (temp != fullArgs);
+            SocialActionCmdMessage socialActionCmdMessage = body;
 
-            string[] cmdArgs = fullArgs.Trim().Split(' ');
+            var announce = new SocialActionCmdMessage
+                           {
+                               Identity = socialActionCmdMessage.Identity, 
+                               Unknown = 0x00, 
+                               Unknown1 = socialActionCmdMessage.Unknown1, 
+                               Unknown2 = socialActionCmdMessage.Unknown2, 
+                               Unknown3 = socialActionCmdMessage.Unknown3, 
+                               Unknown4 = 0x01, 
+                               Unknown5 = socialActionCmdMessage.Unknown5, 
+                               Action = socialActionCmdMessage.Action
+                           };
 
-            Program.csc.CallChatCommand(cmdArgs[0].ToLower(), client, client.Character.Identity, cmdArgs);
+            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
         }
 
         #endregion

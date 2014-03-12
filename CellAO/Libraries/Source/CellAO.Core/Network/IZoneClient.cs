@@ -55,7 +55,7 @@ namespace CellAO.Core.Network
         /// </summary>
         /// <param name="functions">
         /// </param>
-        void CallFunction(Functions functions);
+        void CallFunction(Function functions);
 
         /// <summary>
         /// </summary>
@@ -69,7 +69,7 @@ namespace CellAO.Core.Network
         /// </param>
         /// <returns>
         /// </returns>
-        bool dSendChatText(string text);
+        bool SendChatText(string text);
 
         #endregion
     }

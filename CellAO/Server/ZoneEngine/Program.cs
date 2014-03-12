@@ -125,7 +125,7 @@ namespace ZoneEngine
         {
             try
             {
-                zoneServer = Container.GetInstance<ZoneServer>();
+                zoneServer = new ZoneServer();
             }
             catch (Exception e)
             {
@@ -154,7 +154,7 @@ namespace ZoneEngine
                         if (args[0].ToLower() == "/autostart")
                         {
                             Console.WriteLine(locales.ServerConsoleAutostart);
-                            csc.Compile(false);
+                            ScriptCompiler.Instance.Compile(false);
                             StartTheServer();
                         }
                     }
@@ -295,15 +295,6 @@ namespace ZoneEngine
                 return false;
             }
 
-            if (!InitializeScriptCompiler())
-            {
-                Colouring.Push(ConsoleColor.Red);
-                Console.WriteLine(locales.ErrorCreatingScriptCompilerInstance);
-                Colouring.Pop();
-                Colouring.Pop();
-                return false;
-            }
-
             if (!Misc.CheckDatabase())
             {
                 Colouring.Push(ConsoleColor.Red);
@@ -430,26 +421,6 @@ namespace ZoneEngine
                 Console.WriteLine(locales.ErrorInitializingNLogNBug);
                 Console.WriteLine(e.Message);
                 Colouring.Pop();
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        private static bool InitializeScriptCompiler()
-        {
-            try
-            {
-                csc = new ScriptCompiler();
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-
                 return false;
             }
 
@@ -800,7 +771,7 @@ namespace ZoneEngine
             else
             {
                 // TODO: Add Sql Check.
-                csc.Compile(false);
+                ScriptCompiler.Instance.Compile(false);
                 StartTheServer();
             }
         }
@@ -821,7 +792,7 @@ namespace ZoneEngine
             else
             {
                 // TODO: Add Sql Check.
-                csc.Compile(true);
+                ScriptCompiler.Instance.Compile(true);
                 StartTheServer();
             }
         }
@@ -838,7 +809,7 @@ namespace ZoneEngine
 
             // Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
 
-            Console.WriteLine(csc.AddScriptMembers() + " chat commands loaded");
+            Console.WriteLine(ScriptCompiler.Instance.AddScriptMembers() + " chat commands loaded");
             zoneServer.Start(true, false);
         }
 

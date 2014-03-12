@@ -28,45 +28,58 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class LookAtHandler : IHandleMessage<LookAtMessage>
+    internal class KnuBotAppendTextMessageHandler :
+        BaseMessageHandler<KnuBotAppendTextMessage, KnuBotAppendTextMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public KnuBotAppendTextMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="text">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, string text)
         {
-            var client = (ZoneClient)sender;
-            var lookAtMessage = (LookAtMessage)message.Body;
-
-            var dynel = (ITargetingEntity)client.Playfield.FindByIdentity(lookAtMessage.Identity);
-
-            if (dynel == null)
-            {
-                return;
-            }
-
-            dynel.SetTarget(lookAtMessage.Target);
-            client.Character.SendChangedStats();
+            this.Send(character, this.KnuBotAppendText(character, knubotTarget, text), false);
         }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="text">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller KnuBotAppendText(ICharacter character, Identity knubotTarget, string text)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Target = knubotTarget;
+                x.Text = text;
+                x.Unknown1 = 2;
+            };
+        }
     }
 }

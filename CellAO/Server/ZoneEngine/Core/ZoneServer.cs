@@ -42,17 +42,26 @@ namespace ZoneEngine.Core
     using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
-    using ZoneEngine.Component;
-    using ZoneEngine.Core.PacketHandlers;
+    using CellAO.Core.Components;
+    using MemBus;
+    using MemBus.Configurators;
+    using MemBus.Support;
+    using ZoneEngine.Core.MessageHandlers;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+using SmokeLounge.AOtomation.Messaging.Messages;
+
+    using ZoneEngine.Script;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export]
     public class ZoneServer : ServerBase
     {
+        
+
         #region Fields
 
         /// <summary>
@@ -65,11 +74,13 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private readonly ClientFactory clientFactory;
-
-        /// <summary>
-        /// </summary>
         private readonly List<IPlayfield> playfields = new List<IPlayfield>();
+
+        private readonly DisposeContainer memBusDisposeContainer = new DisposeContainer();
+
+        private readonly MemBus.IBus zoneBus;
+
+        private readonly MessageSerializer messageSerializer = new MessageSerializer();
 
         #endregion
 
@@ -77,15 +88,31 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        /// <param name="clientFactory">
-        /// </param>
-        [ImportingConstructor]
-        public ZoneServer(ClientFactory clientFactory)
+        public ZoneServer()
         {
             // TODO: Get the Server id from chatengine or config file
             this.Id = 0x356;
-            this.clientFactory = clientFactory;
             this.ClientDisconnected += this.ZoneServerClientDisconnected;
+
+            // New Bus initialization
+            this.zoneBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
+
+            this.memBusDisposeContainer.Add(
+                this.zoneBus.Subscribe<MessageWrapper<CharacterActionMessage>>(CharacterActionMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<CharDCMoveMessage>>(CharDCMoveMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<CharInPlayMessage>>(CharInPlayMessageHandler.Default.Receive));
+
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ChatCmdMessage>>(ChatCmdMessageHandler.Default.Receive));
+
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ContainerAddItemMessage>>(ContainerAddItemMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<GenericCmdMessage>>(GenericCmdMessageHandler.Default.Receive));
+
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<LookAtMessage>>(LookAtMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SkillMessage>>(SkillMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SocialActionCmdMessage>>(SocialActionCmdMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TextMessage>>(VicinityChatMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ZoneLoginMessage>>(ZoneLoginMessageHandler.Default.Receive));
+            
         }
 
         #endregion
@@ -177,7 +204,7 @@ namespace ZoneEngine.Core
         /// </exception>
         protected override IClient CreateClient()
         {
-            return this.clientFactory.Create(this);
+            return new ZoneClient(this, this.messageSerializer, this.zoneBus);
         }
 
         /// <summary>
@@ -229,14 +256,24 @@ namespace ZoneEngine.Core
         {
             foreach (Playfield playfield in this.playfields)
             {
-                IInstancedEntity character =
-                    playfield.FindByIdentity(
+                ICharacter character =
+                    playfield.FindByIdentity<Character>(
                         new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
                 if (character != null)
                 {
-                    ChatCommandHandler.Read(
-                        chatCommand.ChatCommandString.TrimStart('.'), 
-                        (ZoneClient)((Character)character).Client);
+                    string fullArgs = chatCommand.ChatCommandString.TrimEnd(char.MinValue).TrimStart('.');
+
+                    string temp = string.Empty;
+                    do
+                    {
+                        temp = fullArgs;
+                        fullArgs = fullArgs.Replace("  ", " ");
+                    }
+                    while (temp != fullArgs);
+
+                    string[] cmdArgs = fullArgs.Trim().Split(' ');
+
+                    ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), character.Client, character.Identity, cmdArgs);
                 }
             }
         }
@@ -258,7 +295,7 @@ namespace ZoneEngine.Core
                 CharacterDao.Instance.SetOffline(((IZoneClient)client).Character.Identity.Instance);
 
                 // Will be saved at character dispose too, but just to be sure...
-                ((IZoneClient)client).Character.Save();
+                // ((IZoneClient)client).Character.Save();
             }
 
             cli.Dispose();

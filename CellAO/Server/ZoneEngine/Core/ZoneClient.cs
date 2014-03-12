@@ -43,6 +43,9 @@ namespace ZoneEngine.Core
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
+    using CellAO.Enums;
+
+    using MemBus;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -72,7 +75,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private IBus bus;
+        private MemBus.IBus bus;
 
         /// <summary>
         /// </summary>
@@ -80,7 +83,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private IMessageSerializer messageSerializer;
+        private readonly IMessageSerializer messageSerializer;
 
         /// <summary>
         /// </summary>
@@ -110,7 +113,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <param name="bus">
         /// </param>
-        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, IBus bus)
+        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, MemBus.IBus bus)
             : base(server)
         {
             this.server = server;
@@ -145,7 +148,7 @@ namespace ZoneEngine.Core
         /// </summary>
         /// <param name="functions">
         /// </param>
-        public void CallFunction(CellAO.Core.Functions.Functions functions)
+        public void CallFunction(CellAO.Core.Functions.Function functions)
         {
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
@@ -329,7 +332,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <returns>
         /// </returns>
-        public bool dSendChatText(string text)
+        public bool SendChatText(string text)
         {
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
@@ -358,8 +361,19 @@ namespace ZoneEngine.Core
             // Remove reference of character
             if (this.character != null)
             {
-                this.character.StartLogoutTimer();
-                this.character.Client = null;
+
+                // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
+                // only how should i find out..... - Algorithman
+                /*
+                if (this.character.Stats[StatIds.gmlevel].Value == 0)
+                {
+                    this.character.StartLogoutTimer();
+                }
+                 */
+                //if (this == this.character.Client)
+               // {
+                    //this.character.Client = null;
+               // }
             }
 
             this.character = null;
@@ -448,8 +462,18 @@ namespace ZoneEngine.Core
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
+            
+            // FUUUUUGLY
+            
+            Type wrapperType = typeof(MessageWrapper<>);
+            Type genericWrapperType = wrapperType.MakeGenericType(message.Body.GetType());
 
-            this.bus.Publish(new MessageReceivedEvent(this, message));
+            object wrapped = Activator.CreateInstance(genericWrapperType);
+            wrapped.GetType().GetProperty("Client").SetValue(wrapped, (IZoneClient)this, null);
+            wrapped.GetType().GetProperty("Message").SetValue(wrapped, message, null);
+            wrapped.GetType().GetProperty("MessageBody").SetValue(wrapped, message.Body, null);                
+
+            this.bus.Publish(wrapped);
 
             return true;
         }

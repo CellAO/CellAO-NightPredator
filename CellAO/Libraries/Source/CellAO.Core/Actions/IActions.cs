@@ -37,7 +37,7 @@ namespace CellAO.Core.Actions
 
     /// <summary>
     /// </summary>
-    public interface IActions
+    public interface IAOAction
     {
         #region Public Properties
 
@@ -49,7 +49,7 @@ namespace CellAO.Core.Actions
         /// <summary>
         /// List of Requirements for this action
         /// </summary>
-        List<Requirements> Requirements { get; set; }
+        List<Requirement> Requirements { get; set; }
 
         #endregion
     }

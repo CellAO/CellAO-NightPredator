@@ -44,8 +44,15 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public CastNanoSpellMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.All;
+            this.Direction = MessageHandlerDirection.OutboundOnly;
         }
+
+        #region Inbound
+
+        #endregion
+
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
@@ -55,10 +62,11 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="target">
         /// </param>
-        public void Send(ICharacter character, int nanoId, Identity target)
+        public void Send(ICharacter character, int nanoId, Identity target, bool announceToPlayfield = true) //  /!\ Announce to playfield by default
         {
-            this.Send(character, Filler(character, nanoId, target), true);
+            this.Send(character, Filler(character, nanoId, target), announceToPlayfield);
         }
+
 
         /// <summary>
         /// </summary>
@@ -70,7 +78,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller Filler(ICharacter character, int nanoId, Identity target)
+        private MessageDataFiller Filler(ICharacter character, int nanoId, Identity target)
         {
             return x =>
             {
@@ -82,5 +90,8 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Unknown1 = 0;
             };
         }
+
+        #endregion
+
     }
 }

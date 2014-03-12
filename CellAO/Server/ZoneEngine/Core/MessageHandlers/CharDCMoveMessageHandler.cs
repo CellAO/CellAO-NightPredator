@@ -24,12 +24,15 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
 
+    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
@@ -40,9 +43,19 @@ namespace ZoneEngine.Core.PacketHandlers
 
     /// <summary>
     /// </summary>
-    public static class CharacterDCMove
+    public class CharDCMoveMessageHandler : BaseMessageHandler<CharDCMoveMessage, CharDCMoveMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public CharDCMoveMessageHandler()
+        {
+            // Only inbound? Maybe we need outbound too, because of Fear nanos - Algorithman
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
+
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
@@ -50,8 +63,12 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <param name="client">
         /// </param>
-        public static void Read(CharDCMoveMessage message, ZoneClient client)
+        protected override void Read(CharDCMoveMessage message, IZoneClient client)
         {
+            if (client.Character.DoNotDoTimers)
+            {
+                return;
+            }
             byte moveType = message.MoveType;
             var heading = new Quaternion(message.Heading.X, message.Heading.Y, message.Heading.Z, message.Heading.W);
             Coordinate coordinates = new Coordinate(message.Coordinates);
@@ -156,7 +173,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             Unknown2 = tmpInt2, 
                             Unknown3 = tmpInt3
                         };
-            client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
+            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
 
             // TODO: rewrite statelscheck
             /*

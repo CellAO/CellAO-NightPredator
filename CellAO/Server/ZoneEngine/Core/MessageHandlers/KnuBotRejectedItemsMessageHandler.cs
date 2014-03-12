@@ -24,57 +24,73 @@
 
 #endregion
 
-namespace ZoneEngine.MessageHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
+    using System.Collections.Generic;
 
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core;
-    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class SocialActionCmdHandler : IHandleMessage<SocialActionCmdMessage>
+    public class KnuBotRejectedItemsMessageHandler :
+        BaseMessageHandler<KnuBotRejectedItemsMessage, KnuBotRejectedItemsMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public KnuBotRejectedItemsMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="items">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, IEnumerable<Item> items)
         {
-            var client = (ZoneClient)sender;
-            var socialActionCmdMessage = (SocialActionCmdMessage)message.Body;
-
-            var announce = new SocialActionCmdMessage
-                           {
-                               Identity = socialActionCmdMessage.Identity, 
-                               Unknown = 0x00, 
-                               Unknown1 = socialActionCmdMessage.Unknown1, 
-                               Unknown2 = socialActionCmdMessage.Unknown2, 
-                               Unknown3 = socialActionCmdMessage.Unknown3, 
-                               Unknown4 = 0x01, 
-                               Unknown5 = socialActionCmdMessage.Unknown5, 
-                               Action = socialActionCmdMessage.Action
-                           };
-            client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
-
-            // This may be not needed here
-            client.Character.SendChangedStats();
+            this.Send(character, this.RejectedItems(character, knubotTarget, items), false);
         }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="items">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller RejectedItems(ICharacter character, Identity knubotTarget, IEnumerable<Item> items)
+        {
+            return x =>
+            {
+                x.Unknown1 = 2;
+                x.Target = knubotTarget;
+                x.Identity = character.Identity;
+                List<KnuBotRejectedItem> temp = new List<KnuBotRejectedItem>();
+                foreach (Item item in items)
+                {
+                    // TODO: Find out what the unknown in rejecteditem is
+                    temp.Add(
+                        new KnuBotRejectedItem() { HighId = item.HighID, LowId = item.LowID, Quality = item.Quality });
+                }
+
+                x.Items = temp.ToArray();
+            };
+        }
     }
 }

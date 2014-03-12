@@ -41,7 +41,7 @@ namespace CellAO.Core.Events
     /// <summary>
     /// </summary>
     [Serializable]
-    public class Events : IEvents
+    public class Event : IEvent
     {
         #region Fields
 
@@ -67,12 +67,12 @@ namespace CellAO.Core.Events
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        public List<Functions> Functions { get; set; }
+        public List<Function> Functions { get; set; }
 
         #endregion
 
-        public Events() {
-            this.Functions = new List<Functions>(10);
+        public Event() {
+            this.Functions = new List<Function>(10);
         }
 
         #region Public Methods and Operators
@@ -81,12 +81,12 @@ namespace CellAO.Core.Events
         /// </summary>
         /// <returns>
         /// </returns>
-        public Events Copy()
+        public Event Copy()
         {
-            Events copy = new Events();
+            Event copy = new Event();
 
             copy.EventType = this.EventType;
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 copy.Functions.Add(functions.Copy());
             }
@@ -102,10 +102,10 @@ namespace CellAO.Core.Events
         /// </param>
         public void Perform(ICharacter self, ICharacter caller)
         {
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 bool result = true;
-                foreach (Requirements requirements in functions.Requirements)
+                foreach (Requirement requirements in functions.Requirements)
                 {
                     result &= requirements.CheckRequirement(self);
                     if (!result)

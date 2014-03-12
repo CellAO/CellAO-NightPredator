@@ -116,8 +116,17 @@ namespace ZoneEngine.ChatCommands
                 }
 
                 // Determine low and high id depending on ql
+                int lowIdStore = lowId;
                 lowId = ItemLoader.ItemList[lowId].GetLowId(ql);
-                highId = ItemLoader.ItemList[lowId].GetHighId(ql);
+                if (lowId != -1)
+                {
+                    highId = ItemLoader.ItemList[lowId].GetHighId(ql);
+                }
+                else
+                {
+                    lowId = lowIdStore;
+                    highId = lowId;
+                }
 
                 Item item = new Item(ql, lowId, highId);
                 if (ItemLoader.ItemList[lowId].IsStackable())

@@ -233,7 +233,7 @@ namespace CellAO.Core.Requirements
         /// </param>
         /// <returns>
         /// </returns>
-        internal static Func<IInstancedEntity, bool> Create(Requirements requirements)
+        internal static Func<IInstancedEntity, bool> Create(Requirement requirements)
         {
             return
                 BuildExpression(

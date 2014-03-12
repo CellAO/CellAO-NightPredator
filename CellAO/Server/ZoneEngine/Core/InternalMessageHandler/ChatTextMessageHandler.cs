@@ -24,42 +24,77 @@
 
 #endregion
 
-namespace ZoneEngine.Core.MessageHandlers
+namespace ZoneEngine.Core.InternalMessageHandler
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
-
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class ChatCmdHandler : IHandleMessage<ChatCmdMessage>
+    public class ChatTextMessageHandler : BaseMessageHandler<ChatTextMessage, ChatTextMessageHandler>
     {
-        #region Public Methods and Operators
+        public ChatTextMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="text">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        protected override ChatTextMessage Create(ICharacter character,params object[] args)
         {
-            var client = (ZoneClient)sender;
-            var chatCmdMessage = (ChatCmdMessage)message.Body;
-
-            ChatCommandHandler.Read(chatCmdMessage, client);
-            client.Character.SendChangedStats();
+            return new ChatTextMessage()
+                   {
+                       Identity = character.Identity,
+                       Text = (string)args[0],
+                       Unknown1 = (short)args[1],
+                       Unknown2 = (int)args[2]
+                   };
         }
+
+        ///// <summary>
+        ///// </summary>
+        ///// <param name="character">
+        ///// </param>
+        ///// <param name="text">
+        ///// </param>
+        ///// <param name="unknown1">
+        ///// </param>
+        ///// <param name="unknown2">
+        ///// </param>
+        ///// <returns>
+        ///// </returns>
+        //public IMSendAOtomationMessageBodyToClient CreateIM(
+        //    ICharacter character,
+        //    string text,
+        //    short unknown1 = 0,
+        //    int unknown2 = 0)
+        //{
+        //    return new IMSendAOtomationMessageBodyToClient()
+        //           {
+        //               Body = this.Create(character, text, unknown1, unknown2),
+        //               client = character.Client
+        //           };
+        //}
 
         #endregion
     }

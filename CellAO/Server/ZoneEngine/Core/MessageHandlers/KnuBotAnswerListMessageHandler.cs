@@ -28,41 +28,66 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
+    using System.Collections.Generic;
 
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class CharDCMoveHandler : IHandleMessage<CharDCMoveMessage>
+    internal class KnuBotAnswerListMessageHandler :
+        BaseMessageHandler<KnuBotAnswerListMessage, KnuBotAnswerListMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public KnuBotAnswerListMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="knubotTarget">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="choices">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, string[] choices)
         {
-            var client = (ZoneClient)sender;
-            var charDCMoveMessage = (CharDCMoveMessage)message.Body;
-            if (!client.Character.DoNotDoTimers)
-            {
-                CharacterDCMove.Read(charDCMoveMessage, client);
-                client.Character.SendChangedStats();
-            }
+            this.Send(character, this.KnuBotAnswerList(character, knubotTarget, choices), false);
         }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="choices">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller KnuBotAnswerList(ICharacter character, Identity knubotTarget, string[] choices)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Target = knubotTarget;
+                List<KnuBotDialogOption> temp = new List<KnuBotDialogOption>();
+                foreach (string choice in choices)
+                {
+                    temp.Add(new KnuBotDialogOption() { Text = choice });
+                }
+
+                x.DialogOptions = temp.ToArray();
+                x.Unknown1 = 2;
+            };
+        }
     }
 }

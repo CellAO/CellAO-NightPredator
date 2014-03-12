@@ -37,7 +37,7 @@ namespace CellAO.Core.Events
 
     /// <summary>
     /// </summary>
-    public interface IEvents
+    public interface IEvent
     {
         #region Public Properties
 
@@ -49,7 +49,7 @@ namespace CellAO.Core.Events
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        List<Functions> Functions { get; set; }
+        List<Function> Functions { get; set; }
 
         #endregion
     }

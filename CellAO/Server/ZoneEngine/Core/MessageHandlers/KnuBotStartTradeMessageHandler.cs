@@ -24,68 +24,67 @@
 
 #endregion
 
-namespace CellAO.Core.Components
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Network;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    /// <typeparam name="T">
-    /// </typeparam>
-    public abstract class AbstractMessageHandler<T> // ; IMessageHandler
-        where T : MessageBody, new()
+    internal class KnuBotStartTradeMessageHandler :
+        BaseMessageHandler<KnuBotStartTradeMessage, KnuBotStartTradeMessageHandler>
     {
-
         /// <summary>
         /// </summary>
-        /// <param name="message">
-        /// </param>
-        public delegate void MessageDataFiller(T message);
+        public KnuBotStartTradeMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
 
         /// <summary>
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="messageDataFiller">
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        /// <param name="itemSlots">
+        /// </param>
+        public void Send(ICharacter character, Identity knubotTarget, string message, int itemSlots)
+        {
+            this.Send(character, this.StartTrade(character, knubotTarget, message, itemSlots), false);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="knubotTarget">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        /// <param name="itemSlots">
         /// </param>
         /// <returns>
         /// </returns>
-        protected abstract T Create(ICharacter character, MessageDataFiller messageDataFiller);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        /// <param name="client">
-        /// </param>
-        protected abstract void Read(T message, IZoneClient client);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        /// <param name="updateCharacterStats">
-        /// </param>
-        // public abstract void Receive(IZoneClient client, Message message);
-        public abstract void Receive(MessageWrapper<T> messageWrapper);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="messageDataFiller">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        protected abstract void Send(ICharacter character, MessageDataFiller messageDataFiller, bool announceToPlayfield = false);
+        private MessageDataFiller StartTrade(ICharacter character, Identity knubotTarget, string message, int itemSlots)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Message = message;
+                x.NumberOfItemSlotsInTradeWindow = itemSlots;
+                x.Target = knubotTarget;
+                x.Unknown1 = 2;
+            };
+        }
     }
 }

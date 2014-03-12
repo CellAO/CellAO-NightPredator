@@ -24,43 +24,57 @@
 
 #endregion
 
-namespace ZoneEngine.MessageHandlers
+namespace ZoneEngine.Core.InternalMessageHandler
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core;
-    using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class CharInPlayHandler : IHandleMessage<CharInPlayMessage>
+    public class DespawnMessageHandler : BaseMessageHandler<DespawnMessage, DespawnMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public DespawnMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="args">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <returns>
+        /// </returns>
+        protected override DespawnMessage Create(ICharacter character, params object[] args)
         {
-            var client = (ZoneClient)sender;
-            var charInPlayMessage = (CharInPlayMessage)message.Body;
-
-            CharacterInPlay.Read(client);
-            client.Character.SendChangedStats();
+            return new DespawnMessage() { Identity = character.Identity, Unknown = 0x01 };
         }
+
+        ///// <summary>
+        ///// </summary>
+        ///// <param name="targetIdentity">
+        ///// </param>
+        ///// <returns>
+        ///// </returns>
+        // public IMSendAOtomationMessageToPlayfieldOthers CreateIM(Identity targetIdentity)
+        // {
+        // DespawnMessage message = create(targetIdentity);
+        // return new IMSendAOtomationMessageToPlayfieldOthers() { Body = message, Identity = targetIdentity };
+        // }
 
         #endregion
     }

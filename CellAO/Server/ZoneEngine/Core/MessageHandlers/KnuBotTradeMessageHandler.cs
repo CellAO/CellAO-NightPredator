@@ -28,43 +28,55 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class CharacterActionHandler : IHandleMessage<CharacterActionMessage>
+    public class KnuBotTradeMessageHandler : BaseMessageHandler<KnuBotTradeMessage, KnuBotTradeMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public KnuBotTradeMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.OutboundOnly;
+            
+        }
+
+        #region Outbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="character">
         /// </param>
-        /// <param name="message">
+        /// <param name="item">
         /// </param>
-        public void Handle(object sender, Message message)
+        public void Send(ICharacter character, Item item)
         {
-            var client = (ZoneClient)sender;
-            var characterActionMessage = (CharacterActionMessage)message.Body;
+            this.Send(character, KnuBotTrade(character, item), false);
+        }
 
-            CharacterAction.Read(characterActionMessage, client);
-            if (client != null)
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private static MessageDataFiller KnuBotTrade(ICharacter character, Item item)
+        {
+            return x =>
             {
-                if (client.Character != null)
-                {
-                    client.Character.SendChangedStats();
-                }
-            }
+                x.Identity = character.Identity;
+
+                // TODO: Figure out the rest of the parameters :)
+            };
         }
 
         #endregion

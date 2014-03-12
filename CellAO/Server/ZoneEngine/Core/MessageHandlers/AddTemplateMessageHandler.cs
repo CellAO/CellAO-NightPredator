@@ -58,7 +58,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public void Send(ICharacter character, Item item)
         {
-            this.Send(character, AddItem(character.Identity, item), false);
+            this.Send(character, AddItem(character, item), false);
         }
 
         /// <summary>
@@ -69,12 +69,12 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller AddItem(Identity identity, Item item)
+        private static MessageDataFiller AddItem(ICharacter character, Item item)
         {
             return x =>
             {
                 x.Unknown = 0;
-                x.Identity = identity;
+                x.Identity = character.Identity;
                 x.HighId = item.HighID;
                 x.LowId = item.LowID;
                 x.Quality = item.Quality;

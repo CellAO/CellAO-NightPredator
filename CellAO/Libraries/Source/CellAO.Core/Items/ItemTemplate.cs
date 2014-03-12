@@ -102,8 +102,8 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            this.Actions = new List<Actions>(4);
-            this.Events = new List<Events>(4);
+            this.Actions = new List<AOAction>(4);
+            this.Events = new List<Event>(4);
             this.Attack = new Dictionary<int, int>(6);
             this.Defend = new Dictionary<int, int>(3);
             this.Stats = new Dictionary<int, int>(20);
@@ -116,11 +116,11 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<Actions> Actions { get; set; }
+        public List<AOAction> Actions { get; set; }
 
         /// <summary>
         /// </summary>
-        public List<Events> Events { get; set; }
+        public List<Event> Events { get; set; }
 
         #endregion
 
@@ -371,7 +371,7 @@ namespace CellAO.Core.Items
                 copy.Attack.Add(kv.Key, kv.Value);
             }
 
-            foreach (Actions actions in this.Actions)
+            foreach (AOAction actions in this.Actions)
             {
                 copy.Actions.Add(actions.Copy());
             }
@@ -381,7 +381,7 @@ namespace CellAO.Core.Items
                 copy.Defend.Add(kv.Key, kv.Value);
             }
 
-            foreach (Events events in this.Events)
+            foreach (Event events in this.Events)
             {
                 copy.Events.Add(events.Copy());
             }

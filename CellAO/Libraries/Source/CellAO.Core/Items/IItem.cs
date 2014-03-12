@@ -63,11 +63,11 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        List<Actions> ItemActions { get; }
+        List<AOAction> ItemActions { get; }
 
         /// <summary>
         /// </summary>
-        List<Events> ItemEvents { get; }
+        List<Event> ItemEvents { get; }
 
         /// <summary>
         /// LowId of the item template

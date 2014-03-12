@@ -45,7 +45,7 @@ namespace CellAO.Core.Items
         /// <summary>
         /// List of Game Action (toUse, toWear)
         /// </summary>
-        List<Actions> Actions { get; set; }
+        List<AOAction> Actions { get; set; }
 
         #endregion
     }

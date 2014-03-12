@@ -39,6 +39,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
+    using ZoneEngine.Script;
 
     #endregion
 
@@ -191,7 +192,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // done, so we call a hook.
             // Call all OnConnect script Methods
-            Program.csc.CallMethod("OnConnect", client.Character);
+            ScriptCompiler.Instance.CallMethod("OnConnect", client.Character);
         }
 
         #endregion

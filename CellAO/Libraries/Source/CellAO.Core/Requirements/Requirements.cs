@@ -42,7 +42,7 @@ namespace CellAO.Core.Requirements
     /// Requirements
     /// </summary>
     [Serializable]
-    public class Requirements : IRequirements
+    public class Requirement : IRequirement
     {
         #region Fields
 
@@ -120,9 +120,9 @@ namespace CellAO.Core.Requirements
         /// </summary>
         /// <returns>
         /// </returns>
-        public Requirements Copy()
+        public Requirement Copy()
         {
-            Requirements copy = new Requirements();
+            Requirement copy = new Requirement();
             copy.Operator = this.Operator;
             copy.ChildOperator = this.ChildOperator;
             copy.Target = this.Target;

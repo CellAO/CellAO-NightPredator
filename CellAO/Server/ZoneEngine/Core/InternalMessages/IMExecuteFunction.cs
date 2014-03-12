@@ -42,7 +42,7 @@ namespace ZoneEngine.Core.InternalMessages
 
         /// <summary>
         /// </summary>
-        public Functions Function;
+        public Function Function;
 
         /// <summary>
         /// </summary>
@@ -58,7 +58,7 @@ namespace ZoneEngine.Core.InternalMessages
         /// </param>
         /// <param name="user">
         /// </param>
-        public IMExecuteFunction(Functions function, Identity user)
+        public IMExecuteFunction(Function function, Identity user)
         {
             this.User = user;
             this.Function = function;

@@ -36,7 +36,7 @@ namespace CellAO.Core.Functions
 
     /// <summary>
     /// </summary>
-    public interface IFunctions
+    public interface IFunction
     {
         #region Public Properties
 
@@ -53,7 +53,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// Requirements to execute this function
         /// </summary>
-        List<Requirements> Requirements { get; set; }
+        List<Requirement> Requirements { get; set; }
 
         /// <summary>
         /// TargetType (constants in ItemLoader)
@@ -89,7 +89,7 @@ namespace CellAO.Core.Functions
         /// Copy Function
         /// </summary>
         /// <returns>new copy</returns>
-        IFunctions ShallowCopy();
+        IFunction ShallowCopy();
 
         #endregion
     }

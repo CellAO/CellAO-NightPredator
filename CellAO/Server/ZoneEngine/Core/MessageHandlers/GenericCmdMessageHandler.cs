@@ -24,32 +24,42 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
+
+    // TODO: Make this to EntityEnvent or something like this
 
     using System;
     using System.Linq;
 
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
     using CellAO.Core.Events;
     using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Core.Statels;
     using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.MessageHandlers;
-    using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class GenericCmd
+    public class GenericCmdMessageHandler : BaseMessageHandler<GenericCmdMessage, GenericCmdMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public GenericCmdMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.All;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
@@ -59,7 +69,7 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         /// <exception cref="NullReferenceException">
         /// </exception>
-        public static void Read(GenericCmdMessage message, ZoneClient client)
+        protected override void Read(GenericCmdMessage message, IZoneClient client)
         {
             switch (message.Action)
             {
@@ -87,7 +97,13 @@ namespace ZoneEngine.Core.PacketHandlers
                                 "No item found at " + message.Target.Type + "/" + message.Target.Instance);
                         }
 
-                        TemplateActionMessageHandler.Default.Send(client.Character, item, (int)message.Target.Type, message.Target.Instance);
+                        TemplateActionMessageHandler.Default.Send(
+                            client.Character, 
+                            item, 
+                            (int)message.Target.Type, 
+                            // container
+                            message.Target.Instance // placement
+                            );
 
                         if (ItemLoader.ItemList[item.HighID].IsConsumable())
                         {
@@ -96,33 +112,45 @@ namespace ZoneEngine.Core.PacketHandlers
                             {
                                 client.Character.BaseInventory.RemoveItem(
                                     (int)message.Target.Type, 
+                                    // pageNum
+                                    message.Target.Instance // slotNum
+                                    );
+                                CharacterActionMessageHandler.Default.SendDeleteItem(
+                                    client.Character, 
+                                    (int)message.Target.Type, 
                                     message.Target.Instance);
-
-                                DeleteItem.Send(client, (int)message.Target.Type, message.Target.Instance);
                             }
                         }
 
                         item.PerformAction(client.Character, EventType.OnUse, message.Target.Instance);
-                        Reply(message, client);
+
+                        // Acknowledge action
+                        message.Identity = client.Character.Identity;
+                        message.Temp1 = 1;
+                        message.Unknown = 0;
+
+                        // client.SendCompressed(message);
+                        client.Character.Send(message);
                     }
                     else
                     {
-                        string s = "Generic Command received:\r\nAction: " + message.Action.ToString() + "("
-                                   + ((int)message.Action).ToString() + ")\r\nTarget: " + message.Target.Type + " "
+                        string s = "Generic Command received:\r\nAction: " + message.Action + "("
+                                   + ((int)message.Action) + ")\r\nTarget: " + message.Target.Type + " "
                                    + ((int)message.Target.Type).ToString("X8") + ":"
                                    + message.Target.Instance.ToString("X8");
                         if (PlayfieldLoader.PFData.ContainsKey(client.Character.Playfield.Identity.Instance))
                         {
                             StatelData sd =
-                                PlayfieldLoader.PFData[client.Playfield.Identity.Instance].Statels.FirstOrDefault(
-                                    x =>
-                                        (x.StatelIdentity.Type == message.Target.Type)
-                                        && (x.StatelIdentity.Instance == message.Target.Instance));
+                                PlayfieldLoader.PFData[client.Character.Playfield.Identity.Instance].Statels
+                                    .FirstOrDefault(
+                                        x =>
+                                            (x.StatelIdentity.Type == message.Target.Type)
+                                            && (x.StatelIdentity.Instance == message.Target.Instance));
 
                             if (sd != null)
                             {
                                 s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
-                                Events onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
+                                Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
                                 if (onUse != null)
                                 {
                                     onUse.Perform(client.Character, client.Character);
@@ -130,7 +158,7 @@ namespace ZoneEngine.Core.PacketHandlers
                             }
                         }
 
-                        client.Character.Send(new ChatTextMessage() { Identity = client.Character.Identity, Text = s });
+                        ChatTextMessageHandler.Default.Send(client.Character, s);
                     }
 
                     break;
@@ -139,21 +167,35 @@ namespace ZoneEngine.Core.PacketHandlers
 
         #endregion
 
-        #region Methods
+        #region Outbound
+
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public void Acknowledge(ICharacter character, GenericCmdMessage message, bool announceToPlayfield = false)
+        {
+            this.Send(character, this.Reply(message), announceToPlayfield);
+        }
 
         /// <summary>
         /// </summary>
         /// <param name="message">
         /// </param>
-        /// <param name="client">
-        /// </param>
-        private static void Reply(GenericCmdMessage message, ZoneClient client)
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller Reply(GenericCmdMessage message)
         {
-            // Acknowledge action
-            message.Identity = client.Character.Identity;
-            message.Temp1 = 1;
-            message.Unknown = 0;
-            client.SendCompressed(message);
+            return x =>
+            {
+                x = message;
+                x.Temp1 = 1;
+                x.Unknown = 0;
+            };
         }
 
         #endregion

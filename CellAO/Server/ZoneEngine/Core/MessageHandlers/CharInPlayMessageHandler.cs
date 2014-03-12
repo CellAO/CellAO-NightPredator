@@ -24,81 +24,68 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Packets
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
+    using CellAO.Core.Components;
+    using CellAO.Core.Network;
+    using CellAO.Enums;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.InternalMessages;
+    using Utility;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class DeleteItem
+    public class CharInPlayMessageHandler : BaseMessageHandler<CharInPlayMessage, CharInPlayMessageHandler>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="container">
-        /// </param>
-        /// <param name="placement">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static MessageBody Create(ICharacter character, int container, int placement)
+        public CharInPlayMessageHandler()
         {
-            return new CharacterActionMessage()
-                   {
-                       Identity = character.Identity, 
-                       Action = CharacterActionType.DeleteItem, 
-                       Target =
-                           new Identity()
-                           {
-                               Type = (IdentityType)container, 
-                               Instance = placement
-                           }
-                   };
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="container">
-        /// </param>
-        /// <param name="placement">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static IMSendAOtomationMessageBodyToClient CreateIM(ICharacter character, int container, int placement)
-        {
-            return new IMSendAOtomationMessageBodyToClient()
-                   {
-                       client = character.Client, 
-                       Body = Create(character, container, placement)
-                   };
-        }
+        #region Inbound
 
         /// <summary>
         /// </summary>
+        /// <param name="message">
+        /// </param>
         /// <param name="client">
         /// </param>
-        /// <param name="container">
-        /// </param>
-        /// <param name="placement">
-        /// </param>
-        public static void Send(ZoneClient client, int container, int placement)
+        protected override void Read(CharInPlayMessage message, IZoneClient client)
         {
-            client.Character.Playfield.Send(client, Create(client.Character, container, placement));
+            LogUtil.Debug("Client connected...");
+            // client got all the needed data and
+            // wants to enter the world. After we
+            // reply to this, the character will really be in game
+            var announce = new CharInPlayMessage { Identity = client.Character.Identity, Unknown = 0x00 };
+            client.Character.Playfield.Announce(announce);
+
+            // Player is in game now, starting is over, set stats normally now
+            client.Character.Starting = false;
+
+            // Needed fix, so gmlevel will be loaded
+            client.Character.Stats[StatIds.gmlevel].Value = client.Character.Stats[StatIds.gmlevel].Value;
+
+            // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
+            // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
+            // walk the same waypoints.
+            // TODO: Fix it
+            /*foreach (MobType mob in NPCPool.Mobs)
+            {
+                // TODO: Make cache - use pf indexing somehow.
+                if (mob.pf == client.Character.pf)
+                {
+                    mob.SendToClient(client);
+                }
+            }*/
         }
 
         #endregion

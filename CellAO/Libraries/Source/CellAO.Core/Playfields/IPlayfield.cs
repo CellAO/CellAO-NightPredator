@@ -62,7 +62,7 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        List<Functions> EnvironmentFunctions { get; }
+        List<Function> EnvironmentFunctions { get; }
 
         /// <summary>
         /// </summary>

@@ -49,7 +49,7 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// List of Item Actions (requirement checks)
         /// </summary>
-        public List<Actions> Actions = new List<Actions>();
+        public List<AOAction> Actions = new List<AOAction>();
 
         /// <summary>
         /// List of Attack attributes
@@ -64,7 +64,7 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// List of Item events
         /// </summary>
-        public List<Events> Events = new List<Events>();
+        public List<Event> Events = new List<Event>();
 
         /// <summary>
         /// Nano ID
@@ -148,15 +148,15 @@ namespace CellAO.Core.Nanos
                 nanoFormula.Stats.Add(nanoFormulaAttribute.Key, nanoFormulaAttribute.Value);
             }
 
-            foreach (Events aoEvents in this.Events)
+            foreach (Event aoEvents in this.Events)
             {
-                Events newEvent = new Events();
-                foreach (Functions aoFunctions in aoEvents.Functions)
+                Event newEvent = new Event();
+                foreach (Function aoFunctions in aoEvents.Functions)
                 {
-                    Functions newAOFunctions = new Functions();
-                    foreach (Requirements aor in aoFunctions.Requirements)
+                    Function newAOFunctions = new Function();
+                    foreach (Requirement aor in aoFunctions.Requirements)
                     {
-                        Requirements newRequirement = new Requirements();
+                        Requirement newRequirement = new Requirement();
                         newRequirement.ChildOperator = aor.ChildOperator;
                         newRequirement.Operator = aor.Operator;
                         newRequirement.Statnumber = aor.Statnumber;

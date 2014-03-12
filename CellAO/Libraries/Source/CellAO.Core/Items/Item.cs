@@ -65,11 +65,11 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        private List<Actions> actions = null;
+        private List<AOAction> actions = null;
 
         /// <summary>
         /// </summary>
-        private List<Events> events = null;
+        private List<Event> events = null;
 
         #endregion
 
@@ -126,7 +126,7 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<Actions> ItemActions
+        public List<AOAction> ItemActions
         {
             get
             {
@@ -141,7 +141,7 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<Events> ItemEvents
+        public List<Event> ItemEvents
         {
             get
             {
@@ -237,13 +237,13 @@ namespace CellAO.Core.Items
                 else
                 {
                     // We need to create the interpolated actions first
-                    this.actions = new List<Actions>();
-                    foreach (Actions action in this.templateLow.Actions)
+                    this.actions = new List<AOAction>();
+                    foreach (AOAction action in this.templateLow.Actions)
                     {
-                        Actions temp = this.templateLow.Actions.Single(x => x.ActionType == action.ActionType).Copy();
+                        AOAction temp = this.templateLow.Actions.Single(x => x.ActionType == action.ActionType).Copy();
 
-                        Actions highActions = this.templateHigh.Actions.Single(x => x.ActionType == action.ActionType);
-                        Actions lowActions = action;
+                        AOAction highActions = this.templateHigh.Actions.Single(x => x.ActionType == action.ActionType);
+                        AOAction lowActions = action;
                         for (int reqnum = 0; reqnum < highActions.Requirements.Count; reqnum++)
                         {
                             temp.Requirements[reqnum].Value =
@@ -270,11 +270,11 @@ namespace CellAO.Core.Items
                 }
                 else
                 {
-                    this.events = new List<Events>();
+                    this.events = new List<Event>();
 
                     for (int evnum = 0; evnum < this.templateLow.Events.Count; evnum++)
                     {
-                        Events temp = this.templateLow.Events[evnum].Copy();
+                        Event temp = this.templateLow.Events[evnum].Copy();
                         for (int funcnum = 0; funcnum < this.templateLow.Events[evnum].Functions.Count; funcnum++)
                         {
                             for (int reqnum = 0;
@@ -405,12 +405,12 @@ namespace CellAO.Core.Items
         /// </param>
         public void PerformAction(ICharacter character, EventType eventType, int itemSlot)
         {
-            foreach (Events events in this.ItemEvents.Where(x => x.EventType == eventType))
+            foreach (Event events in this.ItemEvents.Where(x => x.EventType == eventType))
             {
-                foreach (Functions functions in events.Functions)
+                foreach (Function functions in events.Functions)
                 {
                     bool result = true;
-                    foreach (Requirements requirements in functions.Requirements)
+                    foreach (Requirement requirements in functions.Requirements)
                     {
                         result &= requirements.CheckRequirement(character);
                         if (!result)
@@ -421,7 +421,7 @@ namespace CellAO.Core.Items
 
                     if (result)
                     {
-                        Functions copy = functions.Copy();
+                        Function copy = functions.Copy();
                         MessagePackObject mpo = new MessagePackObject();
                         mpo = itemSlot;
                         copy.Arguments.Values.Add(mpo);

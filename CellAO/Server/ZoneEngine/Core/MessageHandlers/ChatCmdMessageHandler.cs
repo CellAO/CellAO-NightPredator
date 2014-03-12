@@ -24,11 +24,58 @@
 
 #endregion
 
-namespace ZoneEngine.Core.PacketHandlers
+namespace ZoneEngine.Core.MessageHandlers
 {
+    #region Usings ...
+
+    using CellAO.Core.Components;
+    using CellAO.Core.Network;
+
+    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Script;
+
+    #endregion
+
     /// <summary>
     /// </summary>
-    internal class N3Teleport
+    public class ChatCmdMessageHandler : BaseMessageHandler<ChatCmdMessage, ChatCmdMessageHandler>
     {
+        /// <summary>
+        /// </summary>
+        public ChatCmdMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
+
+        }
+
+        #region Inbound
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <param name="client">
+        /// </param>
+        protected override void Read(ChatCmdMessage message, IZoneClient client)
+        {
+            string fullArgs = message.Command.TrimEnd(char.MinValue).TrimStart('.').TrimStart('/');
+
+            string temp = string.Empty;
+            do
+            {
+                temp = fullArgs;
+                fullArgs = fullArgs.Replace("  ", " ");
+            }
+            while (temp != fullArgs);
+
+            string[] cmdArgs = fullArgs.Trim().Split(' ');
+
+            ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), client, client.Character.Identity, cmdArgs);
+        }
+
+        #endregion
     }
 }

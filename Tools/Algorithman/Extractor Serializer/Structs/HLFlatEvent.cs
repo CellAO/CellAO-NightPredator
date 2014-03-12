@@ -85,9 +85,9 @@ namespace Extractor_Serializer.Structs
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Events ToEvents()
+        internal Event ToEvents()
         {
-            Events ev = new Events();
+            Event ev = new Event();
             ev.EventType = (EventType) Enum.ToObject(typeof(EventType), this.EventType);
             foreach (HLFlatFunction flf in this.Functions)
             {

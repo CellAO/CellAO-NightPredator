@@ -29,7 +29,7 @@ namespace CellAO.Core.Requirements
 {
     /// <summary>
     /// </summary>
-    public interface IRequirements
+    public interface IRequirement
     {
         #region Public Properties
 

@@ -28,37 +28,61 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Core.InternalMessages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class GenericCmdHandler : IHandleMessage<GenericCmdMessage>
+    public class FollowTargetMessageHandler : BaseMessageHandler<FollowTargetMessage, FollowTargetMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public FollowTargetMessageHandler()
+        {
+            // Inbound only? We might need it for Mobs/Pets following - Algorithman
+            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.UpdateCharacterStatsOnReceive = true;
+        }
+
+        #region Inbound
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="client">
         /// </param>
         /// <param name="message">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <param name="updateCharacterStats">
+        /// </param>
+        protected override void Read(FollowTargetMessage followTargetMessage, IZoneClient client)
         {
-            var client = (ZoneClient)sender;
-            var genericCmdMessage = (GenericCmdMessage)message.Body;
+            // REFACT can we use the base class methods here ??
 
-            GenericCmd.Read(genericCmdMessage, client);
-            client.Character.SendChangedStats();
+            //var followTargetMessage = (FollowTargetMessage)message.Body;
+
+            var announce = new FollowTargetMessage
+                           {
+                               Identity = client.Character.Identity, 
+                               Unknown = 0, 
+                               Unknown1 = followTargetMessage.Unknown1, 
+                               Unknown2 = followTargetMessage.Unknown2, 
+                               Target =     followTargetMessage.Target, 
+                               Unknown3 = followTargetMessage.Unknown3, 
+                               Unknown4 = followTargetMessage.Unknown4, 
+                               Unknown5 = followTargetMessage.Unknown5, 
+                               Unknown6 = followTargetMessage.Unknown6, 
+                               Unknown7 = followTargetMessage.Unknown7
+                           };
+
+            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
+
         }
 
         #endregion

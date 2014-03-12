@@ -63,6 +63,7 @@ namespace CellAO.Stats.SpecialStats
             bool announceToPlayfield)
             : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
         {
+            this.Changed=true;
         }
 
         #endregion

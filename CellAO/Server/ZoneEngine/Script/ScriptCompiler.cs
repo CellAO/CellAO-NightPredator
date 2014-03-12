@@ -28,6 +28,10 @@
 
 namespace ZoneEngine.Script
 {
+    using System.ComponentModel;
+
+    using CellAO.Core.Network;
+
     using ZoneEngine.Core.MessageHandlers;
 
     #region Usings ...
@@ -91,6 +95,8 @@ namespace ZoneEngine.Script
     public class ScriptCompiler : IDisposable
     {
         // Holder for Chat commands
+
+        public static ScriptCompiler Instance = new ScriptCompiler();
 
         #region Fields
 
@@ -322,7 +328,7 @@ namespace ZoneEngine.Script
         /// </param>
         /// <param name="commandArguments">
         /// </param>
-        public void CallChatCommand(string commandName, ZoneClient client, Identity target, string[] commandArguments)
+        public void CallChatCommand(string commandName, IZoneClient client, Identity target, string[] commandArguments)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             if (commandName.ToUpperInvariant() != "LISTCOMMANDS")

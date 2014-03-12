@@ -24,16 +24,13 @@
 
 #endregion
 
-namespace ZoneEngine.Core.MessageHandlers
+namespace ZoneEngine.Core.Packets
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
-    using CellAO.Core.Components;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
 
@@ -41,37 +38,21 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class FollowTargetHandler : IHandleMessage<FollowTargetMessage>
+    public static class Bulk
     {
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="client">
         /// </param>
-        /// <param name="message">
+        /// <param name="messages">
         /// </param>
-        public void Handle(object sender, Message message)
+        /// <returns>
+        /// </returns>
+        public static IMSendAOtomationMessageBodiesToClient CreateIM(IZoneClient client, MessageBody[] messages)
         {
-            var client = (ZoneClient)sender;
-            var followTargetMessage = (FollowTargetMessage)message.Body;
-
-            var announce = new FollowTargetMessage
-                           {
-                               Identity = client.Character.Identity, 
-                               Unknown = 0, 
-                               Unknown1 = followTargetMessage.Unknown1, 
-                               Unknown2 = followTargetMessage.Unknown2, 
-                               Target = followTargetMessage.Target, 
-                               Unknown3 = followTargetMessage.Unknown3, 
-                               Unknown4 = followTargetMessage.Unknown4, 
-                               Unknown5 = followTargetMessage.Unknown5, 
-                               Unknown6 = followTargetMessage.Unknown6, 
-                               Unknown7 = followTargetMessage.Unknown7
-                           };
-            client.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
-            client.Character.SendChangedStats();
+            return new IMSendAOtomationMessageBodiesToClient() { Bodies = messages, client = client };
         }
 
         #endregion

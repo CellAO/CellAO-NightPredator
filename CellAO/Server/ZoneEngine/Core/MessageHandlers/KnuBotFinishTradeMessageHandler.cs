@@ -28,39 +28,40 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.PacketHandlers;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export(typeof(IHandleMessage))]
-    public class ContainerAddItemHandler : IHandleMessage<ContainerAddItemMessage>
+    public class KnuBotFinishTradeMessageHandler :
+        BaseMessageHandler<KnuBotFinishTradeMessage, KnuBotFinishTradeMessageHandler>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        public KnuBotFinishTradeMessageHandler()
+        {
+            this.Direction = MessageHandlerDirection.InboundOnly;
+        }
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
+        /// <param name="messageWrapper">
         /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Handle(object sender, Message message)
+        public override void Receive(MessageWrapper<KnuBotFinishTradeMessage> messageWrapper)
         {
-            var client = (ZoneClient)sender;
-            var containerAddItemMessage = (ContainerAddItemMessage)message.Body;
+            // TODO: Code it!
+            // As always, find KnuBot npc by its identity and call the appropriate method
+            ICharacter npc =
+    messageWrapper.Client.Character.Playfield.FindByIdentity<ICharacter>(messageWrapper.MessageBody.Target);
+            if (npc != null)
+            {
+                // npc.KnuBotFinishTrade(messageWrapper.Client.Character.Identity);
+            }
 
-            ContainerAddItem.AddItemToContainer(containerAddItemMessage, client);
-            client.Character.SendChangedStats();
         }
-
-        #endregion
     }
 }
