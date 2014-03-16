@@ -193,15 +193,7 @@ namespace ZoneEngine.Core.KnuBot
         {
             get
             {
-                Identity id;
-                id = this.GetBaseKnuBot().KnuBotIdentity;
-                if (id == null)
-                {
-                    // Shouldnt happen ever?
-                    throw new Exception("KnuBot Identity has gone away??");
-                }
-
-                return id;
+                return this.GetBaseKnuBot().KnuBotIdentity;
             }
         }
 
@@ -306,7 +298,7 @@ namespace ZoneEngine.Core.KnuBot
             bool result = true;
 
             // Check for "loose ends"
-            string[] nextDialogIds = this.FlattenNextIds();
+            string[] nextDialogIds = this.FlattenNextDialogIds();
 
             // Check for double Id's
             if (nextDialogIds.GroupBy(n => n).Any(c => c.Count() > 1))
@@ -354,7 +346,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </summary>
         /// <returns>
         /// </returns>
-        public string[] FlattenNextIds()
+        public string[] FlattenNextDialogIds()
         {
             var temp = new List<string>();
             foreach (KnuBotActionStruct kbas in this.knuBotActions)
@@ -368,7 +360,7 @@ namespace ZoneEngine.Core.KnuBot
 
             foreach (KnuBotDialogTree dlg in this.nodes)
             {
-                temp.AddRange(dlg.FlattenNextIds());
+                temp.AddRange(dlg.FlattenNextDialogIds());
             }
 
             return temp.ToArray();

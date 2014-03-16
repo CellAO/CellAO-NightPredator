@@ -98,8 +98,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </exception>
         internal ICharacter GetCharacter()
         {
-            ICharacter weak = this.Character.Target;
-            return weak;
+            return this.Character.Target;
         }
 
         /// <summary>
