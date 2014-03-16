@@ -29,11 +29,15 @@ namespace ZoneEngine.Core.KnuBot
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Items;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
@@ -98,6 +102,11 @@ namespace ZoneEngine.Core.KnuBot
         /// </exception>
         internal ICharacter GetCharacter()
         {
+            if (this.Character.Target == null)
+            {
+                throw new Exception("Character has gone away.");
+            }
+
             return this.Character.Target;
         }
 
@@ -116,6 +125,7 @@ namespace ZoneEngine.Core.KnuBot
                 result = true;
                 this.Character.Target = character;
                 this.selectedNode = this.rootNode;
+                this.OpenWindow();
                 this.Answer(KnuBotOptionId.DialogStart);
             }
 
@@ -179,6 +189,64 @@ namespace ZoneEngine.Core.KnuBot
         protected KnuBotActionStruct CAS(KnuBotAction action, string nextId)
         {
             return new KnuBotActionStruct() { ActionId = action.Method.Name, BotAction = action, NextDialogId = nextId };
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="choices">
+        /// </param>
+        protected void SendAnswerList(string[] choices)
+        {
+            KnuBotAnswerListMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, choices);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="text">
+        /// </param>
+        protected void SendText(string text)
+        {
+            KnuBotAppendTextMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, text);
+        }
+
+        /// <summary>
+        /// </summary>
+        protected void OpenWindow()
+        {
+            KnuBotOpenChatWindowMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="items">
+        /// </param>
+        protected void RejectItems(IEnumerable<Item> items)
+        {
+            KnuBotRejectedItemsMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, items);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <param name="numberOfSlots">
+        /// </param>
+        protected void StartTrade(string message, int numberOfSlots = 6)
+        {
+            KnuBotStartTradeMessageHandler.Default.Send(
+                this.GetCharacter(), 
+                this.KnuBotIdentity, 
+                message, 
+                numberOfSlots);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="item">
+        /// </param>
+        protected void Trade(Item item)
+        {
+            KnuBotTradeMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, item);
         }
     }
 }

@@ -32,6 +32,9 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
 
+    using Dapper;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -56,7 +59,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="item">
         /// </param>
-        public void Send(ICharacter character, Item item)
+        public void Send(ICharacter character,Identity target, Item item)
         {
             this.Send(character, KnuBotTrade(character, item), false);
         }
@@ -69,7 +72,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller KnuBotTrade(ICharacter character, Item item)
+        private static MessageDataFiller KnuBotTrade(ICharacter character,Identity target, Item item)
         {
             return x =>
             {
