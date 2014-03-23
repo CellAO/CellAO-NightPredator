@@ -46,8 +46,8 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="pooledIn">
         /// </param>
-        public BackPackInventoryPage(int ownerInstance, Pool pooledIn)
-            : base((int)IdentityType.Backpack, 30, 0, ownerInstance, pooledIn)
+        public BackPackInventoryPage(int ownerInstance)
+            : base((int)IdentityType.Backpack, 30, 0, ownerInstance)
         {
         }
 

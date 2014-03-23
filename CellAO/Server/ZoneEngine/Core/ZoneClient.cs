@@ -33,6 +33,7 @@ namespace ZoneEngine.Core
     using System.Globalization;
     using System.Linq;
     using System.Net.Sockets;
+    using System.Threading;
 
     using Cell.Core;
 
@@ -44,6 +45,7 @@ namespace ZoneEngine.Core
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using MemBus;
 
@@ -152,10 +154,10 @@ namespace ZoneEngine.Core
         {
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
-                functions.FunctionType, 
-                this.character, 
-                this.character, 
-                this.character, 
+                functions.FunctionType,
+                this.character,
+                this.character,
+                this.character,
                 functions.Arguments.Values.ToArray());
         }
 
@@ -173,20 +175,20 @@ namespace ZoneEngine.Core
                 throw new Exception("Character " + charId + " not found.");
             }
 
-            IPlayfield pf = this.server.PlayfieldById(character.Playfield);
+            // TODO: Save playfield type into Character table and use it accordingly
+            IPlayfield pf = this.server.PlayfieldById(new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
 
-            if (pf.Entities.GetObject<Character>(
+            if (Pool.Instance.GetObject<Character>(
                 new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
             {
                 this.character = new Character(
-                    pf.Entities, 
-                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId }, 
+                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
                     this);
             }
             else
             {
                 this.character =
-                    pf.Entities.GetObject<Character>(
+                    Pool.Instance.GetObject<Character>(
                         new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
                 this.character.Reconnect(this);
                 LogUtil.Debug("Reconnected to Character " + charId);
@@ -215,14 +217,14 @@ namespace ZoneEngine.Core
         {
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = this.server.Id, 
+                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0),
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
+                                      Sender = this.server.Id,
                                       Receiver = this.Character.Identity.Instance
                                   }
                           };
@@ -282,16 +284,16 @@ namespace ZoneEngine.Core
             // TODO: Investigate if reciever is a timestamp
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = 0xdfdf, 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
+                                      MessageId = 0xdfdf,
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
 
                                       // TODO: Make compression choosable in config.xml
-                                      Sender = 0x01000000, 
+                                      Sender = 0x01000000,
 
                                       // 01000000 = uncompressed, 03000000 = compressed
                                       Receiver = 0 // this.character.Identity.Instance 
@@ -337,10 +339,10 @@ namespace ZoneEngine.Core
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
                           {
-                              Identity = this.Character.Identity, 
-                              Unknown = 0x00, 
-                              Text = text, 
-                              Unknown1 = 0x1000, 
+                              Identity = this.Character.Identity,
+                              Unknown = 0x00,
+                              Text = text,
+                              Unknown1 = 0x1000,
                               Unknown2 = 0x00000000
                           };
 
@@ -371,9 +373,9 @@ namespace ZoneEngine.Core
                 }
                  */
                 //if (this == this.character.Client)
-               // {
-                    //this.character.Client = null;
-               // }
+                // {
+                //this.character.Client = null;
+                // }
             }
 
             this.character = null;
@@ -444,8 +446,8 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
+                    this,
+                    "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 LogUtil.Debug(HexOutput.Output(packet));
                 return false;
@@ -457,21 +459,21 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
+                    this,
+                    "Client sent unknown message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
-            
+
             // FUUUUUGLY
-            
+
             Type wrapperType = typeof(MessageWrapper<>);
             Type genericWrapperType = wrapperType.MakeGenericType(message.Body.GetType());
 
             object wrapped = Activator.CreateInstance(genericWrapperType);
             wrapped.GetType().GetProperty("Client").SetValue(wrapped, (IZoneClient)this, null);
             wrapped.GetType().GetProperty("Message").SetValue(wrapped, message, null);
-            wrapped.GetType().GetProperty("MessageBody").SetValue(wrapped, message.Body, null);                
+            wrapped.GetType().GetProperty("MessageBody").SetValue(wrapped, message.Body, null);
 
             this.bus.Publish(wrapped);
 

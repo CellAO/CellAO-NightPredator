@@ -44,11 +44,11 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="owner">
         /// </param>
-        public UnitInventory(IItemContainer owner, Pool pooledIn)
+        public UnitInventory(IItemContainer owner)
             : base(0, owner)
         {
             this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity.Instance));
         }
         
         #endregion

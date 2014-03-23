@@ -89,10 +89,6 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        public static ScriptCompiler csc;
-
-        /// <summary>
-        /// </summary>
         public static ZoneServer zoneServer;
 
         /// <summary>

@@ -30,8 +30,15 @@ namespace CellAO.Core.Controllers
 
     using System;
 
+    using Cell.Util.ObjectPools;
+
     using CellAO.Core.Entities;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
+    using CellAO.Core.Nanos;
     using CellAO.Core.Vector;
+    using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -48,6 +55,8 @@ namespace CellAO.Core.Controllers
         /// </summary>
         public ICharacter Character { get; set; }
 
+        // All functions return true if reply should be sent, false if no reply needed
+
         #region Generic character actions 
 
         /// <summary>
@@ -60,7 +69,8 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool LookAt(Identity target)
         {
-            throw new NotImplementedException();
+            this.Character.SetTarget(target);
+            return true;
         }
 
         /// <summary>
@@ -76,13 +86,17 @@ namespace CellAO.Core.Controllers
         public bool CastNano(int nanoId, Identity target)
         {
             // Procedure:
-            // 1. Check if nano can be casted
+            // 1. Check if nano can be casted (criteria to Use (3))
             // 2. Lock nanocasting ability
             // 3. Wait for cast attack delay
             // 4. Check target's restance to the nano
             // 5. Execute nanos gamefunctions
             // 6. Wait for nano recharge delay
             // 7. Unlock nano casting
+
+            NanoFormula nano = NanoLoader.NanoList[nanoId];
+            int strain = nano.NanoStrain();
+            // ...
 
             throw new NotImplementedException();
         }
@@ -148,7 +162,18 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool Move(int moveType, Coordinate newCoordinates, Quaternion heading)
         {
-            throw new NotImplementedException();
+            // Procedure:
+            // 1. Check if new coordinates are plausible (in range of runspeed since last update)
+            // 2. Set coordinates & heading
+
+            // give it a bit uncertainty (2.0f)
+            if (newCoordinates.Distance2D(this.Character.Coordinates) < 2.0f)
+            {
+                this.Character.SetCoordinates(newCoordinates, heading);
+                this.Character.UpdateMoveType((byte)moveType);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -167,7 +192,43 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool ContainerAddItem(int sourceContainerType, int sourcePlacement, Identity target, int targetPlacement)
         {
-            throw new NotImplementedException();
+            // Procedure:
+            // 1. Check if source location has item
+            // 2. Check if target container exists
+            // 3. Switch source with target
+
+            
+            // Source container exists
+            if (this.Character.BaseInventory.Pages.ContainsKey(sourceContainerType))
+            {
+                IInventoryPage sourcePage = this.Character.BaseInventory.Pages[sourceContainerType];
+                // Source is not null
+                if (sourcePage[sourcePlacement] != null)
+                {
+                    if (this.Character.Identity == target)
+                    {
+                        IInventoryPage targetPage = this.Character.BaseInventory.PageFromSlot(targetPlacement);
+                        if (targetPage != null)
+                        {
+                            IItem itemSource = sourcePage.Remove(sourcePlacement);
+                            IItem itemTarget = targetPage.Remove(targetPlacement);
+                            if (itemTarget != null)
+                            {
+                                sourcePage.Add(sourcePlacement, itemTarget);
+                            }
+                            if (itemSource != null)
+                            {
+                                targetPage.Add(targetPlacement, itemSource);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Put it into the other players/npcs trade window?
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -180,6 +241,13 @@ namespace CellAO.Core.Controllers
         /// </exception>
         public bool Follow(Identity target)
         {
+            // Procedure:
+            // 1. Check if target is still ingame
+            // 2. Find a path to target and head accordingly
+            // 3. Start movement (if not already)
+            // 4. Start Pathfinding loop
+
+            
             throw new NotImplementedException();
         }
 
@@ -196,7 +264,12 @@ namespace CellAO.Core.Controllers
             // 2. Announce the action to the playfield (or range)
             // 3. If logout timer pending, cancel pending logout timer
 
-            throw new NotImplementedException();
+            if (this.Character.InLogoutTimerPeriod())
+            {
+                this.Character.StopLogoutTimer();
+            }
+            this.Character.UpdateMoveType(37); // Magic number -> Stand
+            return true;
         }
 
         /// <summary>
@@ -266,13 +339,18 @@ namespace CellAO.Core.Controllers
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public bool DeleteItem(int container)
+        public bool DeleteItem(int container, int slotNumber)
         {
             // Procedure:
             // 1. Check container id (only bags and main inventory are valid for deleting)
             // 2. Remove item from inventory/bag
 
-            throw new NotImplementedException();
+            if (this.Character.BaseInventory.Pages.ContainsKey(container))
+            {
+                this.Character.BaseInventory.Pages[container].Remove(slotNumber);
+            }
+
+            return true;
         }
 
         /// <summary>

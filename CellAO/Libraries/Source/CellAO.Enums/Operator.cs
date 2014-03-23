@@ -444,6 +444,11 @@ namespace CellAO.Enums
 
         /// <summary>
         /// </summary>
-        User = 16, 
+        User = 16,
+
+        /// <summary>
+        /// </summary>
+        FlyingAllowed = 112,
+
     }
 }

@@ -59,9 +59,27 @@ namespace CellAO.Core.Entities
         /// </summary>
         public string Name { get; set; }
 
+        private Identity playfieldIdentity;
         /// <summary>
         /// </summary>
-        public IPlayfield Playfield { get; set; }
+        public IPlayfield Playfield
+        {
+            get
+            {
+                return Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this.playfieldIdentity = Identity.None;
+                }
+                else
+                {
+                    this.playfieldIdentity = value.Identity;
+                }
+            }
+        }
 
         public IZoneClient Client { get; set; }
 
@@ -87,6 +105,9 @@ namespace CellAO.Core.Entities
         /// </summary>
         public bool Starting { get; set; }
 
+        /// <summary>
+        /// </summary>
+        protected DateTime PredictionTime;
 
         /// <summary>
         /// </summary>
@@ -105,7 +126,13 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public TimeSpan PredictionDuration { get; private set; }
+        public TimeSpan PredictionDuration
+        {
+            get
+            {
+                return DateTime.UtcNow - this.PredictionTime;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -193,7 +220,6 @@ namespace CellAO.Core.Entities
         public bool ChangedAppearance { get; set; }
 
 
-
         #endregion
 
         #region Constructors and Destructors
@@ -204,8 +230,8 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="id">
         /// </param>
-        public Dynel(Pool pooledIn, Identity id)
-            : base(pooledIn, id)
+        public Dynel(Identity id)
+            : base(id)
         {
             this.Starting = true;
             this.DoNotDoTimers = true;
@@ -434,6 +460,16 @@ namespace CellAO.Core.Entities
 
         #endregion
 
+
+        public bool InPlayfield(Identity identity)
+        {
+            bool result = false;
+            if (this.Playfield != null)
+            {
+                result = this.Playfield.Identity == identity;
+            }
+            return result;
+        }
 
 
     }

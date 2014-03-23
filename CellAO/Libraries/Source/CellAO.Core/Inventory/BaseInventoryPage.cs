@@ -38,8 +38,6 @@ namespace CellAO.Core.Inventory
     using CellAO.Enums;
     using CellAO.ObjectManager;
 
-    using Dapper;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
@@ -69,8 +67,8 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="ownerInstance">
         /// </param>
-        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance, Pool pooledIn)
-            :base(pooledIn, new Identity(){Type = (IdentityType)ownerInstance,Instance=pagenum})
+        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance)
+            :base(new Identity(){Type = (IdentityType)ownerInstance,Instance=pagenum})
         {
             this.MaxSlots = maxslots;
             this.FirstSlotNumber = firstslotnumber;
@@ -517,7 +515,7 @@ namespace CellAO.Core.Inventory
             return true;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             base.Dispose();
         }

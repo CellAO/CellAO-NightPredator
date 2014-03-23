@@ -199,7 +199,7 @@ namespace CellAO.Core.Controllers
         /// </param>
         /// <returns>
         /// </returns>
-        bool DeleteItem(int container);
+        bool DeleteItem(int container, int slotNumber);
 
         /// <summary>
         /// </summary>

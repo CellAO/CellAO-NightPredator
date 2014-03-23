@@ -244,9 +244,11 @@ namespace ZoneEngine.Core.KnuBot
         /// </summary>
         /// <param name="item">
         /// </param>
-        protected void Trade(Item item)
+        protected void Trade(IdentityType container, int slotNumber)
         {
-            KnuBotTradeMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, item);
+            IItem temp = this.GetCharacter().BaseInventory.Pages[(int)container][slotNumber];
+            // TODO: Remove item from Character's inventory and check against script reqs
+        
         }
     }
 }

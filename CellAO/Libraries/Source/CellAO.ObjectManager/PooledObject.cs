@@ -38,11 +38,8 @@ namespace CellAO.ObjectManager
 
     /// <summary>
     /// </summary>
-    public class PooledObject : IDisposable, IEntity
+    public class PooledObject : IDisposable, IEntity, IPooledObject
     {
-        /// <summary>
-        /// </summary>
-        private Pool pool;
 
         /// <summary>
         /// </summary>
@@ -50,11 +47,10 @@ namespace CellAO.ObjectManager
         /// </param>
         /// <param name="id">
         /// </param>
-        public PooledObject(Pool pooledIn, Identity id)
+        public PooledObject(Identity id)
         {
             this.Identity = id;
-            pooledIn.AddObject(this);
-            this.pool = pooledIn;
+            Pool.Instance.AddObject(this);
         }
 
         /// <summary>
@@ -65,11 +61,7 @@ namespace CellAO.ObjectManager
         /// </summary>
         public virtual void Dispose()
         {
-            if (this.pool != null)
-            {
-                this.pool.RemoveObject(this);
-                this.pool = null;
-            }
+            Pool.Instance.RemoveObject(this);
         }
     }
 }

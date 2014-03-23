@@ -38,6 +38,7 @@ namespace ZoneEngine.Core.Packets
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -181,16 +182,16 @@ namespace ZoneEngine.Core.Packets
 
                 meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
 
-                foreach (AONano nano in character.ActiveNanos)
+                foreach (KeyValuePair<int,IActiveNano> kv in character.ActiveNanos)
                 {
                     var tempNano = new AONano();
-                    tempNano.ID = nano.ID;
-                    tempNano.Instance = nano.Instance;
-                    tempNano.NanoStrain = nano.NanoStrain;
-                    tempNano.Nanotype = nano.Nanotype;
-                    tempNano.TickCounter = nano.TickCounter;
-                    tempNano.TickInterval = nano.TickInterval;
-                    tempNano.Value3 = nano.Value3;
+                    tempNano.ID = kv.Value.ID;
+                    tempNano.Instance = kv.Value.Instance;
+                    tempNano.NanoStrain = kv.Key;
+                    tempNano.Nanotype = kv.Value.Nanotype;
+                    tempNano.TickCounter = kv.Value.TickCounter;
+                    tempNano.TickInterval = kv.Value.TickInterval;
+                    tempNano.Value3 = kv.Value.Value3;
 
                     nanos.Add(tempNano);
                 }

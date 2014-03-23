@@ -44,8 +44,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public KnuBotTradeInventoryPage(int ownerInstance, Pool pooledIn)
-            : base((int)IdentityType.KnuBotTradeWindow, 0x40, 0, ownerInstance, pooledIn)
+        public KnuBotTradeInventoryPage(int ownerInstance)
+            : base((int)IdentityType.KnuBotTradeWindow, 0x40, 0, ownerInstance)
         {
         }
 

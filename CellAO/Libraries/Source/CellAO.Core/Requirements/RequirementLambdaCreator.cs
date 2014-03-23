@@ -96,6 +96,8 @@ namespace CellAO.Core.Requirements
                 case Operator.HasNotFormula:
 
                     return k => ((Character)GetTarget(t).Compile().Invoke(k)).HasNano(statValue);
+                case Operator.FlyingAllowed:
+                    return k => true;
                 default:
 
                     throw new NotImplementedException("Operator " + o.ToString() + " not implemented yet.");

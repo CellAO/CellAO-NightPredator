@@ -50,7 +50,7 @@ namespace ZoneEngine.Core
     using MemBus.Support;
     using ZoneEngine.Core.MessageHandlers;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
     using ZoneEngine.Script;
 
@@ -60,7 +60,7 @@ using SmokeLounge.AOtomation.Messaging.Messages;
     /// </summary>
     public class ZoneServer : ServerBase
     {
-        
+
 
         #region Fields
 
@@ -112,7 +112,7 @@ using SmokeLounge.AOtomation.Messaging.Messages;
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SocialActionCmdMessage>>(SocialActionCmdMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TextMessage>>(VicinityChatMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ZoneLoginMessage>>(ZoneLoginMessageHandler.Default.Receive));
-            
+
         }
 
         #endregion
@@ -164,18 +164,18 @@ using SmokeLounge.AOtomation.Messaging.Messages;
         /// </param>
         /// <returns>
         /// </returns>
-        public IPlayfield PlayfieldById(int id)
+        public IPlayfield PlayfieldById(Identity id)
         {
             // TODO: This needs to be changed to check for whole Identity
             foreach (IPlayfield pf in this.playfields)
             {
-                if (pf.Identity.Instance == id)
+                if (pf.Identity == id)
                 {
                     return pf;
                 }
             }
 
-            this.CreatePlayfield(new Identity { Instance = id });
+            this.CreatePlayfield(id);
             return this.PlayfieldById(id);
         }
 

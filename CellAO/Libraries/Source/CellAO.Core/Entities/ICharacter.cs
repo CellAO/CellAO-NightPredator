@@ -72,7 +72,7 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// Active Nanos list
         /// </summary>
-        List<IActiveNano> ActiveNanos { get; }
+        Dictionary<int, IActiveNano> ActiveNanos { get; }
 
         /// <summary>
         /// Caching Mesh layer for social tab items
@@ -115,5 +115,9 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         bool InLogoutTimerPeriod();
+
+        void StopLogoutTimer();
+
+        void SetCoordinates(Coordinate newCoordinates, Vector.Quaternion heading);
     }
 }

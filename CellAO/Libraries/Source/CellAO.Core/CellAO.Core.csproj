@@ -190,6 +190,10 @@
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Cell.Util\Cell.Util.csproj">
+      <Project>{77D1AEF7-AA59-4B5A-B114-E0C1EBE1B3C9}</Project>
+      <Name>Cell.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
       <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
       <Name>CellAO.Enums</Name>

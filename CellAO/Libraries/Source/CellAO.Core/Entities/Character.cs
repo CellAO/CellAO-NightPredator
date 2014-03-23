@@ -85,9 +85,6 @@ namespace CellAO.Core.Entities
         /// </summary>
         private SpinOrStrafeDirections strafeDirection;
 
-        /// <summary>
-        /// </summary>
-        private DateTime predictionTime;
 
         #endregion
 
@@ -101,16 +98,16 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="zoneClient">
         /// </param>
-        public Character(Pool pooledIn, Identity identity, IZoneClient zoneClient)
-            : base(pooledIn, identity)
+        public Character(Identity identity, IZoneClient zoneClient)
+            : base(identity)
         {
             this.DoNotDoTimers = true;
             this.Client = zoneClient;
-            this.ActiveNanos = new List<IActiveNano>();
+            this.ActiveNanos = new Dictionary<int, IActiveNano>();
 
             this.UploadedNanos = new List<IUploadedNanos>();
 
-            this.BaseInventory = new PlayerInventory(this, pooledIn);
+            this.BaseInventory = new PlayerInventory(this);
 
 
             this.SocialTab = new Dictionary<int, int>
@@ -152,7 +149,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public List<IActiveNano> ActiveNanos { get; private set; }
+        public Dictionary<int, IActiveNano> ActiveNanos { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -353,7 +350,8 @@ namespace CellAO.Core.Entities
             this.Playfield.Despawn(this.Identity);
             this.Save();
             // SetOffline has to be called AFTER save
-            CharacterDao.Instance.SetOffline(this.Identity.Instance);
+            int charId = this.Identity.Instance;
+
             this.BaseInventory.Dispose();
             this.DoNotDoTimers = true;
             if (this.Client != null)
@@ -369,6 +367,7 @@ namespace CellAO.Core.Entities
             }
 
             this.Client = null;
+            CharacterDao.Instance.SetOffline(charId);
             base.Dispose();
         }
 
@@ -703,7 +702,7 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void UpdateMoveType(byte moveType)
         {
-            this.predictionTime = DateTime.Now;
+            this.PredictionTime = DateTime.UtcNow;
 
             /*
              * NV: Would be nice to have all other possible values filled out for this at some point... *Looks at Suiv*
@@ -902,6 +901,13 @@ namespace CellAO.Core.Entities
         public bool InLogoutTimerPeriod()
         {
             return this.logoutTimer != null;
+        }
+
+        public void SetCoordinates(Coordinate newCoordinates, Quaternion heading)
+        {
+            this.Coordinates = newCoordinates;
+            this.Heading = heading;
+            this.PredictionTime = DateTime.UtcNow;
         }
 
         /// <summary>

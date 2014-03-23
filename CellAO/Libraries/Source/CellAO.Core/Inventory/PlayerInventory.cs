@@ -44,15 +44,15 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="owner">
         /// </param>
-        public PlayerInventory(IItemContainer owner, Pool pooledIn)
-            : base(owner, pooledIn)
+        public PlayerInventory(IItemContainer owner)
+            : base(owner)
         {
             this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance, pooledIn));
-            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance, pooledIn));
-            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance, pooledIn));
-            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance, pooledIn));
-            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance, pooledIn));
+            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance));
         }
 
         #endregion

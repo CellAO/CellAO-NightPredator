@@ -54,8 +54,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public ImplantInventoryPage(int ownerInstance, Pool pooledIn)
-            : base((int)IdentityType.ImplantPage, 15, 0x21, ownerInstance, pooledIn)
+        public ImplantInventoryPage(int ownerInstance)
+            : base((int)IdentityType.ImplantPage, 15, 0x21, ownerInstance)
         {
             this.NeedsItemCheck = true;
         }

@@ -33,6 +33,7 @@ namespace CellAO.Core.Playfields
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading;
 
     using CellAO.Core.Entities;
@@ -73,7 +74,7 @@ namespace CellAO.Core.Playfields
 
     /// <summary>
     /// </summary>
-    public class Playfield : IPlayfield
+    public class Playfield : PooledObject, IPlayfield
     {
         #region Fields
 
@@ -116,21 +117,11 @@ namespace CellAO.Core.Playfields
         /// <param name="playfieldIdentity">
         /// </param>
         public Playfield(ZoneServer zoneServer, Identity playfieldIdentity)
-            : this(zoneServer)
-        {
-            this.Identity = playfieldIdentity;
-            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="zoneServer">
-        /// </param>
-        private Playfield(ZoneServer zoneServer)
+            : base(playfieldIdentity)
         {
             this.server = zoneServer;
-
             this.playfieldBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
+
             this.memBusDisposeContainer.Add(
                 this.playfieldBus.Subscribe<IMSendAOtomationMessageToClient>(SendAOtomationMessageToClient));
             this.memBusDisposeContainer.Add(
@@ -145,8 +136,9 @@ namespace CellAO.Core.Playfields
                     this.SendAOtomationMessageBodiesToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
-            this.Entities = new Pool();
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
+            
+            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
         }
 
         #endregion
@@ -170,19 +162,11 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        public Pool Entities { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public List<Function> EnvironmentFunctions { get; private set; }
 
         /// <summary>
         /// </summary>
         public Expansions Expansion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Identity Identity { get; set; }
 
         /// <summary>
         /// </summary>
@@ -246,15 +230,13 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Announce(MessageBody messageBody)
         {
-            foreach (IEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (Character entity in Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Where(x => x.InPlayfield(this.Identity)))
             {
-                var character = entity as Character;
-
-                if (character != null)
+                if (entity != null)
                 {
                     // Make this whole thing unblocking with publishing single internal messages
                     this.Publish(
-                        new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
+                        new IMSendAOtomationMessageBodyToClient() { client = entity.Client, Body = messageBody });
                 }
             }
         }
@@ -276,16 +258,15 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceOthers(MessageBody messageBody, Identity dontSend)
         {
-            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (Character entity in Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
             {
-                var character = entity as Character;
-                if (character != null)
+                if (entity != null)
                 {
-                    if (character.Identity != dontSend)
+                    if (entity.Identity != dontSend)
                     {
                         // Make this whole thing unblocking with publishing single internal messages
                         this.Publish(
-                            new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
+                            new IMSendAOtomationMessageBodyToClient() { client = entity.Client, Body = messageBody });
                     }
                 }
             }
@@ -304,8 +285,7 @@ namespace CellAO.Core.Playfields
         /// </summary>
         public void DisconnectAllClients()
         {
-            IEnumerable<IEntity> templist =
-                this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(et => et is Character).ToList();
+            IEnumerable<Character> templist = Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).ToList();
             for (int i = templist.Count() - 1; i >= 0; i--)
             {
                 IEntity entity = templist.ElementAt(i);
@@ -323,7 +303,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void DisconnectClient(IInstancedEntity entity)
         {
-            this.Entities.RemoveObject(entity);
+            Pool.Instance.RemoveObject(entity);
         }
 
         /// <summary>
@@ -395,7 +375,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public IInstancedEntity FindByIdentity(Identity identity)
         {
-            return this.Entities.GetObject<IInstancedEntity>(identity);
+            return Pool.Instance.GetObject<IInstancedEntity>(identity);
         }
 
         /// <summary>
@@ -408,7 +388,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public T FindByIdentity<T>(Identity identity) where T : class, IDisposable, IEntity
         {
-            return this.Entities.GetObject<T>(identity);
+            return Pool.Instance.GetObject<T>(identity);
         }
 
         /// <summary>
@@ -423,16 +403,16 @@ namespace CellAO.Core.Playfields
         {
             List<IDynel> temp = new List<IDynel>();
             Coordinate coord = dynel.Coordinates;
-            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (Dynel entity in Pool.Instance.GetAll<Dynel>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
             {
                 if (entity == dynel)
                 {
                     continue;
                 }
 
-                if (((Dynel)entity).Coordinates.Distance2D(coord) <= range)
+                if (entity.Coordinates.Distance2D(coord) <= range)
                 {
-                    temp.Add((Dynel)entity);
+                    temp.Add(entity);
                 }
             }
 
@@ -443,7 +423,7 @@ namespace CellAO.Core.Playfields
         {
             List<ICharacter> temp = new List<ICharacter>();
             Coordinate coord = dynel.Coordinates;
-            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (ICharacter entity in Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
             {
                 if (entity == dynel)
                 {
@@ -467,7 +447,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public INamedEntity FindNamedEntityByIdentity(Identity identity)
         {
-            return this.Entities.GetObject<INamedEntity>(identity);
+            return Pool.Instance.GetObject<INamedEntity>(identity);
         }
 
         /// <summary>
@@ -498,7 +478,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public int NumberOfDynels()
         {
-            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count();
+            return Pool.Instance.GetAll((int)IdentityType.CanbeAffected).Count();
         }
 
         /// <summary>
@@ -507,7 +487,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public int NumberOfPlayers()
         {
-            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count(x => x is Character);
+            return Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Count();
         }
 
         /// <summary>
@@ -599,24 +579,21 @@ namespace CellAO.Core.Playfields
         public void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs)
         {
             Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
-            lock (this.Entities)
+            foreach (IEntity entity in
+                Pool.Instance.GetAll<IPacketReceivingEntity>((int)IdentityType.CanbeAffected))
             {
-                foreach (IEntity entity in
-                    this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is IPacketReceivingEntity))
+                if (entity.Identity != dontSendTo)
                 {
-                    if (entity.Identity != dontSendTo)
+                    var temp = entity as Character;
+                    if (temp != null)
                     {
-                        var temp = entity as Character;
-                        if (temp != null)
-                        {
-                            // TODO: make it NPC-safe
-                            SimpleCharFullUpdateMessage simpleCharFullUpdate =
-                                SimpleCharFullUpdate.ConstructMessage(temp);
-                            sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
+                        // TODO: make it NPC-safe
+                        SimpleCharFullUpdateMessage simpleCharFullUpdate =
+                            SimpleCharFullUpdate.ConstructMessage(temp);
+                        sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
 
-                            var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
-                            sendSCFUs.toClient.SendCompressed(charInPlay);
-                        }
+                        var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
+                        sendSCFUs.toClient.SendCompressed(charInPlay);
                     }
                 }
             }
@@ -663,13 +640,21 @@ namespace CellAO.Core.Playfields
             ZoneClient client = (ZoneClient)dynel.Client;
 
             // Set client=null so dynel can really dispose
+
+            IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
+                Pool.Instance.GetObject<Playfield>(
+                    new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+
+            if (newPlayfield == null)
+            {
+                newPlayfield = new Playfield(this.server, playfield);
+            }
+
+            dynel.Playfield = newPlayfield;
             dynel.Client = null;
             dynel.Dispose();
 
-            CharacterDao.Instance.SetPlayfield(dynelId, (int)playfield.Type, playfield.Instance);
             LogUtil.Debug("Saving to pf " + playfield.Instance);
-            Thread.Sleep(1000);
-
 
             // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
             // for now, just transmit our ip and port
@@ -773,10 +758,7 @@ namespace CellAO.Core.Playfields
         private void HeartBeatTimer(object sender)
         {
             IEnumerable<IEntity> dynels = null;
-            lock (this.Entities)
-            {
-                dynels = this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is ICharacter);
-            }
+            dynels = Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity));
 
             foreach (ICharacter dynel in dynels)
             {
@@ -796,5 +778,10 @@ namespace CellAO.Core.Playfields
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            this.DisconnectAllClients();
+        }
     }
 }

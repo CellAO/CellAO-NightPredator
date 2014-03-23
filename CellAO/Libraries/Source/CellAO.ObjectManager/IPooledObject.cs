@@ -24,31 +24,15 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace CellAO.ObjectManager
 {
-    #region Usings ...
-
-    using CellAO.ObjectManager;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    #endregion
-
     /// <summary>
     /// </summary>
-    public class IncomingTradeInventoryPage : BaseInventoryPage
+    public interface IPooledObject : IEntity
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="ownerInstance">
-        /// </param>
-        public IncomingTradeInventoryPage(int ownerInstance)
-            : base((int)IdentityType.IncomingTradeWindow, 0x40, 0, ownerInstance)
-        {
-        }
-
-        #endregion
     }
 }

@@ -43,11 +43,6 @@ namespace CellAO.Interfaces
         int Instance { get; set; }
 
         /// <summary>
-        /// Nano strain
-        /// </summary>
-        int NanoStrain { get; set; }
-
-        /// <summary>
         /// Nano type
         /// </summary>
         int Nanotype { get; set; }
@@ -55,12 +50,12 @@ namespace CellAO.Interfaces
         /// <summary>
         /// Time 1 (Tickcounter?)
         /// </summary>
-        int Time1 { get; set; }
+        int TickCounter { get; set; }
 
         /// <summary>
         /// Time 2 (Tickinterval?)
         /// </summary>
-        int Time2 { get; set; }
+        int TickInterval { get; set; }
 
         /// <summary>
         /// unknown

@@ -51,6 +51,15 @@ namespace CellAO.ObjectManager
 
         #endregion
 
+        private static readonly Pool instance = new Pool();
+        public static Pool Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -99,6 +108,17 @@ namespace CellAO.ObjectManager
             if (this.pool.ContainsKey(identityType))
             {
                 temp.AddRange((this.pool[identityType].Values.ToArray()));
+            }
+            return temp;
+        }
+
+
+        public IEnumerable<T> GetAll<T>(int identitytype) where T : class
+        {
+            List<T> temp = new List<T>();
+            if (this.pool.ContainsKey(identitytype))
+            {
+                temp.AddRange((this.pool[identitytype].Values.OfType<T>().ToArray()));
             }
             return temp;
         }

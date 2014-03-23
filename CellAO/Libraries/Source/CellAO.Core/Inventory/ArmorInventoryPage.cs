@@ -54,8 +54,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public ArmorInventoryPage(int ownerInstance, Pool pooledIn)
-            : base((int)IdentityType.ArmorPage, 15, 0x11, ownerInstance, pooledIn)
+        public ArmorInventoryPage(int ownerInstance)
+            : base((int)IdentityType.ArmorPage, 15, 0x11, ownerInstance)
         {
             this.NeedsItemCheck = true;
         }

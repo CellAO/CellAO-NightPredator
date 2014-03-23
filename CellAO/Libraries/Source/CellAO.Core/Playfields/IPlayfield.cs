@@ -48,7 +48,7 @@ namespace CellAO.Core.Playfields
 
     /// <summary>
     /// </summary>
-    public interface IPlayfield
+    public interface IPlayfield : IPooledObject, IDisposable, IEntity
     {
         #region Public Properties
 
@@ -58,19 +58,11 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        Pool Entities { get; }
-
-        /// <summary>
-        /// </summary>
         List<Function> EnvironmentFunctions { get; }
 
         /// <summary>
         /// </summary>
         Expansions Expansion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Identity Identity { get; set; }
 
         /// <summary>
         /// </summary>

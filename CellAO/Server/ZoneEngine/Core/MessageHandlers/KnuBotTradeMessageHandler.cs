@@ -29,12 +29,8 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using CellAO.Core.Components;
-    using CellAO.Core.Entities;
-    using CellAO.Core.Items;
+    using CellAO.Core.Network;
 
-    using Dapper;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -47,41 +43,21 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public KnuBotTradeMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-            
-        }
-
-        #region Outbound
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        public void Send(ICharacter character,Identity target, Item item)
-        {
-            this.Send(character, KnuBotTrade(character, item), false);
+            this.Direction = MessageHandlerDirection.InboundOnly;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="character">
+        /// <param name="message">
         /// </param>
-        /// <param name="item">
+        /// <param name="client">
         /// </param>
-        /// <returns>
-        /// </returns>
-        private static MessageDataFiller KnuBotTrade(ICharacter character,Identity target, Item item)
+        protected override void Read(KnuBotTradeMessage message, IZoneClient client)
         {
-            return x =>
-            {
-                x.Identity = character.Identity;
+            // Remove the item from the inventory
+            client.Character.BaseInventory.Pages[(int)message.Container.Type].Remove(message.Container.Instance);
 
-                // TODO: Figure out the rest of the parameters :)
-            };
+            // client.Character.Knubot.
         }
-
-        #endregion
     }
 }

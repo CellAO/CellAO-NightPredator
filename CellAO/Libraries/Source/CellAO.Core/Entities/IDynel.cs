@@ -38,10 +38,12 @@ namespace CellAO.Core.Entities
     using CellAO.Enums;
     using CellAO.Interfaces;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     using ZoneEngine.Core;
 
+    using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
@@ -118,5 +120,7 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         void WriteStats();
+
+        bool InPlayfield(Identity identity);
     }
 }

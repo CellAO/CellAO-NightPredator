@@ -29,8 +29,10 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using System.ComponentModel.Composition;
+    using System.Threading;
 
     using CellAO.Core.Components;
+    using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
@@ -49,7 +51,7 @@ namespace ZoneEngine.Core.MessageHandlers
     {
         public ZoneLoginMessageHandler()
         {
-            this.Direction=MessageHandlerDirection.InboundOnly;
+            this.Direction = MessageHandlerDirection.InboundOnly;
         }
 
         #region Public Methods and Operators
@@ -63,6 +65,7 @@ namespace ZoneEngine.Core.MessageHandlers
         protected override void Read(ZoneLoginMessage message, IZoneClient client)
         {
             ZoneClient zc = (ZoneClient)client;
+
             zc.CreateCharacter(message.CharacterId);
             zc.SendInitiateCompressionMessage(new InitiateCompressionMessage());
 
