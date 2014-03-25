@@ -46,13 +46,14 @@ namespace CellAO_Launcher
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Todo Add a check if the IP box is empty as well as the Exe Box.
+            //TODO: Add a check if the IP box is empty as well as the Exe Box.
             string[] temp = bx_IPAddress.Text.Split('.');
             int ipConverted = int.Parse(temp[3]) + int.Parse(temp[2]) * 256 + int.Parse(temp[1]) * 256 * 256 + int.Parse(temp[0]) * 256 * 256 * 256;
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
             if (UseEncryption.Checked == true)
             {
+                //TODO: Add the ability for us to enject our own SecretKey here to make AO think we are using real encryption.
                 MessageBox.Show("Feature is not implimented yet.");
                 Application.Exit();
             }
@@ -75,7 +76,6 @@ namespace CellAO_Launcher
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //Todo: Add Save code here for Ipbox, use encryption, and file location.
             if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
             else { _config.Instance.CurrentConfig.UseEncryption = false; }
 
