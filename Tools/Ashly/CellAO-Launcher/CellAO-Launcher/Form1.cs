@@ -73,7 +73,7 @@ namespace CellAO_Launcher
             else 
             {
                 startInfo.FileName = bx_AOExe.Text;
-                startInfo.Arguments =  "IA "+ ipConverted + " IP " + Convert.ToInt32(bx_Port.Text) + " UI";
+                startInfo.Arguments =  "IA "+ Convert.ToString(ipConverted) + " IP " + bx_Port.Text + " UI";
                 Process.Start(startInfo);
                 Application.Exit();
             }
