@@ -71,6 +71,8 @@ namespace CellAO_Launcher
             bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
+            if (_config.Instance.CurrentConfig.Debug == true) { checkBox1.Checked = true; }
+            else { checkBox1.Checked = false; }
             if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
             else { UseEncryption.Checked = false; }
             //For Debug mode.
@@ -81,6 +83,9 @@ namespace CellAO_Launcher
         {
             if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
             else { _config.Instance.CurrentConfig.UseEncryption = false; }
+
+            if (checkBox1.Checked == true) { _config.Instance.CurrentConfig.Debug = true; }
+            else { _config.Instance.CurrentConfig.Debug = false; }
 
             _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
@@ -95,6 +100,22 @@ namespace CellAO_Launcher
         {
             string[] temp = bx_IPAddress.Text.Split('.');
             bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked == true)
+            {
+                bx_converted.Visible = true;
+                label4.Visible = true;
+                button4.Visible = true;
+            }
+            else
+            {
+                bx_converted.Visible = false;
+                label4.Visible = false;
+                button4.Visible = false;
+            }
         }
 
     }
