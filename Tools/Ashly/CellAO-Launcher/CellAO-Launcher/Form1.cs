@@ -45,56 +45,57 @@ namespace CellAO_Launcher
         private uint ipConverted;
         private void button1_Click(object sender, EventArgs e)
         {
-            //TODO: Add a check if the IP box is empty as well as the Exe Box.
-            if (cbx_DNSType.Text != null)
+            if (bx_AOExe.Text != null || bx_IPAddress.Text != null || bx_Port.Text != null)
             {
-                if (cbx_DNSType.Text == "IPAddress")
+                if (cbx_DNSType.Text != null)
                 {
-                    string[] temp = bx_IPAddress.Text.Split('.');
-                   // ipConverted = uint.Parse(temp[0]) + uint.Parse(temp[1]) * 256 + uint.Parse(temp[2]) * 256 * 256 + uint.Parse(temp[3]) * 256 * 256 * 256;
-                    ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
+                    if (cbx_DNSType.Text == "IPAddress")
+                    {
+                        string[] temp = bx_IPAddress.Text.Split('.');
+                        ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
+                    }
+                    else
+                    {
+                        IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
+                        string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
+                        ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
+                    }
+                }
+                else { MessageBox.Show("Please choose a DNS Type."); return; }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+
+                if (UseEncryption.Checked == true)
+                {
+                    //TODO: Add the ability for us to enject our own SecretKey here to make AO think we are using real encryption.
+                    MessageBox.Show("Feature is not implimented yet.");
+                    return;
                 }
                 else
                 {
-                    IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
-                    string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
-                    ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
+                    startInfo.FileName = bx_AOExe.Text;
+                    startInfo.Arguments = " IA " + ipConverted + " IP " + bx_Port.Text + " UI";
+                    //startInfo.WorkingDirectory = Path.GetDirectory(bx_AOExe.Text);
+                    startInfo.WorkingDirectory = Path.GetDirectoryName(bx_AOExe.Text);
+                    Process.Start(startInfo);
+
+                    if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
+                    else { _config.Instance.CurrentConfig.UseEncryption = false; }
+
+                    if (cbx_DebugMode.Checked == true) { _config.Instance.CurrentConfig.Debug = true; }
+                    else { _config.Instance.CurrentConfig.Debug = false; }
+
+                    _config.Instance.CurrentConfig.HostType = cbx_DNSType.Text;
+                    _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
+                    _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
+                    _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);
+                    _config.Instance.SaveConfig();
+
+                    Process _proc = Process.GetCurrentProcess();
+                    _proc.Kill();
                 }
             }
-            else { MessageBox.Show("Please choose a DNS Type."); return; }
-
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-
-            if (UseEncryption.Checked == true)
-            {
-                //TODO: Add the ability for us to enject our own SecretKey here to make AO think we are using real encryption.
-                MessageBox.Show("Feature is not implimented yet.");
-                return;
-            }
-            else 
-            {
-                startInfo.FileName = bx_AOExe.Text;
-                startInfo.Arguments =  " IA "+ ipConverted + " IP " + bx_Port.Text + " UI";
-                //startInfo.WorkingDirectory = Path.GetDirectory(bx_AOExe.Text);
-                startInfo.WorkingDirectory = Path.GetDirectoryName(bx_AOExe.Text);
-                Process.Start(startInfo);
-
-                if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
-                else { _config.Instance.CurrentConfig.UseEncryption = false; }
-
-                if (cbx_DebugMode.Checked == true) { _config.Instance.CurrentConfig.Debug = true; }
-                else { _config.Instance.CurrentConfig.Debug = false; }
-
-                _config.Instance.CurrentConfig.HostType = cbx_DNSType.Text;
-                _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
-                _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
-                _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);
-                _config.Instance.SaveConfig();
-
-                Process _proc = Process.GetCurrentProcess();
-                _proc.Kill();
-            }
-            
+            else { MessageBox.Show("Please Enter the proper information."); return; }
         }
 
         private void Form1_Load(object sender, EventArgs e)
