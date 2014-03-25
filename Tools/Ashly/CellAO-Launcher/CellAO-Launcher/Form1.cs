@@ -47,7 +47,7 @@ namespace CellAO_Launcher
             //    MessageBox.Show("Please fill out the information and try again."); return;
           
             string[] temp = bx_IPAddress.Text.Split('.');
-            int ipConverted = int.Parse(temp[3]) + int.Parse(temp[2]) * 256 + int.Parse(temp[1]) * 256 * 256 + int.Parse(temp[0]) * 256 * 256 * 256;
+            int ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
             if (UseEncryption.Checked == true)
@@ -94,7 +94,7 @@ namespace CellAO_Launcher
         private void button4_Click(object sender, EventArgs e)
         {
             string[] temp = bx_IPAddress.Text.Split('.');
-            bx_converted.Text = Convert.ToString(int.Parse(temp[3]) + int.Parse(temp[2]) * 256 + int.Parse(temp[1]) * 256 * 256 + int.Parse(temp[0]) * 256 * 256 * 256);
+            bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
         }
 
     }
