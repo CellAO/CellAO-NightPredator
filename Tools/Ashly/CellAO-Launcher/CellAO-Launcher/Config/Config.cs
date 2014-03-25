@@ -40,7 +40,9 @@ namespace CellAO_Launcher.Config
 
         AOExecutable,
 
-        UseEncryption
+        UseEncryption,
+
+        Debug
 
     }
 
@@ -70,6 +72,11 @@ namespace CellAO_Launcher.Config
         /// Gets or sets a value indicating whether to enable Encryption
         /// </summary>
         public bool UseEncryption { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicated weather launcher is in debug mode or not.
+        /// </summary>
+        public bool Debug { get; set; }
 
         #endregion
     }

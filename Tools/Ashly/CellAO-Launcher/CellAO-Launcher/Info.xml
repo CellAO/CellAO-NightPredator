@@ -6,4 +6,6 @@
   <AOExecutable></AOExecutable>
   <!-- true or false statement here..-->
   <UseEncryption>false</UseEncryption>
+  <!-- Debug Mode doesn't really do anything...-->
+  <Debug>false</Debug>
 </Config>

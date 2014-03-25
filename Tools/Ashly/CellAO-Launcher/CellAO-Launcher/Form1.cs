@@ -24,6 +24,7 @@ namespace CellAO_Launcher
             OpenFileDialog browseFile = new OpenFileDialog();
             browseFile.Filter = "Exe Files (*.exe)|*.exe";
             browseFile.Title = "Browse EXE files";
+            browseFile.FileName = "Anarchy.exe";
 
             if (browseFile.ShowDialog() == DialogResult.Cancel)
                 return;
@@ -38,15 +39,13 @@ namespace CellAO_Launcher
             }
         }
 
-        private void bx_AOExe_TextChanged(object sender, EventArgs e)
-        {
-
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //TODO: Add a check if the IP box is empty as well as the Exe Box.
+            //if (bx_AOExe.Text == null || bx_IPAddress.Text == null)
+            //    MessageBox.Show("Please fill out the information and try again."); return;
+          
             string[] temp = bx_IPAddress.Text.Split('.');
             int ipConverted = int.Parse(temp[3]) + int.Parse(temp[2]) * 256 + int.Parse(temp[1]) * 256 * 256 + int.Parse(temp[0]) * 256 * 256 * 256;
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -55,7 +54,7 @@ namespace CellAO_Launcher
             {
                 //TODO: Add the ability for us to enject our own SecretKey here to make AO think we are using real encryption.
                 MessageBox.Show("Feature is not implimented yet.");
-                Application.Exit();
+                return;
             }
             else 
             {
@@ -64,6 +63,7 @@ namespace CellAO_Launcher
                 Process.Start(startInfo);
                 Application.Exit();
             }
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -72,6 +72,8 @@ namespace CellAO_Launcher
             bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
             else { UseEncryption.Checked = false; }
+            //For Debug mode.
+            if (_config.Instance.CurrentConfig.Debug == true) { label4.Visible = true; bx_converted.Visible = true; bx_converted.ReadOnly = true; button4.Visible = true; }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -86,5 +88,12 @@ namespace CellAO_Launcher
             Application.Exit();
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string[] temp = bx_IPAddress.Text.Split('.');
+            bx_converted.Text = Convert.ToString(int.Parse(temp[3]) + int.Parse(temp[2]) * 256 + int.Parse(temp[1]) * 256 * 256 + int.Parse(temp[0]) * 256 * 256 * 256);
+        }
+
     }
 }
