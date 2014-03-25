@@ -42,7 +42,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.bx_Port = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.cbx_DebugMode = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -173,16 +173,16 @@
             this.bx_Port.Size = new System.Drawing.Size(100, 20);
             this.bx_Port.TabIndex = 13;
             // 
-            // checkBox1
+            // cbx_DebugMode
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(809, 179);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbx_DebugMode.AutoSize = true;
+            this.cbx_DebugMode.Location = new System.Drawing.Point(809, 179);
+            this.cbx_DebugMode.Name = "cbx_DebugMode";
+            this.cbx_DebugMode.Size = new System.Drawing.Size(88, 17);
+            this.cbx_DebugMode.TabIndex = 14;
+            this.cbx_DebugMode.Text = "Debug Mode";
+            this.cbx_DebugMode.UseVisualStyleBackColor = true;
+            this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Form1
             // 
@@ -191,7 +191,7 @@
             this.BackColor = System.Drawing.Color.CadetBlue;
             this.ClientSize = new System.Drawing.Size(962, 202);
             this.ControlBox = false;
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.cbx_DebugMode);
             this.Controls.Add(this.bx_Port);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button4);
@@ -233,7 +233,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox bx_Port;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox cbx_DebugMode;
     }
 }
 
