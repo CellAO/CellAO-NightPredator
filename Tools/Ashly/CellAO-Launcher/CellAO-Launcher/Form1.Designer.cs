@@ -37,11 +37,12 @@
             this.bx_AOExe = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(441, 179);
+            this.button1.Location = new System.Drawing.Point(337, 179);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -68,10 +69,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe Print", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(453, 18);
+            this.label2.Font = new System.Drawing.Font("Segoe Print", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(385, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(221, 43);
+            this.label2.Size = new System.Drawing.Size(341, 65);
             this.label2.TabIndex = 3;
             this.label2.Text = "CellAO Launcher";
             // 
@@ -87,7 +88,7 @@
             // UseEncryption
             // 
             this.UseEncryption.AutoSize = true;
-            this.UseEncryption.Location = new System.Drawing.Point(819, 184);
+            this.UseEncryption.Location = new System.Drawing.Point(487, 90);
             this.UseEncryption.Name = "UseEncryption";
             this.UseEncryption.Size = new System.Drawing.Size(144, 17);
             this.UseEncryption.TabIndex = 5;
@@ -98,13 +99,14 @@
             // 
             this.bx_AOExe.Location = new System.Drawing.Point(27, 133);
             this.bx_AOExe.Name = "bx_AOExe";
-            this.bx_AOExe.Size = new System.Drawing.Size(437, 20);
+            this.bx_AOExe.ReadOnly = true;
+            this.bx_AOExe.Size = new System.Drawing.Size(854, 20);
             this.bx_AOExe.TabIndex = 6;
             this.bx_AOExe.TextChanged += new System.EventHandler(this.bx_AOExe_TextChanged);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(486, 133);
+            this.button2.Location = new System.Drawing.Point(887, 130);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 7;
@@ -112,11 +114,23 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(551, 179);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 8;
+            this.button3.Text = "Quit";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(974, 214);
+            this.ControlBox = false;
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.bx_AOExe);
             this.Controls.Add(this.UseEncryption);
@@ -125,8 +139,12 @@
             this.Controls.Add(this.bx_IPAddress);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "Launcher";
+            this.ShowIcon = false;
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,6 +161,7 @@
         private System.Windows.Forms.TextBox bx_AOExe;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
 
