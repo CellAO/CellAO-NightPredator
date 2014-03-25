@@ -75,6 +75,19 @@ namespace CellAO_Launcher
                 startInfo.FileName = bx_AOExe.Text;
                 startInfo.Arguments =  "IA "+ ipConverted + " IP " + bx_Port.Text + " UI";
                 Process.Start(startInfo);
+
+                if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
+                else { _config.Instance.CurrentConfig.UseEncryption = false; }
+
+                if (cbx_DebugMode.Checked == true) { _config.Instance.CurrentConfig.Debug = true; }
+                else { _config.Instance.CurrentConfig.Debug = false; }
+
+                _config.Instance.CurrentConfig.HostType = cbx_DNSType.Text;
+                _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
+                _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
+                _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);
+                _config.Instance.SaveConfig();
+
                 Application.Exit();
             }
             
