@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using _config = CellAO_Launcher.Config.ConfigReadWrite;
 
 namespace CellAO_Launcher
 {
@@ -66,12 +67,22 @@ namespace CellAO_Launcher
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Todo: Add load code here for Ibox, use encryption and file location.
+            bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
+            bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
+            if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
+            else { UseEncryption.Checked = false; }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             //Todo: Add Save code here for Ipbox, use encryption, and file location.
+            if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
+            else { _config.Instance.CurrentConfig.UseEncryption = false; }
+
+            _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
+            _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
+            _config.Instance.SaveConfig();
+
             Application.Exit();
 
         }
