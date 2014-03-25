@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using _config = CellAO_Launcher.Config.ConfigReadWrite;
+using System.IO;
 
 namespace CellAO_Launcher
 {
@@ -73,7 +74,9 @@ namespace CellAO_Launcher
             else 
             {
                 startInfo.FileName = bx_AOExe.Text;
-                startInfo.Arguments =  "IA "+ ipConverted + " IP " + bx_Port.Text + " UI";
+                startInfo.Arguments =  " IA "+ ipConverted + " IP " + bx_Port.Text + " UI";
+                //startInfo.WorkingDirectory = Path.GetDirectory(bx_AOExe.Text);
+                startInfo.WorkingDirectory = Path.GetDirectoryName(bx_AOExe.Text);
                 Process.Start(startInfo);
 
                 if (UseEncryption.Checked == true) { _config.Instance.CurrentConfig.UseEncryption = true; }
@@ -88,7 +91,8 @@ namespace CellAO_Launcher
                 _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);
                 _config.Instance.SaveConfig();
 
-                Application.Exit();
+                Process _proc = Process.GetCurrentProcess();
+                _proc.Kill();
             }
             
         }
