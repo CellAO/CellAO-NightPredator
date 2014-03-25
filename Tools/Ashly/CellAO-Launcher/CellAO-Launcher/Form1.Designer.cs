@@ -40,6 +40,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.bx_converted = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.bx_Port = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -154,6 +156,22 @@
             this.button4.Visible = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(226, 74);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 13);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Server Port:";
+            // 
+            // bx_Port
+            // 
+            this.bx_Port.Location = new System.Drawing.Point(229, 90);
+            this.bx_Port.Name = "bx_Port";
+            this.bx_Port.Size = new System.Drawing.Size(100, 20);
+            this.bx_Port.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -161,6 +179,8 @@
             this.BackColor = System.Drawing.Color.CadetBlue;
             this.ClientSize = new System.Drawing.Size(966, 206);
             this.ControlBox = false;
+            this.Controls.Add(this.bx_Port);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.bx_converted);
             this.Controls.Add(this.label4);
@@ -198,6 +218,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox bx_converted;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox bx_Port;
     }
 }
 

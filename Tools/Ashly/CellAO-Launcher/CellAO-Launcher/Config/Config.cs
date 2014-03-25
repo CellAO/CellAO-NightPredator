@@ -38,6 +38,8 @@ namespace CellAO_Launcher.Config
     {
         ServerIP,
 
+        ServerPort,
+
         AOExecutable,
 
         UseEncryption,
@@ -61,6 +63,9 @@ namespace CellAO_Launcher.Config
         /// Gets or sets The Server IP
         /// </summary>
         public string ServerIP { get; set; }
+
+
+        public int ServerPort { get; set; }
 
         /// <summary>
         /// Gets or Sets the directory of the AO Exe.

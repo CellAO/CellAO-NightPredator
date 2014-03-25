@@ -2,6 +2,8 @@
 <Config>
   <!-- Server Ip in the form of an IP address 192.168.0.1 as an example -->
   <ServerIP></ServerIP>
+  <!-- This is the Port of the Server you wish to connect to-->
+  <ServerPort></ServerPort>
   <!-- Directory of the EXE to run Anarchy Online-->
   <AOExecutable></AOExecutable>
   <!-- true or false statement here..-->

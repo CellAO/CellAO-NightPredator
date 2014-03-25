@@ -24,7 +24,7 @@ namespace CellAO_Launcher
             OpenFileDialog browseFile = new OpenFileDialog();
             browseFile.Filter = "Exe Files (*.exe)|*.exe";
             browseFile.Title = "Browse EXE files";
-            browseFile.FileName = "Anarchy.exe";
+            browseFile.FileName = "AnarchyOnline.exe";
 
             if (browseFile.ShowDialog() == DialogResult.Cancel)
                 return;
@@ -59,7 +59,7 @@ namespace CellAO_Launcher
             else 
             {
                 startInfo.FileName = bx_AOExe.Text;
-                startInfo.Arguments = Convert.ToString(ipConverted);
+                startInfo.Arguments =  "IA "+ ipConverted + " IP " + Convert.ToInt32(bx_Port.Text) + " UI";
                 Process.Start(startInfo);
                 Application.Exit();
             }
@@ -70,6 +70,7 @@ namespace CellAO_Launcher
         {
             bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
+            bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
             if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
             else { UseEncryption.Checked = false; }
             //For Debug mode.
@@ -83,6 +84,7 @@ namespace CellAO_Launcher
 
             _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
+            _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);
             _config.Instance.SaveConfig();
 
             Application.Exit();
