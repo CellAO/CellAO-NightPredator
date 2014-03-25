@@ -55,7 +55,7 @@ namespace CellAO_Launcher
                 else
                 {
                     IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
-                    string[] temp = host.AddressList[0].Address.ToString().Split('.');
+                    string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
                     ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
                 }
             }
@@ -113,8 +113,22 @@ namespace CellAO_Launcher
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string[] temp = bx_IPAddress.Text.Split('.');
-            bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+            if (cbx_DNSType.Text != null)
+            {
+                if (cbx_DNSType.Text == "IPAddress")
+                {
+                    string[] temp = bx_IPAddress.Text.Split('.');
+                    bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+                }
+                else
+                {
+                    IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
+                    //string[] temp = host.AddressList[0].Address.ToString().Split('.');
+                    string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
+                    bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+                }
+            }
+            else { MessageBox.Show("Please choose a DNS Type."); return; }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
