@@ -123,7 +123,6 @@ namespace CellAO_Launcher
                 else
                 {
                     IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
-                    //string[] temp = host.AddressList[0].Address.ToString().Split('.');
                     string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
                     bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
                 }
