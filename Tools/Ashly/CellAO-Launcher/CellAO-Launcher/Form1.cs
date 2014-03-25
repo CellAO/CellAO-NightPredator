@@ -41,7 +41,7 @@ namespace CellAO_Launcher
         }
 
 
-        private int ipConverted;
+        private uint ipConverted;
         private void button1_Click(object sender, EventArgs e)
         {
             //TODO: Add a check if the IP box is empty as well as the Exe Box.
@@ -50,13 +50,14 @@ namespace CellAO_Launcher
                 if (cbx_DNSType.Text == "IPAddress")
                 {
                     string[] temp = bx_IPAddress.Text.Split('.');
-                    ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
+                   // ipConverted = uint.Parse(temp[0]) + uint.Parse(temp[1]) * 256 + uint.Parse(temp[2]) * 256 * 256 + uint.Parse(temp[3]) * 256 * 256 * 256;
+                    ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
                 }
                 else
                 {
                     IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
                     string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
-                    ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
+                    ipConverted = uint.Parse(temp[0]) | (uint.Parse(temp[1]) << 8) | (uint.Parse(temp[2]) << 16) | (uint.Parse(temp[3]) << 24);
                 }
             }
             else { MessageBox.Show("Please choose a DNS Type."); return; }
@@ -118,13 +119,13 @@ namespace CellAO_Launcher
                 if (cbx_DNSType.Text == "IPAddress")
                 {
                     string[] temp = bx_IPAddress.Text.Split('.');
-                    bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+                    bx_converted.Text = Convert.ToString( uint.Parse(temp[0]) | (uint.Parse(temp[1]) <<8) | (uint.Parse(temp[2]) <<16) | (uint.Parse(temp[3])<<24));
                 }
                 else
                 {
                     IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
                     string[] temp = Convert.ToString(host.AddressList[0]).Split('.');
-                    bx_converted.Text = Convert.ToString(int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256);
+                    bx_converted.Text = Convert.ToString( uint.Parse(temp[0]) | (uint.Parse(temp[1]) <<8) | (uint.Parse(temp[2]) <<16) | (uint.Parse(temp[3])<<24));
                 }
             }
             else { MessageBox.Show("Please choose a DNS Type."); return; }
