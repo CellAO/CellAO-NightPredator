@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Net;
 using _config = CellAO_Launcher.Config.ConfigReadWrite;
 
 namespace CellAO_Launcher
@@ -40,14 +41,26 @@ namespace CellAO_Launcher
         }
 
 
+        private int ipConverted;
         private void button1_Click(object sender, EventArgs e)
         {
             //TODO: Add a check if the IP box is empty as well as the Exe Box.
-            //if (bx_AOExe.Text == null || bx_IPAddress.Text == null)
-            //    MessageBox.Show("Please fill out the information and try again."); return;
-          
-            string[] temp = bx_IPAddress.Text.Split('.');
-            int ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
+            if (cbx_DNSType.Text != null)
+            {
+                if (cbx_DNSType.Text == "IPAddress")
+                {
+                    string[] temp = bx_IPAddress.Text.Split('.');
+                    ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
+                }
+                else
+                {
+                    IPHostEntry host = Dns.GetHostEntry(bx_IPAddress.Text);
+                    string[] temp = host.AddressList[0].Address.ToString().Split('.');
+                    ipConverted = int.Parse(temp[0]) + int.Parse(temp[1]) * 256 + int.Parse(temp[2]) * 256 * 256 + int.Parse(temp[3]) * 256 * 256 * 256;
+                }
+            }
+            else { MessageBox.Show("Please choose a DNS Type."); return; }
+
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
             if (UseEncryption.Checked == true)
@@ -71,6 +84,7 @@ namespace CellAO_Launcher
             bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
+            cbx_DNSType.Text = _config.Instance.CurrentConfig.HostType;
             if (_config.Instance.CurrentConfig.Debug == true) { cbx_DebugMode.Checked = true; }
             else { cbx_DebugMode.Checked = false; }
             if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
@@ -87,6 +101,7 @@ namespace CellAO_Launcher
             if (cbx_DebugMode.Checked == true) { _config.Instance.CurrentConfig.Debug = true; }
             else { _config.Instance.CurrentConfig.Debug = false; }
 
+            _config.Instance.CurrentConfig.HostType = cbx_DNSType.Text;
             _config.Instance.CurrentConfig.AOExecutable = bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = bx_IPAddress.Text;
             _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(bx_Port.Text);

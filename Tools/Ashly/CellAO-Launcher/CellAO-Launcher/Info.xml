@@ -4,6 +4,8 @@
   <ServerIP></ServerIP>
   <!-- This is the Port of the Server you wish to connect to-->
   <ServerPort></ServerPort>
+  <!-- Host Type, IPaddress or Hostname-->
+  <HostType></HostType>
   <!-- Directory of the EXE to run Anarchy Online-->
   <AOExecutable></AOExecutable>
   <!-- true or false statement here..-->

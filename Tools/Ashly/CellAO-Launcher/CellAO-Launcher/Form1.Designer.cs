@@ -43,6 +43,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.bx_Port = new System.Windows.Forms.TextBox();
             this.cbx_DebugMode = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbx_DNSType = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1
@@ -184,6 +186,27 @@
             this.cbx_DebugMode.UseVisualStyleBackColor = true;
             this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(30, 9);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(60, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "DNS Type:";
+            // 
+            // cbx_DNSType
+            // 
+            this.cbx_DNSType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbx_DNSType.FormattingEnabled = true;
+            this.cbx_DNSType.Items.AddRange(new object[] {
+            "IPAddress",
+            "Hostname"});
+            this.cbx_DNSType.Location = new System.Drawing.Point(33, 26);
+            this.cbx_DNSType.Name = "cbx_DNSType";
+            this.cbx_DNSType.Size = new System.Drawing.Size(134, 21);
+            this.cbx_DNSType.TabIndex = 16;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -191,6 +214,8 @@
             this.BackColor = System.Drawing.Color.CadetBlue;
             this.ClientSize = new System.Drawing.Size(962, 202);
             this.ControlBox = false;
+            this.Controls.Add(this.cbx_DNSType);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.cbx_DebugMode);
             this.Controls.Add(this.bx_Port);
             this.Controls.Add(this.label5);
@@ -234,6 +259,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox bx_Port;
         private System.Windows.Forms.CheckBox cbx_DebugMode;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbx_DNSType;
     }
 }
 
