@@ -84,7 +84,7 @@ namespace CellAO_Launcher
             bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
-            cbx_DNSType.Text = _config.Instance.CurrentConfig.HostType;
+            cbx_DNSType.SelectedItem = _config.Instance.CurrentConfig.HostType;
             if (_config.Instance.CurrentConfig.Debug == true) { cbx_DebugMode.Checked = true; }
             else { cbx_DebugMode.Checked = false; }
             if (_config.Instance.CurrentConfig.UseEncryption == true) { UseEncryption.Checked = true; }
