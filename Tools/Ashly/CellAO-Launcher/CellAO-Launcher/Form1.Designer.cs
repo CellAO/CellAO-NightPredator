@@ -116,7 +116,7 @@
             this.button2.TabIndex = 7;
             this.button2.Text = "Find AO exe";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2Click);
             // 
             // button3
             // 
@@ -126,7 +126,7 @@
             this.button3.TabIndex = 8;
             this.button3.Text = "Quit";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3Click);
             // 
             // label4
             // 
@@ -155,7 +155,7 @@
             this.button4.Text = "Convert IP - Test";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Visible = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4Click);
             // 
             // label5
             // 
@@ -182,7 +182,7 @@
             this.cbx_DebugMode.TabIndex = 14;
             this.cbx_DebugMode.Text = "Debug Mode";
             this.cbx_DebugMode.UseVisualStyleBackColor = true;
-            this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
             // 
             // Form1
             // 
@@ -211,7 +211,7 @@
             this.MinimizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.Form1Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

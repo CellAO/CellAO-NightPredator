@@ -57,8 +57,7 @@ namespace CellAO_Launcher
         // These are the keys that will be sent to CellAO.
         /// <summary>
         /// </summary>
-        private string FUNCOM_KEY_PUBLIC =
-            "9c32cc23d559ca90fc31be72df817d0e124769e809f936bc14360ff4bed758f260a0d596584eacbbc2b88bdd410416163e11dbf62173393fbc0c6fefb2d855f1a03dec8e9f105bbad91b3437d8eb73fe2f44159597aa4053cf788d2f9d7012fb8d7c4ce3876f7d6cd5d0c31754f4cd96166708641958de54a6def5657b9f2e92";
+        private const string FUNCOM_KEY_PUBLIC = "9c32cc23d559ca90fc31be72df817d0e124769e809f936bc14360ff4bed758f260a0d596584eacbbc2b88bdd410416163e11dbf62173393fbc0c6fefb2d855f1a03dec8e9f105bbad91b3437d8eb73fe2f44159597aa4053cf788d2f9d7012fb8d7c4ce3876f7d6cd5d0c31754f4cd96166708641958de54a6def5657b9f2e92";
 
         /// <summary>
         /// </summary>
@@ -81,6 +80,11 @@ namespace CellAO_Launcher
 
         /// <summary>
         /// </summary>
+        private string CELLAO_KEY_PRIME =
+            "eca2e8c85d863dcdc26a429a71a9815ad052f6139669dd659f98ae159d313d13c6bf2838e10a69b6478b64a24bd054ba8248e8fa778703b418408249440b2c1edd28853e240d8a7e49540b76d120d3b1ad2878b1b99490eb4a2a5e84caa8a91cecbdb1aa7c816e8be343246f80c637abc653b893fd91686cf8d32d6cfe5f2a6f";
+
+        /// <summary>
+        /// </summary>
         private int CELLAO_KEY_GENERATOR = 5;
 
         /// <summary>
@@ -89,25 +93,16 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="e">
         /// </param>
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2Click(object sender, EventArgs e)
         {
             OpenFileDialog browseFile = new OpenFileDialog();
             browseFile.Filter = "Exe Files (*.exe)|*.exe";
             browseFile.Title = "Browse EXE files";
             browseFile.FileName = "AnarchyOnline.exe";
 
-            if (browseFile.ShowDialog() == DialogResult.Cancel)
-            {
-                return;
-            }
-
-            try
+            if (browseFile.ShowDialog() == DialogResult.OK)
             {
                 this.bx_AOExe.Text = browseFile.FileName;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error:" + ex);
             }
         }
 
@@ -123,7 +118,8 @@ namespace CellAO_Launcher
         /// </param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (this.bx_AOExe.Text != null || this.bx_IPAddress.Text != null || this.bx_Port.Text != null)
+            if (!string.IsNullOrEmpty(this.bx_AOExe.Text) && !string.IsNullOrEmpty(this.bx_IPAddress.Text)
+                && !string.IsNullOrEmpty(this.bx_Port.Text))
             {
                 this.ipConverted = this.ConvertHostToIp(this.bx_IPAddress.Text);
                 if (this.ipConverted == 0)
@@ -134,45 +130,38 @@ namespace CellAO_Launcher
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo();
 
-                    if (this.UseEncryption.Checked == true)
+                    startInfo.FileName = this.bx_AOExe.Text;
+                    startInfo.Arguments = " IA " + this.ipConverted + " IP " + this.bx_Port.Text + " UI";
+                    startInfo.WorkingDirectory = Path.GetDirectoryName(this.bx_AOExe.Text);
+                    Process AO = Process.Start(startInfo);
+
+                    if (this.UseEncryption.Checked)
                     {
-                        // TODO: Add the ability for us to enject our own SecretKey here to make AO think we are using real encryption.
-                        MessageBox.Show("Feature is not implimented yet.");
-                        return;
+                        // Wait for Process to get into main loop
+                        AO.WaitForInputIdle();
+
+                        // Suspend client
+                        Injector.SuspendProcess(AO.Id);
+
+                        // Search and replace keys
+                        Injector.SearchAndReplace(AO.Id, AO.Handle, FUNCOM_KEY_PUBLIC, this.CELLAO_KEY_PUBLIC);
+
+                        // Uncomment this when we have a own Prime - Algorithman
+                        // Injector.SearchAndReplace(AO.Id, AO.Handle, FUNCOM_KEY_PRIME, CELLAO_KEY_PRIME);
+
+                        // Resume client
+                        Injector.ResumeProcess(AO.Id);
                     }
-                    else
-                    {
-                        startInfo.FileName = this.bx_AOExe.Text;
-                        startInfo.Arguments = " IA " + this.ipConverted + " IP " + this.bx_Port.Text + " UI";
-                        startInfo.WorkingDirectory = Path.GetDirectoryName(this.bx_AOExe.Text);
-                        Process.Start(startInfo);
 
-                        if (this.UseEncryption.Checked == true)
-                        {
-                            _config.Instance.CurrentConfig.UseEncryption = true;
-                        }
-                        else
-                        {
-                            _config.Instance.CurrentConfig.UseEncryption = false;
-                        }
+                    // Save configuration data
+                    _config.Instance.CurrentConfig.UseEncryption = this.UseEncryption.Checked;
+                    _config.Instance.CurrentConfig.Debug = this.cbx_DebugMode.Checked;
+                    _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
+                    _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
+                    _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
+                    _config.Instance.SaveConfig();
 
-                        if (this.cbx_DebugMode.Checked == true)
-                        {
-                            _config.Instance.CurrentConfig.Debug = true;
-                        }
-                        else
-                        {
-                            _config.Instance.CurrentConfig.Debug = false;
-                        }
-
-                        _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
-                        _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
-                        _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
-                        _config.Instance.SaveConfig();
-
-                        Process _proc = Process.GetCurrentProcess();
-                        _proc.Kill();
-                    }
+                    Application.Exit();
                 }
             }
             else
@@ -188,28 +177,13 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="e">
         /// </param>
-        private void Form1_Load(object sender, EventArgs e)
+        private void Form1Load(object sender, EventArgs e)
         {
             this.bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             this.bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             this.bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
-            if (_config.Instance.CurrentConfig.Debug == true)
-            {
-                this.cbx_DebugMode.Checked = true;
-            }
-            else
-            {
-                this.cbx_DebugMode.Checked = false;
-            }
-
-            if (_config.Instance.CurrentConfig.UseEncryption == true)
-            {
-                this.UseEncryption.Checked = true;
-            }
-            else
-            {
-                this.UseEncryption.Checked = false;
-            }
+            this.cbx_DebugMode.Checked = _config.Instance.CurrentConfig.Debug;
+            this.UseEncryption.Checked = _config.Instance.CurrentConfig.UseEncryption;
 
             // For Debug mode.
             if (_config.Instance.CurrentConfig.Debug == true)
@@ -227,26 +201,10 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="e">
         /// </param>
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3Click(object sender, EventArgs e)
         {
-            if (this.UseEncryption.Checked == true)
-            {
-                _config.Instance.CurrentConfig.UseEncryption = true;
-            }
-            else
-            {
-                _config.Instance.CurrentConfig.UseEncryption = false;
-            }
-
-            if (this.cbx_DebugMode.Checked == true)
-            {
-                _config.Instance.CurrentConfig.Debug = true;
-            }
-            else
-            {
-                _config.Instance.CurrentConfig.Debug = false;
-            }
-
+            _config.Instance.CurrentConfig.UseEncryption = this.UseEncryption.Checked;
+            _config.Instance.CurrentConfig.Debug = this.cbx_DebugMode.Checked;
             _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
             _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
@@ -290,7 +248,7 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="e">
         /// </param>
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4Click(object sender, EventArgs e)
         {
             uint converted = this.ConvertHostToIp(this.bx_IPAddress.Text);
             if (converted == 0)
@@ -309,7 +267,7 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="e">
         /// </param>
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
             if (this.cbx_DebugMode.Checked == true)
             {

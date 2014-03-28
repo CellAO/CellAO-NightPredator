@@ -170,20 +170,30 @@ namespace Extractor_Serializer
             int cou = 0;
             foreach (int item in items)
             {
-                var fileStream = new FileStream(
-                    path + item.ToString(CultureInfo.InvariantCulture),
-                    FileMode.Create,
-                    FileAccess.Write);
-
-                byte[] data = extractor.GetRecordData(recordtype, item);
-                fileStream.Write(data, 0, data.Length);
-                fileStream.Close();
-                if (cou % 10 == 0)
+                try
                 {
-                    Console.WriteLine(item);
-                }
 
-                cou++;
+                    using (
+                        var fileStream = new FileStream(Path.Combine(
+                            path, item.ToString(CultureInfo.InvariantCulture)),
+                            FileMode.Create,
+                            FileAccess.Write))
+                    {
+                        byte[] data = extractor.GetRecordData(recordtype, item);
+
+                        fileStream.Write(data, 0, data.Length);
+                        fileStream.Close();
+                    }
+                    if (cou % 10 == 0)
+                    {
+                        Console.WriteLine(item);
+                    }
+
+                    cou++;
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -694,7 +704,7 @@ namespace Extractor_Serializer
             }
 
             // Delete all pngs in that folder (makes conversion much faster)
-            string [] filesToDelete=Directory.GetFiles("icons", "*.png", SearchOption.TopDirectoryOnly);
+            string[] filesToDelete = Directory.GetFiles("icons", "*.png", SearchOption.TopDirectoryOnly);
             foreach (string file in filesToDelete)
             {
                 File.Delete(file);
