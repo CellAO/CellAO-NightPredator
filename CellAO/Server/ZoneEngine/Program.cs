@@ -69,10 +69,6 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        public static readonly IContainer Container = new MefContainer();
-
-        /// <summary>
-        /// </summary>
         public static bool DebugGameFunctions;
 
         /// <summary>
@@ -158,7 +154,6 @@ namespace ZoneEngine
                     processedargs = true;
                 }
 
-                Console.Write(Environment.NewLine + "{0} >>", locales.ServerConsoleCommand);
                 string consoleCommand = Console.ReadLine();
 
                 if (consoleCommand != null)

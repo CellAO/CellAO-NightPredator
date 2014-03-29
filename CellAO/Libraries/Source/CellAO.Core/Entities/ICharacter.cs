@@ -123,5 +123,7 @@ namespace CellAO.Core.Entities
         void StartLogoutTimer();
 
         void Reconnect(IZoneClient zoneClient);
+
+        int CalculateNanoAttackTime(Nanos.NanoFormula nano);
     }
 }

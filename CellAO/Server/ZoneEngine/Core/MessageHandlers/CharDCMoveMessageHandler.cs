@@ -120,12 +120,8 @@ namespace ZoneEngine.Core.MessageHandlers
             }
             */
 
-            // Is this correct? Shouldnt the client input be compared to the prediction and then be overridden to prevent teleportation exploits? 
-            // - Algorithman
 
-            client.Controller.Character.RawCoordinates = coordinates.coordinate;
-            client.Controller.Character.RawHeading = heading;
-            client.Controller.Character.UpdateMoveType(moveType);
+            client.Controller.Move(moveType, coordinates, heading);
 
             /* Start NV Heading Testing Code
              * Yaw: 0 to 360 Degrees (North turning clockwise to a complete revolution)
@@ -175,7 +171,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         };
             client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
 
-            // TODO: rewrite statelscheck
+            // TODO: rewrite statelscheck - will move to heartbeat timer too - Algorithman
             /*
             if (Statels.StatelppfonEnter.ContainsKey(client.Character.PlayField))
             {

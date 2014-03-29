@@ -299,7 +299,7 @@ namespace CellAO.Core.Entities
         {
             this.DoNotDoTimers = true;
             DBCharacter daochar = CharacterDao.Instance.Get(this.Identity.Instance);
-            LogUtil.Debug("Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z+"/"+daochar.Playfield);
+            LogUtil.Debug("Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z + "/" + daochar.Playfield);
             if (daochar != null)
             {
                 this.Name = daochar.Name;
@@ -331,7 +331,7 @@ namespace CellAO.Core.Entities
         {
             this.BaseInventory.Write();
             DBCharacter temp = this.GetDBCharacter();
-            LogUtil.Debug("Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z+"/"+temp.Playfield);
+            LogUtil.Debug("Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z + "/" + temp.Playfield);
             CharacterDao.Instance.Save(this.GetDBCharacter());
 
             CharacterDao.Instance.SetPlayfield(
@@ -867,6 +867,27 @@ namespace CellAO.Core.Entities
         public void Reconnect(IZoneClient client)
         {
             this.Client = client;
+        }
+
+        public int CalculateNanoAttackTime(NanoFormula nano)
+        {
+            // Calculation in 100's of seconds!!
+
+            int aggdef = Stats[StatIds.aggdef].Value;
+
+            int aggdefReduction = aggdef - 25;
+            int nanoinit = Stats[StatIds.nanoprowessinitiative].Value;
+            if (nanoinit > 1200)
+            {
+                nanoinit = ((nanoinit - 1200) / 3) + 1200;
+            }
+            int nanoInitreduction = nanoinit >> 1;
+
+            int attackCap = nano.getItemAttribute(523); // AttackDelayCap
+
+            int attackDelay = nano.getItemAttribute(294); // AttackDelay
+            // The Math.Min is safeguard for calculation errors due to uint->int casting of originally negative values
+            return Math.Min(Math.Max(attackDelay - aggdefReduction - nanoInitreduction, attackCap), attackDelay);
         }
 
         /// <summary>

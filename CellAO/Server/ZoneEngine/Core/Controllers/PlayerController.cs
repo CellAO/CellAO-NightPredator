@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.Controllers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
@@ -54,9 +55,9 @@ namespace ZoneEngine.Core.Controllers
     /// <summary>
     /// </summary>
     public class PlayerController : IController
-    {        
+    {
         // All functions return true if reply should be sent, false if no reply needed
-        
+
         /// <summary>
         /// </summary>
         private WeakReference<ICharacter> character;
@@ -121,9 +122,31 @@ namespace ZoneEngine.Core.Controllers
             NanoFormula nano = NanoLoader.NanoList[nanoId];
             int strain = nano.NanoStrain();
 
-            // ...
+            CastNanoSpellMessageHandler.Default.Send(this.Character, nanoId, target);
 
-            throw new NotImplementedException();
+            // CharacterAction 107 - Finish nano casting
+            int attackDelay = Character.CalculateNanoAttackTime(nano);
+            Console.WriteLine("Attack-Delay: " + attackDelay);
+            if (attackDelay != 1234567890)
+            {
+                Thread.Sleep(attackDelay * 10);
+            }
+
+            // Check here for nanoresist of the target, maybe the 1 in finishnanocasting is kind of did land/didnt land flag
+            CharacterActionMessageHandler.Default.FinishNanoCasting(Character, CharacterActionType.FinishNanoCasting, Identity.None, 1, nanoId);
+
+            // TODO: Calculate nanocost modifiers etc.
+            Character.Stats[StatIds.currentnano].Value -= nano.getItemAttribute(407);
+
+            // CharacterAction 98 - Set nano duration
+            CharacterActionMessageHandler.Default.SetNanoDuration(
+                Character,
+                target,
+                nanoId,
+                nano.getItemAttribute(8));
+
+            Thread.Sleep(nano.getItemAttribute(210) * 10); // Recharge Delay
+            return false;
         }
 
         /// <summary>
@@ -171,7 +194,7 @@ namespace ZoneEngine.Core.Controllers
             // 1. Set visualFlags stat
             // 2. Send AppearanceUpdate
             this.Character.Stats[StatIds.visualflags].Value = visualFlag;
-
+            AppearanceUpdateMessageHandler.Default.Send(this.Character);
             return false;
         }
 
@@ -192,6 +215,9 @@ namespace ZoneEngine.Core.Controllers
             // Procedure:
             // 1. Check if new coordinates are plausible (in range of runspeed since last update)
             // 2. Set coordinates & heading
+
+            // Is this correct? Shouldnt the client input be compared to the prediction and then be overridden to prevent teleportation exploits? 
+            // - Algorithman
 
             // give it a bit uncertainty (2.0f)
             if (newCoordinates.Distance2D(this.Character.Coordinates) < 2.0f)
@@ -320,11 +346,11 @@ namespace ZoneEngine.Core.Controllers
         /// <exception cref="NotImplementedException">
         /// </exception>
         public bool SocialAction(
-            SocialAction action, 
-            byte parameter1, 
-            byte parameter2, 
-            byte parameter3, 
-            byte parameter4, 
+            SocialAction action,
+            byte parameter1,
+            byte parameter2,
+            byte parameter3,
+            byte parameter4,
             int parameter5)
         {
             throw new NotImplementedException();
@@ -723,7 +749,7 @@ namespace ZoneEngine.Core.Controllers
             Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();
 
             client.Controller.Character.Stats.GetChangedStats(toPlayer, toPlayfield);
-            
+
             StatMessageHandler.Default.SendBulk(client.Controller.Character, toPlayer, toPlayfield);
         }
 
