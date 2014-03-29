@@ -345,12 +345,12 @@ namespace ZoneEngine.Script
                         if (aoc != null)
                         {
                             // Check GM Level bitwise
-                            if ((client.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
+                            if ((client.Controller.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
                                 && (aoc.GMLevelNeeded() > 0))
                             {
-                                client.Character.Playfield.Publish(
+                                client.Controller.Character.Playfield.Publish(
                                     ChatTextMessageHandler.Default.CreateIM(
-                                        client.Character, 
+                                        client.Controller.Character, 
                                         "You are not authorized to use this command!. This incident will be recorded."));
 
                                 // It is not yet :)
@@ -362,7 +362,7 @@ namespace ZoneEngine.Script
                             {
                                 if (commandArguments[1].ToUpperInvariant() == "HELP")
                                 {
-                                    aoc.CommandHelp(client.Character);
+                                    aoc.CommandHelp(client.Controller.Character);
                                     return;
                                 }
                             }
@@ -370,11 +370,11 @@ namespace ZoneEngine.Script
                             // Execute the command with the given command arguments, if CheckCommandArguments is true else print command help
                             if (aoc.CheckCommandArguments(commandArguments))
                             {
-                                aoc.ExecuteCommand(client.Character, target, commandArguments);
+                                aoc.ExecuteCommand(client.Controller.Character, target, commandArguments);
                             }
                             else
                             {
-                                aoc.CommandHelp(client.Character);
+                                aoc.CommandHelp(client.Controller.Character);
                             }
                         }
                     }
@@ -382,7 +382,7 @@ namespace ZoneEngine.Script
             }
             else
             {
-                client.Character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(client.Character, "Available Commands:"));
+                client.Controller.Character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(client.Controller.Character, "Available Commands:"));
                 string[] scriptNames = this.chatCommands.Keys.ToArray();
                 for (int i = 0; i < scriptNames.Length; i++)
                 {
@@ -401,11 +401,11 @@ namespace ZoneEngine.Script
                     AOChatCommand aoc = (AOChatCommand)assembly.CreateInstance(typename);
                     if (aoc != null)
                     {
-                        if (client.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
+                        if (client.Controller.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
                         {
-                            client.Character.Playfield.Publish(
+                            client.Controller.Character.Playfield.Publish(
                                 ChatTextMessageHandler.Default.CreateIM(
-                                    client.Character, 
+                                    client.Controller.Character, 
                                     scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal))));
                         }
                     }
@@ -419,7 +419,7 @@ namespace ZoneEngine.Script
         /// </param>
         /// <param name="character">
         /// </param>
-        public void CallMethod(string functionName, Character character)
+        public void CallMethod(string functionName, ICharacter character)
         {
             foreach (Assembly assembly in this.multipleDllList)
             {

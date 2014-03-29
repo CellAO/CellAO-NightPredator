@@ -74,9 +74,6 @@
     <Compile Include="Components\MemBusAdapter.cs" />
     <Compile Include="Components\MessageWrapper.cs" />
     <Compile Include="Components\WeakReference.cs" />
-    <Compile Include="Controllers\IController.cs" />
-    <Compile Include="Controllers\NPCController.cs" />
-    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Encryption\BigInteger.cs" />
     <Compile Include="Components\IContainer.cs" />
     <Compile Include="Components\IHandle.cs" />
@@ -91,6 +88,7 @@
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
     <Compile Include="Entities\ICharacter.cs" />
+    <Compile Include="Entities\IController.cs" />
     <Compile Include="Entities\IDynel.cs" />
     <Compile Include="Entities\IInstancedEntity.cs" />
     <Compile Include="Entities\IMoving.cs" />

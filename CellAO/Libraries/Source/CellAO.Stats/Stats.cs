@@ -11694,6 +11694,22 @@ namespace CellAO.Stats
             return null;
         }
 
+        public void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield)
+        {
+            foreach (Stat stat in All.Where(x => x.Changed))
+            {
+                if (stat.AnnounceToPlayfield)
+                {
+                    toPlayfield.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
+                }
+                else
+                {
+                    toPlayer.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
+                }
+                stat.Changed = false;
+            }
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="identity">

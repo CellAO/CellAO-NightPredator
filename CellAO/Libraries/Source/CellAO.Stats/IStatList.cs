@@ -129,5 +129,7 @@ namespace CellAO.Stats
         Stat GetStatByNumber(int number);
 
         #endregion
+
+        void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield);
     }
 }

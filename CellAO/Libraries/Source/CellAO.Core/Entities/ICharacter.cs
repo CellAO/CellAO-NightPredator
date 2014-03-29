@@ -119,5 +119,9 @@ namespace CellAO.Core.Entities
         void StopLogoutTimer();
 
         void SetCoordinates(Coordinate newCoordinates, Vector.Quaternion heading);
+
+        void StartLogoutTimer();
+
+        void Reconnect(IZoneClient zoneClient);
     }
 }

@@ -113,7 +113,7 @@ namespace ZoneEngine.Core.Packets
         {
             var statMessage = new StatMessage
                               {
-                                  Identity = client.Character.Identity, 
+                                  Identity = client.Controller.Character.Identity, 
                                   Stats =
                                       new[]
                                       {
@@ -126,16 +126,16 @@ namespace ZoneEngine.Core.Packets
                                       }
                               };
             var statM = new Message { Body = statMessage };
-            if (!client.Character.DoNotDoTimers)
+            if (!client.Controller.Character.DoNotDoTimers)
             {
-                client.Character.Playfield.Publish(
+                client.Controller.Character.Playfield.Publish(
                     new IMSendAOtomationMessageToClient { client = client, message = statM });
             }
 
             /* announce to playfield? */
             if (announce)
             {
-                client.Character.Playfield.AnnounceOthers(statMessage, client.Character.Identity);
+                client.Controller.Character.Playfield.AnnounceOthers(statMessage, client.Controller.Character.Identity);
             }
         }
 
@@ -232,7 +232,7 @@ namespace ZoneEngine.Core.Packets
             var toPlayfieldIds = new List<int>();
             foreach (KeyValuePair<int, uint> keyValuePair in statsToUpdate)
             {
-                if (client.Character.Stats[keyValuePair.Key].AnnounceToPlayfield)
+                if (client.Controller.Character.Stats[keyValuePair.Key].AnnounceToPlayfield)
                 {
                     toPlayfieldIds.Add(keyValuePair.Key);
                 }
@@ -256,7 +256,7 @@ namespace ZoneEngine.Core.Packets
                 }
             }
 
-            var message = new StatMessage { Identity = client.Character.Identity, Stats = toClient.ToArray() };
+            var message = new StatMessage { Identity = client.Controller.Character.Identity, Stats = toClient.ToArray() };
 
             client.SendCompressed(message);
 
@@ -264,7 +264,7 @@ namespace ZoneEngine.Core.Packets
             if (toPlayfieldIds.Count > 0)
             {
                 message.Stats = toPlayfield.ToArray();
-                client.Character.Playfield.AnnounceOthers(message, client.Character.Identity);
+                client.Controller.Character.Playfield.AnnounceOthers(message, client.Controller.Character.Identity);
             }
         }
 
@@ -282,7 +282,7 @@ namespace ZoneEngine.Core.Packets
         {
             var statMessage = new StatMessage
                               {
-                                  Identity = client.Character.Identity, 
+                                  Identity = client.Controller.Character.Identity, 
                                   Stats =
                                       new[]
                                       {
@@ -317,7 +317,7 @@ namespace ZoneEngine.Core.Packets
         /// </returns>
         public static uint Set(IZoneClient client, int stat, uint value, bool announce)
         {
-            var oldValue = (uint)client.Character.Stats[stat].Value;
+            var oldValue = (uint)client.Controller.Character.Stats[stat].Value;
             Send(client, stat, value, announce);
             return oldValue;
         }

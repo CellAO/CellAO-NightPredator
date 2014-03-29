@@ -58,28 +58,28 @@ namespace ZoneEngine.Core.Packets
                 case 6:
                     var action167Message = new CharacterActionMessage()
                                            {
-                                               Identity = client.Character.Identity, 
+                                               Identity = client.Controller.Character.Identity, 
                                                Action =
                                                    CharacterActionType
                                                    .ChangeAnimationAndStance, 
                                            };
-                    client.Character.Playfield.Announce(action167Message);
+                    client.Controller.Character.Playfield.Announce(action167Message);
 
                     var equipMessage = new CharacterActionMessage()
                                        {
-                                           Identity = client.Character.Identity, 
+                                           Identity = client.Controller.Character.Identity, 
                                            Action = CharacterActionType.Equip, 
                                            Target = page.Identity, 
                                            Parameter1 = 0, 
                                            Parameter2 = 6, 
                                        };
-                    client.Character.Send(equipMessage);
+                    client.Controller.Character.Send(equipMessage);
                     break;
                 default:
                     IItem item = page[slotNumber];
                     var templateActionMessage = new TemplateActionMessage()
                                                 {
-                                                    Identity = client.Character.Identity, 
+                                                    Identity = client.Controller.Character.Identity, 
                                                     ItemHighId = item.HighID, 
                                                     ItemLowId = item.LowID, 
                                                     Quality = item.Quality, 
@@ -99,7 +99,7 @@ namespace ZoneEngine.Core.Packets
                                                         }, 
                                                     Unknown = 0, 
                                                 };
-                    client.Character.Send(templateActionMessage);
+                    client.Controller.Character.Send(templateActionMessage);
                     break;
             }
         }

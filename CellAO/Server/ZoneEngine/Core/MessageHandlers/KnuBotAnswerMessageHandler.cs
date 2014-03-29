@@ -7,6 +7,7 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -22,8 +23,7 @@ namespace ZoneEngine.Core.MessageHandlers
             // TODO: Fill in code!
             // Find character object by identity
             // call character AI controller 
-            ICharacter npc =
-                messageWrapper.Client.Character.Playfield.FindByIdentity<ICharacter>(messageWrapper.MessageBody.Target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
             if (npc != null)
             {
                 // npc.KnuBotAnswerIncoming(messageWrapper.MessageBody.Answer);

@@ -84,11 +84,11 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         public static void TradeSkillBuildPressed(IZoneClient client, int quality)
         {
-            TradeSkillInfo source = client.Character.TradeSkillSource;
-            TradeSkillInfo target = client.Character.TradeSkillTarget;
+            TradeSkillInfo source = client.Controller.Character.TradeSkillSource;
+            TradeSkillInfo target = client.Controller.Character.TradeSkillTarget;
 
-            Item sourceItem = client.Character.BaseInventory.GetItemInContainer(source.Container, source.Placement);
-            Item targetItem = client.Character.BaseInventory.GetItemInContainer(target.Container, target.Placement);
+            Item sourceItem = client.Controller.Character.BaseInventory.GetItemInContainer(source.Container, source.Placement);
+            Item targetItem = client.Controller.Character.BaseInventory.GetItemInContainer(target.Container, target.Placement);
 
             TradeSkillEntry ts = TradeSkill.Instance.GetTradeSkillEntry(sourceItem.HighID, targetItem.HighID);
 
@@ -98,37 +98,37 @@ namespace ZoneEngine.Core.PacketHandlers
                 if (WindowBuild(client, quality, ts, sourceItem, targetItem))
                 {
                     Item newItem = new Item(quality, ts.ResultLowId, ts.ResultHighId);
-                    InventoryError inventoryError = client.Character.BaseInventory.TryAdd(newItem);
+                    InventoryError inventoryError = client.Controller.Character.BaseInventory.TryAdd(newItem);
                     if (inventoryError == InventoryError.OK)
                     {
-                        AddTemplateMessageHandler.Default.Send(client.Character, newItem);
+                        AddTemplateMessageHandler.Default.Send(client.Controller.Character, newItem);
 
                         // Delete source?
                         if ((ts.DeleteFlag & 1) == 1)
                         {
-                            client.Character.BaseInventory.RemoveItem(source.Container, source.Placement);
-                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Character, source.Container, source.Placement);
+                            client.Controller.Character.BaseInventory.RemoveItem(source.Container, source.Placement);
+                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Controller.Character, source.Container, source.Placement);
                         }
 
                         // Delete target?
                         if ((ts.DeleteFlag & 2) == 2)
                         {
-                            client.Character.BaseInventory.RemoveItem(target.Container, target.Placement);
-                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Character, target.Container, target.Placement);
+                            client.Controller.Character.BaseInventory.RemoveItem(target.Container, target.Placement);
+                            CharacterActionMessageHandler.Default.SendDeleteItem(client.Controller.Character, target.Container, target.Placement);
                         }
 
-                        ChatTextMessageHandler.Default.Send(client.Character, SuccessMessage(sourceItem,
+                        ChatTextMessageHandler.Default.Send(client.Controller.Character, SuccessMessage(sourceItem,
                                     targetItem,
                                     new Item(quality, ts.ResultLowId, ts.ResultHighId)));
 
-                        client.Character.Stats[StatIds.xp].Value += CalculateXP(quality, ts);
+                        client.Controller.Character.Stats[StatIds.xp].Value += CalculateXP(quality, ts);
                     }
                 }
             }
             else
             {
-                ChatTextMessageHandler.Default.Send(client.Character, "It is not possible to assemble those two items. Maybe the order was wrong?");
-                ChatTextMessageHandler.Default.Send(client.Character, "No combination found!");
+                ChatTextMessageHandler.Default.Send(client.Controller.Character, "It is not possible to assemble those two items. Maybe the order was wrong?");
+                ChatTextMessageHandler.Default.Send(client.Controller.Character, "No combination found!");
             }
         }
 
@@ -145,16 +145,16 @@ namespace ZoneEngine.Core.PacketHandlers
         {
             if ((container != 0) && (placement != 0))
             {
-                client.Character.TradeSkillSource = new TradeSkillInfo(0, container, placement);
+                client.Controller.Character.TradeSkillSource = new TradeSkillInfo(0, container, placement);
 
-                Item item = client.Character.BaseInventory.GetItemInContainer(container, placement);
-                TradeSkillPacket.SendSource(client.Character, TradeSkill.Instance.SourceProcessesCount(item.HighID));
+                Item item = client.Controller.Character.BaseInventory.GetItemInContainer(container, placement);
+                TradeSkillPacket.SendSource(client.Controller.Character, TradeSkill.Instance.SourceProcessesCount(item.HighID));
 
                 TradeSkillChanged(client);
             }
             else
             {
-                client.Character.TradeSkillSource = null;
+                client.Controller.Character.TradeSkillSource = null;
             }
         }
 
@@ -170,16 +170,16 @@ namespace ZoneEngine.Core.PacketHandlers
         {
             if ((container != 0) && (placement != 0))
             {
-                client.Character.TradeSkillTarget = new TradeSkillInfo(0, container, placement);
+                client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(0, container, placement);
 
-                Item item = client.Character.BaseInventory.GetItemInContainer(container, placement);
-                TradeSkillPacket.SendTarget(client.Character, TradeSkill.Instance.TargetProcessesCount(item.HighID));
+                Item item = client.Controller.Character.BaseInventory.GetItemInContainer(container, placement);
+                TradeSkillPacket.SendTarget(client.Controller.Character, TradeSkill.Instance.TargetProcessesCount(item.HighID));
 
                 TradeSkillChanged(client);
             }
             else
             {
-                client.Character.TradeSkillTarget = null;
+                client.Controller.Character.TradeSkillTarget = null;
             }
         }
 
@@ -216,13 +216,13 @@ namespace ZoneEngine.Core.PacketHandlers
         /// </param>
         private static void TradeSkillChanged(IZoneClient client)
         {
-            TradeSkillInfo source = client.Character.TradeSkillSource;
-            TradeSkillInfo target = client.Character.TradeSkillTarget;
+            TradeSkillInfo source = client.Controller.Character.TradeSkillSource;
+            TradeSkillInfo target = client.Controller.Character.TradeSkillTarget;
 
             if ((source != null) && (target != null))
             {
-                Item sourceItem = client.Character.BaseInventory.GetItemInContainer(source.Container, source.Placement);
-                Item targetItem = client.Character.BaseInventory.GetItemInContainer(target.Container, target.Placement);
+                Item sourceItem = client.Controller.Character.BaseInventory.GetItemInContainer(source.Container, source.Placement);
+                Item targetItem = client.Controller.Character.BaseInventory.GetItemInContainer(target.Container, target.Placement);
 
                 TradeSkillEntry ts = TradeSkill.Instance.GetTradeSkillEntry(sourceItem.HighID, targetItem.HighID);
                 if (ts != null)
@@ -232,9 +232,9 @@ namespace ZoneEngine.Core.PacketHandlers
                         foreach (TradeSkillSkill tsi in ts.Skills)
                         {
                             int skillReq = (int)Math.Ceiling(tsi.Percent / 100M * targetItem.Quality);
-                            if (skillReq > client.Character.Stats[tsi.StatId].Value)
+                            if (skillReq > client.Controller.Character.Stats[tsi.StatId].Value)
                             {
-                                TradeSkillPacket.SendRequirement(client.Character, tsi.StatId, skillReq);
+                                TradeSkillPacket.SendRequirement(client.Controller.Character, tsi.StatId, skillReq);
                             }
                         }
 
@@ -271,14 +271,14 @@ namespace ZoneEngine.Core.PacketHandlers
                                 leastbump =
                                     Math.Min(
                                         Convert.ToInt32(
-                                            (client.Character.Stats[tsSkill.StatId].Value
+                                            (client.Controller.Character.Stats[tsSkill.StatId].Value
                                              - (tsSkill.Percent / 100M * targetItem.Quality)) / tsSkill.SkillPerBump),
                                         maxbump);
                             }
                         }
 
                         TradeSkillPacket.SendResult(
-                            client.Character,
+                            client.Controller.Character,
                             targetItem.Quality,
                             Math.Min(targetItem.Quality + leastbump, ItemLoader.ItemList[ts.ResultHighId].Quality),
                             ts.ResultLowId,
@@ -287,14 +287,14 @@ namespace ZoneEngine.Core.PacketHandlers
                     else
                     {
                         TradeSkillPacket.SendOutOfRange(
-                            client.Character,
+                            client.Controller.Character,
                             Convert.ToInt32(
                                 Math.Round((double)targetItem.Quality - ts.QLRangePercent * targetItem.Quality / 100)));
                     }
                 }
                 else
                 {
-                    TradeSkillPacket.SendNotTradeskill(client.Character);
+                    TradeSkillPacket.SendNotTradeskill(client.Controller.Character);
                 }
             }
         }
@@ -332,7 +332,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             foreach (TradeSkillSkill tss in ts.Skills)
             {
-                if (client.Character.Stats[tss.StatId].Value < Convert.ToInt32(tss.Percent / 100M * targetItem.Quality))
+                if (client.Controller.Character.Stats[tss.StatId].Value < Convert.ToInt32(tss.Percent / 100M * targetItem.Quality))
                 {
                     return false;
                 }

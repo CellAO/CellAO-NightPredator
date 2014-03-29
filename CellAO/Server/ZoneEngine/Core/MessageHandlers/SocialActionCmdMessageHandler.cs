@@ -74,7 +74,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                Action = socialActionCmdMessage.Action
                            };
 
-            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
+            client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
         }
 
         #endregion

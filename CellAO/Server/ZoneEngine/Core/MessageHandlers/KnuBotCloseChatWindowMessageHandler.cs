@@ -7,6 +7,7 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -19,8 +20,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
         public override void Receive(MessageWrapper<KnuBotCloseChatWindowMessage> messageWrapper)
         {
-            ICharacter npc =
-    messageWrapper.Client.Character.Playfield.FindByIdentity<ICharacter>(messageWrapper.MessageBody.Target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
             if (npc != null)
             {
                 // npc.KnuBotClose(messageWrapper.Client.Character.Identity);

@@ -24,15 +24,14 @@
 
 #endregion
 
-namespace CellAO.Core.Controllers
+namespace ZoneEngine.Core.Controllers
 {
     #region Usings ...
 
     using System;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Inventory;
-    using CellAO.Core.Items;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -69,6 +68,11 @@ namespace CellAO.Core.Controllers
         }
 
         public bool ChangeVisualFlag(int visualFlag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Move(int moveType, Coordinate newCoordinates, SmokeLounge.AOtomation.Messaging.GameData.Quaternion heading)
         {
             throw new NotImplementedException();
         }
@@ -210,6 +214,11 @@ namespace CellAO.Core.Controllers
         }
 
         public bool TeamJoinRejected(Identity rejectingIdentity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendChangedStats(IZoneClient client)
         {
             throw new NotImplementedException();
         }

@@ -30,6 +30,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -55,8 +56,7 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             // TODO: Code it!
             // As always, find KnuBot npc by its identity and call the appropriate method
-            ICharacter npc =
-    messageWrapper.Client.Character.Playfield.FindByIdentity<ICharacter>(messageWrapper.MessageBody.Target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
             if (npc != null)
             {
                 // npc.KnuBotFinishTrade(messageWrapper.Client.Character.Identity);

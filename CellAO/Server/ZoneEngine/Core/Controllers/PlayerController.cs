@@ -24,24 +24,28 @@
 
 #endregion
 
-namespace CellAO.Core.Controllers
+namespace ZoneEngine.Core.Controllers
 {
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    using Cell.Util.ObjectPools;
-
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
     using CellAO.Enums;
-    using CellAO.ObjectManager;
+    using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.MessageHandlers;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
@@ -49,15 +53,35 @@ namespace CellAO.Core.Controllers
 
     /// <summary>
     /// </summary>
-    internal class PlayerController : IController
-    {
+    public class PlayerController : IController
+    {        
+        // All functions return true if reply should be sent, false if no reply needed
+        
         /// <summary>
         /// </summary>
-        public ICharacter Character { get; set; }
+        private WeakReference<ICharacter> character;
 
-        // All functions return true if reply should be sent, false if no reply needed
+        /// <summary>
+        /// </summary>
+        public ICharacter Character
+        {
+            get
+            {
+                return this.character.Target;
+            }
 
-        #region Generic character actions 
+            set
+            {
+                if (value == null)
+                {
+                    throw new Exception("Dont try to weak reference null");
+                }
+
+                this.character = new WeakReference<ICharacter>(value);
+            }
+        }
+
+        #region Generic character actions
 
         /// <summary>
         /// </summary>
@@ -96,6 +120,7 @@ namespace CellAO.Core.Controllers
 
             NanoFormula nano = NanoLoader.NanoList[nanoId];
             int strain = nano.NanoStrain();
+
             // ...
 
             throw new NotImplementedException();
@@ -114,7 +139,8 @@ namespace CellAO.Core.Controllers
             // 2. Check against each entities concealment skill
             // 3. Unhide successful found entities
             // 4. Lock search action for ?? seconds
-            throw new NotImplementedException();
+
+            return false;
         }
 
         /// <summary>
@@ -130,7 +156,7 @@ namespace CellAO.Core.Controllers
             // 2. Check concealment against their perception skill
             // 3. Vanish for successful rolled chars/mobs
 
-            throw new NotImplementedException();
+            return false;
         }
 
         /// <summary>
@@ -144,8 +170,9 @@ namespace CellAO.Core.Controllers
             // Procedure:
             // 1. Set visualFlags stat
             // 2. Send AppearanceUpdate
+            this.Character.Stats[StatIds.visualflags].Value = visualFlag;
 
-            throw new NotImplementedException();
+            return false;
         }
 
         /// <summary>
@@ -197,11 +224,11 @@ namespace CellAO.Core.Controllers
             // 2. Check if target container exists
             // 3. Switch source with target
 
-            
             // Source container exists
             if (this.Character.BaseInventory.Pages.ContainsKey(sourceContainerType))
             {
                 IInventoryPage sourcePage = this.Character.BaseInventory.Pages[sourceContainerType];
+
                 // Source is not null
                 if (sourcePage[sourcePlacement] != null)
                 {
@@ -216,6 +243,7 @@ namespace CellAO.Core.Controllers
                             {
                                 sourcePage.Add(sourcePlacement, itemTarget);
                             }
+
                             if (itemSource != null)
                             {
                                 targetPage.Add(targetPlacement, itemSource);
@@ -228,6 +256,7 @@ namespace CellAO.Core.Controllers
                     }
                 }
             }
+
             return true;
         }
 
@@ -247,7 +276,6 @@ namespace CellAO.Core.Controllers
             // 3. Start movement (if not already)
             // 4. Start Pathfinding loop
 
-            
             throw new NotImplementedException();
         }
 
@@ -268,6 +296,7 @@ namespace CellAO.Core.Controllers
             {
                 this.Character.StopLogoutTimer();
             }
+
             this.Character.UpdateMoveType(37); // Magic number -> Stand
             return true;
         }
@@ -318,6 +347,14 @@ namespace CellAO.Core.Controllers
 
         #region Player specific actions
 
+        /// <summary>
+        /// </summary>
+        /// <param name="itemPosition">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public bool UseItem(Identity itemPosition)
         {
             // Procedure:
@@ -334,6 +371,8 @@ namespace CellAO.Core.Controllers
         /// <summary>
         /// </summary>
         /// <param name="container">
+        /// </param>
+        /// <param name="slotNumber">
         /// </param>
         /// <returns>
         /// </returns>
@@ -673,6 +712,23 @@ namespace CellAO.Core.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        public void SendChangedStats(IZoneClient client)
+        {
+
+            Dictionary<int, uint> toPlayfield = new Dictionary<int, uint>();
+            Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();
+
+            client.Controller.Character.Stats.GetChangedStats(toPlayer, toPlayfield);
+            
+            StatMessageHandler.Default.SendBulk(client.Controller.Character, toPlayer, toPlayfield);
+        }
+
         #endregion
+
+
     }
 }

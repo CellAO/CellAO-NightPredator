@@ -65,14 +65,14 @@ namespace ZoneEngine.Core.MessageHandlers
             // client got all the needed data and
             // wants to enter the world. After we
             // reply to this, the character will really be in game
-            var announce = new CharInPlayMessage { Identity = client.Character.Identity, Unknown = 0x00 };
-            client.Character.Playfield.Announce(announce);
+            var announce = new CharInPlayMessage { Identity = client.Controller.Character.Identity, Unknown = 0x00 };
+            client.Controller.Character.Playfield.Announce(announce);
 
             // Player is in game now, starting is over, set stats normally now
-            client.Character.Starting = false;
+            client.Controller.Character.Starting = false;
 
             // Needed fix, so gmlevel will be loaded
-            client.Character.Stats[StatIds.gmlevel].Value = client.Character.Stats[StatIds.gmlevel].Value;
+            client.Controller.Character.Stats[StatIds.gmlevel].Value = client.Controller.Character.Stats[StatIds.gmlevel].Value;
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN

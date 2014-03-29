@@ -91,8 +91,8 @@ namespace ZoneEngine.ChatCommands
             // Fallback to self if no target is selected
             if (target.Instance == 0)
             {
-                target.Type = character.Client.Character.Identity.Type;
-                target.Instance = character.Client.Character.Identity.Instance;
+                target.Type = character.Client.Controller.Character.Identity.Type;
+                target.Instance = character.Client.Controller.Character.Identity.Instance;
             }
 
             int statId = 1234567890;

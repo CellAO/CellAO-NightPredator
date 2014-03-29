@@ -430,7 +430,7 @@ namespace ZoneEngine.Core.Packets
         /// </returns>
         public static SimpleCharFullUpdateMessage ConstructMessage(IZoneClient client)
         {
-            return ConstructMessage(client.Character);
+            return ConstructMessage((Character)client.Controller.Character);
         }
 
         /// <summary>
@@ -439,10 +439,10 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         /// <param name="receiver">
         /// </param>
-        public static void SendToOne(Character character, IZoneClient receiver)
+        public static void SendToOne(ICharacter character, IZoneClient receiver)
         {
-            SimpleCharFullUpdateMessage message = ConstructMessage(character);
-            receiver.Character.Send(message);
+            SimpleCharFullUpdateMessage message = ConstructMessage((Character)character);
+            receiver.Controller.Character.Send(message);
         }
 
         /// <summary>
@@ -452,7 +452,7 @@ namespace ZoneEngine.Core.Packets
         public static void SendToPlayfield(IZoneClient client)
         {
             SimpleCharFullUpdateMessage message = ConstructMessage(client);
-            client.Character.Playfield.Announce(message);
+            client.Controller.Character.Playfield.Announce(message);
         }
 
         #endregion

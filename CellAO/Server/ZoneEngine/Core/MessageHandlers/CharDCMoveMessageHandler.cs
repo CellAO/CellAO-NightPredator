@@ -65,7 +65,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(CharDCMoveMessage message, IZoneClient client)
         {
-            if (client.Character.DoNotDoTimers)
+            if (client.Controller.Character.DoNotDoTimers)
             {
                 return;
             }
@@ -123,9 +123,9 @@ namespace ZoneEngine.Core.MessageHandlers
             // Is this correct? Shouldnt the client input be compared to the prediction and then be overridden to prevent teleportation exploits? 
             // - Algorithman
 
-            client.Character.RawCoordinates = coordinates.coordinate;
-            client.Character.RawHeading = heading;
-            client.Character.UpdateMoveType(moveType);
+            client.Controller.Character.RawCoordinates = coordinates.coordinate;
+            client.Controller.Character.RawHeading = heading;
+            client.Controller.Character.UpdateMoveType(moveType);
 
             /* Start NV Heading Testing Code
              * Yaw: 0 to 360 Degrees (North turning clockwise to a complete revolution)
@@ -143,7 +143,7 @@ namespace ZoneEngine.Core.MessageHandlers
             /* start of packet */
             var reply = new CharDCMoveMessage
                         {
-                            Identity = client.Character.Identity, 
+                            Identity = client.Controller.Character.Identity, 
                             Unknown = 0x00, 
                             MoveType = moveType, 
                             Heading =
@@ -173,7 +173,7 @@ namespace ZoneEngine.Core.MessageHandlers
                             Unknown2 = tmpInt2, 
                             Unknown3 = tmpInt3
                         };
-            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
+            client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = reply });
 
             // TODO: rewrite statelscheck
             /*

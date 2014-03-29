@@ -24,25 +24,25 @@
 
 #endregion
 
-namespace CellAO.Core.Controllers
+namespace CellAO.Core.Entities
 {
     #region Usings ...
 
     using System;
 
-    using CellAO.Core.Entities;
+    using CellAO.Core.Network;
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    internal interface IController
+    public interface IController
     {
         /// <summary>
         /// ICharacter object connected to this Controller
@@ -109,7 +109,7 @@ namespace CellAO.Core.Controllers
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        bool Move(int moveType, Coordinate newCoordinates, Quaternion heading);
+        bool Move(int moveType, Coordinate newCoordinates, Vector.Quaternion heading);
 
         /// <summary>
         /// </summary>
@@ -360,5 +360,7 @@ namespace CellAO.Core.Controllers
         bool TeamJoinRejected(Identity rejectingIdentity);
 
         #endregion
+
+        void SendChangedStats(IZoneClient client);
     }
 }

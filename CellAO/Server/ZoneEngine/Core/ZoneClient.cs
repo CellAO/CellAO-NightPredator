@@ -46,6 +46,7 @@ namespace ZoneEngine.Core
     using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.ObjectManager;
+    using ZoneEngine.Core.Controllers;
 
     using MemBus;
 
@@ -81,7 +82,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private Character character;
+        private IController controller;
 
         /// <summary>
         /// </summary>
@@ -127,18 +128,15 @@ namespace ZoneEngine.Core
 
         #region Public Properties
 
-        /// <summary>
-        /// </summary>
-        public Character Character
+        public IController Controller
         {
             get
             {
-                return this.character;
+                return this.controller;
             }
-
             set
             {
-                this.character = (Character)value;
+                this.controller = value;
             }
         }
 
@@ -155,9 +153,9 @@ namespace ZoneEngine.Core
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
                 functions.FunctionType,
-                this.character,
-                this.character,
-                this.character,
+                this.Controller.Character,
+                this.Controller.Character,
+                this.Controller.Character,
                 functions.Arguments.Values.ToArray());
         }
 
@@ -175,31 +173,33 @@ namespace ZoneEngine.Core
                 throw new Exception("Character " + charId + " not found.");
             }
 
+            this.controller = new PlayerController();
+
             // TODO: Save playfield type into Character table and use it accordingly
             IPlayfield pf = this.server.PlayfieldById(new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
 
             if (Pool.Instance.GetObject<Character>(
                 new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
             {
-                this.character = new Character(
+                this.Controller.Character = new Character(
                     new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
                     this);
             }
             else
             {
-                this.character =
+                this.Controller.Character =
                     Pool.Instance.GetObject<Character>(
                         new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
-                this.character.Reconnect(this);
+                this.Controller.Character.Reconnect(this);
                 LogUtil.Debug("Reconnected to Character " + charId);
             }
 
             // Stop pending logouts
-            this.character.StopLogoutTimer();
+            this.Controller.Character.StopLogoutTimer();
 
-            this.character.Playfield = pf;
+            this.Controller.Character.Playfield = pf;
             this.Playfield = pf;
-            this.character.Stats.Read();
+            this.Controller.Character.Stats.Read();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace ZoneEngine.Core
                                       PacketType = messageBody.PacketType,
                                       Unknown = 0x0001,
                                       Sender = this.server.Id,
-                                      Receiver = this.Character.Identity.Instance
+                                      Receiver = this.Controller.Character.Identity.Instance
                                   }
                           };
 
@@ -339,7 +339,7 @@ namespace ZoneEngine.Core
             // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
             var message = new ChatTextMessage
                           {
-                              Identity = this.Character.Identity,
+                              Identity = this.Controller.Character.Identity,
                               Unknown = 0x00,
                               Text = text,
                               Unknown1 = 0x1000,
@@ -361,7 +361,7 @@ namespace ZoneEngine.Core
         protected override void Dispose(bool disposing)
         {
             // Remove reference of character
-            if (this.character != null)
+            if (this.Controller.Character != null)
             {
 
                 // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
@@ -378,7 +378,8 @@ namespace ZoneEngine.Core
                 // }
             }
 
-            this.character = null;
+            // Not needed anymore, since controller.character is a weakreference now and only lives in the Pool now
+            // this.Controller.Character = null;
 
             base.Dispose(disposing);
         }

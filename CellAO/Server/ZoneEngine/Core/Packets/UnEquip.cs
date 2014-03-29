@@ -58,17 +58,17 @@ namespace ZoneEngine.Core.Packets
                 case 6:
                     var action97Message = new CharacterActionMessage()
                                           {
-                                              Identity = client.Character.Identity, 
+                                              Identity = client.Controller.Character.Identity, 
                                               Action = CharacterActionType.Unknown3, 
                                               Parameter2 = 6
                                           };
-                    client.Character.Send(action97Message);
+                    client.Controller.Character.Send(action97Message);
                     break;
                 default:
                     IItem item = page[slotNumber];
                     var templateActionMessage = new TemplateActionMessage()
                                                 {
-                                                    Identity = client.Character.Identity, 
+                                                    Identity = client.Controller.Character.Identity, 
                                                     ItemHighId = item.HighID, 
                                                     ItemLowId = item.LowID, 
                                                     Quality = item.Quality, 
@@ -85,7 +85,7 @@ namespace ZoneEngine.Core.Packets
                                                         }, 
                                                     Unknown = 0, 
                                                 };
-                    client.Character.Send(templateActionMessage);
+                    client.Controller.Character.Send(templateActionMessage);
                     break;
             }
         }

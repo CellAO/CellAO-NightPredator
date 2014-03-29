@@ -69,7 +69,7 @@ namespace ZoneEngine.Core.MessageHandlers
             zc.CreateCharacter(message.CharacterId);
             zc.SendInitiateCompressionMessage(new InitiateCompressionMessage());
 
-            client.Character.Playfield = zc.Playfield;
+            client.Controller.Character.Playfield = zc.Playfield;
 
             ClientConnected tmpClientConnected = new ClientConnected();
             tmpClientConnected.Read(message.CharacterId, zc);

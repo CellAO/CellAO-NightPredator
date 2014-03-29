@@ -67,7 +67,7 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             uint baseIp = 0;
 
-            uint characterLevel = client.Character.Stats[StatIds.level].BaseValue;
+            uint characterLevel = client.Controller.Character.Stats[StatIds.level].BaseValue;
 
             // Calculate base IP value for character level
             if (characterLevel > 204)
@@ -114,13 +114,13 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 count--;
                 GameTuple<CharacterStat, uint> stat = skillMessage.Skills[count];
-                client.Character.Stats[(int)stat.Value1].Value = (int)stat.Value2;
+                client.Controller.Character.Stats[(int)stat.Value1].Value = (int)stat.Value2;
                 statlist.Add((int)stat.Value1);
             }
 
             statlist.Add(53); // IP
-            uint usedIp = baseIp - (uint)Math.Floor(SkillUpdate.CalculateIP(client.Character.Stats));
-            client.Character.Stats[StatIds.ip].BaseValue = usedIp;
+            uint usedIp = baseIp - (uint)Math.Floor(SkillUpdate.CalculateIP(client.Controller.Character.Stats));
+            client.Controller.Character.Stats[StatIds.ip].BaseValue = usedIp;
 
             // Send the changed stats back to the client
             count = 0;
@@ -128,7 +128,7 @@ namespace ZoneEngine.Core.MessageHandlers
             while (count < statlist.Count)
             {
                 int stat = statlist[count];
-                uint statval = client.Character.Stats[stat].BaseValue;
+                uint statval = client.Controller.Character.Stats[stat].BaseValue;
                 newStats.Add(new GameTuple<CharacterStat, uint> { Value1 = (CharacterStat)stat, Value2 = statval });
                 count++;
             }
@@ -140,11 +140,11 @@ namespace ZoneEngine.Core.MessageHandlers
                             Skills = newStats.ToArray()
                         };
 
-            client.Character.Playfield.Publish(
+            client.Controller.Character.Playfield.Publish(
                 new IMSendAOtomationMessageBodyToClient { client = client, Body = reply });
 
             // and save the changes to the statsdb
-            client.Character.WriteStats();
+            client.Controller.Character.WriteStats();
         }
 
         #endregion

@@ -880,7 +880,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         private static void AddStat3232(IZoneClient client, IList<GameTuple<int, uint>> list, int statId)
         {
-            var tuple = new GameTuple<int, uint> { Value1 = statId, Value2 = client.Character.Stats[statId].BaseValue };
+            var tuple = new GameTuple<int, uint> { Value1 = statId, Value2 = client.Controller.Character.Stats[statId].BaseValue };
 
             list.Add(tuple);
         }
@@ -902,8 +902,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
             var tuple = new GameTuple<byte, short>
                         {
-                            Value1 = (byte)statId, 
-                            Value2 = (short)client.Character.Stats[statId].BaseValue
+                            Value1 = (byte)statId,
+                            Value2 = (short)client.Controller.Character.Stats[statId].BaseValue
                         };
 
             list.Add(tuple);
@@ -926,8 +926,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
             var tuple = new GameTuple<byte, byte>
                         {
-                            Value1 = (byte)statId, 
-                            Value2 = (byte)client.Character.Stats[statId].BaseValue
+                            Value1 = (byte)statId,
+                            Value2 = (byte)client.Controller.Character.Stats[statId].BaseValue
                         };
 
             list.Add(tuple);

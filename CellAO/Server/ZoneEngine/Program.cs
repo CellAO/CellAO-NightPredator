@@ -729,7 +729,7 @@ namespace ZoneEngine
                     foreach (ZoneClient c in zoneServer.Clients)
                     {
                         Console.WriteLine(
-                            "Character " + c.Character.Name + " online in PF " + c.Character.Playfield.Identity.Instance);
+                            "Character " + c.Controller.Character.Name + " online in PF " + c.Controller.Character.Playfield.Identity.Instance);
                     }
                 }
 

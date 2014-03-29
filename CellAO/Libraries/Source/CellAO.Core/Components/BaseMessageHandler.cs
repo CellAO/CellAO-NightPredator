@@ -128,9 +128,9 @@ namespace CellAO.Core.Components
                     {
                         if (client != null)
                         {
-                            if (client.Character != null)
+                            if (client.Controller.Character != null)
                             {
-                                client.Character.SendChangedStats();
+                                client.Controller.SendChangedStats(client);
                             }
                         }
                     }

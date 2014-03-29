@@ -76,10 +76,10 @@ namespace ZoneEngine.Core.PacketHandlers
             // client.CreateCharacter(charID);
             client.Server.Info(
                 client, 
-                "Client connected. ID: {0} IP: {1} Character name: {2}", 
-                client.Character.Identity.Instance, 
-                client.ClientAddress, 
-                client.Character.Name);
+                "Client connected. ID: {0} IP: {1} Character name: {2}",
+                client.Controller.Character.Identity.Instance, 
+                client.ClientAddress,
+                client.Controller.Character.Name);
 
             // now we have to start sending packets like 
             // character stats, inventory, playfield info
@@ -90,16 +90,16 @@ namespace ZoneEngine.Core.PacketHandlers
             // packets.
 
             /* send chat server info to client */
-            ChatServerInfoMessageHandler.Default.Send(client.Character);
+            ChatServerInfoMessageHandler.Default.Send(client.Controller.Character);
 
             /* send playfield info to client */
-            PlayfieldAnarchyFMessageHandler.Default.Send(client.Character);
+            PlayfieldAnarchyFMessageHandler.Default.Send(client.Controller.Character);
 
             var sendSCFUs = new IMSendPlayerSCFUs { toClient = client };
             ((Playfield)client.Playfield).SendSCFUsToClient(sendSCFUs);
 
             /* set SocialStatus to 0 */
-            client.Character.Stats[521].BaseValue = 0;
+            client.Controller.Character.Stats[521].BaseValue = 0;
 
             // Stat.SendDirect(client, 521, 0, false);
 
@@ -135,7 +135,7 @@ namespace ZoneEngine.Core.PacketHandlers
             SimpleCharFullUpdate.SendToPlayfield(client);
 
             /* inventory, items and all that */
-            FullCharacterMessageHandler.Default.Send(client.Character);
+            FullCharacterMessageHandler.Default.Send(client.Controller.Character);
 
             var specials = new[]
                            {
@@ -168,7 +168,7 @@ namespace ZoneEngine.Core.PacketHandlers
             // done
 
             // Timers are allowed to update client stats now.
-            client.Character.DoNotDoTimers = false;
+            client.Controller.Character.DoNotDoTimers = false;
 
             // spawn all active monsters to client
             // TODO: Implement NonPlayerCharacterHandler
@@ -186,13 +186,13 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // TODO: create a better alternative to ProcessTimers
             // client.Character.ProcessTimers(DateTime.Now + TimeSpan.FromMilliseconds(200));
-            client.Character.CalculateSkills();
+            client.Controller.Character.CalculateSkills();
 
-            AppearanceUpdateMessageHandler.Default.Send(client.Character);
+            AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
 
             // done, so we call a hook.
             // Call all OnConnect script Methods
-            ScriptCompiler.Instance.CallMethod("OnConnect", client.Character);
+            ScriptCompiler.Instance.CallMethod("OnConnect", client.Controller.Character);
         }
 
         #endregion

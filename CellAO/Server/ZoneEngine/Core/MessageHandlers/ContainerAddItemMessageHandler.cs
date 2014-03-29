@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.MessageHandlers
     // TODO: Change Actions to something more suitable (maybe EntityAction?)
 
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading;
 
@@ -40,6 +41,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Items;
     using CellAO.Core.Network;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
@@ -88,13 +90,19 @@ namespace ZoneEngine.Core.MessageHandlers
              * 0790 Playershop Inventory
              * DEAD Trade Window (incoming) It's bank now (when you put something into the bank)
              */
-            var fromContainerID = (int)message.SourceContainer.Type;
+
+            IInventoryPage sendingPage =
+                Pool.Instance.GetObject<IInventoryPage>(
+                    new Identity()
+                    {
+                        Type = (IdentityType)message.Identity.Instance,
+                        Instance = (int)message.SourceContainer.Type
+                    });
             int fromPlacement = message.SourceContainer.Instance;
             Identity toIdentity = message.Target;
             int toPlacement = message.TargetPlacement;
 
             // Where and what does need to be moved/added?
-            IInventoryPage sendingPage = client.Character.BaseInventory.Pages[fromContainerID];
             IItem itemFrom = sendingPage[fromPlacement];
 
             // Receiver of the item (IInstancedEntity, can be mostly all from NPC, Character or Bag, later even playfields)
@@ -104,7 +112,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 toIdentity.Type = IdentityType.CanbeAffected;
             }
 
-            IItemContainer itemReceiver = client.Character.Playfield.FindByIdentity(toIdentity) as IItemContainer;
+            IItemContainer itemReceiver = client.Controller.Character.Playfield.FindByIdentity(toIdentity) as IItemContainer;
             if (itemReceiver == null)
             {
                 throw new ArgumentOutOfRangeException(
@@ -124,7 +132,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             // Get standard page if toplacement cant be found (0x6F for next free slot)
             // TODO: If Entities are not the same (other player, bag etc) then always add to the standard page
-            if ((receivingPage == null) || (itemReceiver.GetType() != client.Character.GetType()))
+            if ((receivingPage == null) || (itemReceiver.GetType() != client.Controller.Character.GetType()))
             {
                 receivingPage = itemReceiver.BaseInventory.Pages[itemReceiver.BaseInventory.StandardPage];
             }
@@ -153,7 +161,7 @@ namespace ZoneEngine.Core.MessageHandlers
             // Calculating delay for equip/unequip/switch gear
             int delay = 20;
 
-            client.Character.DoNotDoTimers = true;
+            client.Controller.Character.DoNotDoTimers = true;
             IItemSlotHandler equipTo = receivingPage as IItemSlotHandler;
             IItemSlotHandler unequipFrom = sendingPage as IItemSlotHandler;
 
@@ -172,7 +180,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     {
                         AOAction action = this.getAction(sendingPage, itemFrom);
 
-                        if (action.CheckRequirements(client.Character))
+                        if (action.CheckRequirements(client.Controller.Character))
                         {
                             UnEquip.Send(client, receivingPage, toPlacement);
                             if (!noAppearanceUpdate)
@@ -189,7 +197,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                             Thread.Sleep(delay * 10); // social has to wait for 0.2 secs too (for helmet update)
 
-                            client.Character.Send(message);
+                            client.Controller.Character.Send(message);
                             equipTo.HotSwap(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(client, receivingPage, toPlacement);
                         }
@@ -206,7 +214,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                         AOAction action = this.getAction(receivingPage, itemFrom);
 
-                        if (action.CheckRequirements(client.Character))
+                        if (action.CheckRequirements(client.Controller.Character))
                         {
                             if (!noAppearanceUpdate)
                             {
@@ -231,7 +239,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 UnEquip.Send(client, sendingPage, fromPlacement);
                             }
 
-                            client.Character.Send(message);
+                            client.Controller.Character.Send(message);
                             equipTo.Equip(sendingPage, fromPlacement, toPlacement);
                             Equip.Send(client, receivingPage, toPlacement);
                         }
@@ -262,7 +270,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     UnEquip.Send(client, sendingPage, fromPlacement);
                     unequipFrom.Unequip(fromPlacement, receivingPage, toPlacement);
-                    client.Character.Send(message);
+                    client.Controller.Character.Send(message);
                 }
                 else
                 {
@@ -270,20 +278,20 @@ namespace ZoneEngine.Core.MessageHandlers
                     message.TargetPlacement = receivingPage.FindFreeSlot();
                     IItem item = sendingPage.Remove(fromPlacement);
                     receivingPage.Add(message.TargetPlacement, item);
-                    client.Character.Send(message);
+                    client.Controller.Character.Send(message);
                 }
             }
 
-            client.Character.DoNotDoTimers = false;
+            client.Controller.Character.DoNotDoTimers = false;
 
-            client.Character.Stats.ClearChangedFlags();
+            client.Controller.Character.Stats.ClearChangedFlags();
 
             // Apply item functions before sending the appearanceupdate message
-            client.Character.CalculateSkills();
+            client.Controller.Character.CalculateSkills();
 
             if (!noAppearanceUpdate)
             {
-                AppearanceUpdateMessageHandler.Default.Send(client.Character);
+                AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
             }
         }
 

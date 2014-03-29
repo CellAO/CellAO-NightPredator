@@ -89,7 +89,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     // TODO: Lower current nano points/check if enough nano points
 
                     CastNanoSpellMessageHandler.Default.Send(
-                        client.Character, 
+                        client.Controller.Character, 
                         message.Parameter2, 
                         // nanoId
                         message.Target);
@@ -97,9 +97,9 @@ namespace ZoneEngine.Core.MessageHandlers
                     // CharacterAction 107 - Finish nano casting
 
                     this.SendToPlayfield(
-                        client.Character, 
+                        client.Controller.Character, 
                         this.FinishNanoCasting(
-                            client.Character, 
+                            client.Controller.Character, 
                             CharacterActionType.FinishNanoCasting, 
                             Identity.None, 
                             1, 
@@ -107,9 +107,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     // CharacterAction 98 - Set nano duration
                     this.Send(
-                        client.Character, 
+                        client.Controller.Character, 
                         this.Action98(
-                            client.Character, 
+                            client.Controller.Character, 
                             CharacterActionType.SetNanoDuration, 
                             message.Target, 
                             message.Parameter2, 
@@ -122,20 +122,20 @@ namespace ZoneEngine.Core.MessageHandlers
                     // If action == search
                     /* Msg 110:136744723 = "No hidden objects found." */
                     // TODO: SEARCH!!
-                    FeedbackMessageHandler.Default.Send(client.Character, 110, 136744723);
+                    FeedbackMessageHandler.Default.Send(client.Controller.Character, 110, 136744723);
                     break;
 
                 case CharacterActionType.InfoRequest:
 
                     // If action == Info Request
-                    IInstancedEntity tPlayer = client.Character.Playfield.FindByIdentity(message.Target);
+                    IInstancedEntity tPlayer = client.Controller.Character.Playfield.FindByIdentity(message.Target);
 
                     // TODO: Think of a new method to distinguish players from mobs (NPCFamily for example)
                     var tChar = tPlayer as Character;
                     if (tChar != null)
                     {
                         // Is it a Player?
-                        CharacterInfoPacketMessageHandler.Default.Send(client.Character, tChar);
+                        CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, tChar);
                     }
                     else
                     {
@@ -191,14 +191,14 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     // If action == Logout
                     // Start 30 second logout timer if client is not a GM (statid 215)
-                    if (client.Character.Stats[StatIds.gmlevel].Value == 0)
+                    if (client.Controller.Character.Stats[StatIds.gmlevel].Value == 0)
                     {
-                        client.Character.StartLogoutTimer();
+                        client.Controller.Character.StartLogoutTimer();
                     }
                     else
                     {
                         // If client is a GM, disconnect without timer
-                        client.Character.Dispose();
+                        client.Controller.Character.Dispose();
                     }
 
                     break;
@@ -207,21 +207,21 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     // If action == Stop Logout
                     // Stop current logout timer and send stop logout packet
-                    client.Character.StopLogoutTimer();
-                    client.Character.UpdateMoveType((byte)client.Character.PreviousMoveMode);
-                    client.Character.Playfield.Announce(message);
+                    client.Controller.Character.StopLogoutTimer();
+                    client.Controller.Character.UpdateMoveType((byte)client.Controller.Character.PreviousMoveMode);
+                    client.Controller.Character.Playfield.Announce(message);
                     break;
 
                 case CharacterActionType.StandUp:
                 {
                     // If action == Stand
-                    client.Character.UpdateMoveType(37);
-                    client.Character.Playfield.Announce(message);
+                    client.Controller.Character.UpdateMoveType(37);
+                    client.Controller.Character.Playfield.Announce(message);
 
-                    if (client.Character.InLogoutTimerPeriod())
+                    if (client.Controller.Character.InLogoutTimerPeriod())
                     {
-                        this.Send(client.Character, this.StopLogout(client.Character), true);
-                        client.Character.StopLogoutTimer();
+                        this.Send(client.Controller.Character, this.StopLogout(client.Controller.Character), true);
+                        client.Controller.Character.StopLogoutTimer();
                     }
 
                     // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
@@ -315,36 +315,36 @@ namespace ZoneEngine.Core.MessageHandlers
                     ItemDao.Instance.Delete(
                         new
                         {
-                            containertype = (int)targetIdentityType, 
-                            containerinstance = client.Character.Identity.Instance, 
+                            containertype = (int)targetIdentityType,
+                            containerinstance = client.Controller.Character.Identity.Instance, 
                             Id = message.Target.Instance
                         });
-                    client.Character.BaseInventory.RemoveItem((int)targetIdentityType, message.Target.Instance);
+                    client.Controller.Character.BaseInventory.RemoveItem((int)targetIdentityType, message.Target.Instance);
 
-                    this.Acknowledge(client.Character, message);
+                    this.Acknowledge(client.Controller.Character, message);
                     break;
 
                 case CharacterActionType.Split: // Split?
-                    IItem it = client.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance];
+                    IItem it = client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance];
                     it.MultipleCount -= message.Parameter2;
                     Item newItem = new Item(it.Quality, it.LowID, it.HighID);
                     newItem.MultipleCount = message.Parameter2;
 
-                    client.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
-                        client.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(), 
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(), 
                         newItem);
-                    client.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
 
                     // Does it need to Acknowledge? Need to check that - Algorithman
                     break;
 
                 case CharacterActionType.AcceptTeamRequest:
-                    client.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance].MultipleCount
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance].MultipleCount
                         +=
-                        client.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2].MultipleCount;
-                    client.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
-                    client.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
-                    this.Acknowledge(client.Character, message);
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2].MultipleCount;
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
+                    this.Acknowledge(client.Controller.Character, message);
                     break;
 
                     // ###################################################################################
@@ -360,7 +360,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     // TODO: Insert perception checks on receiving characters/mobs and then dont send to playfield
                     // Send Action 162 : Enable Sneak
 
-                    this.Send(client.Character, this.Sneak(client.Character), true);
+                    this.Send(client.Controller.Character, this.Sneak(client.Controller.Character), true);
 
                     // End of Enable sneak
                     // TODO: IF SNEAKING IS NOT ALLOWED SEND REJECTION PACKET
@@ -371,8 +371,8 @@ namespace ZoneEngine.Core.MessageHandlers
                     Identity item1 = message.Target;
                     var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
 
-                    client.Character.TradeSkillSource = new TradeSkillInfo(0, (int)item1.Type, item1.Instance);
-                    client.Character.TradeSkillTarget = new TradeSkillInfo(1, (int)item2.Type, item2.Instance);
+                    client.Controller.Character.TradeSkillSource = new TradeSkillInfo(0, (int)item1.Type, item1.Instance);
+                    client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(1, (int)item2.Type, item2.Instance);
                     TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
 
                     break;
@@ -380,12 +380,12 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 case CharacterActionType.ChangeVisualFlag:
                 {
-                    client.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
+                    client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
 
                     ChatTextMessageHandler.Default.Send(
-                        client.Character, 
+                        client.Controller.Character, 
                         "Setting Visual Flag to " + message.Parameter2);
-                    AppearanceUpdateMessageHandler.Default.Send(client.Character);
+                    AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
                 }
 
                     break;
@@ -404,7 +404,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 default:
                 {
                     // unkown
-                    client.Character.Playfield.Announce(message);
+                    client.Controller.Character.Playfield.Announce(message);
                 }
 
                     break;
@@ -544,7 +544,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private MessageDataFiller Sneak(Character character)
+        private MessageDataFiller Sneak(ICharacter character)
         {
             return x =>
             {
@@ -565,7 +565,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="message">
         /// </param>
-        private void Acknowledge(Character character, CharacterActionMessage message)
+        private void Acknowledge(ICharacter character, CharacterActionMessage message)
         {
             this.Send(character, this.Reply(message));
         }
@@ -587,7 +587,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private MessageDataFiller StopLogout(Character character)
+        private MessageDataFiller StopLogout(ICharacter character)
         {
             return x =>
             {

@@ -69,7 +69,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             var announce = new FollowTargetMessage
                            {
-                               Identity = client.Character.Identity, 
+                               Identity = client.Controller.Character.Identity, 
                                Unknown = 0, 
                                Unknown1 = followTargetMessage.Unknown1, 
                                Unknown2 = followTargetMessage.Unknown2, 
@@ -81,7 +81,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                Unknown7 = followTargetMessage.Unknown7
                            };
 
-            client.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
+            client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
 
         }
 

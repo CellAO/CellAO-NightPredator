@@ -73,8 +73,8 @@ namespace ZoneEngine.Core.MessageHandlers
                     MessageBody = new ChatCmdMessage()
                                   {
                                       Command = message.Message.Text.TrimStart('.'),
-                                      Identity = client.Character.Identity,
-                                      Target = client.Character.SelectedTarget
+                                      Identity = client.Controller.Character.Identity,
+                                      Target = client.Controller.Character.SelectedTarget
                                   }
                 };
                 // It is a chat command in vicinity chat, lets process it
@@ -82,7 +82,7 @@ namespace ZoneEngine.Core.MessageHandlers
             }
             else
             {
-                ICharacter character = client.Character;
+                ICharacter character = client.Controller.Character;
                 IPlayfield playfield = character.Playfield;
 
                 float range = 0.0f;

@@ -83,7 +83,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         Item item = null;
                         try
                         {
-                            item = client.Character.BaseInventory.GetItemInContainer(
+                            item = client.Controller.Character.BaseInventory.GetItemInContainer(
                                 (int)message.Target.Type, 
                                 message.Target.Instance);
                         }
@@ -98,7 +98,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         }
 
                         TemplateActionMessageHandler.Default.Send(
-                            client.Character, 
+                            client.Controller.Character, 
                             item, 
                             (int)message.Target.Type, 
                             // container
@@ -110,27 +110,27 @@ namespace ZoneEngine.Core.MessageHandlers
                             item.MultipleCount--;
                             if (item.MultipleCount == 0)
                             {
-                                client.Character.BaseInventory.RemoveItem(
+                                client.Controller.Character.BaseInventory.RemoveItem(
                                     (int)message.Target.Type, 
                                     // pageNum
                                     message.Target.Instance // slotNum
                                     );
                                 CharacterActionMessageHandler.Default.SendDeleteItem(
-                                    client.Character, 
+                                    client.Controller.Character, 
                                     (int)message.Target.Type, 
                                     message.Target.Instance);
                             }
                         }
 
-                        item.PerformAction(client.Character, EventType.OnUse, message.Target.Instance);
+                        item.PerformAction(client.Controller.Character, EventType.OnUse, message.Target.Instance);
 
                         // Acknowledge action
-                        message.Identity = client.Character.Identity;
+                        message.Identity = client.Controller.Character.Identity;
                         message.Temp1 = 1;
                         message.Unknown = 0;
 
                         // client.SendCompressed(message);
-                        client.Character.Send(message);
+                        client.Controller.Character.Send(message);
                     }
                     else
                     {
@@ -138,10 +138,10 @@ namespace ZoneEngine.Core.MessageHandlers
                                    + ((int)message.Action) + ")\r\nTarget: " + message.Target.Type + " "
                                    + ((int)message.Target.Type).ToString("X8") + ":"
                                    + message.Target.Instance.ToString("X8");
-                        if (PlayfieldLoader.PFData.ContainsKey(client.Character.Playfield.Identity.Instance))
+                        if (PlayfieldLoader.PFData.ContainsKey(client.Controller.Character.Playfield.Identity.Instance))
                         {
                             StatelData sd =
-                                PlayfieldLoader.PFData[client.Character.Playfield.Identity.Instance].Statels
+                                PlayfieldLoader.PFData[client.Controller.Character.Playfield.Identity.Instance].Statels
                                     .FirstOrDefault(
                                         x =>
                                             (x.StatelIdentity.Type == message.Target.Type)
@@ -153,12 +153,12 @@ namespace ZoneEngine.Core.MessageHandlers
                                 Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
                                 if (onUse != null)
                                 {
-                                    onUse.Perform(client.Character, client.Character);
+                                    onUse.Perform(client.Controller.Character, client.Controller.Character);
                                 }
                             }
                         }
 
-                        ChatTextMessageHandler.Default.Send(client.Character, s);
+                        ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
                     }
 
                     break;

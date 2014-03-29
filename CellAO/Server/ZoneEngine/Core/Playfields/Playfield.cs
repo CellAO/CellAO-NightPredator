@@ -578,7 +578,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs)
         {
-            Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
+            Identity dontSendTo = sendSCFUs.toClient.Controller.Character.Identity;
             foreach (IEntity entity in
                 Pool.Instance.GetAll<IPacketReceivingEntity>((int)IdentityType.CanbeAffected))
             {

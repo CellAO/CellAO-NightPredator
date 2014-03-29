@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -58,7 +59,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(LookAtMessage message, IZoneClient client)
         {
-            var dynel = (ITargetingEntity)client.Character.Playfield.FindByIdentity(message.Identity);
+            var dynel = Pool.Instance.GetObject<ITargetingEntity>(message.Target);
 
             if (dynel == null)
             {
