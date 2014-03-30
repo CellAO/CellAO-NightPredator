@@ -85,6 +85,7 @@
     <Compile Include="Components\MemBusIoCAdapter.cs" />
     <Compile Include="Components\MessagePublisher.cs" />
     <Compile Include="Components\MessageSerializer.cs" />
+    <Compile Include="Encryption\PasswordHash.cs" />
     <Compile Include="Entities\Character.cs" />
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />

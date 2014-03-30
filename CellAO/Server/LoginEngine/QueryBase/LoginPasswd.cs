@@ -28,6 +28,9 @@ namespace LoginEngine.QueryBase
 {
     #region Usings ...
 
+    using System;
+
+    using CellAO.Core.Encryption;
     using CellAO.Database.Dao;
 
     #endregion

@@ -36,6 +36,7 @@ namespace AO.Core.Encryption
     using System.Security.Cryptography;
     using System.Text;
 
+    using CellAO.Core.Encryption;
     using CellAO.Database.Dao;
 
     using Utility;
@@ -134,12 +135,7 @@ namespace AO.Core.Encryption
         /// </returns>
         public string GeneratePasswordHash(string clearPassword)
         {
-            byte[] Salt = new byte[2];
-            RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
-
-            rand.GetBytes(Salt);
-
-            return this.GeneratePasswordHash(clearPassword, Salt);
+            return PasswordHash.CreateHash(clearPassword);
         }
 
         /// <summary>
@@ -201,7 +197,7 @@ namespace AO.Core.Encryption
                 return false;
             }
 
-            if (!this.IsValidPasswordHash(ClientPassword, passwordHash))
+            if (!PasswordHash.ValidatePassword(ClientPassword, passwordHash))
             {
                 return false;
             }
@@ -371,31 +367,6 @@ namespace AO.Core.Encryption
 
         /// <summary>
         /// </summary>
-        /// <param name="clearPassword">
-        /// </param>
-        /// <param name="Salt">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private string GeneratePasswordHash(string clearPassword, byte[] Salt)
-        {
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-
-            // Note we use ASCII here not UTF8 for better compatability with PHP/etc
-            byte[] clearPasswordBytes = Encoding.ASCII.GetBytes(clearPassword);
-            byte[] saltedPasswordBytes = new byte[clearPasswordBytes.Length + Salt.Length];
-
-            Array.Copy(Salt, 0, saltedPasswordBytes, 0, Salt.Length);
-            Array.Copy(clearPasswordBytes, 0, saltedPasswordBytes, Salt.Length, clearPasswordBytes.Length);
-
-            byte[] passwordHash = md5.ComputeHash(saltedPasswordBytes);
-
-            return BitConverter.ToString(Salt).ToLower().Replace("-", string.Empty).PadLeft(4, '0') + "$"
-                   + BitConverter.ToString(passwordHash).ToLower().Replace("-", string.Empty).PadLeft(32, '0');
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="RecvLogin">
         /// </param>
         /// <returns>
@@ -411,36 +382,6 @@ namespace AO.Core.Encryption
 
             LogUtil.Debug(string.Format("No entry for account username '{0}' found", RecvLogin));
             return string.Empty;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="clientPassword">
-        /// </param>
-        /// <param name="passwordHash">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private bool IsValidPasswordHash(string clientPassword, string passwordHash)
-        {
-            if (passwordHash == string.Empty)
-            {
-                return false;
-            }
-
-            byte[] Salt = new byte[2];
-
-            Salt[0] = Convert.ToByte(passwordHash.Substring(0, 2), 16);
-            Salt[1] = Convert.ToByte(passwordHash.Substring(2, 2), 16);
-
-            string clientHash = this.GeneratePasswordHash(clientPassword, Salt);
-
-            if (clientHash != passwordHash)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion
