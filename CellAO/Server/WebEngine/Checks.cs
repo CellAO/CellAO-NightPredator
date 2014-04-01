@@ -54,10 +54,10 @@ namespace WebEngine
                 Console.WriteLine();
                 Console.WriteLine("Downloading php...");
                 url.DownloadFile(
-                    "http://windows.php.net/downloads/releases/php-5.5.9-nts-Win32-VC11-x86.zip",
-                    "php-5.5.9-nts-Win32-VC11-x86.zip");
+                    "http://windows.php.net/downloads/releases/php-5.5.10-nts-Win32-VC11-x86.zip",
+                    "php-5.5.10-nts-Win32-VC11-x86.zip");
                 url.Dispose();
-                this.UrlDownloadFileCompleted("php-5.5.9-nts-Win32-VC11-x86.zip");
+                this.UrlDownloadFileCompleted("php-5.5.10-nts-Win32-VC11-x86.zip");
             }
             else
             {
