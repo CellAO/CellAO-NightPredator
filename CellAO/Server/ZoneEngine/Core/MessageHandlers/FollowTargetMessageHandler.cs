@@ -29,8 +29,12 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
     using CellAO.Core.Network;
 
+    using Dapper;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -46,8 +50,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public FollowTargetMessageHandler()
         {
-            // Inbound only? We might need it for Mobs/Pets following - Algorithman
-            this.Direction = MessageHandlerDirection.InboundOnly;
+            this.Direction = MessageHandlerDirection.All;
             this.UpdateCharacterStatsOnReceive = true;
         }
 
@@ -83,6 +86,21 @@ namespace ZoneEngine.Core.MessageHandlers
 
             client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
 
+        }
+
+        public void Send(ICharacter character, Identity toFollow)
+        {
+            
+        }
+
+        private MessageDataFiller Filler(ICharacter character, Identity toFollow)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Target = toFollow;
+                x.Unknown = 0;
+            };
         }
 
         #endregion
