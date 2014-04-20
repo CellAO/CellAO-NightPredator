@@ -32,6 +32,7 @@ namespace ZoneEngine.ChatCommands
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
+    using CellAO.ObjectManager;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -91,8 +92,8 @@ namespace ZoneEngine.ChatCommands
             // Fallback to self if no target is selected
             if (target.Instance == 0)
             {
-                target.Type = character.Client.Controller.Character.Identity.Type;
-                target.Instance = character.Client.Controller.Character.Identity.Instance;
+                target.Type = character.Identity.Type;
+                target.Instance = character.Identity.Instance;
             }
 
             int statId = 1234567890;
@@ -134,31 +135,36 @@ namespace ZoneEngine.ChatCommands
                 }
             }
 
-            IInstancedEntity tempch = character.Playfield.FindByIdentity(target);
-
-            uint statOldValue;
-            try
+            Character tempch = Pool.Instance.GetObject<Character>(target);
+            if (tempch != null)
             {
-                statOldValue = tempch.Stats[statId].BaseValue;
-                tempch.Stats[statId].Value = (int)statNewValue;
-            }
-            catch
-            {
-                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Unknown StatId " + statId));
-                return;
-            }
+                uint statOldValue;
+                try
+                {
+                    statOldValue = tempch.Stats[statId].BaseValue;
+                    tempch.Stats[statId].Value = (int)statNewValue;
+                }
+                catch
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "Unknown StatId " + statId));
+                    return;
+                }
 
-            string name = string.Empty;
-            if (tempch is INamedEntity)
-            {
-                name = ((INamedEntity)tempch).Name + " ";
-            }
+                string name = string.Empty;
+                if (tempch is INamedEntity)
+                {
+                    name = ((INamedEntity)tempch).Name + " ";
+                }
 
-            string response = "Dynel " + name + "(" + target.Type + ":" + target.Instance + "): Stat "
-                              + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
-            response += " Old: " + statOldValue;
-            response += " New: " + statNewValue;
-            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, response));
+                tempch.Controller.SendChangedStats();
+
+                string response = "Dynel " + name + "(" + target.Type + ":" + target.Instance + "): Stat "
+                                  + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
+                response += " Old: " + statOldValue;
+                response += " New: " + statNewValue;
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, response));
+            }
         }
 
         /// <summary>

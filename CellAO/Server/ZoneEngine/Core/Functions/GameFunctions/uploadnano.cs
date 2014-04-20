@@ -81,26 +81,29 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// <returns>
         /// </returns>
         public override bool Execute(
-            INamedEntity self, 
-            INamedEntity caller, 
-            IInstancedEntity target, 
+            INamedEntity self,
+            INamedEntity caller,
+            IInstancedEntity target,
             MessagePackObject[] arguments)
         {
             var temp = new UploadedNano() { NanoId = arguments[0].AsInt32() };
             ((Character)self).UploadedNanos.Add(temp);
             UploadedNanosDao.Instance.WriteNano(((Character)self).Identity.Instance, temp);
 
-            var message = new CharacterActionMessage()
-                          {
-                              Identity = self.Identity, 
-                              Action = CharacterActionType.UploadNano, 
-                              Target = self.Identity, 
-                              Parameter1 = (int)IdentityType.NanoProgram, 
-                              Parameter2 = temp.NanoId, 
-                              Unknown = 0
-                          };
+            if (((Character)self).Controller.Client != null)
+            {
+                var message = new CharacterActionMessage()
+                              {
+                                  Identity = self.Identity,
+                                  Action = CharacterActionType.UploadNano,
+                                  Target = self.Identity,
+                                  Parameter1 = (int)IdentityType.NanoProgram,
+                                  Parameter2 = temp.NanoId,
+                                  Unknown = 0
+                              };
 
-            ((Character)self).Client.SendCompressed(message);
+                ((Character)self).Controller.Client.SendCompressed(message);
+            }
 
             return true;
         }

@@ -35,18 +35,26 @@ namespace ZoneEngine.Core.Controllers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Events;
+    using CellAO.Core.Functions;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Core.Network;
+    using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using Utility;
+
+    using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.MessageHandlers;
+    using ZoneEngine.Core.Playfields;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
@@ -82,6 +90,25 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
+        ~PlayerController()
+        {
+            LogUtil.Debug("Finalization of PlayerController");
+        }
+
+        public void Dispose()
+        {
+            // Should already be disposed here
+            // this.Client.Dispose();
+            this.Client = null;
+        }
+
+        public PlayerController(IZoneClient client)
+        {
+            this.Client = client;
+        }
+
+        public IZoneClient Client { get; set; }
+
         #region Generic character actions
 
         /// <summary>
@@ -94,8 +121,13 @@ namespace ZoneEngine.Core.Controllers
         /// </exception>
         public bool LookAt(Identity target)
         {
-            this.Character.SetTarget(target);
-            return true;
+            bool result = false;
+            if (Pool.Instance.Contains(target))
+            {
+                this.Character.SetTarget(target);
+                result = true;
+            }
+            return result;
         }
 
         /// <summary>
@@ -220,10 +252,15 @@ namespace ZoneEngine.Core.Controllers
             // - Algorithman
 
             // give it a bit uncertainty (2.0f)
+            LogUtil.Debug(newCoordinates.ToString() + "<->" + this.Character.Coordinates.ToString());
             if (newCoordinates.Distance2D(this.Character.Coordinates) < 2.0f)
             {
                 this.Character.SetCoordinates(newCoordinates, heading);
                 this.Character.UpdateMoveType((byte)moveType);
+            }
+            else
+            {
+                this.Character.StopMovement();
             }
 
             return true;
@@ -391,7 +428,79 @@ namespace ZoneEngine.Core.Controllers
             // 4. Send the TemplateAction to client
             // 5. Execute the item's gamefunctions
 
-            throw new NotImplementedException();
+            Item item = null;
+            try
+            {
+                item = Character.BaseInventory.GetItemInContainer(
+                    (int)itemPosition.Type,
+                    itemPosition.Instance);
+            }
+            catch (Exception)
+            {
+            }
+
+            if (item == null)
+            {
+                throw new NullReferenceException(
+                    "No item found at " + itemPosition);
+            }
+
+            TemplateActionMessageHandler.Default.Send(
+                Character,
+                item,
+                (int)itemPosition.Type,
+                // container
+                itemPosition.Instance // placement
+                );
+
+            if (ItemLoader.ItemList[item.HighID].IsConsumable())
+            {
+                item.MultipleCount--;
+                if (item.MultipleCount == 0)
+                {
+                    Character.BaseInventory.RemoveItem(
+                        (int)itemPosition.Type,
+                        // pageNum
+                        itemPosition.Instance // slotNum
+                        );
+                    CharacterActionMessageHandler.Default.SendDeleteItem(
+                        Character,
+                        (int)itemPosition.Type,
+                        itemPosition.Instance);
+                }
+            }
+
+            item.PerformAction(Character, EventType.OnUse, itemPosition.Instance);
+            return true;
+        }
+
+        public bool UseStatel(Identity identity)
+        {
+            if (PlayfieldLoader.PFData.ContainsKey(Character.Playfield.Identity.Instance))
+            {
+                StatelData sd =
+                    PlayfieldLoader.PFData[Character.Playfield.Identity.Instance].Statels
+                        .FirstOrDefault(
+                            x =>
+                                (x.StatelIdentity.Type == identity.Type)
+                                && (x.StatelIdentity.Instance == identity.Instance));
+
+                if (sd != null)
+                {
+                    this.SendChatText("Found Statel with " + sd.Events.Count + " events");
+                    Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
+                    if (onUse != null)
+                    {
+                        onUse.Perform(Character, Character);
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void SendChatText(string text)
+        {
+            ChatTextMessageHandler.Default.Send(Character, text);
         }
 
         /// <summary>
@@ -742,19 +851,29 @@ namespace ZoneEngine.Core.Controllers
         /// </summary>
         /// <param name="client">
         /// </param>
-        public void SendChangedStats(IZoneClient client)
+        public void SendChangedStats()
         {
 
             Dictionary<int, uint> toPlayfield = new Dictionary<int, uint>();
             Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();
 
-            client.Controller.Character.Stats.GetChangedStats(toPlayer, toPlayfield);
+            this.Character.Stats.GetChangedStats(toPlayer, toPlayfield);
 
-            StatMessageHandler.Default.SendBulk(client.Controller.Character, toPlayer, toPlayfield);
+            StatMessageHandler.Default.SendBulk(this.Character, toPlayer, toPlayfield);
         }
 
         #endregion
 
+        public void CallFunction(Function function)
+        {
+            // TODO: Make it more versatile, not just applying stuff on yourself
+            FunctionCollection.Instance.CallFunction(
+                function.FunctionType,
+                this.Character,
+                this.Character,
+                this.Character,
+                function.Arguments.Values.ToArray());
+        }
 
     }
 }

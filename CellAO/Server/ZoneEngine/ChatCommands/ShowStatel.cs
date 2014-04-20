@@ -170,7 +170,7 @@ namespace ZoneEngine.ChatCommands
                 }
             }
 
-            character.Playfield.Publish(Bulk.CreateIM(character.Client, replies.ToArray()));
+            character.Playfield.Publish(Bulk.CreateIM(character.Controller.Client, replies.ToArray()));
         }
 
         /// <summary>

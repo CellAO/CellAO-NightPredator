@@ -3139,7 +3139,7 @@ namespace CellAO.Stats
             this.hasAlwaysLootable = new Stat(this, 345, 1234567890, false, false, false);
             this.hasKnuBotData = new Stat(this, 768, 1234567890, false, false, false);
             this.hateValueModifyer = new Stat(this, 288, 1234567890, false, false, false);
-            this.headMesh = new OverridingModifierStat(this, 64, 0, false, false, false);
+            this.headMesh = new OverridingModifierStat(this, 64, 0, false, false, true);
             this.healDelta = new StatHealDelta(this, 343, 1234567890, true, false, false);
             this.healInterval = new StatHealInterval(this, 342, 29, true, false, false);
             this.healMultiplier = new Stat(this, 535, 1234567890, false, false, false);
@@ -3195,7 +3195,7 @@ namespace CellAO.Stats
             this.liquidType = new Stat(this, 268, 1234567890, false, false, false);
             this.lockDifficulty = new Stat(this, 299, 1234567890, false, false, false);
             this.lockDownTime = new Stat(this, 613, 1234567890, false, false, false);
-            this.losHeight = new Stat(this, 466, 1234567890, false, false, false);
+            this.losHeight = new Stat(this, 466, 15, false, false, false);
             this.lowresMesh = new Stat(this, 390, 1234567890, false, false, false);
             this.lrEnergyWeapon = new StatSkill(this, 133, 5, true, false, false);
             this.lrMultipleWeapon = new StatSkill(this, 134, 5, true, false, false);

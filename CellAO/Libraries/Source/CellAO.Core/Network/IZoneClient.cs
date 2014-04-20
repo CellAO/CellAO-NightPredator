@@ -53,23 +53,9 @@ namespace CellAO.Core.Network
 
         /// <summary>
         /// </summary>
-        /// <param name="functions">
-        /// </param>
-        void CallFunction(Function functions);
-
-        /// <summary>
-        /// </summary>
         /// <param name="messageBody">
         /// </param>
         void SendCompressed(MessageBody messageBody);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="text">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        bool SendChatText(string text);
 
         #endregion
     }

@@ -527,6 +527,44 @@ namespace CellAO.Database.Dao
             return parameters;
         }
 
+        public IEnumerable<T> GetWhere(object parameter = null, IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            IEnumerable<T> result = new List<T>();
+
+            IDbConnection conn = connection;
+            try
+            {
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    result = conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, parameter), parameter, trans);
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+            return result;
+        }
+
         #endregion
     }
 }

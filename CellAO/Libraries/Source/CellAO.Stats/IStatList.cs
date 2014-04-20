@@ -131,5 +131,7 @@ namespace CellAO.Stats
         #endregion
 
         void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield);
+
+        void SetBaseValueWithoutTriggering(int stat, uint value);
     }
 }

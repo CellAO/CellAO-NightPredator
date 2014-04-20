@@ -129,7 +129,7 @@ namespace ZoneEngine.Core.MessageHandlers
                            this.Create(
                                character, 
                                Filler(character, text, unknown1, unknown2)), 
-                       client = character.Client
+                       client = character.Controller.Client
                    };
         }
 

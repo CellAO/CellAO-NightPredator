@@ -24,11 +24,50 @@
 
 #endregion
 
-namespace CellAO.Core.Entities
+namespace CellAO.Stats.SpecialStats
 {
     /// <summary>
     /// </summary>
-    public interface INonPlayerCharacter : IInstancedEntity
+    public class StatHeadmesh : OverridingModifierStat
     {
+        /// <summary>
+        /// </summary>
+        /// <param name="statList">
+        /// </param>
+        /// <param name="number">
+        /// </param>
+        /// <param name="defaultValue">
+        /// </param>
+        /// <param name="sendBaseValue">
+        /// </param>
+        /// <param name="dontWrite">
+        /// </param>
+        /// <param name="announceToPlayfield">
+        /// </param>
+        public StatHeadmesh(
+            Stats statList, 
+            int number, 
+            uint defaultValue, 
+            bool sendBaseValue, 
+            bool dontWrite, 
+            bool announceToPlayfield)
+            : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
+        {
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="value">
+        /// </param>
+        /// <param name="starting">
+        /// </param>
+        public override void Set(int value, bool starting = false)
+        {
+            this.Modifier = value - (int)this.BaseValue;
+            this.ReCalculate = true;
+            this.Changed = true;
+
+            // TODO: Need a back link to character here, so MeshLayers can be updated
+        }
     }
 }

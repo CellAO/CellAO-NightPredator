@@ -174,7 +174,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     else
                     {
                         // If client is a GM, disconnect without timer
-                        client.Controller.Character.Dispose();
+                        client.Controller.Character.StartLogoutTimer(1000);
                     }
 
                     break;

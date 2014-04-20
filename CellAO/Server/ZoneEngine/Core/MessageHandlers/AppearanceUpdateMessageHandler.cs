@@ -160,6 +160,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         textures.Add(new AOTextures(texture.place, texture.Texture));
 
                         // REFACT why recreating a AOTexture ???
+                        // Because of thread safety, player could lose texture the same time? - Algorithman
                     }
 
                     meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);

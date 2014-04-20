@@ -30,24 +30,27 @@ namespace CellAO.Core.Entities
 
     using System;
 
+    using CellAO.Core.Functions;
     using CellAO.Core.Network;
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface IController
+    public interface IController : IDisposable
     {
         /// <summary>
         /// ICharacter object connected to this Controller
         /// </summary>
         ICharacter Character { get; set; }
+
+        IZoneClient Client { get; set; }
 
         #region Generic character actions
 
@@ -60,6 +63,20 @@ namespace CellAO.Core.Entities
         /// <exception cref="NotImplementedException">
         /// </exception>
         bool LookAt(Identity target);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        bool UseStatel(Identity identity);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="text">
+        /// </param>
+        void SendChatText(string text);
 
         /// <summary>
         /// </summary>
@@ -109,7 +126,7 @@ namespace CellAO.Core.Entities
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        bool Move(int moveType, Coordinate newCoordinates, Vector.Quaternion heading);
+        bool Move(int moveType, Coordinate newCoordinates, Quaternion heading);
 
         /// <summary>
         /// </summary>
@@ -196,6 +213,8 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         /// <param name="container">
+        /// </param>
+        /// <param name="slotNumber">
         /// </param>
         /// <returns>
         /// </returns>
@@ -361,6 +380,16 @@ namespace CellAO.Core.Entities
 
         #endregion
 
-        void SendChangedStats(IZoneClient client);
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        void SendChangedStats();
+
+        /// <summary>
+        /// </summary>
+        /// <param name="function">
+        /// </param>
+        void CallFunction(Function function);
     }
 }

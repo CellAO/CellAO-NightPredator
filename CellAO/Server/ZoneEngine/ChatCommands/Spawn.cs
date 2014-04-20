@@ -33,17 +33,19 @@ namespace ZoneEngine.ChatCommands
     using System.Globalization;
 
     using CellAO.Core.Entities;
+    using CellAO.Core.NPCHandler;
     using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
-using CellAO.Database.Dao;
-using System.Text;
+    using CellAO.Database.Dao;
+    using System.Text;
 
     #endregion
 
@@ -107,13 +109,15 @@ Filter will be applied to mob name"));
         /// </param>
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
-            if(string.Compare(args[1], "list", true) == 0) {
+            if (string.Compare(args[1], "list", true) == 0)
+            {
                 // list templates
-                IEnumerable<DBMobTemplate> mobTemplates = 
-                    MobTemplateDao.GetMobTemplatesByName((args.Length > 2) ? args[2] : "%", false);
+                IEnumerable<DBMobTemplate> mobTemplates =
+                    MobTemplateDao.Instance.GetMobTemplatesByName((args.Length > 2) ? args[2] : "%", false);
 
                 StringBuilder text = new StringBuilder("List of mobtemplates (Hash, Name): ");
-                foreach(DBMobTemplate mt in mobTemplates) {
+                foreach (DBMobTemplate mt in mobTemplates)
+                {
                     text.AppendLine(string.Format("{0},'{1}'", mt.Hash, mt.Name));
                 }
 
@@ -122,15 +126,45 @@ Filter will be applied to mob name"));
                     character,
                     text.ToString()));
 
-            } else {
+            }
+            else
+            {
                 // try spawning mob
-                if (args.Length == 3) {
+                Character mobCharacter = null;
+                if (args.Length == 3)
+                {
                     // DBMobTemplate mt = MobTemplateDao.GetMobTemplateByHash(args[1])
                     // character.Playfield.Despawn
                     //NonPlayerCharacterHandler.SpawnMonster(client, args[1], uint.Parse(args[2]));
+                    NPCController npcController = new NPCController();
+                    mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
+                        args[1],
+                        character.Playfield.Identity,
+                        character.Coordinates,
+                        character.RawHeading,
+                        npcController,
+                        int.Parse(args[2]));
+
+                }
+                if (args.Length == 2)
+                {
+                    NPCController npcController = new NPCController();
+                    mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
+                        args[1],
+                        character.Playfield.Identity,
+                        character.Coordinates,
+                        character.RawHeading,
+                        npcController);
+                }
+                if (mobCharacter != null)
+                {
+                    mobCharacter.Playfield = character.Playfield;
+                    var mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
+                    character.Playfield.Announce(mess);
+                    AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
                 }
             }
-            
+
 
             // this.CommandHelp(client);
 

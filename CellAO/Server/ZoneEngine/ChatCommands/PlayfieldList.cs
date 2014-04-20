@@ -88,7 +88,7 @@ namespace ZoneEngine.ChatCommands
                 messList.Add(ChatTextMessageHandler.Default.Create(character, pf.Key.Instance.ToString().PadLeft(8) + ": " + pf.Value));
             }
 
-            character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));
+            character.Playfield.Publish(Bulk.CreateIM(character.Controller.Client, messList.ToArray()));
         }
 
         /// <summary>

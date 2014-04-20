@@ -137,7 +137,7 @@ namespace CellAO.Core.Playfields
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
-            
+
             this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
         }
 
@@ -235,8 +235,11 @@ namespace CellAO.Core.Playfields
                 if (entity != null)
                 {
                     // Make this whole thing unblocking with publishing single internal messages
-                    this.Publish(
-                        new IMSendAOtomationMessageBodyToClient() { client = entity.Client, Body = messageBody });
+                    if (entity.Controller.Client != null)
+                    {
+                        this.Publish(
+                        new IMSendAOtomationMessageBodyToClient() { client = entity.Controller.Client, Body = messageBody });
+                    }
                 }
             }
         }
@@ -266,7 +269,7 @@ namespace CellAO.Core.Playfields
                     {
                         // Make this whole thing unblocking with publishing single internal messages
                         this.Publish(
-                            new IMSendAOtomationMessageBodyToClient() { client = entity.Client, Body = messageBody });
+                            new IMSendAOtomationMessageBodyToClient() { client = entity.Controller.Client, Body = messageBody });
                     }
                 }
             }
@@ -291,7 +294,10 @@ namespace CellAO.Core.Playfields
                 IEntity entity = templist.ElementAt(i);
                 if ((entity as Character) != null)
                 {
-                    this.server.DisconnectClient((entity as Character).Client);
+                    if ((entity as Character).Controller.Client != null)
+                    {
+                        this.server.DisconnectClient((entity as Character).Controller.Client);
+                    }
                     (entity as Character).Dispose();
                 }
             }
@@ -353,8 +359,10 @@ namespace CellAO.Core.Playfields
                 var temp = user as Character;
                 if (temp != null)
                 {
-                    temp.Client.SendCompressed(
-                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                    if (temp.Controller.Client!=null)
+                    {
+                        temp.Controller.Client.SendCompressed(
+                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });}
                     return;
                 }
             }
@@ -550,7 +558,16 @@ namespace CellAO.Core.Playfields
         {
             if (msg.client != null)
             {
-                msg.client.SendCompressed(msg.Body);
+                try
+                {
+                    LogUtil.Debug(msg.Body.GetType().ToString());
+                    msg.client.SendCompressed(msg.Body);
+                }
+                catch (Exception)
+                {
+                    LogUtil.Debug(msg.Body.GetType().ToString());
+                    throw;
+                }
             }
         }
 
@@ -637,13 +654,13 @@ namespace CellAO.Core.Playfields
             // else you would end up at weird coordinates in the same playfield
 
             // Save client object
-            ZoneClient client = (ZoneClient)dynel.Client;
+            ZoneClient client = (ZoneClient)dynel.Controller.Client;
 
             // Set client=null so dynel can really dispose
 
             IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
-                Pool.Instance.GetObject<Playfield>(
-                    new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+            Pool.Instance.GetObject<Playfield>(
+                new Identity() { Type = playfield.Type, Instance = playfield.Instance });
 
             if (newPlayfield == null)
             {
@@ -651,7 +668,7 @@ namespace CellAO.Core.Playfields
             }
 
             dynel.Playfield = newPlayfield;
-            dynel.Client = null;
+            dynel.Controller.Client = null;
             dynel.Dispose();
 
             LogUtil.Debug("Saving to pf " + playfield.Instance);

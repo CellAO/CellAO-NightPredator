@@ -62,6 +62,9 @@ namespace ZoneEngine.Core.Packets
         /// </returns>
         public static SimpleCharFullUpdateMessage ConstructMessage(Character character)
         {
+            // No need to set packet flags here, its all done in the SimpleCharFullUpdateSerializer.cs
+            // - Algorithman
+
             // Character Variables
             bool socialonly;
             bool showsocial;
@@ -182,7 +185,7 @@ namespace ZoneEngine.Core.Packets
 
                 meshs = MeshLayers.GetMeshs(character, showsocial, socialonly);
 
-                foreach (KeyValuePair<int,IActiveNano> kv in character.ActiveNanos)
+                foreach (KeyValuePair<int, IActiveNano> kv in character.ActiveNanos)
                 {
                     var tempNano = new AONano();
                     tempNano.ID = kv.Value.ID;
@@ -207,16 +210,13 @@ namespace ZoneEngine.Core.Packets
             scfu.Identity = charId;
 
             scfu.Version = 57; // SCFU packet version (57/0x39)
-            scfu.Flags = SimpleCharFullUpdateFlags.None; // Try setting to 0x042062C8 if you have problems (old value)
-            scfu.Flags |= SimpleCharFullUpdateFlags.HasPlayfieldId; // Has Playfield ID
             scfu.PlayfieldId = charPlayfield; // playfield
 
             if (character.FightingTarget.Instance != 0)
             {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasFightingTarget;
                 scfu.FightingTarget = new Identity
                                       {
-                                          Type = character.FightingTarget.Type, 
+                                          Type = character.FightingTarget.Type,
                                           Instance = character.FightingTarget.Instance
                                       };
             }
@@ -225,22 +225,21 @@ namespace ZoneEngine.Core.Packets
             scfu.Coordinates = new Vector3 { X = charCoord.x, Y = charCoord.y, Z = charCoord.z };
 
             // Heading Data
-            scfu.Flags |= SimpleCharFullUpdateFlags.HasHeading;
             scfu.Heading = new SmokeLounge.AOtomation.Messaging.GameData.Quaternion
                            {
-                               W = charHeading.wf, 
-                               X = charHeading.xf, 
-                               Y = charHeading.yf, 
+                               W = charHeading.wf,
+                               X = charHeading.xf,
+                               Y = charHeading.yf,
                                Z = charHeading.zf
                            };
 
             // Race
             scfu.Appearance = new Appearance
                               {
-                                  Side = (Side)sideValue, 
-                                  Fatness = (Fatness)fatValue, 
-                                  Breed = (Breed)breedValue, 
-                                  Gender = (Gender)sexValue, 
+                                  Side = (Side)sideValue,
+                                  Fatness = (Fatness)fatValue,
+                                  Breed = (Breed)breedValue,
+                                  Gender = (Gender)sexValue,
                                   Race = raceValue
                               }; // appearance
 
@@ -251,13 +250,10 @@ namespace ZoneEngine.Core.Packets
             scfu.AccountFlags = (short)accFlagsValue;
             scfu.Expansions = (short)expansionValue;
 
-            bool isNpc = character is INonPlayerCharacter;
+            bool isNpc = (NPCFamily != 1234567890) && (NPCFamily!=0);
 
             if (isNpc)
             {
-                // Are we a NPC (i think anyway)? So far this is _NOT_ used at all
-                scfu.Flags |= SimpleCharFullUpdateFlags.IsNpc;
-
                 var snpc = new SimpleNpcInfo { Family = (short)NPCFamily, LosHeight = (short)losHeight };
                 scfu.CharacterInfo = snpc;
             }
@@ -287,7 +283,6 @@ namespace ZoneEngine.Core.Packets
 
                 if (orgNameLength != 0)
                 {
-                    scfu.Flags |= SimpleCharFullUpdateFlags.HasOrgName; // Has org name data
                     spc.OrgName = orgName;
                 }
 
@@ -296,23 +291,11 @@ namespace ZoneEngine.Core.Packets
 
             // Level
             scfu.Level = (short)levelValue;
-            if (scfu.Level > sbyte.MaxValue)
-            {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasExtendedLevel;
-            }
-
+            
             // Health
-            scfu.Health = (uint)healthValue;
-            if (scfu.Health <= short.MaxValue)
-            {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasSmallHealth;
-            }
-
+            scfu.Health = healthValue;
+            
             scfu.HealthDamage = healthValue - currentHealth;
-            if (scfu.HealthDamage <= byte.MaxValue)
-            {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasSmallHealthDamage;
-            }
 
             // If player is in grid or fixer grid
             // make him/her/it a nice upside down pyramid
@@ -330,6 +313,8 @@ namespace ZoneEngine.Core.Packets
             scfu.VisibleTitle = 0; // visible title?
 
             // 42 bytes long
+            // For PlayerCharacters that is
+            // NPC's have a shorter one?
             scfu.Unknown1 = new byte[]
                             {
                                 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 
@@ -337,29 +322,38 @@ namespace ZoneEngine.Core.Packets
                                 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
                                 0x00, 0x00, 0x00, 0x00
                             };
+            
+            // NPC Unknown1
+            if ((NPCFamily!=0) && (NPCFamily!=1234567890))
+            {
+                scfu.Unknown1 = new byte[]
+                            {
+                                // Knubot values??            
+                                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+             
+                                (byte)currentMovementMode, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 
+                                0x00, 0x00, 0x02, 0x00, 0x00
+                            };
+            }
+            
 
             if (headMeshValue != 0)
             {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasHeadMesh; // Has HeadMesh Flag
                 scfu.HeadMesh = (uint?)headMeshValue; // Headmesh
             }
 
             // Runspeed
             scfu.RunSpeedBase = (short)runSpeedBaseValue;
-            if (runSpeedBaseValue > sbyte.MaxValue)
-            {
-                scfu.Flags |= SimpleCharFullUpdateFlags.HasExtendedRunSpeed;
-            }
 
             scfu.ActiveNanos = (from nano in nanos
-                select
-                    new ActiveNano
-                    {
-                        NanoId = nano.ID, 
-                        NanoInstance = nano.Instance, 
-                        Time1 = nano.TickCounter, 
-                        Time2 = nano.TickInterval
-                    }).ToArray();
+                                select
+                                    new ActiveNano
+                                    {
+                                        NanoId = nano.ID,
+                                        NanoInstance = nano.Instance,
+                                        Time1 = nano.TickCounter,
+                                        Time2 = nano.TickInterval
+                                    }).ToArray();
 
             // Texture/Cloth Data
             var scfuTextures = new List<Texture>();
@@ -406,14 +400,14 @@ namespace ZoneEngine.Core.Packets
             // # Meshs
             // ############
             scfu.Meshes = (from aoMesh in meshs
-                select
-                    new Mesh
-                    {
-                        Position = (byte)aoMesh.Position, 
-                        Id = (uint)aoMesh.Mesh, 
-                        OverrideTextureId = aoMesh.OverrideTexture, 
-                        Layer = (byte)aoMesh.Layer
-                    }).ToArray();
+                           select
+                               new Mesh
+                               {
+                                   Position = (byte)aoMesh.Position,
+                                   Id = (uint)aoMesh.Mesh,
+                                   OverrideTextureId = aoMesh.OverrideTexture,
+                                   Layer = (byte)aoMesh.Layer
+                               }).ToArray();
 
             // End Meshs
             scfu.Flags2 = 0; // packetFlags2

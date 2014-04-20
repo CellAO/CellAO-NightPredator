@@ -130,7 +130,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 fullCharacterMessage.Unknown7 = 1;
                 fullCharacterMessage.Unknown8 = 0;
 
-                IZoneClient client = character.Client;
+                IZoneClient client = character.Controller.Client;
 
                 /* part 6 of data (1-st stats block) */
 

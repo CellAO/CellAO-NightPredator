@@ -73,7 +73,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
             string[] cmdArgs = fullArgs.Trim().Split(' ');
 
-            ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), client, client.Controller.Character.Identity, cmdArgs);
+            ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), client, client.Controller.Character.SelectedTarget, cmdArgs);
         }
 
         #endregion

@@ -41,10 +41,6 @@ namespace CellAO.Database.Entities
     {
         /// <summary>
         /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// </summary>
         public int Playfield { get; set; }
 
         /// <summary>
@@ -118,5 +114,9 @@ namespace CellAO.Database.Entities
         /// <summary>
         /// </summary>
         public Binary AdditionalMeshs { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public int Id { get; set; }
     }
 }

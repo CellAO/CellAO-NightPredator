@@ -51,7 +51,12 @@ namespace CellAO.ObjectManager
 
         #endregion
 
+        /// <summary>
+        /// </summary>
         private static readonly Pool instance = new Pool();
+
+        /// <summary>
+        /// </summary>
         public static Pool Instance
         {
             get
@@ -61,6 +66,19 @@ namespace CellAO.ObjectManager
         }
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        public void Dispose()
+        {
+            foreach (Dictionary<ulong, IEntity> list in this.pool.Values)
+            {
+                foreach (IDisposable disposable in list.Values)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -85,19 +103,6 @@ namespace CellAO.ObjectManager
 
         /// <summary>
         /// </summary>
-        public void Dispose()
-        {
-            foreach (Dictionary<ulong, IEntity> list in this.pool.Values)
-            {
-                foreach (IDisposable disposable in list.Values)
-                {
-                    disposable.Dispose();
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="identityType">
         /// </param>
         /// <returns>
@@ -107,19 +112,28 @@ namespace CellAO.ObjectManager
             List<IEntity> temp = new List<IEntity>();
             if (this.pool.ContainsKey(identityType))
             {
-                temp.AddRange((this.pool[identityType].Values.ToArray()));
+                temp.AddRange(this.pool[identityType].Values.ToArray());
             }
+
             return temp;
         }
 
-
+        /// <summary>
+        /// </summary>
+        /// <param name="identitytype">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
         public IEnumerable<T> GetAll<T>(int identitytype) where T : class
         {
             List<T> temp = new List<T>();
             if (this.pool.ContainsKey(identitytype))
             {
-                temp.AddRange((this.pool[identitytype].Values.OfType<T>().ToArray()));
+                temp.AddRange(this.pool[identitytype].Values.OfType<T>().ToArray());
             }
+
             return temp;
         }
 
@@ -157,6 +171,27 @@ namespace CellAO.ObjectManager
 
         /// <summary>
         /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public object GetObject(Identity identity)
+        {
+            if (this.pool.ContainsKey((int)identity.Type))
+            {
+                ulong id = identity.Long();
+                if (this.pool[(int)identity.Type].ContainsKey(id))
+                {
+                    IEntity temp = this.pool[(int)identity.Type].First(x => x.Key == id).Value;
+                    return temp;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="obj">
         /// </param>
         /// <typeparam name="T">
@@ -185,6 +220,41 @@ namespace CellAO.ObjectManager
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool Contains(Identity identity)
+        {
+            bool result = false;
+            if (this.pool.ContainsKey((int)identity.Type))
+            {
+                if (this.pool[(int)identity.Type].ContainsKey(identity.Long()))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         #endregion
+
+        public int GetFreeInstance<T>(int minId, IdentityType type)
+        {
+            int newId = minId;
+            Identity temp = new Identity() { Type = type, Instance = minId };
+            if (this.pool.ContainsKey((int)type))
+            {
+                while (this.pool[(int)type].ContainsKey(temp.Long()))
+                {
+                    // TODO: Prevent overflow....
+                    temp.Instance++;
+                }
+            }
+            return temp.Instance;
+        }
     }
 }

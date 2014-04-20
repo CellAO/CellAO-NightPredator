@@ -116,7 +116,7 @@ namespace CellAO.Core.Events
 
                 if (result)
                 {
-                    self.Client.CallFunction(functions);
+                    self.Controller.CallFunction(functions);
                 }
             }
         }

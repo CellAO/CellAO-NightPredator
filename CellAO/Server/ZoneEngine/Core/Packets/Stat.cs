@@ -151,7 +151,10 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ICharacter character, int stat, uint value, bool announce)
         {
-            Send((IZoneClient)character.Client, stat, value, announce);
+            if (character.Controller.Client != null)
+            {
+                Send((IZoneClient)character.Controller.Client, stat, value, announce);
+            }
         }
 
         /// <summary>
@@ -166,7 +169,10 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ICharacter character, int stat, int value, bool announce)
         {
-            Send(character.Client, stat, value, announce);
+            if (character.Controller.Client != null)
+            {
+                Send(character.Controller.Client, stat, value, announce);
+            }
         }
 
         /// <summary>

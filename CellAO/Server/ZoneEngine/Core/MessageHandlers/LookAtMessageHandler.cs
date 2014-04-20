@@ -59,14 +59,13 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(LookAtMessage message, IZoneClient client)
         {
-            var dynel = Pool.Instance.GetObject<ITargetingEntity>(message.Target);
-
-            if (dynel == null)
+            if (client.Controller.LookAt(message.Target))
             {
-                return;
+                if (message.ReturnInfo == 1)
+                {
+                    CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, message.Target);
+                }
             }
-
-            dynel.SetTarget(message.Target);
         }
 
         #endregion

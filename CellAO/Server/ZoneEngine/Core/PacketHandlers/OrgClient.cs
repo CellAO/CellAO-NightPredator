@@ -480,26 +480,34 @@ namespace ZoneEngine.Core.PacketHandlers
                     Character tPlayer = client.Playfield.FindByIdentity<Character>(message.Target);
                     if (tPlayer != null)
                     {
-                        var inviteMessage = new OrgInviteMessage
-                                            {
-                                                Identity = tPlayer.Identity, 
-                                                Unknown = 0x00, 
-                                                Unknown1 = 0x00000000, 
-                                                Unknown2 = 0x00000000, 
-                                                Organization =
-                                                    new Identity
-                                                    {
-                                                        Type = IdentityType.Organization, 
-                                                        Instance =
-                                                            (int)
-                                                            client.Controller.Character.Stats[
-                                                                (int)StatIds.clan].Value
-                                                    },
-                                                OrganizationName = client.Controller.Character.OrganizationName, 
-                                                Unknown3 = 0x00000000
-                                            };
+                        if (tPlayer.Controller.Client != null)
+                        {
+                            var inviteMessage = new OrgInviteMessage
+                                                {
+                                                    Identity = tPlayer.Identity,
+                                                    Unknown = 0x00,
+                                                    Unknown1 = 0x00000000,
+                                                    Unknown2 = 0x00000000,
+                                                    Organization =
+                                                        new Identity
+                                                        {
+                                                            Type =
+                                                                IdentityType
+                                                                .Organization,
+                                                            Instance =
+                                                                (int)
+                                                                client.Controller
+                                                                .Character.Stats[
+                                                                    (int)StatIds.clan]
+                                                                .Value
+                                                        },
+                                                    OrganizationName =
+                                                        client.Controller.Character.OrganizationName,
+                                                    Unknown3 = 0x00000000
+                                                };
 
-                        tPlayer.Client.SendCompressed(inviteMessage);
+                            tPlayer.Controller.Client.SendCompressed(inviteMessage);
+                        }
                     }
                 }
 

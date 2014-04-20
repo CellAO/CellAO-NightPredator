@@ -92,7 +92,7 @@ namespace ZoneEngine.ChatCommands
                         ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
             }
 
-            character.Playfield.Publish(Bulk.CreateIM(character.Client, messList.ToArray()));
+            character.Playfield.Publish(Bulk.CreateIM(character.Controller.Client, messList.ToArray()));
         }
 
         /// <summary>

@@ -62,8 +62,14 @@ namespace ZoneEngine.Core.MessageHandlers
             Dictionary<int, uint> statsToClient, 
             Dictionary<int, uint> statsToPlayfield)
         {
-            this.Send(character, this.FillerBulk(character, statsToClient));
-            this.Send(character, this.FillerBulk(character, statsToPlayfield), true);
+            if (statsToClient.Count > 0)
+            {
+                this.Send(character, this.FillerBulk(character, statsToClient));
+            }
+            if (statsToPlayfield.Count > 0)
+            {
+                this.Send(character, this.FillerBulk(character, statsToPlayfield), true);
+            }
         }
 
         /// <summary>

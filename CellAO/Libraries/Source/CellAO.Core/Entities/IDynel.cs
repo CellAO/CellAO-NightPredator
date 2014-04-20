@@ -54,7 +54,7 @@ namespace CellAO.Core.Entities
     {
         /// <summary>
         /// </summary>
-        IZoneClient Client { get; set; }
+        IController Controller { get; }
 
         /// <summary>
         /// </summary>

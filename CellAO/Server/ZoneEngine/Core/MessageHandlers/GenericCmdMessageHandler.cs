@@ -80,85 +80,18 @@ namespace ZoneEngine.Core.MessageHandlers
                 case GenericCmdAction.Use:
                     if (message.Target.Type == IdentityType.Inventory)
                     {
-                        Item item = null;
-                        try
-                        {
-                            item = client.Controller.Character.BaseInventory.GetItemInContainer(
-                                (int)message.Target.Type, 
-                                message.Target.Instance);
-                        }
-                        catch (Exception)
-                        {
-                        }
-
-                        if (item == null)
-                        {
-                            throw new NullReferenceException(
-                                "No item found at " + message.Target.Type + "/" + message.Target.Instance);
-                        }
-
-                        TemplateActionMessageHandler.Default.Send(
-                            client.Controller.Character, 
-                            item, 
-                            (int)message.Target.Type, 
-                            // container
-                            message.Target.Instance // placement
-                            );
-
-                        if (ItemLoader.ItemList[item.HighID].IsConsumable())
-                        {
-                            item.MultipleCount--;
-                            if (item.MultipleCount == 0)
-                            {
-                                client.Controller.Character.BaseInventory.RemoveItem(
-                                    (int)message.Target.Type, 
-                                    // pageNum
-                                    message.Target.Instance // slotNum
-                                    );
-                                CharacterActionMessageHandler.Default.SendDeleteItem(
-                                    client.Controller.Character, 
-                                    (int)message.Target.Type, 
-                                    message.Target.Instance);
-                            }
-                        }
-
-                        item.PerformAction(client.Controller.Character, EventType.OnUse, message.Target.Instance);
-
+                        client.Controller.UseItem(message.Target);
                         // Acknowledge action
-                        message.Identity = client.Controller.Character.Identity;
-                        message.Temp1 = 1;
-                        message.Unknown = 0;
-
-                        // client.SendCompressed(message);
-                        client.Controller.Character.Send(message);
+                        this.Acknowledge(client.Controller.Character, message);
                     }
                     else
                     {
-                        string s = "Generic Command received:\r\nAction: " + message.Action + "("
-                                   + ((int)message.Action) + ")\r\nTarget: " + message.Target.Type + " "
-                                   + ((int)message.Target.Type).ToString("X8") + ":"
-                                   + message.Target.Instance.ToString("X8");
-                        if (PlayfieldLoader.PFData.ContainsKey(client.Controller.Character.Playfield.Identity.Instance))
-                        {
-                            StatelData sd =
-                                PlayfieldLoader.PFData[client.Controller.Character.Playfield.Identity.Instance].Statels
-                                    .FirstOrDefault(
-                                        x =>
-                                            (x.StatelIdentity.Type == message.Target.Type)
-                                            && (x.StatelIdentity.Instance == message.Target.Instance));
-
-                            if (sd != null)
-                            {
-                                s = s + "\r\nFound Statel with " + sd.Events.Count + " events";
-                                Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
-                                if (onUse != null)
-                                {
-                                    onUse.Perform(client.Controller.Character, client.Controller.Character);
-                                }
-                            }
-                        }
-
+                        // Use statel (doors, grid terminals etc)
+#if DEBUG
+                        string s = string.Format("Generic Command received:\r\nAction: {0} ({1}){2}Target: {3} {4}", message.Action, (int)message.Action, Environment.NewLine, message.Target.Type,message.Target.ToString(true));
                         ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
+#endif
+                        client.Controller.UseStatel(message.Target);
                     }
 
                     break;
@@ -179,7 +112,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public void Acknowledge(ICharacter character, GenericCmdMessage message, bool announceToPlayfield = false)
         {
-            this.Send(character, this.Reply(message), announceToPlayfield);
+            this.Send(character, this.Reply(character, message), announceToPlayfield);
         }
 
         /// <summary>
@@ -188,11 +121,12 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <returns>
         /// </returns>
-        private MessageDataFiller Reply(GenericCmdMessage message)
+        private MessageDataFiller Reply(ICharacter character, GenericCmdMessage message)
         {
             return x =>
             {
                 x = message;
+                x.Identity = character.Identity;
                 x.Temp1 = 1;
                 x.Unknown = 0;
             };

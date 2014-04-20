@@ -130,7 +130,7 @@ namespace CellAO.Core.Components
                         {
                             if (client.Controller.Character != null)
                             {
-                                client.Controller.SendChangedStats(client);
+                                client.Controller.SendChangedStats();
                             }
                         }
                     }

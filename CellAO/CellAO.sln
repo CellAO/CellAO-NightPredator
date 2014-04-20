@@ -103,6 +103,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CellAO.ObjectManager", "Lib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEngine", "Server\WebEngine\WebEngine.csproj", "{A8218B30-C168-4949-B482-3C6800F04A63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFUPacketFlagViewer", "..\Tools\Algorithman\SCFUPacketFlagViewer\SCFUPacketFlagViewer.csproj", "{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -397,6 +399,20 @@ Global
 		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x64.ActiveCfg = Release|Any CPU
 		{A8218B30-C168-4949-B482-3C6800F04A63}.Release|x86.ActiveCfg = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|x64.ActiveCfg = Release|Any CPU
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -418,11 +434,12 @@ Global
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{2D8E1D1E-787A-4949-89B7-C10C3D1D0AF9} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 		{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
+		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_UpdateAssemblyVersion = True
 		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
 	EndGlobalSection
 EndGlobal

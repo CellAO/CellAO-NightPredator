@@ -42,7 +42,7 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Organization queries
     /// </summary>
-    public static class MobTemplateDao
+    public class MobTemplateDao : Dao<DBMobTemplate,MobTemplateDao>
     {
         // note in the following SQL MobMeshs,AdditionalMeshs are not included (big objects)
         /// <summary>
@@ -57,21 +57,9 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static DBMobTemplate GetMobTemplateByHash(string hash)
+        public DBMobTemplate GetMobTemplateByHash(string hash)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBMobTemplate>(SQL + "WHERE Hash like @hash", new { hash }).SingleOrDefault();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.Debug("Searched for mobTemplate with hash:" + hash);
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetWhere(new { hash }).FirstOrDefault();
         }
 
         /// <summary>
@@ -83,7 +71,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static IEnumerable<DBMobTemplate> GetMobTemplatesByName(string name, bool strictFind)
+        public IEnumerable<DBMobTemplate> GetMobTemplatesByName(string name, bool strictFind)
         {
             try
             {

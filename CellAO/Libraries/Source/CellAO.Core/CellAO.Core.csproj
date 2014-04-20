@@ -93,7 +93,6 @@
     <Compile Include="Entities\IInstancedEntity.cs" />
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />
-    <Compile Include="Entities\INonPlayerCharacter.cs" />
     <Compile Include="Entities\ITargetingEntity.cs" />
     <Compile Include="Entities\TradeSkillInfo.cs" />
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
@@ -142,6 +141,7 @@
     <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Nanos\UploadedNano.cs" />
     <Compile Include="Network\IZoneClient.cs" />
+    <Compile Include="NPCHandler\NonPlayerCharacterHandler.cs" />
     <Compile Include="Pathfinding\General\Pair.cs" />
     <Compile Include="Pathfinding\General\PriorityQueue.cs" />
     <Compile Include="Pathfinding\General\SingletonHolder.cs" />

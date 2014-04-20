@@ -146,21 +146,6 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        /// <param name="functions">
-        /// </param>
-        public void CallFunction(CellAO.Core.Functions.Function functions)
-        {
-            // TODO: Make it more versatile, not just applying stuff on yourself
-            FunctionCollection.Instance.CallFunction(
-                functions.FunctionType,
-                this.Controller.Character,
-                this.Controller.Character,
-                this.Controller.Character,
-                functions.Arguments.Values.ToArray());
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="charId">
         /// </param>
         /// <exception cref="Exception">
@@ -173,7 +158,7 @@ namespace ZoneEngine.Core
                 throw new Exception("Character " + charId + " not found.");
             }
 
-            this.controller = new PlayerController();
+            this.controller = new PlayerController(this);
 
             // TODO: Save playfield type into Character table and use it accordingly
             IPlayfield pf = this.server.PlayfieldById(new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
@@ -183,7 +168,7 @@ namespace ZoneEngine.Core
             {
                 this.Controller.Character = new Character(
                     new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
-                    this);
+                    this.Controller);
             }
             else
             {
@@ -326,28 +311,6 @@ namespace ZoneEngine.Core
             {
                 LogUtil.ErrorException(e);
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="text">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public bool SendChatText(string text)
-        {
-            // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
-            var message = new ChatTextMessage
-                          {
-                              Identity = this.Controller.Character.Identity,
-                              Unknown = 0x00,
-                              Text = text,
-                              Unknown1 = 0x1000,
-                              Unknown2 = 0x00000000
-                          };
-
-            this.SendCompressed(message);
-            return true;
         }
 
         #endregion

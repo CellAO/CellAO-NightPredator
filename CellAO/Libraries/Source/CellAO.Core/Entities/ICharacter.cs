@@ -120,10 +120,12 @@ namespace CellAO.Core.Entities
 
         void SetCoordinates(Coordinate newCoordinates, Vector.Quaternion heading);
 
-        void StartLogoutTimer();
+        void StartLogoutTimer(int time = 30000);
 
         void Reconnect(IZoneClient zoneClient);
 
         int CalculateNanoAttackTime(Nanos.NanoFormula nano);
+
+        void StopMovement();
     }
 }

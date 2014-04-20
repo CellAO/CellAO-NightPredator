@@ -273,7 +273,7 @@ namespace ZoneEngine.Core
 
                     string[] cmdArgs = fullArgs.Trim().Split(' ');
 
-                    ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), character.Client, character.Identity, cmdArgs);
+                    ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), character.Controller.Client, character.Identity, cmdArgs);
                 }
             }
         }

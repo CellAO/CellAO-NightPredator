@@ -425,7 +425,7 @@ namespace CellAO.Core.Items
                         MessagePackObject mpo = new MessagePackObject();
                         mpo = itemSlot;
                         copy.Arguments.Values.Add(mpo);
-                        character.Client.CallFunction(copy);
+                        character.Controller.CallFunction(copy);
                     }
                 }
             }

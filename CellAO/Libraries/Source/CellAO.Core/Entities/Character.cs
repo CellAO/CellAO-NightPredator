@@ -42,19 +42,15 @@ namespace CellAO.Core.Entities
     using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
-    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
 
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
-    using CellAO.Core.Playfields;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -85,30 +81,29 @@ namespace CellAO.Core.Entities
         /// </summary>
         private SpinOrStrafeDirections strafeDirection;
 
-
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        /// <param name="pooledIn">
-        /// </param>
         /// <param name="identity">
         /// </param>
-        /// <param name="zoneClient">
+        /// <param name="controller">
         /// </param>
-        public Character(Identity identity, IZoneClient zoneClient)
+        public Character(Identity identity, IController controller)
             : base(identity)
         {
             this.DoNotDoTimers = true;
-            this.Client = zoneClient;
+            // Create backlink to Controller
+            this.Controller = controller;
+            this.Controller.Character = this;
+
             this.ActiveNanos = new Dictionary<int, IActiveNano>();
 
             this.UploadedNanos = new List<IUploadedNanos>();
 
             this.BaseInventory = new PlayerInventory(this);
-
 
             this.SocialTab = new Dictionary<int, int>
                              {
@@ -138,6 +133,39 @@ namespace CellAO.Core.Entities
 
         #region Public Properties
 
+        /// <summary>
+        ///  Wrapper for Stats[StatIds.currentmovementmode]
+        /// </summary>
+        private MoveModes currentmovementmode
+        {
+            // moveMode
+            get
+            {
+                return (MoveModes)this.Stats[StatIds.currentmovementmode].Value;
+            }
+
+            set
+            {
+                this.Stats[StatIds.currentmovementmode].Value = (int)value;
+            }
+        }
+
+        /// <summary>
+        /// Wrapper for Stats[StatIds.prevmovementmode]
+        /// </summary>
+        private MoveModes prevmovementmode
+        {
+            // previousMoveMode
+            get
+            {
+                return (MoveModes)this.Stats[StatIds.prevmovementmode].Value;
+            }
+
+            set
+            {
+                this.Stats[StatIds.prevmovementmode].Value = (int)value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -175,44 +203,9 @@ namespace CellAO.Core.Entities
         /// </summary>
         public MoveModes MoveMode { get; set; }
 
-
         /// <summary>
         /// </summary>
         public MoveModes PreviousMoveMode { get; set; }
-
-        /// <summary>
-        ///  Wrapper for Stats[StatIds.currentmovementmode]
-        /// </summary>
-        private MoveModes currentmovementmode //moveMode
-        {
-            get
-            {
-                return (MoveModes)this.Stats[StatIds.currentmovementmode].Value;
-            }
-
-            set
-            {
-                this.Stats[StatIds.currentmovementmode].Value = (int)value;
-            }
-        }
-
-
-        /// <summary>
-        /// Wrapper for Stats[StatIds.prevmovementmode]
-        /// </summary>
-        private MoveModes prevmovementmode // previousMoveMode
-        {
-            get
-            {
-                return (MoveModes)this.Stats[StatIds.prevmovementmode].Value;
-            }
-
-            set
-            {
-                this.Stats[StatIds.prevmovementmode].Value = (int)value;
-            }
-        }
-
 
         /// <summary>
         /// </summary>
@@ -241,7 +234,7 @@ namespace CellAO.Core.Entities
                 }
                 else if (this.spinDirection == SpinOrStrafeDirections.None)
                 {
-                    Vector.Vector3 moveVector = this.calculateMoveVector();
+                    Vector3 moveVector = this.calculateMoveVector();
 
                     moveVector = moveVector * this.PredictionDuration.TotalSeconds;
 
@@ -249,8 +242,8 @@ namespace CellAO.Core.Entities
                 }
                 else
                 {
-                    Vector.Vector3 moveVector;
-                    Vector.Vector3 positionFromCentreOfTurningCircle;
+                    Vector3 moveVector;
+                    Vector3 positionFromCentreOfTurningCircle;
                     double turnArcAngle;
                     double y;
                     double duration;
@@ -265,28 +258,34 @@ namespace CellAO.Core.Entities
 
                     if (this.spinDirection == SpinOrStrafeDirections.Left)
                     {
-                        positionFromCentreOfTurningCircle = new Vector.Vector3(moveVector.z, y, -moveVector.x);
+                        positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
                     }
                     else
                     {
-                        positionFromCentreOfTurningCircle = new Vector.Vector3(-moveVector.z, y, moveVector.x);
+                        positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
                     }
 
                     return
                         new Coordinate(
-                            new Vector.Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
-                            + (Vector.Vector3)
-                                Vector.Quaternion.RotateVector3(
-                                    new Vector.Quaternion(Vector.Vector3.AxisY, turnArcAngle),
+                            new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
+                            + (Vector3)
+                                Quaternion.RotateVector3(
+                                    new Quaternion(Vector3.AxisY, turnArcAngle),
                                     positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
                 }
             }
 
             set
             {
-                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3() { X = value.x, Y = value.y, Z = value.z };
+                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
+                                      {
+                                          X = value.x,
+                                          Y = value.y,
+                                          Z = value.z
+                                      };
             }
         }
+
         #endregion
 
         #region Object
@@ -299,13 +298,19 @@ namespace CellAO.Core.Entities
         {
             this.DoNotDoTimers = true;
             DBCharacter daochar = CharacterDao.Instance.Get(this.Identity.Instance);
-            LogUtil.Debug("Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z + "/" + daochar.Playfield);
             if (daochar != null)
             {
+                LogUtil.Debug(
+                    "Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z + "/" + daochar.Playfield);
                 this.Name = daochar.Name;
                 this.LastName = daochar.LastName;
                 this.FirstName = daochar.FirstName;
-                this.RawCoordinates = new Vector3 { X = daochar.X, Y = daochar.Y, Z = daochar.Z };
+                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3
+                                      {
+                                          X = daochar.X,
+                                          Y = daochar.Y,
+                                          Z = daochar.Z
+                                      };
                 this.RawHeading = new Quaternion(daochar.HeadingX, daochar.HeadingY, daochar.HeadingZ, daochar.HeadingW);
             }
 
@@ -322,7 +327,6 @@ namespace CellAO.Core.Entities
             return true;
         }
 
-
         /// <summary>
         /// </summary>
         /// <returns>
@@ -331,7 +335,8 @@ namespace CellAO.Core.Entities
         {
             this.BaseInventory.Write();
             DBCharacter temp = this.GetDBCharacter();
-            LogUtil.Debug("Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z + "/" + temp.Playfield);
+            LogUtil.Debug(
+                "Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z + "/" + temp.Playfield);
             CharacterDao.Instance.Save(this.GetDBCharacter());
 
             CharacterDao.Instance.SetPlayfield(
@@ -349,18 +354,22 @@ namespace CellAO.Core.Entities
             this.DoNotDoTimers = true;
             this.Playfield.Despawn(this.Identity);
             this.Save();
+
             // SetOffline has to be called AFTER save
             int charId = this.Identity.Instance;
 
             this.BaseInventory.Dispose();
             this.DoNotDoTimers = true;
-            if (this.Client != null)
+            if (this.Controller != null)
             {
-                this.Client.Server.DisconnectClient(this.Client);
+                if (this.Controller.Client != null)
+                {
+                    this.Controller.Client.Server.DisconnectClient(this.Controller.Client);
+                    this.Controller.Client = null;
+                }
             }
-
-            this.Client = null;
             CharacterDao.Instance.SetOffline(charId);
+            this.Controller.Dispose();
             base.Dispose();
         }
 
@@ -484,208 +493,6 @@ namespace CellAO.Core.Entities
         #endregion
 
         #region Movement
-
-        /// <summary>
-        /// Can Character move?
-        /// </summary>
-        /// <returns>Can move=true</returns>
-        private bool CanMove()
-        {
-            if ((this.currentmovementmode == MoveModes.Run) || (this.currentmovementmode == MoveModes.Walk)
-                || (this.currentmovementmode == MoveModes.Swim) || (this.currentmovementmode == MoveModes.Crawl)
-                || (this.currentmovementmode == MoveModes.Sneak) || (this.currentmovementmode == MoveModes.Fly))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// </summary>
-        public void StopMovement()
-        {
-            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
-            this.RawCoordinates.X = this.Coordinates.x;
-            this.RawCoordinates.Y = this.Coordinates.y;
-            this.RawCoordinates.Z = this.Coordinates.z;
-            this.RawHeading = this.Heading;
-
-            this.spinDirection = SpinOrStrafeDirections.None;
-            this.strafeDirection = SpinOrStrafeDirections.None;
-            this.moveDirection = MoveDirections.None;
-        }
-
-        /// <summary>
-        /// Calculate the effective run speed (run, walk, sneak etc)
-        /// </summary>
-        /// <returns>Effective run speed</returns>
-        private int calculateEffectiveRunSpeed()
-        {
-            int effectiveRunSpeed;
-
-            switch (this.currentmovementmode)
-            {
-                case MoveModes.Run:
-                    effectiveRunSpeed = this.Stats[StatIds.runspeed].Value; // Stat #156 = RunSpeed
-                    break;
-
-                case MoveModes.Walk:
-                    effectiveRunSpeed = -500;
-                    break;
-
-                case MoveModes.Swim:
-
-                    // Swim speed is calculated the same as Run Speed except is half as effective
-                    effectiveRunSpeed = this.Stats[StatIds.swim].Value >> 1; // Stat #138 = Swim
-                    break;
-
-                case MoveModes.Crawl:
-                    effectiveRunSpeed = -600;
-                    break;
-
-                case MoveModes.Sneak:
-                    effectiveRunSpeed = -500;
-                    break;
-
-                case MoveModes.Fly:
-                    effectiveRunSpeed = 2200; // NV: TODO: Propper calc for this!
-                    break;
-
-                default:
-
-                    // All other movement modes, sitting, sleeping, lounging, rooted, etc have a speed of 0
-                    // As there is no way to 'force' that this way, we just default to 0 and hope that canMove() has been called to properly check.
-                    effectiveRunSpeed = 0;
-                    break;
-            }
-
-            return effectiveRunSpeed;
-        }
-
-        /// <summary>
-        /// Calculate forward speed
-        /// </summary>
-        /// <returns>forward speed</returns>
-        private double calculateForwardSpeed()
-        {
-            double speed;
-            int effectiveRunSpeed;
-
-            if ((this.moveDirection == MoveDirections.None) || (!this.CanMove()))
-            {
-                return 0;
-            }
-
-            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
-
-            if (this.moveDirection == MoveDirections.Forwards)
-            {
-                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
-                speed = Math.Max(0, (effectiveRunSpeed * 0.005) + 4);
-
-                if (this.currentmovementmode != MoveModes.Swim)
-                {
-                    speed = Math.Min(15, speed); // Forward speed is capped at 15 units/sec for non-swimming
-                }
-            }
-            else
-            {
-                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
-                speed = -Math.Max(0, (effectiveRunSpeed * 0.0035) + 4);
-
-                if (this.currentmovementmode != MoveModes.Swim)
-                {
-                    speed = Math.Max(-15, speed); // Backwards speed is capped at 15 units/sec for non-swimming
-                }
-            }
-
-            return speed;
-        }
-
-        /// <summary>
-        /// Calculate move vector
-        /// </summary>
-        /// <returns>Movevector</returns>
-        private Vector.Vector3 calculateMoveVector()
-        {
-            double forwardSpeed;
-            double strafeSpeed;
-            Vector.Vector3 forwardMove;
-            Vector.Vector3 strafeMove;
-
-            if (!this.CanMove())
-            {
-                return Vector.Vector3.Origin;
-            }
-
-            forwardSpeed = this.calculateForwardSpeed();
-            strafeSpeed = this.calculateStrafeSpeed();
-
-            if ((forwardSpeed == 0) && (strafeSpeed == 0))
-            {
-                return Vector.Vector3.Origin;
-            }
-
-            if (forwardSpeed != 0)
-            {
-                forwardMove = (Vector.Vector3)CellAO.Core.Vector.Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisZ);
-                forwardMove.Magnitude = Math.Abs(forwardSpeed);
-                if (forwardSpeed < 0)
-                {
-                    forwardMove = -forwardMove;
-                }
-            }
-            else
-            {
-                forwardMove = Vector.Vector3.Origin;
-            }
-
-            if (strafeSpeed != 0)
-            {
-                strafeMove = (Vector.Vector3)CellAO.Core.Vector.Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisX);
-                strafeMove.Magnitude = Math.Abs(strafeSpeed);
-                if (strafeSpeed < 0)
-                {
-                    strafeMove = -strafeMove;
-                }
-            }
-            else
-            {
-                strafeMove = Vector.Vector3.Origin;
-            }
-
-            return forwardMove + strafeMove;
-        }
-
-        /// <summary>
-        /// Calculate strafe speed
-        /// </summary>
-        /// <returns>Strafe speed</returns>
-        private double calculateStrafeSpeed()
-        {
-            double speed;
-            int effectiveRunSpeed;
-
-            // Note, you can not strafe while swimming or crawling
-            if ((this.strafeDirection == SpinOrStrafeDirections.None) || (this.currentmovementmode == MoveModes.Swim)
-                || (this.currentmovementmode == MoveModes.Crawl) || (!this.CanMove()))
-            {
-                return 0;
-            }
-
-            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
-
-            // NV: TODO: Update this based off Forward runspeed when that is checked (strafe effective run speed = effective run speed / 2)
-            speed = ((effectiveRunSpeed / 2) * 0.005) + 4;
-
-            if (this.strafeDirection == SpinOrStrafeDirections.Left)
-            {
-                speed = -speed;
-            }
-
-            return speed;
-        }
 
         /// <summary>
         /// </summary>
@@ -856,6 +663,208 @@ namespace CellAO.Core.Entities
             // Console.WriteLine((moveDirection != 0 ? moveMode.ToString() : "Stand") + "ing in the direction " + moveDirection.ToString() + (spinDirection != 0 ? " while spinning " + spinDirection.ToString() : "") + (strafeDirection != 0 ? " and strafing " + strafeDirection.ToString() : ""));
         }
 
+        /// <summary>
+        /// Can Character move?
+        /// </summary>
+        /// <returns>Can move=true</returns>
+        private bool CanMove()
+        {
+            if ((this.currentmovementmode == MoveModes.Run) || (this.currentmovementmode == MoveModes.Walk)
+                || (this.currentmovementmode == MoveModes.Swim) || (this.currentmovementmode == MoveModes.Crawl)
+                || (this.currentmovementmode == MoveModes.Sneak) || (this.currentmovementmode == MoveModes.Fly))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StopMovement()
+        {
+            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
+            this.RawCoordinates.X = this.Coordinates.x;
+            this.RawCoordinates.Y = this.Coordinates.y;
+            this.RawCoordinates.Z = this.Coordinates.z;
+            this.RawHeading = this.Heading;
+
+            this.spinDirection = SpinOrStrafeDirections.None;
+            this.strafeDirection = SpinOrStrafeDirections.None;
+            this.moveDirection = MoveDirections.None;
+        }
+
+        /// <summary>
+        /// Calculate the effective run speed (run, walk, sneak etc)
+        /// </summary>
+        /// <returns>Effective run speed</returns>
+        private int calculateEffectiveRunSpeed()
+        {
+            int effectiveRunSpeed;
+
+            switch (this.currentmovementmode)
+            {
+                case MoveModes.Run:
+                    effectiveRunSpeed = this.Stats[StatIds.runspeed].Value; // Stat #156 = RunSpeed
+                    break;
+
+                case MoveModes.Walk:
+                    effectiveRunSpeed = -500;
+                    break;
+
+                case MoveModes.Swim:
+
+                    // Swim speed is calculated the same as Run Speed except is half as effective
+                    effectiveRunSpeed = this.Stats[StatIds.swim].Value >> 1; // Stat #138 = Swim
+                    break;
+
+                case MoveModes.Crawl:
+                    effectiveRunSpeed = -600;
+                    break;
+
+                case MoveModes.Sneak:
+                    effectiveRunSpeed = -500;
+                    break;
+
+                case MoveModes.Fly:
+                    effectiveRunSpeed = 2200; // NV: TODO: Propper calc for this!
+                    break;
+
+                default:
+
+                    // All other movement modes, sitting, sleeping, lounging, rooted, etc have a speed of 0
+                    // As there is no way to 'force' that this way, we just default to 0 and hope that canMove() has been called to properly check.
+                    effectiveRunSpeed = 0;
+                    break;
+            }
+
+            return effectiveRunSpeed;
+        }
+
+        /// <summary>
+        /// Calculate forward speed
+        /// </summary>
+        /// <returns>forward speed</returns>
+        private double calculateForwardSpeed()
+        {
+            double speed;
+            int effectiveRunSpeed;
+
+            if ((this.moveDirection == MoveDirections.None) || (!this.CanMove()))
+            {
+                return 0;
+            }
+
+            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
+
+            if (this.moveDirection == MoveDirections.Forwards)
+            {
+                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
+                speed = Math.Max(0, (effectiveRunSpeed * 0.005) + 4);
+
+                if (this.currentmovementmode != MoveModes.Swim)
+                {
+                    speed = Math.Min(15, speed); // Forward speed is capped at 15 units/sec for non-swimming
+                }
+            }
+            else
+            {
+                // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
+                speed = -Math.Max(0, (effectiveRunSpeed * 0.0035) + 4);
+
+                if (this.currentmovementmode != MoveModes.Swim)
+                {
+                    speed = Math.Max(-15, speed); // Backwards speed is capped at 15 units/sec for non-swimming
+                }
+            }
+
+            return speed;
+        }
+
+        /// <summary>
+        /// Calculate move vector
+        /// </summary>
+        /// <returns>Movevector</returns>
+        private Vector3 calculateMoveVector()
+        {
+            double forwardSpeed;
+            double strafeSpeed;
+            Vector3 forwardMove;
+            Vector3 strafeMove;
+
+            if (!this.CanMove())
+            {
+                return Vector3.Origin;
+            }
+
+            forwardSpeed = this.calculateForwardSpeed();
+            strafeSpeed = this.calculateStrafeSpeed();
+
+            if ((forwardSpeed == 0) && (strafeSpeed == 0))
+            {
+                return Vector3.Origin;
+            }
+
+            if (forwardSpeed != 0)
+            {
+                forwardMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisZ);
+                forwardMove.Magnitude = Math.Abs(forwardSpeed);
+                if (forwardSpeed < 0)
+                {
+                    forwardMove = -forwardMove;
+                }
+            }
+            else
+            {
+                forwardMove = Vector3.Origin;
+            }
+
+            if (strafeSpeed != 0)
+            {
+                strafeMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisX);
+                strafeMove.Magnitude = Math.Abs(strafeSpeed);
+                if (strafeSpeed < 0)
+                {
+                    strafeMove = -strafeMove;
+                }
+            }
+            else
+            {
+                strafeMove = Vector3.Origin;
+            }
+
+            return forwardMove + strafeMove;
+        }
+
+        /// <summary>
+        /// Calculate strafe speed
+        /// </summary>
+        /// <returns>Strafe speed</returns>
+        private double calculateStrafeSpeed()
+        {
+            double speed;
+            int effectiveRunSpeed;
+
+            // Note, you can not strafe while swimming or crawling
+            if ((this.strafeDirection == SpinOrStrafeDirections.None) || (this.currentmovementmode == MoveModes.Swim)
+                || (this.currentmovementmode == MoveModes.Crawl) || (!this.CanMove()))
+            {
+                return 0;
+            }
+
+            effectiveRunSpeed = this.calculateEffectiveRunSpeed();
+
+            // NV: TODO: Update this based off Forward runspeed when that is checked (strafe effective run speed = effective run speed / 2)
+            speed = ((effectiveRunSpeed / 2) * 0.005) + 4;
+
+            if (this.strafeDirection == SpinOrStrafeDirections.Left)
+            {
+                speed = -speed;
+            }
+
+            return speed;
+        }
+
         #endregion
 
         #region Connection
@@ -866,35 +875,43 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Reconnect(IZoneClient client)
         {
-            this.Client = client;
+            this.Controller.Client = client;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="nano">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public int CalculateNanoAttackTime(NanoFormula nano)
         {
             // Calculation in 100's of seconds!!
 
-            int aggdef = Stats[StatIds.aggdef].Value;
+            int aggdef = this.Stats[StatIds.aggdef].Value;
 
             int aggdefReduction = aggdef - 25;
-            int nanoinit = Stats[StatIds.nanoprowessinitiative].Value;
+            int nanoinit = this.Stats[StatIds.nanoprowessinitiative].Value;
             if (nanoinit > 1200)
             {
                 nanoinit = ((nanoinit - 1200) / 3) + 1200;
             }
+
             int nanoInitreduction = nanoinit >> 1;
 
             int attackCap = nano.getItemAttribute(523); // AttackDelayCap
 
             int attackDelay = nano.getItemAttribute(294); // AttackDelay
+
             // The Math.Min is safeguard for calculation errors due to uint->int casting of originally negative values
             return Math.Min(Math.Max(attackDelay - aggdefReduction - nanoInitreduction, attackCap), attackDelay);
         }
 
         /// <summary>
         /// </summary>
-        public void StartLogoutTimer()
+        public void StartLogoutTimer(int time = 30000)
         {
-            this.logoutTimer = new Timer(this.LogoutTimerCallback, null, 30000, 0);
+            this.logoutTimer = new Timer(this.LogoutTimerCallback, null, time, 0);
         }
 
         /// <summary>
@@ -905,6 +922,7 @@ namespace CellAO.Core.Entities
             {
                 this.logoutTimer.Dispose();
             }
+
             this.logoutTimer = null;
         }
 
@@ -917,6 +935,12 @@ namespace CellAO.Core.Entities
             return this.logoutTimer != null;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="newCoordinates">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
         public void SetCoordinates(Coordinate newCoordinates, Quaternion heading)
         {
             this.Coordinates = newCoordinates;
@@ -941,8 +965,6 @@ namespace CellAO.Core.Entities
             this.Dispose();
         }
 
-
         #endregion
-
     }
 }

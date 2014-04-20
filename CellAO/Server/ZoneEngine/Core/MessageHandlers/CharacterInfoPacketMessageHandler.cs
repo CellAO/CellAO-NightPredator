@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Database.Dao;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -165,46 +166,70 @@ namespace ZoneEngine.Core.MessageHandlers
                     }
                 }
 
-                var infoPacket = new CharacterInfoPacket
-                                 {
-                                     Unknown1 = 0x01, 
-                                     Profession =
-                                         (Profession)tPlayer.Stats[StatIds.profession].Value, 
-                                     Level = (byte)tPlayer.Stats[StatIds.level].Value, 
-                                     TitleLevel = (byte)tPlayer.Stats[StatIds.titlelevel].Value, 
-                                     VisualProfession =
-                                         (Profession)tPlayer.Stats[StatIds.visualflags].Value, 
-                                     SideXp = 0, 
-                                     Health = tPlayer.Stats[StatIds.health].Value, 
-                                     MaxHealth = tPlayer.Stats[StatIds.life].Value, 
-                                     BreedHostility = 0x00000000, 
-                                     OrganizationId = orgId, 
-                                     FirstName = tPlayer.FirstName, 
-                                     LastName = tPlayer.LastName, 
-                                     LegacyTitle = LegacyTitle, 
-                                     Unknown2 = 0x0000, 
-                                     OrganizationRank = orgRank, 
-                                     TowerFields = null, 
-                                     CityPlayfieldId = 0x00000000, 
-                                     Towers = null, 
-                                     InvadersKilled = tPlayer.Stats[StatIds.invaderskilled].Value, 
-                                     KilledByInvaders =
-                                         tPlayer.Stats[StatIds.killedbyinvaders].Value, 
-                                     AiLevel = tPlayer.Stats[StatIds.alienlevel].Value, 
-                                     PvpDuelWins = tPlayer.Stats[StatIds.pvpduelkills].Value, 
-                                     PvpDuelLoses = tPlayer.Stats[StatIds.pvpdueldeaths].Value, 
-                                     PvpProfessionDuelLoses =
-                                         tPlayer.Stats[StatIds.pvpprofessiondueldeaths].Value, 
-                                     PvpSoloKills =
-                                         tPlayer.Stats[StatIds.pvprankedsolokills].Value, 
-                                     PvpTeamKills =
-                                         tPlayer.Stats[StatIds.pvprankedteamkills].Value, 
-                                     PvpSoloScore = tPlayer.Stats[StatIds.pvpsoloscore].Value, 
-                                     PvpTeamScore = tPlayer.Stats[StatIds.pvpteamscore].Value, 
-                                     PvpDuelScore = tPlayer.Stats[StatIds.pvpduelscore].Value
-                                 };
+                if (character.Stats[StatIds.npcfamily].Value != 0)
+                {
+                    type = InfoPacketType.Monster;
+                    x.Info = new MonsterInfoPacket()
+                             {
+                                 CurrentHealth = tPlayer.Stats[StatIds.health].Value,
+                                 Level = (byte)tPlayer.Stats[StatIds.level].Value,
+                                 MaxHealth = tPlayer.Stats[StatIds.life].Value,
+                                 OrganizationId = 0,
+                                 Profession =
+                                     (byte)tPlayer.Stats[StatIds.profession].Value,
+                                 TitleLevel =
+                                     (byte)tPlayer.Stats[StatIds.titlelevel].Value,
+                                 VisualProfession =
+                                     (byte)
+                                     tPlayer.Stats[StatIds.visualprofession].Value,
+                                 Unknown8 = 1234567890,
+                                 Unknown9 = 1234567890,
+                                 Unknown10 = 1234567890, 
 
-                x.Info = infoPacket;
+                             };
+                }
+                else
+                {
+                    x.Info = new CharacterInfoPacket
+                    {
+                        Unknown1 = 0x01,
+                        Profession =
+                            (Profession)tPlayer.Stats[StatIds.profession].Value,
+                        Level = (byte)tPlayer.Stats[StatIds.level].Value,
+                        TitleLevel = (byte)tPlayer.Stats[StatIds.titlelevel].Value,
+                        VisualProfession =
+                            (Profession)tPlayer.Stats[StatIds.visualflags].Value,
+                        SideXp = 0,
+                        Health = tPlayer.Stats[StatIds.health].Value,
+                        MaxHealth = tPlayer.Stats[StatIds.life].Value,
+                        BreedHostility = 0x00000000,
+                        OrganizationId = orgId,
+                        FirstName = tPlayer.FirstName,
+                        LastName = tPlayer.LastName,
+                        LegacyTitle = LegacyTitle,
+                        Unknown2 = 0x0000,
+                        OrganizationRank = orgRank,
+                        TowerFields = null,
+                        CityPlayfieldId = 0x00000000,
+                        Towers = null,
+                        InvadersKilled = tPlayer.Stats[StatIds.invaderskilled].Value,
+                        KilledByInvaders =
+                            tPlayer.Stats[StatIds.killedbyinvaders].Value,
+                        AiLevel = tPlayer.Stats[StatIds.alienlevel].Value,
+                        PvpDuelWins = tPlayer.Stats[StatIds.pvpduelkills].Value,
+                        PvpDuelLoses = tPlayer.Stats[StatIds.pvpdueldeaths].Value,
+                        PvpProfessionDuelLoses =
+                            tPlayer.Stats[StatIds.pvpprofessiondueldeaths].Value,
+                        PvpSoloKills =
+                            tPlayer.Stats[StatIds.pvprankedsolokills].Value,
+                        PvpTeamKills =
+                            tPlayer.Stats[StatIds.pvprankedteamkills].Value,
+                        PvpSoloScore = tPlayer.Stats[StatIds.pvpsoloscore].Value,
+                        PvpTeamScore = tPlayer.Stats[StatIds.pvpteamscore].Value,
+                        PvpDuelScore = tPlayer.Stats[StatIds.pvpduelscore].Value
+                    };
+                }
+                
                 x.Type = type;
                 x.Unknown = 0;
                 x.Identity = tPlayer.Identity;
@@ -212,5 +237,22 @@ namespace ZoneEngine.Core.MessageHandlers
         }
 
         #endregion
+
+        internal void Send(ICharacter character, Identity identity)
+        {
+            // Only for Characters now
+            // Need more info whether to send for non Characters too
+            var obj = Pool.Instance.GetObject(identity) as ICharacter;
+
+            if (obj != null)
+            {
+                if (obj.Stats[StatIds.npcfamily].Value != 0)
+                {
+                    // !=0 -> Monster
+                    this.Send(character, obj);
+                }
+            }
+
+        }
     }
 }
