@@ -24,50 +24,29 @@
 
 #endregion
 
-namespace CellAO.Database.Dao
+namespace CellAO.Database.Entities
 {
-    #region Usings ...
-
-    using System.Data.Linq;
-
-    using CellAO.Database.Entities;
-
-    #endregion
+    using CellAO.Database.Dao;
 
     /// <summary>
     /// </summary>
-    public class MobSpawnDao : Dao<DBMobSpawn, MobSpawnDao>
+    [Tablename("mobspawns_stats")]
+    public class DBMobSpawnStat : IDBEntity
     {
+        /// <summary>
+        /// </summary>
+        public int Playfield { get; set; }
 
-        public int Add(DBMobSpawn entity)
-        {
+        /// <summary>
+        /// </summary>
+        public int Stat { get; set; }
 
-            if (entity.Waypoints == null)
-            {
-                entity.Waypoints = new Binary(new byte[0]);
-            }
+        /// <summary>
+        /// </summary>
+        public int Value { get; set; }
 
-            if (entity.Weaponpairs == null)
-            {
-                entity.Weaponpairs = new Binary(new byte[0]);
-            }
-
-            if (entity.RunningNanos == null)
-            {
-                entity.RunningNanos = new Binary(new byte[0]);
-            }
-
-            if (entity.MobMeshs == null)
-            {
-                entity.MobMeshs = new Binary(new byte[0]);
-            }
-
-            if (entity.AdditionalMeshs == null)
-            {
-                entity.AdditionalMeshs = new Binary(new byte[0]);
-            }
-
-            return Add(entity, null, null, false);
-        }
+        /// <summary>
+        /// </summary>
+        public int Id { get; set; }
     }
 }

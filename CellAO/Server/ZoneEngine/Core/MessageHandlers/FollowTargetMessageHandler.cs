@@ -31,6 +31,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
+    using CellAO.Core.Vector;
 
     using Dapper;
 
@@ -39,6 +40,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
+
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -83,16 +86,38 @@ namespace ZoneEngine.Core.MessageHandlers
 
         public void Send(ICharacter character, Identity toFollow)
         {
-            this.SendToPlayfield(character, this.Filler(character, toFollow));
+            this.SendToPlayfield(character, this.FillerFollowTarget(character, toFollow));
         }
 
-        private MessageDataFiller Filler(ICharacter character, Identity toFollow)
+        public void Send(ICharacter character, Vector3 start, Vector3 end)
+        {
+            this.SendToPlayfield(character, this.FillerCoordinates(character, start, end));
+        }
+
+        private MessageDataFiller FillerFollowTarget(ICharacter character, Identity toFollow)
         {
             return x =>
             {
                 x.Identity = character.Identity;
                 x.Info = new FollowTargetInfo(){Target=toFollow,Dummy1=0x20000000};
                 x.Unknown = 0;
+            };
+        }
+
+        private MessageDataFiller FillerCoordinates(ICharacter character, Vector3 start, Vector3 end)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Info = new FollowCoordinateInfo()
+                         {
+                             CurrentCoordinates = start,
+                             EndCoordinates = end,
+                             CoordinateCount = 2,
+                             DataLength = 0x18,
+                             FollowInfoType = 1
+                         };
+                x.Unknown = 1;
             };
         }
 

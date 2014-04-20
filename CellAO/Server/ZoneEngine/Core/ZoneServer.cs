@@ -113,6 +113,7 @@ namespace ZoneEngine.Core
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TextMessage>>(VicinityChatMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ZoneLoginMessage>>(ZoneLoginMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<FollowTargetMessage>>(FollowTargetMessageHandler.Default.Receive));
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TradeMessage>>(TradeMessageHandler.Default.Receive));
         }
 
         #endregion
@@ -299,6 +300,15 @@ namespace ZoneEngine.Core
             }
 
             cli.Dispose();
+        }
+
+        public override void Stop()
+        {
+            foreach (Playfield pf in this.playfields)
+            {
+                pf.Dispose();
+            }
+            base.Stop();
         }
 
         #endregion

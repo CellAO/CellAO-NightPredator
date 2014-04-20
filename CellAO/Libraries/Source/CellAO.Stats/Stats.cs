@@ -12089,6 +12089,20 @@ namespace CellAO.Stats
             this.Write();
         }
 
+
+        public Dictionary<int, uint> GetStatValues()
+        {
+            var temp = new Dictionary<int, uint>();
+            foreach (Stat c in this.all)
+            {
+                if (c.DefaultValue != c.BaseValue)
+                {
+                    temp.Add(c.StatId,c.BaseValue);
+                }
+            }
+            return temp;
+        }
+
         #endregion
     }
 }

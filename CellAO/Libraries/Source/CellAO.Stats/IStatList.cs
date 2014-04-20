@@ -133,5 +133,7 @@ namespace CellAO.Stats
         void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield);
 
         void SetBaseValueWithoutTriggering(int stat, uint value);
+
+        Dictionary<int, uint> GetStatValues();
     }
 }

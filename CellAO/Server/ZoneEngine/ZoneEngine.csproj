@@ -88,6 +88,7 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
+    <Compile Include="ChatCommands\Npc.cs" />
     <Compile Include="ChatCommands\Spawn.cs" />
     <Compile Include="ChatCommands\TeleportDynel.cs" />
     <Compile Include="ChatCommands\Teleport.cs" />

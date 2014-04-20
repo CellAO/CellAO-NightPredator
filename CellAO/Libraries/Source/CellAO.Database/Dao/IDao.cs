@@ -54,7 +54,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        int Add(T dbentity, IDbConnection connection = null, IDbTransaction transaction = null);
+        int Add(T dbentity, IDbConnection connection = null, IDbTransaction transaction = null, bool dontUseId = true);
 
         /// <summary>
         /// </summary>

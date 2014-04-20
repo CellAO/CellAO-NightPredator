@@ -48,7 +48,8 @@ namespace CellAO.Database.Dao
     /// <typeparam name="TU">
     /// </typeparam>
     public class Dao<T, TU> : IDao<T>
-        where T : IDBEntity, new() where TU : class, IDao<T>
+        where T : IDBEntity, new()
+        where TU : class, IDao<T>
     {
         /// <summary>
         /// </summary>
@@ -160,7 +161,7 @@ namespace CellAO.Database.Dao
         /// </returns>
         /// <exception cref="DataBaseException">
         /// </exception>
-        public int Add(T entity, IDbConnection connection = null, IDbTransaction transaction = null)
+        public int Add(T entity, IDbConnection connection = null, IDbTransaction transaction = null, bool dontUseId = true)
         {
             int rowsAffected = 0;
 
@@ -173,16 +174,16 @@ namespace CellAO.Database.Dao
                 {
                     trans = trans ?? conn.BeginTransaction();
                     rowsAffected = conn.Execute(
-                        SqlMapperUtil.CreateInsertSQL(this.TableName, entity), 
-                        entity, 
-                        transaction);
+                        SqlMapperUtil.CreateInsertSQL(this.TableName, entity, dontUseId),
+                        entity,
+                        trans);
 
                     // Does this need to be inside of the transaction or outside?? -- Algorithman
 
                     // we must retrive the Id anyway here. we need to standardise the id as we started to do.
                     if (rowsAffected == 1)
                     {
-                        SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id, transaction);
+                        SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id, trans);
                     }
                     else
                     {
@@ -241,8 +242,8 @@ namespace CellAO.Database.Dao
                 {
                     trans = trans ?? conn.BeginTransaction();
                     rowsAffected = conn.Execute(
-                        SqlMapperUtil.CreateDeleteSQL(this.TableName), 
-                        new { id = entityId }, 
+                        SqlMapperUtil.CreateDeleteSQL(this.TableName),
+                        new { id = entityId },
                         transaction);
                 }
                 finally
@@ -296,8 +297,8 @@ namespace CellAO.Database.Dao
                 {
                     trans = trans ?? conn.BeginTransaction();
                     rowsAffected = conn.Execute(
-                        SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters), 
-                        whereParameters, 
+                        SqlMapperUtil.CreateDeleteSQL(this.TableName, whereParameters),
+                        whereParameters,
                         transaction);
                 }
                 finally
@@ -339,7 +340,7 @@ namespace CellAO.Database.Dao
             {
                 exists =
                     conn.Query<int>(
-                        string.Format("SELECT ID FROM {0} where ID = @id", this.TableName), 
+                        string.Format("SELECT ID FROM {0} where ID = @id", this.TableName),
                         new { id = entityId }).Count() == 1;
             }
 
@@ -362,7 +363,7 @@ namespace CellAO.Database.Dao
             {
                 entity =
                     conn.Query<T>(
-                        SqlMapperUtil.CreateGetSQL(this.TableName, new { Id = entityId }), 
+                        SqlMapperUtil.CreateGetSQL(this.TableName, new { Id = entityId }),
                         new { Id = entityId }).SingleOrDefault();
             }
 
@@ -401,9 +402,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// </returns>
         public int Save(
-            T entity, 
-            object parameters = null, 
-            IDbConnection connection = null, 
+            T entity,
+            object parameters = null,
+            IDbConnection connection = null,
             IDbTransaction transaction = null)
         {
             int rowsAffected = 0;
@@ -417,8 +418,8 @@ namespace CellAO.Database.Dao
                 {
                     trans = trans ?? conn.BeginTransaction();
                     rowsAffected = conn.Execute(
-                        SqlMapperUtil.CreateUpdateSQL(this.TableName, parameters ?? entity), 
-                        parameters ?? entity, 
+                        SqlMapperUtil.CreateUpdateSQL(this.TableName, parameters ?? entity),
+                        parameters ?? entity,
                         transaction);
                 }
                 finally
@@ -460,9 +461,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// </returns>
         public int Save(
-            List<T> entities, 
-            object parameters = null, 
-            IDbConnection connection = null, 
+            List<T> entities,
+            object parameters = null,
+            IDbConnection connection = null,
             IDbTransaction transaction = null)
         {
             int rowsAffected = 0;

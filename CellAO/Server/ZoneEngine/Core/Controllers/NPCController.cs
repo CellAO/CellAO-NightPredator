@@ -77,7 +77,10 @@ namespace ZoneEngine.Core.Controllers
 
         public void Dispose()
         {
-            this.Client = null;
+            if (this.Client != null)
+            {
+                this.Client = null;
+            }
             // this.Character.Dispose();
         }
 

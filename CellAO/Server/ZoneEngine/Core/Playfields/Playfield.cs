@@ -40,6 +40,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Events;
     using CellAO.Core.Functions;
     using CellAO.Core.Network;
+    using CellAO.Core.NPCHandler;
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
@@ -60,6 +61,7 @@ namespace CellAO.Core.Playfields
 
     using ZoneEngine;
     using ZoneEngine.Core;
+    using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.MessageHandlers;
@@ -139,6 +141,17 @@ namespace CellAO.Core.Playfields
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
 
             this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
+            this.LoadMobSpawns(playfieldIdentity);
+        }
+
+        private void LoadMobSpawns(Identity playfieldIdentity)
+        {
+            var mobs = MobSpawnDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            foreach (var mob in mobs)
+            {
+                var stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
+                NonPlayerCharacterHandler.InstantiateMobSpawn(mob, stats.ToArray(), new NPCController(), this);
+            }
         }
 
         #endregion
@@ -359,10 +372,11 @@ namespace CellAO.Core.Playfields
                 var temp = user as Character;
                 if (temp != null)
                 {
-                    if (temp.Controller.Client!=null)
+                    if (temp.Controller.Client != null)
                     {
                         temp.Controller.Client.SendCompressed(
-                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });}
+                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                    }
                     return;
                 }
             }
@@ -798,6 +812,7 @@ namespace CellAO.Core.Playfields
 
         public void Dispose()
         {
+            // We wont save any NPCs to character table/character's stats table
             this.DisconnectAllClients();
         }
     }

@@ -99,5 +99,32 @@ namespace CellAO.Core.NPCHandler
             }
             return null;
         }
+
+        public static void InstantiateMobSpawn(DBMobSpawn mob, DBMobSpawnStat[] stats, IController npccontroller, IPlayfield playfield)
+        {
+
+            if (playfield != null)
+            {
+                Identity mobId = new Identity() { Type = IdentityType.CanbeAffected, Instance = mob.Id };
+                if (Pool.Instance.GetObject(mobId) != null)
+                {
+                    throw new Exception("Object "+mobId.ToString(true)+" already exists!!");
+                }
+                Character cmob = new Character(mobId, npccontroller);
+                cmob.Playfield = playfield;
+                cmob.Coordinates = new Coordinate() { x = mob.X, y = mob.Y, z = mob.Z };
+                cmob.RawHeading=new Quaternion(mob.HeadingX,mob.HeadingY,mob.HeadingZ,mob.HeadingW);
+                cmob.Name = mob.Name;
+                cmob.FirstName = "";
+                cmob.LastName = "";
+                foreach (DBMobSpawnStat stat in stats)
+                {
+                    cmob.Stats.SetBaseValueWithoutTriggering(stat.Stat, (uint)stat.Value);
+                }
+                var temp = cmob.Stats[StatIds.level].Value;
+                temp = cmob.Stats[StatIds.agility].Value;
+
+            }
+        }
     }
 }

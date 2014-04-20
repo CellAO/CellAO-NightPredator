@@ -9,6 +9,8 @@ using Dapper;
 
 namespace CellAO.Database
 {
+    using System.Net.Configuration;
+
     using CellAO.Database.Entities;
 
     using Utility.Config;
@@ -215,7 +217,7 @@ namespace CellAO.Database
             return sb.ToString();
         }
 
-        public static string CreateInsertSQL(string tablename, object parameters)
+        public static string CreateInsertSQL(string tablename, object parameters, bool dontUseId = true)
         {
             if (parameters == null)
                 throw new ArgumentNullException("Cannot create Insert SQL statement without parameters");
@@ -223,7 +225,7 @@ namespace CellAO.Database
             StringBuilder sb = new StringBuilder(string.Concat("INSERT INTO ", tablename, " ( "));
             foreach (string pname in GetParametersFromObject(parameters, null, false).ParameterNames)
             {
-                if (pname.ToLower() != "id")
+                if ((pname.ToLower() != "id") || !dontUseId)
                 {
                     sb.AppendFormat("{0},", pname);
                 }
@@ -232,7 +234,7 @@ namespace CellAO.Database
             sb.Append(" ) VALUES ( ");
             foreach (string pname in GetParametersFromObject(parameters, null, false).ParameterNames)
             {
-                if (pname.ToLower() != "id")
+                if ((pname.ToLower() != "id") || !dontUseId)
                 {
                     sb.AppendFormat("@{0},", pname);
                 }
