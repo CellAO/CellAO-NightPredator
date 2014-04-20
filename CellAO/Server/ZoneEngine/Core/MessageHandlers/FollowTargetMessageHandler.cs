@@ -70,19 +70,12 @@ namespace ZoneEngine.Core.MessageHandlers
 
             //var followTargetMessage = (FollowTargetMessage)message.Body;
 
-            var announce = new FollowTargetMessage
-                           {
-                               Identity = client.Controller.Character.Identity, 
-                               Unknown = 0, 
-                               Unknown1 = followTargetMessage.Unknown1, 
-                               Unknown2 = followTargetMessage.Unknown2, 
-                               Target =     followTargetMessage.Target, 
-                               Unknown3 = followTargetMessage.Unknown3, 
-                               Unknown4 = followTargetMessage.Unknown4, 
-                               Unknown5 = followTargetMessage.Unknown5, 
-                               Unknown6 = followTargetMessage.Unknown6, 
-                               Unknown7 = followTargetMessage.Unknown7
-                           };
+            var announce = new FollowTargetMessage { Identity = client.Controller.Character.Identity, Unknown = 0 };
+            var followinfo = followTargetMessage.Info as FollowTargetInfo;
+            if (followinfo != null)
+            {
+                announce.Info = new FollowTargetInfo() { DataLength = 0, Target = followinfo.Target, Dummy=0x40, Dummy1 = 0x20000000 };
+            }
 
             client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
 
@@ -90,7 +83,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
         public void Send(ICharacter character, Identity toFollow)
         {
-            
+            this.SendToPlayfield(character, this.Filler(character, toFollow));
         }
 
         private MessageDataFiller Filler(ICharacter character, Identity toFollow)
@@ -98,7 +91,7 @@ namespace ZoneEngine.Core.MessageHandlers
             return x =>
             {
                 x.Identity = character.Identity;
-                x.Target = toFollow;
+                x.Info = new FollowTargetInfo(){Target=toFollow,Dummy1=0x20000000};
                 x.Unknown = 0;
             };
         }

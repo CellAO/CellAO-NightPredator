@@ -112,7 +112,7 @@ namespace ZoneEngine.Core
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SocialActionCmdMessage>>(SocialActionCmdMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TextMessage>>(VicinityChatMessageHandler.Default.Receive));
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ZoneLoginMessage>>(ZoneLoginMessageHandler.Default.Receive));
-
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<FollowTargetMessage>>(FollowTargetMessageHandler.Default.Receive));
         }
 
         #endregion
