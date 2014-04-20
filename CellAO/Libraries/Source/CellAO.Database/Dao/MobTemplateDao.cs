@@ -82,9 +82,9 @@ namespace CellAO.Database.Dao
                             string.Concat(
                                 SQL, 
                                 "WHERE Name like ", 
-                                strictFind ? string.Empty : "'%' + ", 
+                                strictFind ? string.Empty : "CONCAT('%', ", 
                                 " @name ", 
-                                strictFind ? string.Empty : "'%' ", 
+                                strictFind ? string.Empty : ", '%')", 
                                 " ORDER BY Name ASC"), 
                             new { name });
                 }
