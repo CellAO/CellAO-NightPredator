@@ -84,15 +84,11 @@ namespace CellAO.Core.NPCHandler
                 mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].Add((int)ArmorSlots.Legs + mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].FirstSlotNumber, trousers);
                 mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].Add((int)ArmorSlots.Head + mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].FirstSlotNumber, helmet);
                  */
-                mobCharacter.BaseInventory.CalculateModifiers(mobCharacter);
-                Function fc = new Function();
-                fc.FunctionType = (int)FunctionType.HeadMesh;
-                fc.Arguments.Values.Add(0);
-                fc.Arguments.Values.Add(mob.HeadMesh);
-                fc.Target = (int)ItemTarget.Self;
-                fc.TickCount = 1;
-                fc.TickInterval = 0;
-                mobCharacter.Controller.CallFunction(fc);
+
+                // Set the MeshLayers correctly ( Head mesh!! )  /!\
+                // This needs to be in StatHeadmesh.cs
+                mobCharacter.MeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
+                mobCharacter.SocialMeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
 
 
                 mobCharacter.Name = mob.Name;
