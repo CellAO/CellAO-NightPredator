@@ -40,16 +40,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class PlayfieldAnarchyFMessageHandler :
         BaseMessageHandler<PlayfieldAnarchyFMessage, PlayfieldAnarchyFMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public PlayfieldAnarchyFMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

@@ -38,16 +38,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class KnuBotFinishTradeMessageHandler :
         BaseMessageHandler<KnuBotFinishTradeMessage, KnuBotFinishTradeMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotFinishTradeMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="messageWrapper">
@@ -61,7 +55,6 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 // npc.KnuBotFinishTrade(messageWrapper.Client.Character.Identity);
             }
-
         }
     }
 }

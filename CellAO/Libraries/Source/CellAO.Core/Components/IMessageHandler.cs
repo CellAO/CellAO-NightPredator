@@ -28,7 +28,6 @@ namespace CellAO.Core.Components
 {
     #region Usings ...
 
-    using CellAO.Core.Network;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
@@ -37,15 +36,21 @@ namespace CellAO.Core.Components
     /// </summary>
     /// <typeparam name="T">
     /// </typeparam>
-    //public interface IMessageHandler<T>
-    //    where T : Message, new()
-    //{
-    //    void Receive(IZoneClient client, T message);
-    //}
-
-    public interface IMessageHandler
+    /// <typeparam name="TU">
+    /// </typeparam>
+    public interface IMessageHandler<T, TU>
+        where T : MessageBody where TU : new()
     {
-        void Receive(IZoneClient client, Message message);
-    }
+        /// <summary>
+        /// </summary>
+        /// <param name="messageWrapper">
+        /// </param>
+        void Receive(MessageWrapper<T> messageWrapper);
 
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        TU GetDefault();
+    }
 }

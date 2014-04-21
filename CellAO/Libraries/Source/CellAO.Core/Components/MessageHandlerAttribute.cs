@@ -24,37 +24,32 @@
 
 #endregion
 
-namespace ZoneEngine.Core.MessageHandlers
+namespace CellAO.Core.Components
 {
     #region Usings ...
 
-    using CellAO.Core.Components;
-    using CellAO.Core.Entities;
-    using CellAO.ObjectManager;
-
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using System;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [MessageHandler(MessageHandlerDirection.InboundOnly)]
-    public class KnuBotAnswerMessageHandler : BaseMessageHandler<KnuBotAnswerMessage, KnuBotAnswerMessageHandler>
+    [AttributeUsage(AttributeTargets.Class, Inherited = true)]
+    public class MessageHandlerAttribute : Attribute
     {
+
         /// <summary>
         /// </summary>
-        /// <param name="messageWrapper">
-        /// </param>
-        public override void Receive(MessageWrapper<KnuBotAnswerMessage> messageWrapper)
+        public MessageHandlerDirection Direction { get; set; }
+        
+        public MessageHandlerAttribute()
         {
-            // TODO: Fill in code!
-            // Find character object by identity
-            // call character AI controller 
-            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
-            if (npc != null)
-            {
-                // npc.KnuBotAnswerIncoming(messageWrapper.MessageBody.Answer);
-            }
+            this.Direction=MessageHandlerDirection.None;
+        }
+
+        public MessageHandlerAttribute(MessageHandlerDirection direction)
+        {
+            this.Direction = direction;
         }
     }
 }

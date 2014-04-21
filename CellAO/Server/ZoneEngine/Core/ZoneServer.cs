@@ -31,7 +31,10 @@ namespace ZoneEngine.Core
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Linq;
     using System.Net;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
 
     using Cell.Core;
 
@@ -40,6 +43,8 @@ namespace ZoneEngine.Core
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
+
+    using NBug;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
@@ -97,24 +102,81 @@ namespace ZoneEngine.Core
             // New Bus initialization
             this.zoneBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
 
-            this.memBusDisposeContainer.Add(
-                this.zoneBus.Subscribe<MessageWrapper<CharacterActionMessage>>(CharacterActionMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<CharDCMoveMessage>>(CharDCMoveMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<CharInPlayMessage>>(CharInPlayMessageHandler.Default.Receive));
+            subscribedMessageHandlers.Clear();
 
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ChatCmdMessage>>(ChatCmdMessageHandler.Default.Receive));
+            this.SubscribeMessage<CharacterActionMessageHandler, CharacterActionMessage>();
+            this.SubscribeMessage<CharDCMoveMessageHandler, CharDCMoveMessage>();
+            this.SubscribeMessage<CharInPlayMessageHandler, CharInPlayMessage>();
+            this.SubscribeMessage<ChatCmdMessageHandler, ChatCmdMessage>();
+            this.SubscribeMessage<ContainerAddItemMessageHandler, ContainerAddItemMessage>();
+            this.SubscribeMessage<FollowTargetMessageHandler, FollowTargetMessage>();
+            this.SubscribeMessage<GenericCmdMessageHandler, GenericCmdMessage>();
+            this.SubscribeMessage<LookAtMessageHandler, LookAtMessage>();
+            this.SubscribeMessage<SkillMessageHandler, SkillMessage>();
+            this.SubscribeMessage<SocialActionCmdMessageHandler, SocialActionCmdMessage>();
+            this.SubscribeMessage<VicinityChatMessageHandler, TextMessage>();
+            this.SubscribeMessage<TradeMessageHandler, TradeMessage>();
+            this.SubscribeMessage<ZoneLoginMessageHandler, ZoneLoginMessage>();
 
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ContainerAddItemMessage>>(ContainerAddItemMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<GenericCmdMessage>>(GenericCmdMessageHandler.Default.Receive));
-
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<LookAtMessage>>(LookAtMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SkillMessage>>(SkillMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<SocialActionCmdMessage>>(SocialActionCmdMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TextMessage>>(VicinityChatMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<ZoneLoginMessage>>(ZoneLoginMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<FollowTargetMessage>>(FollowTargetMessageHandler.Default.Receive));
-            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TradeMessage>>(TradeMessageHandler.Default.Receive));
+            this.SubscribeMessage<KnuBotAnswerMessageHandler, KnuBotAnswerMessage>();
+            this.SubscribeMessage<KnuBotCloseChatWindowMessageHandler, KnuBotCloseChatWindowMessage>();
+            this.SubscribeMessage<KnuBotFinishTradeMessageHandler, KnuBotFinishTradeMessage>();
+            this.SubscribeMessage<KnuBotTradeMessageHandler, KnuBotTradeMessage>();
+            this.CheckSubscribedMessageHandlers();
         }
+
+
+        private void SubscribeMessage<T, TU>()
+            where T : AbstractMessageHandler<TU>
+            where TU : MessageBody, new()
+        {
+            T def = (T)typeof(T).GetProperty("Default", BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public).GetValue(null, null);
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TU>>(def.Receive));
+            this.subscribedMessageHandlers.Add(typeof(TU));
+        }
+
+
+
+        private void CheckSubscribedMessageHandlers()
+        {
+            bool warned = false;
+            var assembly = Assembly.GetExecutingAssembly();
+            foreach (
+                var type in
+                    assembly.GetTypes()
+                        .Where(x => x.IsClass && (x.GetCustomAttributes(typeof(MessageHandlerAttribute), true).Any())))
+            {
+                if (type.BaseType != null)
+                {
+                    var genericArgument = type.BaseType.GetGenericArguments()[0];
+                    MessageHandlerAttribute handlerAttribute = (MessageHandlerAttribute)
+                        type.GetCustomAttributes(typeof(MessageHandlerAttribute), true).FirstOrDefault();
+
+                    if (handlerAttribute.Direction == MessageHandlerDirection.None)
+                    {
+                        Console.WriteLine("Warning: '" + type.Name + "' has no Direction defined (MessageHandlerAttribute missing in declaration?)");
+                    }
+                    else
+                    {
+                        if (handlerAttribute.Direction != MessageHandlerDirection.OutboundOnly)
+                        {
+                            if (!this.subscribedMessageHandlers.Contains(genericArgument))
+                            {
+                                // Found a Messagehandler which is not subscribed
+                                if (!warned)
+                                {
+                                    Console.WriteLine("Warning! Following Messagehandlers have not been subscribed!");
+                                    warned = true;
+                                }
+                                Console.WriteLine("Missing: " + type.Name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private readonly List<Type> subscribedMessageHandlers = new List<Type>();
 
         #endregion
 

@@ -38,15 +38,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class BankMessageHandler : BaseMessageHandler<BankMessage, BankMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public BankMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

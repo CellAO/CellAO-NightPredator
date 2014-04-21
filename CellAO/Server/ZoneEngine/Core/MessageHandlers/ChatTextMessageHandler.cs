@@ -39,15 +39,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class ChatTextMessageHandler : BaseMessageHandler<ChatTextMessage, ChatTextMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public ChatTextMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

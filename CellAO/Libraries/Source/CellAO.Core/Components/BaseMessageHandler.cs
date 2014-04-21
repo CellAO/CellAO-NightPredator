@@ -33,6 +33,10 @@ namespace CellAO.Core.Components
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
 
+    using MemBus.Support;
+
+    using MsgPack.Serialization.EmittingSerializers;
+
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
@@ -43,25 +47,12 @@ namespace CellAO.Core.Components
     /// </typeparam>
     /// <typeparam name="TU">
     /// </typeparam>
+    [MessageHandler]
     public class BaseMessageHandler<T, TU> : AbstractMessageHandler<T>
         where T : MessageBody, new() where TU : new()
     {
         /// <summary>
         /// </summary>
-        public enum MessageHandlerDirection
-        {
-            /// <summary>
-            /// </summary>
-            InboundOnly, 
-
-            /// <summary>
-            /// </summary>
-            OutboundOnly, 
-
-            /// <summary>
-            /// </summary>
-            All
-        }
 
         #region Singleton
 
@@ -94,6 +85,12 @@ namespace CellAO.Core.Components
         /// </summary>
         public BaseMessageHandler()
         {
+            this.Direction = this.GetType().GetAttribute<MessageHandlerAttribute>().Direction;
+        }
+
+        public static TU GetDefault()
+        {
+            return Default;
         }
 
         #region Inbound
@@ -228,5 +225,20 @@ namespace CellAO.Core.Components
         }
 
         #endregion
+    }
+    public enum MessageHandlerDirection
+    {
+        None, 
+        /// <summary>
+        /// </summary>
+        InboundOnly,
+
+        /// <summary>
+        /// </summary>
+        OutboundOnly,
+
+        /// <summary>
+        /// </summary>
+        All
     }
 }

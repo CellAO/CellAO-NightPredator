@@ -31,7 +31,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Network;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
@@ -40,16 +39,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class SocialActionCmdMessageHandler :
         BaseMessageHandler<SocialActionCmdMessage, SocialActionCmdMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public SocialActionCmdMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         #region Inbound
 
         /// <summary>

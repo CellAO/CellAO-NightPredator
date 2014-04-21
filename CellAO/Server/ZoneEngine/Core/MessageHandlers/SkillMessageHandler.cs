@@ -37,7 +37,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
@@ -46,15 +45,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class SkillMessageHandler : BaseMessageHandler<SkillMessage, SkillMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public SkillMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         #region Inbound
 
         /// <summary>

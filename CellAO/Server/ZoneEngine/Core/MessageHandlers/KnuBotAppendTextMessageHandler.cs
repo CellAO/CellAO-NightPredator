@@ -38,16 +38,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     internal class KnuBotAppendTextMessageHandler :
         BaseMessageHandler<KnuBotAppendTextMessage, KnuBotAppendTextMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotAppendTextMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">

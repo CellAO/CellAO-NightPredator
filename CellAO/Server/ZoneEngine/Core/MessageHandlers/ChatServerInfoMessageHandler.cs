@@ -45,15 +45,9 @@ namespace ZoneEngine.Core.MessageHandlers
     ///     Chat server info packet writer
     /// </summary>
     // [Export(typeof(IHandleMessage))]
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class ChatServerInfoMessageHandler : BaseMessageHandler<ChatServerInfoMessage, ChatServerInfoMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public ChatServerInfoMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

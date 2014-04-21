@@ -40,15 +40,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class DespawnMessageHandler : BaseMessageHandler<DespawnMessage, DespawnMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public DespawnMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

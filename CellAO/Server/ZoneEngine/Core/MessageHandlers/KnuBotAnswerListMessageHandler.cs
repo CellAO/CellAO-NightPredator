@@ -40,16 +40,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     internal class KnuBotAnswerListMessageHandler :
         BaseMessageHandler<KnuBotAnswerListMessage, KnuBotAnswerListMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotAnswerListMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">

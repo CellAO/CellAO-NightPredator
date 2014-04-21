@@ -28,39 +28,28 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.ComponentModel.Composition;
-    using System.Threading;
-
     using CellAO.Core.Components;
-    using CellAO.Database.Dao;
+    using CellAO.Core.Network;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
-    using Utility;
-
-    using ZoneEngine.Core;
     using ZoneEngine.Core.PacketHandlers;
-    using CellAO.Core.Network;
 
     #endregion
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class ZoneLoginMessageHandler : BaseMessageHandler<ZoneLoginMessage, ZoneLoginMessageHandler>
     {
-        public ZoneLoginMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         #region Public Methods and Operators
 
         /// <summary>
         /// </summary>
-        /// <param name="sender">
-        /// </param>
         /// <param name="message">
+        /// </param>
+        /// <param name="client">
         /// </param>
         protected override void Read(ZoneLoginMessage message, IZoneClient client)
         {

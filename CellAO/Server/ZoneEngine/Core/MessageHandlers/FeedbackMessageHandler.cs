@@ -37,15 +37,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class FeedbackMessageHandler : BaseMessageHandler<FeedbackMessage, FeedbackMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public FeedbackMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

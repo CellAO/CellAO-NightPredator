@@ -32,22 +32,15 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class AddTemplateMessageHandler : BaseMessageHandler<AddTemplateMessage, AddTemplateMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public AddTemplateMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>
@@ -63,7 +56,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
         /// <summary>
         /// </summary>
-        /// <param name="identity">
+        /// <param name="character">
         /// </param>
         /// <param name="item">
         /// </param>

@@ -29,9 +29,7 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using CellAO.Core.Components;
-    using CellAO.Core.Entities;
     using CellAO.Core.Network;
-    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
@@ -39,13 +37,13 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class LookAtMessageHandler : BaseMessageHandler<LookAtMessage, LookAtMessageHandler>
     {
         /// <summary>
         /// </summary>
         public LookAtMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.InboundOnly;
             this.UpdateCharacterStatsOnReceive = true;
         }
 

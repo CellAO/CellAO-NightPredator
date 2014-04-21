@@ -37,15 +37,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class KnuBotTradeMessageHandler : BaseMessageHandler<KnuBotTradeMessage, KnuBotTradeMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotTradeMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="message">
@@ -55,7 +49,8 @@ namespace ZoneEngine.Core.MessageHandlers
         protected override void Read(KnuBotTradeMessage message, IZoneClient client)
         {
             // Remove the item from the inventory
-            client.Controller.Character.BaseInventory.Pages[(int)message.Container.Type].Remove(message.Container.Instance);
+            client.Controller.Character.BaseInventory.Pages[(int)message.Container.Type].Remove(
+                message.Container.Instance);
 
             // client.Character.Knubot.
         }

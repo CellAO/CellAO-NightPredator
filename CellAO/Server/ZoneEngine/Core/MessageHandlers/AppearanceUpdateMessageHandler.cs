@@ -43,16 +43,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class AppearanceUpdateMessageHandler :
         BaseMessageHandler<AppearanceUpdateMessage, AppearanceUpdateMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public AppearanceUpdateMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

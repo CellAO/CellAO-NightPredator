@@ -46,6 +46,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.All)]
     public class CharacterActionMessageHandler :
         BaseMessageHandler<CharacterActionMessage, CharacterActionMessageHandler>
     {
@@ -53,7 +54,6 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         public CharacterActionMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.All;
             this.UpdateCharacterStatsOnReceive = true;
         }
 
@@ -92,7 +92,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     break;
 
-                /* this is here to prevent server crash that is caused by search action if server doesn't reply if something is found or not */
+                    /* this is here to prevent server crash that is caused by search action if server doesn't reply if something is found or not */
                 case CharacterActionType.Search:
 
                     // If action == search
@@ -189,61 +189,61 @@ namespace ZoneEngine.Core.MessageHandlers
                     break;
 
                 case CharacterActionType.StandUp:
+                {
+                    // If action == Stand
+                    client.Controller.Character.UpdateMoveType(37);
+                    client.Controller.Character.Playfield.Announce(message);
+
+                    if (client.Controller.Character.InLogoutTimerPeriod())
                     {
-                        // If action == Stand
-                        client.Controller.Character.UpdateMoveType(37);
-                        client.Controller.Character.Playfield.Announce(message);
-
-                        if (client.Controller.Character.InLogoutTimerPeriod())
-                        {
-                            this.Send(client.Controller.Character, this.StopLogout(client.Controller.Character), true);
-                            client.Controller.Character.StopLogoutTimer();
-                        }
-
-                        // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
-                        // ((ZoneClient)client).StandCancelLogout();
+                        this.Send(client.Controller.Character, this.StopLogout(client.Controller.Character), true);
+                        client.Controller.Character.StopLogoutTimer();
                     }
+
+                    // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
+                    // ((ZoneClient)client).StandCancelLogout();
+                }
 
                     break;
 
                 case CharacterActionType.TeamKickMember:
-                    {
-                        // Kick Team Member
-                    }
+                {
+                    // Kick Team Member
+                }
 
                     break;
 
                 case CharacterActionType.LeaveTeam:
-                    {
-                        // Leave Team
-                        /*
+                {
+                    // Leave Team
+                    /*
                                                 var team = new TeamClass();
                                                 team.LeaveTeam(client);
                                                  */
-                    }
+                }
 
                     break;
                 case CharacterActionType.TransferLeader:
-                    {
-                        // Transfer Team Leadership
-                    }
+                {
+                    // Transfer Team Leadership
+                }
 
                     break;
 
                 case CharacterActionType.TeamRequestInvite:
-                    {
-                        // Team Join Request
-                        // Send Team Invite Request To Target Player
-                        /*
+                {
+                    // Team Join Request
+                    // Send Team Invite Request To Target Player
+                    /*
                                                 var team = new TeamClass();
                                                 team.SendTeamRequest(client, packet.Target);
                                                  */
-                    }
+                }
 
                     break;
                 case CharacterActionType.TeamRequestReply:
-                    {
-                        /*
+                {
+                    /*
                                                  Request Reply
                                                  Check if positive or negative response
 
@@ -283,7 +283,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                                  TeamMember Packet
                                                 team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
                                                  */
-                    }
+                }
 
                     break;
 
@@ -291,23 +291,27 @@ namespace ZoneEngine.Core.MessageHandlers
                     ItemDao.Instance.Delete(
                         new
                         {
-                            containertype = (int)targetIdentityType,
-                            containerinstance = client.Controller.Character.Identity.Instance,
+                            containertype = (int)targetIdentityType, 
+                            containerinstance = client.Controller.Character.Identity.Instance, 
                             Id = message.Target.Instance
                         });
-                    client.Controller.Character.BaseInventory.RemoveItem((int)targetIdentityType, message.Target.Instance);
+                    client.Controller.Character.BaseInventory.RemoveItem(
+                        (int)targetIdentityType, 
+                        message.Target.Instance);
 
                     this.Acknowledge(client.Controller.Character, message);
                     break;
 
                 case CharacterActionType.Split: // Split?
-                    IItem it = client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance];
+                    IItem it =
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance
+                            ];
                     it.MultipleCount -= message.Parameter2;
                     Item newItem = new Item(it.Quality, it.LowID, it.HighID);
                     newItem.MultipleCount = message.Parameter2;
 
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
-                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(),
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(), 
                         newItem);
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
 
@@ -315,21 +319,22 @@ namespace ZoneEngine.Core.MessageHandlers
                     break;
 
                 case CharacterActionType.AcceptTeamRequest:
-                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance].MultipleCount
-                        +=
-                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2].MultipleCount;
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance]
+                        .MultipleCount +=
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2]
+                            .MultipleCount;
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
                     this.Acknowledge(client.Controller.Character, message);
                     break;
 
-                // ###################################################################################
-                // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
-                // currently i cannot find a missing packet or link which tells the server the player
-                // has stopped sneaking, hidden packet or something, will come back to later.
-                // ###################################################################################
+                    // ###################################################################################
+                    // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
+                    // currently i cannot find a missing packet or link which tells the server the player
+                    // has stopped sneaking, hidden packet or something, will come back to later.
+                    // ###################################################################################
 
-                // Sneak Packet Received
+                    // Sneak Packet Received
                 case CharacterActionType.StartSneak:
 
                     // TODO: IF SNEAKING IS ALLOWED RUN THIS CODE.
@@ -343,26 +348,32 @@ namespace ZoneEngine.Core.MessageHandlers
                     break;
 
                 case CharacterActionType.UseItemOnItem:
-                    {
-                        Identity item1 = message.Target;
-                        var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
+                {
+                    Identity item1 = message.Target;
+                    var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
 
-                        client.Controller.Character.TradeSkillSource = new TradeSkillInfo(0, (int)item1.Type, item1.Instance);
-                        client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(1, (int)item2.Type, item2.Instance);
-                        TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
+                    client.Controller.Character.TradeSkillSource = new TradeSkillInfo(
+                        0, 
+                        (int)item1.Type, 
+                        item1.Instance);
+                    client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(
+                        1, 
+                        (int)item2.Type, 
+                        item2.Instance);
+                    TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
 
-                        break;
-                    }
+                    break;
+                }
 
                 case CharacterActionType.ChangeVisualFlag:
-                    {
-                        client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
+                {
+                    client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
 
-                        ChatTextMessageHandler.Default.Send(
-                            client.Controller.Character,
-                            "Setting Visual Flag to " + message.Parameter2);
-                        AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
-                    }
+                    ChatTextMessageHandler.Default.Send(
+                        client.Controller.Character, 
+                        "Setting Visual Flag to " + message.Parameter2);
+                    AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
+                }
 
                     break;
                 case CharacterActionType.TradeskillSourceChanged:
@@ -378,10 +389,10 @@ namespace ZoneEngine.Core.MessageHandlers
                     break;
 
                 default:
-                    {
-                        // unkown
-                        client.Controller.Character.Playfield.Announce(message);
-                    }
+                {
+                    // unkown
+                    client.Controller.Character.Playfield.Announce(message);
+                }
 
                     break;
             }
@@ -404,10 +415,10 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <param name="unknown2">
         /// </param>
         public void FinishNanoCasting(
-            ICharacter character,
-            CharacterActionType actionType,
-            Identity target,
-            int unknown1,
+            ICharacter character, 
+            CharacterActionType actionType, 
+            Identity target, 
+            int unknown1, 
             int unknown2)
         {
             this.Send(character, this.ConstructFinishNanoCasting(character, target, unknown1, unknown2), true);
@@ -416,8 +427,6 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <summary>
         /// </summary>
         /// <param name="character">
-        /// </param>
-        /// <param name="actionType">
         /// </param>
         /// <param name="target">
         /// </param>
@@ -428,9 +437,9 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <returns>
         /// </returns>
         private MessageDataFiller ConstructFinishNanoCasting(
-            ICharacter character,
-            Identity target,
-            int unknown1,
+            ICharacter character, 
+            Identity target, 
+            int unknown1, 
             int unknown2)
         {
             return x =>
@@ -450,8 +459,6 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </summary>
         /// <param name="character">
         /// </param>
-        /// <param name="actionType">
-        /// </param>
         /// <param name="target">
         /// </param>
         /// <param name="unknown1">
@@ -461,9 +468,9 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <returns>
         /// </returns>
         private MessageDataFiller ConstructSetNanoDuration(
-            ICharacter character,
-            Identity target,
-            int unknown1,
+            ICharacter character, 
+            Identity target, 
+            int unknown1, 
             int duration = 0x249F0)
         {
             return x =>
@@ -479,6 +486,16 @@ namespace ZoneEngine.Core.MessageHandlers
             };
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="duration">
+        /// </param>
         public void SetNanoDuration(ICharacter character, Identity target, int unknown1, int duration = 0x249F0)
         {
             this.Send(character, this.ConstructSetNanoDuration(character, target, unknown1, duration));

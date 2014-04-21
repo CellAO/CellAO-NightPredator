@@ -38,22 +38,15 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class VicinityChatMessageHandler : BaseMessageHandler<TextMessage, VicinityChatMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public VicinityChatMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         #region Inbound
 
         /// <summary>
@@ -67,16 +60,35 @@ namespace ZoneEngine.Core.MessageHandlers
             if (message.Message.Text.StartsWith("."))
             {
                 MessageWrapper<ChatCmdMessage> wrapper = new MessageWrapper<ChatCmdMessage>()
-                {
-                    Client = client,
-                    Message = null,
-                    MessageBody = new ChatCmdMessage()
-                                  {
-                                      Command = message.Message.Text.TrimStart('.'),
-                                      Identity = client.Controller.Character.Identity,
-                                      Target = client.Controller.Character.SelectedTarget
-                                  }
-                };
+                                                         {
+                                                             Client = client, 
+                                                             Message = null, 
+                                                             MessageBody =
+                                                                 new ChatCmdMessage()
+                                                                 {
+                                                                     Command
+                                                                         =
+                                                                         message
+                                                                         .Message
+                                                                         .Text
+                                                                         .TrimStart
+                                                                         (
+                                                                             '.'), 
+                                                                     Identity
+                                                                         =
+                                                                         client
+                                                                         .Controller
+                                                                         .Character
+                                                                         .Identity, 
+                                                                     Target
+                                                                         =
+                                                                         client
+                                                                         .Controller
+                                                                         .Character
+                                                                         .SelectedTarget
+                                                                 }
+                                                         };
+
                 // It is a chat command in vicinity chat, lets process it
                 ChatCmdMessageHandler.Default.Receive(wrapper); // manually call the receive()
             }
@@ -105,9 +117,10 @@ namespace ZoneEngine.Core.MessageHandlers
                                                    {
                                                        CharacterIds =
                                                            charsInRange.Select(
-                                                               x => x.Identity.Instance).ToList(),
-                                                       MessageType = (byte)message.Message.Type,
-                                                       Text = message.Message.Text,
+                                                               x => x.Identity.Instance)
+                                                           .ToList(), 
+                                                       MessageType = (byte)message.Message.Type, 
+                                                       Text = message.Message.Text, 
                                                        SenderId = character.Identity.Instance
                                                    };
 

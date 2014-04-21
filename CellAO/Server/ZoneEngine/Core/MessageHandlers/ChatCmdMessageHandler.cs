@@ -31,7 +31,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Network;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Script;
@@ -40,15 +39,14 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class ChatCmdMessageHandler : BaseMessageHandler<ChatCmdMessage, ChatCmdMessageHandler>
     {
         /// <summary>
         /// </summary>
         public ChatCmdMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.InboundOnly;
             this.UpdateCharacterStatsOnReceive = true;
-
         }
 
         #region Inbound
@@ -73,7 +71,11 @@ namespace ZoneEngine.Core.MessageHandlers
 
             string[] cmdArgs = fullArgs.Trim().Split(' ');
 
-            ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), client, client.Controller.Character.SelectedTarget, cmdArgs);
+            ScriptCompiler.Instance.CallChatCommand(
+                cmdArgs[0].ToLower(), 
+                client, 
+                client.Controller.Character.SelectedTarget, 
+                cmdArgs);
         }
 
         #endregion

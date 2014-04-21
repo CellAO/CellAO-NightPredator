@@ -38,16 +38,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     internal class KnuBotStartTradeMessageHandler :
         BaseMessageHandler<KnuBotStartTradeMessage, KnuBotStartTradeMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotStartTradeMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">

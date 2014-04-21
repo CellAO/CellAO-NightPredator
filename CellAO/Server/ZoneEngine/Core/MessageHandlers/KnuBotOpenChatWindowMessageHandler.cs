@@ -38,16 +38,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class KnuBotOpenChatWindowMessageHandler :
         BaseMessageHandler<KnuBotOpenChatWindowMessage, KnuBotOpenChatWindowMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotOpenChatWindowMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">

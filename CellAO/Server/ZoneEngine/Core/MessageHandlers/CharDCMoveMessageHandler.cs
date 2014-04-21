@@ -32,7 +32,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Network;
     using CellAO.Core.Vector;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.InternalMessages;
@@ -43,16 +42,15 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    // Only inbound? Maybe we need outbound too, because of Fear nanos - Algorithman
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class CharDCMoveMessageHandler : BaseMessageHandler<CharDCMoveMessage, CharDCMoveMessageHandler>
     {
         /// <summary>
         /// </summary>
         public CharDCMoveMessageHandler()
         {
-            // Only inbound? Maybe we need outbound too, because of Fear nanos - Algorithman
-            this.Direction = MessageHandlerDirection.InboundOnly;
             this.UpdateCharacterStatsOnReceive = true;
-
         }
 
         #region Inbound
@@ -69,6 +67,7 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 return;
             }
+
             byte moveType = message.MoveType;
             var heading = new Quaternion(message.Heading.X, message.Heading.Y, message.Heading.Z, message.Heading.W);
             Coordinate coordinates = new Coordinate(message.Coordinates);
@@ -119,7 +118,6 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
             }
             */
-
 
             client.Controller.Move(moveType, coordinates, heading);
 

@@ -41,16 +41,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class KnuBotRejectedItemsMessageHandler :
         BaseMessageHandler<KnuBotRejectedItemsMessage, KnuBotRejectedItemsMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public KnuBotRejectedItemsMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">

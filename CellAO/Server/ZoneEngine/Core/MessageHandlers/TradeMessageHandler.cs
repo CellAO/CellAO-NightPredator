@@ -40,15 +40,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class TradeMessageHandler : BaseMessageHandler<TradeMessage, TradeMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public TradeMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="message">
@@ -57,7 +51,6 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(TradeMessage message, IZoneClient client)
         {
-
             // /!\ THIS IS ONLY A TEST /!\
             // Right click on mob lets them walk away 20m
             // This does NOT work on all mobs tho. (Depends on character flags, vendors wont, like bartender. Leets will)

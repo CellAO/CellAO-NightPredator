@@ -31,7 +31,6 @@ namespace ZoneEngine.Core.MessageHandlers
     // TODO: Change Actions to something more suitable (maybe EntityAction?)
 
     using System;
-    using System.ComponentModel;
     using System.Linq;
     using System.Threading;
 
@@ -44,7 +43,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Packets;
@@ -53,16 +51,10 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class ContainerAddItemMessageHandler :
         BaseMessageHandler<ContainerAddItemMessage, ContainerAddItemMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public ContainerAddItemMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.InboundOnly;
-        }
-
         #region Inbound
 
         /// <summary>
@@ -95,7 +87,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 Pool.Instance.GetObject<IInventoryPage>(
                     new Identity()
                     {
-                        Type = (IdentityType)message.Identity.Instance,
+                        Type = (IdentityType)message.Identity.Instance, 
                         Instance = (int)message.SourceContainer.Type
                     });
             int fromPlacement = message.SourceContainer.Instance;
@@ -112,7 +104,8 @@ namespace ZoneEngine.Core.MessageHandlers
                 toIdentity.Type = IdentityType.CanbeAffected;
             }
 
-            IItemContainer itemReceiver = client.Controller.Character.Playfield.FindByIdentity(toIdentity) as IItemContainer;
+            IItemContainer itemReceiver =
+                client.Controller.Character.Playfield.FindByIdentity(toIdentity) as IItemContainer;
             if (itemReceiver == null)
             {
                 throw new ArgumentOutOfRangeException(

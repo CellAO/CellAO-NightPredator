@@ -72,6 +72,7 @@
     <Compile Include="Components\IBus.cs" />
     <Compile Include="Components\IMessageHandler.cs" />
     <Compile Include="Components\MemBusAdapter.cs" />
+    <Compile Include="Components\MessageHandlerAttribute.cs" />
     <Compile Include="Components\MessageWrapper.cs" />
     <Compile Include="Components\WeakReference.cs" />
     <Compile Include="Encryption\BigInteger.cs" />

@@ -39,15 +39,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class TemplateActionMessageHandler : BaseMessageHandler<TemplateActionMessage, TemplateActionMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public TemplateActionMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>

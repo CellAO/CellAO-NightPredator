@@ -40,15 +40,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class StatMessageHandler : BaseMessageHandler<StatMessage, StatMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public StatMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="character">
@@ -66,6 +60,7 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 this.Send(character, this.FillerBulk(character, statsToClient));
             }
+
             if (statsToPlayfield.Count > 0)
             {
                 this.Send(character, this.FillerBulk(character, statsToPlayfield), true);

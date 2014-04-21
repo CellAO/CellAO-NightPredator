@@ -31,34 +31,21 @@ namespace ZoneEngine.Core.MessageHandlers
     // TODO: Make this to EntityEnvent or something like this
 
     using System;
-    using System.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Events;
-    using CellAO.Core.Items;
     using CellAO.Core.Network;
-    using CellAO.Core.Statels;
-    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    using ZoneEngine.Core.Playfields;
 
     #endregion
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.All)]
     public class GenericCmdMessageHandler : BaseMessageHandler<GenericCmdMessage, GenericCmdMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public GenericCmdMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.All;
-        }
-
         #region Inbound
 
         /// <summary>
@@ -81,6 +68,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     if (message.Target.Type == IdentityType.Inventory)
                     {
                         client.Controller.UseItem(message.Target);
+
                         // Acknowledge action
                         this.Acknowledge(client.Controller.Character, message);
                     }
@@ -88,7 +76,13 @@ namespace ZoneEngine.Core.MessageHandlers
                     {
                         // Use statel (doors, grid terminals etc)
 #if DEBUG
-                        string s = string.Format("Generic Command received:\r\nAction: {0} ({1}){2}Target: {3} {4}", message.Action, (int)message.Action, Environment.NewLine, message.Target.Type,message.Target.ToString(true));
+                        string s = string.Format(
+                            "Generic Command received:\r\nAction: {0} ({1}){2}Target: {3} {4}", 
+                            message.Action, 
+                            (int)message.Action, 
+                            Environment.NewLine, 
+                            message.Target.Type, 
+                            message.Target.ToString(true));
                         ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
 #endif
                         client.Controller.UseStatel(message.Target);
@@ -117,6 +111,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
         /// <summary>
         /// </summary>
+        /// <param name="character">
+        /// </param>
         /// <param name="message">
         /// </param>
         /// <returns>

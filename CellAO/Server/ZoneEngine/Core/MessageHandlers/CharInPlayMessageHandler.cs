@@ -32,7 +32,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Network;
     using CellAO.Enums;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
@@ -41,13 +40,13 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.InboundOnly)]
     public class CharInPlayMessageHandler : BaseMessageHandler<CharInPlayMessage, CharInPlayMessageHandler>
     {
         /// <summary>
         /// </summary>
         public CharInPlayMessageHandler()
         {
-            this.Direction = MessageHandlerDirection.InboundOnly;
             this.UpdateCharacterStatsOnReceive = true;
         }
 
@@ -62,6 +61,7 @@ namespace ZoneEngine.Core.MessageHandlers
         protected override void Read(CharInPlayMessage message, IZoneClient client)
         {
             LogUtil.Debug("Client connected...");
+
             // client got all the needed data and
             // wants to enter the world. After we
             // reply to this, the character will really be in game
@@ -72,7 +72,8 @@ namespace ZoneEngine.Core.MessageHandlers
             client.Controller.Character.Starting = false;
 
             // Needed fix, so gmlevel will be loaded
-            client.Controller.Character.Stats[StatIds.gmlevel].Value = client.Controller.Character.Stats[StatIds.gmlevel].Value;
+            client.Controller.Character.Stats[StatIds.gmlevel].Value =
+                client.Controller.Character.Stats[StatIds.gmlevel].Value;
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
