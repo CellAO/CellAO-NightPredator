@@ -78,15 +78,15 @@ namespace CellAO.Core.NPCHandler
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.losheight, 15);
 
                 /*
-                 * For testing only, blue trousers and a helmet
+                // For testing only, blue trousers and a helmet
                 IItem trousers = new Item(1, ItemLoader.ItemList[27350].GetLowId(1),ItemLoader.ItemList[27350].GetLowId(1));
                 IItem helmet = new Item(1, ItemLoader.ItemList[85534].GetLowId(1), ItemLoader.ItemList[85534].GetHighId(1));
                 mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].Add((int)ArmorSlots.Legs + mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].FirstSlotNumber, trousers);
                 mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].Add((int)ArmorSlots.Head + mobCharacter.BaseInventory.Pages[(int)IdentityType.ArmorPage].FirstSlotNumber, helmet);
-                 */
+                */
 
                 // Set the MeshLayers correctly ( Head mesh!! )  /!\
-                // This needs to be in StatHeadmesh.cs
+                // TODO: This needs to be in StatHeadmesh.cs (somehow)
                 mobCharacter.MeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
                 mobCharacter.SocialMeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
 

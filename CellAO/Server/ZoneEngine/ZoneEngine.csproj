@@ -141,6 +141,7 @@
     <Compile Include="Core\MessageHandlers\FollowTargetMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\FullCharacterMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\GenericCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\InventoryUpdateMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAnswerListMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAnswerMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAppendTextMessageHandler.cs" />

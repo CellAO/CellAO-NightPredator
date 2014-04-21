@@ -57,6 +57,7 @@ namespace ZoneEngine.Core.MessageHandlers
             Character target = Pool.Instance.GetObject<Character>(message.Target);
             if (target != null)
             {
+                InventoryUpdateMessageHandler.Default.Send(client.Controller.Character,target.BaseInventory.Pages[(int)IdentityType.ArmorPage]);
                 Vector3 start = new Vector3();
                 start.X = target.RawCoordinates.X + 20;
                 start.Y = target.RawCoordinates.Y;
