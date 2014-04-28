@@ -37,7 +37,6 @@ namespace WebEngine.Handlers
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Net.Mime;
 
     using WebEngine.ErrorHandlers;
 
@@ -57,7 +56,7 @@ namespace WebEngine.Handlers
 
         private string responseBody;
 
-        private ResponseHeader responseHeaders;
+        private readonly ResponseHeader responseHeaders;
 
         public PHPHandler(String fileName, Dictionary<String, String> envVariables)
         {
@@ -98,10 +97,11 @@ namespace WebEngine.Handlers
                 this.phpOutput = proc.StandardOutput.ReadToEnd();
                 this.phpErrorOutput = proc.StandardError.ReadToEnd();
                 proc.Close();
-                proc.Dispose();
 
                 this.responseHeaders =
-                    new ResponseHeader(this.phpOutput.Substring(0, this.phpOutput.IndexOf("\r\n\r\n")), this.fullFilePath);
+                    new ResponseHeader(
+                        this.phpOutput.Substring(0, this.phpOutput.IndexOf("\r\n\r\n")),
+                        this.fullFilePath);
                 this.setResponseBody(this.phpOutput.Substring(this.phpOutput.IndexOf("\r\n\r\n")));
                 this.responseHeaders.setContentLength(this.getContentLength());
             }

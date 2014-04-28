@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -52,7 +57,6 @@ namespace CellAO.Core.Inventory
         /// </summary>
         private readonly IDictionary<int, IItem> Content = new Dictionary<int, IItem>();
 
-
         #endregion
 
         #region Constructors and Destructors
@@ -68,7 +72,7 @@ namespace CellAO.Core.Inventory
         /// <param name="ownerInstance">
         /// </param>
         public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance)
-            :base(new Identity(){Type = (IdentityType)ownerInstance,Instance=pagenum})
+            : base(new Identity() { Type = (IdentityType)ownerInstance, Instance = pagenum })
         {
             this.MaxSlots = maxslots;
             this.FirstSlotNumber = firstslotnumber;
@@ -81,7 +85,6 @@ namespace CellAO.Core.Inventory
         /// <summary>
         /// </summary>
         public int FirstSlotNumber { get; set; }
-
 
         /// <summary>
         /// </summary>
@@ -166,76 +169,11 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Added(ItemTemplate item)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="character">
         /// </param>
         public virtual void CalculateModifiers(Character character)
         {
             // Do nothing
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckAdd(int slot, ItemTemplate item, InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="templ">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckRemove(int slot, ItemTemplate templ, InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            IItem toEquip = sendingPage[fromPlacement];
-
-            // First: Check if the item can be worn
-            bool canBeWornCheck = (toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear;
-
-            if (canBeWornCheck)
-            {
-                this.Add(toPlacement, toEquip);
-                sendingPage.Remove(fromPlacement);
-            }
         }
 
         /// <summary>
@@ -256,28 +194,6 @@ namespace CellAO.Core.Inventory
             }
 
             return -1;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            IItem toEquip = sendingPage[fromPlacement];
-            IItem hotSwapItem = this[toPlacement];
-
-            sendingPage.Remove(fromPlacement);
-            this.Remove(toPlacement);
-
-            sendingPage.Add(fromPlacement, hotSwapItem);
-            this.Add(toPlacement, toEquip);
         }
 
         /// <summary>
@@ -311,7 +227,10 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in InstancedItemDao.Instance.GetAll(new { containertype = containerType, containerinstance = this.Identity.Instance }))
+            foreach (
+                DBInstancedItem item in
+                    InstancedItemDao.Instance.GetAll(
+                        new { containertype = containerType, containerinstance = this.Identity.Instance }))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -366,28 +285,27 @@ namespace CellAO.Core.Inventory
 
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.Identity.Instance, containerplacement = slotNum });
+                ItemDao.Instance.Delete(
+                    new
+                    {
+                        containertype = containerType,
+                        containerinstance = this.Identity.Instance,
+                        containerplacement = slotNum
+                    });
             }
             else
             {
-                InstancedItemDao.Instance.Delete(new { containertype = containerType, containerinstance = this.Identity.Instance, containerplacement = slotNum });
+                InstancedItemDao.Instance.Delete(
+                    new
+                    {
+                        containertype = containerType,
+                        containerinstance = this.Identity.Instance,
+                        containerplacement = slotNum
+                    });
             }
 
             this.Content.Remove(slotNum);
             return temp;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Removed(int slot, ItemTemplate item)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -418,38 +336,6 @@ namespace CellAO.Core.Inventory
             }
 
             return slots.ToArray();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slotFrom">
-        /// </param>
-        /// <param name="slotTo">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void TryHotSwap(int slotFrom, int slotTo, InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="receivingPage">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
-        {
-            IItem toUnEquip = this[fromPlacement];
-            receivingPage.Add(toPlacement, toUnEquip);
-            this.Remove(fromPlacement);
         }
 
         /// <summary>
@@ -510,14 +396,141 @@ namespace CellAO.Core.Inventory
                 }
             }
 
-            ItemDao.Instance.Save(DBuninstanced,null,null);
-            InstancedItemDao.Instance.Save(DBinstanced,null,null);
+            ItemDao.Instance.Save(DBuninstanced, null, null);
+            InstancedItemDao.Instance.Save(DBinstanced, null, null);
             return true;
         }
 
-        public override void Dispose()
+        /// <summary>
+        /// </summary>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Added(ItemTemplate item)
         {
-            base.Dispose();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckAdd(int slot, ItemTemplate item, InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="templ">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckRemove(int slot, ItemTemplate templ, InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+
+            // First: Check if the item can be worn
+            bool canBeWornCheck = (toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear;
+
+            if (canBeWornCheck)
+            {
+                this.Add(toPlacement, toEquip);
+                sendingPage.Remove(fromPlacement);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+            IItem hotSwapItem = this[toPlacement];
+
+            sendingPage.Remove(fromPlacement);
+            this.Remove(toPlacement);
+
+            sendingPage.Add(fromPlacement, hotSwapItem);
+            this.Add(toPlacement, toEquip);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Removed(int slot, ItemTemplate item)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slotFrom">
+        /// </param>
+        /// <param name="slotTo">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void TryHotSwap(int slotFrom, int slotTo, InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="receivingPage">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Unequip(int fromPlacement, IInventoryPage receivingPage, int toPlacement)
+        {
+            IItem toUnEquip = this[fromPlacement];
+            receivingPage.Add(toPlacement, toUnEquip);
+            this.Remove(fromPlacement);
         }
 
         #endregion

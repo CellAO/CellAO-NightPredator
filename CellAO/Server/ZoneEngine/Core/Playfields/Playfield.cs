@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -33,7 +38,6 @@ namespace CellAO.Core.Playfields
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-    using System.Security.Cryptography.X509Certificates;
     using System.Threading;
 
     using CellAO.Core.Entities;
@@ -44,6 +48,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
     using CellAO.ObjectManager;
@@ -59,7 +64,6 @@ namespace CellAO.Core.Playfields
 
     using Utility;
 
-    using ZoneEngine;
     using ZoneEngine.Core;
     using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.Functions;
@@ -98,15 +102,17 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        private Timer heartBeat;
+        private readonly Timer heartBeat;
 
         /// <summary>
         /// </summary>
-        private List<StatelData> statels = new List<StatelData>();
+        private readonly List<StatelData> statels = new List<StatelData>();
 
         /// <summary>
         /// </summary>
         private float x;
+
+        private bool disposed = false;
 
         #endregion
 
@@ -146,10 +152,10 @@ namespace CellAO.Core.Playfields
 
         private void LoadMobSpawns(Identity playfieldIdentity)
         {
-            var mobs = MobSpawnDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
-            foreach (var mob in mobs)
+            IEnumerable<DBMobSpawn> mobs = MobSpawnDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            foreach (DBMobSpawn mob in mobs)
             {
-                var stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
+                IEnumerable<DBMobSpawnStat> stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
                 NonPlayerCharacterHandler.InstantiateMobSpawn(mob, stats.ToArray(), new NPCController(), this);
             }
         }
@@ -218,16 +224,6 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="clientMessage">
-        /// </param>
-        public static void SendAOtomationMessageToClient(IMSendAOtomationMessageToClient clientMessage)
-        {
-            LogUtil.Debug(clientMessage.message.Body.GetType().ToString());
-            clientMessage.client.SendCompressed(clientMessage.message.Body);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="message">
         /// </param>
         /// <exception cref="NotImplementedException">
@@ -243,7 +239,9 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Announce(MessageBody messageBody)
         {
-            foreach (Character entity in Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Where(x => x.InPlayfield(this.Identity)))
+            foreach (Character entity in
+                Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                    .Where(x => x.InPlayfield(this.Identity)))
             {
                 if (entity != null)
                 {
@@ -251,7 +249,11 @@ namespace CellAO.Core.Playfields
                     if (entity.Controller.Client != null)
                     {
                         this.Publish(
-                        new IMSendAOtomationMessageBodyToClient() { client = entity.Controller.Client, Body = messageBody });
+                            new IMSendAOtomationMessageBodyToClient()
+                            {
+                                client = entity.Controller.Client,
+                                Body = messageBody
+                            });
                     }
                 }
             }
@@ -274,7 +276,9 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceOthers(MessageBody messageBody, Identity dontSend)
         {
-            foreach (Character entity in Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
+            foreach (Character entity in
+                Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                    .Where(xx => xx.InPlayfield(this.Identity)))
             {
                 if (entity != null)
                 {
@@ -282,7 +286,11 @@ namespace CellAO.Core.Playfields
                     {
                         // Make this whole thing unblocking with publishing single internal messages
                         this.Publish(
-                            new IMSendAOtomationMessageBodyToClient() { client = entity.Controller.Client, Body = messageBody });
+                            new IMSendAOtomationMessageBodyToClient()
+                            {
+                                client = entity.Controller.Client,
+                                Body = messageBody
+                            });
                     }
                 }
             }
@@ -314,6 +322,214 @@ namespace CellAO.Core.Playfields
                     (entity as Character).Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IInstancedEntity FindByIdentity(Identity identity)
+        {
+            return Pool.Instance.GetObject<IInstancedEntity>(identity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        public T FindByIdentity<T>(Identity identity) where T : class, IEntity
+        {
+            return Pool.Instance.GetObject<T>(identity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dynel">
+        /// </param>
+        /// <param name="range">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public List<IDynel> FindInRange(IDynel dynel, float range)
+        {
+            List<IDynel> temp = new List<IDynel>();
+            Coordinate coord = dynel.Coordinates;
+            foreach (Dynel entity in
+                Pool.Instance.GetAll<Dynel>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
+            {
+                if (entity == dynel)
+                {
+                    continue;
+                }
+
+                if (entity.Coordinates.Distance2D(coord) <= range)
+                {
+                    temp.Add(entity);
+                }
+            }
+
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool IsInstancedPlayfield()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int NumberOfDynels()
+        {
+            return Pool.Instance.GetAll((int)IdentityType.CanbeAffected).Count();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int NumberOfPlayers()
+        {
+            return Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Count();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj">
+        /// </param>
+        public void Publish(object obj)
+        {
+            this.playfieldBus.Publish(obj);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="body">
+        /// </param>
+        public void Send(IZoneClient client, MessageBody body)
+        {
+            this.Publish(new IMSendAOtomationMessageBodyToClient() { client = client, Body = body });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        public void Send(IZoneClient client, Message message)
+        {
+            this.Publish(new IMSendAOtomationMessageToClient() { client = client, message = message });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dynel">
+        /// </param>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public void Teleport(Dynel dynel, Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            // Prevent client from entering this again
+            if (dynel.DoNotDoTimers)
+            {
+                return;
+            }
+            Thread.Sleep(200);
+            int dynelId = dynel.Identity.Instance;
+
+            dynel.DoNotDoTimers = true;
+
+            // Teleport to another playfield
+            TeleportMessageHandler.Default.Send(
+                dynel as ICharacter,
+                destination.coordinate,
+                (Quaternion)heading,
+                playfield);
+
+            // Send packet, disconnect, and other playfield waits for connect
+
+            DespawnMessage despawnMessage = DespawnMessageHandler.Default.Create(dynel.Identity);
+            this.AnnounceOthers(despawnMessage, dynel.Identity);
+            dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
+            dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
+
+            // IMPORTANT!!
+            // Dispose the character object, save new playfield data and then recreate it
+            // else you would end up at weird coordinates in the same playfield
+
+            // Save client object
+            ZoneClient client = (ZoneClient)dynel.Controller.Client;
+
+            // Set client=null so dynel can really dispose
+
+            IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
+            Pool.Instance.GetObject<Playfield>(new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+
+            if (newPlayfield == null)
+            {
+                newPlayfield = new Playfield(this.server, playfield);
+            }
+
+            dynel.Playfield = newPlayfield;
+            dynel.Controller.Client = null;
+            dynel.Dispose();
+
+            LogUtil.Debug(DebugInfoDetail.Database, "Saving to pf " + playfield.Instance);
+
+            // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
+            // for now, just transmit our ip and port
+
+            IPAddress tempIp;
+            if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
+            {
+                IPHostEntry zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
+                foreach (IPAddress ip in zoneHost.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        tempIp = ip;
+                        break;
+                    }
+                }
+            }
+
+            var redirect = new ZoneRedirectionMessage
+                           {
+                               ServerIpAddress = tempIp,
+                               ServerPort = (ushort)this.server.TcpEndPoint.Port
+                           };
+            client.SendCompressed(redirect);
+            // client.Server.DisconnectClient(client);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientMessage">
+        /// </param>
+        public static void SendAOtomationMessageToClient(IMSendAOtomationMessageToClient clientMessage)
+        {
+            LogUtil.Debug(DebugInfoDetail.AoTomation, clientMessage.message.Body.GetType().ToString());
+            clientMessage.client.SendCompressed(clientMessage.message.Body);
         }
 
         /// <summary>
@@ -375,7 +591,7 @@ namespace CellAO.Core.Playfields
                     if (temp.Controller.Client != null)
                     {
                         temp.Controller.Client.SendCompressed(
-                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                            new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
                     }
                     return;
                 }
@@ -389,63 +605,13 @@ namespace CellAO.Core.Playfields
                 imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public IInstancedEntity FindByIdentity(Identity identity)
-        {
-            return Pool.Instance.GetObject<IInstancedEntity>(identity);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// </returns>
-        public T FindByIdentity<T>(Identity identity) where T : class, IDisposable, IEntity
-        {
-            return Pool.Instance.GetObject<T>(identity);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="dynel">
-        /// </param>
-        /// <param name="range">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public List<IDynel> FindInRange(IDynel dynel, float range)
-        {
-            List<IDynel> temp = new List<IDynel>();
-            Coordinate coord = dynel.Coordinates;
-            foreach (Dynel entity in Pool.Instance.GetAll<Dynel>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
-            {
-                if (entity == dynel)
-                {
-                    continue;
-                }
-
-                if (entity.Coordinates.Distance2D(coord) <= range)
-                {
-                    temp.Add(entity);
-                }
-            }
-
-            return temp;
-        }
-
         public List<ICharacter> FindCharacterInRange(IDynel dynel, float range)
         {
             List<ICharacter> temp = new List<ICharacter>();
             Coordinate coord = dynel.Coordinates;
-            foreach (ICharacter entity in Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
+            foreach (ICharacter entity in
+                Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
+                    .Where(xx => xx.InPlayfield(this.Identity)))
             {
                 if (entity == dynel)
                 {
@@ -474,17 +640,6 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public bool IsInstancedPlayfield()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="global">
         /// </param>
         /// <returns>
@@ -492,55 +647,6 @@ namespace CellAO.Core.Playfields
         public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
         {
             return this.server.ListAvailablePlayfields(global);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public int NumberOfDynels()
-        {
-            return Pool.Instance.GetAll((int)IdentityType.CanbeAffected).Count();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public int NumberOfPlayers()
-        {
-            return Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Count();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="obj">
-        /// </param>
-        public void Publish(object obj)
-        {
-            this.playfieldBus.Publish(obj);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="body">
-        /// </param>
-        public void Send(IZoneClient client, MessageBody body)
-        {
-            this.Publish(new IMSendAOtomationMessageBodyToClient() { client = client, Body = body });
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Send(IZoneClient client, Message message)
-        {
-            this.Publish(new IMSendAOtomationMessageToClient() { client = client, message = message });
         }
 
         /// <summary>
@@ -574,13 +680,14 @@ namespace CellAO.Core.Playfields
             {
                 try
                 {
-                    LogUtil.Debug(msg.Body.GetType().ToString());
+                    LogUtil.Debug(DebugInfoDetail.AoTomation, msg.Body.GetType().ToString());
                     msg.client.SendCompressed(msg.Body);
                 }
                 catch (Exception)
                 {
-                    LogUtil.Debug(msg.Body.GetType().ToString());
-                    throw;
+                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString());
+                    // /!\ This happens sometimes, dont know why tho, need more investigation
+                    // throw;
                 }
             }
         }
@@ -619,8 +726,7 @@ namespace CellAO.Core.Playfields
                     if (temp != null)
                     {
                         // TODO: make it NPC-safe
-                        SimpleCharFullUpdateMessage simpleCharFullUpdate =
-                            SimpleCharFullUpdate.ConstructMessage(temp);
+                        SimpleCharFullUpdateMessage simpleCharFullUpdate = SimpleCharFullUpdate.ConstructMessage(temp);
                         sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
 
                         var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
@@ -628,89 +734,6 @@ namespace CellAO.Core.Playfields
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="dynel">
-        /// </param>
-        /// <param name="destination">
-        /// </param>
-        /// <param name="heading">
-        /// </param>
-        /// <param name="playfield">
-        /// </param>
-        public void Teleport(Dynel dynel, Coordinate destination, IQuaternion heading, Identity playfield)
-        {
-            // Prevent client from entering this again
-            if (dynel.DoNotDoTimers)
-            {
-                return;
-            }
-            Thread.Sleep(200);
-            int dynelId = dynel.Identity.Instance;
-
-
-            dynel.DoNotDoTimers = true;
-
-            // Teleport to another playfield
-            TeleportMessageHandler.Default.Send(dynel as ICharacter, destination.coordinate, (Quaternion)heading, playfield);
-
-            // Send packet, disconnect, and other playfield waits for connect
-
-            DespawnMessage despawnMessage = DespawnMessageHandler.Default.Create(dynel.Identity);
-            this.AnnounceOthers(despawnMessage, dynel.Identity);
-            dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
-            dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-
-            // IMPORTANT!!
-            // Dispose the character object, save new playfield data and then recreate it
-            // else you would end up at weird coordinates in the same playfield
-
-            // Save client object
-            ZoneClient client = (ZoneClient)dynel.Controller.Client;
-
-            // Set client=null so dynel can really dispose
-
-            IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
-            Pool.Instance.GetObject<Playfield>(
-                new Identity() { Type = playfield.Type, Instance = playfield.Instance });
-
-            if (newPlayfield == null)
-            {
-                newPlayfield = new Playfield(this.server, playfield);
-            }
-
-            dynel.Playfield = newPlayfield;
-            dynel.Controller.Client = null;
-            dynel.Dispose();
-
-            LogUtil.Debug("Saving to pf " + playfield.Instance);
-
-            // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
-            // for now, just transmit our ip and port
-
-            IPAddress tempIp;
-            if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
-            {
-                IPHostEntry zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
-                foreach (IPAddress ip in zoneHost.AddressList)
-                {
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        tempIp = ip;
-                        break;
-                    }
-                }
-            }
-
-            var redirect = new ZoneRedirectionMessage
-                           {
-                               ServerIpAddress = tempIp,
-                               ServerPort = (ushort)this.server.TcpEndPoint.Port
-                           };
-            client.SendCompressed(redirect);
-            // client.Server.DisconnectClient(client);
         }
 
         #endregion
@@ -726,8 +749,7 @@ namespace CellAO.Core.Playfields
             foreach (StatelData sd in this.statels)
             {
                 foreach (Event ev in
-                    sd.Events.Where(
-                        x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
+                    sd.Events.Where(x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
                 {
                     if (sd.Coord().Distance3D(dynel.Coordinates) < 2.0)
                     {
@@ -749,18 +771,12 @@ namespace CellAO.Core.Playfields
                 int destPlayfield = wcr.SecondWall.DestinationPlayfield;
                 if (destPlayfield > 0)
                 {
-                    if (Program.DebugZoning)
-                    {
-                        LogUtil.Debug(wcr.ToString());
-                    }
+                    LogUtil.Debug(DebugInfoDetail.Zoning, wcr.ToString());
 
                     PlayfieldDestination dest =
                         PlayfieldLoader.PFData[destPlayfield].Destinations[wcr.SecondWall.DestinationIndex];
 
-                    if (Program.DebugZoning)
-                    {
-                        LogUtil.Debug(dest.ToString());
-                    }
+                    LogUtil.Debug(DebugInfoDetail.Zoning, dest.ToString());
 
                     float newX = (dest.EndX - dest.StartX) * wcr.Factor + dest.StartX;
                     float newZ = (dest.EndZ - dest.StartZ) * wcr.Factor + dest.StartZ;
@@ -789,7 +805,9 @@ namespace CellAO.Core.Playfields
         private void HeartBeatTimer(object sender)
         {
             IEnumerable<IEntity> dynels = null;
-            dynels = Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity));
+            dynels =
+                Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
+                    .Where(xx => xx.InPlayfield(this.Identity));
 
             foreach (ICharacter dynel in dynels)
             {
@@ -798,6 +816,11 @@ namespace CellAO.Core.Playfields
                     if (dynel.DoNotDoTimers || dynel.Starting)
                     {
                         continue;
+                    }
+
+                    if (dynel.Controller.IsFollowing())
+                    {
+                        dynel.Controller.DoFollow();
                     }
 
                     this.CheckWallCollision(dynel);
@@ -810,10 +833,27 @@ namespace CellAO.Core.Playfields
 
         #endregion
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            // We wont save any NPCs to character table/character's stats table
-            this.DisconnectAllClients();
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    // We wont save any NPCs to character table/character's stats table
+                    this.DisconnectAllClients();
+                    if (this.memBusDisposeContainer != null)
+                    {
+                        this.memBusDisposeContainer.Dispose();
+                    }
+                    if (this.heartBeat != null)
+                    {
+                        this.heartBeat.Dispose();
+                    }
+                }
+            }
+            this.disposed = true;
+
+            base.Dispose(disposing);
         }
     }
 }

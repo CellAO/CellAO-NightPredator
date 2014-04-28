@@ -1,13 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region License
+
+// Copyright (c) 2005-2014, CellAO Team
+// 
+// 
+// All rights reserved.
+// 
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+
+#endregion
 
 namespace CellAO.Core.NPCHandler
 {
+    #region Usings ...
+
+    using System;
+
     using CellAO.Core.Entities;
-    using CellAO.Core.Functions;
-    using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
@@ -15,19 +43,25 @@ namespace CellAO.Core.NPCHandler
     using CellAO.Enums;
     using CellAO.ObjectManager;
 
-    using Dapper;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
+    #endregion
+
     public static class NonPlayerCharacterHandler
     {
-        public static Character SpawnMobFromTemplate(string hash, Identity playfieldIdentity, Coordinate coord, Quaternion heading, IController controller, int desiredLevel = -1)
+        public static Character SpawnMobFromTemplate(
+            string hash,
+            Identity playfieldIdentity,
+            Coordinate coord,
+            Quaternion heading,
+            IController controller,
+            int desiredLevel = -1)
         {
             Character mobCharacter = null;
 
-            var mob = MobTemplateDao.Instance.GetMobTemplateByHash(hash);
+            DBMobTemplate mob = MobTemplateDao.Instance.GetMobTemplateByHash(hash);
             if (mob != null)
             {
                 int level = desiredLevel;
@@ -48,7 +82,13 @@ namespace CellAO.Core.NPCHandler
             return mobCharacter;
         }
 
-        private static Character CreateMob(DBMobTemplate mob, Identity playfieldIdentity, Coordinate coord, Quaternion heading, IController controller, int level)
+        private static Character CreateMob(
+            DBMobTemplate mob,
+            Identity playfieldIdentity,
+            Coordinate coord,
+            Quaternion heading,
+            IController controller,
+            int level)
         {
             IPlayfield playfield = Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
             if (playfield != null)
@@ -56,6 +96,7 @@ namespace CellAO.Core.NPCHandler
                 int newInstanceId = Pool.Instance.GetFreeInstance<Character>(1000000, IdentityType.CanbeAffected);
                 Identity newIdentity = new Identity() { Type = IdentityType.CanbeAffected, Instance = newInstanceId };
                 Character mobCharacter = new Character(newIdentity, controller);
+                mobCharacter.Read();
                 mobCharacter.Coordinates = coord;
                 mobCharacter.Playfield = Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
                 mobCharacter.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
@@ -90,7 +131,6 @@ namespace CellAO.Core.NPCHandler
                 mobCharacter.MeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
                 mobCharacter.SocialMeshLayer.AddMesh(0, mob.HeadMesh, 0, 4);
 
-
                 mobCharacter.Name = mob.Name;
                 mobCharacter.FirstName = "";
                 mobCharacter.LastName = "";
@@ -100,20 +140,24 @@ namespace CellAO.Core.NPCHandler
             return null;
         }
 
-        public static void InstantiateMobSpawn(DBMobSpawn mob, DBMobSpawnStat[] stats, IController npccontroller, IPlayfield playfield)
+        public static void InstantiateMobSpawn(
+            DBMobSpawn mob,
+            DBMobSpawnStat[] stats,
+            IController npccontroller,
+            IPlayfield playfield)
         {
-
             if (playfield != null)
             {
                 Identity mobId = new Identity() { Type = IdentityType.CanbeAffected, Instance = mob.Id };
                 if (Pool.Instance.GetObject(mobId) != null)
                 {
-                    throw new Exception("Object "+mobId.ToString(true)+" already exists!!");
+                    throw new Exception("Object " + mobId.ToString(true) + " already exists!!");
                 }
                 Character cmob = new Character(mobId, npccontroller);
+                cmob.Read();
                 cmob.Playfield = playfield;
                 cmob.Coordinates = new Coordinate() { x = mob.X, y = mob.Y, z = mob.Z };
-                cmob.RawHeading=new Quaternion(mob.HeadingX,mob.HeadingY,mob.HeadingZ,mob.HeadingW);
+                cmob.RawHeading = new Quaternion(mob.HeadingX, mob.HeadingY, mob.HeadingZ, mob.HeadingW);
                 cmob.Name = mob.Name;
                 cmob.FirstName = "";
                 cmob.LastName = "";
@@ -121,9 +165,10 @@ namespace CellAO.Core.NPCHandler
                 {
                     cmob.Stats.SetBaseValueWithoutTriggering(stat.Stat, (uint)stat.Value);
                 }
-                var temp = cmob.Stats[StatIds.level].Value;
-                temp = cmob.Stats[StatIds.agility].Value;
 
+                // initiate affected stats calculation
+                int temp = cmob.Stats[StatIds.level].Value;
+                temp = cmob.Stats[StatIds.agility].Value;
             }
         }
     }

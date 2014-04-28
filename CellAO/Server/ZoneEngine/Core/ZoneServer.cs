@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,34 +35,30 @@ namespace ZoneEngine.Core
 
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using System.Runtime.CompilerServices;
 
     using Cell.Core;
 
     using CellAO.Communication.Messages;
-    using CellAO.Core.Entities;
-    using CellAO.Core.Network;
-    using CellAO.Core.Playfields;
-    using CellAO.Database.Dao;
-
-    using NBug;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
-
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Playfields;
+
     using MemBus;
     using MemBus.Configurators;
     using MemBus.Support;
-    using ZoneEngine.Core.MessageHandlers;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Script;
+
+    using IBus = MemBus.IBus;
 
     #endregion
 
@@ -65,8 +66,6 @@ namespace ZoneEngine.Core
     /// </summary>
     public class ZoneServer : ServerBase
     {
-
-
         #region Fields
 
         /// <summary>
@@ -83,13 +82,15 @@ namespace ZoneEngine.Core
 
         private readonly DisposeContainer memBusDisposeContainer = new DisposeContainer();
 
-        private readonly MemBus.IBus zoneBus;
+        private readonly IBus zoneBus;
 
         private readonly MessageSerializer messageSerializer = new MessageSerializer();
 
         #endregion
 
         #region Constructors and Destructors
+
+        private readonly List<Type> subscribedMessageHandlers = new List<Type>();
 
         /// <summary>
         /// </summary>
@@ -102,7 +103,7 @@ namespace ZoneEngine.Core
             // New Bus initialization
             this.zoneBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
 
-            subscribedMessageHandlers.Clear();
+            this.subscribedMessageHandlers.Clear();
 
             this.SubscribeMessage<CharacterActionMessageHandler, CharacterActionMessage>();
             this.SubscribeMessage<CharDCMoveMessageHandler, CharDCMoveMessage>();
@@ -125,36 +126,37 @@ namespace ZoneEngine.Core
             this.CheckSubscribedMessageHandlers();
         }
 
-
-        private void SubscribeMessage<T, TU>()
-            where T : AbstractMessageHandler<TU>
-            where TU : MessageBody, new()
+        private void SubscribeMessage<T, TU>() where T : AbstractMessageHandler<TU> where TU : MessageBody, new()
         {
-            T def = (T)typeof(T).GetProperty("Default", BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public).GetValue(null, null);
+            T def =
+                (T)
+                    typeof(T).GetProperty(
+                        "Default",
+                        BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public).GetValue(null, null);
             this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TU>>(def.Receive));
             this.subscribedMessageHandlers.Add(typeof(TU));
         }
 
-
-
         private void CheckSubscribedMessageHandlers()
         {
             bool warned = false;
-            var assembly = Assembly.GetExecutingAssembly();
-            foreach (
-                var type in
-                    assembly.GetTypes()
-                        .Where(x => x.IsClass && (x.GetCustomAttributes(typeof(MessageHandlerAttribute), true).Any())))
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            foreach (Type type in
+                assembly.GetTypes()
+                    .Where(x => x.IsClass && (x.GetCustomAttributes(typeof(MessageHandlerAttribute), true).Any())))
             {
                 if (type.BaseType != null)
                 {
-                    var genericArgument = type.BaseType.GetGenericArguments()[0];
-                    MessageHandlerAttribute handlerAttribute = (MessageHandlerAttribute)
-                        type.GetCustomAttributes(typeof(MessageHandlerAttribute), true).FirstOrDefault();
+                    Type genericArgument = type.BaseType.GetGenericArguments()[0];
+                    MessageHandlerAttribute handlerAttribute =
+                        (MessageHandlerAttribute)
+                            type.GetCustomAttributes(typeof(MessageHandlerAttribute), true).FirstOrDefault();
 
                     if (handlerAttribute.Direction == MessageHandlerDirection.None)
                     {
-                        Console.WriteLine("Warning: '" + type.Name + "' has no Direction defined (MessageHandlerAttribute missing in declaration?)");
+                        Console.WriteLine(
+                            "Warning: '" + type.Name
+                            + "' has no Direction defined (MessageHandlerAttribute missing in declaration?)");
                     }
                     else
                     {
@@ -175,8 +177,6 @@ namespace ZoneEngine.Core
                 }
             }
         }
-
-        private readonly List<Type> subscribedMessageHandlers = new List<Type>();
 
         #endregion
 
@@ -336,7 +336,11 @@ namespace ZoneEngine.Core
 
                     string[] cmdArgs = fullArgs.Trim().Split(' ');
 
-                    ScriptCompiler.Instance.CallChatCommand(cmdArgs[0].ToLower(), character.Controller.Client, character.Identity, cmdArgs);
+                    ScriptCompiler.Instance.CallChatCommand(
+                        cmdArgs[0].ToLower(),
+                        character.Controller.Client,
+                        character.Identity,
+                        cmdArgs);
                 }
             }
         }
@@ -350,18 +354,10 @@ namespace ZoneEngine.Core
         private void ZoneServerClientDisconnected(IClient client, bool forced)
         {
             ZoneClient cli = (ZoneClient)client;
-            if (cli.Controller.Character != null)
+            if (cli != null)
             {
-                // Wrong here 
-                // ((Character)cli.Character).StartLogoutTimer();
-
-                CharacterDao.Instance.SetOffline(((IZoneClient)client).Controller.Character.Identity.Instance);
-
-                // Will be saved at character dispose too, but just to be sure...
-                // ((IZoneClient)client).Character.Save();
+                cli.Dispose();
             }
-
-            cli.Dispose();
         }
 
         public override void Stop()

@@ -179,7 +179,6 @@ namespace Extractor_Serializer
             }
 
             bStream.Close();
-            bStream.Dispose();
         }
 
         /// <summary>
@@ -345,7 +344,6 @@ namespace Extractor_Serializer
                 foreach (bStream current in this.DATs)
                 {
                     current.Close();
-                    current.Dispose();
                 }
             }
         }

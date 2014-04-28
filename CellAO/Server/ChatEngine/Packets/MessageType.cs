@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -34,153 +39,153 @@ namespace ChatEngine.Packets
 
         /// <summary>
         /// </summary>
-        LoginSeed = 0, 
+        LoginSeed = 0,
 
         /// <summary>
         /// </summary>
-        LoginOk = 5, 
+        LoginOk = 5,
 
         /// <summary>
         /// </summary>
-        LoginError = 6, 
+        LoginError = 6,
 
         /// <summary>
         /// </summary>
-        LoginCharacterList = 7, 
+        LoginCharacterList = 7,
 
         /// <summary>
         /// </summary>
-        CharacterUnknown = 10, 
+        CharacterUnknown = 10,
 
         /// <summary>
         /// </summary>
-        CharacterName = 20, 
+        CharacterName = 20,
 
         /// <summary>
         /// </summary>
-        VicinityMessage = 34, 
+        VicinityMessage = 34,
 
         /// <summary>
         /// </summary>
-        AnonymousMessage = 35, 
+        AnonymousMessage = 35,
 
         /// <summary>
         /// </summary>
-        SystemMessage = 36, 
+        SystemMessage = 36,
 
         /// <summary>
         /// </summary>
-        MessageSystem = 37, 
+        MessageSystem = 37,
 
         /// <summary>
         /// </summary>
-        FriendStatus = 40, 
+        FriendStatus = 40,
 
         /// <summary>
         /// </summary>
-        FriendRemoved = 41, 
+        FriendRemoved = 41,
 
         /// <summary>
         /// </summary>
-        PrivateChannelJoin = 52, 
+        PrivateChannelJoin = 52,
 
         /// <summary>
         /// </summary>
-        PrivateChannelPart = 53, 
+        PrivateChannelPart = 53,
 
         /// <summary>
         /// </summary>
-        PrivateChannelKickAll = 54, 
+        PrivateChannelKickAll = 54,
 
         /// <summary>
         /// </summary>
-        PrivateChannelClientJoin = 55, 
+        PrivateChannelClientJoin = 55,
 
         /// <summary>
         /// </summary>
-        PrivateChannelClientPart = 56, 
+        PrivateChannelClientPart = 56,
 
         /// <summary>
         /// </summary>
-        ChannelStatus = 60, 
+        ChannelStatus = 60,
 
         /// <summary>
         /// </summary>
-        ChannelPart = 61, 
+        ChannelPart = 61,
 
         /// <summary>
         /// </summary>
-        Pong = 100, 
+        Pong = 100,
 
         /// <summary>
         /// </summary>
-        Forward = 110, 
+        Forward = 110,
 
         /// <summary>
         /// </summary>
-        AmdMuxInfo = 1100, 
+        AmdMuxInfo = 1100,
 
         // Incoming Packets
 
         /// <summary>
         /// </summary>
-        LoginResponse = 2, 
+        LoginResponse = 2,
 
         /// <summary>
         /// </summary>
-        LoginSelectChar = 3, 
+        LoginSelectChar = 3,
 
         /// <summary>
         /// </summary>
-        FriendAdd = 40, 
+        FriendAdd = 40,
 
         /// <summary>
         /// </summary>
-        FriendRemove = 41, 
+        FriendRemove = 41,
 
         /// <summary>
         /// </summary>
-        ChannelUpdate = 64, 
+        ChannelUpdate = 64,
 
         /// <summary>
         /// </summary>
-        ChannelCliMode = 66, 
+        ChannelCliMode = 66,
 
         /// <summary>
         /// </summary>
-        PrivateChannelInvite = 50, 
+        PrivateChannelInvite = 50,
 
         /// <summary>
         /// </summary>
-        PrivateChannelKick = 51, 
+        PrivateChannelKick = 51,
 
         /// <summary>
         /// </summary>
-        ClientModeGet = 70, 
+        ClientModeGet = 70,
 
         /// <summary>
         /// </summary>
-        ClientModeSet = 71, 
+        ClientModeSet = 71,
 
         /// <summary>
         /// </summary>
-        Ping = 100, 
+        Ping = 100,
 
         /// <summary>
         /// </summary>
-        ChatCommand = 120, 
+        ChatCommand = 120,
 
         /// <summary>
         /// </summary>
-        NameLookup = 21, 
+        NameLookup = 21,
 
         /// <summary>
         /// </summary>
-        PrivateGroupMessage = 57, 
+        PrivateGroupMessage = 57,
 
         /// <summary>
         /// </summary>
-        ChannelMessage = 65, 
+        ChannelMessage = 65,
 
         /// <summary>
         /// </summary>

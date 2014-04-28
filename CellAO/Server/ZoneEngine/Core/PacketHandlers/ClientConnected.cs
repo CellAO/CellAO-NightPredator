@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,7 +35,6 @@ namespace ZoneEngine.Core.PacketHandlers
 
     using System.Text;
 
-    using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -75,9 +79,9 @@ namespace ZoneEngine.Core.PacketHandlers
             // Character is created and read when Client connects in Client.cs->CreateCharacter
             // client.CreateCharacter(charID);
             client.Server.Info(
-                client, 
+                client,
                 "Client connected. ID: {0} IP: {1} Character name: {2}",
-                client.Controller.Character.Identity.Instance, 
+                client.Controller.Character.Identity.Instance,
                 client.ClientAddress,
                 client.Controller.Character.Name);
 
@@ -108,19 +112,19 @@ namespace ZoneEngine.Core.PacketHandlers
             /* Action 167 Animation and Stance Data maybe? */
             var message = new CharacterActionMessage
                           {
-                              Identity = identity, 
-                              Action = CharacterActionType.ChangeAnimationAndStance, 
-                              Target = Identity.None, 
-                              Parameter1 = 0x00000000, 
+                              Identity = identity,
+                              Action = CharacterActionType.ChangeAnimationAndStance,
+                              Target = Identity.None,
+                              Parameter1 = 0x00000000,
                               Parameter2 = 0x00000001
                           };
             client.SendCompressed(message);
 
             var gameTimeMessage = new GameTimeMessage
                                   {
-                                      Identity = identity, 
-                                      Unknown1 = 30024.0f, 
-                                      Unknown3 = 185408, 
+                                      Identity = identity,
+                                      Unknown1 = 30024.0f,
+                                      Unknown3 = 185408,
                                       Unknown4 = 80183.3125f
                                   };
             client.SendCompressed(gameTimeMessage);
@@ -141,23 +145,23 @@ namespace ZoneEngine.Core.PacketHandlers
                            {
                                new SpecialAttackInfo
                                {
-                                   Unknown1 = 0x0000AAC0, 
-                                   Unknown2 = 0x00023569, 
-                                   Unknown3 = 0x00000064, 
+                                   Unknown1 = 0x0000AAC0,
+                                   Unknown2 = 0x00023569,
+                                   Unknown3 = 0x00000064,
                                    Unknown4 = "MAAT"
-                               }, 
+                               },
                                new SpecialAttackInfo
                                {
-                                   Unknown1 = 0x0000A431, 
-                                   Unknown2 = 0x0000A430, 
-                                   Unknown3 = 0x00000090, 
+                                   Unknown1 = 0x0000A431,
+                                   Unknown2 = 0x0000A430,
+                                   Unknown3 = 0x00000090,
                                    Unknown4 = "DIIT"
-                               }, 
+                               },
                                new SpecialAttackInfo
                                {
-                                   Unknown1 = 0x00011294, 
-                                   Unknown2 = 0x00011295, 
-                                   Unknown3 = 0x0000008E, 
+                                   Unknown1 = 0x00011294,
+                                   Unknown2 = 0x00011295,
+                                   Unknown3 = 0x0000008E,
                                    Unknown4 = "BRAW"
                                }
                            };

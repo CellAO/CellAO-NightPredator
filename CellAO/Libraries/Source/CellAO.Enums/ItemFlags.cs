@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -39,130 +44,130 @@ namespace CellAO.Enums
     {
         /// <summary>
         /// </summary>
-        CanBeAttacked = 0x1 << 28, 
+        CanBeAttacked = 0x1 << 28,
 
         /// <summary>
         /// </summary>
-        CanBeTemplateItem = 0x1 << 3, 
+        CanBeTemplateItem = 0x1 << 3,
 
         /// <summary>
         /// </summary>
-        DefaultTarget = 0x1 << 14, 
+        DefaultTarget = 0x1 << 14,
 
         /// <summary>
         /// </summary>
-        DisableFalling = 0x1 << 29, 
+        DisableFalling = 0x1 << 29,
 
         /// <summary>
         /// </summary>
-        DisableStatelCollision = 0x1 << 31, 
+        DisableStatelCollision = 0x1 << 31,
 
         /// <summary>
         /// </summary>
-        HasAnimation = 0x1 << 17, 
+        HasAnimation = 0x1 << 17,
 
         /// <summary>
         /// </summary>
-        HasDamage = 0x1 << 30, 
+        HasDamage = 0x1 << 30,
 
         /// <summary>
         /// </summary>
-        HasEnergy = 0x1 << 22, 
+        HasEnergy = 0x1 << 22,
 
         /// <summary>
         /// </summary>
-        HasMultiplecount = 0x1 << 5, 
+        HasMultiplecount = 0x1 << 5,
 
         /// <summary>
         /// </summary>
-        HasRotation = 0x1 << 18, 
+        HasRotation = 0x1 << 18,
 
         /// <summary>
         /// </summary>
-        HasSentFirstIir = 0x1 << 21, 
+        HasSentFirstIir = 0x1 << 21,
 
         /// <summary>
         /// </summary>
-        IllegalClan = 0x1 << 24, 
+        IllegalClan = 0x1 << 24,
 
         /// <summary>
         /// </summary>
-        IllegalOmni = 0x1 << 25, 
+        IllegalOmni = 0x1 << 25,
 
         /// <summary>
         /// </summary>
-        ItemSocialArmour = 0x1 << 8, 
+        ItemSocialArmour = 0x1 << 8,
 
         /// <summary>
         /// </summary>
-        ItemTextureOverride = 0x1 << 15, 
+        ItemTextureOverride = 0x1 << 15,
 
         /// <summary>
         /// </summary>
-        Locked = 0x1 << 6, 
+        Locked = 0x1 << 6,
 
         /// <summary>
         /// </summary>
-        MirrorInLeftHand = 0x1 << 23, 
+        MirrorInLeftHand = 0x1 << 23,
 
         /// <summary>
         /// </summary>
-        ModifiedDescription = 0x1 << 1, 
+        ModifiedDescription = 0x1 << 1,
 
         /// <summary>
         /// </summary>
-        ModifiedName = 0x1 << 2, 
+        ModifiedName = 0x1 << 2,
 
         /// <summary>
         /// </summary>
-        NoDrop = 0x1 << 26, 
+        NoDrop = 0x1 << 26,
 
         /// <summary>
         /// </summary>
-        NoSelectionIndicator = 0x1 << 10, 
+        NoSelectionIndicator = 0x1 << 10,
 
         /// <summary>
         /// </summary>
-        Null = 0x1 << 16, 
+        Null = 0x1 << 16,
 
         /// <summary>
         /// </summary>
-        Open = 0x1 << 7, 
+        Open = 0x1 << 7,
 
         /// <summary>
         /// </summary>
-        Repulsive = 0x1 << 13, 
+        Repulsive = 0x1 << 13,
 
         /// <summary>
         /// </summary>
-        Stationary = 0x1 << 12, 
+        Stationary = 0x1 << 12,
 
         /// <summary>
         /// </summary>
-        TellCollision = 0x1 << 9, 
+        TellCollision = 0x1 << 9,
 
         /// <summary>
         /// </summary>
-        TurnOnUse = 0x1 << 4, 
+        TurnOnUse = 0x1 << 4,
 
         /// <summary>
         /// </summary>
-        Unique = 0x1 << 27, 
+        Unique = 0x1 << 27,
 
         /// <summary>
         /// </summary>
-        UseEmptyDestruct = 0x1 << 11, 
+        UseEmptyDestruct = 0x1 << 11,
 
         /// <summary>
         /// </summary>
-        Visible = 0x1 << 0, 
+        Visible = 0x1 << 0,
 
         /// <summary>
         /// </summary>
-        WantCollision = 0x1 << 19, 
+        WantCollision = 0x1 << 19,
 
         /// <summary>
         /// </summary>
-        WantSignals = 0x1 << 20, 
+        WantSignals = 0x1 << 20,
     }
 }

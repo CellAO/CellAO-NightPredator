@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,9 +47,6 @@ namespace AO.Core.Encryption
     /// </summary>
     public class BigInteger
     {
-        // maximum length of the BigInteger in uint (4 bytes)
-        // change this to suit the required level of precision.
-
         #region Constants
 
         /// <summary>
@@ -53,39 +55,37 @@ namespace AO.Core.Encryption
 
         #endregion
 
-        // primes smaller than 2000 to test the generated prime number
-
         #region Static Fields
 
         /// <summary>
         /// </summary>
         public static readonly int[] primesBelow2000 =
         {
-            2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 
-            61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 
-            131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 
-            197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 
-            271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 
-            353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 
-            433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 
-            509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 
-            601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 
-            677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 
-            769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 
-            859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 
-            953, 967, 971, 977, 983, 991, 997, 1009, 1013, 1019, 1021, 1031, 
-            1033, 1039, 1049, 1051, 1061, 1063, 1069, 1087, 1091, 1093, 
-            1097, 1103, 1109, 1117, 1123, 1129, 1151, 1153, 1163, 1171, 
-            1181, 1187, 1193, 1201, 1213, 1217, 1223, 1229, 1231, 1237, 
-            1249, 1259, 1277, 1279, 1283, 1289, 1291, 1297, 1301, 1303, 
-            1307, 1319, 1321, 1327, 1361, 1367, 1373, 1381, 1399, 1409, 
-            1423, 1427, 1429, 1433, 1439, 1447, 1451, 1453, 1459, 1471, 
-            1481, 1483, 1487, 1489, 1493, 1499, 1511, 1523, 1531, 1543, 
-            1549, 1553, 1559, 1567, 1571, 1579, 1583, 1597, 1601, 1607, 
-            1609, 1613, 1619, 1621, 1627, 1637, 1657, 1663, 1667, 1669, 
-            1693, 1697, 1699, 1709, 1721, 1723, 1733, 1741, 1747, 1753, 
-            1759, 1777, 1783, 1787, 1789, 1801, 1811, 1823, 1831, 1847, 
-            1861, 1867, 1871, 1873, 1877, 1879, 1889, 1901, 1907, 1913, 
+            2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
+            61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127,
+            131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193,
+            197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269,
+            271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349,
+            353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431,
+            433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503,
+            509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599,
+            601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673,
+            677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761,
+            769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857,
+            859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947,
+            953, 967, 971, 977, 983, 991, 997, 1009, 1013, 1019, 1021, 1031,
+            1033, 1039, 1049, 1051, 1061, 1063, 1069, 1087, 1091, 1093,
+            1097, 1103, 1109, 1117, 1123, 1129, 1151, 1153, 1163, 1171,
+            1181, 1187, 1193, 1201, 1213, 1217, 1223, 1229, 1231, 1237,
+            1249, 1259, 1277, 1279, 1283, 1289, 1291, 1297, 1301, 1303,
+            1307, 1319, 1321, 1327, 1361, 1367, 1373, 1381, 1399, 1409,
+            1423, 1427, 1429, 1433, 1439, 1447, 1451, 1453, 1459, 1471,
+            1481, 1483, 1487, 1489, 1493, 1499, 1511, 1523, 1531, 1543,
+            1549, 1553, 1559, 1567, 1571, 1579, 1583, 1597, 1601, 1607,
+            1609, 1613, 1619, 1621, 1627, 1637, 1657, 1663, 1667, 1669,
+            1693, 1697, 1699, 1709, 1721, 1723, 1733, 1741, 1747, 1753,
+            1759, 1777, 1783, 1787, 1789, 1801, 1811, 1823, 1831, 1847,
+            1861, 1867, 1871, 1873, 1877, 1879, 1889, 1901, 1907, 1913,
             1931, 1933, 1949, 1951, 1973, 1979, 1987, 1993, 1997, 1999
         };
 
@@ -102,10 +102,6 @@ namespace AO.Core.Encryption
         private readonly uint[] data; // stores bytes from the Big Integer
 
         #endregion
-
-        // ***********************************************************************
-        // Constructor (Default value for BigInteger is 0
-        // ***********************************************************************
 
         #region Constructors and Destructors
 
@@ -753,15 +749,15 @@ namespace AO.Core.Encryption
             // private and public key
             BigInteger bi_e =
                 new BigInteger(
-                    "a932b948feed4fb2b692609bd22164fc9edb59fae7880cc1eaff7b3c9626b7e5b241c27a974833b2622ebe09beb451917663d47232488f23a117fc97720f1e7", 
+                    "a932b948feed4fb2b692609bd22164fc9edb59fae7880cc1eaff7b3c9626b7e5b241c27a974833b2622ebe09beb451917663d47232488f23a117fc97720f1e7",
                     16);
             BigInteger bi_d =
                 new BigInteger(
-                    "4adf2f7a89da93248509347d2ae506d683dd3a16357e859a980c4f77a4e2f7a01fae289f13a851df6e9db5adaa60bfd2b162bbbe31f7c8f828261a6839311929d2cef4f864dde65e556ce43c89bbbf9f1ac5511315847ce9cc8dc92470a747b8792d6a83b0092d2e5ebaf852c85cacf34278efa99160f2f8aa7ee7214de07b7", 
+                    "4adf2f7a89da93248509347d2ae506d683dd3a16357e859a980c4f77a4e2f7a01fae289f13a851df6e9db5adaa60bfd2b162bbbe31f7c8f828261a6839311929d2cef4f864dde65e556ce43c89bbbf9f1ac5511315847ce9cc8dc92470a747b8792d6a83b0092d2e5ebaf852c85cacf34278efa99160f2f8aa7ee7214de07b7",
                     16);
             BigInteger bi_n =
                 new BigInteger(
-                    "e8e77781f36a7b3188d711c2190b560f205a52391b3479cdb99fa010745cbeba5f2adc08e1de6bf38398a0487c4a73610d94ec36f17f3f46ad75e17bc1adfec99839589f45f95ccc94cb2a5c500b477eb3323d8cfab0c8458c96f0147a45d27e45a4d11d54d77684f65d48f15fafcc1ba208e71e921b9bd9017c16a5231af7f", 
+                    "e8e77781f36a7b3188d711c2190b560f205a52391b3479cdb99fa010745cbeba5f2adc08e1de6bf38398a0487c4a73610d94ec36f17f3f46ad75e17bc1adfec99839589f45f95ccc94cb2a5c500b477eb3323d8cfab0c8458c96f0147a45d27e45a4d11d54d77684f65d48f15fafcc1ba208e71e921b9bd9017c16a5231af7f",
                     16);
 
             Console.WriteLine("e =\n" + bi_e.ToString(10));
@@ -840,20 +836,20 @@ namespace AO.Core.Encryption
 
             byte[] pseudoPrime1 =
             {
-                0x85, 0x84, 0x64, 0xFD, 0x70, 0x6A, 0x9F, 0xF0, 0x94, 0x0C, 0x3E, 0x2C, 0x74, 0x34, 
-                0x05, 0xC9, 0x55, 0xB3, 0x85, 0x32, 0x98, 0x71, 0xF9, 0x41, 0x21, 0x5F, 0x02, 0x9E, 
-                0xEA, 0x56, 0x8D, 0x8C, 0x44, 0xCC, 0xEE, 0xEE, 0x3D, 0x2C, 0x9D, 0x2C, 0x12, 0x41, 
-                0x1E, 0xF1, 0xC5, 0x32, 0xC3, 0xAA, 0x31, 0x4A, 0x52, 0xD8, 0xE8, 0xAF, 0x42, 0xF4, 
-                0x72, 0xA1, 0x2A, 0x0D, 0x97, 0xB1, 0x31, 0xB3, 
+                0x85, 0x84, 0x64, 0xFD, 0x70, 0x6A, 0x9F, 0xF0, 0x94, 0x0C, 0x3E, 0x2C, 0x74, 0x34,
+                0x05, 0xC9, 0x55, 0xB3, 0x85, 0x32, 0x98, 0x71, 0xF9, 0x41, 0x21, 0x5F, 0x02, 0x9E,
+                0xEA, 0x56, 0x8D, 0x8C, 0x44, 0xCC, 0xEE, 0xEE, 0x3D, 0x2C, 0x9D, 0x2C, 0x12, 0x41,
+                0x1E, 0xF1, 0xC5, 0x32, 0xC3, 0xAA, 0x31, 0x4A, 0x52, 0xD8, 0xE8, 0xAF, 0x42, 0xF4,
+                0x72, 0xA1, 0x2A, 0x0D, 0x97, 0xB1, 0x31, 0xB3,
             };
 
             byte[] pseudoPrime2 =
             {
-                0x99, 0x98, 0xCA, 0xB8, 0x5E, 0xD7, 0xE5, 0xDC, 0x28, 0x5C, 0x6F, 0x0E, 0x15, 0x09, 
-                0x59, 0x6E, 0x84, 0xF3, 0x81, 0xCD, 0xDE, 0x42, 0xDC, 0x93, 0xC2, 0x7A, 0x62, 0xAC, 
-                0x6C, 0xAF, 0xDE, 0x74, 0xE3, 0xCB, 0x60, 0x20, 0x38, 0x9C, 0x21, 0xC3, 0xDC, 0xC8, 
-                0xA2, 0x4D, 0xC6, 0x2A, 0x35, 0x7F, 0xF3, 0xA9, 0xE8, 0x1D, 0x7B, 0x2C, 0x78, 0xFA, 
-                0xB8, 0x02, 0x55, 0x80, 0x9B, 0xC2, 0xA5, 0xCB, 
+                0x99, 0x98, 0xCA, 0xB8, 0x5E, 0xD7, 0xE5, 0xDC, 0x28, 0x5C, 0x6F, 0x0E, 0x15, 0x09,
+                0x59, 0x6E, 0x84, 0xF3, 0x81, 0xCD, 0xDE, 0x42, 0xDC, 0x93, 0xC2, 0x7A, 0x62, 0xAC,
+                0x6C, 0xAF, 0xDE, 0x74, 0xE3, 0xCB, 0x60, 0x20, 0x38, 0x9C, 0x21, 0xC3, 0xDC, 0xC8,
+                0xA2, 0x4D, 0xC6, 0x2A, 0x35, 0x7F, 0xF3, 0xA9, 0xE8, 0x1D, 0x7B, 0x2C, 0x78, 0xFA,
+                0xB8, 0x02, 0x55, 0x80, 0x9B, 0xC2, 0xA5, 0xCB,
             };
 
             BigInteger bi_p = new BigInteger(pseudoPrime1);
@@ -3224,39 +3220,6 @@ namespace AO.Core.Encryption
 
         #endregion
 
-        // ***********************************************************************
-        // Returns the k_th number in the Lucas Sequence reduced modulo n.
-        // Uses index doubling to speed up the process.  For example, to calculate V(k),
-        // we maintain two numbers in the sequence V(n) and V(n+1).
-        // To obtain V(2n), we use the identity
-        // V(2n) = (V(n) * V(n)) - (2 * Q^n)
-        // To obtain V(2n+1), we first write it as
-        // V(2n+1) = V((n+1) + n)
-        // and use the identity
-        // V(m+n) = V(m) * V(n) - Q * V(m-n)
-        // Hence,
-        // V((n+1) + n) = V(n+1) * V(n) - Q^n * V((n+1) - n)
-        // = V(n+1) * V(n) - Q^n * V(1)
-        // = V(n+1) * V(n) - Q^n * P
-        // We use k in its binary expansion and perform index doubling for each
-        // bit position.  For each bit position that is set, we perform an
-        // index doubling followed by an index addition.  This means that for V(n),
-        // we need to update it to V(2n+1).  For V(n+1), we need to update it to
-        // V((2n+1)+1) = V(2*(n+1))
-        // This function returns
-        // [0] = U(k)
-        // [1] = V(k)
-        // [2] = Q^n
-        // Where U(0) = 0 % n, U(1) = 1 % n
-        // V(0) = 2 % n, V(1) = P % n
-        // ***********************************************************************
-
-        // ***********************************************************************
-        // Performs the calculation of the kth term in the Lucas Sequence.
-        // For details of the algorithm, see reference [9].
-        // k must be odd.  i.e LSB == 1
-        // ***********************************************************************
-
         #region Methods
 
         /// <summary>
@@ -3278,11 +3241,11 @@ namespace AO.Core.Encryption
         /// <exception cref="ArgumentException">
         /// </exception>
         private static BigInteger[] LucasSequenceHelper(
-            BigInteger P, 
-            BigInteger Q, 
-            BigInteger k, 
-            BigInteger n, 
-            BigInteger constant, 
+            BigInteger P,
+            BigInteger Q,
+            BigInteger k,
+            BigInteger n,
+            BigInteger constant,
             int s)
         {
             BigInteger[] result = new BigInteger[3];
@@ -3408,9 +3371,9 @@ namespace AO.Core.Encryption
         /// <param name="outRemainder">
         /// </param>
         private static void multiByteDivide(
-            BigInteger bi1, 
-            BigInteger bi2, 
-            BigInteger outQuotient, 
+            BigInteger bi1,
+            BigInteger bi2,
+            BigInteger outQuotient,
             BigInteger outRemainder)
         {
             uint[] result = new uint[maxLength];
@@ -3666,9 +3629,9 @@ namespace AO.Core.Encryption
         /// <param name="outRemainder">
         /// </param>
         private static void singleByteDivide(
-            BigInteger bi1, 
-            BigInteger bi2, 
-            BigInteger outQuotient, 
+            BigInteger bi1,
+            BigInteger bi2,
+            BigInteger outQuotient,
             BigInteger outRemainder)
         {
             uint[] result = new uint[maxLength];
@@ -3998,6 +3961,48 @@ namespace AO.Core.Encryption
         }
 
         #endregion
+
+        // maximum length of the BigInteger in uint (4 bytes)
+        // change this to suit the required level of precision.
+
+        // primes smaller than 2000 to test the generated prime number
+
+        // ***********************************************************************
+        // Constructor (Default value for BigInteger is 0
+        // ***********************************************************************
+
+        // ***********************************************************************
+        // Returns the k_th number in the Lucas Sequence reduced modulo n.
+        // Uses index doubling to speed up the process.  For example, to calculate V(k),
+        // we maintain two numbers in the sequence V(n) and V(n+1).
+        // To obtain V(2n), we use the identity
+        // V(2n) = (V(n) * V(n)) - (2 * Q^n)
+        // To obtain V(2n+1), we first write it as
+        // V(2n+1) = V((n+1) + n)
+        // and use the identity
+        // V(m+n) = V(m) * V(n) - Q * V(m-n)
+        // Hence,
+        // V((n+1) + n) = V(n+1) * V(n) - Q^n * V((n+1) - n)
+        // = V(n+1) * V(n) - Q^n * V(1)
+        // = V(n+1) * V(n) - Q^n * P
+        // We use k in its binary expansion and perform index doubling for each
+        // bit position.  For each bit position that is set, we perform an
+        // index doubling followed by an index addition.  This means that for V(n),
+        // we need to update it to V(2n+1).  For V(n+1), we need to update it to
+        // V((2n+1)+1) = V(2*(n+1))
+        // This function returns
+        // [0] = U(k)
+        // [1] = V(k)
+        // [2] = Q^n
+        // Where U(0) = 0 % n, U(1) = 1 % n
+        // V(0) = 2 % n, V(1) = P % n
+        // ***********************************************************************
+
+        // ***********************************************************************
+        // Performs the calculation of the kth term in the Lucas Sequence.
+        // For details of the algorithm, see reference [9].
+        // k must be odd.  i.e LSB == 1
+        // ***********************************************************************
 
         // ***********************************************************************
         // Tests the correct implementation of the /, %, * and + operators

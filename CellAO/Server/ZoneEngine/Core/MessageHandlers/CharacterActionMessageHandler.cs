@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -67,7 +72,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(CharacterActionMessage message, IZoneClient client)
         {
-            LogUtil.Debug("Reading CharacterActionMessage");
+            LogUtil.Debug(DebugInfoDetail.NetworkMessages, "Reading CharacterActionMessage");
 
             // var actionNum = (int)characterAction.Action;
             // int unknown1 = message.Unknown1;
@@ -291,12 +296,12 @@ namespace ZoneEngine.Core.MessageHandlers
                     ItemDao.Instance.Delete(
                         new
                         {
-                            containertype = (int)targetIdentityType, 
-                            containerinstance = client.Controller.Character.Identity.Instance, 
+                            containertype = (int)targetIdentityType,
+                            containerinstance = client.Controller.Character.Identity.Instance,
                             Id = message.Target.Instance
                         });
                     client.Controller.Character.BaseInventory.RemoveItem(
-                        (int)targetIdentityType, 
+                        (int)targetIdentityType,
                         message.Target.Instance);
 
                     this.Acknowledge(client.Controller.Character, message);
@@ -311,7 +316,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     newItem.MultipleCount = message.Parameter2;
 
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
-                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(), 
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(),
                         newItem);
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
 
@@ -353,12 +358,12 @@ namespace ZoneEngine.Core.MessageHandlers
                     var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
 
                     client.Controller.Character.TradeSkillSource = new TradeSkillInfo(
-                        0, 
-                        (int)item1.Type, 
+                        0,
+                        (int)item1.Type,
                         item1.Instance);
                     client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(
-                        1, 
-                        (int)item2.Type, 
+                        1,
+                        (int)item2.Type,
                         item2.Instance);
                     TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
 
@@ -370,7 +375,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
 
                     ChatTextMessageHandler.Default.Send(
-                        client.Controller.Character, 
+                        client.Controller.Character,
                         "Setting Visual Flag to " + message.Parameter2);
                     AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
                 }
@@ -415,10 +420,10 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <param name="unknown2">
         /// </param>
         public void FinishNanoCasting(
-            ICharacter character, 
-            CharacterActionType actionType, 
-            Identity target, 
-            int unknown1, 
+            ICharacter character,
+            CharacterActionType actionType,
+            Identity target,
+            int unknown1,
             int unknown2)
         {
             this.Send(character, this.ConstructFinishNanoCasting(character, target, unknown1, unknown2), true);
@@ -437,9 +442,9 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <returns>
         /// </returns>
         private MessageDataFiller ConstructFinishNanoCasting(
-            ICharacter character, 
-            Identity target, 
-            int unknown1, 
+            ICharacter character,
+            Identity target,
+            int unknown1,
             int unknown2)
         {
             return x =>
@@ -468,9 +473,9 @@ namespace ZoneEngine.Core.MessageHandlers
         /// <returns>
         /// </returns>
         private MessageDataFiller ConstructSetNanoDuration(
-            ICharacter character, 
-            Identity target, 
-            int unknown1, 
+            ICharacter character,
+            Identity target,
+            int unknown1,
             int duration = 0x249F0)
         {
             return x =>

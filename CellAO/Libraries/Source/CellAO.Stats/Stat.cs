@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -52,9 +57,9 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public StatChangedEventArgs(
-            Stat changedStat, 
-            uint valueBeforeChange, 
-            uint valueAfterChange, 
+            Stat changedStat,
+            uint valueBeforeChange,
+            uint valueAfterChange,
             bool announceToPlayfield)
         {
             this.Stat = changedStat;
@@ -143,11 +148,11 @@ namespace CellAO.Stats
         /// <param name="announceToPlayfield">
         /// </param>
         public Stat(
-            Stats statList, 
-            int number, 
-            uint defaultValue, 
-            bool sendBaseValue, 
-            bool dontWrite, 
+            Stats statList,
+            int number,
+            uint defaultValue,
+            bool sendBaseValue,
+            bool dontWrite,
             bool announceToPlayfield)
         {
             this.Stats = statList;
@@ -171,6 +176,52 @@ namespace CellAO.Stats
             get
             {
                 return this.affects;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public uint DefaultValue { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public bool DoNotDontWriteToSql { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public virtual uint GetBaseValue
+        {
+            get
+            {
+                return this.baseValue;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public virtual int GetValue
+        {
+            get
+            {
+                this.LastCalculatedValue = (int)Math.Floor(
+                    (double) // ReSharper disable PossibleLossOfFraction
+                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
+                return this.LastCalculatedValue;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public bool SendBaseValue
+        {
+            get
+            {
+                return this.sendBaseValue;
+            }
+
+            set
+            {
+                this.sendBaseValue = value;
             }
         }
 
@@ -208,37 +259,6 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         public bool Changed { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public uint DefaultValue { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public bool DoNotDontWriteToSql { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public virtual uint GetBaseValue
-        {
-            get
-            {
-                return this.baseValue;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public virtual int GetValue
-        {
-            get
-            {
-                this.LastCalculatedValue = (int)Math.Floor(
-                    (double) // ReSharper disable PossibleLossOfFraction
-                        ((this.BaseValue + this.Modifier + this.Trickle) * this.PercentageModifier / 100));
-                return this.LastCalculatedValue;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -286,21 +306,6 @@ namespace CellAO.Stats
         /// <summary>
         /// </summary>
         public bool ReCalculate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public bool SendBaseValue
-        {
-            get
-            {
-                return this.sendBaseValue;
-            }
-
-            set
-            {
-                this.sendBaseValue = value;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -415,22 +420,22 @@ namespace CellAO.Stats
         /// </summary>
         /// <param name="value">
         /// </param>
-        /// <param name="starting">
-        /// </param>
-        public virtual void Set(int value, bool starting = false)
+        public virtual void SetBaseValue(uint value)
         {
-            this.Set((uint)value, starting);
+            this.Changed = this.baseValue != value;
+            this.baseValue = value;
+            this.ReCalculate = true;
         }
 
         /// <summary>
         /// </summary>
         /// <param name="value">
         /// </param>
-        public virtual void SetBaseValue(uint value)
+        /// <param name="starting">
+        /// </param>
+        public virtual void Set(int value, bool starting = false)
         {
-            this.Changed = this.baseValue != value;
-            this.baseValue = value;
-            this.ReCalculate = true;
+            this.Set((uint)value, starting);
         }
 
         /// <summary>

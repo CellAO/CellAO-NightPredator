@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -32,6 +37,7 @@ namespace Chatengine.Relay
     using System.Linq;
     using System.Text;
 
+    using ChatEngine.Channels;
     using ChatEngine.CoreServer;
     using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
@@ -48,9 +54,6 @@ namespace Chatengine.Relay
     /// </summary>
     public class RelayBot : BasicIrcBot
     {
-        // List of all currently logged-in Twitter users.
-        // private List<CellAOUsers> cellAoUserses;
-
         #region Fields
 
         /// <summary>
@@ -88,6 +91,7 @@ namespace Chatengine.Relay
             : base()
         {
             this.cellAoBotUsers = new List<CellAoBotUser>();
+            this.InitializeRelayChatCommandProcessors();
         }
 
         #endregion
@@ -102,8 +106,8 @@ namespace Chatengine.Relay
             {
                 return new IrcUserRegistrationInfo()
                        {
-                           NickName = this.nickname, 
-                           UserName = this.username, 
+                           NickName = this.nickname,
+                           UserName = this.username,
                            RealName = this.realname
                        };
             }
@@ -153,10 +157,10 @@ namespace Chatengine.Relay
             {
                 // Find ingame channel to relay
                 string temp = Config.Instance.CurrentConfig.RelayIngameChannel;
-                this.RelayedChannel = chatServer.Channels.Where(x => x.ChannelName == temp).FirstOrDefault();
+                this.RelayedChannel = chatServer.Channels.FirstOrDefault(x => x.ChannelName == temp);
                 if (this.RelayedChannel == null)
                 {
-                    LogUtil.Debug("Could not find ChatEngine Channel '" + temp + "'");
+                    LogUtil.Debug(DebugInfoDetail.Engine, "Could not find ChatEngine Channel '" + temp + "'");
                     return;
                 }
 
@@ -173,10 +177,8 @@ namespace Chatengine.Relay
 
         /// <summary>
         /// </summary>
-        protected override void InitializeChatCommandProcessors()
+        protected void InitializeRelayChatCommandProcessors()
         {
-            base.InitializeChatCommandProcessors();
-
             this.ChatCommandProcessors.Add("lusers", this.ProcessChatCommandListUsers);
             this.ChatCommandProcessors.Add("login", this.ProcessChatCommandLogIn);
             this.ChatCommandProcessors.Add("logout", this.ProcessChatCommandLogOut);
@@ -184,13 +186,6 @@ namespace Chatengine.Relay
             this.ChatCommandProcessors.Add("home", this.ProcessChatCommandHome);
             this.ChatCommandProcessors.Add("mentions", this.ProcessChatCommandMentions);
             this.ChatCommandProcessors.Add("serverinfo", this.ProcessChatCommandServerInfo);
-        }
-
-        /// <summary>
-        /// </summary>
-        protected override void InitializeCommandProcessors()
-        {
-            base.InitializeCommandProcessors();
         }
 
         /// <summary>
@@ -333,10 +328,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandHome(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -368,10 +363,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandListUsers(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -403,10 +398,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandLogIn(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             var sourceUser = (IrcUser)source;
@@ -456,10 +451,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandLogOut(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -489,10 +484,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandMentions(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -524,10 +519,10 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandSend(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             // var sourceUser = (IrcUser)source;
@@ -558,17 +553,17 @@ namespace Chatengine.Relay
         /// <param name="parameters">
         /// </param>
         private void ProcessChatCommandServerInfo(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters)
         {
             IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
             client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: TBA");
             client.LocalUser.SendMessage(
-                replyTarget, 
+                replyTarget,
                 "This is the address for the server: " + Config.Instance.CurrentConfig.ListenIP + "  On Port: "
                 + Config.Instance.CurrentConfig.LoginPort);
         }
@@ -579,9 +574,9 @@ namespace Chatengine.Relay
         /// </param>
         /// <param name="text">
         /// </param>
-        private void RelayedChannel_OnChannelMessage(string playerName, string text)
+        private void RelayedChannel_OnChannelMessage(object sender, ChannelMessageEventArgs e)
         {
-            this.client.LocalUser.SendMessage(this.ircchannel, "[" + playerName + "] " + text);
+            this.client.LocalUser.SendMessage(this.ircchannel, "[" + e.PlayerName + "] " + e.Text);
         }
 
         /// <summary>
@@ -613,6 +608,9 @@ namespace Chatengine.Relay
         }
 
         #endregion
+
+        // List of all currently logged-in Twitter users.
+        // private List<CellAOUsers> cellAoUserses;
 
         // TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
 

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -45,7 +50,6 @@ namespace ZoneEngine.Core.Controllers
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.ObjectManager;
-    using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -57,6 +61,7 @@ namespace ZoneEngine.Core.Controllers
     using ZoneEngine.Core.Playfields;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -69,6 +74,15 @@ namespace ZoneEngine.Core.Controllers
         /// <summary>
         /// </summary>
         private WeakReference<ICharacter> character;
+
+        private bool disposed = false;
+
+        public PlayerController(IZoneClient client)
+        {
+            this.Client = client;
+        }
+
+        public CharacterState State { get; private set; }
 
         /// <summary>
         /// </summary>
@@ -90,24 +104,62 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
-        ~PlayerController()
-        {
-            LogUtil.Debug("Finalization of PlayerController");
-        }
-
         public void Dispose()
         {
-            // Should already be disposed here
-            // this.Client.Dispose();
-            this.Client = null;
-        }
-
-        public PlayerController(IZoneClient client)
-        {
-            this.Client = client;
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public IZoneClient Client { get; set; }
+
+        public void CallFunction(Function function)
+        {
+            // TODO: Make it more versatile, not just applying stuff on yourself
+            FunctionCollection.Instance.CallFunction(
+                function.FunctionType,
+                this.Character,
+                this.Character,
+                this.Character,
+                function.Arguments.Values.ToArray());
+        }
+
+        public void MoveTo(Vector3 destination)
+        {
+            FollowTargetMessageHandler.Default.Send(this.Character, this.Character.RawCoordinates, destination);
+        }
+
+        public void Run()
+        {
+            this.Character.UpdateMoveType(25); // Magic number 25 = Run
+        }
+
+        public void StopMovement()
+        {
+            this.Character.UpdateMoveType(2); // Magic number: Stop movement
+        }
+
+        public void Walk()
+        {
+            this.Character.UpdateMoveType(24); // Magic number 24 = Walk
+        }
+
+        public bool SaveToDatabase
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public bool IsFollowing()
+        {
+            return false;
+        }
+
+        public void DoFollow()
+        {
+            throw new NotImplementedException();
+        }
 
         #region Generic character actions
 
@@ -157,7 +209,7 @@ namespace ZoneEngine.Core.Controllers
             CastNanoSpellMessageHandler.Default.Send(this.Character, nanoId, target);
 
             // CharacterAction 107 - Finish nano casting
-            int attackDelay = Character.CalculateNanoAttackTime(nano);
+            int attackDelay = this.Character.CalculateNanoAttackTime(nano);
             Console.WriteLine("Attack-Delay: " + attackDelay);
             if (attackDelay != 1234567890)
             {
@@ -165,14 +217,19 @@ namespace ZoneEngine.Core.Controllers
             }
 
             // Check here for nanoresist of the target, maybe the 1 in finishnanocasting is kind of did land/didnt land flag
-            CharacterActionMessageHandler.Default.FinishNanoCasting(Character, CharacterActionType.FinishNanoCasting, Identity.None, 1, nanoId);
+            CharacterActionMessageHandler.Default.FinishNanoCasting(
+                this.Character,
+                CharacterActionType.FinishNanoCasting,
+                Identity.None,
+                1,
+                nanoId);
 
             // TODO: Calculate nanocost modifiers etc.
-            Character.Stats[StatIds.currentnano].Value -= nano.getItemAttribute(407);
+            this.Character.Stats[StatIds.currentnano].Value -= nano.getItemAttribute(407);
 
             // CharacterAction 98 - Set nano duration
             CharacterActionMessageHandler.Default.SetNanoDuration(
-                Character,
+                this.Character,
                 target,
                 nanoId,
                 nano.getItemAttribute(8));
@@ -252,7 +309,9 @@ namespace ZoneEngine.Core.Controllers
             // - Algorithman
 
             // give it a bit uncertainty (2.0f)
-            LogUtil.Debug(newCoordinates.ToString() + "<->" + this.Character.Coordinates.ToString());
+            LogUtil.Debug(
+                DebugInfoDetail.Movement,
+                newCoordinates.ToString() + "<->" + this.Character.Coordinates.ToString());
             // if (newCoordinates.Distance2D(this.Character.Coordinates) < 2.0f)
             {
                 this.Character.SetCoordinates(newCoordinates, heading);
@@ -432,9 +491,7 @@ namespace ZoneEngine.Core.Controllers
             Item item = null;
             try
             {
-                item = Character.BaseInventory.GetItemInContainer(
-                    (int)itemPosition.Type,
-                    itemPosition.Instance);
+                item = this.Character.BaseInventory.GetItemInContainer((int)itemPosition.Type, itemPosition.Instance);
             }
             catch (Exception)
             {
@@ -442,12 +499,11 @@ namespace ZoneEngine.Core.Controllers
 
             if (item == null)
             {
-                throw new NullReferenceException(
-                    "No item found at " + itemPosition);
+                throw new NullReferenceException("No item found at " + itemPosition);
             }
 
             TemplateActionMessageHandler.Default.Send(
-                Character,
+                this.Character,
                 item,
                 (int)itemPosition.Type,
                 // container
@@ -459,32 +515,30 @@ namespace ZoneEngine.Core.Controllers
                 item.MultipleCount--;
                 if (item.MultipleCount == 0)
                 {
-                    Character.BaseInventory.RemoveItem(
+                    this.Character.BaseInventory.RemoveItem(
                         (int)itemPosition.Type,
                         // pageNum
                         itemPosition.Instance // slotNum
                         );
                     CharacterActionMessageHandler.Default.SendDeleteItem(
-                        Character,
+                        this.Character,
                         (int)itemPosition.Type,
                         itemPosition.Instance);
                 }
             }
 
-            item.PerformAction(Character, EventType.OnUse, itemPosition.Instance);
+            item.PerformAction(this.Character, EventType.OnUse, itemPosition.Instance);
             return true;
         }
 
         public bool UseStatel(Identity identity)
         {
-            if (PlayfieldLoader.PFData.ContainsKey(Character.Playfield.Identity.Instance))
+            if (PlayfieldLoader.PFData.ContainsKey(this.Character.Playfield.Identity.Instance))
             {
                 StatelData sd =
-                    PlayfieldLoader.PFData[Character.Playfield.Identity.Instance].Statels
-                        .FirstOrDefault(
-                            x =>
-                                (x.StatelIdentity.Type == identity.Type)
-                                && (x.StatelIdentity.Instance == identity.Instance));
+                    PlayfieldLoader.PFData[this.Character.Playfield.Identity.Instance].Statels.FirstOrDefault(
+                        x =>
+                            (x.StatelIdentity.Type == identity.Type) && (x.StatelIdentity.Instance == identity.Instance));
 
                 if (sd != null)
                 {
@@ -492,7 +546,7 @@ namespace ZoneEngine.Core.Controllers
                     Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
                     if (onUse != null)
                     {
-                        onUse.Perform(Character, Character);
+                        onUse.Perform(this.Character, this.Character);
                     }
                 }
             }
@@ -501,7 +555,7 @@ namespace ZoneEngine.Core.Controllers
 
         public void SendChatText(string text)
         {
-            ChatTextMessageHandler.Default.Send(Character, text);
+            ChatTextMessageHandler.Default.Send(this.Character, text);
         }
 
         /// <summary>
@@ -854,7 +908,6 @@ namespace ZoneEngine.Core.Controllers
         /// </param>
         public void SendChangedStats()
         {
-
             Dictionary<int, uint> toPlayfield = new Dictionary<int, uint>();
             Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();
 
@@ -865,16 +918,24 @@ namespace ZoneEngine.Core.Controllers
 
         #endregion
 
-        public void CallFunction(Function function)
+        ~PlayerController()
         {
-            // TODO: Make it more versatile, not just applying stuff on yourself
-            FunctionCollection.Instance.CallFunction(
-                function.FunctionType,
-                this.Character,
-                this.Character,
-                this.Character,
-                function.Arguments.Values.ToArray());
+            this.Dispose(false);
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            LogUtil.Debug(DebugInfoDetail.Memory, "Disposing of PlayerController");
+
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    // Only remove the link to client here, client will be disposed on its own
+                    this.Client = null;
+                }
+            }
+            this.disposed = true;
+        }
     }
 }

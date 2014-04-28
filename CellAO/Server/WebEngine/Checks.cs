@@ -83,7 +83,6 @@ namespace WebEngine
                         _config.Instance.CurrentConfig.WebHostPhpPath,
                         ExtractExistingFileAction.OverwriteSilently);
                 }
-                zip.Dispose();
                 Console.WriteLine("Done.");
                 Console.WriteLine();
                 Console.WriteLine("Deleting " + Convert.ToString(file) + "...");
@@ -149,7 +148,6 @@ namespace WebEngine
                 {
                     ze.Extract(_config.Instance.CurrentConfig.WebHostRoot, ExtractExistingFileAction.OverwriteSilently);
                 }
-                zip.Dispose();
                 Console.WriteLine("Done.");
             }
         }

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -94,9 +99,9 @@ namespace ChatEngine.CoreServer
             {
                 this.Channels.Add(
                     new GlobalChannel(
-                        ChannelFlags.None, 
-                        ChannelType.General, 
-                        5, 
+                        ChannelFlags.None,
+                        ChannelType.General,
+                        5,
                         ConfigReadWrite.Instance.CurrentConfig.RelayIngameChannel));
             }
 
@@ -203,11 +208,12 @@ namespace ChatEngine.CoreServer
         /// </param>
         /// <param name="messageObject">
         /// </param>
-        internal void ISComDataReceived(IClient client, DynamicMessage messageObject)
+        internal void ISComDataReceived(object sender, DynamicMessage messageObject)
         {
-            if (messageObject.DataObject is VicinityChatMessage)
+            var message = messageObject.DataObject as VicinityChatMessage;
+            if (message != null)
             {
-                this.DistributeVicinityChat((VicinityChatMessage)messageObject.DataObject);
+                this.DistributeVicinityChat(message);
             }
         }
 
@@ -224,7 +230,7 @@ namespace ChatEngine.CoreServer
                                    {
                                        0x00, 0x00, 0x00, 0x22, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
                                        // Server Salt (32 Bytes)
-                                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                                       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
                                    };
 
@@ -292,8 +298,8 @@ namespace ChatEngine.CoreServer
         private void DistributeVicinityChat(VicinityChatMessage vicinityChatMessage)
         {
             byte[] packet = MsgVicinity.Create(
-                (uint)vicinityChatMessage.SenderId, 
-                vicinityChatMessage.Text, 
+                (uint)vicinityChatMessage.SenderId,
+                vicinityChatMessage.Text,
                 (byte)vicinityChatMessage.MessageType);
 
             string lookup = CharacterDao.Instance.GetCharacterNameById(vicinityChatMessage.SenderId);

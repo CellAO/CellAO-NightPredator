@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -33,11 +38,13 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Functions;
     using CellAO.Core.Network;
     using CellAO.Core.Vector;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -45,12 +52,16 @@ namespace CellAO.Core.Entities
     /// </summary>
     public interface IController : IDisposable
     {
+        CharacterState State { get; }
+
         /// <summary>
         /// ICharacter object connected to this Controller
         /// </summary>
         ICharacter Character { get; set; }
 
         IZoneClient Client { get; set; }
+
+        bool SaveToDatabase { get; }
 
         #region Generic character actions
 
@@ -181,11 +192,11 @@ namespace CellAO.Core.Entities
         /// <exception cref="NotImplementedException">
         /// </exception>
         bool SocialAction(
-            SocialAction action, 
-            byte parameter1, 
-            byte parameter2, 
-            byte parameter3, 
-            byte parameter4, 
+            SocialAction action,
+            byte parameter1,
+            byte parameter2,
+            byte parameter3,
+            byte parameter4,
             int parameter5);
 
         /// <summary>
@@ -391,5 +402,31 @@ namespace CellAO.Core.Entities
         /// <param name="function">
         /// </param>
         void CallFunction(Function function);
+
+        /// <summary>
+        /// Walk/Run Character to destination coordinates
+        /// </summary>
+        /// <param name="destination">
+        /// </param>
+        void MoveTo(Vector3 destination);
+
+        /// <summary>
+        /// Switch to Run mode
+        /// </summary>
+        void Run();
+
+        /// <summary>
+        /// Stop all movements
+        /// </summary>
+        void StopMovement();
+
+        /// <summary>
+        /// Switch to walk mode
+        /// </summary>
+        void Walk();
+
+        bool IsFollowing();
+
+        void DoFollow();
     }
 }

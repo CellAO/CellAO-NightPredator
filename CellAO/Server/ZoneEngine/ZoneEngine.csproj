@@ -95,6 +95,7 @@
     <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
+    <Compile Include="ChatCommands\WalkingTest.cs" />
     <Compile Include="Core\Controllers\NPCController.cs" />
     <Compile Include="Core\Controllers\PlayerController.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />

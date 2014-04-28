@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,11 +47,8 @@ namespace CellAO.Core.Entities
     using CellAO.ObjectManager;
     using CellAO.Stats;
 
-    using NLog;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
@@ -83,6 +85,8 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         protected DateTime PredictionTime;
+
+        private bool disposed = false;
 
         /// <summary>
         /// </summary>
@@ -252,7 +256,6 @@ namespace CellAO.Core.Entities
             // The subclasses will initialize their own BaseInventory
             // this.BaseInventory = new UnitInventory(this, pooledIn);
 
-            this.DoNotDoTimers = false;
             this.Starting = false;
         }
 
@@ -318,7 +321,7 @@ namespace CellAO.Core.Entities
             // load depending on identity type
             switch (this.Identity.Type)
             {
-                // case IdentityType.
+                    // case IdentityType.
             }
 
             this.BaseInventory.Read();
@@ -356,20 +359,20 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public override void Dispose()
-        {
-            this.Dispose(true);
-            base.Dispose();
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="disposing">
         /// </param>
-        public void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            // Write stats to database
-            this.Write();
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    // Write stats to database
+                    this.Write();
+                }
+            }
+            this.disposed = true;
+            base.Dispose(disposing);
         }
 
         #endregion

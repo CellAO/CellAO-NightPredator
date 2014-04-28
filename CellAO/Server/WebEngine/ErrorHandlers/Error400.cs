@@ -33,7 +33,7 @@ namespace WebEngine.ErrorHandlers
 {
     internal class Error400
     {
-        private ResponseHeader responseHeader;
+        private readonly ResponseHeader responseHeader;
 
         private string responseBody = "";
 

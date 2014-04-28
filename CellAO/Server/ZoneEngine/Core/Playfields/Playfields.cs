@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,8 +47,6 @@ namespace ZoneEngine.Core.Playfields
     /// </summary>
     public class DistrictInfo
     {
-        // Generally this shouldn't be used outside of the static constructor
-
         #region Fields
 
         /// <summary>
@@ -126,6 +129,8 @@ namespace ZoneEngine.Core.Playfields
         }
 
         #endregion
+
+        // Generally this shouldn't be used outside of the static constructor
     }
 
     #endregion
@@ -137,13 +142,6 @@ namespace ZoneEngine.Core.Playfields
     /// </summary>
     public class PlayfieldInfo
     {
-        /*
-         * At some point, this class will contain zone boarders/etc for zoning and any
-         * other pf-specific related info such as a handle to the spawns list for the
-         * playfield, currently spawned monsters and their locations, etc
-         * 
-         */
-
         #region Fields
 
         /// <summary>
@@ -224,6 +222,13 @@ namespace ZoneEngine.Core.Playfields
         }
 
         #endregion
+
+        /*
+         * At some point, this class will contain zone boarders/etc for zoning and any
+         * other pf-specific related info such as a handle to the spawns list for the
+         * playfield, currently spawned monsters and their locations, etc
+         * 
+         */
     }
 
     #endregion
@@ -271,10 +276,6 @@ namespace ZoneEngine.Core.Playfields
         }
 
         #endregion
-
-        // Generally this shouldn't be used outside of the static constructor
-
-        // This really should only be used for development. Included for completeness.
 
         #region Public Methods and Operators
 
@@ -437,6 +438,10 @@ namespace ZoneEngine.Core.Playfields
         }
 
         #endregion
+
+        // Generally this shouldn't be used outside of the static constructor
+
+        // This really should only be used for development. Included for completeness.
     }
 
     #endregion

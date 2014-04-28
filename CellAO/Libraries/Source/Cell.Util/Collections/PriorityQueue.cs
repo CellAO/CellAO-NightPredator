@@ -204,7 +204,7 @@ namespace Cell.Util.Collections
 
 		#region ISerializable implementation
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue(CAPACITY_NAME, _capacity);
 			info.AddValue(COUNT_NAME, _count);

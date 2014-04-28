@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -46,56 +51,56 @@ namespace ZoneEngine.Core.KnuBot
         // Self made from other input
         /// <summary>
         /// </summary>
-        FinishTrade = -3, 
+        FinishTrade = -3,
 
         /// <summary>
         /// </summary>
-        StartTrade = -2, 
+        StartTrade = -2,
 
         /// <summary>
         /// </summary>
-        WindowClosed = -1, 
+        WindowClosed = -1,
 
         /// <summary>
         /// </summary>
-        DialogStart = 0, 
+        DialogStart = 0,
 
         // END Self made
         /// <summary>
         /// </summary>
-        Option1 = 1, 
+        Option1 = 1,
 
         /// <summary>
         /// </summary>
-        Option2 = 2, 
+        Option2 = 2,
 
         /// <summary>
         /// </summary>
-        Option3 = 3, 
+        Option3 = 3,
 
         /// <summary>
         /// </summary>
-        Option4 = 4, 
+        Option4 = 4,
 
         /// <summary>
         /// </summary>
-        Option5 = 5, 
+        Option5 = 5,
 
         /// <summary>
         /// </summary>
-        Option6 = 6, 
+        Option6 = 6,
 
         /// <summary>
         /// </summary>
-        Option7 = 7, 
+        Option7 = 7,
 
         /// <summary>
         /// </summary>
-        Option8 = 8, 
+        Option8 = 8,
 
         /// <summary>
         /// </summary>
-        Option9 = 9, 
+        Option9 = 9,
     }
 
     /// <summary>

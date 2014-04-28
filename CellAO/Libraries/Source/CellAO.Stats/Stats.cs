@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -3050,7 +3055,7 @@ namespace CellAO.Stats
             this.criticalIncrease = new Stat(this, 379, 1234567890, false, false, false);
             this.currBodyLocation = new Stat(this, 220, 0, false, false, false);
             this.currentMass = new Stat(this, 78, 0, false, false, false);
-            this.currentMovementMode = new Stat(this, 173, 3, false, false, false);
+            this.currentMovementMode = new Stat(this, 173, 3, false, false, true);
             this.currentNCU = new Stat(this, 180, 0, false, false, false);
             this.currentNano = new StatCurrentNano(this, 214, 1, true, false, false);
             this.currentPlayfield = new Stat(this, 589, 1234567890, false, false, false);
@@ -4724,16 +4729,6 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public List<IStat> All
-        {
-            get
-            {
-                return this.all;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         public Stat AmmoName
         {
             get
@@ -5389,61 +5384,6 @@ namespace CellAO.Stats
             get
             {
                 return this.changeSideCount;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public GameTuple<CharacterStat, uint>[] ChangedAnnouncingStats
-        {
-            get
-            {
-                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
-                foreach (Stat stat in this.all)
-                {
-                    if (stat.Changed && stat.AnnounceToPlayfield)
-                    {
-                        temp.Add(
-                            new GameTuple<CharacterStat, uint>()
-                            {
-                                Value1 = (CharacterStat)stat.StatId,
-                                Value2 =
-                                    stat.SendBaseValue
-                                        ? stat.BaseValue
-                                        : (uint)stat.Value
-                            });
-                    }
-                }
-
-                return temp.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public GameTuple<CharacterStat, uint>[] ChangedStats
-        {
-            get
-            {
-                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
-                foreach (Stat stat in this.all)
-                {
-                    if (stat.Changed)
-                    {
-                        temp.Add(
-                            new GameTuple<CharacterStat, uint>()
-                            {
-                                Value1 = (CharacterStat)stat.StatId,
-                                Value2 =
-                                    stat.SendBaseValue
-                                        ? stat.BaseValue
-                                        : (uint)stat.Value
-                            });
-                        stat.Changed = false;
-                    }
-                }
-
-                return temp.ToArray();
             }
         }
 
@@ -8649,16 +8589,6 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public Identity Owner
-        {
-            get
-            {
-                return this.owner;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         public Stat OwnerInstance
         {
             get
@@ -11507,6 +11437,81 @@ namespace CellAO.Stats
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public List<IStat> All
+        {
+            get
+            {
+                return this.all;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public GameTuple<CharacterStat, uint>[] ChangedAnnouncingStats
+        {
+            get
+            {
+                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
+                foreach (Stat stat in this.all)
+                {
+                    if (stat.Changed && stat.AnnounceToPlayfield)
+                    {
+                        temp.Add(
+                            new GameTuple<CharacterStat, uint>()
+                            {
+                                Value1 = (CharacterStat)stat.StatId,
+                                Value2 =
+                                    stat.SendBaseValue
+                                        ? stat.BaseValue
+                                        : (uint)stat.Value
+                            });
+                    }
+                }
+
+                return temp.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public GameTuple<CharacterStat, uint>[] ChangedStats
+        {
+            get
+            {
+                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
+                foreach (Stat stat in this.all)
+                {
+                    if (stat.Changed)
+                    {
+                        temp.Add(
+                            new GameTuple<CharacterStat, uint>()
+                            {
+                                Value1 = (CharacterStat)stat.StatId,
+                                Value2 =
+                                    stat.SendBaseValue
+                                        ? stat.BaseValue
+                                        : (uint)stat.Value
+                            });
+                        stat.Changed = false;
+                    }
+                }
+
+                return temp.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public Identity Owner
+        {
+            get
+            {
+                return this.owner;
+            }
+        }
+
         #endregion
 
         #region Public Indexers
@@ -11606,6 +11611,85 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
+        /// <param name="number">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public Stat GetStatByNumber(int number)
+        {
+            foreach (Stat c in this.all)
+            {
+                if (c.StatId != number)
+                {
+                    continue;
+                }
+
+                return c;
+            }
+
+            return null;
+        }
+
+        public void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield)
+        {
+            foreach (Stat stat in this.All.Where(x => x.Changed))
+            {
+                if (stat.AnnounceToPlayfield)
+                {
+                    toPlayfield.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
+                }
+                else
+                {
+                    toPlayer.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
+                }
+                stat.Changed = false;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool Read()
+        {
+            return this.Read(this.Owner);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="stat">
+        /// </param>
+        /// <param name="value">
+        /// </param>
+        public void SetBaseValueWithoutTriggering(int stat, uint value)
+        {
+            this.all.Single(x => x.StatId == stat).SetBaseValue(value);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool Write()
+        {
+            return this.Write(this.Owner);
+        }
+
+        public Dictionary<int, uint> GetStatValues()
+        {
+            var temp = new Dictionary<int, uint>();
+            foreach (Stat c in this.all)
+            {
+                if (c.DefaultValue != c.BaseValue)
+                {
+                    temp.Add(c.StatId, c.BaseValue);
+                }
+            }
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="stat">
         /// </param>
         /// <returns>
@@ -11675,43 +11759,6 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        /// <param name="number">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public Stat GetStatByNumber(int number)
-        {
-            foreach (Stat c in this.all)
-            {
-                if (c.StatId != number)
-                {
-                    continue;
-                }
-
-                return c;
-            }
-
-            return null;
-        }
-
-        public void GetChangedStats(Dictionary<int, uint> toPlayer, Dictionary<int, uint> toPlayfield)
-        {
-            foreach (Stat stat in All.Where(x => x.Changed))
-            {
-                if (stat.AnnounceToPlayfield)
-                {
-                    toPlayfield.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
-                }
-                else
-                {
-                    toPlayer.Add(stat.StatId, stat.SendBaseValue ? stat.BaseValue : (uint)stat.Value);
-                }
-                stat.Changed = false;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="identity">
         /// </param>
         /// <returns>
@@ -11731,15 +11778,6 @@ namespace CellAO.Stats
         }
 
         /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Read()
-        {
-            return this.Read(this.Owner);
-        }
-
-        /// <summary>
         /// Read all stats from Sql
         /// </summary>
         /// <param name="identity">
@@ -11747,7 +11785,7 @@ namespace CellAO.Stats
         public void ReadStatsfromSql(Identity identity)
         {
             foreach (DBStats dbStats in
-                StatDao.Instance.GetAll(new{Type=(int)identity.Type, Instance=identity.Instance}))
+                StatDao.Instance.GetAll(new { Type = (int)identity.Type, Instance = identity.Instance }))
             {
                 this.SetBaseValueWithoutTriggering(dbStats.StatId, (uint)dbStats.StatValue);
             }
@@ -11816,17 +11854,6 @@ namespace CellAO.Stats
 
             throw new StatDoesNotExistException(
                 "Stat " + stat + " does not exist.\r\nValue: " + value + "\r\nMethod: SetBaseValue");
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="stat">
-        /// </param>
-        /// <param name="value">
-        /// </param>
-        public void SetBaseValueWithoutTriggering(int stat, uint value)
-        {
-            this.all.Single(x => x.StatId == stat).SetBaseValue(value);
         }
 
         /// <summary>
@@ -12073,34 +12100,11 @@ namespace CellAO.Stats
         }
 
         /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Write()
-        {
-            return this.Write(this.Owner);
-        }
-
-        /// <summary>
         /// Write all Stats to Sql
         /// </summary>
         public void WriteStatstoSql()
         {
             this.Write();
-        }
-
-
-        public Dictionary<int, uint> GetStatValues()
-        {
-            var temp = new Dictionary<int, uint>();
-            foreach (Stat c in this.all)
-            {
-                if (c.DefaultValue != c.BaseValue)
-                {
-                    temp.Add(c.StatId,c.BaseValue);
-                }
-            }
-            return temp;
         }
 
         #endregion

@@ -82,7 +82,9 @@
     </Compile>
     <Compile Include="Channels\ChannelBase.cs" />
     <Compile Include="Channels\ChannelFlags.cs" />
+    <Compile Include="Channels\ChannelMessageEventArgs.cs" />
     <Compile Include="Channels\ChannelType.cs" />
+    <Compile Include="Channels\ClientJoinEventArgs.cs" />
     <Compile Include="Channels\RestrictedChannel.cs" />
     <Compile Include="Channels\GlobalChannel.cs" />
     <Compile Include="Channels\IChannelBase.cs" />

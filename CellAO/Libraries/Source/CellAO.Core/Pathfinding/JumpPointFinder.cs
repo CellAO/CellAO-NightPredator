@@ -1,127 +1,153 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
+﻿#region License
+
+// Copyright (c) 2005-2014, CellAO Team
+// 
+// 
+// All rights reserved.
+// 
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+
+#endregion
 
 namespace CellAO.Core.Pathfinding
 {
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+
     using CellAO.Core.Pathfinding.Grid;
+
+    #endregion
 
     public delegate float HeuristicDelegate(int iDx, int iDy);
 
     public class JumpPointParam
     {
+        protected HeuristicDelegate m_heuristic;
 
-        public JumpPointParam(BaseGrid iGrid, GridPos iStartPos, GridPos iEndPos, bool iAllowEndNodeUnWalkable = true, bool iCrossCorner = true, bool iCrossAdjacentPoint = true, HeuristicMode iMode = HeuristicMode.EUCLIDEAN)
+        protected bool m_crossAdjacentPoint;
+
+        protected bool m_crossCorner;
+
+        protected bool m_allowEndNodeUnWalkable;
+
+        protected bool m_useRecursive;
+
+        protected IBaseGrid m_searchGrid;
+
+        protected Node m_startNode;
+
+        protected Node m_endNode;
+
+        public List<Node> openList;
+
+        public JumpPointParam(
+            IBaseGrid iGrid,
+            GridPos iStartPos,
+            GridPos iEndPos,
+            bool iAllowEndNodeUnWalkable = true,
+            bool iCrossCorner = true,
+            bool iCrossAdjacentPoint = true,
+            HeuristicMode iMode = HeuristicMode.EUCLIDEAN)
         {
             switch (iMode)
             {
                 case HeuristicMode.MANHATTAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
                     break;
                 case HeuristicMode.EUCLIDEAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
                     break;
                 case HeuristicMode.CHEBYSHEV:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
                     break;
                 default:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
                     break;
             }
-            m_allowEndNodeUnWalkable = iAllowEndNodeUnWalkable;
-            m_crossAdjacentPoint = iCrossAdjacentPoint;
-            m_crossCorner = iCrossCorner;
-            openList = new List<Node>();
+            this.m_allowEndNodeUnWalkable = iAllowEndNodeUnWalkable;
+            this.m_crossAdjacentPoint = iCrossAdjacentPoint;
+            this.m_crossCorner = iCrossCorner;
+            this.openList = new List<Node>();
 
-            m_searchGrid = iGrid;
-            m_startNode = m_searchGrid.GetNodeAt(iStartPos.x, iStartPos.y);
-            m_endNode = m_searchGrid.GetNodeAt(iEndPos.x, iEndPos.y);
-            if (m_startNode == null)
-                m_startNode = new Node(iStartPos.x, iStartPos.y, true);
-            if (m_endNode == null)
-                m_endNode = new Node(iEndPos.x, iEndPos.y, true);
-            m_useRecursive = false;
+            this.m_searchGrid = iGrid;
+            this.m_startNode = this.m_searchGrid.GetNodeAt(iStartPos.x, iStartPos.y);
+            this.m_endNode = this.m_searchGrid.GetNodeAt(iEndPos.x, iEndPos.y);
+            if (this.m_startNode == null)
+            {
+                this.m_startNode = new Node(iStartPos.x, iStartPos.y, true);
+            }
+            if (this.m_endNode == null)
+            {
+                this.m_endNode = new Node(iEndPos.x, iEndPos.y, true);
+            }
+            this.m_useRecursive = false;
         }
 
-        public JumpPointParam(BaseGrid iGrid, bool iAllowEndNodeUnWalkable = true, bool iCrossCorner = true, bool iCrossAdjacentPoint = true, HeuristicMode iMode = HeuristicMode.EUCLIDEAN)
+        public JumpPointParam(
+            IBaseGrid iGrid,
+            bool iAllowEndNodeUnWalkable = true,
+            bool iCrossCorner = true,
+            bool iCrossAdjacentPoint = true,
+            HeuristicMode iMode = HeuristicMode.EUCLIDEAN)
         {
             switch (iMode)
             {
                 case HeuristicMode.MANHATTAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
                     break;
                 case HeuristicMode.EUCLIDEAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
                     break;
                 case HeuristicMode.CHEBYSHEV:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
                     break;
                 default:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
                     break;
             }
-            m_allowEndNodeUnWalkable = iAllowEndNodeUnWalkable;
-            m_crossAdjacentPoint = iCrossAdjacentPoint;
-            m_crossCorner = iCrossCorner;
+            this.m_allowEndNodeUnWalkable = iAllowEndNodeUnWalkable;
+            this.m_crossAdjacentPoint = iCrossAdjacentPoint;
+            this.m_crossCorner = iCrossCorner;
 
-            openList = new List<Node>();
+            this.openList = new List<Node>();
 
-            m_searchGrid = iGrid;
-            m_startNode = null;
-            m_endNode = null;
-            m_useRecursive = false;
-        }
-
-        public void SetHeuristic(HeuristicMode iMode)
-        {
-            m_heuristic = null;
-            switch (iMode)
-            {
-                case HeuristicMode.MANHATTAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
-                    break;
-                case HeuristicMode.EUCLIDEAN:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
-                    break;
-                case HeuristicMode.CHEBYSHEV:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
-                    break;
-                default:
-                    m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
-                    break;
-            }
-        }
-
-        public void Reset(GridPos iStartPos, GridPos iEndPos, BaseGrid iSearchGrid = null)
-        {
-            openList.Clear();
-            m_startNode = null;
-            m_endNode = null;
-
-            if (iSearchGrid != null)
-                m_searchGrid = iSearchGrid;
-            m_searchGrid.Reset();
-            m_startNode = m_searchGrid.GetNodeAt(iStartPos.x, iStartPos.y);
-            m_endNode = m_searchGrid.GetNodeAt(iEndPos.x, iEndPos.y);
-            if (m_startNode == null)
-                m_startNode = new Node(iStartPos.x, iStartPos.y, true);
-            if (m_endNode == null)
-                m_endNode = new Node(iEndPos.x, iEndPos.y, true);
-
-
+            this.m_searchGrid = iGrid;
+            this.m_startNode = null;
+            this.m_endNode = null;
+            this.m_useRecursive = false;
         }
 
         public bool CrossAdjacentPoint
         {
             get
             {
-                return m_crossCorner && m_crossAdjacentPoint;
+                return this.m_crossCorner && this.m_crossAdjacentPoint;
             }
             set
             {
-                m_crossAdjacentPoint = value;
+                this.m_crossAdjacentPoint = value;
             }
         }
 
@@ -129,11 +155,11 @@ namespace CellAO.Core.Pathfinding
         {
             get
             {
-                return m_crossCorner;
+                return this.m_crossCorner;
             }
             set
             {
-                m_crossCorner = value;
+                this.m_crossCorner = value;
             }
         }
 
@@ -141,11 +167,11 @@ namespace CellAO.Core.Pathfinding
         {
             get
             {
-                return m_allowEndNodeUnWalkable;
+                return this.m_allowEndNodeUnWalkable;
             }
             set
             {
-                m_allowEndNodeUnWalkable = value;
+                this.m_allowEndNodeUnWalkable = value;
             }
         }
 
@@ -153,15 +179,15 @@ namespace CellAO.Core.Pathfinding
         {
             get
             {
-                return m_heuristic;
+                return this.m_heuristic;
             }
         }
 
-        public BaseGrid SearchGrid
+        public IBaseGrid SearchGrid
         {
             get
             {
-                return m_searchGrid;
+                return this.m_searchGrid;
             }
         }
 
@@ -169,14 +195,15 @@ namespace CellAO.Core.Pathfinding
         {
             get
             {
-                return m_startNode;
+                return this.m_startNode;
             }
         }
+
         public Node EndNode
         {
             get
             {
-                return m_endNode;
+                return this.m_endNode;
             }
         }
 
@@ -184,31 +211,62 @@ namespace CellAO.Core.Pathfinding
         {
             get
             {
-                return m_useRecursive;
+                return this.m_useRecursive;
             }
             set
             {
-                m_useRecursive = value;
+                this.m_useRecursive = value;
             }
         }
-        protected HeuristicDelegate m_heuristic;
-        protected bool m_crossAdjacentPoint;
-        protected bool m_crossCorner;
-        protected bool m_allowEndNodeUnWalkable;
 
-        protected bool m_useRecursive;
+        public void SetHeuristic(HeuristicMode iMode)
+        {
+            this.m_heuristic = null;
+            switch (iMode)
+            {
+                case HeuristicMode.MANHATTAN:
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
+                    break;
+                case HeuristicMode.EUCLIDEAN:
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    break;
+                case HeuristicMode.CHEBYSHEV:
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
+                    break;
+                default:
+                    this.m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
+                    break;
+            }
+        }
 
-        protected BaseGrid m_searchGrid;
-        protected Node m_startNode;
-        protected Node m_endNode;
+        public void Reset(GridPos iStartPos, GridPos iEndPos, IBaseGrid iSearchGrid = null)
+        {
+            this.openList.Clear();
+            this.m_startNode = null;
+            this.m_endNode = null;
 
-        public List<Node> openList;
+            if (iSearchGrid != null)
+            {
+                this.m_searchGrid = iSearchGrid;
+            }
+            this.m_searchGrid.Reset();
+            this.m_startNode = this.m_searchGrid.GetNodeAt(iStartPos.x, iStartPos.y);
+            this.m_endNode = this.m_searchGrid.GetNodeAt(iEndPos.x, iEndPos.y);
+            if (this.m_startNode == null)
+            {
+                this.m_startNode = new Node(iStartPos.x, iStartPos.y, true);
+            }
+            if (this.m_endNode == null)
+            {
+                this.m_endNode = new Node(iEndPos.x, iEndPos.y, true);
+            }
+        }
     }
-    class JumpPointFinder
+
+    internal class JumpPointFinder
     {
         public static List<GridPos> FindPath(JumpPointParam iParam)
         {
-
             List<Node> tOpenList = iParam.openList;
             Node tStartNode = iParam.StartNode;
             Node tEndNode = iParam.EndNode;
@@ -274,30 +332,42 @@ namespace CellAO.Core.Pathfinding
             {
                 tNeighbor = tNeighbors[i];
                 if (iParam.UseRecursive)
+                {
                     tJumpPoint = jump(iParam, tNeighbor.x, tNeighbor.y, iNode.x, iNode.y);
+                }
                 else
+                {
                     tJumpPoint = jumpLoop(iParam, tNeighbor.x, tNeighbor.y, iNode.x, iNode.y);
+                }
                 if (tJumpPoint != null)
                 {
                     tJumpNode = iParam.SearchGrid.GetNodeAt(tJumpPoint.Value.x, tJumpPoint.Value.y);
                     if (tJumpNode == null)
                     {
                         if (iParam.EndNode.x == tJumpPoint.Value.x && iParam.EndNode.y == tJumpPoint.Value.y)
+                        {
                             tJumpNode = iParam.SearchGrid.GetNodeAt(tJumpPoint.Value);
+                        }
                     }
                     if (tJumpNode.isClosed)
                     {
                         continue;
                     }
                     // include distance, as parent may not be immediately adjacent:
-                    float tCurNodeToJumpNodeLen = tHeuristic(Math.Abs(tJumpPoint.Value.x - iNode.x), Math.Abs(tJumpPoint.Value.y - iNode.y));
-                    float tStartToJumpNodeLen = iNode.startToCurNodeLen + tCurNodeToJumpNodeLen; // next `startToCurNodeLen` value
+                    float tCurNodeToJumpNodeLen = tHeuristic(
+                        Math.Abs(tJumpPoint.Value.x - iNode.x),
+                        Math.Abs(tJumpPoint.Value.y - iNode.y));
+                    float tStartToJumpNodeLen = iNode.startToCurNodeLen + tCurNodeToJumpNodeLen;
+                        // next `startToCurNodeLen` value
 
                     if (!tJumpNode.isOpened || tStartToJumpNodeLen < tJumpNode.startToCurNodeLen)
                     {
                         tJumpNode.startToCurNodeLen = tStartToJumpNodeLen;
-                        tJumpNode.heuristicCurNodeToEndLen = (tJumpNode.heuristicCurNodeToEndLen == null ? tHeuristic(Math.Abs(tJumpPoint.Value.x - tEndX), Math.Abs(tJumpPoint.Value.y - tEndY)) : tJumpNode.heuristicCurNodeToEndLen);
-                        tJumpNode.heuristicStartToEndLen = tJumpNode.startToCurNodeLen + tJumpNode.heuristicCurNodeToEndLen.Value;
+                        tJumpNode.heuristicCurNodeToEndLen = (tJumpNode.heuristicCurNodeToEndLen == null
+                            ? tHeuristic(Math.Abs(tJumpPoint.Value.x - tEndX), Math.Abs(tJumpPoint.Value.y - tEndY))
+                            : tJumpNode.heuristicCurNodeToEndLen);
+                        tJumpNode.heuristicStartToEndLen = tJumpNode.startToCurNodeLen
+                                                           + tJumpNode.heuristicCurNodeToEndLen.Value;
                         tJumpNode.parent = iNode;
 
                         if (!tJumpNode.isOpened)
@@ -307,32 +377,6 @@ namespace CellAO.Core.Pathfinding
                         }
                     }
                 }
-            }
-        }
-
-        private class JumpSnapshot
-        {
-            public int iX;
-            public int iY;
-            public int iPx;
-            public int iPy;
-            public int tDx;
-            public int tDy;
-            public GridPos? jx;
-            public GridPos? jy;
-            public int stage;
-            public JumpSnapshot()
-            {
-
-                iX = 0;
-                iY = 0;
-                iPx = 0;
-                iPy = 0;
-                tDx = 0;
-                tDy = 0;
-                jx = null;
-                jy = null;
-                stage = 0;
             }
         }
 
@@ -361,7 +405,9 @@ namespace CellAO.Core.Pathfinding
                             retVal = null;
                             continue;
                         }
-                        else if (iParam.SearchGrid.GetNodeAt(currentSnapshot.iX, currentSnapshot.iY).Equals(iParam.EndNode))
+                        else if (
+                            iParam.SearchGrid.GetNodeAt(currentSnapshot.iX, currentSnapshot.iY)
+                                .Equals(iParam.EndNode))
                         {
                             retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                             continue;
@@ -377,21 +423,39 @@ namespace CellAO.Core.Pathfinding
                             // along the diagonal
                             if (currentSnapshot.tDx != 0 && currentSnapshot.tDy != 0)
                             {
-                                if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - currentSnapshot.tDx, currentSnapshot.iY + currentSnapshot.tDy) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - currentSnapshot.tDx, currentSnapshot.iY)) ||
-                                    (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY - currentSnapshot.tDy) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY - currentSnapshot.tDy)))
+                                if ((iParam.SearchGrid.IsWalkableAt(
+                                    currentSnapshot.iX - currentSnapshot.tDx,
+                                    currentSnapshot.iY + currentSnapshot.tDy)
+                                     && !iParam.SearchGrid.IsWalkableAt(
+                                         currentSnapshot.iX - currentSnapshot.tDx,
+                                         currentSnapshot.iY))
+                                    || (iParam.SearchGrid.IsWalkableAt(
+                                        currentSnapshot.iX + currentSnapshot.tDx,
+                                        currentSnapshot.iY - currentSnapshot.tDy)
+                                        && !iParam.SearchGrid.IsWalkableAt(
+                                            currentSnapshot.iX,
+                                            currentSnapshot.iY - currentSnapshot.tDy)))
                                 {
                                     retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                     continue;
                                 }
                             }
-                            // horizontally/vertically
+                                // horizontally/vertically
                             else
                             {
                                 if (currentSnapshot.tDx != 0)
                                 {
                                     // moving along x
-                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY + 1) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + 1)) ||
-                                        (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY - 1) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY - 1)))
+                                    if ((iParam.SearchGrid.IsWalkableAt(
+                                        currentSnapshot.iX + currentSnapshot.tDx,
+                                        currentSnapshot.iY + 1)
+                                         && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + 1))
+                                        || (iParam.SearchGrid.IsWalkableAt(
+                                            currentSnapshot.iX + currentSnapshot.tDx,
+                                            currentSnapshot.iY - 1)
+                                            && !iParam.SearchGrid.IsWalkableAt(
+                                                currentSnapshot.iX,
+                                                currentSnapshot.iY - 1)))
                                     {
                                         retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                         continue;
@@ -399,8 +463,16 @@ namespace CellAO.Core.Pathfinding
                                 }
                                 else
                                 {
-                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY + currentSnapshot.tDy) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY)) ||
-                                        (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - 1, currentSnapshot.iY + currentSnapshot.tDy) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - 1, currentSnapshot.iY)))
+                                    if ((iParam.SearchGrid.IsWalkableAt(
+                                        currentSnapshot.iX + 1,
+                                        currentSnapshot.iY + currentSnapshot.tDy)
+                                         && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY))
+                                        || (iParam.SearchGrid.IsWalkableAt(
+                                            currentSnapshot.iX - 1,
+                                            currentSnapshot.iY + currentSnapshot.tDy)
+                                            && !iParam.SearchGrid.IsWalkableAt(
+                                                currentSnapshot.iX - 1,
+                                                currentSnapshot.iY)))
                                     {
                                         retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                         continue;
@@ -428,7 +500,12 @@ namespace CellAO.Core.Pathfinding
 
                             // moving diagonally, must make sure one of the vertical/horizontal
                             // neighbors is open to allow the path
-                            if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY) || iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy))
+                            if (iParam.SearchGrid.IsWalkableAt(
+                                currentSnapshot.iX + currentSnapshot.tDx,
+                                currentSnapshot.iY)
+                                || iParam.SearchGrid.IsWalkableAt(
+                                    currentSnapshot.iX,
+                                    currentSnapshot.iY + currentSnapshot.tDy))
                             {
                                 newSnapshot = new JumpSnapshot();
                                 newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
@@ -457,21 +534,43 @@ namespace CellAO.Core.Pathfinding
                             // along the diagonal
                             if (currentSnapshot.tDx != 0 && currentSnapshot.tDy != 0)
                             {
-                                if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY + currentSnapshot.tDy) && iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY)) ||
-                                    (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY + currentSnapshot.tDy) && iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy)))
+                                if ((iParam.SearchGrid.IsWalkableAt(
+                                    currentSnapshot.iX + currentSnapshot.tDx,
+                                    currentSnapshot.iY + currentSnapshot.tDy)
+                                     && iParam.SearchGrid.IsWalkableAt(
+                                         currentSnapshot.iX,
+                                         currentSnapshot.iY + currentSnapshot.tDy)
+                                     && !iParam.SearchGrid.IsWalkableAt(
+                                         currentSnapshot.iX + currentSnapshot.tDx,
+                                         currentSnapshot.iY))
+                                    || (iParam.SearchGrid.IsWalkableAt(
+                                        currentSnapshot.iX + currentSnapshot.tDx,
+                                        currentSnapshot.iY + currentSnapshot.tDy)
+                                        && iParam.SearchGrid.IsWalkableAt(
+                                            currentSnapshot.iX + currentSnapshot.tDx,
+                                            currentSnapshot.iY)
+                                        && !iParam.SearchGrid.IsWalkableAt(
+                                            currentSnapshot.iX,
+                                            currentSnapshot.iY + currentSnapshot.tDy)))
                                 {
                                     retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                     continue;
                                 }
                             }
-                            // horizontally/vertically
+                                // horizontally/vertically
                             else
                             {
                                 if (currentSnapshot.tDx != 0)
                                 {
                                     // moving along x
-                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + 1) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - currentSnapshot.tDx, currentSnapshot.iY + 1)) ||
-                                        (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY - 1) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - currentSnapshot.tDx, currentSnapshot.iY - 1)))
+                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + 1)
+                                         && !iParam.SearchGrid.IsWalkableAt(
+                                             currentSnapshot.iX - currentSnapshot.tDx,
+                                             currentSnapshot.iY + 1))
+                                        || (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY - 1)
+                                            && !iParam.SearchGrid.IsWalkableAt(
+                                                currentSnapshot.iX - currentSnapshot.tDx,
+                                                currentSnapshot.iY - 1)))
                                     {
                                         retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                         continue;
@@ -479,15 +578,20 @@ namespace CellAO.Core.Pathfinding
                                 }
                                 else
                                 {
-                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY - currentSnapshot.tDy)) ||
-                                        (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - 1, currentSnapshot.iY) && !iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - 1, currentSnapshot.iY - currentSnapshot.tDy)))
+                                    if ((iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + 1, currentSnapshot.iY)
+                                         && !iParam.SearchGrid.IsWalkableAt(
+                                             currentSnapshot.iX + 1,
+                                             currentSnapshot.iY - currentSnapshot.tDy))
+                                        || (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX - 1, currentSnapshot.iY)
+                                            && !iParam.SearchGrid.IsWalkableAt(
+                                                currentSnapshot.iX - 1,
+                                                currentSnapshot.iY - currentSnapshot.tDy)))
                                     {
                                         retVal = new GridPos(currentSnapshot.iX, currentSnapshot.iY);
                                         continue;
                                     }
                                 }
                             }
-
 
                             // when moving diagonally, must check for vertical/horizontal jump points
                             if (currentSnapshot.tDx != 0 && currentSnapshot.tDy != 0)
@@ -507,7 +611,12 @@ namespace CellAO.Core.Pathfinding
 
                             // moving diagonally, must make sure both of the vertical/horizontal
                             // neighbors is open to allow the path
-                            if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY) && iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy))
+                            if (iParam.SearchGrid.IsWalkableAt(
+                                currentSnapshot.iX + currentSnapshot.tDx,
+                                currentSnapshot.iY)
+                                && iParam.SearchGrid.IsWalkableAt(
+                                    currentSnapshot.iX,
+                                    currentSnapshot.iY + currentSnapshot.tDy))
                             {
                                 newSnapshot = new JumpSnapshot();
                                 newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
@@ -545,7 +654,10 @@ namespace CellAO.Core.Pathfinding
 
                         // moving diagonally, must make sure one of the vertical/horizontal
                         // neighbors is open to allow the path
-                        if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY) || iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy))
+                        if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY)
+                            || iParam.SearchGrid.IsWalkableAt(
+                                currentSnapshot.iX,
+                                currentSnapshot.iY + currentSnapshot.tDy))
                         {
                             newSnapshot = new JumpSnapshot();
                             newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
@@ -593,7 +705,10 @@ namespace CellAO.Core.Pathfinding
 
                         // moving diagonally, must make sure both of the vertical/horizontal
                         // neighbors is open to allow the path
-                        if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY) && iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX, currentSnapshot.iY + currentSnapshot.tDy))
+                        if (iParam.SearchGrid.IsWalkableAt(currentSnapshot.iX + currentSnapshot.tDx, currentSnapshot.iY)
+                            && iParam.SearchGrid.IsWalkableAt(
+                                currentSnapshot.iX,
+                                currentSnapshot.iY + currentSnapshot.tDy))
                         {
                             newSnapshot = new JumpSnapshot();
                             newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
@@ -610,8 +725,8 @@ namespace CellAO.Core.Pathfinding
             }
 
             return retVal;
-
         }
+
         private static GridPos? jump(JumpPointParam iParam, int iX, int iY, int iPx, int iPy)
         {
             if (!iParam.SearchGrid.IsWalkableAt(iX, iY))
@@ -633,28 +748,34 @@ namespace CellAO.Core.Pathfinding
                 // along the diagonal
                 if (tDx != 0 && tDy != 0)
                 {
-                    if ((iParam.SearchGrid.IsWalkableAt(iX - tDx, iY + tDy) && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY)) ||
-                        (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY - tDy) && !iParam.SearchGrid.IsWalkableAt(iX, iY - tDy)))
+                    if ((iParam.SearchGrid.IsWalkableAt(iX - tDx, iY + tDy)
+                         && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY))
+                        || (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY - tDy)
+                            && !iParam.SearchGrid.IsWalkableAt(iX, iY - tDy)))
                     {
                         return new GridPos(iX, iY);
                     }
                 }
-                // horizontally/vertically
+                    // horizontally/vertically
                 else
                 {
                     if (tDx != 0)
                     {
                         // moving along x
-                        if ((iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + 1) && !iParam.SearchGrid.IsWalkableAt(iX, iY + 1)) ||
-                            (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY - 1) && !iParam.SearchGrid.IsWalkableAt(iX, iY - 1)))
+                        if ((iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + 1)
+                             && !iParam.SearchGrid.IsWalkableAt(iX, iY + 1))
+                            || (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY - 1)
+                                && !iParam.SearchGrid.IsWalkableAt(iX, iY - 1)))
                         {
                             return new GridPos(iX, iY);
                         }
                     }
                     else
                     {
-                        if ((iParam.SearchGrid.IsWalkableAt(iX + 1, iY + tDy) && !iParam.SearchGrid.IsWalkableAt(iX + 1, iY)) ||
-                            (iParam.SearchGrid.IsWalkableAt(iX - 1, iY + tDy) && !iParam.SearchGrid.IsWalkableAt(iX - 1, iY)))
+                        if ((iParam.SearchGrid.IsWalkableAt(iX + 1, iY + tDy)
+                             && !iParam.SearchGrid.IsWalkableAt(iX + 1, iY))
+                            || (iParam.SearchGrid.IsWalkableAt(iX - 1, iY + tDy)
+                                && !iParam.SearchGrid.IsWalkableAt(iX - 1, iY)))
                         {
                             return new GridPos(iX, iY);
                         }
@@ -692,34 +813,41 @@ namespace CellAO.Core.Pathfinding
                 // along the diagonal
                 if (tDx != 0 && tDy != 0)
                 {
-                    if ((iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + tDy) && iParam.SearchGrid.IsWalkableAt(iX, iY + tDy) && !iParam.SearchGrid.IsWalkableAt(iX + tDx, iY)) ||
-                        (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + tDy) && iParam.SearchGrid.IsWalkableAt(iX + tDx, iY) && !iParam.SearchGrid.IsWalkableAt(iX, iY + tDy)))
+                    if ((iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + tDy)
+                         && iParam.SearchGrid.IsWalkableAt(iX, iY + tDy)
+                         && !iParam.SearchGrid.IsWalkableAt(iX + tDx, iY))
+                        || (iParam.SearchGrid.IsWalkableAt(iX + tDx, iY + tDy)
+                            && iParam.SearchGrid.IsWalkableAt(iX + tDx, iY)
+                            && !iParam.SearchGrid.IsWalkableAt(iX, iY + tDy)))
                     {
                         return new GridPos(iX, iY);
                     }
                 }
-                // horizontally/vertically
+                    // horizontally/vertically
                 else
                 {
                     if (tDx != 0)
                     {
                         // moving along x
-                        if ((iParam.SearchGrid.IsWalkableAt(iX, iY + 1) && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY + 1)) ||
-                            (iParam.SearchGrid.IsWalkableAt(iX, iY - 1) && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY - 1)))
+                        if ((iParam.SearchGrid.IsWalkableAt(iX, iY + 1)
+                             && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY + 1))
+                            || (iParam.SearchGrid.IsWalkableAt(iX, iY - 1)
+                                && !iParam.SearchGrid.IsWalkableAt(iX - tDx, iY - 1)))
                         {
                             return new GridPos(iX, iY);
                         }
                     }
                     else
                     {
-                        if ((iParam.SearchGrid.IsWalkableAt(iX + 1, iY) && !iParam.SearchGrid.IsWalkableAt(iX + 1, iY - tDy)) ||
-                            (iParam.SearchGrid.IsWalkableAt(iX - 1, iY) && !iParam.SearchGrid.IsWalkableAt(iX - 1, iY - tDy)))
+                        if ((iParam.SearchGrid.IsWalkableAt(iX + 1, iY)
+                             && !iParam.SearchGrid.IsWalkableAt(iX + 1, iY - tDy))
+                            || (iParam.SearchGrid.IsWalkableAt(iX - 1, iY)
+                                && !iParam.SearchGrid.IsWalkableAt(iX - 1, iY - tDy)))
                         {
                             return new GridPos(iX, iY);
                         }
                     }
                 }
-
 
                 // when moving diagonally, must check for vertical/horizontal jump points
                 if (tDx != 0 && tDy != 0)
@@ -743,7 +871,6 @@ namespace CellAO.Core.Pathfinding
                     return null;
                 }
             }
-
         }
 
         private static List<GridPos> findNeighbors(JumpPointParam iParam, Node iNode)
@@ -781,7 +908,8 @@ namespace CellAO.Core.Pathfinding
 
                         if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy) || iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
+                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy)
+                                || iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
                             {
                                 tNeighbors.Add(new GridPos(tX + tDx, tY + tDy));
                             }
@@ -793,7 +921,8 @@ namespace CellAO.Core.Pathfinding
 
                         if (iParam.SearchGrid.IsWalkableAt(tX - tDx, tY + tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy) && !iParam.SearchGrid.IsWalkableAt(tX - tDx, tY))
+                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy)
+                                && !iParam.SearchGrid.IsWalkableAt(tX - tDx, tY))
                             {
                                 tNeighbors.Add(new GridPos(tX - tDx, tY + tDy));
                             }
@@ -801,15 +930,14 @@ namespace CellAO.Core.Pathfinding
 
                         if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY) && !iParam.SearchGrid.IsWalkableAt(tX, tY - tDy))
+                            if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY)
+                                && !iParam.SearchGrid.IsWalkableAt(tX, tY - tDy))
                             {
                                 tNeighbors.Add(new GridPos(tX + tDx, tY - tDy));
                             }
                         }
-
-
                     }
-                    // search horizontally/vertically
+                        // search horizontally/vertically
                     else
                     {
                         if (tDx == 0)
@@ -818,22 +946,26 @@ namespace CellAO.Core.Pathfinding
                             {
                                 tNeighbors.Add(new GridPos(tX, tY + tDy));
 
-                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy) && !iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX + 1, tY + tDy));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy) && !iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX - 1, tY + tDy));
                                 }
                             }
                             else if (iParam.CrossAdjacentPoint)
                             {
-                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy) && !iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX + 1, tY + tDy));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy) && !iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX - 1, tY + tDy));
                                 }
@@ -843,25 +975,28 @@ namespace CellAO.Core.Pathfinding
                         {
                             if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
                             {
-
                                 tNeighbors.Add(new GridPos(tX + tDx, tY));
 
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1) && !iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY + 1));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1) && !iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY - 1));
                                 }
                             }
                             else if (iParam.CrossAdjacentPoint)
                             {
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1) && !iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY + 1));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1) && !iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1)
+                                    && !iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY - 1));
                                 }
@@ -885,25 +1020,32 @@ namespace CellAO.Core.Pathfinding
 
                         if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy) && iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
+                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy)
+                                && iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
+                            {
                                 tNeighbors.Add(new GridPos(tX + tDx, tY + tDy));
+                            }
                         }
 
                         if (iParam.SearchGrid.IsWalkableAt(tX - tDx, tY + tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy) && iParam.SearchGrid.IsWalkableAt(tX - tDx, tY))
+                            if (iParam.SearchGrid.IsWalkableAt(tX, tY + tDy)
+                                && iParam.SearchGrid.IsWalkableAt(tX - tDx, tY))
+                            {
                                 tNeighbors.Add(new GridPos(tX - tDx, tY + tDy));
+                            }
                         }
 
                         if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - tDy))
                         {
-                            if (iParam.SearchGrid.IsWalkableAt(tX, tY - tDy) && iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
+                            if (iParam.SearchGrid.IsWalkableAt(tX, tY - tDy)
+                                && iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
+                            {
                                 tNeighbors.Add(new GridPos(tX + tDx, tY - tDy));
+                            }
                         }
-
-
                     }
-                    // search horizontally/vertically
+                        // search horizontally/vertically
                     else
                     {
                         if (tDx == 0)
@@ -912,46 +1054,56 @@ namespace CellAO.Core.Pathfinding
                             {
                                 tNeighbors.Add(new GridPos(tX, tY + tDy));
 
-                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy) && iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY + tDy)
+                                    && iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX + 1, tY + tDy));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy) && iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
+                                if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY + tDy)
+                                    && iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
                                 {
                                     tNeighbors.Add(new GridPos(tX - 1, tY + tDy));
                                 }
                             }
                             if (iParam.SearchGrid.IsWalkableAt(tX + 1, tY))
+                            {
                                 tNeighbors.Add(new GridPos(tX + 1, tY));
+                            }
                             if (iParam.SearchGrid.IsWalkableAt(tX - 1, tY))
+                            {
                                 tNeighbors.Add(new GridPos(tX - 1, tY));
+                            }
                         }
                         else
                         {
                             if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY))
                             {
-
                                 tNeighbors.Add(new GridPos(tX + tDx, tY));
 
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1) && iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY + 1)
+                                    && iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY + 1));
                                 }
-                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1) && iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
+                                if (iParam.SearchGrid.IsWalkableAt(tX + tDx, tY - 1)
+                                    && iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
                                 {
                                     tNeighbors.Add(new GridPos(tX + tDx, tY - 1));
                                 }
                             }
                             if (iParam.SearchGrid.IsWalkableAt(tX, tY + 1))
+                            {
                                 tNeighbors.Add(new GridPos(tX, tY + 1));
+                            }
                             if (iParam.SearchGrid.IsWalkableAt(tX, tY - 1))
+                            {
                                 tNeighbors.Add(new GridPos(tX, tY - 1));
+                            }
                         }
                     }
                 }
-
             }
-            // return all neighbors
+                // return all neighbors
             else
             {
                 tNeighborNodes = iParam.SearchGrid.GetNeighbors(iNode, iParam.CrossCorner, iParam.CrossAdjacentPoint);
@@ -963,6 +1115,40 @@ namespace CellAO.Core.Pathfinding
             }
 
             return tNeighbors;
+        }
+
+        private class JumpSnapshot
+        {
+            public int iX;
+
+            public int iY;
+
+            public int iPx;
+
+            public int iPy;
+
+            public int tDx;
+
+            public int tDy;
+
+            public GridPos? jx;
+
+            public GridPos? jy;
+
+            public int stage;
+
+            public JumpSnapshot()
+            {
+                this.iX = 0;
+                this.iY = 0;
+                this.iPx = 0;
+                this.iPy = 0;
+                this.tDx = 0;
+                this.tDy = 0;
+                this.jx = null;
+                this.jy = null;
+                this.stage = 0;
+            }
         }
     }
 }

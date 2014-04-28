@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -39,7 +44,6 @@ namespace ZoneEngine.ChatCommands
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Core.MessageHandlers;
-    using ZoneEngine.Core.Packets;
 
     #endregion
 
@@ -72,7 +76,7 @@ namespace ZoneEngine.ChatCommands
         {
             character.Playfield.Publish(
                 ChatTextMessageHandler.Default.CreateIM(
-                    character, 
+                    character,
                     "Usage: Select target and /command giveitem id ql\r\nIt doesn't matter if high or low id is given"));
             return;
         }
@@ -105,13 +109,15 @@ namespace ZoneEngine.ChatCommands
                 int ql;
                 if (!int.TryParse(args[1], out lowId))
                 {
-                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "LowId is no number"));
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "LowId is no number"));
                     return;
                 }
 
                 if (!int.TryParse(args[2], out ql))
                 {
-                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "QualityLevel is no number"));
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "QualityLevel is no number"));
                     return;
                 }
 
@@ -148,7 +154,8 @@ namespace ZoneEngine.ChatCommands
             }
             else
             {
-                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Target has no Inventory."));
+                character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(character, "Target has no Inventory."));
             }
         }
 

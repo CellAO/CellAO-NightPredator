@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,22 +35,18 @@ namespace ZoneEngine.ChatCommands
 
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.NPCHandler;
-    using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Controllers;
-    using ZoneEngine.Core.InternalMessages;
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
-    using ZoneEngine.Core.Playfields;
-    using CellAO.Database.Dao;
-    using System.Text;
 
     #endregion
 
@@ -90,13 +91,10 @@ namespace ZoneEngine.ChatCommands
         /// </exception>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(
-                ChatTextMessageHandler.Default.CreateIM(
-                    character,
-@"Usage: /command Spawn hash level
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character,
+                @"Usage: /command Spawn hash level
 For a list of available templates: /command spawn list [filter1,filter2...]
 Filter will be applied to mob name"));
-
         }
 
         /// <summary>
@@ -121,11 +119,7 @@ Filter will be applied to mob name"));
                     text.AppendLine(string.Format("{0},'{1}'", mt.Hash, mt.Name));
                 }
 
-                character.Playfield.Publish(
-                ChatTextMessageHandler.Default.CreateIM(
-                    character,
-                    text.ToString()));
-
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, text.ToString()));
             }
             else
             {
@@ -144,7 +138,6 @@ Filter will be applied to mob name"));
                         character.RawHeading,
                         npcController,
                         int.Parse(args[2]));
-
                 }
                 if (args.Length == 2)
                 {
@@ -159,12 +152,11 @@ Filter will be applied to mob name"));
                 if (mobCharacter != null)
                 {
                     mobCharacter.Playfield = character.Playfield;
-                    var mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
+                    SimpleCharFullUpdateMessage mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
                     character.Playfield.Announce(mess);
                     AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
                 }
             }
-
 
             // this.CommandHelp(client);
 

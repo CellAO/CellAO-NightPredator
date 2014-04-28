@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -144,7 +149,7 @@ namespace CellAO.Core.Vector
             {
                 return -2
                        * Math.Atan2(
-                           (2 * this.x * this.w) - (2 * this.y * this.z), 
+                           (2 * this.x * this.w) - (2 * this.y * this.z),
                            1 - (2 * this.x * this.y) - (2 * this.z * this.z));
             }
         }
@@ -207,7 +212,7 @@ namespace CellAO.Core.Vector
             get
             {
                 double _yaw = Math.Atan2(
-                    (2 * this.y * this.w) - (2 * this.x * this.z), 
+                    (2 * this.y * this.w) - (2 * this.x * this.z),
                     1 - (2 * this.y * this.y) - (2 * this.z * this.z));
                 if (_yaw < 0)
                 {
@@ -249,6 +254,126 @@ namespace CellAO.Core.Vector
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Return the Conjugate (Spacial Inverse) of the Quaternion
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public IQuaternion Conjugate()
+        {
+            return Conjugate(this);
+        }
+
+        /// <summary>
+        /// Fill this info in
+        /// </summary>
+        /// <param name="vDirection">
+        /// </param>
+        /// <returns>
+        /// Fill this info in
+        /// </returns>
+        public IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection)
+        {
+            // Step 1. Setup basis vectors describing the rotation given the input vector and assuming an initial up direction of (0, 1, 0)
+            Vector3 vUp = new Vector3(0, 1.0f, 0.0f); // Y Up vector
+            Vector3 vRight = Vector3.Cross(vUp, vDirection); // The perpendicular vector to Up and Direction
+            vUp = Vector3.Cross(vDirection, vRight); // The actual up vector given the direction and the right vector
+
+            // Step 2. Put the three vectors into the matrix to bulid a basis rotation matrix
+            // This step isnt necessary, but im adding it because often you would want to convert from matricies to quaternions instead of vectors to quaternions
+            // If you want to skip this step, you can use the vector values directly in the quaternion setup below
+            Matrix mBasis = new DenseMatrix(4, 4);
+            mBasis.SetRow(0, new[] { (float)vRight.x, (float)vRight.y, (float)vRight.z, 0.0f });
+            mBasis.SetRow(1, new[] { (float)vUp.x, (float)vUp.y, (float)vUp.z, 0.0f });
+            mBasis.SetRow(2, new[] { (float)vDirection.x, (float)vDirection.y, (float)vDirection.z, 0.0f });
+            mBasis.SetRow(3, new[] { 0.0f, 0.0f, 0.0f, 1.0f });
+
+            // Step 3. Build a quaternion from the matrix
+            double dfWScale = Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f * 4.0;
+            if (dfWScale == 0.0)
+            {
+                Quaternion q = new Quaternion(0, 1, 0, 0);
+                return q;
+            }
+
+            Quaternion qrot = new Quaternion(
+                (float)((mBasis.At(3, 2) - mBasis.At(2, 3)) / dfWScale),
+                (float)((mBasis.At(0, 2) - mBasis.At(2, 0)) / dfWScale),
+                (float)((mBasis.At(1, 0) - mBasis.At(0, 1)) / dfWScale),
+                (float)Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f);
+            return qrot;
+        }
+
+        /// <summary>
+        /// Returns the Hamilton Product of two Quaternions
+        /// </summary>
+        /// <param name="vRight">
+        /// Other Quaternion
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IQuaternion Hamilton(IQuaternion vRight)
+        {
+            return Hamilton(this, vRight);
+        }
+
+        /// <summary>
+        /// Return a Normalized Quaternion
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public IQuaternion Normalize()
+        {
+            return Normalize(this);
+        }
+
+        /// <summary>
+        /// Return a Vector rotated around the Quaternion
+        /// Note: Only works for Unit Quaternions at present due to lazyness (AO-provided Quaternions are all Unit Quaternions)
+        /// </summary>
+        /// <param name="v1">
+        /// Vector
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IVector3 RotateVector3(IVector3 v1)
+        {
+            return RotateVector3(this, v1);
+        }
+
+        /// <summary>
+        /// Return a Vector representation of a Quaternion (w is dropped)
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public IVector3 VectorRepresentation()
+        {
+            return VectorRepresentation(this);
+        }
+
+        /// <summary>
+        /// Update a Quaternion to a new value using its Components
+        /// </summary>
+        /// <param name="x">
+        /// x component of the Quaternion
+        /// </param>
+        /// <param name="y">
+        /// y component of the Quaternion
+        /// </param>
+        /// <param name="z">
+        /// z component of the Quaternion
+        /// </param>
+        /// <param name="w">
+        /// w component of the Quaternion
+        /// </param>
+        public void update(double x, double y, double z, double w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
 
         /// <summary>
         /// Return the Conjugate of the Quaternion
@@ -353,124 +478,9 @@ namespace CellAO.Core.Vector
             return new Quaternion(q.X, q.Y, q.Z, q.W);
         }
 
-        /// <summary>
-        /// Return the Conjugate (Spacial Inverse) of the Quaternion
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public IQuaternion Conjugate()
+        public override string ToString()
         {
-            return Conjugate(this);
-        }
-
-        /// <summary>
-        /// Fill this info in
-        /// </summary>
-        /// <param name="vDirection">
-        /// </param>
-        /// <returns>
-        /// Fill this info in
-        /// </returns>
-        public IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection)
-        {
-            // Step 1. Setup basis vectors describing the rotation given the input vector and assuming an initial up direction of (0, 1, 0)
-            Vector3 vUp = new Vector3(0, 1.0f, 0.0f); // Y Up vector
-            Vector3 vRight = Vector3.Cross(vUp, vDirection); // The perpendicular vector to Up and Direction
-            vUp = Vector3.Cross(vDirection, vRight); // The actual up vector given the direction and the right vector
-
-            // Step 2. Put the three vectors into the matrix to bulid a basis rotation matrix
-            // This step isnt necessary, but im adding it because often you would want to convert from matricies to quaternions instead of vectors to quaternions
-            // If you want to skip this step, you can use the vector values directly in the quaternion setup below
-            Matrix mBasis = new DenseMatrix(4, 4);
-            mBasis.SetRow(0, new[] { (float)vRight.x, (float)vRight.y, (float)vRight.z, 0.0f });
-            mBasis.SetRow(1, new[] { (float)vUp.x, (float)vUp.y, (float)vUp.z, 0.0f });
-            mBasis.SetRow(2, new[] { (float)vDirection.x, (float)vDirection.y, (float)vDirection.z, 0.0f });
-            mBasis.SetRow(3, new[] { 0.0f, 0.0f, 0.0f, 1.0f });
-
-            // Step 3. Build a quaternion from the matrix
-            double dfWScale = Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f * 4.0;
-            if (dfWScale == 0.0)
-            {
-                Quaternion q = new Quaternion(0, 1, 0, 0);
-                return q;
-            }
-
-            Quaternion qrot = new Quaternion(
-                (float)((mBasis.At(3, 2) - mBasis.At(2, 3)) / dfWScale), 
-                (float)((mBasis.At(0, 2) - mBasis.At(2, 0)) / dfWScale), 
-                (float)((mBasis.At(1, 0) - mBasis.At(0, 1)) / dfWScale), 
-                (float)Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f);
-            return qrot;
-        }
-
-        /// <summary>
-        /// Returns the Hamilton Product of two Quaternions
-        /// </summary>
-        /// <param name="vRight">
-        /// Other Quaternion
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public IQuaternion Hamilton(IQuaternion vRight)
-        {
-            return Hamilton(this, vRight);
-        }
-
-        /// <summary>
-        /// Return a Normalized Quaternion
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public IQuaternion Normalize()
-        {
-            return Normalize(this);
-        }
-
-        /// <summary>
-        /// Return a Vector rotated around the Quaternion
-        /// Note: Only works for Unit Quaternions at present due to lazyness (AO-provided Quaternions are all Unit Quaternions)
-        /// </summary>
-        /// <param name="v1">
-        /// Vector
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public IVector3 RotateVector3(IVector3 v1)
-        {
-            return RotateVector3(this, v1);
-        }
-
-        /// <summary>
-        /// Return a Vector representation of a Quaternion (w is dropped)
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public IVector3 VectorRepresentation()
-        {
-            return VectorRepresentation(this);
-        }
-
-        /// <summary>
-        /// Update a Quaternion to a new value using its Components
-        /// </summary>
-        /// <param name="x">
-        /// x component of the Quaternion
-        /// </param>
-        /// <param name="y">
-        /// y component of the Quaternion
-        /// </param>
-        /// <param name="z">
-        /// z component of the Quaternion
-        /// </param>
-        /// <param name="w">
-        /// w component of the Quaternion
-        /// </param>
-        public void update(double x, double y, double z, double w)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
+            return string.Format("{0} {1} {2} {3}", this.x, this.y, this.z, this.w);
         }
 
         #endregion

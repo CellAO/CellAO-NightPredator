@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -81,6 +86,10 @@ namespace CellAO.Core.Entities
         /// </summary>
         private SpinOrStrafeDirections strafeDirection;
 
+        private byte lastMoveType = 0;
+
+        private bool disposed = false;
+
         #endregion
 
         #region Constructors and Destructors
@@ -107,26 +116,22 @@ namespace CellAO.Core.Entities
 
             this.SocialTab = new Dictionary<int, int>
                              {
-                                 { 0, 0 }, 
-                                 { 1, 0 }, 
-                                 { 2, 0 }, 
-                                 { 3, 0 }, 
-                                 { 4, 0 }, 
-                                 { 38, 0 }, 
-                                 { 1004, 0 }, 
-                                 { 1005, 0 }, 
-                                 { 64, 0 }, 
-                                 { 32, 0 }, 
-                                 { 1006, 0 }, 
+                                 { 0, 0 },
+                                 { 1, 0 },
+                                 { 2, 0 },
+                                 { 3, 0 },
+                                 { 4, 0 },
+                                 { 38, 0 },
+                                 { 1004, 0 },
+                                 { 1005, 0 },
+                                 { 64, 0 },
+                                 { 32, 0 },
+                                 { 1006, 0 },
                                  { 1007, 0 }
                              };
 
-            this.Read();
-
             this.meshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
             this.socialMeshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
-
-            this.DoNotDoTimers = false;
         }
 
         #endregion
@@ -238,7 +243,24 @@ namespace CellAO.Core.Entities
 
                     moveVector = moveVector * this.PredictionDuration.TotalSeconds;
 
-                    return new Coordinate(this.RawCoordinates + moveVector);
+                    this.RawCoordinates = new Vector3()
+                                          {
+                                              x = this.RawCoordinates.X + moveVector.x,
+                                              y = this.RawCoordinates.Y + moveVector.y,
+                                              z = this.RawCoordinates.Z + moveVector.z
+                                          };
+
+                    this.PredictionTime = DateTime.UtcNow;
+                    Coordinate result =
+                        new Coordinate(
+                            new Vector3(
+                                this.RawCoordinates.X + moveVector.x,
+                                this.RawCoordinates.Y + moveVector.y,
+                                this.RawCoordinates.Z + moveVector.z));
+                    LogUtil.Debug(
+                        DebugInfoDetail.Movement,
+                        moveVector.ToString().PadRight(40) + "/" + result.ToString() + "/");
+                    return result;
                 }
                 else
                 {
@@ -283,6 +305,7 @@ namespace CellAO.Core.Entities
                                           Y = value.y,
                                           Z = value.z
                                       };
+                this.PredictionTime = DateTime.UtcNow;
             }
         }
 
@@ -301,6 +324,7 @@ namespace CellAO.Core.Entities
             if (daochar != null)
             {
                 LogUtil.Debug(
+                    DebugInfoDetail.Database,
                     "Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z + "/" + daochar.Playfield);
                 this.Name = daochar.Name;
                 this.LastName = daochar.LastName;
@@ -333,9 +357,14 @@ namespace CellAO.Core.Entities
         /// </returns>
         public override bool Write()
         {
+            if (!this.Controller.SaveToDatabase)
+            {
+                return true;
+            }
             this.BaseInventory.Write();
             DBCharacter temp = this.GetDBCharacter();
             LogUtil.Debug(
+                DebugInfoDetail.Database,
                 "Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z + "/" + temp.Playfield);
             CharacterDao.Instance.Save(this.GetDBCharacter());
 
@@ -347,30 +376,41 @@ namespace CellAO.Core.Entities
             return base.Write();
         }
 
-        /// <summary>
-        /// </summary>
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            this.DoNotDoTimers = true;
-            this.Playfield.Despawn(this.Identity);
-            this.Save();
-
-            // SetOffline has to be called AFTER save
-            int charId = this.Identity.Instance;
-
-            this.BaseInventory.Dispose();
-            this.DoNotDoTimers = true;
-            if (this.Controller != null)
+            if (disposing)
             {
-                if (this.Controller.Client != null)
+                if (!this.disposed)
                 {
-                    this.Controller.Client.Server.DisconnectClient(this.Controller.Client);
-                    this.Controller.Client = null;
+                    this.DoNotDoTimers = true;
+                    this.Playfield.Despawn(this.Identity);
+                    this.Save();
+
+                    // SetOffline has to be called AFTER save
+                    int charId = this.Identity.Instance;
+
+                    this.BaseInventory.Dispose();
+                    this.DoNotDoTimers = true;
+                    if (this.Controller != null)
+                    {
+                        if (this.Controller.Client != null)
+                        {
+                            this.Controller.Client.Server.DisconnectClient(this.Controller.Client);
+                            this.Controller.Client = null;
+                        }
+                        this.Controller.Dispose();
+                    }
+
+                    if (this.logoutTimer != null)
+                    {
+                        this.logoutTimer.Dispose();
+                    }
+
+                    CharacterDao.Instance.SetOffline(charId);
                 }
             }
-            CharacterDao.Instance.SetOffline(charId);
-            this.Controller.Dispose();
-            base.Dispose();
+            this.disposed = true;
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -425,17 +465,17 @@ namespace CellAO.Core.Entities
 
             this.SocialTab = new Dictionary<int, int>
                              {
-                                 { 0, 0 }, 
-                                 { 1, 0 }, 
-                                 { 2, 0 }, 
-                                 { 3, 0 }, 
-                                 { 4, 0 }, 
-                                 { 38, 0 }, 
-                                 { 1004, 0 }, 
-                                 { 1005, 0 }, 
-                                 { 64, 0 }, 
-                                 { 32, 0 }, 
-                                 { 1006, 0 }, 
+                                 { 0, 0 },
+                                 { 1, 0 },
+                                 { 2, 0 },
+                                 { 3, 0 },
+                                 { 4, 0 },
+                                 { 38, 0 },
+                                 { 1004, 0 },
+                                 { 1005, 0 },
+                                 { 64, 0 },
+                                 { 32, 0 },
+                                 { 1006, 0 },
                                  { 1007, 0 }
                              };
 
@@ -527,6 +567,9 @@ namespace CellAO.Core.Entities
                 15: same as 0
                 16: same as 0
              */
+
+            this.lastMoveType = moveType;
+
             switch (moveType)
             {
                 case 1: // Forward Start
@@ -534,6 +577,8 @@ namespace CellAO.Core.Entities
                     break;
                 case 2: // Forward Stop
                     this.moveDirection = MoveDirections.None;
+                    // Stop the predicition
+                    this.Coordinates = this.Coordinates;
                     break;
 
                 case 3: // Reverse Start
@@ -664,6 +709,26 @@ namespace CellAO.Core.Entities
         }
 
         /// <summary>
+        /// </summary>
+        public void StopMovement()
+        {
+            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
+            this.RawCoordinates.X = this.Coordinates.x;
+            this.RawCoordinates.Y = this.Coordinates.y;
+            this.RawCoordinates.Z = this.Coordinates.z;
+            this.RawHeading = this.Heading;
+
+            this.spinDirection = SpinOrStrafeDirections.None;
+            this.strafeDirection = SpinOrStrafeDirections.None;
+            this.moveDirection = MoveDirections.None;
+        }
+
+        public byte GetLastMoveType()
+        {
+            return this.lastMoveType;
+        }
+
+        /// <summary>
         /// Can Character move?
         /// </summary>
         /// <returns>Can move=true</returns>
@@ -677,21 +742,6 @@ namespace CellAO.Core.Entities
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// </summary>
-        public void StopMovement()
-        {
-            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
-            this.RawCoordinates.X = this.Coordinates.x;
-            this.RawCoordinates.Y = this.Coordinates.y;
-            this.RawCoordinates.Z = this.Coordinates.z;
-            this.RawHeading = this.Heading;
-
-            this.spinDirection = SpinOrStrafeDirections.None;
-            this.strafeDirection = SpinOrStrafeDirections.None;
-            this.moveDirection = MoveDirections.None;
         }
 
         /// <summary>

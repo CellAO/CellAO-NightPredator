@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,36 +34,27 @@ namespace ZoneEngine.Core
     #region Usings ...
 
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Net.Sockets;
-    using System.Threading;
 
     using Cell.Core;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.EventHandlers.Events;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
-    using CellAO.Enums;
     using CellAO.ObjectManager;
-    using ZoneEngine.Core.Controllers;
-
-    using MemBus;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
 
     using zlib;
 
-    using ZoneEngine.Core.Functions;
+    using IBus = MemBus.IBus;
 
     #endregion
 
@@ -78,7 +74,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private MemBus.IBus bus;
+        private readonly IBus bus;
 
         /// <summary>
         /// </summary>
@@ -92,6 +88,8 @@ namespace ZoneEngine.Core
         /// </summary>
         private NetworkStream netStream;
 
+        private readonly object locker = new object();
+
         /// <summary>
         /// </summary>
         private short packetNumber = 0;
@@ -103,6 +101,8 @@ namespace ZoneEngine.Core
         /// <summary>
         /// </summary>
         private bool zStreamSetup;
+
+        private bool disposed = false;
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace ZoneEngine.Core
         /// </param>
         /// <param name="bus">
         /// </param>
-        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, MemBus.IBus bus)
+        public ZoneClient(ZoneServer server, IMessageSerializer messageSerializer, IBus bus)
             : base(server)
         {
             this.server = server;
@@ -146,56 +146,6 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        /// <param name="charId">
-        /// </param>
-        /// <exception cref="Exception">
-        /// </exception>
-        public void CreateCharacter(int charId)
-        {
-            DBCharacter character = CharacterDao.Instance.Get(charId);
-            if (character == null)
-            {
-                throw new Exception("Character " + charId + " not found.");
-            }
-
-            this.controller = new PlayerController(this);
-
-            // TODO: Save playfield type into Character table and use it accordingly
-            IPlayfield pf = this.server.PlayfieldById(new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
-
-            if (Pool.Instance.GetObject<Character>(
-                new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
-            {
-                this.Controller.Character = new Character(
-                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
-                    this.Controller);
-            }
-            else
-            {
-                this.Controller.Character =
-                    Pool.Instance.GetObject<Character>(
-                        new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
-                this.Controller.Character.Reconnect(this);
-                LogUtil.Debug("Reconnected to Character " + charId);
-            }
-
-            // Stop pending logouts
-            this.Controller.Character.StopLogoutTimer();
-
-            this.Controller.Character.Playfield = pf;
-            this.Playfield = pf;
-            this.Controller.Character.Stats.Read();
-        }
-
-        /// <summary>
-        /// </summary>
-        public new void Dispose()
-        {
-            this.Dispose(true);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="messageBody">
         /// </param>
         public void SendCompressed(MessageBody messageBody)
@@ -216,12 +166,55 @@ namespace ZoneEngine.Core
 
             byte[] buffer = this.messageSerializer.Serialize(message);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(messageBody.GetType().ToString());
-            }
+            LogUtil.Debug(DebugInfoDetail.AoTomation, messageBody.GetType().ToString());
 
             this.SendCompressed(buffer);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="charId">
+        /// </param>
+        /// <exception cref="Exception">
+        /// </exception>
+        public void CreateCharacter(int charId)
+        {
+            DBCharacter character = CharacterDao.Instance.Get(charId);
+            if (character == null)
+            {
+                throw new Exception("Character " + charId + " not found.");
+            }
+
+            // TODO: Save playfield type into Character table and use it accordingly
+            IPlayfield pf =
+                this.server.PlayfieldById(
+                    new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
+
+            if (
+                Pool.Instance.GetObject<Character>(
+                    new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
+            {
+                this.Controller.Character =
+                    new Character(
+                        new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
+                        this.Controller);
+                this.controller.Character.Read();
+            }
+            else
+            {
+                this.Controller.Character =
+                    Pool.Instance.GetObject<Character>(
+                        new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
+                this.Controller.Character.Reconnect(this);
+                LogUtil.Debug(DebugInfoDetail.Engine, "Reconnected to Character " + charId);
+            }
+
+            // Stop pending logouts
+            this.Controller.Character.StopLogoutTimer();
+
+            this.Controller.Character.Playfield = pf;
+            this.Playfield = pf;
+            this.Controller.Character.Stats.Read();
         }
 
         /// <summary>
@@ -231,7 +224,7 @@ namespace ZoneEngine.Core
         public void SendCompressed(byte[] buffer)
         {
             // We can not be multithreaded here. packet numbers would be jumbled
-            lock (this.netStream)
+            lock (this.locker)
             {
                 // Discard the packet for now, if we can not write to the stream
                 if (this.netStream.CanWrite)
@@ -247,17 +240,14 @@ namespace ZoneEngine.Core
                     }
                     catch (Exception e)
                     {
-                        LogUtil.Debug("Error writing to zStream");
+                        LogUtil.Debug(DebugInfoDetail.Error, "Error writing to zStream");
                         LogUtil.ErrorException(e);
                         this.server.DisconnectClient(this);
                     }
                 }
             }
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(HexOutput.Output(buffer));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(buffer));
         }
 
         /// <summary>
@@ -286,10 +276,7 @@ namespace ZoneEngine.Core
                           };
             byte[] buffer = this.messageSerializer.Serialize(message);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(HexOutput.Output(buffer));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(buffer));
 
             this.packetNumber = 1;
 
@@ -323,23 +310,38 @@ namespace ZoneEngine.Core
         /// </param>
         protected override void Dispose(bool disposing)
         {
-            // Remove reference of character
-            if (this.Controller.Character != null)
+            if (disposing)
             {
-
-                // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
-                // only how should i find out..... - Algorithman
-                /*
-                if (this.character.Stats[StatIds.gmlevel].Value == 0)
+                if (!this.disposed)
                 {
-                    this.character.StartLogoutTimer();
+                    // Remove reference of character
+                    if (this.Controller.Character != null)
+                    {
+                        // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
+                        // only how should i find out..... - Algorithman
+                        /*
+                    if (this.character.Stats[StatIds.gmlevel].Value == 0)
+                    {
+                        this.character.StartLogoutTimer();
+                    }
+                     */
+                        //if (this == this.character.Client)
+                        // {
+                        //this.character.Client = null;
+                        // }
+                    }
+                    if (this.zStream != null)
+                    {
+                        this.zStream.Close();
+                    }
+                    if (this.netStream != null)
+                    {
+                        this.netStream.Close();
+                    }
+                    this.controller = null;
                 }
-                 */
-                //if (this == this.character.Client)
-                // {
-                //this.character.Client = null;
-                // }
             }
+            this.disposed = true;
 
             // Not needed anymore, since controller.character is a weakreference now and only lives in the Pool now
             // this.Controller.Character = null;
@@ -396,10 +398,7 @@ namespace ZoneEngine.Core
             var packet = new byte[this._remainingLength];
             Array.Copy(buffer.SegmentData, packet, this._remainingLength);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug("\r\nReceived: \r\n" + HexOutput.Output(packet));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, "\r\nReceived: \r\n" + HexOutput.Output(packet));
 
             this._remainingLength = 0;
             try
@@ -413,7 +412,7 @@ namespace ZoneEngine.Core
                     this,
                     "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
-                LogUtil.Debug(HexOutput.Output(packet));
+                LogUtil.Debug(DebugInfoDetail.Error, HexOutput.Output(packet));
                 return false;
             }
 
