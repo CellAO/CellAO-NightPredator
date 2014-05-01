@@ -11680,7 +11680,7 @@ namespace CellAO.Stats
             var temp = new Dictionary<int, uint>();
             foreach (Stat c in this.all)
             {
-                if (c.DefaultValue != c.BaseValue)
+                // if (c.DefaultValue != c.Value)
                 {
                     temp.Add(c.StatId, c.BaseValue);
                 }

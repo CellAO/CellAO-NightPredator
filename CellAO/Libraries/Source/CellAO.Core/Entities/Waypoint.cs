@@ -29,15 +29,30 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Core.Vector;
 
-using Utility;
+    #endregion
 
-#endregion
+    public class Waypoint
+    {
+        public Waypoint()
+        {
+            this.Running = false;
+            this.Position = new Vector3();
+        }
 
-[assembly: AssemblyVersion("1.4.1.2172")]
-[assembly: AssemblyFileVersion("1.4.1.2277")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+        public Waypoint(Vector3 position, bool running)
+        {
+            this.Running = running;
+            this.Position = position;
+        }
+
+        public bool Running { get; set; }
+
+        public Vector3 Position { get; set; }
+    }
+}

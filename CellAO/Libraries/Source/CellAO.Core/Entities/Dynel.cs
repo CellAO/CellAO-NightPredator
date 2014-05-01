@@ -153,7 +153,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public Vector3 RawCoordinates { get; set; }
+        public virtual Vector3 RawCoordinates { get; set; }
 
         /// <summary>
         /// </summary>

@@ -36,9 +36,12 @@ namespace ZoneEngine.ChatCommands
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
+    using CellAO.Enums;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
@@ -68,6 +71,19 @@ namespace ZoneEngine.ChatCommands
                     npc.Controller.MoveTo(newcoords);
                 }
             }
+            if (args[0].ToLower() == "walkback")
+            {
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                if (npc != null)
+                {
+                    Vector3 newcoords = new Vector3();
+                    newcoords.X = npc.RawCoordinates.X;
+                    newcoords.Y = npc.RawCoordinates.Y;
+                    newcoords.Z = npc.RawCoordinates.Z;
+                    newcoords.X -= 20;
+                    npc.Controller.MoveTo(newcoords);
+                }
+            }
             if (args[0].ToLower() == "followtest")
             {
                 ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
@@ -75,6 +91,36 @@ namespace ZoneEngine.ChatCommands
                 {
                     npc.Controller.Follow(character.Identity);
                 }
+            }
+            if (args[0].ToLower() == "showcoords")
+            {
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                if (npc != null)
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            "Coordinates of "+character.SelectedTarget.ToString(true)+": "+npc.Coordinates.ToString()));
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            "Heading of " + character.SelectedTarget.ToString(true) + ": " + npc.Heading.ToString()));
+                }
+            }
+            if (args[0].ToLower() == "addwp")
+            {
+                CellAO.Core.Vector.Vector3 v = character.Coordinates.coordinate;
+                bool running = character.MoveMode == MoveModes.Run;
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                if (npc != null)
+                {
+                    npc.AddWaypoint(v, running);
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            "Waypoint added: " + character.SelectedTarget.ToString(true) + ": " + character.Coordinates.ToString()));
+                }
+
             }
         }
 
@@ -85,7 +131,7 @@ namespace ZoneEngine.ChatCommands
 
         public override List<string> ListCommands()
         {
-            return new List<string>(new[] { "walktest", "followtest" });
+            return new List<string>(new[] { "walktest", "followtest", "walkback", "showcoords" , "addwp"});
         }
     }
 }

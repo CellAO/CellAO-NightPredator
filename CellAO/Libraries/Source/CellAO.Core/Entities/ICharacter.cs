@@ -86,6 +86,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         TradeSkillInfo TradeSkillTarget { get; set; }
 
+        List<Waypoint> Waypoints { get; set; }
+
         /// <summary>
         /// </summary>
         MoveModes MoveMode { get; set; }
@@ -131,5 +133,7 @@ namespace CellAO.Core.Entities
         void StopMovement();
 
         byte GetLastMoveType();
+
+        void AddWaypoint(Vector.Vector3 v, bool running);
     }
 }

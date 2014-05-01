@@ -94,12 +94,9 @@ namespace ZoneEngine.ChatCommands
 
             if (MobSpawnDao.Instance.Exists(mobdbo.Id))
             {
-                MobSpawnDao.Instance.Save(mobdbo);
+                MobSpawnDao.Instance.Delete(mobdbo.Id);
             }
-            else
-            {
-                MobSpawnDao.Instance.Add(mobdbo);
-            }
+            MobSpawnDao.Instance.Add(mobdbo);
 
             // Clear remnants first
             MobSpawnStatDao.Instance.Delete(new { mobdbo.Id, mobdbo.Playfield });
@@ -115,6 +112,21 @@ namespace ZoneEngine.ChatCommands
                         Value = (int)kv.Value
                     });
             }
+
+            MobSpawnWaypointsDao.Instance.Delete(new { Identity = mobdbo.Id });
+
+            foreach (Waypoint wp in mob.Waypoints)
+            {
+                DBMobSpawnWaypoints waypoint = new DBMobSpawnWaypoints();
+                waypoint.Identity = mobdbo.Id;
+                waypoint.Playfield = mobdbo.Playfield;
+                waypoint.WalkMode = wp.Running ? 1 : 0;
+                waypoint.X = wp.Position.xf;
+                waypoint.Y = wp.Position.yf;
+                waypoint.Z = wp.Position.zf;
+                MobSpawnWaypointsDao.Instance.Add(waypoint);
+            }
+
         }
 
         public override int GMLevelNeeded()

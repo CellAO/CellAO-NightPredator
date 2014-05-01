@@ -86,6 +86,10 @@ namespace CellAO.Core.Entities
         /// </summary>
         private SpinOrStrafeDirections strafeDirection;
 
+        public List<Waypoint> Waypoints { get; set; }
+
+
+
         private byte lastMoveType = 0;
 
         private bool disposed = false;
@@ -129,6 +133,8 @@ namespace CellAO.Core.Entities
                                  { 1006, 0 },
                                  { 1007, 0 }
                              };
+
+            this.Waypoints = new List<Waypoint>();
 
             this.meshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
             this.socialMeshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
@@ -206,7 +212,17 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public MoveModes MoveMode { get; set; }
+        public MoveModes MoveMode
+        {
+            get
+            {
+                return this.currentmovementmode;
+            }
+            set
+            {
+                this.currentmovementmode = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -233,68 +249,8 @@ namespace CellAO.Core.Entities
         {
             get
             {
-                if ((this.moveDirection == MoveDirections.None) && (this.strafeDirection == SpinOrStrafeDirections.None))
-                {
-                    return new Coordinate(this.RawCoordinates);
-                }
-                else if (this.spinDirection == SpinOrStrafeDirections.None)
-                {
-                    Vector3 moveVector = this.calculateMoveVector();
-
-                    moveVector = moveVector * this.PredictionDuration.TotalSeconds;
-
-                    this.RawCoordinates = new Vector3()
-                                          {
-                                              x = this.RawCoordinates.X + moveVector.x,
-                                              y = this.RawCoordinates.Y + moveVector.y,
-                                              z = this.RawCoordinates.Z + moveVector.z
-                                          };
-
-                    this.PredictionTime = DateTime.UtcNow;
-                    Coordinate result =
-                        new Coordinate(
-                            new Vector3(
-                                this.RawCoordinates.X + moveVector.x,
-                                this.RawCoordinates.Y + moveVector.y,
-                                this.RawCoordinates.Z + moveVector.z));
-                    LogUtil.Debug(
-                        DebugInfoDetail.Movement,
-                        moveVector.ToString().PadRight(40) + "/" + result.ToString() + "/");
-                    return result;
-                }
-                else
-                {
-                    Vector3 moveVector;
-                    Vector3 positionFromCentreOfTurningCircle;
-                    double turnArcAngle;
-                    double y;
-                    double duration;
-
-                    duration = this.PredictionDuration.TotalSeconds;
-
-                    moveVector = this.calculateMoveVector();
-                    turnArcAngle = this.calculateTurnArcAngle();
-
-                    // This is calculated seperately as height is unaffected by turning
-                    y = this.RawCoordinates.Y + (moveVector.y * duration);
-
-                    if (this.spinDirection == SpinOrStrafeDirections.Left)
-                    {
-                        positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
-                    }
-                    else
-                    {
-                        positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
-                    }
-
-                    return
-                        new Coordinate(
-                            new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
-                            + (Vector3)
-                                Quaternion.RotateVector3(
-                                    new Quaternion(Vector3.AxisY, turnArcAngle),
-                                    positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
-                }
+                Coordinate result = this.CalculatePredictedPosition();
+                return result;
             }
 
             set
@@ -305,7 +261,74 @@ namespace CellAO.Core.Entities
                                           Y = value.y,
                                           Z = value.z
                                       };
+                LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + value.ToString());
                 this.PredictionTime = DateTime.UtcNow;
+            }
+        }
+
+        internal Coordinate CalculatePredictedPosition()
+        {
+            if ((this.moveDirection == MoveDirections.None) && (this.strafeDirection == SpinOrStrafeDirections.None))
+            {
+                return new Coordinate(this.RawCoordinates);
+            }
+            else if (this.spinDirection == SpinOrStrafeDirections.None)
+            {
+                Vector3 moveVector = this.CalculateMoveVector();
+
+                moveVector = moveVector * this.PredictionDuration.TotalSeconds;
+
+                /*this.RawCoordinates = new Vector3()
+                                      {
+                                          x = this.RawCoordinates.X + moveVector.x,
+                                          y = this.RawCoordinates.Y + moveVector.y,
+                                          z = this.RawCoordinates.Z + moveVector.z
+                                      };
+
+                this.PredictionTime = DateTime.UtcNow;*/
+                Coordinate result =
+                    new Coordinate(
+                        new Vector3(
+                            this.RawCoordinates.X + moveVector.x,
+                            this.RawCoordinates.Y + moveVector.y,
+                            this.RawCoordinates.Z + moveVector.z));
+                LogUtil.Debug(
+                    DebugInfoDetail.Movement,
+                    moveVector.ToString().PadRight(40) + "/" + result.ToString() + "/");
+                return result;
+            }
+            else
+            {
+                Vector3 moveVector;
+                Vector3 positionFromCentreOfTurningCircle;
+                double turnArcAngle;
+                double y;
+                double duration;
+
+                duration = this.PredictionDuration.TotalSeconds;
+
+                moveVector = this.CalculateMoveVector();
+                turnArcAngle = this.calculateTurnArcAngle();
+
+                // This is calculated seperately as height is unaffected by turning
+                y = this.RawCoordinates.Y + (moveVector.y * duration);
+
+                if (this.spinDirection == SpinOrStrafeDirections.Left)
+                {
+                    positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
+                }
+                else
+                {
+                    positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
+                }
+
+                return
+                    new Coordinate(
+                        new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
+                        + (Vector3)
+                            Quaternion.RotateVector3(
+                                new Quaternion(Vector3.AxisY, turnArcAngle),
+                                positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
             }
         }
 
@@ -576,15 +599,21 @@ namespace CellAO.Core.Entities
                     this.moveDirection = MoveDirections.Forwards;
                     break;
                 case 2: // Forward Stop
-                    this.moveDirection = MoveDirections.None;
                     // Stop the predicition
-                    this.Coordinates = this.Coordinates;
+                    Coordinate temp = this.CalculatePredictedPosition();
+                    this.Coordinates = temp;
+                    LogUtil.Debug(DebugInfoDetail.Movement, "Stopped at " + temp);
+                    this.PredictionTime = DateTime.UtcNow;
+                    this.moveDirection = MoveDirections.None;
                     break;
 
                 case 3: // Reverse Start
                     this.moveDirection = MoveDirections.Backwards;
                     break;
                 case 4: // Reverse Stop
+                    // Stop the predicition
+                    this.Coordinates = this.CalculatePredictedPosition();
+                    this.PredictionTime = DateTime.UtcNow;
                     this.moveDirection = MoveDirections.None;
                     break;
 
@@ -728,6 +757,15 @@ namespace CellAO.Core.Entities
             return this.lastMoveType;
         }
 
+        public void AddWaypoint(Vector3 v, bool running)
+        {
+            this.Waypoints.Add(new Waypoint(v, running));
+            if (this.Waypoints.Count > 1)
+            {
+                this.Controller.State = CharacterState.Patrolling;
+            }
+        }
+
         /// <summary>
         /// Can Character move?
         /// </summary>
@@ -835,7 +873,7 @@ namespace CellAO.Core.Entities
         /// Calculate move vector
         /// </summary>
         /// <returns>Movevector</returns>
-        private Vector3 calculateMoveVector()
+        private Vector3 CalculateMoveVector()
         {
             double forwardSpeed;
             double strafeSpeed;

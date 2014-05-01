@@ -52,7 +52,7 @@ namespace CellAO.Core.Entities
     /// </summary>
     public interface IController : IDisposable
     {
-        CharacterState State { get; }
+        CharacterState State { get; set; }
 
         /// <summary>
         /// ICharacter object connected to this Controller
@@ -428,5 +428,7 @@ namespace CellAO.Core.Entities
         bool IsFollowing();
 
         void DoFollow();
+
+        void StartPatrolling();
     }
 }

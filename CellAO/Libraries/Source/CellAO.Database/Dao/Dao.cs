@@ -53,7 +53,8 @@ namespace CellAO.Database.Dao
     /// <typeparam name="TU">
     /// </typeparam>
     public class Dao<T, TU> : IDao<T>
-        where T : IDBEntity, new() where TU : class, IDao<T>
+        where T : IDBEntity, new()
+        where TU : class, IDao<T>
     {
         /// <summary>
         /// </summary>
@@ -175,7 +176,7 @@ namespace CellAO.Database.Dao
                     // we must retrive the Id anyway here. we need to standardise the id as we started to do.
                     if (rowsAffected == 1)
                     {
-                        SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id, trans);
+                        SqlMapperUtil.SetIdentity<int>(conn, id => entity.Id = id == 0 ? entity.Id : id, trans);
                     }
                     else
                     {

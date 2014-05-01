@@ -36,6 +36,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
+    using CellAO.Enums;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -143,12 +144,26 @@ namespace ZoneEngine.Core.MessageHandlers
             return x =>
             {
                 x.Identity = character.Identity;
+                byte movetype = 0;
+                switch (character.MoveMode)
+                {
+                    case MoveModes.Crawl:
+                        movetype = 27;
+                        break;
+                    case MoveModes.Run:
+                        movetype = 25;
+                        break;
+                    case MoveModes.Walk:
+                    default: movetype = 24;
+                        break;
+
+                }
                 x.Info = new FollowCoordinateInfo()
                          {
                              CurrentCoordinates = start,
                              EndCoordinates = end,
                              CoordinateCount = 2,
-                             MoveMode = character.GetLastMoveType(),
+                             MoveMode = movetype,
                              FollowInfoType = 1
                          };
                 x.Unknown = 1;

@@ -265,6 +265,11 @@ namespace CellAO.Core.Vector
             return Conjugate(this);
         }
 
+        IQuaternion IQuaternion.GenerateRotationFromDirectionVector(IVector3 vDirection)
+        {
+            return GenerateRotationFromDirectionVector(vDirection);
+        }
+
         /// <summary>
         /// Fill this info in
         /// </summary>
@@ -273,12 +278,13 @@ namespace CellAO.Core.Vector
         /// <returns>
         /// Fill this info in
         /// </returns>
-        public IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection)
+        public static IQuaternion GenerateRotationFromDirectionVector(IVector3 vDirection)
         {
             // Step 1. Setup basis vectors describing the rotation given the input vector and assuming an initial up direction of (0, 1, 0)
+            Vector3 vDirNormalized = Vector3.Normalize((Vector3)vDirection);
             Vector3 vUp = new Vector3(0, 1.0f, 0.0f); // Y Up vector
-            Vector3 vRight = Vector3.Cross(vUp, vDirection); // The perpendicular vector to Up and Direction
-            vUp = Vector3.Cross(vDirection, vRight); // The actual up vector given the direction and the right vector
+            Vector3 vRight = Vector3.Cross(vUp, vDirNormalized); // The perpendicular vector to Up and Direction
+            vUp = Vector3.Cross(vDirNormalized, vRight); // The actual up vector given the direction and the right vector
 
             // Step 2. Put the three vectors into the matrix to bulid a basis rotation matrix
             // This step isnt necessary, but im adding it because often you would want to convert from matricies to quaternions instead of vectors to quaternions
@@ -286,7 +292,7 @@ namespace CellAO.Core.Vector
             Matrix mBasis = new DenseMatrix(4, 4);
             mBasis.SetRow(0, new[] { (float)vRight.x, (float)vRight.y, (float)vRight.z, 0.0f });
             mBasis.SetRow(1, new[] { (float)vUp.x, (float)vUp.y, (float)vUp.z, 0.0f });
-            mBasis.SetRow(2, new[] { (float)vDirection.x, (float)vDirection.y, (float)vDirection.z, 0.0f });
+            mBasis.SetRow(2, new[] { (float)vDirNormalized.x, (float)vDirNormalized.y, (float)vDirNormalized.z, 0.0f });
             mBasis.SetRow(3, new[] { 0.0f, 0.0f, 0.0f, 1.0f });
 
             // Step 3. Build a quaternion from the matrix
@@ -302,6 +308,9 @@ namespace CellAO.Core.Vector
                 (float)((mBasis.At(0, 2) - mBasis.At(2, 0)) / dfWScale),
                 (float)((mBasis.At(1, 0) - mBasis.At(0, 1)) / dfWScale),
                 (float)Math.Sqrt(1.0f + mBasis.At(0, 0) + mBasis.At(1, 1) + mBasis.At(2, 2)) / 2.0f);
+            var temp = qrot.w;
+            qrot.w = qrot.y;
+            qrot.y = temp;
             return qrot;
         }
 

@@ -77,12 +77,24 @@ namespace ZoneEngine.Core.Controllers
 
         private bool disposed = false;
 
+        private CharacterState state = CharacterState.Idle;
+
         public PlayerController(IZoneClient client)
         {
             this.Client = client;
         }
 
-        public CharacterState State { get; private set; }
+        public CharacterState State
+        {
+            get
+            {
+                return this.state;
+            }
+            set
+            {
+                this.state = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -157,6 +169,11 @@ namespace ZoneEngine.Core.Controllers
         }
 
         public void DoFollow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartPatrolling()
         {
             throw new NotImplementedException();
         }

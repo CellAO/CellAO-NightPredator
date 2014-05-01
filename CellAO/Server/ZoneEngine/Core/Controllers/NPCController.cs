@@ -36,7 +36,6 @@ namespace ZoneEngine.Core.Controllers
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Threading;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
@@ -53,8 +52,8 @@ namespace ZoneEngine.Core.Controllers
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.MessageHandlers;
 
-    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -62,13 +61,25 @@ namespace ZoneEngine.Core.Controllers
     /// </summary>
     internal class NPCController : IController
     {
-        private double lastDistance = 0.0f;
+        private double lastDistance = double.MaxValue;
 
         private Identity followIdentity = Identity.None;
 
-        private CellAO.Core.Vector.Vector3 followCoordinates = new CellAO.Core.Vector.Vector3();
+        private Vector3 followCoordinates = new Vector3();
 
-        public CharacterState State { get; private set; }
+        private CharacterState state = CharacterState.Idle;
+
+        public CharacterState State
+        {
+            get
+            {
+                return this.state;
+            }
+            set
+            {
+                this.state = value;
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -131,7 +142,7 @@ namespace ZoneEngine.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool Move(int moveType, Coordinate newCoordinates, CellAO.Core.Vector.Quaternion heading)
+        public bool Move(int moveType, Coordinate newCoordinates, Quaternion heading)
         {
             throw new NotImplementedException();
         }
@@ -144,6 +155,16 @@ namespace ZoneEngine.Core.Controllers
         public bool Follow(Identity target)
         {
             this.followIdentity = target;
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(target);
+            if (npc != null)
+            {
+                Vector3 temp = npc.Coordinates.coordinate-this.Character.Coordinates.coordinate;
+                temp.y = 0;
+                this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
+                FollowTargetMessageHandler.Default.Send(this.Character, this.Character.Coordinates.coordinate,npc.Coordinates.coordinate);
+                this.Run();
+                this.StartMovement();
+            }
             return true;
         }
 
@@ -293,19 +314,19 @@ namespace ZoneEngine.Core.Controllers
                 function.Arguments.Values.ToArray());
         }
 
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(SmokeLounge.AOtomation.Messaging.GameData.Vector3 destination)
         {
             FollowTargetMessageHandler.Default.Send(this.Character, this.Character.RawCoordinates, destination);
-            CellAO.Core.Vector.Vector3 dest = destination;
-            CellAO.Core.Vector.Vector3 start = this.Character.RawCoordinates;
+            Vector3 dest = destination;
+            Vector3 start = this.Character.RawCoordinates;
             dest = start - dest;
             dest = dest.Normalize();
-            this.Character.Heading =
-                (CellAO.Core.Vector.Quaternion)this.Character.Heading.GenerateRotationFromDirectionVector(dest);
+            this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(dest);
             this.Run();
 
             Coordinate c = new Coordinate(destination);
-            bool arrived = false;
+            this.followCoordinates = c.coordinate;
+            /*bool arrived = false;
             double lastDistance = double.MaxValue;
             while (!arrived)
             {
@@ -316,13 +337,14 @@ namespace ZoneEngine.Core.Controllers
                 // LogUtil.Debug(DebugInfoDetail.Movement,"Moving...");
                 Thread.Sleep(100);
             }
-            this.StopMovement();
+            LogUtil.Debug(DebugInfoDetail.Movement, "Arrived at "+this.Character.Coordinates.ToString());
+            this.StopMovement();*/
         }
 
         public void DoFollow()
         {
             Coordinate sourceCoord = this.Character.Coordinates;
-            CellAO.Core.Vector.Vector3 targetPosition = this.followCoordinates;
+            Vector3 targetPosition = this.followCoordinates;
             if (!this.followIdentity.Equals(Identity.None))
             {
                 ICharacter targetChar = Pool.Instance.GetObject<ICharacter>(this.followIdentity);
@@ -330,7 +352,7 @@ namespace ZoneEngine.Core.Controllers
                 {
                     // If target does not longer exist (death or zone or logoff) then stop following
                     this.followIdentity = Identity.None;
-                    this.followCoordinates = new CellAO.Core.Vector.Vector3();
+                    this.followCoordinates = new Vector3();
                     return;
                 }
 
@@ -338,38 +360,65 @@ namespace ZoneEngine.Core.Controllers
             }
 
             // Do we have coordinates to follow?
-            if (targetPosition.Distance2D(new CellAO.Core.Vector.Vector3()) < 0.01f)
+            if (targetPosition.Distance2D(new Vector3()) < 0.01f)
             {
                 return;
             }
 
             // /!\ If target flies away, there has to be some kind of adjustment
-            CellAO.Core.Vector.Vector3 start = sourceCoord.coordinate;
-            CellAO.Core.Vector.Vector3 dest = targetPosition;
+            Vector3 start = sourceCoord.coordinate;
+            Vector3 dest = targetPosition;
 
             // Check if we have arrived
-            if (start.Distance2D(dest) < 1.0f)
+            if (start.Distance2D(dest) < 0.1f)
             {
                 this.StopMovement();
                 this.Character.RawCoordinates = dest;
-                this.followCoordinates = new CellAO.Core.Vector.Vector3();
+                this.followCoordinates = new Vector3();
                 return;
             }
 
             LogUtil.Debug(DebugInfoDetail.Movement, "Distance to target: " + start.Distance2D(dest).ToString());
 
             // If target moved or first call, then issue a new follow
-            if (this.followCoordinates.Distance2D(dest) > 1.0f)
+            if (targetPosition.Distance2D(dest) > 1.0f)
             {
                 this.Character.Coordinates = sourceCoord;
-                CellAO.Core.Vector.Vector3 temp = dest - start;
+                Vector3 temp = dest - start;
                 temp.y = 0;
-                this.Character.Heading =
-                    (CellAO.Core.Vector.Quaternion)
-                        this.Character.Heading.GenerateRotationFromDirectionVector(temp.Normalize());
+                this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
                 this.followCoordinates = dest;
                 FollowTargetMessageHandler.Default.Send(this.Character, start, dest);
-                this.Run();
+                this.StartMovement();
+            }
+        }
+
+        public void StartPatrolling()
+        {
+            Waypoint next = this.FindNextWaypoint();
+
+            // If a suitable waypoint is found
+            if (next != null)
+            {
+                if (next.Running)
+                {
+                    this.Run();
+                }
+                else
+                {
+                    this.Walk();
+                }
+                this.followCoordinates = next.Position;
+                Vector3 temp = this.Character.Coordinates.coordinate - next.Position;
+                temp.y = 0;
+                this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
+                LogUtil.Debug(DebugInfoDetail.Movement, "Direction: " + this.Character.Heading.ToString());
+                FollowTargetMessageHandler.Default.Send(
+                    this.Character,
+                    this.Character.Coordinates.coordinate,
+                    next.Position);
+                this.StartMovement();
+                LogUtil.Debug(DebugInfoDetail.Movement, "Walking to: " + this.followCoordinates);
             }
         }
 
@@ -382,18 +431,16 @@ namespace ZoneEngine.Core.Controllers
         public void Run()
         {
             this.Character.UpdateMoveType(25); // Magic number: Switch to run
-            this.Character.UpdateMoveType(1); // Magic number: Forward start
         }
 
         public void StopMovement()
         {
-            this.Character.UpdateMoveType(2); // Magic numer: Forward stop
+            this.Character.UpdateMoveType(2); // Magic number: Forward stop
         }
 
         public void Walk()
         {
             this.Character.UpdateMoveType(24); // Magic number: Switch to walk
-            this.Character.UpdateMoveType(1); // Magic number: Forward start
         }
 
         public bool SaveToDatabase
@@ -404,13 +451,47 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
+        private Waypoint FindNextWaypoint()
+        {
+            Waypoint result = null;
+            double wpDistance = double.MaxValue;
+            foreach (Waypoint wp in this.Character.Waypoints)
+            {
+                double distance = wp.Position.Distance2D(this.Character.Coordinates.coordinate);
+                if (distance > 1.0f)
+                {
+                    if (wpDistance > distance)
+                    {
+                        result = wp;
+                        wpDistance = distance;
+                    }
+                }
+                else
+                {
+                    // If we stand on a waypoint already, then take the next (or first) one
+                    result =
+                        this.Character.Waypoints[
+                            (this.Character.Waypoints.IndexOf(wp) + 1) % this.Character.Waypoints.Count];
+                }
+            }
+            return result;
+        }
+
+        public void StartMovement()
+        {
+            this.Character.UpdateMoveType(1); // Magic number: Forward start
+        }
+
         ~NPCController()
         {
             LogUtil.Debug(DebugInfoDetail.Memory, "NPC Controller finished");
             LogUtil.Debug(DebugInfoDetail.Memory, new StackTrace().ToString());
         }
 
-        public bool Move(int moveType, Coordinate newCoordinates, Quaternion heading)
+        public bool Move(
+            int moveType,
+            Coordinate newCoordinates,
+            SmokeLounge.AOtomation.Messaging.GameData.Quaternion heading)
         {
             return false;
         }
@@ -424,7 +505,7 @@ namespace ZoneEngine.Core.Controllers
             this.followIdentity = Identity.None;
             lock (this.followCoordinates)
             {
-                this.followCoordinates = new CellAO.Core.Vector.Vector3();
+                this.followCoordinates = new Vector3();
             }
         }
     }

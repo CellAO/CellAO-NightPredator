@@ -339,7 +339,7 @@ namespace ZoneEngine.Core
                     ScriptCompiler.Instance.CallChatCommand(
                         cmdArgs[0].ToLower(),
                         character.Controller.Client,
-                        character.Identity,
+                        character.SelectedTarget,
                         cmdArgs);
                 }
             }

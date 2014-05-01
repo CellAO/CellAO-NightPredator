@@ -34,6 +34,8 @@ namespace CellAO.Core.NPCHandler
     #region Usings ...
 
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
@@ -165,10 +167,27 @@ namespace CellAO.Core.NPCHandler
                 {
                     cmob.Stats.SetBaseValueWithoutTriggering(stat.Stat, (uint)stat.Value);
                 }
-
                 // initiate affected stats calculation
                 int temp = cmob.Stats[StatIds.level].Value;
                 temp = cmob.Stats[StatIds.agility].Value;
+                temp = cmob.Stats[StatIds.headmesh].Value;
+                cmob.MeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
+                cmob.SocialMeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
+
+                IEnumerable<DBMobSpawnWaypoints> waypoints =
+                    MobSpawnWaypointsDao.Instance.GetWhere(new { Identity = mobId.Instance });
+                foreach (DBMobSpawnWaypoints wp in waypoints)
+                {
+                    Waypoint way = new Waypoint();
+                    way.Position=new Vector.Vector3(wp.X,wp.Y,wp.Z);
+                    way.Running = wp.WalkMode == 1;
+                    cmob.Waypoints.Add(way);
+                }
+                npccontroller.Character = cmob;
+                if (cmob.Waypoints.Count > 2)
+                {
+                    cmob.Controller.State = CharacterState.Patrolling;
+                }
             }
         }
     }
