@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,20 +35,18 @@ namespace ZoneEngine.ChatCommands
 
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Text;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Vector;
+    using CellAO.Core.NPCHandler;
+    using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-    using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
-    using ZoneEngine.Core.Playfields;
-using CellAO.Database.Dao;
-using System.Text;
 
     #endregion
 
@@ -88,13 +91,10 @@ using System.Text;
         /// </exception>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(
-                ChatTextMessageHandler.Default.CreateIM(
-                    character,
-@"Usage: /command Spawn hash level
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character,
+                @"Usage: /command Spawn hash level
 For a list of available templates: /command spawn list [filter1,filter2...]
 Filter will be applied to mob name"));
-
         }
 
         /// <summary>
@@ -107,30 +107,56 @@ Filter will be applied to mob name"));
         /// </param>
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
-            if(string.Compare(args[1], "list", true) == 0) {
+            if (string.Compare(args[1], "list", true) == 0)
+            {
                 // list templates
-                IEnumerable<DBMobTemplate> mobTemplates = 
-                    MobTemplateDao.GetMobTemplatesByName((args.Length > 2) ? args[2] : "%", false);
+                IEnumerable<DBMobTemplate> mobTemplates =
+                    MobTemplateDao.Instance.GetMobTemplatesByName((args.Length > 2) ? args[2] : "%", false);
 
                 StringBuilder text = new StringBuilder("List of mobtemplates (Hash, Name): ");
-                foreach(DBMobTemplate mt in mobTemplates) {
+                foreach (DBMobTemplate mt in mobTemplates)
+                {
                     text.AppendLine(string.Format("{0},'{1}'", mt.Hash, mt.Name));
                 }
 
-                character.Playfield.Publish(
-                ChatTextMessageHandler.Default.CreateIM(
-                    character,
-                    text.ToString()));
-
-            } else {
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, text.ToString()));
+            }
+            else
+            {
                 // try spawning mob
-                if (args.Length == 3) {
+                Character mobCharacter = null;
+                if (args.Length == 3)
+                {
                     // DBMobTemplate mt = MobTemplateDao.GetMobTemplateByHash(args[1])
                     // character.Playfield.Despawn
                     //NonPlayerCharacterHandler.SpawnMonster(client, args[1], uint.Parse(args[2]));
+                    NPCController npcController = new NPCController();
+                    mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
+                        args[1],
+                        character.Playfield.Identity,
+                        character.Coordinates,
+                        character.RawHeading,
+                        npcController,
+                        int.Parse(args[2]));
+                }
+                if (args.Length == 2)
+                {
+                    NPCController npcController = new NPCController();
+                    mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
+                        args[1],
+                        character.Playfield.Identity,
+                        character.Coordinates,
+                        character.RawHeading,
+                        npcController);
+                }
+                if (mobCharacter != null)
+                {
+                    mobCharacter.Playfield = character.Playfield;
+                    SimpleCharFullUpdateMessage mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
+                    character.Playfield.Announce(mess);
+                    AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
                 }
             }
-            
 
             // this.CommandHelp(client);
 

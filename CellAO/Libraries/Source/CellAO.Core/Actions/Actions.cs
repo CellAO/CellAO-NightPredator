@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -41,15 +46,15 @@ namespace CellAO.Core.Actions
     /// AOActions covers all action types, with their reqs
     /// </summary>
     [Serializable]
-    public class Actions : IActions
+    public class AOAction : IAOAction
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        public Actions()
+        public AOAction()
         {
-            this.Requirements = new List<Requirements>(15);
+            this.Requirements = new List<Requirement>(15);
         }
 
         #endregion
@@ -64,7 +69,7 @@ namespace CellAO.Core.Actions
         /// <summary>
         /// List of Requirements for this action
         /// </summary>
-        public List<Requirements> Requirements { get; set; }
+        public List<Requirement> Requirements { get; set; }
 
         #endregion
 
@@ -79,7 +84,7 @@ namespace CellAO.Core.Actions
         public bool CheckRequirements(IInstancedEntity entity)
         {
             bool result = true;
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 if (requirements.ChildOperator == Operator.And)
                 {
@@ -103,11 +108,11 @@ namespace CellAO.Core.Actions
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Actions Copy()
+        internal AOAction Copy()
         {
-            Actions copy = new Actions();
+            AOAction copy = new AOAction();
             copy.ActionType = this.ActionType;
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 copy.Requirements.Add(requirements.Copy());
             }

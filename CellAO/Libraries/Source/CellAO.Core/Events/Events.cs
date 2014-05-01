@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -41,7 +46,7 @@ namespace CellAO.Core.Events
     /// <summary>
     /// </summary>
     [Serializable]
-    public class Events : IEvents
+    public class Event : IEvent
     {
         #region Fields
 
@@ -49,7 +54,6 @@ namespace CellAO.Core.Events
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
         // private int eventType;
-
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
@@ -67,12 +71,13 @@ namespace CellAO.Core.Events
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        public List<Functions> Functions { get; set; }
+        public List<Function> Functions { get; set; }
 
         #endregion
 
-        public Events() {
-            this.Functions = new List<Functions>(10);
+        public Event()
+        {
+            this.Functions = new List<Function>(10);
         }
 
         #region Public Methods and Operators
@@ -81,12 +86,12 @@ namespace CellAO.Core.Events
         /// </summary>
         /// <returns>
         /// </returns>
-        public Events Copy()
+        public Event Copy()
         {
-            Events copy = new Events();
+            Event copy = new Event();
 
             copy.EventType = this.EventType;
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 copy.Functions.Add(functions.Copy());
             }
@@ -102,10 +107,10 @@ namespace CellAO.Core.Events
         /// </param>
         public void Perform(ICharacter self, ICharacter caller)
         {
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 bool result = true;
-                foreach (Requirements requirements in functions.Requirements)
+                foreach (Requirement requirements in functions.Requirements)
                 {
                     result &= requirements.CheckRequirement(self);
                     if (!result)
@@ -116,7 +121,7 @@ namespace CellAO.Core.Events
 
                 if (result)
                 {
-                    self.Client.CallFunction(functions);
+                    self.Controller.CallFunction(functions);
                 }
             }
         }

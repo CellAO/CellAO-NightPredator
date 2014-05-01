@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -155,14 +160,14 @@ namespace LoginEngine.CoreClient
             // TODO: Investigate if reciever is a timestamp
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = 0x00000001, 
+                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0),
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
+                                      Sender = 0x00000001,
                                       Receiver = receiver
                                   }
                           };
@@ -172,10 +177,7 @@ namespace LoginEngine.CoreClient
             buffer[1] = BitConverter.GetBytes(this.packetNumber)[1];
             this.packetNumber++;
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug("Sent:\r\n" + HexOutput.Output(buffer));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, "Sent:\r\n" + HexOutput.Output(buffer));
 
             if (buffer.Length % 4 > 0)
             {
@@ -236,11 +238,10 @@ namespace LoginEngine.CoreClient
             var packet = new byte[this._remainingLength];
             Array.Copy(buffer.SegmentData, packet, this._remainingLength);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug("Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
-                LogUtil.Debug(HexOutput.Output(packet));
-            }
+            LogUtil.Debug(
+                DebugInfoDetail.Network,
+                "Offset: " + buffer.Offset.ToString() + " -- RemainingLength: " + this._remainingLength);
+            LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(packet));
 
             this._remainingLength = 0;
             try
@@ -251,10 +252,10 @@ namespace LoginEngine.CoreClient
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
+                    this,
+                    "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
-                LogUtil.Debug(HexOutput.Output(packet)); 
+                LogUtil.Debug(DebugInfoDetail.Error, HexOutput.Output(packet));
                 return false;
             }
 
@@ -264,8 +265,8 @@ namespace LoginEngine.CoreClient
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
+                    this,
+                    "Client sent unknown message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }

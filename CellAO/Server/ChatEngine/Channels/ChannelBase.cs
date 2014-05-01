@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -53,7 +58,7 @@ namespace ChatEngine.Channels
 
         /// <summary>
         /// </summary>
-        private HashSet<IClient> clients = new HashSet<IClient>();
+        private readonly HashSet<IClient> clients = new HashSet<IClient>();
 
         #endregion
 
@@ -87,13 +92,13 @@ namespace ChatEngine.Channels
         /// </param>
         /// <param name="text">
         /// </param>
-        public delegate void ChannelMessageEvent(string playerName, string text);
+        public delegate void ChannelMessageEvent(object sender, ChannelMessageEventArgs e);
 
         /// <summary>
         /// </summary>
         /// <param name="playerName">
         /// </param>
-        public delegate void ClientJoinEvent(string playerName);
+        public delegate void ClientJoinEvent(object sender, ClientJoinEventArgs e);
 
         #endregion
 
@@ -143,7 +148,9 @@ namespace ChatEngine.Channels
                     ((Client)client).Channels.Add(this);
                     if (this.OnClientJoinChannel != null)
                     {
-                        this.OnClientJoinChannel(((Client)client).Character.characterName);
+                        this.OnClientJoinChannel(
+                            this,
+                            new ClientJoinEventArgs() { PlayerName = ((Client)client).Character.characterName });
                     }
 
                     byte[] channelJoinPacket = ChannelJoin.Create(this, new byte[] { 0x00, 0x00 });
@@ -166,9 +173,9 @@ namespace ChatEngine.Channels
         public void ChannelMessage(Client sourceClient, string text, string blob = "")
         {
             byte[] channelMessageBytes = Packets.ChannelMessage.Create(
-                this, 
-                sourceClient.Character.CharacterId, 
-                text, 
+                this,
+                sourceClient.Character.CharacterId,
+                text,
                 blob);
             foreach (IClient client in this.clients)
             {
@@ -177,7 +184,9 @@ namespace ChatEngine.Channels
 
             if (this.OnChannelMessage != null)
             {
-                this.OnChannelMessage(sourceClient.Character.characterName, text);
+                this.OnChannelMessage(
+                    this,
+                    new ChannelMessageEventArgs() { PlayerName = sourceClient.Character.characterName, Text = text });
             }
         }
 
@@ -225,7 +234,9 @@ namespace ChatEngine.Channels
 
                 if (this.OnClientLeaveChannel != null)
                 {
-                    this.OnClientLeaveChannel(((Client)client).Character.characterName);
+                    this.OnClientLeaveChannel(
+                        this,
+                        new ClientJoinEventArgs() { PlayerName = ((Client)client).Character.characterName });
                 }
 
                 // TODO: Send feedback to client
@@ -249,7 +260,7 @@ namespace ChatEngine.Channels
         {
             if (this.OnChannelMessage != null)
             {
-                this.OnChannelMessage(characterName, text);
+                this.OnChannelMessage(this, new ChannelMessageEventArgs() { PlayerName = characterName, Text = text });
             }
         }
 

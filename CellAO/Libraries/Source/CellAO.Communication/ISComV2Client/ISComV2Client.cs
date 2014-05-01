@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,7 +47,7 @@ namespace CellAO.Communication.ISComV2Client
 
     /// <summary>
     /// </summary>
-    public class ISComV2Client
+    public class ISComV2Client : IDisposable
     {
         #region Fields
 
@@ -66,6 +71,8 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         private int serverPort;
 
+        private bool disposed = false;
+
         #endregion
 
         #region Constructors and Destructors
@@ -74,8 +81,8 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         public ISComV2Client()
         {
-            this.clientBase.ReceivedData += this.clientBase_ReceivedData;
-            this.clientBase.Disconnected += this.clientBase_Disconnected;
+            this.clientBase.ReceivedData += this.ClientBaseReceivedData;
+            this.clientBase.Disconnected += this.ClientBaseDisconnected;
 
             this.connectorThread = new Thread(new ThreadStart(this.Connector));
         }
@@ -86,18 +93,18 @@ namespace CellAO.Communication.ISComV2Client
 
         /// <summary>
         /// </summary>
-        public delegate void OnConnectHandler();
+        public delegate void OnConnectHandler(object sender, EventArgs e);
 
         /// <summary>
         /// </summary>
-        /// <param name="messageObject">
+        /// <param name="e">
         /// </param>
-        public delegate void OnReceiveDataHandler(DynamicMessage messageObject);
+        public delegate void OnReceiveDataHandler(object sender, DynamicMessage e);
 
         /// <summary>
         /// Event fired after reconnect tries were unsuccessful
         /// </summary>
-        public delegate void ReallyDisconnectedHandler();
+        public delegate void ReallyDisconnectedHandler(object sender, EventArgs e);
 
         #endregion
 
@@ -140,7 +147,7 @@ namespace CellAO.Communication.ISComV2Client
             }
             catch (Exception e)
             {
-                LogUtil.Debug("ISCom Connection to ChatEngine failed");
+                LogUtil.Debug(DebugInfoDetail.Engine, "ISCom Connection to ChatEngine failed");
                 LogUtil.ErrorException(e);
                 return false;
             }
@@ -176,7 +183,7 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         public void ShutDown()
         {
-            LogUtil.Debug("Shutting down ISCom");
+            LogUtil.Debug(DebugInfoDetail.Engine, "Shutting down ISCom");
             this.closing = true;
             while (this.connectorThread.IsAlive)
             {
@@ -202,7 +209,7 @@ namespace CellAO.Communication.ISComV2Client
 
                 if (!this.clientBase.IsConnected)
                 {
-                    LogUtil.Debug("Trying to connect to ChatEngine...");
+                    LogUtil.Debug(DebugInfoDetail.ISComm, "Trying to connect to ChatEngine...");
 
                     // this.Connect(serverAddress, serverPort);
                     try
@@ -210,7 +217,7 @@ namespace CellAO.Communication.ISComV2Client
                         this.clientBase.Connect(this.serverAddress, this.serverPort);
                         if (this.OnConnect != null)
                         {
-                            this.OnConnect();
+                            this.OnConnect(this, EventArgs.Empty);
                         }
                     }
                     catch
@@ -227,33 +234,51 @@ namespace CellAO.Communication.ISComV2Client
 
         /// <summary>
         /// </summary>
-        private void clientBase_Disconnected()
+        private void ClientBaseDisconnected(object sender, EventArgs e)
         {
             if (this.serverAddress == null)
             {
-                LogUtil.Debug("Could not reconnect to ChatEngine (no server address found)");
+                LogUtil.Debug(DebugInfoDetail.Error, "Could not reconnect to ChatEngine (no server address found)");
                 return;
             }
 
-            LogUtil.Debug("Trying to reconnect to ChatEngine");
+            LogUtil.Debug(DebugInfoDetail.ISComm, "Trying to reconnect to ChatEngine");
         }
 
         /// <summary>
         /// </summary>
         /// <param name="dataBytes">
         /// </param>
-        private void clientBase_ReceivedData(byte[] dataBytes)
+        private void ClientBaseReceivedData(object sender, OnDataReceivedArgs e)
         {
             MessagePackSerializer<DynamicMessage> serializer = MessagePackSerializer.Create<DynamicMessage>();
-            DynamicMessage tmp = serializer.UnpackSingleObject(dataBytes);
+            DynamicMessage tmp = serializer.UnpackSingleObject(e.dataBytes);
 
             // Is the handler set?
             if (this.OnReceiveData != null)
             {
-                this.OnReceiveData(tmp);
+                this.OnReceiveData(this, tmp);
             }
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    this.clientBase.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
     }
 }

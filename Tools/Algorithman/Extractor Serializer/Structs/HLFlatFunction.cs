@@ -58,7 +58,7 @@ namespace Extractor_Serializer.Structs
 
         /// <summary>
         /// </summary>
-        public List<Requirements> Requirements = new List<Requirements>();
+        public List<Requirement> Requirements = new List<Requirement>();
 
         /// <summary>
         /// </summary>
@@ -97,16 +97,16 @@ namespace Extractor_Serializer.Structs
         /// </param>
         /// <returns>
         /// </returns>
-        public List<Requirements> ParseReqs(List<rawreqs> rreqs)
+        public List<Requirement> ParseReqs(List<rawreqs> rreqs)
         {
             int numreqs = rreqs.Count;
 
-            List<Requirements> output = new List<Requirements>();
+            List<Requirement> output = new List<Requirement>();
 
             for (int i = 0; i < numreqs; i++)
             {
                 rawreqs rr = rreqs[i];
-                Requirements aor = new Requirements();
+                Requirement aor = new Requirement();
 
                 aor.Target = ItemTarget.Self;
                 aor.Statnumber = rr.stat;
@@ -185,7 +185,7 @@ namespace Extractor_Serializer.Structs
                 reqCount--;
             }
 
-            foreach (Requirements req in this.ParseReqs(raws))
+            foreach (Requirement req in this.ParseReqs(raws))
             {
                 this.Requirements.Add(req);
             }
@@ -245,9 +245,9 @@ namespace Extractor_Serializer.Structs
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Functions ToFunctions()
+        internal Function ToFunctions()
         {
-            Functions f = new Functions();
+            Function f = new Function();
             f.FunctionType = this.FunctionType;
             f.Target = this.Target;
             f.TickCount = this.TickCount;

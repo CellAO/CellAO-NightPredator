@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -70,7 +75,7 @@ namespace ChatEngine.PacketHandlers
             if (playerName == ConfigReadWrite.Instance.CurrentConfig.RelayBotNick)
             {
                 byte[] botlookup = NameLookupResult.Create(
-                    0x80000000, 
+                    0x80000000,
                     ConfigReadWrite.Instance.CurrentConfig.RelayBotNick);
                 client.Send(botlookup);
                 client.Send(BuddyOnlineStatus.Create(0x80000000, 1, new byte[] { 0x00, 0x01, 0x00 }));
@@ -78,9 +83,9 @@ namespace ChatEngine.PacketHandlers
             }
 
             client.Server.Debug(
-                client, 
-                "{0} >> PlayerNameLookup: PlayerName: {1}", 
-                client.Character.characterName, 
+                client,
+                "{0} >> PlayerNameLookup: PlayerName: {1}",
+                client.Character.characterName,
                 playerName);
             reader.Finish();
 
@@ -95,7 +100,7 @@ namespace ChatEngine.PacketHandlers
             client.Send(
                 BuddyOnlineStatus.Create(
                     playerId,
-                    (uint)CharacterDao.Instance.IsOnline((int)playerId), 
+                    (uint)CharacterDao.Instance.IsOnline((int)playerId),
                     new byte[] { 0x00, 0x01, 0x00 }));
             client.KnownClients.Add(playerId);
         }

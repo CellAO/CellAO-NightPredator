@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,30 +34,27 @@ namespace ZoneEngine.Core
     #region Usings ...
 
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Net.Sockets;
 
     using Cell.Core;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.EventHandlers.Events;
     using CellAO.Core.Network;
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
 
     using zlib;
 
-    using ZoneEngine.Core.Functions;
+    using IBus = MemBus.IBus;
 
     #endregion
 
@@ -72,19 +74,21 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private IBus bus;
+        private readonly IBus bus;
 
         /// <summary>
         /// </summary>
-        private Character character;
+        private IController controller;
 
         /// <summary>
         /// </summary>
-        private IMessageSerializer messageSerializer;
+        private readonly IMessageSerializer messageSerializer;
 
         /// <summary>
         /// </summary>
         private NetworkStream netStream;
+
+        private readonly object locker = new object();
 
         /// <summary>
         /// </summary>
@@ -97,6 +101,8 @@ namespace ZoneEngine.Core
         /// <summary>
         /// </summary>
         private bool zStreamSetup;
+
+        private bool disposed = false;
 
         #endregion
 
@@ -122,18 +128,15 @@ namespace ZoneEngine.Core
 
         #region Public Properties
 
-        /// <summary>
-        /// </summary>
-        public Character Character
+        public IController Controller
         {
             get
             {
-                return this.character;
+                return this.controller;
             }
-
             set
             {
-                this.character = (Character)value;
+                this.controller = value;
             }
         }
 
@@ -143,17 +146,29 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        /// <param name="functions">
+        /// <param name="messageBody">
         /// </param>
-        public void CallFunction(CellAO.Core.Functions.Functions functions)
+        public void SendCompressed(MessageBody messageBody)
         {
-            // TODO: Make it more versatile, not just applying stuff on yourself
-            FunctionCollection.Instance.CallFunction(
-                functions.FunctionType, 
-                this.character, 
-                this.character, 
-                this.character, 
-                functions.Arguments.Values.ToArray());
+            var message = new Message
+                          {
+                              Body = messageBody,
+                              Header =
+                                  new Header
+                                  {
+                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0),
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
+                                      Sender = this.server.Id,
+                                      Receiver = this.Controller.Character.Identity.Instance
+                                  }
+                          };
+
+            byte[] buffer = this.messageSerializer.Serialize(message);
+
+            LogUtil.Debug(DebugInfoDetail.AoTomation, messageBody.GetType().ToString());
+
+            this.SendCompressed(buffer);
         }
 
         /// <summary>
@@ -170,68 +185,36 @@ namespace ZoneEngine.Core
                 throw new Exception("Character " + charId + " not found.");
             }
 
-            IPlayfield pf = this.server.PlayfieldById(character.Playfield);
+            // TODO: Save playfield type into Character table and use it accordingly
+            IPlayfield pf =
+                this.server.PlayfieldById(
+                    new Identity() { Type = IdentityType.Playfield, Instance = character.Playfield });
 
-            if (pf.Entities.GetObject<Character>(
-                new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
+            if (
+                Pool.Instance.GetObject<Character>(
+                    new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
             {
-                this.character = new Character(
-                    pf.Entities, 
-                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId }, 
-                    this);
+                this.Controller.Character =
+                    new Character(
+                        new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
+                        this.Controller);
+                this.controller.Character.Read();
             }
             else
             {
-                this.character =
-                    pf.Entities.GetObject<Character>(
+                this.Controller.Character =
+                    Pool.Instance.GetObject<Character>(
                         new Identity() { Type = IdentityType.CanbeAffected, Instance = charId });
-                this.character.Reconnect(this);
-                LogUtil.Debug("Reconnected to Character " + charId);
+                this.Controller.Character.Reconnect(this);
+                LogUtil.Debug(DebugInfoDetail.Engine, "Reconnected to Character " + charId);
             }
 
             // Stop pending logouts
-            this.character.StopLogoutTimer();
+            this.Controller.Character.StopLogoutTimer();
 
-            this.character.Playfield = pf;
+            this.Controller.Character.Playfield = pf;
             this.Playfield = pf;
-            this.character.Stats.Read();
-        }
-
-        /// <summary>
-        /// </summary>
-        public new void Dispose()
-        {
-            this.Dispose(true);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        public void SendCompressed(MessageBody messageBody)
-        {
-            var message = new Message
-                          {
-                              Body = messageBody, 
-                              Header =
-                                  new Header
-                                  {
-                                      MessageId = BitConverter.ToUInt16(new byte[] { 0xDF, 0xDF }, 0), 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
-                                      Sender = this.server.Id, 
-                                      Receiver = this.Character.Identity.Instance
-                                  }
-                          };
-
-            byte[] buffer = this.messageSerializer.Serialize(message);
-
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(messageBody.GetType().ToString());
-            }
-
-            this.SendCompressed(buffer);
+            this.Controller.Character.Stats.Read();
         }
 
         /// <summary>
@@ -241,7 +224,7 @@ namespace ZoneEngine.Core
         public void SendCompressed(byte[] buffer)
         {
             // We can not be multithreaded here. packet numbers would be jumbled
-            lock (this.netStream)
+            lock (this.locker)
             {
                 // Discard the packet for now, if we can not write to the stream
                 if (this.netStream.CanWrite)
@@ -257,17 +240,14 @@ namespace ZoneEngine.Core
                     }
                     catch (Exception e)
                     {
-                        LogUtil.Debug("Error writing to zStream");
+                        LogUtil.Debug(DebugInfoDetail.Error, "Error writing to zStream");
                         LogUtil.ErrorException(e);
                         this.server.DisconnectClient(this);
                     }
                 }
             }
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(HexOutput.Output(buffer));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(buffer));
         }
 
         /// <summary>
@@ -279,16 +259,16 @@ namespace ZoneEngine.Core
             // TODO: Investigate if reciever is a timestamp
             var message = new Message
                           {
-                              Body = messageBody, 
+                              Body = messageBody,
                               Header =
                                   new Header
                                   {
-                                      MessageId = 0xdfdf, 
-                                      PacketType = messageBody.PacketType, 
-                                      Unknown = 0x0001, 
+                                      MessageId = 0xdfdf,
+                                      PacketType = messageBody.PacketType,
+                                      Unknown = 0x0001,
 
                                       // TODO: Make compression choosable in config.xml
-                                      Sender = 0x01000000, 
+                                      Sender = 0x01000000,
 
                                       // 01000000 = uncompressed, 03000000 = compressed
                                       Receiver = 0 // this.character.Identity.Instance 
@@ -296,10 +276,7 @@ namespace ZoneEngine.Core
                           };
             byte[] buffer = this.messageSerializer.Serialize(message);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug(HexOutput.Output(buffer));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(buffer));
 
             this.packetNumber = 1;
 
@@ -323,28 +300,6 @@ namespace ZoneEngine.Core
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="text">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public bool dSendChatText(string text)
-        {
-            // TODO: remove it here, transfer it to Character class and let it publish it on playfield bus
-            var message = new ChatTextMessage
-                          {
-                              Identity = this.Character.Identity, 
-                              Unknown = 0x00, 
-                              Text = text, 
-                              Unknown1 = 0x1000, 
-                              Unknown2 = 0x00000000
-                          };
-
-            this.SendCompressed(message);
-            return true;
-        }
-
         #endregion
 
         #region Methods
@@ -355,14 +310,41 @@ namespace ZoneEngine.Core
         /// </param>
         protected override void Dispose(bool disposing)
         {
-            // Remove reference of character
-            if (this.character != null)
+            if (disposing)
             {
-                this.character.StartLogoutTimer();
-                this.character.Client = null;
+                if (!this.disposed)
+                {
+                    // Remove reference of character
+                    if (this.Controller.Character != null)
+                    {
+                        // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
+                        // only how should i find out..... - Algorithman
+                        /*
+                    if (this.character.Stats[StatIds.gmlevel].Value == 0)
+                    {
+                        this.character.StartLogoutTimer();
+                    }
+                     */
+                        //if (this == this.character.Client)
+                        // {
+                        //this.character.Client = null;
+                        // }
+                    }
+                    if (this.zStream != null)
+                    {
+                        this.zStream.Close();
+                    }
+                    if (this.netStream != null)
+                    {
+                        this.netStream.Close();
+                    }
+                    this.controller = null;
+                }
             }
+            this.disposed = true;
 
-            this.character = null;
+            // Not needed anymore, since controller.character is a weakreference now and only lives in the Pool now
+            // this.Controller.Character = null;
 
             base.Dispose(disposing);
         }
@@ -416,10 +398,7 @@ namespace ZoneEngine.Core
             var packet = new byte[this._remainingLength];
             Array.Copy(buffer.SegmentData, packet, this._remainingLength);
 
-            if (Program.DebugNetwork)
-            {
-                LogUtil.Debug("\r\nReceived: \r\n" + HexOutput.Output(packet));
-            }
+            LogUtil.Debug(DebugInfoDetail.Network, "\r\nReceived: \r\n" + HexOutput.Output(packet));
 
             this._remainingLength = 0;
             try
@@ -430,10 +409,10 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent malformed message {0}", 
+                    this,
+                    "Client sent malformed message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
-                LogUtil.Debug(HexOutput.Output(packet));
+                LogUtil.Debug(DebugInfoDetail.Error, HexOutput.Output(packet));
                 return false;
             }
 
@@ -443,13 +422,23 @@ namespace ZoneEngine.Core
             {
                 uint messageNumber = this.GetMessageNumber(packet);
                 this.Server.Warning(
-                    this, 
-                    "Client sent unknown message {0}", 
+                    this,
+                    "Client sent unknown message {0}",
                     messageNumber.ToString(CultureInfo.InvariantCulture));
                 return false;
             }
 
-            this.bus.Publish(new MessageReceivedEvent(this, message));
+            // FUUUUUGLY
+
+            Type wrapperType = typeof(MessageWrapper<>);
+            Type genericWrapperType = wrapperType.MakeGenericType(message.Body.GetType());
+
+            object wrapped = Activator.CreateInstance(genericWrapperType);
+            wrapped.GetType().GetProperty("Client").SetValue(wrapped, (IZoneClient)this, null);
+            wrapped.GetType().GetProperty("Message").SetValue(wrapped, message, null);
+            wrapped.GetType().GetProperty("MessageBody").SetValue(wrapped, message.Body, null);
+
+            this.bus.Publish(wrapped);
 
             return true;
         }

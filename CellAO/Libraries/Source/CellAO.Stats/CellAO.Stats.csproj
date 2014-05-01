@@ -48,6 +48,7 @@
     <Compile Include="SpecialStats\StatAlienNextXP.cs" />
     <Compile Include="SpecialStats\StatCurrentNano.cs" />
     <Compile Include="SpecialStats\StatGMLevel.cs" />
+    <Compile Include="SpecialStats\StatHeadmesh.cs" />
     <Compile Include="SpecialStats\StatHealDelta.cs" />
     <Compile Include="SpecialStats\StatHealInterval.cs" />
     <Compile Include="SpecialStats\StatLife.cs" />
@@ -85,6 +86,10 @@
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CellAO.ObjectManager\CellAO.ObjectManager.csproj">
+      <Project>{65A705B0-F8BF-4D68-A8FD-C630A87DC120}</Project>
+      <Name>CellAO.ObjectManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>

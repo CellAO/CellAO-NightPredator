@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -43,16 +48,16 @@ namespace CellAO.Core.Functions
     /// AOFunctions
     /// </summary>
     [Serializable]
-    public class Functions : IFunctions
+    public class Function : IFunction
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// </summary>
-        public Functions()
+        public Function()
         {
             this.Arguments = new FunctionArguments();
-            this.Requirements = new List<Requirements>(10);
+            this.Requirements = new List<Requirement>(10);
             this.dolocalstats = true;
         }
 
@@ -73,7 +78,7 @@ namespace CellAO.Core.Functions
         /// <summary>
         /// Requirements to execute this function
         /// </summary>
-        public List<Requirements> Requirements { get; set; }
+        public List<Requirement> Requirements { get; set; }
 
         /// <summary>
         /// TargetType (constants in ItemLoader)
@@ -101,23 +106,11 @@ namespace CellAO.Core.Functions
 
         /// <summary>
         /// </summary>
-        /// <param name="ms">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public static Functions Deserialize(MemoryStream ms)
-        {
-            MessagePackSerializer<Functions> fromByte = MessagePackSerializer.Create<Functions>();
-            return fromByte.Unpack(ms);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <returns>
         /// </returns>
         public string Serialize()
         {
-            MessagePackSerializer<Functions> toByte = MessagePackSerializer.Create<Functions>();
+            MessagePackSerializer<Function> toByte = MessagePackSerializer.Create<Function>();
             var ms = new MemoryStream();
             toByte.Pack(ms, this);
 
@@ -129,12 +122,12 @@ namespace CellAO.Core.Functions
         /// Copy Function
         /// </summary>
         /// <returns>new copy</returns>
-        public IFunctions ShallowCopy()
+        public IFunction ShallowCopy()
         {
-            IFunctions newAOF = new Functions();
-            foreach (Requirements aor in this.Requirements)
+            IFunction newAOF = new Function();
+            foreach (Requirement aor in this.Requirements)
             {
-                Requirements newAOR = new Requirements();
+                Requirement newAOR = new Requirement();
                 newAOR.ChildOperator = aor.ChildOperator;
                 newAOR.Operator = aor.Operator;
                 newAOR.Statnumber = aor.Statnumber;
@@ -173,6 +166,18 @@ namespace CellAO.Core.Functions
             return newAOF;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="ms">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static Function Deserialize(MemoryStream ms)
+        {
+            MessagePackSerializer<Function> fromByte = MessagePackSerializer.Create<Function>();
+            return fromByte.Unpack(ms);
+        }
+
         #endregion
 
         #region Methods
@@ -181,11 +186,11 @@ namespace CellAO.Core.Functions
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Functions Copy()
+        internal Function Copy()
         {
-            Functions copy = new Functions();
+            Function copy = new Function();
 
-            foreach (Requirements requirements in this.Requirements)
+            foreach (Requirement requirements in this.Requirements)
             {
                 copy.Requirements.Add(requirements.Copy());
             }

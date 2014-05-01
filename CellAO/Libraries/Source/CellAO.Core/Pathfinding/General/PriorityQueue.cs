@@ -1,55 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
+﻿#region License
+
+// Copyright (c) 2005-2014, CellAO Team
+// 
+// 
+// All rights reserved.
+// 
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
+// 
+//     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+//     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+
+#endregion
 
 namespace CellAO.Core.Pathfinding.General
 {
-    public class PriorityQueue<T> where T : IComparable
+    #region Usings ...
+
+    using System;
+    using System.Collections.Generic;
+
+    #endregion
+
+    public class PriorityQueue<T>
+        where T : IComparable
     {
-        private List<T> m_data;
+        private readonly List<T> m_data;
 
         public PriorityQueue()
         {
             this.m_data = new List<T>();
         }
 
+        public int Count
+        {
+            get
+            {
+                return this.m_data.Count;
+            }
+        }
+
         public void Enqueue(T queueItem)
         {
-            m_data.Add(queueItem);
-            m_data.Sort();
+            this.m_data.Add(queueItem);
+            this.m_data.Sort();
         }
 
         public void Clear()
         {
-            m_data.Clear();
+            this.m_data.Clear();
         }
-
 
         public T Dequeue()
         {
-            T frontItem = m_data[0];
-            m_data.RemoveAt(0);
+            T frontItem = this.m_data[0];
+            this.m_data.RemoveAt(0);
             return frontItem;
         }
 
         public T Peek()
         {
-            T frontItem = m_data[0];
+            T frontItem = this.m_data[0];
             return frontItem;
         }
 
         public bool Contains(T queueItem)
         {
-            return m_data.Contains(queueItem);
-        }
-        public int Count
-        {
-            get
-            {
-                return m_data.Count;
-            }
+            return this.m_data.Contains(queueItem);
         }
     }
 }

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,7 +47,7 @@ namespace CellAO.Database.Dao
     /// <summary>
     /// Data access object for Organization queries
     /// </summary>
-    public static class MobTemplateDao
+    public class MobTemplateDao : Dao<DBMobTemplate, MobTemplateDao>
     {
         // note in the following SQL MobMeshs,AdditionalMeshs are not included (big objects)
         /// <summary>
@@ -57,21 +62,9 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static DBMobTemplate GetMobTemplateByHash(string hash)
+        public DBMobTemplate GetMobTemplateByHash(string hash)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBMobTemplate>(SQL + "WHERE Hash like @hash", new { hash }).SingleOrDefault();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.Debug("Searched for mobTemplate with hash:" + hash);
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetWhere(new { hash }).FirstOrDefault();
         }
 
         /// <summary>
@@ -83,7 +76,7 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static IEnumerable<DBMobTemplate> GetMobTemplatesByName(string name, bool strictFind)
+        public IEnumerable<DBMobTemplate> GetMobTemplatesByName(string name, bool strictFind)
         {
             try
             {
@@ -92,18 +85,18 @@ namespace CellAO.Database.Dao
                     return
                         conn.Query<DBMobTemplate>(
                             string.Concat(
-                                SQL, 
-                                "WHERE Name like ", 
-                                strictFind ? string.Empty : "'%' + ", 
-                                " @name ", 
-                                strictFind ? string.Empty : "'%' ", 
-                                " ORDER BY Name ASC"), 
+                                SQL,
+                                "WHERE Name like ",
+                                strictFind ? string.Empty : "CONCAT('%', ",
+                                " @name ",
+                                strictFind ? string.Empty : ", '%')",
+                                " ORDER BY Name ASC"),
                             new { name });
                 }
             }
             catch (Exception e)
             {
-                LogUtil.Debug("Searched for mobTemplate with name containing :" + name);
+                LogUtil.Debug(DebugInfoDetail.Error, "Searched for mobTemplate with name containing :" + name);
                 LogUtil.ErrorException(e);
                 throw;
             }

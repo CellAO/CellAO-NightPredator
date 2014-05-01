@@ -748,8 +748,6 @@ namespace Extractor_Serializer
             FileStream fs = new FileStream(p, FileMode.Open, FileAccess.Read);
             using (Image original = new Bitmap(fs))
             {
-                fs.Close();
-
                 using (Bitmap image = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb))
                 {
                     Graphics g = Graphics.FromImage(image);

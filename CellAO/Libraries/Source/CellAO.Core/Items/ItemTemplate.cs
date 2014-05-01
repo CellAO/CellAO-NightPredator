@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -102,8 +107,8 @@ namespace CellAO.Core.Items
         /// </summary>
         public ItemTemplate()
         {
-            this.Actions = new List<Actions>(4);
-            this.Events = new List<Events>(4);
+            this.Actions = new List<AOAction>(4);
+            this.Events = new List<Event>(4);
             this.Attack = new Dictionary<int, int>(6);
             this.Defend = new Dictionary<int, int>(3);
             this.Stats = new Dictionary<int, int>(20);
@@ -116,11 +121,11 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<Actions> Actions { get; set; }
+        public List<AOAction> Actions { get; set; }
 
         /// <summary>
         /// </summary>
-        public List<Events> Events { get; set; }
+        public List<Event> Events { get; set; }
 
         #endregion
 
@@ -371,7 +376,7 @@ namespace CellAO.Core.Items
                 copy.Attack.Add(kv.Key, kv.Value);
             }
 
-            foreach (Actions actions in this.Actions)
+            foreach (AOAction actions in this.Actions)
             {
                 copy.Actions.Add(actions.Copy());
             }
@@ -381,7 +386,7 @@ namespace CellAO.Core.Items
                 copy.Defend.Add(kv.Key, kv.Value);
             }
 
-            foreach (Events events in this.Events)
+            foreach (Event events in this.Events)
             {
                 copy.Events.Add(events.Copy());
             }

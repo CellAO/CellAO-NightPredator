@@ -70,7 +70,6 @@ namespace Extractor_Serializer
 
             try
             {
-                ms.Close();
                 br.Close();
             }
             catch (Exception)
@@ -155,7 +154,6 @@ namespace Extractor_Serializer
             }
 
             br.Close();
-            ms.Close();
             return name;
         }
 

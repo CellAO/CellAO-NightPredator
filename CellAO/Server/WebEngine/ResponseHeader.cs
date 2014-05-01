@@ -75,7 +75,7 @@ namespace WebEngine
                 this.setResponseStatus(this.getKeyValue("Status: ", responseHeaders));
                 this.setResponseCode("Status: " + this.getKeyValue("Status: ", responseHeaders));
             }
-            
+
             this.setResponseHeaders(responseHeaders);
         }
 
@@ -166,7 +166,8 @@ namespace WebEngine
                 value =
                     haystack.Substring(
                         haystack.IndexOf(needle) + needle.Length,
-                        haystack.IndexOf("\r\n", haystack.IndexOf(needle)) - (haystack.IndexOf(needle) + needle.Length)).Trim();
+                        haystack.IndexOf("\r\n", haystack.IndexOf(needle)) - (haystack.IndexOf(needle) + needle.Length))
+                        .Trim();
             }
             return value;
         }

@@ -69,6 +69,8 @@
     <Compile Include="Dao\IDao.cs" />
     <Compile Include="Dao\MobDroptableDao.cs" />
     <Compile Include="Dao\MobSpawnDao.cs" />
+    <Compile Include="Dao\MobSpawnStatDao.cs" />
+    <Compile Include="Dao\MobSpawnWaypointsDao.cs" />
     <Compile Include="Dao\MobTemplateDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
@@ -85,6 +87,8 @@
     <Compile Include="Dao\VendorTemplateDao.cs" />
     <Compile Include="Entities\DBMobDroptable.cs" />
     <Compile Include="Entities\DBMobSpawn.cs" />
+    <Compile Include="Entities\DBMobSpawnStat.cs" />
+    <Compile Include="Entities\DBMobSpawnWaypoints.cs" />
     <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />

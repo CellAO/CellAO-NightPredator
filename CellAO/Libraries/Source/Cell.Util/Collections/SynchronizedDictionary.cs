@@ -19,6 +19,7 @@ using System.Threading;
 
 namespace Cell.Util.Collections
 {
+
 	public class SynchronizedDictionary<TKey, TValue> : Dictionary<TKey, TValue>
 	{
 		private readonly object _syncLock = new object();

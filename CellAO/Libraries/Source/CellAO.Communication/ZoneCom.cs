@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -82,7 +87,7 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        public delegate void OnClientConnectedToServer();
+        public delegate void OnClientConnectedToServer(object sender, EventArgs e);
 
         /// <summary>
         /// </summary>
@@ -90,13 +95,13 @@ namespace CellAO.Communication
         /// </param>
         /// <param name="args">
         /// </param>
-        public delegate void OnReceivedMessageFromClient(HandleClientRequest request, OnMessageArgs args);
+        public delegate void OnReceivedMessageFromClient(object sender, OnMessageArgs e);
 
         /// <summary>
         /// </summary>
         /// <param name="args">
         /// </param>
-        public delegate void OnReceivedMessageFromServer(OnMessageArgs args);
+        public delegate void OnReceivedMessageFromServer(object sender, OnMessageArgs e);
 
         #endregion
 
@@ -194,13 +199,13 @@ namespace CellAO.Communication
         {
             if (isServer == true)
             {
-                LogUtil.Debug("ZoneCom already initialized as Server.");
+                LogUtil.Debug(DebugInfoDetail.Error, "ZoneCom already initialized as Server.");
                 return;
             }
 
             if (isServer == false)
             {
-                LogUtil.Debug("ZoneCom already initialized as Client.");
+                LogUtil.Debug(DebugInfoDetail.Error, "ZoneCom already initialized as Client.");
                 return;
             }
 
@@ -214,14 +219,14 @@ namespace CellAO.Communication
             client = new ZoneComClient();
             client.OnConnect += ClientToServerConnected;
             client.OnDisconnect += ClientToServerDisconnected;
-            client.MessageReceived += client_MessageReceived;
+            client.MessageReceived += ClientMessageReceived;
             try
             {
                 client.ConnectToServer(address, port);
             }
             catch (Exception)
             {
-                ClientToServerDisconnected();
+                ClientToServerDisconnected(null, EventArgs.Empty);
                 return;
             }
 
@@ -252,14 +257,14 @@ namespace CellAO.Communication
             server = new ZoneComServer(address, port);
             server.OnConnect += ServerToClientConnected;
             server.OnDisconnect += ServerToClientDisconnected;
-            server.MessageReceived += server_MessageReceived;
+            server.MessageReceived += ServerMessageReceived;
             try
             {
                 server.StartServer();
             }
             catch (Exception)
             {
-                ServerToClientDisconnected();
+                ServerToClientDisconnected(null, null);
                 return;
             }
 
@@ -272,15 +277,15 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private static void ClientToServerConnected()
+        private static void ClientToServerConnected(object sender, EventArgs e)
         {
             isLinkedWithServer = true;
-            ClientConnectedToServer();
+            ClientConnectedToServer(sender, e);
         }
 
         /// <summary>
         /// </summary>
-        private static void ClientToServerDisconnected()
+        private static void ClientToServerDisconnected(object sender, EventArgs e)
         {
             isLinkedWithServer = false;
             isServer = null;
@@ -290,14 +295,14 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private static void ServerToClientConnected()
+        private static void ServerToClientConnected(object sender, EventArgs e)
         {
             isLinkedWithClient = true;
         }
 
         /// <summary>
         /// </summary>
-        private static void ServerToClientDisconnected()
+        private static void ServerToClientDisconnected(object sender, EventArgs e)
         {
             isLinkedWithClient = false;
         }
@@ -306,16 +311,16 @@ namespace CellAO.Communication
         /// </summary>
         /// <param name="onMessageArgs">
         /// </param>
-        private static void client_MessageReceived(OnMessageArgs onMessageArgs)
+        private static void ClientMessageReceived(object sender, OnMessageArgs onMessageArgs)
         {
-            ReceivedMessageFromServer(onMessageArgs);
+            ReceivedMessageFromServer(sender, onMessageArgs);
         }
 
         /// <summary>
         /// </summary>
         private static void connectedToServer_r()
         {
-            ClientConnectedToServer();
+            ClientConnectedToServer(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -324,9 +329,9 @@ namespace CellAO.Communication
         /// </param>
         /// <param name="onMessageArgs">
         /// </param>
-        private static void server_MessageReceived(HandleClientRequest request, OnMessageArgs onMessageArgs)
+        private static void ServerMessageReceived(object sender, OnMessageArgs e)
         {
-            ReceivedMessageFromClient(request, onMessageArgs);
+            ReceivedMessageFromClient((HandleClientRequest)sender, e);
         }
 
         #endregion

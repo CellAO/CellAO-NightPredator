@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -113,29 +118,29 @@ namespace ZoneEngine.Core.Packets
         {
             var statMessage = new StatMessage
                               {
-                                  Identity = client.Character.Identity, 
+                                  Identity = client.Controller.Character.Identity,
                                   Stats =
                                       new[]
                                       {
                                           new GameTuple<CharacterStat, uint>
                                           {
                                               Value1 =
-                                                  (CharacterStat)stat, 
+                                                  (CharacterStat)stat,
                                               Value2 = value
                                           }
                                       }
                               };
             var statM = new Message { Body = statMessage };
-            if (!client.Character.DoNotDoTimers)
+            if (!client.Controller.Character.DoNotDoTimers)
             {
-                client.Character.Playfield.Publish(
+                client.Controller.Character.Playfield.Publish(
                     new IMSendAOtomationMessageToClient { client = client, message = statM });
             }
 
             /* announce to playfield? */
             if (announce)
             {
-                client.Character.Playfield.AnnounceOthers(statMessage, client.Character.Identity);
+                client.Controller.Character.Playfield.AnnounceOthers(statMessage, client.Controller.Character.Identity);
             }
         }
 
@@ -151,7 +156,10 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ICharacter character, int stat, uint value, bool announce)
         {
-            Send((IZoneClient)character.Client, stat, value, announce);
+            if (character.Controller.Client != null)
+            {
+                Send((IZoneClient)character.Controller.Client, stat, value, announce);
+            }
         }
 
         /// <summary>
@@ -166,7 +174,10 @@ namespace ZoneEngine.Core.Packets
         /// </param>
         public static void Send(ICharacter character, int stat, int value, bool announce)
         {
-            Send(character.Client, stat, value, announce);
+            if (character.Controller.Client != null)
+            {
+                Send(character.Controller.Client, stat, value, announce);
+            }
         }
 
         /// <summary>
@@ -199,7 +210,7 @@ namespace ZoneEngine.Core.Packets
                     stats.Add(
                         new GameTuple<CharacterStat, uint>
                         {
-                            Value1 = (CharacterStat)keyValuePair.Key, 
+                            Value1 = (CharacterStat)keyValuePair.Key,
                             Value2 = keyValuePair.Value
                         });
                 }
@@ -232,7 +243,7 @@ namespace ZoneEngine.Core.Packets
             var toPlayfieldIds = new List<int>();
             foreach (KeyValuePair<int, uint> keyValuePair in statsToUpdate)
             {
-                if (client.Character.Stats[keyValuePair.Key].AnnounceToPlayfield)
+                if (client.Controller.Character.Stats[keyValuePair.Key].AnnounceToPlayfield)
                 {
                     toPlayfieldIds.Add(keyValuePair.Key);
                 }
@@ -245,7 +256,7 @@ namespace ZoneEngine.Core.Packets
             {
                 var statValue = new GameTuple<CharacterStat, uint>
                                 {
-                                    Value1 = (CharacterStat)keyValuePair.Key, 
+                                    Value1 = (CharacterStat)keyValuePair.Key,
                                     Value2 = keyValuePair.Value
                                 };
                 toClient.Add(statValue);
@@ -256,7 +267,11 @@ namespace ZoneEngine.Core.Packets
                 }
             }
 
-            var message = new StatMessage { Identity = client.Character.Identity, Stats = toClient.ToArray() };
+            var message = new StatMessage
+                          {
+                              Identity = client.Controller.Character.Identity,
+                              Stats = toClient.ToArray()
+                          };
 
             client.SendCompressed(message);
 
@@ -264,7 +279,7 @@ namespace ZoneEngine.Core.Packets
             if (toPlayfieldIds.Count > 0)
             {
                 message.Stats = toPlayfield.ToArray();
-                client.Character.Playfield.AnnounceOthers(message, client.Character.Identity);
+                client.Controller.Character.Playfield.AnnounceOthers(message, client.Controller.Character.Identity);
             }
         }
 
@@ -282,14 +297,14 @@ namespace ZoneEngine.Core.Packets
         {
             var statMessage = new StatMessage
                               {
-                                  Identity = client.Character.Identity, 
+                                  Identity = client.Controller.Character.Identity,
                                   Stats =
                                       new[]
                                       {
                                           new GameTuple<CharacterStat, uint>
                                           {
                                               Value1 =
-                                                  (CharacterStat)stat, 
+                                                  (CharacterStat)stat,
                                               Value2 = value
                                           }
                                       }
@@ -317,7 +332,7 @@ namespace ZoneEngine.Core.Packets
         /// </returns>
         public static uint Set(IZoneClient client, int stat, uint value, bool announce)
         {
-            var oldValue = (uint)client.Character.Stats[stat].Value;
+            var oldValue = (uint)client.Controller.Character.Stats[stat].Value;
             Send(client, stat, value, announce);
             return oldValue;
         }

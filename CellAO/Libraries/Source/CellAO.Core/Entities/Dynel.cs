@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,23 +34,24 @@ namespace CellAO.Core.Entities
     #region Usings ...
 
     using System;
-    using System.Threading;
+    using System.Collections.Generic;
 
+    using CellAO.Core.Components;
     using CellAO.Core.Inventory;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Textures;
     using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
+    using CellAO.Enums;
     using CellAO.Interfaces;
     using CellAO.ObjectManager;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using CellAO.Core.Network;
-    using CellAO.Enums;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using CellAO.Core.Textures;
-    using CellAO.Database.Dao;
-    using System.Collections.Generic;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -57,13 +63,11 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public string Name { get; set; }
+        private Identity playfieldIdentity;
 
         /// <summary>
         /// </summary>
-        public IPlayfield Playfield { get; set; }
-
-        public IZoneClient Client { get; set; }
+        private WeakReference<IController> controller;
 
         /// <summary>
         /// </summary>
@@ -78,6 +82,41 @@ namespace CellAO.Core.Entities
         /// </summary>
         public List<AOTextures> Textures = new List<AOTextures>();
 
+        /// <summary>
+        /// </summary>
+        protected DateTime PredictionTime;
+
+        private bool disposed = false;
+
+        /// <summary>
+        /// </summary>
+        public IController Controller { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public IPlayfield Playfield
+        {
+            get
+            {
+                return Pool.Instance.GetObject<IPlayfield>(this.playfieldIdentity);
+            }
+
+            set
+            {
+                if (value == null)
+                {
+                    this.playfieldIdentity = Identity.None;
+                }
+                else
+                {
+                    this.playfieldIdentity = value.Identity;
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -86,7 +125,6 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         public bool Starting { get; set; }
-
 
         /// <summary>
         /// </summary>
@@ -99,26 +137,32 @@ namespace CellAO.Core.Entities
 
             set
             {
-                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3() { X = value.x, Y = value.y, Z = value.z };
+                this.RawCoordinates = new Vector3() { X = value.x, Y = value.y, Z = value.z };
             }
         }
 
         /// <summary>
         /// </summary>
-        public TimeSpan PredictionDuration { get; private set; }
+        public TimeSpan PredictionDuration
+        {
+            get
+            {
+                return DateTime.UtcNow - this.PredictionTime;
+            }
+        }
 
         /// <summary>
         /// </summary>
-        public SmokeLounge.AOtomation.Messaging.GameData.Vector3 RawCoordinates { get; set; }
+        public virtual Vector3 RawCoordinates { get; set; }
 
         /// <summary>
         /// </summary>
-        public CellAO.Core.Vector.Quaternion RawHeading { get; set; }
+        public Quaternion RawHeading { get; set; }
 
         /// <summary>
         /// Heading as Quaternion
         /// </summary>
-        public CellAO.Core.Vector.Quaternion Heading
+        public Quaternion Heading
         {
             get
             {
@@ -129,13 +173,13 @@ namespace CellAO.Core.Entities
                 else
                 {
                     double turnArcAngle;
-                    CellAO.Core.Vector.Quaternion turnQuaterion;
-                    CellAO.Core.Vector.Quaternion newHeading;
+                    Quaternion turnQuaterion;
+                    Quaternion newHeading;
 
                     turnArcAngle = this.calculateTurnArcAngle();
-                    turnQuaterion = new CellAO.Core.Vector.Quaternion(Vector.Vector3.AxisY, turnArcAngle);
+                    turnQuaterion = new Quaternion(Vector.Vector3.AxisY, turnArcAngle);
 
-                    newHeading = CellAO.Core.Vector.Quaternion.Hamilton(turnQuaterion, this.RawHeading);
+                    newHeading = Quaternion.Hamilton(turnQuaterion, this.RawHeading);
                     newHeading.Normalize();
 
                     return newHeading;
@@ -144,6 +188,7 @@ namespace CellAO.Core.Entities
 
             set
             {
+                this.RawHeading = new Quaternion(value.xf, value.yf, value.zf, value.wf);
             }
         }
 
@@ -187,12 +232,9 @@ namespace CellAO.Core.Entities
             }
         }
 
-
         /// <summary>
         /// </summary>
         public bool ChangedAppearance { get; set; }
-
-
 
         #endregion
 
@@ -200,12 +242,10 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <param name="pooledIn">
-        /// </param>
         /// <param name="id">
         /// </param>
-        public Dynel(Pool pooledIn, Identity id)
-            : base(pooledIn, id)
+        public Dynel(Identity id)
+            : base(id)
         {
             this.Starting = true;
             this.DoNotDoTimers = true;
@@ -216,12 +256,10 @@ namespace CellAO.Core.Entities
             // The subclasses will initialize their own BaseInventory
             // this.BaseInventory = new UnitInventory(this, pooledIn);
 
-            this.DoNotDoTimers = false;
             this.Starting = false;
         }
 
         #endregion
-
 
         #region Positioning
 
@@ -245,6 +283,7 @@ namespace CellAO.Core.Entities
 
             return turnTime;
         }
+
         /// <summary>
         /// Calculate Turnangle
         /// </summary>
@@ -266,7 +305,6 @@ namespace CellAO.Core.Entities
 
         #endregion
 
-
         #region Object
 
         /// <summary>
@@ -283,18 +321,16 @@ namespace CellAO.Core.Entities
             // load depending on identity type
             switch (this.Identity.Type)
             {
-                //case IdentityType.
-
+                    // case IdentityType.
             }
 
             this.BaseInventory.Read();
 
-            //base.Read();
+            // base.Read();
 
             this.DoNotDoTimers = false;
             return true;
         }
-
 
         /// <summary>
         /// </summary>
@@ -313,7 +349,6 @@ namespace CellAO.Core.Entities
             return true;
         }
 
-
         /// <summary>
         /// Wrapper for this.Write()
         /// </summary>
@@ -322,27 +357,25 @@ namespace CellAO.Core.Entities
             this.Write();
         }
 
-
-        /// <summary>
-        /// </summary>
-        public override void Dispose()
-        {
-            this.Dispose(true);
-            base.Dispose();
-        }
-
         /// <summary>
         /// </summary>
         /// <param name="disposing">
         /// </param>
-        public void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            // Write stats to database
-            this.Write();
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    // Write stats to database
+                    this.Write();
+                }
+            }
+            this.disposed = true;
+            base.Dispose(disposing);
         }
 
         #endregion
-
 
         #region Statistics
 
@@ -359,20 +392,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         public void SendChangedStats()
         {
-            var message = new StatMessage() { Identity = this.Identity, };
-            message.Stats = this.Stats.ChangedAnnouncingStats;
-            if (message.Stats.Length > 0)
-            {
-                this.Playfield.AnnounceOthers(message, this.Identity);
-            }
-
-            message.Stats = this.Stats.ChangedStats;
-            if (message.Stats.Length > 0)
-            {
-                this.Playfield.Send(this.Client, message);
-            }
+            this.Controller.SendChangedStats();
         }
-
 
         #endregion
 
@@ -401,16 +422,7 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Send(SystemMessage message)
         {
-            this.Playfield.Send(this.Client, message);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        public void Send(MessageBody messageBody)
-        {
-            this.Playfield.Send(this.Client, messageBody);
+            this.Playfield.Send(this.Controller.Client, message);
         }
 
         /// <summary>
@@ -432,9 +444,32 @@ namespace CellAO.Core.Entities
             this.Playfield.Announce(messageBody);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="messageBody">
+        /// </param>
+        public void Send(MessageBody messageBody)
+        {
+            this.Playfield.Send(this.Controller.Client, messageBody);
+        }
+
         #endregion
 
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool InPlayfield(Identity identity)
+        {
+            bool result = false;
+            if (this.Playfield != null)
+            {
+                result = this.Playfield.Identity == identity;
+            }
 
-
+            return result;
+        }
     }
 }

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -57,8 +62,6 @@ namespace ChatEngine.Relay.Common
 
         #endregion
 
-        // Regex for splitting space-separated list of command parts until first parameter that begins with '/'.
-
         #region Static Fields
 
         /// <summary>
@@ -79,20 +82,20 @@ namespace ChatEngine.Relay.Common
 
         /// <summary>
         /// </summary>
-        private Collection<IrcClient> allClients;
+        private readonly Collection<IrcClient> allClients;
 
         /// <summary>
         /// </summary>
-        private ReadOnlyCollection<IrcClient> allClientsReadOnly;
+        private readonly ReadOnlyCollection<IrcClient> allClientsReadOnly;
 
         /// <summary>
         /// </summary>
-        private IDictionary<string, ChatCommandProcessor> chatCommandProcessors;
+        private readonly IDictionary<string, ChatCommandProcessor> chatCommandProcessors;
 
         // Dictionary of all command processors, keyed by name.
         /// <summary>
         /// </summary>
-        private IDictionary<string, CommandProcessor> commandProcessors;
+        private readonly IDictionary<string, CommandProcessor> commandProcessors;
 
         // True if the read loop is currently active, false if ready to terminate.
 
@@ -114,13 +117,11 @@ namespace ChatEngine.Relay.Common
         {
             this.isRunning = false;
             this.commandProcessors = new Dictionary<string, CommandProcessor>(StringComparer.InvariantCultureIgnoreCase);
-            this.InitializeCommandProcessors();
 
             this.allClients = new Collection<IrcClient>();
             this.allClientsReadOnly = new ReadOnlyCollection<IrcClient>(this.allClients);
             this.chatCommandProcessors =
                 new Dictionary<string, ChatCommandProcessor>(StringComparer.InvariantCultureIgnoreCase);
-            this.InitializeChatCommandProcessors();
         }
 
         /// <summary>
@@ -147,10 +148,10 @@ namespace ChatEngine.Relay.Common
         /// <param name="parameters">
         /// </param>
         protected delegate void ChatCommandProcessor(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             IList<string> parameters);
 
         /// <summary>
@@ -215,6 +216,14 @@ namespace ChatEngine.Relay.Common
 
         /// <summary>
         /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="server">
         /// </param>
         public void Disconnect(string server)
@@ -229,14 +238,6 @@ namespace ChatEngine.Relay.Common
             this.allClients.Remove(client);
 
             Console.Out.WriteLine("Disconnected from '{0}'.", serverName);
-        }
-
-        /// <summary>
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -307,7 +308,7 @@ namespace ChatEngine.Relay.Common
         /// </summary>
         /// <param name="disposing">
         /// </param>
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!this.isDisposed)
             {
@@ -344,7 +345,7 @@ namespace ChatEngine.Relay.Common
             if (client == null)
             {
                 throw new IrcBotException(
-                    IrcBotExceptionType.NoConnection, 
+                    IrcBotExceptionType.NoConnection,
                     string.Format(Resources.MessageBotNoConnection, serverNameMask));
             }
 
@@ -362,8 +363,8 @@ namespace ChatEngine.Relay.Common
         /// <returns>
         /// </returns>
         protected IList<IIrcMessageTarget> GetDefaultReplyTarget(
-            IrcClient client, 
-            IIrcMessageSource source, 
+            IrcClient client,
+            IIrcMessageSource source,
             IList<IIrcMessageTarget> targets)
         {
             if (targets.Contains(client.LocalUser) && source is IIrcMessageTarget)
@@ -375,14 +376,6 @@ namespace ChatEngine.Relay.Common
                 return targets;
             }
         }
-
-        /// <summary>
-        /// </summary>
-        protected abstract void InitializeChatCommandProcessors();
-
-        /// <summary>
-        /// </summary>
-        protected abstract void InitializeCommandProcessors();
 
         /// <summary>
         /// </summary>
@@ -690,10 +683,10 @@ namespace ChatEngine.Relay.Common
         /// <param name="parameters">
         /// </param>
         private void ReadChatCommand(
-            IrcClient client, 
-            IIrcMessageSource source, 
-            IList<IIrcMessageTarget> targets, 
-            string command, 
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
             string[] parameters)
         {
             IList<IIrcMessageTarget> defaultReplyTarget = this.GetDefaultReplyTarget(client, source, targets);
@@ -714,9 +707,9 @@ namespace ChatEngine.Relay.Common
                     if (source is IIrcMessageTarget)
                     {
                         client.LocalUser.SendNotice(
-                            defaultReplyTarget, 
-                            "Error processing '{0}' command: {1}", 
-                            command, 
+                            defaultReplyTarget,
+                            "Error processing '{0}' command: {1}",
+                            command,
                             ex.Message);
                     }
                 }
@@ -757,5 +750,7 @@ namespace ChatEngine.Relay.Common
         }
 
         #endregion
+
+        // Regex for splitting space-separated list of command parts until first parameter that begins with '/'.
     }
 }

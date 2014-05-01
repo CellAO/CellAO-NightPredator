@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -99,6 +104,8 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         private uint _bytesSent;
 
+        private bool disposed = false;
+
         #endregion
 
         #region Constructors and Destructors
@@ -118,11 +125,11 @@ namespace CellAO.Communication.ISComV2Client
         /// </summary>
         /// <param name="dataBytes">
         /// </param>
-        public delegate void OnDataReceived(byte[] dataBytes);
+        public delegate void OnDataReceived(object sender, OnDataReceivedArgs e);
 
         /// <summary>
         /// </summary>
-        public delegate void OnDisconnect();
+        public delegate void OnDisconnect(object sender, EventArgs e);
 
         #endregion
 
@@ -227,6 +234,14 @@ namespace CellAO.Communication.ISComV2Client
 
         /// <summary>
         /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// </summary>
         public void BeginReceive()
         {
             this.ResumeReceive();
@@ -262,14 +277,6 @@ namespace CellAO.Communication.ISComV2Client
 
                 this.BeginReceive();
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -362,7 +369,7 @@ namespace CellAO.Communication.ISComV2Client
             // Call the Event
             if (this.ReceivedData != null)
             {
-                this.ReceivedData(dataBytes);
+                this.ReceivedData(this, new OnDataReceivedArgs() { dataBytes = dataBytes });
             }
         }
 
@@ -372,20 +379,27 @@ namespace CellAO.Communication.ISComV2Client
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            if (this._tcpSock != null && this._tcpSock.Connected)
+            if (disposing)
             {
-                try
+                if (!this.disposed)
                 {
-                    this._bufferSegment.DecrementUsage();
-                    this._tcpSock.Shutdown(SocketShutdown.Both);
-                    this._tcpSock.Close();
-                    this._tcpSock = null;
-                }
-                catch (SocketException /* exception*/)
-                {
-                    // TODO: Check what exceptions we need to handle
+                    if (this._tcpSock != null && this._tcpSock.Connected)
+                    {
+                        try
+                        {
+                            this._bufferSegment.DecrementUsage();
+                            this._tcpSock.Shutdown(SocketShutdown.Both);
+                            this._tcpSock.Close();
+                            this._tcpSock = null;
+                        }
+                        catch (SocketException /* exception*/)
+                        {
+                            // TODO: Check what exceptions we need to handle
+                        }
+                    }
                 }
             }
+            this.disposed = true;
         }
 
         /// <summary>
@@ -398,10 +412,10 @@ namespace CellAO.Communication.ISComV2Client
                 // not enough space left in buffer: Copy to new buffer
                 BufferSegment newSegment = Buffers.CheckOut();
                 Array.Copy(
-                    this._bufferSegment.Buffer.Array, 
-                    this._bufferSegment.Offset + this._offset, 
-                    newSegment.Buffer.Array, 
-                    newSegment.Offset, 
+                    this._bufferSegment.Buffer.Array,
+                    this._bufferSegment.Offset + this._offset,
+                    newSegment.Buffer.Array,
+                    newSegment.Offset,
                     this._remainingLength);
                 this._bufferSegment.DecrementUsage();
                 this._bufferSegment = newSegment;
@@ -436,10 +450,10 @@ namespace CellAO.Communication.ISComV2Client
                 if (expectedLength == -1)
                 {
                     // MALFORMED PACKET RECEIVED !!!
-                    LogUtil.Debug("Malformed packet received: ");
+                    LogUtil.Debug(DebugInfoDetail.Error, "Malformed packet received: ");
                     byte[] data = new byte[this._remainingLength];
                     buffer.SegmentData.CopyTo(data, this._remainingLength);
-                    LogUtil.Debug(HexOutput.Output(data));
+                    LogUtil.Debug(DebugInfoDetail.Error, HexOutput.Output(data));
                     this._remainingLength = 0;
                     this._offset = 0;
 
@@ -585,8 +599,8 @@ namespace CellAO.Communication.ISComV2Client
                 int offset = this._offset + this._remainingLength;
 
                 socketArgs.SetBuffer(
-                    this._bufferSegment.Buffer.Array, 
-                    this._bufferSegment.Offset + offset, 
+                    this._bufferSegment.Buffer.Array,
+                    this._bufferSegment.Offset + offset,
                     BufferSize - offset);
                 socketArgs.UserToken = this;
                 socketArgs.Completed += this.ReceiveAsyncComplete;
@@ -605,7 +619,7 @@ namespace CellAO.Communication.ISComV2Client
         {
             if (this.Disconnected != null)
             {
-                this.Disconnected();
+                this.Disconnected(this, EventArgs.Empty);
             }
         }
 

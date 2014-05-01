@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,7 +34,7 @@ namespace WebEngine
     #region Usings ...
 
     using System;
-    using System.Diagnostics;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Net;
@@ -37,11 +42,11 @@ namespace WebEngine
     using System.Text;
     using System.Threading;
     using System.Xml.Linq;
-    using System.Collections.Generic;
+
+    using Utility;
+
     using WebEngine.ErrorHandlers;
     using WebEngine.Handlers;
-    using Utility;
-    using WebEngine.ASPX;
 
     using _config = Utility.Config.ConfigReadWrite;
 
@@ -194,18 +199,18 @@ namespace WebEngine
         /// </returns>
         private string GetMimeType(string extention)
         {
-            var xElement1 = this.xdoc.Element("configuration");
+            XElement xElement1 = this.xdoc.Element("configuration");
             if (xElement1 != null)
             {
-                var element1 = xElement1.Element("Mime");
+                XElement element1 = xElement1.Element("Mime");
                 if (element1 != null)
                 {
-                    foreach (var xel in element1.Elements("Values"))
+                    foreach (XElement xel in element1.Elements("Values"))
                     {
-                        var xElement = xel.Element("Ext");
+                        XElement xElement = xel.Element("Ext");
                         if (xElement != null && xElement.Value == extention)
                         {
-                            var element = xel.Element("Type");
+                            XElement element = xel.Element("Type");
                             if (element != null)
                             {
                                 return element.Value;
@@ -320,12 +325,17 @@ namespace WebEngine
                 // Get the full name of the requested file
                 if (requestedFile.EndsWith("\\") || String.IsNullOrEmpty(requestedFile))
                 {
-                    foreach(String fileName in new String[] {"index.php", "index.aspx", "index.html", "index.htm", "index.txt"}){
-                       String tmpFileName = _config.Instance.CurrentConfig.WebHostRoot + "\\" + requestedFile + fileName;
-                       if(File.Exists(tmpFileName)){
-                           requestedFile = requestedFile + fileName;
-                           break;
-                       }
+                    foreach (
+                        String fileName in
+                            new String[] { "index.php", "index.aspx", "index.html", "index.htm", "index.txt" })
+                    {
+                        String tmpFileName = _config.Instance.CurrentConfig.WebHostRoot + "\\" + requestedFile
+                                             + fileName;
+                        if (File.Exists(tmpFileName))
+                        {
+                            requestedFile = requestedFile + fileName;
+                            break;
+                        }
                     }
                     if (string.IsNullOrEmpty(requestedFile))
                     {
@@ -357,7 +367,6 @@ namespace WebEngine
                                                  { "query_string", queryString }
                                              };
                         var aspxHandler = new ASPXHandler(requestedFile, requestOptions);
-
                     }
                     else if (ext == ".php" || ext == ".exe")
                     {

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -32,155 +37,155 @@ namespace CellAO.Enums
     {
         /// <summary>
         /// </summary>
-        AimedShot = 21, 
+        AimedShot = 21,
 
         /// <summary>
         /// </summary>
-        AMS = 12, 
+        AMS = 12,
 
         /// <summary>
         /// </summary>
-        Any = 0, 
+        Any = 0,
 
         /// <summary>
         /// </summary>
-        Attack = 11, 
+        Attack = 11,
 
         /// <summary>
         /// </summary>
-        Burst = 22, 
+        Burst = 22,
 
         /// <summary>
         /// </summary>
-        Close = 102, 
+        Close = 102,
 
         /// <summary>
         /// </summary>
-        CombatIdle = 16, 
+        CombatIdle = 16,
 
         /// <summary>
         /// </summary>
-        CombatIdleEnd = 27, 
+        CombatIdleEnd = 27,
 
         /// <summary>
         /// </summary>
-        CombatIdleStart = 26, 
+        CombatIdleStart = 26,
 
         /// <summary>
         /// </summary>
-        Crawl = 20, 
+        Crawl = 20,
 
         /// <summary>
         /// </summary>
-        DMS = 13, 
+        DMS = 13,
 
         /// <summary>
         /// </summary>
-        DoubleAttack = 14, 
+        DoubleAttack = 14,
 
         /// <summary>
         /// </summary>
-        Drop = 2, 
+        Drop = 2,
 
         /// <summary>
         /// </summary>
-        FastAttack = 25, 
+        FastAttack = 25,
 
         /// <summary>
         /// </summary>
-        FlingShot = 28, 
+        FlingShot = 28,
 
         /// <summary>
         /// </summary>
-        FullAuto = 23, 
+        FullAuto = 23,
 
         /// <summary>
         /// </summary>
-        Get = 1, 
+        Get = 1,
 
         /// <summary>
         /// </summary>
-        Idle = 15, 
+        Idle = 15,
 
         /// <summary>
         /// </summary>
-        Impact = 31, 
+        Impact = 31,
 
         /// <summary>
         /// </summary>
-        LeftAttack = 24, 
+        LeftAttack = 24,
 
         /// <summary>
         /// </summary>
-        LeftFoot = 33, 
+        LeftFoot = 33,
 
         /// <summary>
         /// </summary>
-        Open = 100, 
+        Open = 100,
 
         /// <summary>
         /// </summary>
-        PlayShiftRequirements = 136, 
+        PlayShiftRequirements = 136,
 
         /// <summary>
         /// </summary>
-        Repair = 4, 
+        Repair = 4,
 
         /// <summary>
         /// </summary>
-        RightFoot = 34, 
+        RightFoot = 34,
 
         /// <summary>
         /// </summary>
-        Run = 18, 
+        Run = 18,
 
         /// <summary>
         /// </summary>
-        Sneak = 19, 
+        Sneak = 19,
 
         /// <summary>
         /// </summary>
-        SneakAttack = 29, 
+        SneakAttack = 29,
 
         /// <summary>
         /// </summary>
-        Split = 10, 
+        Split = 10,
 
         /// <summary>
         /// </summary>
-        Terminate = 30, 
+        Terminate = 30,
 
         /// <summary>
         /// </summary>
-        ToRemove = 7, 
+        ToRemove = 7,
 
         /// <summary>
         /// </summary>
-        ToTriggerTargetInVicinity = 111, 
+        ToTriggerTargetInVicinity = 111,
 
         /// <summary>
         /// </summary>
-        ToUnwield = 9, 
+        ToUnwield = 9,
 
         /// <summary>
         /// </summary>
-        ToUse = 3, 
+        ToUse = 3,
 
         /// <summary>
         /// </summary>
-        ToWear = 6, 
+        ToWear = 6,
 
         /// <summary>
         /// </summary>
-        ToWield = 8, 
+        ToWield = 8,
 
         /// <summary>
         /// </summary>
-        UseItemOnCharacter = 32, 
+        UseItemOnCharacter = 32,
 
         /// <summary>
         /// </summary>
-        UseItemOnItem = 5, 
+        UseItemOnItem = 5,
 
         /// <summary>
         /// </summary>

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -33,6 +38,8 @@ namespace CellAO.Core.Components
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
 
+    using MemBus.Support;
+
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     #endregion
@@ -43,31 +50,25 @@ namespace CellAO.Core.Components
     /// </typeparam>
     /// <typeparam name="TU">
     /// </typeparam>
+    [MessageHandler]
     public class BaseMessageHandler<T, TU> : AbstractMessageHandler<T>
-        where T : MessageBody, new() where TU : IMessageHandler<T>, new()
+        where T : MessageBody, new() where TU : new()
     {
         /// <summary>
         /// </summary>
-        public enum MessageHandlerDirection
-        {
-            /// <summary>
-            /// </summary>
-            InboundOnly, 
-
-            /// <summary>
-            /// </summary>
-            OutboundOnly, 
-
-            /// <summary>
-            /// </summary>
-            All
-        }
 
         #region Singleton
 
         /// <summary>
         /// </summary>
         protected static TU _default;
+
+        /// <summary>
+        /// </summary>
+        public BaseMessageHandler()
+        {
+            this.Direction = this.GetType().GetAttribute<MessageHandlerAttribute>().Direction;
+        }
 
         /// <summary>
         /// </summary>
@@ -90,13 +91,14 @@ namespace CellAO.Core.Components
 
         #endregion
 
-        /// <summary>
-        /// </summary>
-        public BaseMessageHandler()
+        public static TU GetDefault()
         {
+            return Default;
         }
 
         #region Inbound
+
+        protected bool UpdateCharacterStatsOnReceive = false;
 
         /// <summary>
         /// </summary>
@@ -108,23 +110,29 @@ namespace CellAO.Core.Components
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void Receive(IZoneClient client, Message message, bool updateCharacterStats = false)
+        //public override void Receive(IZoneClient client, Message message)
+        public override void Receive(MessageWrapper<T> messageWrapper)
         {
+            IZoneClient client = messageWrapper.Client;
+            MessageBody messageBody = (messageWrapper.Message != null)
+                ? messageWrapper.Message.Body
+                : messageWrapper.MessageBody;
+
             if ((this.Direction == MessageHandlerDirection.All)
                 || (this.Direction == MessageHandlerDirection.InboundOnly))
             {
-                T body = message.Body as T;
+                T body = messageBody as T;
                 if (body != null)
                 {
                     this.Read(body, client);
 
-                    if (updateCharacterStats)
+                    if (this.UpdateCharacterStatsOnReceive)
                     {
                         if (client != null)
                         {
-                            if (client.Character != null)
+                            if (client.Controller.Character != null)
                             {
-                                client.Character.SendChangedStats();
+                                client.Controller.SendChangedStats();
                             }
                         }
                     }
@@ -132,7 +140,7 @@ namespace CellAO.Core.Components
                 else
                 {
                     throw new NotImplementedException(
-                        "Don't throw other messagetypes on me (" + message.Body.GetType() + " instead of " + typeof(T)
+                        "Don't throw other messagetypes on me (" + messageBody.GetType() + " instead of " + typeof(T)
                         + ")");
                 }
             }
@@ -170,8 +178,8 @@ namespace CellAO.Core.Components
         /// <exception cref="NotImplementedException">
         /// </exception>
         protected override void Send(
-            ICharacter character, 
-            MessageDataFiller messageDataFiller, 
+            ICharacter character,
+            MessageDataFiller messageDataFiller,
             bool announceToPlayfield = false)
         {
             if ((this.Direction == MessageHandlerDirection.All)
@@ -196,21 +204,9 @@ namespace CellAO.Core.Components
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void SendToPlayfield(
-            ICharacter character, 
-            MessageDataFiller messageDataFiller, 
-            bool announceToPlayfield = false)
+        protected void SendToPlayfield(ICharacter character, MessageDataFiller messageDataFiller)
         {
-            if ((this.Direction == MessageHandlerDirection.All)
-                || (this.Direction == MessageHandlerDirection.OutboundOnly))
-            {
-                T mb = this.Create(character, messageDataFiller);
-                character.Send(mb, announceToPlayfield);
-            }
-            else
-            {
-                throw new NotImplementedException("This message handler cannot send outboud messages");
-            }
+            this.Send(character, messageDataFiller, true);
         }
 
         /// <summary>
@@ -231,5 +227,22 @@ namespace CellAO.Core.Components
         }
 
         #endregion
+    }
+
+    public enum MessageHandlerDirection
+    {
+        None,
+
+        /// <summary>
+        /// </summary>
+        InboundOnly,
+
+        /// <summary>
+        /// </summary>
+        OutboundOnly,
+
+        /// <summary>
+        /// </summary>
+        All
     }
 }

@@ -52,13 +52,13 @@ namespace WebEngine.Handlers
 
         private String fileExtension;
 
-        private byte[] responseBody;
+        private readonly byte[] responseBody;
 
         private int responseBodyLength;
 
-        private ResponseHeader responseHeader;
+        private readonly ResponseHeader responseHeader;
 
-        private Dictionary<String, String> contentTypes = new Dictionary<String, String>();
+        private readonly Dictionary<String, String> contentTypes = new Dictionary<String, String>();
 
         public FileHandler(String fileName)
         {

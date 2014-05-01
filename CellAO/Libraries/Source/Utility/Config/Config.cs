@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,12 +25,12 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
 namespace Utility.Config
 {
-    using System.Net;
 
     #region enum
 
@@ -38,102 +42,102 @@ namespace Utility.Config
         /// <summary>
         /// IP to listen
         /// </summary>
-        ListenIP, 
+        ListenIP,
 
         /// <summary>
         /// Chat Server IP
         /// </summary>
-        ChatIP, 
+        ChatIP,
 
         /// <summary>
         /// Zone Server IP
         /// </summary>
-        ZoneIP, 
+        ZoneIP,
 
         /// <summary>
         /// Communication Port between Zone and Chat Engines..
         /// </summary>
-        CommPort, 
+        CommPort,
 
         /// <summary>
         /// Login Port Number
         /// </summary>
-        LoginPort, 
+        LoginPort,
 
         /// <summary>
         /// Zone Port Number
         /// </summary>
-        ZonePort, 
+        ZonePort,
 
         /// <summary>
         /// Chat Port Number
         /// </summary>
-        ChatPort, 
+        ChatPort,
 
         /// <summary>
         /// Chat Server's Motd
         /// </summary>
-        Motd, 
+        Motd,
 
         /// <summary>
         /// This is for the LoginEncryption to turn it on and off
         /// </summary>
-        UsePassword, 
+        UsePassword,
 
         /// <summary>
         /// This enables or Disables SQL Logging
         /// </summary>
-        SqlLog, 
+        SqlLog,
 
         /// <summary>
         /// This is for turning the chat logging on and off
         /// </summary>
-        LogChat, 
+        LogChat,
 
         /// <summary>
         /// This is the Sql Connection String
         /// </summary>
-        connectionString, 
+        connectionString,
 
         /// <summary>
         /// ISComm local IP address?
         /// </summary>
-        ISCommLocalIP, 
+        ISCommLocalIP,
 
         /// <summary>
         /// This is for the SQL Choices
         /// </summary>
-        SQLType, 
+        SQLType,
 
         /// <summary>
         /// Locale language selection for you, en = english , gr = german, more languages as we go
         /// </summary>
-        Locale, 
+        Locale,
 
         /// <summary>
         /// 
         /// </summary>
-        IRCServer, 
+        IRCServer,
 
         /// <summary>
         /// 
         /// </summary>
-        RelayBotNick, 
+        RelayBotNick,
 
         /// <summary>
         /// 
         /// </summary>
-        RelayBotIdent, 
+        RelayBotIdent,
 
         /// <summary>
         /// 
         /// </summary>
-        IRCChannel, 
+        IRCChannel,
 
         /// <summary>
         /// 
         /// </summary>
-        RelayIngameChannel, 
+        RelayIngameChannel,
 
         /// <summary>
         /// 
@@ -164,12 +168,11 @@ namespace Utility.Config
         /// 
         /// </summary>
         WebHostDefaultPage,
-        
+
         /// <summary>
         /// 
         /// </summary>
         WebHostPhpPath
-
     }
 
     #endregion
@@ -316,11 +319,12 @@ namespace Utility.Config
         /// 
         /// </summary>
         public string WebHostDefaultPage { get; set; }
-        
+
         /// <summary>
         /// 
         /// </summary>
         public string WebHostPhpPath { get; set; }
+
         #endregion
     }
 

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -49,7 +54,7 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// List of Item Actions (requirement checks)
         /// </summary>
-        public List<Actions> Actions = new List<Actions>();
+        public List<AOAction> Actions = new List<AOAction>();
 
         /// <summary>
         /// List of Attack attributes
@@ -64,7 +69,7 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// List of Item events
         /// </summary>
-        public List<Events> Events = new List<Events>();
+        public List<Event> Events = new List<Event>();
 
         /// <summary>
         /// Nano ID
@@ -148,15 +153,15 @@ namespace CellAO.Core.Nanos
                 nanoFormula.Stats.Add(nanoFormulaAttribute.Key, nanoFormulaAttribute.Value);
             }
 
-            foreach (Events aoEvents in this.Events)
+            foreach (Event aoEvents in this.Events)
             {
-                Events newEvent = new Events();
-                foreach (Functions aoFunctions in aoEvents.Functions)
+                Event newEvent = new Event();
+                foreach (Function aoFunctions in aoEvents.Functions)
                 {
-                    Functions newAOFunctions = new Functions();
-                    foreach (Requirements aor in aoFunctions.Requirements)
+                    Function newAOFunctions = new Function();
+                    foreach (Requirement aor in aoFunctions.Requirements)
                     {
-                        Requirements newRequirement = new Requirements();
+                        Requirement newRequirement = new Requirement();
                         newRequirement.ChildOperator = aor.ChildOperator;
                         newRequirement.Operator = aor.Operator;
                         newRequirement.Statnumber = aor.Statnumber;

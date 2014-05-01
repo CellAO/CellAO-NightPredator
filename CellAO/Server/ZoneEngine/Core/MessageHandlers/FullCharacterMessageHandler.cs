@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -45,15 +50,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class FullCharacterMessageHandler : BaseMessageHandler<FullCharacterMessage, FullCharacterMessageHandler>
     {
-        /// <summary>
-        /// </summary>
-        public FullCharacterMessageHandler()
-        {
-            this.Direction = MessageHandlerDirection.OutboundOnly;
-        }
-
         #region Outbound
 
         /// <summary>
@@ -94,13 +93,13 @@ namespace ZoneEngine.Core.MessageHandlers
                     {
                         var temp = new InventorySlot
                                    {
-                                       Placement = kv.Key, 
-                                       Flags = (short)kv.Value.Flags, 
-                                       Count = (short)kv.Value.MultipleCount, 
-                                       Identity = kv.Value.Identity, 
-                                       ItemLowId = kv.Value.LowID, 
-                                       ItemHighId = kv.Value.HighID, 
-                                       Quality = kv.Value.Quality, 
+                                       Placement = kv.Key,
+                                       Flags = (short)kv.Value.Flags,
+                                       Count = (short)kv.Value.MultipleCount,
+                                       Identity = kv.Value.Identity,
+                                       ItemLowId = kv.Value.LowID,
+                                       ItemHighId = kv.Value.HighID,
+                                       Quality = kv.Value.Quality,
                                        Unknown = kv.Value.Nothing
                                    };
                         inventory.Add(temp);
@@ -130,7 +129,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 fullCharacterMessage.Unknown7 = 1;
                 fullCharacterMessage.Unknown8 = 0;
 
-                IZoneClient client = character.Client;
+                IZoneClient client = character.Controller.Client;
 
                 /* part 6 of data (1-st stats block) */
 
@@ -880,7 +879,11 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         private static void AddStat3232(IZoneClient client, IList<GameTuple<int, uint>> list, int statId)
         {
-            var tuple = new GameTuple<int, uint> { Value1 = statId, Value2 = client.Character.Stats[statId].BaseValue };
+            var tuple = new GameTuple<int, uint>
+                        {
+                            Value1 = statId,
+                            Value2 = client.Controller.Character.Stats[statId].BaseValue
+                        };
 
             list.Add(tuple);
         }
@@ -902,8 +905,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
             var tuple = new GameTuple<byte, short>
                         {
-                            Value1 = (byte)statId, 
-                            Value2 = (short)client.Character.Stats[statId].BaseValue
+                            Value1 = (byte)statId,
+                            Value2 = (short)client.Controller.Character.Stats[statId].BaseValue
                         };
 
             list.Add(tuple);
@@ -926,8 +929,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
             var tuple = new GameTuple<byte, byte>
                         {
-                            Value1 = (byte)statId, 
-                            Value2 = (byte)client.Character.Stats[statId].BaseValue
+                            Value1 = (byte)statId,
+                            Value2 = (byte)client.Controller.Character.Stats[statId].BaseValue
                         };
 
             list.Add(tuple);

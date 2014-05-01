@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -94,7 +99,7 @@ namespace CellAO.Communication.ISComV2Server
         /// </param>
         /// <param name="dataBytes">
         /// </param>
-        public delegate void DataReceivedHandler(ISComV2ClientHandler client, byte[] dataBytes);
+        public delegate void DataReceivedHandler(object sender, OnDataReceivedArgs e);
 
         #endregion
 
@@ -176,10 +181,10 @@ namespace CellAO.Communication.ISComV2Server
                 if (expectedLength == -1)
                 {
                     // MALFORMED PACKET RECEIVED !!!
-                    LogUtil.Debug("Malformed packet received: ");
+                    LogUtil.Debug(DebugInfoDetail.Error, "Malformed packet received: ");
                     byte[] data = new byte[this._remainingLength];
                     buffer.SegmentData.CopyTo(data, this._remainingLength);
-                    LogUtil.Debug(HexOutput.Output(data));
+                    LogUtil.Debug(DebugInfoDetail.Error, HexOutput.Output(data));
                     this._remainingLength = 0;
                     this._offset = 0;
 
@@ -200,11 +205,11 @@ namespace CellAO.Communication.ISComV2Server
                     Array.Copy(buffer.SegmentData, 8 + this._offset, dataBytes, 0, expectedLength);
                     if (this.DataReceived != null)
                     {
-                        this.DataReceived(this, dataBytes);
+                        this.DataReceived(this, new OnDataReceivedArgs() { dataBytes = dataBytes });
                     }
                     else
                     {
-                        LogUtil.Debug("No DataReceived event fired due to missing method");
+                        LogUtil.Debug(DebugInfoDetail.Error, "No DataReceived event fired due to missing method");
                     }
                 }
 
@@ -230,7 +235,7 @@ namespace CellAO.Communication.ISComV2Server
         {
             if (BitConverter.ToInt32(buffer.SegmentData, this._offset) != 0x00FF55AA)
             {
-                Console.WriteLine("Invalid packet header");
+                LogUtil.Debug(DebugInfoDetail.Error, "Invalid packet header");
                 return -1;
             }
 
