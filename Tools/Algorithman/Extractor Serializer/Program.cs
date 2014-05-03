@@ -182,7 +182,6 @@ namespace Extractor_Serializer
                         byte[] data = extractor.GetRecordData(recordtype, item);
 
                         fileStream.Write(data, 0, data.Length);
-                        fileStream.Close();
                     }
                     if (cou % 10 == 0)
                     {
@@ -627,7 +626,7 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Creating serialized item data file - please wait");
 
-            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 5000);
+            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 10240);
 
             Console.WriteLine();
             Console.WriteLine("Checking Items...");

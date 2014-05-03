@@ -47,12 +47,12 @@ namespace ZoneEngine.Core
     using CellAO.Database.Entities;
     using CellAO.ObjectManager;
 
+    using Ionic.Zlib;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Utility;
-
-    using zlib;
 
     using IBus = MemBus.IBus;
 
@@ -96,7 +96,7 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private ZOutputStream zStream;
+        private ZlibStream zStream;
 
         /// <summary>
         /// </summary>
@@ -289,8 +289,8 @@ namespace ZoneEngine.Core
                 {
                     // CreateIM the zStream
                     this.netStream = new NetworkStream(this.TcpSocket);
-                    this.zStream = new ZOutputStream(this.netStream, zlibConst.Z_BEST_SPEED);
-                    this.zStream.FlushMode = zlibConst.Z_SYNC_FLUSH;
+                    this.zStream = new ZlibStream(this.netStream, CompressionMode.Compress,CompressionLevel.BestSpeed);
+                    this.zStream.FlushMode = FlushType.Sync;
                     this.zStreamSetup = true;
                 }
             }

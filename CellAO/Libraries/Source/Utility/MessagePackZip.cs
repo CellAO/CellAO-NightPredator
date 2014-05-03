@@ -36,11 +36,13 @@ namespace Utility
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
 
     using MsgPack.Serialization;
 
-    using zlib;
+    using Ionic.Zlib;
 
     #endregion
 
@@ -53,14 +55,6 @@ namespace Utility
         /// <summary>
         /// </summary>
         private const int CopyBufferLength = 2 * 1024 * 1024;
-
-        #endregion
-
-        #region Static Fields
-
-        /// <summary>
-        /// </summary>
-        private static readonly byte[] copyBuffer = new byte[CopyBufferLength];
 
         #endregion
 
@@ -94,6 +88,10 @@ namespace Utility
         /// </exception>
         public static void CompressData<T>(string filename, string version, List<T> dataList, int packCount = 500)
         {
+
+            // Need to build the serializer/deserializer prior to Task invocations
+            MessagePackSerializer<List<T>> constructor = MessagePackSerializer.Create<List<T>>();
+
             Console.WriteLine("Compressing " + typeof(T).Name + "s");
 
             if (packCount == 0)
@@ -101,50 +99,58 @@ namespace Utility
                 throw new Exception("Dont use 0 as packCount!!");
             }
 
+
             Stream fileStream = new FileStream(filename, FileMode.Create);
-            var zipStream = new ZOutputStream(fileStream, zlibConst.Z_BEST_COMPRESSION);
-            var bufferStream = new MemoryStream(20 * 1024 * 1024);
+            var zlibStream = new ZlibStream(fileStream, CompressionMode.Compress, CompressionLevel.BestCompression);
+
+            BinaryWriter binaryWriter = new BinaryWriter(zlibStream);
 
             byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
-            bufferStream.WriteByte((byte)versionbuffer.Length);
-            bufferStream.Write(versionbuffer, 0, versionbuffer.Length);
+            binaryWriter.Write((byte)versionbuffer.Length);
+            binaryWriter.Write(versionbuffer, 0, versionbuffer.Length);
 
-            byte[] buffer = BitConverter.GetBytes(packCount);
-            bufferStream.Write(buffer, 0, buffer.Length);
+            binaryWriter.Write(packCount);
             int tempCapacity = dataList.Count;
-            buffer = BitConverter.GetBytes(tempCapacity);
-            bufferStream.Write(buffer, 0, buffer.Length);
-            MessagePackSerializer<List<T>> bf = MessagePackSerializer.Create<List<T>>();
+            binaryWriter.Write(tempCapacity);
 
-            int counter = 0;
             int maxCount = dataList.Count;
-            List<T> tempList = new List<T>(tempCapacity);
-            while (counter < maxCount)
-            {
-                tempList.Add(dataList[counter]);
-                counter++;
 
-                if (counter % packCount == 0)
-                {
-                    bf.Pack(bufferStream, tempList);
-                    bufferStream.Flush();
-                    tempList.Clear();
-                }
+            // Write number of slices
+            int slices = Convert.ToInt32(Math.Ceiling((double)maxCount / packCount));
+            binaryWriter.Write(slices);
+
+            TaskedSerializer<T>[] taskData = new TaskedSerializer<T>[slices];
+
+            Task[] tasks = new Task[taskData.Length];
+            for (int i = 0; i < taskData.Count(); i++)
+            {
+                taskData[i] = new TaskedSerializer<T>(dataList.Skip(packCount * i).Take(packCount).ToList());
+                int i1 = i;
+                tasks[i] = new Task(() => taskData[i1].Serialize());
+                tasks[i].Start();
             }
 
-            if (tempList.Count > 0)
-            {
-                bf.Pack(bufferStream, tempList);
-                bufferStream.Flush();
-            }
-
-            // bf.Pack(bufferStream, dataList);
+            // Wait for all serialization to finish
+            Task.WaitAll(tasks);
 
             Console.WriteLine("100% serialized");
-            bufferStream.Seek(0, SeekOrigin.Begin);
-            CopyStream(bufferStream, zipStream);
-            bufferStream.Close();
-            zipStream.Close();
+
+            // Write data streams
+            foreach (TaskedSerializer<T> task in taskData)
+            {
+                task.Stream.Position = 0;
+                int size = (int)task.Stream.Length;
+                binaryWriter.Write(size);
+                task.Stream.CopyTo(zlibStream);
+                task.Dispose();
+            }
+
+            for (int i = 0; i < slices; i++)
+            {
+                taskData[i] = null;
+                tasks[i].Dispose();
+            }
+            zlibStream.Close();
         }
 
         /// <summary>
@@ -177,7 +183,7 @@ namespace Utility
             }
 
             Stream fileStream = new FileStream(filename, FileMode.Create);
-            var zipStream = new ZOutputStream(fileStream, zlibConst.Z_HUFFMAN_ONLY);
+            var zipStream = new ZlibStream(fileStream, CompressionMode.Compress, CompressionLevel.BestCompression);
             var bufferStream = new MemoryStream(20 * 1024 * 1024);
 
             byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
@@ -196,34 +202,9 @@ namespace Utility
 
             Console.WriteLine("100% serialized");
             bufferStream.Seek(0, SeekOrigin.Begin);
-            CopyStream(bufferStream, zipStream);
+            bufferStream.CopyTo(zipStream);
             bufferStream.Close();
             zipStream.Close();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="input">
-        /// </param>
-        /// <param name="output">
-        /// </param>
-        /// <param name="text">
-        /// </param>
-        public static void CopyStream(Stream input, Stream output, string text = "inflated")
-        {
-            int len;
-            int done = 0;
-            while ((len = input.Read(copyBuffer, 0, CopyBufferLength)) > 0)
-            {
-                output.Write(copyBuffer, 0, len);
-
-                // output.Flush();
-                done += len;
-                Console.Write("\r" + (done * 100 / input.Length).ToString().PadLeft(3) + "% " + text);
-            }
-
-            output.Flush();
-            Console.WriteLine("\r100% " + text);
         }
 
         /// <summary>
@@ -236,39 +217,68 @@ namespace Utility
         /// </returns>
         public static List<T> UncompressData<T>(string fname)
         {
+            // Need to build the serializer/deserializer prior to Task invocations
+            MessagePackSerializer<List<T>> constructor = MessagePackSerializer.Create<List<T>>();
+
             Stream fileStream = new FileStream(fname, FileMode.Open);
-            MemoryStream memoryStream = new MemoryStream(4 * 1024 * 1024);
 
-            ZOutputStream zOutputStream = new ZOutputStream(memoryStream);
-            CopyStream(fileStream, zOutputStream, "deflated");
+            ZlibStream inputStream = new ZlibStream(fileStream, CompressionMode.Decompress);
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            BinaryReader binaryReader = new BinaryReader(memoryStream);
-            byte versionlength = (byte)memoryStream.ReadByte();
+            // CopyStream(fileStream, zOutputStream, "deflated");
+
+            // memoryStream.Seek(0, SeekOrigin.Begin);
+
+            BinaryReader binaryReader = new BinaryReader(inputStream);
+
+
+            byte versionlength = (byte)inputStream.ReadByte();
             char[] version = new char[versionlength];
             version = binaryReader.ReadChars(versionlength);
+            string versionString = "";
+            foreach (char c in version)
+            {
+                versionString += c;
+            }
 
+            Console.WriteLine("Loading data for client version " + versionString);
             // TODO: Check version and print a warning if not same as config.xml's
-            MessagePackSerializer<List<T>> messagePackSerializer = MessagePackSerializer.Create<List<T>>();
 
-            var buffer = new byte[4];
-            memoryStream.Read(buffer, 0, 4);
-            int packaged = BitConverter.ToInt32(buffer, 0);
-            memoryStream.Read(buffer, 0, 4);
+            // packaged is unused here
+            int packaged = binaryReader.ReadInt32();
 
-            int capacity = BitConverter.ToInt32(buffer, 0);
+            int capacity = binaryReader.ReadInt32();
+
+            int slices = binaryReader.ReadInt32();
+
+            TaskedSerializer<T>[] tasked = new TaskedSerializer<T>[slices];
+
+            Task[] tasks = new Task[slices];
+
+            for (int i = 0; i < slices; i++)
+            {
+
+                int size = binaryReader.ReadInt32();
+                byte[] tempBuffer = new byte[size];
+                inputStream.Read(tempBuffer, 0, size);
+                using (MemoryStream tempStream = new MemoryStream(tempBuffer))
+                {
+                    tasked[i] = new TaskedSerializer<T>(tempStream);
+                }
+                int i1 = i;
+                tasks[i] = new Task(() => tasked[i1].Deserialize());
+                tasks[i].Start();
+            }
+
+            binaryReader.Close();
+            Task.WaitAll(tasks);
 
             List<T> resultList = new List<T>(capacity);
-            while (true)
+            for (int i = 0; i < slices; i++)
             {
-                try
-                {
-                    resultList.AddRange(messagePackSerializer.Unpack(memoryStream));
-                }
-                catch (Exception)
-                {
-                    break;
-                }
+                resultList.AddRange(tasked[i].DataSlice);
+                tasked[i].DataSlice.Clear();
+                tasks[i].Dispose();
+                tasked[i].Dispose();
             }
 
             return resultList;
@@ -288,14 +298,12 @@ namespace Utility
         {
             var tempList = new Dictionary<T, TU>();
             Stream fileStream = new FileStream(fname, FileMode.Open);
-            MemoryStream memoryStream = new MemoryStream(20 * 1024 * 1024);
 
-            ZOutputStream zOutputStream = new ZOutputStream(memoryStream);
-            CopyStream(fileStream, zOutputStream, "deflated");
+            ZlibStream inputStream = new ZlibStream(fileStream, CompressionMode.Decompress);
 
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            BinaryReader binaryReader = new BinaryReader(memoryStream);
-            byte versionlength = (byte)memoryStream.ReadByte();
+            inputStream.Seek(0, SeekOrigin.Begin);
+            BinaryReader binaryReader = new BinaryReader(inputStream);
+            byte versionlength = binaryReader.ReadByte();
             char[] version = new char[versionlength];
             version = binaryReader.ReadChars(versionlength);
 
@@ -304,11 +312,11 @@ namespace Utility
                 MessagePackSerializer.Create<Dictionary<T, TU>>();
 
             var buffer = new byte[4];
-            memoryStream.Read(buffer, 0, 4);
+            inputStream.Read(buffer, 0, 4);
 
-            memoryStream.Read(buffer, 0, 4);
+            inputStream.Read(buffer, 0, 4);
 
-            return messagePackSerializer.Unpack(memoryStream);
+            return messagePackSerializer.Unpack(inputStream);
         }
 
         #endregion
@@ -325,6 +333,56 @@ namespace Utility
                 }
             }
             return new List<T>();
+        }
+    }
+
+    internal class TaskedSerializer<T> : IDisposable
+    {
+        public MemoryStream Stream = new MemoryStream();
+
+        public List<T> DataSlice = new List<T>();
+
+        public TaskedSerializer(List<T> data)
+        {
+            this.DataSlice = data;
+        }
+
+        public TaskedSerializer(byte[] dataBytes)
+        {
+            this.Stream = new MemoryStream(dataBytes);
+            this.Stream.Position = 0;
+        }
+
+        public TaskedSerializer(MemoryStream ms)
+        {
+            ms.CopyTo(this.Stream, (int)ms.Length);
+            this.Stream.Position = 0;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        internal void Serialize()
+        {
+            MessagePackSerializer<List<T>> bf = MessagePackSerializer.Create<List<T>>();
+            bf.Pack(this.Stream, this.DataSlice);
+        }
+
+        internal void Deserialize()
+        {
+            MessagePackSerializer<List<T>> messagePackSerializer = MessagePackSerializer.Create<List<T>>();
+            this.DataSlice = messagePackSerializer.Unpack(this.Stream);
+        }
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.DataSlice.Clear();
+                this.Stream.Dispose();
+            }
         }
     }
 }

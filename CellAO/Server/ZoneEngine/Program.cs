@@ -35,12 +35,15 @@ namespace ZoneEngine
 
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Client;
     using CellAO.Communication.Messages;
+    using CellAO.Core.Actions;
+    using CellAO.Core.Events;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Database;
@@ -514,6 +517,7 @@ namespace ZoneEngine
             Colouring.Push(ConsoleColor.Green);
             try
             {
+                
                 Console.WriteLine(locales.ItemLoaderLoadedItems, ItemLoader.CacheAllItems());
             }
             catch (Exception e)

@@ -106,7 +106,6 @@ namespace ZoneEngine.Core.Playfields
                 }
             }
 
-            GC.Collect();
             return PFData.Count;
         }
 
