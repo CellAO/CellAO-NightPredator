@@ -100,57 +100,56 @@ namespace Utility
             }
 
 
-            Stream fileStream = new FileStream(filename, FileMode.Create);
-            var zlibStream = new ZlibStream(fileStream, CompressionMode.Compress, CompressionLevel.BestCompression);
-
-            BinaryWriter binaryWriter = new BinaryWriter(zlibStream);
-
-            byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
-            binaryWriter.Write((byte)versionbuffer.Length);
-            binaryWriter.Write(versionbuffer, 0, versionbuffer.Length);
-
-            binaryWriter.Write(packCount);
-            int tempCapacity = dataList.Count;
-            binaryWriter.Write(tempCapacity);
-
-            int maxCount = dataList.Count;
-
-            // Write number of slices
-            int slices = Convert.ToInt32(Math.Ceiling((double)maxCount / packCount));
-            binaryWriter.Write(slices);
-
-            TaskedSerializer<T>[] taskData = new TaskedSerializer<T>[slices];
-
-            Task[] tasks = new Task[taskData.Length];
-            for (int i = 0; i < taskData.Count(); i++)
+            using (Stream fileStream = new FileStream(filename, FileMode.Create))
             {
-                taskData[i] = new TaskedSerializer<T>(dataList.Skip(packCount * i).Take(packCount).ToList());
-                int i1 = i;
-                tasks[i] = new Task(() => taskData[i1].Serialize());
-                tasks[i].Start();
+                BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+
+                byte[] versionbuffer = Encoding.ASCII.GetBytes(version);
+                binaryWriter.Write((byte)versionbuffer.Length);
+                binaryWriter.Write(versionbuffer, 0, versionbuffer.Length);
+
+                binaryWriter.Write(packCount);
+                int tempCapacity = dataList.Count;
+                binaryWriter.Write(tempCapacity);
+
+                int maxCount = dataList.Count;
+
+                // Write number of slices
+                int slices = Convert.ToInt32(Math.Ceiling((double)maxCount / packCount));
+                binaryWriter.Write(slices);
+
+                TaskedSerializer<T>[] taskData = new TaskedSerializer<T>[slices];
+
+                Task[] tasks = new Task[taskData.Length];
+                for (int i = 0; i < taskData.Count(); i++)
+                {
+                    taskData[i] = new TaskedSerializer<T>(dataList.Skip(packCount * i).Take(packCount).ToList());
+                    int i1 = i;
+                    tasks[i] = new Task(() => taskData[i1].Serialize());
+                    tasks[i].Start();
+                }
+
+                // Wait for all serialization to finish
+                Task.WaitAll(tasks);
+
+                Console.WriteLine("100% serialized");
+
+                // Write data streams
+                foreach (TaskedSerializer<T> task in taskData)
+                {
+                    task.Stream.Position = 0;
+                    int size = (int)task.Stream.Length;
+                    binaryWriter.Write(size);
+                    task.Stream.CopyTo(fileStream);
+                    task.Dispose();
+                }
+
+                for (int i = 0; i < slices; i++)
+                {
+                    taskData[i] = null;
+                    tasks[i].Dispose();
+                }
             }
-
-            // Wait for all serialization to finish
-            Task.WaitAll(tasks);
-
-            Console.WriteLine("100% serialized");
-
-            // Write data streams
-            foreach (TaskedSerializer<T> task in taskData)
-            {
-                task.Stream.Position = 0;
-                int size = (int)task.Stream.Length;
-                binaryWriter.Write(size);
-                task.Stream.CopyTo(zlibStream);
-                task.Dispose();
-            }
-
-            for (int i = 0; i < slices; i++)
-            {
-                taskData[i] = null;
-                tasks[i].Dispose();
-            }
-            zlibStream.Close();
         }
 
         /// <summary>
@@ -219,66 +218,60 @@ namespace Utility
         {
             // Need to build the serializer/deserializer prior to Task invocations
             MessagePackSerializer<List<T>> constructor = MessagePackSerializer.Create<List<T>>();
+            List<T> resultList = new List<T>();
 
-            Stream fileStream = new FileStream(fname, FileMode.Open);
-
-            ZlibStream inputStream = new ZlibStream(fileStream, CompressionMode.Decompress);
-
-            // CopyStream(fileStream, zOutputStream, "deflated");
-
-            // memoryStream.Seek(0, SeekOrigin.Begin);
-
-            BinaryReader binaryReader = new BinaryReader(inputStream);
-
-
-            byte versionlength = (byte)inputStream.ReadByte();
-            char[] version = new char[versionlength];
-            version = binaryReader.ReadChars(versionlength);
-            string versionString = "";
-            foreach (char c in version)
+            using (Stream fileStream = new FileStream(fname, FileMode.Open))
             {
-                versionString += c;
-            }
+                BinaryReader binaryReader = new BinaryReader(fileStream);
 
-            Console.WriteLine("Loading data for client version " + versionString);
-            // TODO: Check version and print a warning if not same as config.xml's
 
-            // packaged is unused here
-            int packaged = binaryReader.ReadInt32();
-
-            int capacity = binaryReader.ReadInt32();
-
-            int slices = binaryReader.ReadInt32();
-
-            TaskedSerializer<T>[] tasked = new TaskedSerializer<T>[slices];
-
-            Task[] tasks = new Task[slices];
-
-            for (int i = 0; i < slices; i++)
-            {
-
-                int size = binaryReader.ReadInt32();
-                byte[] tempBuffer = new byte[size];
-                inputStream.Read(tempBuffer, 0, size);
-                using (MemoryStream tempStream = new MemoryStream(tempBuffer))
+                byte versionlength = binaryReader.ReadByte();
+                char[] version = new char[versionlength];
+                version = binaryReader.ReadChars(versionlength);
+                string versionString = "";
+                foreach (char c in version)
                 {
-                    tasked[i] = new TaskedSerializer<T>(tempStream);
+                    versionString += c;
                 }
-                int i1 = i;
-                tasks[i] = new Task(() => tasked[i1].Deserialize());
-                tasks[i].Start();
-            }
 
-            binaryReader.Close();
-            Task.WaitAll(tasks);
+                Console.WriteLine("Loading data for client version " + versionString);
+                // TODO: Check version and print a warning if not same as config.xml's
 
-            List<T> resultList = new List<T>(capacity);
-            for (int i = 0; i < slices; i++)
-            {
-                resultList.AddRange(tasked[i].DataSlice);
-                tasked[i].DataSlice.Clear();
-                tasks[i].Dispose();
-                tasked[i].Dispose();
+                // packaged is unused here
+                int packaged = binaryReader.ReadInt32();
+
+                int capacity = binaryReader.ReadInt32();
+
+                int slices = binaryReader.ReadInt32();
+
+                TaskedSerializer<T>[] tasked = new TaskedSerializer<T>[slices];
+
+                Task[] tasks = new Task[slices];
+
+                for (int i = 0; i < slices; i++)
+                {
+
+                    int size = binaryReader.ReadInt32();
+                    byte[] tempBuffer = binaryReader.ReadBytes(size);
+                    using (MemoryStream tempStream = new MemoryStream(tempBuffer))
+                    {
+                        tasked[i] = new TaskedSerializer<T>(tempStream);
+                    }
+                    int i1 = i;
+                    tasks[i] = new Task(() => tasked[i1].Deserialize());
+                    tasks[i].Start();
+                }
+
+                Task.WaitAll(tasks);
+
+                resultList = new List<T>(capacity);
+                for (int i = 0; i < slices; i++)
+                {
+                    resultList.AddRange(tasked[i].DataSlice);
+                    tasked[i].DataSlice.Clear();
+                    tasks[i].Dispose();
+                    tasked[i].Dispose();
+                }
             }
 
             return resultList;
@@ -367,13 +360,30 @@ namespace Utility
         internal void Serialize()
         {
             MessagePackSerializer<List<T>> bf = MessagePackSerializer.Create<List<T>>();
-            bf.Pack(this.Stream, this.DataSlice);
+            MemoryStream ms = new MemoryStream();
+            bf.Pack(ms, this.DataSlice);
+            ZlibStream zs = new ZlibStream(this.Stream, CompressionMode.Compress, CompressionLevel.Level9);
+
+            zs.FlushMode=FlushType.Sync;
+            ms.Position = 0;
+            ms.CopyTo(zs);
+            zs.FlushMode = FlushType.Full;
+            zs.Flush();
+            this.Stream.Position = 0;
         }
 
         internal void Deserialize()
         {
             MessagePackSerializer<List<T>> messagePackSerializer = MessagePackSerializer.Create<List<T>>();
-            this.DataSlice = messagePackSerializer.Unpack(this.Stream);
+            ZlibStream zs = new ZlibStream(this.Stream, CompressionMode.Decompress);
+            MemoryStream ms = new MemoryStream();
+            
+            zs.CopyTo(ms);
+            zs.Flush();
+            ms.Flush();
+            ms.Position = 0;
+            this.DataSlice = messagePackSerializer.Unpack(ms);
+            ms.Close();
         }
 
         public virtual void Dispose(bool disposing)

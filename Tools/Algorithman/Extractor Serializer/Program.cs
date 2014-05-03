@@ -613,7 +613,7 @@ namespace Extractor_Serializer
             Console.WriteLine("Creating serialized nano data file - please wait");
 
             string version = GetVersion(AOPath);
-            MessagePackZip.CompressData<NanoFormula>("nanos.dat", version, rawNanoList, 1000);
+            MessagePackZip.CompressData<NanoFormula>("nanos.dat", version, rawNanoList, (rawNanoList.Count / 12) + 1);
 
             Console.WriteLine();
             Console.WriteLine("Checking Nanos...");
@@ -626,7 +626,7 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Creating serialized item data file - please wait");
 
-            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 10240);
+            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 10000);
 
             Console.WriteLine();
             Console.WriteLine("Checking Items...");
