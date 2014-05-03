@@ -34,6 +34,8 @@ namespace ZoneEngine.ChatCommands
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Data.Linq;
+    using System.Linq.Expressions;
 
     using CellAO.Core.Entities;
     using CellAO.Database.Dao;
@@ -41,6 +43,8 @@ namespace ZoneEngine.ChatCommands
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
 
     using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.MessageHandlers;
@@ -91,11 +95,17 @@ namespace ZoneEngine.ChatCommands
             mobdbo.HeadingX = mob.Heading.xf;
             mobdbo.HeadingY = mob.Heading.yf;
             mobdbo.HeadingZ = mob.Heading.zf;
+            if (mob.Waypoints.Count > 0)
+            {
+                mobdbo.Waypoints = new Binary(MessagePackZip.SerializeData(mob.Waypoints));
+            }
+
 
             if (MobSpawnDao.Instance.Exists(mobdbo.Id))
             {
                 MobSpawnDao.Instance.Delete(mobdbo.Id);
             }
+
             MobSpawnDao.Instance.Add(mobdbo);
 
             // Clear remnants first
@@ -114,19 +124,6 @@ namespace ZoneEngine.ChatCommands
             }
 
             MobSpawnWaypointsDao.Instance.Delete(new { Identity = mobdbo.Id });
-
-            foreach (Waypoint wp in mob.Waypoints)
-            {
-                DBMobSpawnWaypoints waypoint = new DBMobSpawnWaypoints();
-                waypoint.Identity = mobdbo.Id;
-                waypoint.Playfield = mobdbo.Playfield;
-                waypoint.WalkMode = wp.Running ? 1 : 0;
-                waypoint.X = wp.Position.xf;
-                waypoint.Y = wp.Position.yf;
-                waypoint.Z = wp.Position.zf;
-                MobSpawnWaypointsDao.Instance.Add(waypoint);
-            }
-
         }
 
         public override int GMLevelNeeded()

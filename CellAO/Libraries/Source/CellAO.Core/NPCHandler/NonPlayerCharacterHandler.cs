@@ -47,6 +47,8 @@ namespace CellAO.Core.NPCHandler
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
+
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
@@ -173,16 +175,7 @@ namespace CellAO.Core.NPCHandler
                 temp = cmob.Stats[StatIds.headmesh].Value;
                 cmob.MeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
                 cmob.SocialMeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
-
-                IEnumerable<DBMobSpawnWaypoints> waypoints =
-                    MobSpawnWaypointsDao.Instance.GetWhere(new { Identity = mobId.Instance });
-                foreach (DBMobSpawnWaypoints wp in waypoints)
-                {
-                    Waypoint way = new Waypoint();
-                    way.Position=new Vector.Vector3(wp.X,wp.Y,wp.Z);
-                    way.Running = wp.WalkMode == 1;
-                    cmob.Waypoints.Add(way);
-                }
+                cmob.Waypoints = MessagePackZip.DeserializeData<Waypoint>(mob.Waypoints.ToArray());
                 npccontroller.Character = cmob;
                 if (cmob.Waypoints.Count > 2)
                 {

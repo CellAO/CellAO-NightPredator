@@ -66,6 +66,18 @@ namespace Utility
 
         #region Public Methods and Operators
 
+        public static byte[] SerializeData<T>(List<T> dataList)
+        {
+            byte[] temp = null;
+            MessagePackSerializer<List<T>> bf = MessagePackSerializer.Create<List<T>>();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Pack(ms, dataList);
+                temp = ms.GetBuffer();
+            }
+            return temp;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="filename">
@@ -300,5 +312,19 @@ namespace Utility
         }
 
         #endregion
+
+        public static List<T> DeserializeData<T>(byte[] data)
+        {
+            if (data.Length > 0)
+            {
+                using (MemoryStream ms = new MemoryStream(data))
+                {
+                    ms.Position = 0;
+                    MessagePackSerializer<List<T>> bf = MessagePackSerializer.Create<List<T>>();
+                    return bf.Unpack(ms);
+                }
+            }
+            return new List<T>();
+        }
     }
 }
