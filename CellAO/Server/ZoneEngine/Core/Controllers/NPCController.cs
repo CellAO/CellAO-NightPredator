@@ -158,10 +158,10 @@ namespace ZoneEngine.Core.Controllers
             ICharacter npc = Pool.Instance.GetObject<ICharacter>(target);
             if (npc != null)
             {
-                Vector3 temp = npc.Coordinates.coordinate-this.Character.Coordinates.coordinate;
+                Vector3 temp = npc.Coordinates().coordinate - this.Character.Coordinates().coordinate;
                 temp.y = 0;
                 this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
-                FollowTargetMessageHandler.Default.Send(this.Character, this.Character.Coordinates.coordinate,npc.Coordinates.coordinate);
+                FollowTargetMessageHandler.Default.Send(this.Character, this.Character.Coordinates().coordinate, npc.Coordinates().coordinate);
                 this.Run();
                 this.StartMovement();
             }
@@ -343,7 +343,7 @@ namespace ZoneEngine.Core.Controllers
 
         public void DoFollow()
         {
-            Coordinate sourceCoord = this.Character.Coordinates;
+            Coordinate sourceCoord = this.Character.Coordinates();
             Vector3 targetPosition = this.followCoordinates;
             if (!this.followIdentity.Equals(Identity.None))
             {
@@ -356,7 +356,7 @@ namespace ZoneEngine.Core.Controllers
                     return;
                 }
 
-                targetPosition = targetChar.Coordinates.coordinate;
+                targetPosition = targetChar.Coordinates().coordinate;
             }
 
             // Do we have coordinates to follow?
@@ -370,10 +370,11 @@ namespace ZoneEngine.Core.Controllers
             Vector3 dest = targetPosition;
 
             // Check if we have arrived
-            if (start.Distance2D(dest) < 0.1f)
+            if (start.Distance2D(dest) < 0.3f)
             {
                 this.StopMovement();
                 this.Character.RawCoordinates = dest;
+                FollowTargetMessageHandler.Default.Send(this.Character, dest);
                 this.followCoordinates = new Vector3();
                 return;
             }
@@ -381,12 +382,14 @@ namespace ZoneEngine.Core.Controllers
             LogUtil.Debug(DebugInfoDetail.Movement, "Distance to target: " + start.Distance2D(dest).ToString());
 
             // If target moved or first call, then issue a new follow
-            if (targetPosition.Distance2D(dest) > 1.0f)
+            if (targetPosition.Distance2D(followCoordinates) > 2.0f)
             {
-                this.Character.Coordinates = sourceCoord;
-                Vector3 temp = dest - start;
+                this.StopMovement();
+                this.Character.Coordinates(start);
+                FollowTargetMessageHandler.Default.Send(this.Character, start);
+                Vector3 temp = start - dest;
                 temp.y = 0;
-                this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
+                this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp);
                 this.followCoordinates = dest;
                 FollowTargetMessageHandler.Default.Send(this.Character, start, dest);
                 this.StartMovement();
@@ -409,13 +412,13 @@ namespace ZoneEngine.Core.Controllers
                     this.Walk();
                 }
                 this.followCoordinates = next.Position;
-                Vector3 temp = this.Character.Coordinates.coordinate - next.Position;
+                Vector3 temp = this.Character.Coordinates().coordinate - next.Position;
                 temp.y = 0;
                 this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
                 LogUtil.Debug(DebugInfoDetail.Movement, "Direction: " + this.Character.Heading.ToString());
                 FollowTargetMessageHandler.Default.Send(
                     this.Character,
-                    this.Character.Coordinates.coordinate,
+                    this.Character.Coordinates().coordinate,
                     next.Position);
                 this.StartMovement();
                 LogUtil.Debug(DebugInfoDetail.Movement, "Walking to: " + this.followCoordinates);
@@ -457,8 +460,8 @@ namespace ZoneEngine.Core.Controllers
             double wpDistance = double.MaxValue;
             foreach (Waypoint wp in this.Character.Waypoints)
             {
-                double distance = wp.Position.Distance2D(this.Character.Coordinates.coordinate);
-                if (distance > 1.0f)
+                double distance = wp.Position.Distance2D(this.Character.Coordinates().coordinate);
+                if (distance > 0.2f)
                 {
                     if (wpDistance > distance)
                     {

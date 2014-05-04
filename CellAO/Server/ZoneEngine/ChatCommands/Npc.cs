@@ -35,9 +35,9 @@ namespace ZoneEngine.ChatCommands
 
     using System.Collections.Generic;
     using System.Data.Linq;
-    using System.Linq.Expressions;
 
     using CellAO.Core.Entities;
+    using CellAO.Core.Vector;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
     using CellAO.ObjectManager;
@@ -88,18 +88,19 @@ namespace ZoneEngine.ChatCommands
             mobdbo.Textures3 = 0;
             mobdbo.Textures4 = 0;
             mobdbo.Playfield = mob.Playfield.Identity.Instance;
-            mobdbo.X = mob.Coordinates.x;
-            mobdbo.Y = mob.Coordinates.y;
-            mobdbo.Z = mob.Coordinates.z;
+            Coordinate tempCoordinate = mob.Coordinates();
+            mobdbo.X = tempCoordinate.x;
+            mobdbo.Y = tempCoordinate.y;
+            mobdbo.Z = tempCoordinate.z;
             mobdbo.HeadingW = mob.Heading.wf;
             mobdbo.HeadingX = mob.Heading.xf;
             mobdbo.HeadingY = mob.Heading.yf;
             mobdbo.HeadingZ = mob.Heading.zf;
             if (mob.Waypoints.Count > 0)
             {
-                mobdbo.Waypoints = new Binary(MessagePackZip.SerializeData(mob.Waypoints));
+                List<MobSpawnWaypoint> temp = this.GetMobWaypoints(mob);
+                mobdbo.Waypoints = new Binary(MessagePackZip.SerializeData(temp));
             }
-
 
             if (MobSpawnDao.Instance.Exists(mobdbo.Id))
             {
@@ -124,6 +125,23 @@ namespace ZoneEngine.ChatCommands
             }
 
             MobSpawnWaypointsDao.Instance.Delete(new { Identity = mobdbo.Id });
+        }
+
+        private List<MobSpawnWaypoint> GetMobWaypoints(Character mob)
+        {
+            List<MobSpawnWaypoint> temp = new List<MobSpawnWaypoint>();
+            foreach (Waypoint wp in mob.Waypoints)
+            {
+                MobSpawnWaypoint waypoint = new MobSpawnWaypoint();
+                waypoint.Identity = mob.Identity.Instance;
+                waypoint.Playfield = mob.Playfield.Identity.Instance;
+                waypoint.WalkMode = wp.Running ? 1 : 0;
+                waypoint.X = wp.Position.xf;
+                waypoint.Y = wp.Position.yf;
+                waypoint.Z = wp.Position.zf;
+                temp.Add(waypoint);
+            }
+            return temp;
         }
 
         public override int GMLevelNeeded()

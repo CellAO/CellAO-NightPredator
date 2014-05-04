@@ -134,7 +134,7 @@ Filter will be applied to mob name"));
                     mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
                         args[1],
                         character.Playfield.Identity,
-                        character.Coordinates,
+                        character.Coordinates(),
                         character.RawHeading,
                         npcController,
                         int.Parse(args[2]));
@@ -145,7 +145,7 @@ Filter will be applied to mob name"));
                     mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
                         args[1],
                         character.Playfield.Identity,
-                        character.Coordinates,
+                        character.Coordinates(),
                         character.RawHeading,
                         npcController);
                 }

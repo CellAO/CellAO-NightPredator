@@ -77,7 +77,7 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 announce.Info = new FollowTargetInfo()
                                 {
-                                    DataLength = 0,
+                                    MoveType = 0,
                                     Target = followinfo.Target,
                                     Dummy = 0x40,
                                     Dummy1 = 0x20000000
@@ -87,6 +87,30 @@ namespace ZoneEngine.Core.MessageHandlers
             client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
         }
 
+
+        public void Send(ICharacter character, Vector3 stopPosition)
+        {
+            this.SendToPlayfield(character, this.FillerFullStopAt(character, stopPosition));
+        }
+
+        private MessageDataFiller FillerFullStopAt(ICharacter character, Vector3 stopPosition)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Info = new FollowTargetInfo()
+                         {
+                             Target = Identity.None,
+                             X = stopPosition.X,
+                             Y = stopPosition.Y,
+                             Z = stopPosition.Z,
+                             Dummy = 0,
+                             Dummy1 = 0,
+                             MoveType = 21 // Magic number FULL STOP
+                         };
+
+            };
+        }
         /// <summary>
         /// </summary>
         /// <param name="character">

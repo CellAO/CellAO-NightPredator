@@ -86,13 +86,11 @@ namespace CellAO.Core.Entities
         /// </summary>
         private SpinOrStrafeDirections strafeDirection;
 
-        public List<Waypoint> Waypoints { get; set; }
-
-
-
         private byte lastMoveType = 0;
 
         private bool disposed = false;
+
+        public List<Waypoint> Waypoints { get; set; }
 
         #endregion
 
@@ -243,27 +241,31 @@ namespace CellAO.Core.Entities
             }
         }
 
-        /// <summary>
-        /// </summary>
-        public override Coordinate Coordinates
+        public override Coordinate Coordinates()
         {
-            get
-            {
-                Coordinate result = this.CalculatePredictedPosition();
-                return result;
-            }
+            Coordinate result = this.CalculatePredictedPosition();
+            return result;
+        }
 
-            set
-            {
-                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
-                                      {
-                                          X = value.x,
-                                          Y = value.y,
-                                          Z = value.z
-                                      };
-                LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + value.ToString());
-                this.PredictionTime = DateTime.UtcNow;
-            }
+        public override void Coordinates(Vector3 position)
+        {
+            this.RawCoordinates = position;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.ToString());
+            this.PredictionTime = DateTime.UtcNow;
+        }
+
+        public override void Coordinates(SmokeLounge.AOtomation.Messaging.GameData.Vector3 position)
+        {
+            this.RawCoordinates = position;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.ToString());
+            this.PredictionTime = DateTime.UtcNow;
+        }
+
+        public override void Coordinates(Coordinate position)
+        {
+            this.RawCoordinates = position.coordinate;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.coordinate.ToString());
+            this.PredictionTime = DateTime.UtcNow;
         }
 
         internal Coordinate CalculatePredictedPosition()
@@ -601,7 +603,7 @@ namespace CellAO.Core.Entities
                 case 2: // Forward Stop
                     // Stop the predicition
                     Coordinate temp = this.CalculatePredictedPosition();
-                    this.Coordinates = temp;
+                    this.Coordinates(temp);
                     LogUtil.Debug(DebugInfoDetail.Movement, "Stopped at " + temp);
                     this.PredictionTime = DateTime.UtcNow;
                     this.moveDirection = MoveDirections.None;
@@ -612,7 +614,7 @@ namespace CellAO.Core.Entities
                     break;
                 case 4: // Reverse Stop
                     // Stop the predicition
-                    this.Coordinates = this.CalculatePredictedPosition();
+                    this.Coordinates(this.CalculatePredictedPosition());
                     this.PredictionTime = DateTime.UtcNow;
                     this.moveDirection = MoveDirections.None;
                     break;
@@ -742,9 +744,9 @@ namespace CellAO.Core.Entities
         public void StopMovement()
         {
             // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
-            this.RawCoordinates.X = this.Coordinates.x;
-            this.RawCoordinates.Y = this.Coordinates.y;
-            this.RawCoordinates.Z = this.Coordinates.z;
+            this.RawCoordinates.X = this.Coordinates().x;
+            this.RawCoordinates.Y = this.Coordinates().y;
+            this.RawCoordinates.Z = this.Coordinates().z;
             this.RawHeading = this.Heading;
 
             this.spinDirection = SpinOrStrafeDirections.None;
@@ -1031,7 +1033,7 @@ namespace CellAO.Core.Entities
         /// </param>
         public void SetCoordinates(Coordinate newCoordinates, Quaternion heading)
         {
-            this.Coordinates = newCoordinates;
+            this.Coordinates(newCoordinates);
             this.Heading = heading;
             this.PredictionTime = DateTime.UtcNow;
         }

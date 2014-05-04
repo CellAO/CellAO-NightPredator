@@ -7,7 +7,7 @@ namespace CellAO.Database.Dao
 {
     using CellAO.Database.Entities;
 
-    public class MobSpawnWaypointsDao : Dao<DBMobSpawnWaypoints, MobSpawnWaypointsDao>
+    public class MobSpawnWaypointsDao : Dao<MobSpawnWaypoint, MobSpawnWaypointsDao>
     {
     }
 }
