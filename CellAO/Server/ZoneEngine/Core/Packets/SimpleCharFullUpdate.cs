@@ -136,7 +136,7 @@ namespace ZoneEngine.Core.Packets
                 showsocial = (character.Stats[StatIds.visualflags].Value & 0x20) > 0;
 
                 charPlayfield = character.Playfield.Identity.Instance;
-                charCoord = character.Coordinates;
+                charCoord = character.Coordinates();
                 charId = character.Identity;
                 charHeading = character.Heading;
 

@@ -108,7 +108,7 @@ namespace ZoneEngine.ChatCommands
             {
                 coord = new Coordinate(
                     float.Parse(args[1], NumberStyles.Any, CultureInfo.InvariantCulture),
-                    character.Coordinates.y,
+                    character.Coordinates().y,
                     float.Parse(args[2], NumberStyles.Any, CultureInfo.InvariantCulture));
                 pf = int.Parse(args[3]);
             }

@@ -359,7 +359,7 @@ namespace CellAO.Core.Playfields
         public List<IDynel> FindInRange(IDynel dynel, float range)
         {
             List<IDynel> temp = new List<IDynel>();
-            Coordinate coord = dynel.Coordinates;
+            Coordinate coord = dynel.Coordinates();
             foreach (Dynel entity in
                 Pool.Instance.GetAll<Dynel>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
             {
@@ -368,7 +368,7 @@ namespace CellAO.Core.Playfields
                     continue;
                 }
 
-                if (entity.Coordinates.Distance2D(coord) <= range)
+                if (entity.Coordinates().Distance2D(coord) <= range)
                 {
                     temp.Add(entity);
                 }
@@ -608,7 +608,7 @@ namespace CellAO.Core.Playfields
         public List<ICharacter> FindCharacterInRange(IDynel dynel, float range)
         {
             List<ICharacter> temp = new List<ICharacter>();
-            Coordinate coord = dynel.Coordinates;
+            Coordinate coord = dynel.Coordinates();
             foreach (ICharacter entity in
                 Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
                     .Where(xx => xx.InPlayfield(this.Identity)))
@@ -618,7 +618,7 @@ namespace CellAO.Core.Playfields
                     continue;
                 }
 
-                if (((Character)entity).Coordinates.Distance2D(coord) <= range)
+                if (((Character)entity).Coordinates().Distance2D(coord) <= range)
                 {
                     temp.Add((Character)entity);
                 }
@@ -751,7 +751,7 @@ namespace CellAO.Core.Playfields
                 foreach (Event ev in
                     sd.Events.Where(x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
                 {
-                    if (sd.Coord().Distance3D(dynel.Coordinates) < 2.0)
+                    if (sd.Coord().Distance3D(dynel.Coordinates()) < 2.0f)
                     {
                         ev.Perform(dynel, dynel);
                     }
@@ -765,7 +765,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         private void CheckWallCollision(ICharacter dynel)
         {
-            WallCollisionResult wcr = WallCollision.CheckCollision(dynel.Coordinates, dynel.Playfield.Identity.Instance);
+            WallCollisionResult wcr = WallCollision.CheckCollision(dynel.Coordinates(), dynel.Playfield.Identity.Instance);
             if (wcr != null)
             {
                 int destPlayfield = wcr.SecondWall.DestinationPlayfield;

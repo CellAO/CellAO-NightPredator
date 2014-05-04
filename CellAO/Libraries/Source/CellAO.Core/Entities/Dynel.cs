@@ -128,17 +128,24 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public virtual Coordinate Coordinates
+        public virtual Coordinate Coordinates()
         {
-            get
-            {
-                return new Coordinate(this.RawCoordinates);
-            }
+            return new Coordinate(this.RawCoordinates);
+        }
 
-            set
-            {
-                this.RawCoordinates = new Vector3() { X = value.x, Y = value.y, Z = value.z };
-            }
+        public virtual void Coordinates(Vector3 position)
+        {
+            this.RawCoordinates = position;
+        }
+
+        public virtual void Coordinates(Vector.Vector3 position)
+        {
+            this.RawCoordinates = position;
+        }
+
+        public virtual void Coordinates(Coordinate position)
+        {
+            this.RawCoordinates = position.coordinate;
         }
 
         /// <summary>

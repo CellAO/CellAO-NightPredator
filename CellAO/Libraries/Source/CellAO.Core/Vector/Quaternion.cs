@@ -311,7 +311,7 @@ namespace CellAO.Core.Vector
             var temp = qrot.w;
             qrot.w = qrot.y;
             qrot.y = temp;
-            return qrot;
+            return qrot.Normalize();
         }
 
         /// <summary>

@@ -34,7 +34,6 @@ namespace CellAO.Core.NPCHandler
     #region Usings ...
 
     using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
@@ -101,7 +100,7 @@ namespace CellAO.Core.NPCHandler
                 Identity newIdentity = new Identity() { Type = IdentityType.CanbeAffected, Instance = newInstanceId };
                 Character mobCharacter = new Character(newIdentity, controller);
                 mobCharacter.Read();
-                mobCharacter.Coordinates = coord;
+                mobCharacter.Coordinates(coord);
                 mobCharacter.Playfield = Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
                 mobCharacter.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.life, (uint)mob.Health);
@@ -160,7 +159,7 @@ namespace CellAO.Core.NPCHandler
                 Character cmob = new Character(mobId, npccontroller);
                 cmob.Read();
                 cmob.Playfield = playfield;
-                cmob.Coordinates = new Coordinate() { x = mob.X, y = mob.Y, z = mob.Z };
+                cmob.Coordinates(new Coordinate() { x = mob.X, y = mob.Y, z = mob.Z });
                 cmob.RawHeading = new Quaternion(mob.HeadingX, mob.HeadingY, mob.HeadingZ, mob.HeadingW);
                 cmob.Name = mob.Name;
                 cmob.FirstName = "";
@@ -175,7 +174,17 @@ namespace CellAO.Core.NPCHandler
                 temp = cmob.Stats[StatIds.headmesh].Value;
                 cmob.MeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
                 cmob.SocialMeshLayer.AddMesh(0, cmob.Stats[StatIds.headmesh].Value, 0, 4);
-                cmob.Waypoints = MessagePackZip.DeserializeData<Waypoint>(mob.Waypoints.ToArray());
+                List<MobSpawnWaypoint> waypoints =
+                    MessagePackZip.DeserializeData<MobSpawnWaypoint>(mob.Waypoints.ToArray());
+                foreach (MobSpawnWaypoint wp in waypoints)
+                {
+                    Waypoint mobwp = new Waypoint();
+                    mobwp.Position.x = wp.X;
+                    mobwp.Position.y = wp.Y;
+                    mobwp.Position.z = wp.Z;
+                    mobwp.Running = wp.WalkMode == 1;
+                    cmob.Waypoints.Add(mobwp);
+                }
                 npccontroller.Character = cmob;
                 if (cmob.Waypoints.Count > 2)
                 {

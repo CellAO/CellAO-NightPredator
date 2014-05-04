@@ -64,7 +64,7 @@ namespace ZoneEngine.Core.Playfields
         /// </returns>
         public static WallCollisionResult CheckCollision(ICharacter character)
         {
-            return CheckCollision(character.Coordinates, character.Playfield.Identity.Instance);
+            return CheckCollision(character.Coordinates(), character.Playfield.Identity.Instance);
         }
 
         /// <summary>

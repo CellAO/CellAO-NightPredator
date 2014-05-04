@@ -88,7 +88,7 @@
     <Compile Include="Entities\DBMobDroptable.cs" />
     <Compile Include="Entities\DBMobSpawn.cs" />
     <Compile Include="Entities\DBMobSpawnStat.cs" />
-    <Compile Include="Entities\DBMobSpawnWaypoints.cs" />
+    <Compile Include="Entities\MobSpawnWaypoint.cs" />
     <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />

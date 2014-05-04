@@ -100,7 +100,8 @@ namespace ZoneEngine.ChatCommands
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            "Coordinates of "+character.SelectedTarget.ToString(true)+": "+npc.Coordinates.ToString()));
+                            "Coordinates of " + character.SelectedTarget.ToString(true) + ": "
+                            + npc.Coordinates().ToString()));
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
@@ -109,7 +110,7 @@ namespace ZoneEngine.ChatCommands
             }
             if (args[0].ToLower() == "addwp")
             {
-                CellAO.Core.Vector.Vector3 v = character.Coordinates.coordinate;
+                CellAO.Core.Vector.Vector3 v = character.Coordinates().coordinate;
                 bool running = character.MoveMode == MoveModes.Run;
                 ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
                 if (npc != null)
@@ -118,9 +119,9 @@ namespace ZoneEngine.ChatCommands
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            "Waypoint added: " + character.SelectedTarget.ToString(true) + ": " + character.Coordinates.ToString()));
+                            "Waypoint added: " + character.SelectedTarget.ToString(true) + ": "
+                            + character.Coordinates().ToString()));
                 }
-
             }
         }
 
@@ -131,7 +132,7 @@ namespace ZoneEngine.ChatCommands
 
         public override List<string> ListCommands()
         {
-            return new List<string>(new[] { "walktest", "followtest", "walkback", "showcoords" , "addwp"});
+            return new List<string>(new[] { "walktest", "followtest", "walkback", "showcoords", "addwp" });
         }
     }
 }

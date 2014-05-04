@@ -48,6 +48,7 @@ namespace CellAO.Core.Entities
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -134,6 +135,6 @@ namespace CellAO.Core.Entities
 
         byte GetLastMoveType();
 
-        void AddWaypoint(Vector.Vector3 v, bool running);
+        void AddWaypoint(Vector3 v, bool running);
     }
 }

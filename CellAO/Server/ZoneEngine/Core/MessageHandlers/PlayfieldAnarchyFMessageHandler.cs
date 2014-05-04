@@ -35,11 +35,14 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Vector;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Playfields;
+
+    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
@@ -75,11 +78,12 @@ namespace ZoneEngine.Core.MessageHandlers
                                  Type = IdentityType.Playfield2,
                                  Instance = character.Playfield.Identity.Instance
                              };
+                Coordinate temp = character.Coordinates();
                 x.CharacterCoordinates = new Vector3
                                          {
-                                             X = character.Coordinates.x,
-                                             Y = character.Coordinates.y,
-                                             Z = character.Coordinates.z,
+                                             X = temp.x,
+                                             Y = temp.y,
+                                             Z = temp.z,
                                          };
                 x.PlayfieldId1 = new Identity
                                  {

@@ -44,7 +44,7 @@ namespace CellAO.Core.Entities
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -59,10 +59,6 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         bool ChangedAppearance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Coordinate Coordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -83,7 +79,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        Vector3 RawCoordinates { get; set; }
+        SmokeLounge.AOtomation.Messaging.GameData.Vector3 RawCoordinates { get; set; }
 
         /// <summary>
         /// </summary>
@@ -92,6 +88,14 @@ namespace CellAO.Core.Entities
         /// <summary>
         /// </summary>
         string OrganizationName { get; }
+
+        Coordinate Coordinates();
+
+        void Coordinates(Vector3 position);
+
+        void Coordinates(SmokeLounge.AOtomation.Messaging.GameData.Vector3 position);
+
+        void Coordinates(Coordinate position);
 
         /// <summary>
         /// </summary>

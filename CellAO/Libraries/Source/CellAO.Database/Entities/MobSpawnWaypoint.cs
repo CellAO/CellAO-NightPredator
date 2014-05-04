@@ -29,15 +29,29 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Database.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Database.Dao;
 
-using Utility;
+    #endregion
 
-#endregion
+    [Tablename("mobspawnswaypoints")]
+    public class MobSpawnWaypoint : IDBEntity
+    {
+        public int Identity { get; set; }
 
-[assembly: AssemblyVersion("1.4.1.2343")]
-[assembly: AssemblyFileVersion("1.4.1.2448")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+        public int WalkMode { get; set; }
+
+        public int Playfield { get; set; }
+
+        public float X { get; set; }
+
+        public float Y { get; set; }
+
+        public float Z { get; set; }
+
+        public int Id { get; set; }
+    }
+}

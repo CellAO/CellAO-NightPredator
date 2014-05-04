@@ -31,12 +31,6 @@
 
 namespace CellAO.Core.Entities
 {
-    #region Usings ...
-
-    
-
-    #endregion
-
     /// <summary>
     /// </summary>
     public interface INamedEntity : IInstancedEntity

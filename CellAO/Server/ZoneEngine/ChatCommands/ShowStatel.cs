@@ -105,6 +105,7 @@ namespace ZoneEngine.ChatCommands
             }
             else
             {
+                Coordinate tempCoordinate = character.Coordinates();
                 PlayfieldData pfData = PlayfieldLoader.PFData[character.Playfield.Identity.Instance];
                 foreach (StatelData s in pfData.Statels)
                 {
@@ -114,8 +115,8 @@ namespace ZoneEngine.ChatCommands
                     }
                     else
                     {
-                        if (Coordinate.Distance2D(character.Coordinates, s.Coord())
-                            < Coordinate.Distance2D(character.Coordinates, o.Coord()))
+                        if (Coordinate.Distance2D(tempCoordinate, s.Coord())
+                            < Coordinate.Distance2D(tempCoordinate, o.Coord()))
                         {
                             o = s;
                         }

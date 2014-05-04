@@ -328,7 +328,7 @@ namespace ZoneEngine.Core.Controllers
             // give it a bit uncertainty (2.0f)
             LogUtil.Debug(
                 DebugInfoDetail.Movement,
-                newCoordinates.ToString() + "<->" + this.Character.Coordinates.ToString());
+                newCoordinates.ToString() + "<->" + this.Character.Coordinates().ToString());
             // if (newCoordinates.Distance2D(this.Character.Coordinates) < 2.0f)
             {
                 this.Character.SetCoordinates(newCoordinates, heading);
