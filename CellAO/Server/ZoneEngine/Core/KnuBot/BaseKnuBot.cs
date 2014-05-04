@@ -250,7 +250,7 @@ namespace ZoneEngine.Core.KnuBot
             KnuBotAppendTextMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, text);
             LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Write"));
             // Need to sleep here, else packets will be jumbled...
-            Thread.Sleep(200);
+            Thread.Sleep(20);
         }
 
         protected void WriteLine(string text = "")
