@@ -63,44 +63,44 @@ namespace ZoneEngine.Core.KnuBot
 
         /// <summary>
         /// </summary>
-        DialogStart = 0,
+        DialogStart = 10,
 
         // END Self made
         /// <summary>
         /// </summary>
-        Option1 = 1,
+        Option1 = 0,
 
         /// <summary>
         /// </summary>
-        Option2 = 2,
+        Option2 = 1,
 
         /// <summary>
         /// </summary>
-        Option3 = 3,
+        Option3 = 2,
 
         /// <summary>
         /// </summary>
-        Option4 = 4,
+        Option4 = 3,
 
         /// <summary>
         /// </summary>
-        Option5 = 5,
+        Option5 = 4,
 
         /// <summary>
         /// </summary>
-        Option6 = 6,
+        Option6 = 5,
 
         /// <summary>
         /// </summary>
-        Option7 = 7,
+        Option7 = 6,
 
         /// <summary>
         /// </summary>
-        Option8 = 8,
+        Option8 = 7,
 
         /// <summary>
         /// </summary>
-        Option9 = 9,
+        Option9 = 8,
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ namespace ZoneEngine.Core.KnuBot
     /// <param name="character">
     /// Character object to check on
     /// </param>
-    public delegate string KnuBotCondition(KnuBotOptionId optionId);
+    public delegate KnuBotAction KnuBotCondition(KnuBotOptionId optionId);
 
     /// <summary>
     /// KnuBot Action (stepping into tree, stepping out of tree, executing game functions etc.)
@@ -246,13 +246,17 @@ namespace ZoneEngine.Core.KnuBot
             string nextDialogId = string.Empty;
             if (this.Character != null)
             {
-                string actionId = this.condition(optionId);
-                if (actionId != string.Empty)
+                KnuBotAction action = this.condition(optionId);
+                if (action != null)
                 {
-                    // Execute Action
-                    // No checks for empty results here, since we did this all in the Validate method already
-                    this.knuBotActions.Where(x => x.ActionId == actionId).Select(x => x.BotAction).First()();
-                    nextDialogId = this.knuBotActions.First(x => x.ActionId == actionId).NextDialogId;
+                    string actionId = action.Method.Name;
+                    if (actionId != string.Empty)
+                    {
+                        // Execute Action
+                        // No checks for empty results here, since we did this all in the Validate method already
+                        this.knuBotActions.Where(x => x.ActionId == actionId).Select(x => x.BotAction).First()();
+                        nextDialogId = this.knuBotActions.First(x => x.ActionId == actionId).NextDialogId;
+                    }
                 }
             }
 

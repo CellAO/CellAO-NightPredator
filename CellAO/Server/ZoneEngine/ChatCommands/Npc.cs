@@ -123,8 +123,6 @@ namespace ZoneEngine.ChatCommands
                         Value = (int)kv.Value
                     });
             }
-
-            MobSpawnWaypointsDao.Instance.Delete(new { Identity = mobdbo.Id });
         }
 
         private List<MobSpawnWaypoint> GetMobWaypoints(Character mob)

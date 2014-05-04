@@ -70,7 +70,6 @@
     <Compile Include="Dao\MobDroptableDao.cs" />
     <Compile Include="Dao\MobSpawnDao.cs" />
     <Compile Include="Dao\MobSpawnStatDao.cs" />
-    <Compile Include="Dao\MobSpawnWaypointsDao.cs" />
     <Compile Include="Dao\MobTemplateDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
@@ -175,9 +174,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SqlTables\mobspawnsuploadednanos.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlTables\mobspawnswaypoints.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SqlTables\mobspawns_stats.sql">

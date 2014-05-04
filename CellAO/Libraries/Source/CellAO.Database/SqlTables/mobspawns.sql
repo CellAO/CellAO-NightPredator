@@ -19,6 +19,7 @@ CREATE TABLE  `mobspawns` (
   `RunningNanos` blob,
   `MobMeshs` blob,
   `AdditionalMeshs` blob,
+  `KnuBotScriptName` varchar(256) DEFAULT '',
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 

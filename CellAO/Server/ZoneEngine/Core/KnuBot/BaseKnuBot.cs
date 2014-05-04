@@ -35,12 +35,16 @@ namespace ZoneEngine.Core.KnuBot
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
 
     using ZoneEngine.Core.MessageHandlers;
 
@@ -72,7 +76,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </param>
         /// <param name="root">
         /// </param>
-        public BaseKnuBot(Identity knubotIdentity, KnuBotDialogTree root)
+        protected BaseKnuBot(Identity knubotIdentity, KnuBotDialogTree root)
             : this(knubotIdentity)
         {
             this.SetRootNode(root);
@@ -82,7 +86,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </summary>
         /// <param name="knubotIdentity">
         /// </param>
-        public BaseKnuBot(Identity knubotIdentity)
+        protected BaseKnuBot(Identity knubotIdentity)
         {
             this.Character = new WeakReference<ICharacter>(null);
             this.KnuBotIdentity = knubotIdentity;
@@ -94,6 +98,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </param>
         protected void SetRootNode(KnuBotDialogTree node)
         {
+            node.ValidateTree();
             this.rootNode = node;
             this.selectedNode = this.rootNode;
             this.rootNode.SetKnuBot(this);
@@ -107,11 +112,11 @@ namespace ZoneEngine.Core.KnuBot
         /// </exception>
         internal ICharacter GetCharacter()
         {
-            if (this.Character.Target == null)
-            {
-                throw new Exception("Character has gone away.");
-            }
-
+            /*            if (this.Character.Target == null)
+                        {
+                            throw new Exception("Character has gone away.");
+                        }
+                        */
             return this.Character.Target;
         }
 
@@ -124,14 +129,21 @@ namespace ZoneEngine.Core.KnuBot
         public bool StartDialog(ICharacter character)
         {
             bool result = false;
-            if (this.GetCharacter() == null)
+
+            // Does the starting character exist?
+            if (character != null)
             {
-                // OK, no one is talking, lets initialize
-                result = true;
-                this.Character.Target = character;
-                this.selectedNode = this.rootNode;
-                this.OpenWindow();
-                this.Answer(KnuBotOptionId.DialogStart);
+                // if (this.GetCharacter() == null)
+                {
+                    // OK, no one is talking, lets initialize
+                    result = true;
+                    this.Character.Target = character;
+                    this.selectedNode = this.rootNode;
+                    this.OpenWindow();
+                    this.Answer(KnuBotOptionId.DialogStart);
+                    LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Start Dialog"));
+
+                }
             }
 
             return result;
@@ -154,32 +166,55 @@ namespace ZoneEngine.Core.KnuBot
         /// </exception>
         public void Answer(int answer)
         {
-            string nextId = this.selectedNode.Execute((KnuBotOptionId)answer);
-            if (nextId == "parent")
+            KnuBotDialogTree oldNode = this.selectedNode;
+            // Only do talk if window is still open
+            if (answer != (int)KnuBotOptionId.WindowClosed)
             {
-                this.selectedNode = this.selectedNode.Parent;
-            }
-            else
-            {
-                if (nextId == "root")
+                string nextId = this.selectedNode.Execute((KnuBotOptionId)answer);
+                LogUtil.Debug(
+                    DebugInfoDetail.KnuBot,
+                    string.Format(
+                        "Received KnuBot Answer {0} for node {1} -> {2}",
+                        answer,
+                        this.selectedNode.id,
+                        nextId));
+                if (nextId == "parent")
                 {
-                    this.selectedNode = this.rootNode;
+                    this.selectedNode = this.selectedNode.Parent;
                 }
                 else
                 {
-                    if (nextId != "self")
+                    if (nextId == "root")
                     {
-                        KnuBotDialogTree nextSelectedNode = this.selectedNode.GetNode(nextId);
-                        if (nextSelectedNode == null)
+                        this.selectedNode = this.rootNode;
+                    }
+                    else
+                    {
+                        if (nextId != "self")
                         {
-                            throw new Exception(
-                                "Could not find dialog id '" + nextId + "' in tree '"
-                                + string.Join(Environment.NewLine, this.selectedNode.FlattenDialogIds()) + "'");
-                        }
+                            KnuBotDialogTree nextSelectedNode = this.selectedNode.GetNode(nextId);
+                            if (nextSelectedNode == null)
+                            {
+                                throw new Exception(
+                                    "Could not find dialog id '" + nextId + "' in tree '"
+                                    + string.Join(Environment.NewLine, this.selectedNode.FlattenDialogIds()) + "'");
+                            }
 
-                        this.selectedNode = nextSelectedNode;
+                            this.selectedNode = nextSelectedNode;
+                        }
                     }
                 }
+
+                // Only start over if its not the same node or option
+                if ((answer!=(int)KnuBotOptionId.DialogStart) || (oldNode!=this.selectedNode))
+                {
+                    this.Answer(KnuBotOptionId.DialogStart);
+                }
+            }
+            else
+            {
+                // Remove link to conversation partner
+                this.Character = new WeakReference<ICharacter>(null);
             }
         }
 
@@ -200,18 +235,27 @@ namespace ZoneEngine.Core.KnuBot
         /// </summary>
         /// <param name="choices">
         /// </param>
-        protected void SendAnswerList(string[] choices)
+        protected void SendAnswerList(params string[] choices)
         {
             KnuBotAnswerListMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, choices);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Sending KnuBot Choice List ({0} choices)", choices.Length));
         }
 
         /// <summary>
         /// </summary>
         /// <param name="text">
         /// </param>
-        protected void SendText(string text)
+        protected void Write(string text)
         {
             KnuBotAppendTextMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, text);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Write"));
+            // Need to sleep here, else packets will be jumbled...
+            Thread.Sleep(200);
+        }
+
+        protected void WriteLine(string text = "")
+        {
+            this.Write(text+"\n");
         }
 
         /// <summary>
@@ -219,6 +263,7 @@ namespace ZoneEngine.Core.KnuBot
         protected void OpenWindow()
         {
             KnuBotOpenChatWindowMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, "Opening KnuBot window");
         }
 
         /// <summary>
@@ -228,6 +273,7 @@ namespace ZoneEngine.Core.KnuBot
         protected void RejectItems(IEnumerable<Item> items)
         {
             KnuBotRejectedItemsMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, items);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Reject {0} items", items.Count()));
         }
 
         /// <summary>
@@ -243,6 +289,7 @@ namespace ZoneEngine.Core.KnuBot
                 this.KnuBotIdentity,
                 message,
                 numberOfSlots);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Start trade ({0} slots)", numberOfSlots));
         }
 
         /// <summary>
@@ -253,6 +300,13 @@ namespace ZoneEngine.Core.KnuBot
         {
             IItem temp = this.GetCharacter().BaseInventory.Pages[(int)container][slotNumber];
             // TODO: Remove item from Character's inventory and check against script reqs
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Trade item in container {0} slot {1}", container.ToString(), slotNumber));
+        }
+
+        public void CloseChatWindow()
+        {
+            this.Character = new WeakReference<ICharacter>(null);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Close KnuBot window"));
         }
     }
 }

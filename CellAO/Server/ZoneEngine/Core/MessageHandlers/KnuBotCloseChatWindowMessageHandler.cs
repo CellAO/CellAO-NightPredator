@@ -39,6 +39,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.Controllers;
+    using ZoneEngine.Core.KnuBot;
+
     #endregion
 
     /// <summary>
@@ -56,7 +59,8 @@ namespace ZoneEngine.Core.MessageHandlers
             ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
             if (npc != null)
             {
-                // npc.KnuBotClose(messageWrapper.Client.Character.Identity);
+                ((NPCController)npc.Controller).KnuBot.Answer(KnuBotOptionId.WindowClosed);
+                ((NPCController)npc.Controller).KnuBot.CloseChatWindow();
             }
         }
     }

@@ -143,7 +143,7 @@ namespace CellAO.Core.NPCHandler
             return null;
         }
 
-        public static void InstantiateMobSpawn(
+        public static ICharacter InstantiateMobSpawn(
             DBMobSpawn mob,
             DBMobSpawnStat[] stats,
             IController npccontroller,
@@ -190,7 +190,10 @@ namespace CellAO.Core.NPCHandler
                 {
                     cmob.Controller.State = CharacterState.Patrolling;
                 }
+
+                return cmob;
             }
+            return null;
         }
     }
 }

@@ -144,6 +144,7 @@ namespace ZoneEngine.Script
                                                         "SmokeLounge.AOtomation.Messaging.dll",
                                                         "CellAO.ObjectManager.dll",
                                                         "MySql.Data.dll",
+                                                        "Utility.dll",
                                                         "ZoneEngine.exe",
                                                         "ChatEngine.exe",
                                                         "LoginEngine.exe"

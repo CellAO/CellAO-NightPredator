@@ -122,6 +122,10 @@ namespace CellAO.Database.Entities
 
         /// <summary>
         /// </summary>
+        public string KnuBotScriptName { get; set; }
+
+        /// <summary>
+        /// </summary>
         public int Id { get; set; }
     }
 }

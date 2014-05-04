@@ -71,6 +71,7 @@ namespace CellAO.Core.Playfields
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
+    using ZoneEngine.Script;
 
     using Config = Utility.Config.ConfigReadWrite;
     using Quaternion = CellAO.Core.Vector.Quaternion;
@@ -156,7 +157,11 @@ namespace CellAO.Core.Playfields
             foreach (DBMobSpawn mob in mobs)
             {
                 IEnumerable<DBMobSpawnStat> stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
-                NonPlayerCharacterHandler.InstantiateMobSpawn(mob, stats.ToArray(), new NPCController(), this);
+                ICharacter cmob = NonPlayerCharacterHandler.InstantiateMobSpawn(mob, stats.ToArray(), new NPCController(), this);
+                if (mob.KnuBotScriptName != "")
+                {
+                    ScriptCompiler.Instance.CallMethod(mob.KnuBotScriptName, cmob);
+                }
             }
         }
 
@@ -823,10 +828,10 @@ namespace CellAO.Core.Playfields
                         dynel.Controller.DoFollow();
                     }
                     else
-                    if (dynel.Controller.State == CharacterState.Patrolling)
-                    {
-                        dynel.Controller.StartPatrolling();
-                    }
+                        if (dynel.Controller.State == CharacterState.Patrolling)
+                        {
+                            dynel.Controller.StartPatrolling();
+                        }
 
                     this.CheckWallCollision(dynel);
                     this.CheckStatelCollision(dynel);

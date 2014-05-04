@@ -538,5 +538,7 @@ namespace Utility
         Memory = 1024,
 
         AoTomation = 2048,
+
+        KnuBot = 4096,
     }
 }

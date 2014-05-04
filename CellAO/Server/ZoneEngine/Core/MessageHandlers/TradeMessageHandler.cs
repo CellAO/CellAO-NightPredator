@@ -38,7 +38,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Network;
     using CellAO.ObjectManager;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
@@ -56,12 +55,14 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(TradeMessage message, IZoneClient client)
         {
-            // /!\ THIS IS ONLY A TEST /!\
-            // Right click on mob lets them walk away 20m
-            // This does NOT work on all mobs tho. (Depends on character flags, vendors wont, like bartender. Leets will)
             Character target = Pool.Instance.GetObject<Character>(message.Target);
             if (target != null)
             {
+                target.Controller.Trade(message.Identity);
+                /*
+            // /!\ THIS IS ONLY A TEST /!\
+            // Right click on mob lets them walk away 20m
+            // This does NOT work on all mobs tho. (Depends on character flags, vendors wont, like bartender. Leets will)
                 InventoryUpdateMessageHandler.Default.Send(
                     client.Controller.Character,
                     target.BaseInventory.Pages[(int)IdentityType.ArmorPage]);
@@ -70,6 +71,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 start.Y = target.RawCoordinates.Y;
                 start.Z = target.RawCoordinates.Z;
                 FollowTargetMessageHandler.Default.Send(target, target.RawCoordinates, start);
+             */
             }
         }
     }

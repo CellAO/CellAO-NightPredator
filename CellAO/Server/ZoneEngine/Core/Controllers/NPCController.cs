@@ -50,6 +50,7 @@ namespace ZoneEngine.Core.Controllers
     using Utility;
 
     using ZoneEngine.Core.Functions;
+    using ZoneEngine.Core.KnuBot;
     using ZoneEngine.Core.MessageHandlers;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
@@ -59,8 +60,10 @@ namespace ZoneEngine.Core.Controllers
 
     /// <summary>
     /// </summary>
-    internal class NPCController : IController
+    public class NPCController : IController
     {
+        public BaseKnuBot KnuBot = null;
+
         private double lastDistance = double.MaxValue;
 
         private Identity followIdentity = Identity.None;
@@ -100,11 +103,8 @@ namespace ZoneEngine.Core.Controllers
 
         public void Dispose()
         {
-            if (this.Client != null)
-            {
-                this.Client = null;
-            }
-            // this.Character.Dispose();
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public bool LookAt(Identity target)
@@ -161,7 +161,10 @@ namespace ZoneEngine.Core.Controllers
                 Vector3 temp = npc.Coordinates().coordinate - this.Character.Coordinates().coordinate;
                 temp.y = 0;
                 this.Character.Heading = (Quaternion)Quaternion.GenerateRotationFromDirectionVector(temp).Normalize();
-                FollowTargetMessageHandler.Default.Send(this.Character, this.Character.Coordinates().coordinate, npc.Coordinates().coordinate);
+                FollowTargetMessageHandler.Default.Send(
+                    this.Character,
+                    this.Character.Coordinates().coordinate,
+                    npc.Coordinates().coordinate);
                 this.Run();
                 this.StartMovement();
             }
@@ -186,7 +189,12 @@ namespace ZoneEngine.Core.Controllers
 
         public bool Trade(Identity target)
         {
-            throw new NotImplementedException();
+            // Do we have a attached KnuBot?
+            if (this.KnuBot != null)
+            {
+                return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(target));
+            }
+            return false;
         }
 
         public bool UseItem(Identity itemPosition)
@@ -382,7 +390,7 @@ namespace ZoneEngine.Core.Controllers
             LogUtil.Debug(DebugInfoDetail.Movement, "Distance to target: " + start.Distance2D(dest).ToString());
 
             // If target moved or first call, then issue a new follow
-            if (targetPosition.Distance2D(followCoordinates) > 2.0f)
+            if (targetPosition.Distance2D(this.followCoordinates) > 2.0f)
             {
                 this.StopMovement();
                 this.Character.Coordinates(start);
@@ -454,6 +462,17 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.Client != null)
+                {
+                    this.Client = null;
+                }
+            }
+        }
+
         private Waypoint FindNextWaypoint()
         {
             Waypoint result = null;
@@ -489,6 +508,7 @@ namespace ZoneEngine.Core.Controllers
         {
             LogUtil.Debug(DebugInfoDetail.Memory, "NPC Controller finished");
             LogUtil.Debug(DebugInfoDetail.Memory, new StackTrace().ToString());
+            this.Dispose(false);
         }
 
         public bool Move(
@@ -510,6 +530,11 @@ namespace ZoneEngine.Core.Controllers
             {
                 this.followCoordinates = new Vector3();
             }
+        }
+
+        public void SetKnuBot(BaseKnuBot knubot)
+        {
+            this.KnuBot = knubot;
         }
     }
 }
