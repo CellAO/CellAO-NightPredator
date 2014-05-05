@@ -337,6 +337,20 @@ namespace ZoneEngine.Script
             return chatCommands;
         }
 
+        public string ScriptExists(string scriptname)
+        {
+            string result = "";
+            foreach (string name in this.scriptList.Keys)
+            {
+                if (name.Substring(name.IndexOf(":", StringComparison.Ordinal) + 1).ToLower() == scriptname.ToLower())
+                {
+                    result = name.Substring(name.IndexOf(":", StringComparison.Ordinal) + 1);
+                    break;
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="commandName">

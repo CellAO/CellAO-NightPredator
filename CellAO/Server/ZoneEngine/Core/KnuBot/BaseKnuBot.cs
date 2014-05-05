@@ -110,7 +110,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </returns>
         /// <exception cref="Exception">
         /// </exception>
-        internal ICharacter GetCharacter()
+        public ICharacter GetCharacter()
         {
             /*            if (this.Character.Target == null)
                         {

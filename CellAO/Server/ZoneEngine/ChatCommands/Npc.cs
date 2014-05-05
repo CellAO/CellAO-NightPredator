@@ -48,6 +48,7 @@ namespace ZoneEngine.ChatCommands
 
     using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.MessageHandlers;
+    using ZoneEngine.Script;
 
     #endregion
 
@@ -55,73 +56,133 @@ namespace ZoneEngine.ChatCommands
     {
         public override bool CheckCommandArguments(string[] args)
         {
-            return args.Length == 2;
+            return args.Length <= 3;
         }
 
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatTextMessageHandler.Default.CreateIM(character, "/npc [save|despawn|delete] with targeted mob"));
+                ChatTextMessageHandler.Default.CreateIM(
+                    character,
+                    "/npc [save|despawn|delete] with targeted mob\nand /npc knubot <scriptname>"));
         }
 
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
-            Character mob = Pool.Instance.GetObject<Character>(target);
-            if (mob == null)
+            if (args[1].ToLower() == "save")
             {
-                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Not a NPC?"));
-                return;
+                Character mob = Pool.Instance.GetObject<Character>(target);
+                if (mob == null)
+                {
+                    character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Not a NPC?"));
+                    return;
+                }
+
+                if (!(mob.Controller is NPCController))
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            "Don't try to remove/save other players please."));
+                }
+
+                DBMobSpawn mobdbo = new DBMobSpawn();
+                mobdbo.Id = mob.Identity.Instance;
+                mobdbo.Name = mob.Name;
+                mobdbo.Textures0 = 0;
+                mobdbo.Textures1 = 0;
+                mobdbo.Textures2 = 0;
+                mobdbo.Textures3 = 0;
+                mobdbo.Textures4 = 0;
+                mobdbo.Playfield = mob.Playfield.Identity.Instance;
+                Coordinate tempCoordinate = mob.Coordinates();
+                mobdbo.X = tempCoordinate.x;
+                mobdbo.Y = tempCoordinate.y;
+                mobdbo.Z = tempCoordinate.z;
+                mobdbo.HeadingW = mob.Heading.wf;
+                mobdbo.HeadingX = mob.Heading.xf;
+                mobdbo.HeadingY = mob.Heading.yf;
+                mobdbo.HeadingZ = mob.Heading.zf;
+                if (mob.Waypoints.Count > 0)
+                {
+                    List<MobSpawnWaypoint> temp = this.GetMobWaypoints(mob);
+                    mobdbo.Waypoints = new Binary(MessagePackZip.SerializeData(temp));
+                }
+
+                if (MobSpawnDao.Instance.Exists(mobdbo.Id))
+                {
+                    MobSpawnDao.Instance.Delete(mobdbo.Id);
+                }
+
+                MobSpawnDao.Instance.Add(mobdbo);
+
+                // Clear remnants first
+                MobSpawnStatDao.Instance.Delete(new { mobdbo.Id, mobdbo.Playfield });
+                Dictionary<int, uint> statsToSave = mob.Stats.GetStatValues();
+                foreach (KeyValuePair<int, uint> kv in statsToSave)
+                {
+                    MobSpawnStatDao.Instance.Add(
+                        new DBMobSpawnStat()
+                        {
+                            Id = mob.Identity.Instance,
+                            Playfield = mob.Playfield.Identity.Instance,
+                            Stat = kv.Key,
+                            Value = (int)kv.Value
+                        });
+                }
+            }
+            if (args[1].ToLower() == "remove")
+            {
+                MobSpawnDao.Instance.Delete(target.Instance);
             }
 
-            if (!(mob.Controller is NPCController))
+            if (args[1].ToLower() == "knubot")
             {
-                character.Playfield.Publish(
-                    ChatTextMessageHandler.Default.CreateIM(character, "Don't try to remove/save other players please."));
-            }
+                ICharacter cmob = Pool.Instance.GetObject<ICharacter>(target);
+                if (cmob == null)
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            string.Format("Target {0} is no npc.", target.ToString(true))));
+                    return;
+                }
 
-            DBMobSpawn mobdbo = new DBMobSpawn();
-            mobdbo.Id = mob.Identity.Instance;
-            mobdbo.Name = mob.Name;
-            mobdbo.Textures0 = 0;
-            mobdbo.Textures1 = 0;
-            mobdbo.Textures2 = 0;
-            mobdbo.Textures3 = 0;
-            mobdbo.Textures4 = 0;
-            mobdbo.Playfield = mob.Playfield.Identity.Instance;
-            Coordinate tempCoordinate = mob.Coordinates();
-            mobdbo.X = tempCoordinate.x;
-            mobdbo.Y = tempCoordinate.y;
-            mobdbo.Z = tempCoordinate.z;
-            mobdbo.HeadingW = mob.Heading.wf;
-            mobdbo.HeadingX = mob.Heading.xf;
-            mobdbo.HeadingY = mob.Heading.yf;
-            mobdbo.HeadingZ = mob.Heading.zf;
-            if (mob.Waypoints.Count > 0)
-            {
-                List<MobSpawnWaypoint> temp = this.GetMobWaypoints(mob);
-                mobdbo.Waypoints = new Binary(MessagePackZip.SerializeData(temp));
-            }
-
-            if (MobSpawnDao.Instance.Exists(mobdbo.Id))
-            {
-                MobSpawnDao.Instance.Delete(mobdbo.Id);
-            }
-
-            MobSpawnDao.Instance.Add(mobdbo);
-
-            // Clear remnants first
-            MobSpawnStatDao.Instance.Delete(new { mobdbo.Id, mobdbo.Playfield });
-            Dictionary<int, uint> statsToSave = mob.Stats.GetStatValues();
-            foreach (KeyValuePair<int, uint> kv in statsToSave)
-            {
-                MobSpawnStatDao.Instance.Add(
-                    new DBMobSpawnStat()
+                string scriptname = args[2];
+                scriptname = ScriptCompiler.Instance.ScriptExists(scriptname);
+                if (scriptname != "")
+                {
+                    DBMobSpawn mob = MobSpawnDao.Instance.Get(target.Instance);
+                    if (mob.Id == 0)
                     {
-                        Id = mob.Identity.Instance,
-                        Playfield = mob.Playfield.Identity.Instance,
-                        Stat = kv.Key,
-                        Value = (int)kv.Value
-                    });
+                        character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                character,
+                                string.Format(
+                                    "Target npc {0} is not yet saved to mobspawn table.",
+                                    target.ToString(true))));
+                    }
+                    else
+                    {
+                        mob.KnuBotScriptName = scriptname;
+                        MobSpawnDao.Instance.Save(mob);
+                        character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                character,
+                                string.Format(
+                                    "Saved initialization script '{0}' for spawn {1}.",
+                                    args[2],
+                                    target.ToString(true))));
+                        ScriptCompiler.Instance.CallMethod(scriptname, cmob);
+                    }
+                }
+                else
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            character,
+                            string.Format("Script '{0}' does not exist.", args[2])));
+                }
             }
         }
 
