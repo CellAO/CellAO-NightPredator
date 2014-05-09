@@ -43,11 +43,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.bx_Port = new System.Windows.Forms.TextBox();
             this.cbx_DebugMode = new System.Windows.Forms.CheckBox();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(337, 179);
+            this.button1.Location = new System.Drawing.Point(316, 431);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -120,7 +121,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(551, 179);
+            this.button3.Location = new System.Drawing.Point(542, 431);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 8;
@@ -176,7 +177,7 @@
             // cbx_DebugMode
             // 
             this.cbx_DebugMode.AutoSize = true;
-            this.cbx_DebugMode.Location = new System.Drawing.Point(809, 179);
+            this.cbx_DebugMode.Location = new System.Drawing.Point(652, 92);
             this.cbx_DebugMode.Name = "cbx_DebugMode";
             this.cbx_DebugMode.Size = new System.Drawing.Size(88, 17);
             this.cbx_DebugMode.TabIndex = 14;
@@ -184,13 +185,23 @@
             this.cbx_DebugMode.UseVisualStyleBackColor = true;
             this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
             // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Location = new System.Drawing.Point(0, 168);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(983, 257);
+            this.webBrowser1.TabIndex = 15;
+            this.webBrowser1.Url = new System.Uri("", System.UriKind.Relative);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
-            this.ClientSize = new System.Drawing.Size(990, 207);
+            this.ClientSize = new System.Drawing.Size(986, 466);
             this.ControlBox = false;
+            this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.cbx_DebugMode);
             this.Controls.Add(this.bx_Port);
             this.Controls.Add(this.label5);
@@ -234,6 +245,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox bx_Port;
         private System.Windows.Forms.CheckBox cbx_DebugMode;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
 

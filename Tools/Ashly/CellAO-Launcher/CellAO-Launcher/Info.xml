@@ -10,4 +10,6 @@
   <AOExecutable></AOExecutable>
   <!-- true or false statement here..-->
   <UseEncryption>false</UseEncryption>
+  <!-- URL to set browser to-->
+  <Url>http://www.aocell.info</Url>
 </Config>

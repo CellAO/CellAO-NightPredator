@@ -187,6 +187,7 @@ namespace CellAO_Launcher
         /// </param>
         private void Form1Load(object sender, EventArgs e)
         {
+            webBrowser1.Navigate(_config.Instance.CurrentConfig.Url);
             this.bx_IPAddress.Text = _config.Instance.CurrentConfig.ServerIP;
             this.bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             this.bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
@@ -214,7 +215,9 @@ namespace CellAO_Launcher
         private void Button3Click(object sender, EventArgs e)
         {
             _config.Instance.CurrentConfig.UseEncryption = this.UseEncryption.Checked;
-            _config.Instance.CurrentConfig.Debug = this.cbx_DebugMode.Checked;
+#if DEBUG
+            this.cbx_DebugMode.Checked = true;
+#endif 
             _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
             _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);

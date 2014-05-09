@@ -46,7 +46,7 @@ namespace CellAO_Launcher.Config
 
         UseEncryption,
 
-        Debug
+        Url
 
     }
 
@@ -90,7 +90,7 @@ namespace CellAO_Launcher.Config
         /// <summary>
         /// Gets or sets a value indicated weather launcher is in debug mode or not.
         /// </summary>
-        public bool Debug { get; set; }
+        public string Url { get; set; }
 
         #endregion
     }
