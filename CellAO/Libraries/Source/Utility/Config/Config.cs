@@ -80,11 +80,6 @@ namespace Utility.Config
         Motd,
 
         /// <summary>
-        /// This is for the LoginEncryption to turn it on and off
-        /// </summary>
-        UsePassword,
-
-        /// <summary>
         /// This enables or Disables SQL Logging
         /// </summary>
         SqlLog,
@@ -285,11 +280,6 @@ namespace Utility.Config
         /// 
         /// </summary>
         public bool UseIRCRelay { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use the Password
-        /// </summary>
-        public bool UsePassword { get; set; }
 
         /// <summary>
         /// Gets or sets Zone server IP

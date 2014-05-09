@@ -59,7 +59,11 @@ namespace AO.Core.Encryption
         /// <summary>
         /// 
         /// </summary>
-        public bool i_Enable = Convert.ToBoolean(ConfigReadWrite.Instance.CurrentConfig.UsePassword);
+#if DEBUG
+        public bool i_Enable = false;
+#else
+        public bool i_Enable = true;
+#endif
 
         #endregion
 
