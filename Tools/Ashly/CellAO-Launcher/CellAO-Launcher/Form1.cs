@@ -163,7 +163,7 @@ namespace CellAO_Launcher
                     _config.Instance.SaveConfig();
                     Application.Exit();
 #else
-                    this.chx_DebugMode.Checked = false;
+                    this.cbx_DebugMode.Checked = false;
                     _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
                     _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
                     _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
