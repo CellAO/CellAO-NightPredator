@@ -44,8 +44,6 @@ namespace CellAO_Launcher.Config
 
         AOExecutable,
 
-        UseEncryption,
-
         Url
 
     }
@@ -80,12 +78,6 @@ namespace CellAO_Launcher.Config
         /// Gets or Sets the directory of the AO Exe.
         /// </summary>
         public string AOExecutable { get; set; }
-
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to enable Encryption
-        /// </summary>
-        public bool UseEncryption { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicated weather launcher is in debug mode or not.

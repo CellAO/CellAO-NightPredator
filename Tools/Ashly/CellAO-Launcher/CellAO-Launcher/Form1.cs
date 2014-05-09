@@ -154,22 +154,11 @@ namespace CellAO_Launcher
                     }
 
                     // Save configuration data
-                    _config.Instance.CurrentConfig.UseEncryption = this.UseEncryption.Checked;
-#if DEBUG
-                    this.cbx_DebugMode.Checked = true;
                     _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
                     _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
                     _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
-                    _config.Instance.SaveConfig();
+                    _config.Instance.SaveConfig();;
                     Application.Exit();
-#else
-                    this.cbx_DebugMode.Checked = false;
-                    _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
-                    _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
-                    _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
-                    _config.Instance.SaveConfig();
-                    Application.Exit();
-#endif
                 }
             }
             else
@@ -192,11 +181,9 @@ namespace CellAO_Launcher
             this.bx_AOExe.Text = _config.Instance.CurrentConfig.AOExecutable;
             this.bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
 #if DEBUG
-            this.cbx_DebugMode.Checked = true; ;
             this.UseEncryption.Checked = false;
 #else 
-            this.cbx_DebugMode.Checked = false;
-            this.UseEncryption.Checked = _config.Instance.CurrentConfig.UseEncryption;
+            this.UseEncryption.Checked = true;
 
                 this.label4.Visible = true;
                 this.bx_converted.Visible = true;
@@ -214,9 +201,8 @@ namespace CellAO_Launcher
         /// </param>
         private void Button3Click(object sender, EventArgs e)
         {
-            _config.Instance.CurrentConfig.UseEncryption = this.UseEncryption.Checked;
 #if DEBUG
-            this.cbx_DebugMode.Checked = true;
+            this.UseEncryption.Checked = true;
 #endif 
             _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
@@ -282,18 +268,17 @@ namespace CellAO_Launcher
         /// </param>
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
-            if (this.cbx_DebugMode.Checked == true)
-            {
-                this.bx_converted.Visible = true;
-                this.label4.Visible = true;
-                this.button4.Visible = true;
-            }
-            else
-            {
-                this.bx_converted.Visible = false;
-                this.label4.Visible = false;
-                this.button4.Visible = false;
-            }
+#if DEBUG
+            this.bx_converted.Visible  = true;
+            this.label4.Visible = true;
+            this.button4.Visible = true;
+
+#else
+      
+            this.bx_converted.Visible = false;
+            this.label4.Visible = false;
+            this.button4.Visible = false;
+#endif
         }
     }
 }

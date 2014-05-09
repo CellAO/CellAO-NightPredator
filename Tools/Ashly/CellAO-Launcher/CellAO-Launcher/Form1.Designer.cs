@@ -42,7 +42,6 @@
             this.button4 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.bx_Port = new System.Windows.Forms.TextBox();
-            this.cbx_DebugMode = new System.Windows.Forms.CheckBox();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
@@ -100,6 +99,7 @@
             this.UseEncryption.TabIndex = 5;
             this.UseEncryption.Text = "Use Encrypted Launcher";
             this.UseEncryption.UseVisualStyleBackColor = true;
+            this.UseEncryption.Visible = false;
             // 
             // bx_AOExe
             // 
@@ -174,17 +174,6 @@
             this.bx_Port.Size = new System.Drawing.Size(100, 20);
             this.bx_Port.TabIndex = 13;
             // 
-            // cbx_DebugMode
-            // 
-            this.cbx_DebugMode.AutoSize = true;
-            this.cbx_DebugMode.Location = new System.Drawing.Point(652, 92);
-            this.cbx_DebugMode.Name = "cbx_DebugMode";
-            this.cbx_DebugMode.Size = new System.Drawing.Size(88, 17);
-            this.cbx_DebugMode.TabIndex = 14;
-            this.cbx_DebugMode.Text = "Debug Mode";
-            this.cbx_DebugMode.UseVisualStyleBackColor = true;
-            this.cbx_DebugMode.CheckedChanged += new System.EventHandler(this.CheckBox1CheckedChanged);
-            // 
             // webBrowser1
             // 
             this.webBrowser1.Location = new System.Drawing.Point(0, 168);
@@ -202,7 +191,6 @@
             this.ClientSize = new System.Drawing.Size(986, 466);
             this.ControlBox = false;
             this.Controls.Add(this.webBrowser1);
-            this.Controls.Add(this.cbx_DebugMode);
             this.Controls.Add(this.bx_Port);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button4);
@@ -244,7 +232,6 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox bx_Port;
-        private System.Windows.Forms.CheckBox cbx_DebugMode;
         private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
