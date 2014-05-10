@@ -109,6 +109,14 @@ namespace ZoneEngine.Script
         /// </summary>
         private readonly Dictionary<string, Type> chatCommands = new Dictionary<string, Type>();
 
+        public List<string> ChatCommands
+        {
+            get
+            {
+                return this.chatCommands.Keys.ToList();
+            }
+        }
+
         /// <summary>
         /// Our CSharp compiler object
         /// </summary>
