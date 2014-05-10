@@ -38,15 +38,24 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Network;
     using CellAO.ObjectManager;
 
+    using Dapper;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [MessageHandler(MessageHandlerDirection.InboundOnly)]
+    [MessageHandler(MessageHandlerDirection.All)]
     public class TradeMessageHandler : BaseMessageHandler<TradeMessage, TradeMessageHandler>
     {
+
+        public TradeMessageHandler()
+        {
+            this.UpdateCharacterStatsOnReceive = false;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="message">
@@ -55,24 +64,36 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(TradeMessage message, IZoneClient client)
         {
-            Character target = Pool.Instance.GetObject<Character>(message.Target);
+            ICharacter target = Pool.Instance.GetObject<ICharacter>(message.Target);
             if (target != null)
             {
                 target.Controller.Trade(message.Identity);
-                /*
-            // /!\ THIS IS ONLY A TEST /!\
-            // Right click on mob lets them walk away 20m
-            // This does NOT work on all mobs tho. (Depends on character flags, vendors wont, like bartender. Leets will)
-                InventoryUpdateMessageHandler.Default.Send(
-                    client.Controller.Character,
-                    target.BaseInventory.Pages[(int)IdentityType.ArmorPage]);
-                Vector3 start = new Vector3();
-                start.X = target.RawCoordinates.X + 20;
-                start.Y = target.RawCoordinates.Y;
-                start.Z = target.RawCoordinates.Z;
-                FollowTargetMessageHandler.Default.Send(target, target.RawCoordinates, start);
-             */
             }
+            // TODO: Add shop code here
+            // something like
+            /*IShop shop = Pool.Instance.GetObject<IShop>(message.Target)
+            {
+                Identity tempbag = shop.Trade(client.Controller.Character, message.Action, message.Target, message.Container);
+                this.Send(character, message.Target, tempbag);
+            }*/
         }
+
+        public void Send(ICharacter character, Identity targetIdentity, Identity containerIdentity)
+        {
+            this.Send(character, this.ShopTrade(character, targetIdentity, containerIdentity));
+        }
+
+        private MessageDataFiller ShopTrade(ICharacter character, Identity targetIdentity, Identity containerIdentity)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Container = containerIdentity;
+                x.Target = targetIdentity;
+                x.Unknown1 = 2;
+                x.Action=TradeAction.None;
+            };
+        }
+
     }
 }

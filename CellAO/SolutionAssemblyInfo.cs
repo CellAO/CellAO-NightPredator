@@ -37,7 +37,7 @@ using Utility;
 
 #endregion
 
-[assembly: AssemblyVersion("1.4.1.2418")]
-[assembly: AssemblyFileVersion("1.4.1.2523")]
+[assembly: AssemblyVersion("1.4.1.2419")]
+[assembly: AssemblyFileVersion("1.4.1.2524")]
 [assembly: RevisionName("Night Predator")]
 [assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
