@@ -42,6 +42,7 @@ Installation instructions follow soon.
 - **T0t4r4** - Thank you coming soon(tm)
 - **Estrid** - For continueing the support of the Webcore.
 - **Swifty** - For contributing Example Scripts for CellAO. 
+- **Kyle873** -  Note to come later 
 
 **Others:**
 
