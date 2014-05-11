@@ -143,21 +143,21 @@ namespace ZoneEngine.Core.PacketHandlers
 
             var specials = new[]
                            {
-                               new SpecialAttackInfo
+                               new SpecialAttack
                                {
                                    Unknown1 = 0x0000AAC0,
                                    Unknown2 = 0x00023569,
                                    Unknown3 = 0x00000064,
                                    Unknown4 = "MAAT"
                                },
-                               new SpecialAttackInfo
+                               new SpecialAttack
                                {
                                    Unknown1 = 0x0000A431,
                                    Unknown2 = 0x0000A430,
                                    Unknown3 = 0x00000090,
                                    Unknown4 = "DIIT"
                                },
-                               new SpecialAttackInfo
+                               new SpecialAttack
                                {
                                    Unknown1 = 0x00011294,
                                    Unknown2 = 0x00011295,
