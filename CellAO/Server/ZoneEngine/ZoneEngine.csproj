@@ -188,6 +188,7 @@
     <None Include="Scripts\KnuBotFlappy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Scripts\InfoBot.cs" />
     <Compile Include="Script\IAOScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
   </ItemGroup>
