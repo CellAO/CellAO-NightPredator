@@ -57,6 +57,7 @@
     <Compile Include="Config\ConfigReadWrite.cs" />
     <Compile Include="ConsoleText.cs" />
     <Compile Include="CpuRamUtilization.cs" />
+    <Compile Include="DebugStrings.cs" />
     <Compile Include="FunctionArgumentList.cs" />
     <Compile Include="HexOutput.cs" />
     <Compile Include="LogUtil.cs" />
@@ -71,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}</Project>
+      <Name>SmokeLounge.AOtomation.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
