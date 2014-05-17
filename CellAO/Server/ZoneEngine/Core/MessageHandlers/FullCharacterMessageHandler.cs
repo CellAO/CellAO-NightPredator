@@ -862,7 +862,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 fullCharacterMessage.Unknown10 = 0;
 
-                fullCharacterMessage.Unknown11 = new Identity[0];
+                fullCharacterMessage.Unknown11 = new object[0];
 
                 fullCharacterMessage.Unknown12 = new object[0];
 
