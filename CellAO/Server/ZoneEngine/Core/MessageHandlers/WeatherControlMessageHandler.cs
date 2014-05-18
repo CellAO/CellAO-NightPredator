@@ -48,8 +48,53 @@ namespace ZoneEngine.Core.MessageHandlers
     [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class WeatherControlMessageHandler : BaseMessageHandler<WeatherControlMessage, WeatherControlMessageHandler>
     {
+        public void Send(ICharacter character, WeatherEntry w, bool announceToPlayfield = false)
+        {
+            double secondsLate = (DateTime.UtcNow - w.StartTime).TotalMilliseconds;
+            double fadeIn = w.FadeIn / 6.0f;
+            short sFadeIn = w.FadeIn;
+
+            int duration = w.Duration;
+            if (secondsLate > 0)
+            {
+                secondsLate -= fadeIn;
+
+                fadeIn = secondsLate < 0 ? -secondsLate : 1 / 6;
+                secondsLate = secondsLate < 0 ? 0 : secondsLate;
+
+                secondsLate -= duration * 1000;
+                duration = secondsLate < 0 ? Convert.ToInt32(-secondsLate / 1000) : 1;
+                // secondsLate = secondsLate < 0 ? 0 : secondsLate;
+                sFadeIn = Convert.ToInt16(fadeIn * 6);
+            }
+
+            Vector3 temp = w.Position;
+
+            this.Send(
+                character,
+                w.Playfield,
+                temp,
+                sFadeIn,
+                duration,
+                w.FadeOut,
+                w.Range,
+                (byte)w.WeatherType,
+                w.Intensity,
+                w.Wind,
+                w.Clouds,
+                w.Thunderstrikes,
+                w.Tremors,
+                w.TremorPercentage,
+                w.ThunderstrikePercentage,
+                w.AmbientColor,
+                w.FogColor,
+                w.ZBufferVisibility,
+                announceToPlayfield);
+        }
+
         public void Send(
             ICharacter character,
+            Identity playfield,
             Vector3 position,
             short fadeIn,
             int duration,
@@ -65,12 +110,13 @@ namespace ZoneEngine.Core.MessageHandlers
             byte thunderstrikePercentage,
             int ambientColor,
             int fogColor,
-            byte zBufferVisibility)
+            byte zBufferVisibility,
+            bool announceToPlayfield)
         {
             this.Send(
                 character,
                 this.Filler1(
-                    character,
+                    playfield,
                     position,
                     fadeIn,
                     duration,
@@ -86,11 +132,12 @@ namespace ZoneEngine.Core.MessageHandlers
                     thunderstrikePercentage,
                     ambientColor,
                     fogColor,
-                    zBufferVisibility));
+                    zBufferVisibility),
+                announceToPlayfield);
         }
 
         private MessageDataFiller Filler1(
-            ICharacter character,
+            Identity playfield,
             Vector3 position,
             short fadeIn,
             int duration,
@@ -110,15 +157,10 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             return x =>
             {
-                Random rnd = new Random();
                 x.Position = new Vector3();
 
                 x.Unknown = 0;
-                x.Identity = new Identity()
-                             {
-                                 Type = IdentityType.Playfield1,
-                                 Instance = character.Playfield.Identity.Instance
-                             };
+                x.Identity = new Identity() { Type = IdentityType.Playfield1, Instance = playfield.Instance };
                 x.FadeIn = fadeIn; // in x/100*60 seconds
                 x.Duration = duration; // Duration in seconds
                 x.FadeOut = fadeOut; // in x/100*60 seconds
@@ -132,9 +174,9 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Thunderstrikes = thunderstrikes; // Thunderstrikes
                 x.Tremors = tremors; // Tremors
                 x.TremorPercentage = tremorPercentage;
-                    // Tremor percentage of occurrance every 20 (+small random) seconds
+                // Tremor percentage of occurrance every 20 (+small random) seconds
                 x.ThunderstrikePercentage = thunderstrikePercentage;
-                    // Thunderstrike percentage of occurance every 10 (+small random) seconds
+                // Thunderstrike percentage of occurance every 10 (+small random) seconds
 
                 // Cloud/Ambient color
                 x.CloudColorRed = (byte)(ambientColor & 0xff);
@@ -150,6 +192,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Position.Y = position.Y;
                 x.Position.Z = position.Z;
                 x.UnknownSingle = 0.0f; // 0 < x < 1.0 Dunno what it is
+
                 LogUtil.Debug(DebugInfoDetail.Memory, x.DebugString());
             };
         }

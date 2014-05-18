@@ -104,27 +104,31 @@ namespace ZoneEngine.ChatCommands
             }
             else*/
             {
-                int col = Convert.ToInt32(args[13], 16);
-                int col2 = Convert.ToInt32(args[14], 16);
+                int ambientColor = Convert.ToInt32(args[13], 16);
+                int fogColor = Convert.ToInt32(args[14], 16);
 
-                WeatherControlMessageHandler.Default.Send(
-                    character,
-                    position,
-                    short.Parse(args[1]),
-                    int.Parse(args[2]),
-                    short.Parse(args[3]),
-                    Single.Parse(args[4]),
-                    byte.Parse(args[5]),
-                    byte.Parse(args[6]),
-                    byte.Parse(args[7]),
-                    byte.Parse(args[8]),
-                    byte.Parse(args[9]),
-                    byte.Parse(args[10]),
-                    byte.Parse(args[11]),
-                    byte.Parse(args[12]),
-                    col,
-                    col2,
-                    byte.Parse(args[15]));
+                WeatherEntry newWeather = new WeatherEntry();
+                newWeather.AmbientColor = ambientColor;
+                newWeather.FogColor = fogColor;
+                newWeather.Position = position;
+                newWeather.FadeIn = short.Parse(args[1]);
+                newWeather.Duration = int.Parse(args[2]);
+                newWeather.FadeOut = short.Parse(args[3]);
+                newWeather.Range = Single.Parse(args[4]);
+                newWeather.WeatherType = (WeatherType)byte.Parse(args[5]);
+                newWeather.Intensity = byte.Parse(args[6]);
+                newWeather.Wind = byte.Parse(args[7]);
+                newWeather.Clouds = byte.Parse(args[8]);
+                newWeather.Thunderstrikes = byte.Parse(args[9]);
+                newWeather.Tremors = byte.Parse(args[10]);
+                newWeather.ThunderstrikePercentage = byte.Parse(args[11]);
+                newWeather.TremorPercentage = byte.Parse(args[12]);
+                newWeather.ZBufferVisibility = byte.Parse(args[15]);
+                newWeather.Playfield = character.Playfield.Identity;
+
+                WeatherSettings.Instance.Add(newWeather);
+
+                WeatherControlMessageHandler.Default.Send(character, newWeather);
             }
         }
 

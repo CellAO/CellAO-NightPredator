@@ -29,15 +29,52 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using System;
 
-using Utility;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
-#endregion
+    #endregion
 
-[assembly: AssemblyVersion("1.4.1.2576")]
-[assembly: AssemblyFileVersion("1.4.1.2681")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+    public class WeatherEntry
+    {
+        public Identity Playfield { get; set; }
+
+        public short FadeIn { get; set; }
+
+        public int Duration { get; set; }
+
+        public short FadeOut { get; set; }
+
+        public Single Range { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public WeatherType WeatherType { get; set; }
+
+        public byte Intensity { get; set; }
+
+        public byte Wind { get; set; }
+
+        public byte Clouds { get; set; }
+
+        public byte Thunderstrikes { get; set; }
+
+        public byte Tremors { get; set; }
+
+        public byte TremorPercentage { get; set; }
+
+        public byte ThunderstrikePercentage { get; set; }
+
+        public int AmbientColor { get; set; }
+
+        public int FogColor { get; set; }
+
+        public byte ZBufferVisibility { get; set; }
+
+        public Vector3 Position { get; set; }
+    }
+}
