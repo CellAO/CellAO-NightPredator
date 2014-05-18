@@ -40,9 +40,9 @@ namespace Utility
     using System.Text;
     using System.Threading.Tasks;
 
-    using MsgPack.Serialization;
-
     using Ionic.Zlib;
+
+    using MsgPack.Serialization;
 
     #endregion
 
@@ -88,7 +88,6 @@ namespace Utility
         /// </exception>
         public static void CompressData<T>(string filename, string version, List<T> dataList, int packCount = 500)
         {
-
             // Need to build the serializer/deserializer prior to Task invocations
             MessagePackSerializer<List<T>> constructor = MessagePackSerializer.Create<List<T>>();
 
@@ -98,7 +97,6 @@ namespace Utility
             {
                 throw new Exception("Dont use 0 as packCount!!");
             }
-
 
             using (Stream fileStream = new FileStream(filename, FileMode.Create))
             {
@@ -119,7 +117,6 @@ namespace Utility
                 binaryWriter.Write(slices);
 
                 TaskedSerializer<T>[] taskData = new TaskedSerializer<T>[slices];
-
                 Task[] tasks = new Task[taskData.Length];
                 for (int i = 0; i < taskData.Count(); i++)
                 {
@@ -224,7 +221,6 @@ namespace Utility
             {
                 BinaryReader binaryReader = new BinaryReader(fileStream);
 
-
                 byte versionlength = binaryReader.ReadByte();
                 char[] version = new char[versionlength];
                 version = binaryReader.ReadChars(versionlength);
@@ -250,7 +246,6 @@ namespace Utility
 
                 for (int i = 0; i < slices; i++)
                 {
-
                     int size = binaryReader.ReadInt32();
                     byte[] tempBuffer = binaryReader.ReadBytes(size);
                     using (MemoryStream tempStream = new MemoryStream(tempBuffer))
@@ -364,7 +359,7 @@ namespace Utility
             bf.Pack(ms, this.DataSlice);
             ZlibStream zs = new ZlibStream(this.Stream, CompressionMode.Compress, CompressionLevel.Level9);
 
-            zs.FlushMode=FlushType.Sync;
+            zs.FlushMode = FlushType.Sync;
             ms.Position = 0;
             ms.CopyTo(zs);
             zs.FlushMode = FlushType.Full;
@@ -377,7 +372,7 @@ namespace Utility
             MessagePackSerializer<List<T>> messagePackSerializer = MessagePackSerializer.Create<List<T>>();
             ZlibStream zs = new ZlibStream(this.Stream, CompressionMode.Decompress);
             MemoryStream ms = new MemoryStream();
-            
+
             zs.CopyTo(ms);
             zs.Flush();
             ms.Flush();

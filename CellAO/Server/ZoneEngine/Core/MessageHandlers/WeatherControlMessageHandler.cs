@@ -48,46 +48,109 @@ namespace ZoneEngine.Core.MessageHandlers
     [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class WeatherControlMessageHandler : BaseMessageHandler<WeatherControlMessage, WeatherControlMessageHandler>
     {
-        public void Send(ICharacter character)
+        public void Send(
+            ICharacter character,
+            Vector3 position,
+            short fadeIn,
+            int duration,
+            short fadeOut,
+            Single range,
+            byte weathertype,
+            byte weatherIntensity,
+            byte wind,
+            byte clouds,
+            byte thunderstrikes,
+            byte tremors,
+            byte tremorPercentage,
+            byte thunderstrikePercentage,
+            int ambientColor,
+            int fogColor,
+            byte zBufferVisibility)
         {
-            this.Send(character, this.Filler1(character));
+            this.Send(
+                character,
+                this.Filler1(
+                    character,
+                    position,
+                    fadeIn,
+                    duration,
+                    fadeOut,
+                    range,
+                    weathertype,
+                    weatherIntensity,
+                    wind,
+                    clouds,
+                    thunderstrikes,
+                    tremors,
+                    tremorPercentage,
+                    thunderstrikePercentage,
+                    ambientColor,
+                    fogColor,
+                    zBufferVisibility));
         }
-        private static byte version = 0;
-        private MessageDataFiller Filler1(ICharacter character)
-        {
 
+        private MessageDataFiller Filler1(
+            ICharacter character,
+            Vector3 position,
+            short fadeIn,
+            int duration,
+            short fadeOut,
+            Single range,
+            byte weatherType,
+            byte weatherIntensity,
+            byte wind,
+            byte clouds,
+            byte thunderstrikes,
+            byte tremors,
+            byte tremorPercentage,
+            byte thunderstrikePercentage,
+            int ambientColor,
+            int fogColor,
+            byte zBufferVisibility)
+        {
             return x =>
             {
                 Random rnd = new Random();
-                x.Heading = new Quaternion();
-                x.Heading.X = character.Coordinates().x;
-                x.Heading.Y = character.Coordinates().y;
-                x.Heading.Z = character.Heading.zf;
-                x.Heading.W = character.Heading.wf;
+                x.Position = new Vector3();
+
                 x.Unknown = 0;
-                x.Identity = character.Identity;
-                x.Unknown1 = 100;
-                x.Unknown2 = 10000;
-                x.Unknown3 = 100;
-                x.Unknown4 = 1000.0f;
+                x.Identity = new Identity()
+                             {
+                                 Type = IdentityType.Playfield1,
+                                 Instance = character.Playfield.Identity.Instance
+                             };
+                x.FadeIn = fadeIn; // in x/100*60 seconds
+                x.Duration = duration; // Duration in seconds
+                x.FadeOut = fadeOut; // in x/100*60 seconds
+                x.Range = range; // Range
 
-                x.Unknown5 = WeatherControlMessageHandler.version++;
+                x.WeatherType = weatherType; // StormIntensity 0-x (probably not 100)
 
-                x.Unknown6 = (byte)rnd.Next(10);
-                x.Unknown7 = (byte)rnd.Next(20);
-                x.Unknown8 = (byte)rnd.Next(30);
-                x.Unknown9 = (byte)rnd.Next(40);
-                x.Unknown10 = (byte)rnd.Next(50);
-                x.Unknown11 = (byte)rnd.Next(60);
-                x.Unknown12 = (byte)rnd.Next(70);
-                x.Unknown13 = (byte)rnd.Next(255);
-                x.Unknown14 = (byte)rnd.Next(255);
-                x.Unknown15 = (byte)rnd.Next(255);
-                x.Unknown16 = (byte)rnd.Next(255);
-                x.Unknown17 = (byte)rnd.Next(255);
-                x.Unknown18 = (byte)rnd.Next(255);
-                x.Unknown19 = (byte)rnd.Next(100);
-                LogUtil.Debug(DebugInfoDetail.Memory,x.DebugString());
+                x.WeatherIntensity = weatherIntensity; // Rain
+                x.Wind = wind; // Wind intensity
+                x.Clouds = clouds; // Cloud overlay intensity
+                x.Thunderstrikes = thunderstrikes; // Thunderstrikes
+                x.Tremors = tremors; // Tremors
+                x.TremorPercentage = tremorPercentage;
+                    // Tremor percentage of occurrance every 20 (+small random) seconds
+                x.ThunderstrikePercentage = thunderstrikePercentage;
+                    // Thunderstrike percentage of occurance every 10 (+small random) seconds
+
+                // Cloud/Ambient color
+                x.CloudColorRed = (byte)(ambientColor & 0xff);
+                x.CloudColorGreen = (byte)((ambientColor >> 8) & 0xff);
+                x.CloudColorBlue = (byte)(ambientColor >> 16);
+
+                x.FogColorRed = (byte)(fogColor & 0xff);
+                x.FogColorGreen = (byte)((fogColor >> 8) & 0xff);
+                x.FogColorBlue = (byte)(fogColor >> 16);
+                x.ZBufferVisibility = zBufferVisibility; // Visibility reduction
+
+                x.Position.X = position.X;
+                x.Position.Y = position.Y;
+                x.Position.Z = position.Z;
+                x.UnknownSingle = 0.0f; // 0 < x < 1.0 Dunno what it is
+                LogUtil.Debug(DebugInfoDetail.Memory, x.DebugString());
             };
         }
     }

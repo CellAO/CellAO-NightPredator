@@ -149,7 +149,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                character,
                                Filler(
                                    character,
-                                   text,
+                                   text.Replace("<","&lt;").Replace(">","&gt;"),
                                    unknown1,
                                    unknown2,
                                    unknown3)),

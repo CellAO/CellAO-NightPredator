@@ -45,6 +45,7 @@ namespace ZoneEngine.Core
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
+    using CellAO.ObjectManager;
 
     using MemBus;
     using MemBus.Configurators;
@@ -317,31 +318,28 @@ namespace ZoneEngine.Core
         /// </param>
         private void HandleChatCommand(ChatCommand chatCommand)
         {
-            foreach (Playfield playfield in this.playfields)
+            ICharacter character =
+                Pool.Instance.GetObject<Character>(
+                    new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
+            if (character != null)
             {
-                ICharacter character =
-                    playfield.FindByIdentity<Character>(
-                        new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
-                if (character != null)
+                string fullArgs = chatCommand.ChatCommandString.TrimEnd(char.MinValue).TrimStart('.');
+
+                string temp = string.Empty;
+                do
                 {
-                    string fullArgs = chatCommand.ChatCommandString.TrimEnd(char.MinValue).TrimStart('.');
-
-                    string temp = string.Empty;
-                    do
-                    {
-                        temp = fullArgs;
-                        fullArgs = fullArgs.Replace("  ", " ");
-                    }
-                    while (temp != fullArgs);
-
-                    string[] cmdArgs = fullArgs.Trim().Split(' ');
-
-                    ScriptCompiler.Instance.CallChatCommand(
-                        cmdArgs[0].ToLower(),
-                        character.Controller.Client,
-                        character.SelectedTarget,
-                        cmdArgs);
+                    temp = fullArgs;
+                    fullArgs = fullArgs.Replace("  ", " ");
                 }
+                while (temp != fullArgs);
+
+                string[] cmdArgs = fullArgs.Trim().Split(' ');
+
+                ScriptCompiler.Instance.CallChatCommand(
+                    cmdArgs[0].ToLower(),
+                    character.Controller.Client,
+                    character.SelectedTarget,
+                    cmdArgs);
             }
         }
 
