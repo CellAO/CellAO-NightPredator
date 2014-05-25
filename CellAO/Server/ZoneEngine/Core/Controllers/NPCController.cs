@@ -155,7 +155,7 @@ namespace ZoneEngine.Core.Controllers
         public bool Follow(Identity target)
         {
             this.followIdentity = target;
-            ICharacter npc = Pool.Instance.GetObject<ICharacter>(target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(this.Character.Playfield.Identity, target);
             if (npc != null)
             {
                 Vector3 temp = npc.Coordinates().coordinate - this.Character.Coordinates().coordinate;
@@ -192,7 +192,7 @@ namespace ZoneEngine.Core.Controllers
             // Do we have a attached KnuBot?
             if (this.KnuBot != null)
             {
-                return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(target));
+                return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(Character.Playfield.Identity, target));
             }
             return false;
         }
@@ -355,7 +355,7 @@ namespace ZoneEngine.Core.Controllers
             Vector3 targetPosition = this.followCoordinates;
             if (!this.followIdentity.Equals(Identity.None))
             {
-                ICharacter targetChar = Pool.Instance.GetObject<ICharacter>(this.followIdentity);
+                ICharacter targetChar = Pool.Instance.GetObject<ICharacter>(Character.Playfield.Identity, this.followIdentity);
                 if (targetChar == null)
                 {
                     // If target does not longer exist (death or zone or logoff) then stop following

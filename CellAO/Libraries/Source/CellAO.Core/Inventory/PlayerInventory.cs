@@ -51,11 +51,11 @@ namespace CellAO.Core.Inventory
             : base(owner)
         {
             this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity.Instance));
-            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.ArmorPage, new ArmorInventoryPage(owner.Identity));
+            this.Pages.Add((int)IdentityType.SocialPage, new SocialArmorInventoryPage(owner.Identity));
+            this.Pages.Add((int)IdentityType.ImplantPage, new ImplantInventoryPage(owner.Identity));
+            this.Pages.Add((int)IdentityType.WeaponPage, new WeaponInventoryPage(owner.Identity));
+            this.Pages.Add((int)IdentityType.Bank, new BankInventoryPage(owner.Identity));
         }
 
         #endregion

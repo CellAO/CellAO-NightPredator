@@ -65,6 +65,8 @@ namespace CellAO.Core.Inventory
         /// </summary>
         public Identity Identity { get; private set; }
 
+        public Identity Parent { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators

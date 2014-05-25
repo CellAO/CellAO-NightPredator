@@ -58,7 +58,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public WeaponInventoryPage(int ownerInstance)
+        public WeaponInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.WeaponPage, 15, 0x01, ownerInstance)
         {
             this.NeedsItemCheck = true;

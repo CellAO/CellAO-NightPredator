@@ -190,8 +190,9 @@ namespace ZoneEngine.Core.Controllers
         /// </exception>
         public bool LookAt(Identity target)
         {
+            // TODO: add Team lookup here too (F1-F6 for example)
             bool result = false;
-            if (Pool.Instance.Contains(target))
+            if (Pool.Instance.Contains(Character.Playfield.Identity, target))
             {
                 this.Character.SetTarget(target);
                 result = true;

@@ -55,7 +55,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(TradeMessage message, IZoneClient client)
         {
-            Character target = Pool.Instance.GetObject<Character>(message.Target);
+            Character target = Pool.Instance.GetObject<Character>(client.Controller.Character.Playfield.Identity, message.Target);
             if (target != null)
             {
                 target.Controller.Trade(message.Identity);

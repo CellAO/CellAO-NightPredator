@@ -29,29 +29,20 @@
 
 #endregion
 
-namespace CellAO.Core.Inventory
+namespace CellAO.Core.Exceptions
 {
     #region Usings ...
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
+    using System;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class KnuBotTradeInventoryPage : BaseInventoryPage
+    [Serializable]
+    public class ParentNotInPoolException : Exception
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// </summary>
-        /// <param name="ownerInstance">
-        /// </param>
-        public KnuBotTradeInventoryPage(Identity ownerInstance)
-            : base((int)IdentityType.KnuBotTradeWindow, 0x40, 0, ownerInstance)
+        public ParentNotInPoolException(string p)
+            : base(p)
         {
         }
-
-        #endregion
     }
 }

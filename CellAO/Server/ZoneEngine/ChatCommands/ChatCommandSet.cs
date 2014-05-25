@@ -140,7 +140,7 @@ namespace ZoneEngine.ChatCommands
                 }
             }
 
-            Character tempch = Pool.Instance.GetObject<Character>(target);
+            Character tempch = Pool.Instance.GetObject<Character>(character.Playfield.Identity, target);
             if (tempch != null)
             {
                 uint statOldValue;

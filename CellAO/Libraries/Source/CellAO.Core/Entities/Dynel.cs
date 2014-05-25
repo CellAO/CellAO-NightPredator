@@ -102,7 +102,7 @@ namespace CellAO.Core.Entities
         {
             get
             {
-                return Pool.Instance.GetObject<IPlayfield>(this.playfieldIdentity);
+                return Pool.Instance.GetObject<IPlayfield>(Identity.None, this.playfieldIdentity);
             }
 
             set
@@ -251,8 +251,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         /// <param name="id">
         /// </param>
-        public Dynel(Identity id)
-            : base(id)
+        public Dynel(Identity parent, Identity id)
+            : base(parent, id)
         {
             this.Starting = true;
             this.DoNotDoTimers = true;

@@ -47,7 +47,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public OutgoingTradeInventoryPage(int ownerInstance)
+        public OutgoingTradeInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.TradeWindow, 0x40, 0, ownerInstance)
         {
         }

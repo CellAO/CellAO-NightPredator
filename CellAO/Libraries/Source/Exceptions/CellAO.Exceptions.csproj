@@ -51,6 +51,7 @@
     <Compile Include="ConnectionStringErrorException.cs" />
     <Compile Include="DatabaseCouldNotBeDeterminedException.cs" />
     <Compile Include="DataBaseException.cs" />
+    <Compile Include="ParentNotInPoolException.cs" />
     <Compile Include="StatDoesNotExistException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeInstanceMismatchException.cs" />

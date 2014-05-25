@@ -126,7 +126,7 @@ namespace CellAO.Core.Playfields
         /// <param name="playfieldIdentity">
         /// </param>
         public Playfield(ZoneServer zoneServer, Identity playfieldIdentity)
-            : base(playfieldIdentity)
+            : base(Identity.None, playfieldIdentity)
         {
             this.server = zoneServer;
             this.playfieldBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
@@ -488,7 +488,7 @@ namespace CellAO.Core.Playfields
             // Set client=null so dynel can really dispose
 
             IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
-            Pool.Instance.GetObject<Playfield>(new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+            Pool.Instance.GetObject<Playfield>(Identity.None, new Identity() { Type = playfield.Type, Instance = playfield.Instance });
 
             if (newPlayfield == null)
             {

@@ -57,7 +57,7 @@ namespace ZoneEngine.Core.MessageHandlers
             // TODO: Fill in code!
             // Find character object by identity
             // call character AI controller 
-            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.Client.Controller.Character.Playfield.Identity, messageWrapper.MessageBody.Target);
             if (npc != null)
             {
                 ((NPCController)npc.Controller).KnuBot.Answer(messageWrapper.MessageBody.Answer);

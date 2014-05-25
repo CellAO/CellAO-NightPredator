@@ -47,7 +47,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public OverflowInventoryPage(int ownerInstance)
+        public OverflowInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.OverflowWindow, 0x40, 0, ownerInstance)
         {
         }

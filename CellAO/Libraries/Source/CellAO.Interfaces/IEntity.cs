@@ -47,6 +47,10 @@ namespace CellAO.Interfaces
         /// </summary>
         Identity Identity { get; }
 
+        /// <summary>
+        /// </summary>
+        Identity Parent { get; }
+
         #endregion
     }
 }
