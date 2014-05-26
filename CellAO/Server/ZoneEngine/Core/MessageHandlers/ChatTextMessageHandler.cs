@@ -59,9 +59,11 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="unknown2">
         /// </param>
-        public void Send(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
+        /// <param name="unknown3">
+        /// </param>
+        public void Send(ICharacter character, string text, byte unknown1 = 0, byte unknown2 = 0, int unknown3 = 0)
         {
-            this.Send(character, Filler(character, text, unknown1, unknown2));
+            this.Send(character, Filler(character, text, unknown1, unknown2, unknown3));
         }
 
         /// <summary>
@@ -74,9 +76,16 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="unknown2">
         /// </param>
+        /// <param name="unknown3">
+        /// </param>
         /// <returns>
         /// </returns>
-        private static MessageDataFiller Filler(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
+        private static MessageDataFiller Filler(
+            ICharacter character,
+            string text,
+            byte unknown1 = 0,
+            byte unknown2 = 0,
+            int unknown3 = 0)
         {
             return x =>
             {
@@ -84,6 +93,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Text = text;
                 x.Unknown1 = unknown1;
                 x.Unknown2 = unknown2;
+                x.Unknown3 = unknown3;
             };
         }
 
@@ -97,11 +107,18 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="unknown2">
         /// </param>
+        /// <param name="unknown3">
+        /// </param>
         /// <returns>
         /// </returns>
-        public ChatTextMessage Create(ICharacter character, string text, short unknown1 = 0, int unknown2 = 0)
+        public ChatTextMessage Create(
+            ICharacter character,
+            string text,
+            byte unknown1 = 0,
+            byte unknown2 = 0,
+            int unknown3 = 0)
         {
-            return this.Create(character, Filler(character, text, unknown1, unknown2));
+            return this.Create(character, Filler(character, text, unknown1, unknown2, unknown3));
         }
 
         /// <summary>
@@ -114,20 +131,28 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         /// <param name="unknown2">
         /// </param>
+        /// <param name="unknown3">
+        /// </param>
         /// <returns>
         /// </returns>
         public IMSendAOtomationMessageBodyToClient CreateIM(
             ICharacter character,
             string text,
-            short unknown1 = 0,
-            int unknown2 = 0)
+            byte unknown1 = 0,
+            byte unknown2 = 0,
+            int unknown3 = 0)
         {
             return new IMSendAOtomationMessageBodyToClient()
                    {
                        Body =
                            this.Create(
                                character,
-                               Filler(character, text, unknown1, unknown2)),
+                               Filler(
+                                   character,
+                                   text.Replace("<","&lt;").Replace(">","&gt;"),
+                                   unknown1,
+                                   unknown2,
+                                   unknown3)),
                        client = character.Controller.Client
                    };
         }

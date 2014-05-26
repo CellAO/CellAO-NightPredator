@@ -58,7 +58,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public ImplantInventoryPage(int ownerInstance)
+        public ImplantInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.ImplantPage, 15, 0x21, ownerInstance)
         {
             this.NeedsItemCheck = true;

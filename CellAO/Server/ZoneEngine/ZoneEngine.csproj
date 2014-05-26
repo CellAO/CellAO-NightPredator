@@ -97,6 +97,7 @@
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
     <Compile Include="ChatCommands\WalkingTest.cs" />
+    <Compile Include="ChatCommands\Weather.cs" />
     <Compile Include="Core\Controllers\NPCController.cs" />
     <Compile Include="Core\Controllers\PlayerController.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
@@ -162,7 +163,9 @@
     <Compile Include="Core\MessageHandlers\TeleportMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TemplateActionMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TradeMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\VendingMachineFullUpdateMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\VicinityChatMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\WeatherControlMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ZoneLoginMessageHandler.cs" />
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
@@ -189,6 +192,7 @@
     <None Include="Scripts\KnuBotFlappy.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="Scripts\InfoBot.cs" />
     <Compile Include="Script\IAOScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
   </ItemGroup>

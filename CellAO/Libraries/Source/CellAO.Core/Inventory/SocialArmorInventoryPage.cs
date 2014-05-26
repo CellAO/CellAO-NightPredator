@@ -58,7 +58,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public SocialArmorInventoryPage(int ownerInstance)
+        public SocialArmorInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.SocialPage, 15, 0x31, ownerInstance)
         {
             this.NeedsItemCheck = true;

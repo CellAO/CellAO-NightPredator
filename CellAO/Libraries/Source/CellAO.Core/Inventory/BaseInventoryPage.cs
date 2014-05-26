@@ -71,8 +71,8 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="ownerInstance">
         /// </param>
-        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance)
-            : base(new Identity() { Type = (IdentityType)ownerInstance, Instance = pagenum })
+        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, Identity ownerInstance)
+            : base(ownerInstance, new Identity() { Type = (IdentityType)ownerInstance.Instance, Instance = pagenum })
         {
             this.MaxSlots = maxslots;
             this.FirstSlotNumber = firstslotnumber;

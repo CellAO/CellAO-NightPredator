@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
     using CellAO.Core.Network;
     using CellAO.Enums;
 
@@ -92,6 +93,11 @@ namespace ZoneEngine.Core.MessageHandlers
                     mob.SendToClient(client);
                 }
             }*/
+
+            foreach (WeatherEntry w in WeatherSettings.Instance.WeatherList)
+            {
+                WeatherControlMessageHandler.Default.Send(client.Controller.Character, w);
+            }
         }
 
         #endregion

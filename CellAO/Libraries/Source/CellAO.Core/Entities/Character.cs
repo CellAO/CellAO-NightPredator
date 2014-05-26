@@ -102,8 +102,8 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <param name="controller">
         /// </param>
-        public Character(Identity identity, IController controller)
-            : base(identity)
+        public Character(Identity parent, Identity identity, IController controller)
+            : base(parent, identity)
         {
             this.DoNotDoTimers = true;
             // Create backlink to Controller

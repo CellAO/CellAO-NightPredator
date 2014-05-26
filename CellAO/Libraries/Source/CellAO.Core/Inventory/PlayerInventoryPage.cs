@@ -47,7 +47,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public PlayerInventoryPage(int ownerInstance)
+        public PlayerInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.Inventory, 30, 0x40, ownerInstance)
         {
         }

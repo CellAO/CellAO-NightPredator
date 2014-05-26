@@ -51,7 +51,7 @@ namespace CellAO.Core.Inventory
             : base(0, owner)
         {
             this.StandardPage = (int)IdentityType.Inventory;
-            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity.Instance));
+            this.Pages.Add((int)IdentityType.Inventory, new PlayerInventoryPage(owner.Identity));
         }
 
         #endregion

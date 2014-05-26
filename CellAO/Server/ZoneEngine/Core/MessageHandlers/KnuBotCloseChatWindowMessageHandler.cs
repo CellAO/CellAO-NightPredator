@@ -56,7 +56,7 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         public override void Receive(MessageWrapper<KnuBotCloseChatWindowMessage> messageWrapper)
         {
-            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.MessageBody.Target);
+            ICharacter npc = Pool.Instance.GetObject<ICharacter>(messageWrapper.Client.Controller.Character.Playfield.Identity, messageWrapper.MessageBody.Target);
             if (npc != null)
             {
                 ((NPCController)npc.Controller).KnuBot.Answer(KnuBotOptionId.WindowClosed);

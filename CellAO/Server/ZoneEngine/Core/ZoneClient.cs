@@ -194,10 +194,10 @@ namespace ZoneEngine.Core
                 Pool.Instance.GetObject<Character>(
                     new Identity() { Type = IdentityType.CanbeAffected, Instance = charId }) == null)
             {
-                this.Controller.Character =
-                    new Character(
-                        new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
-                        this.Controller);
+                this.Controller.Character = new Character(
+                    pf.Identity,
+                    new Identity { Type = IdentityType.CanbeAffected, Instance = charId },
+                    this.Controller);
                 this.controller.Character.Read();
             }
             else
@@ -289,7 +289,7 @@ namespace ZoneEngine.Core
                 {
                     // CreateIM the zStream
                     this.netStream = new NetworkStream(this.TcpSocket);
-                    this.zStream = new ZlibStream(this.netStream, CompressionMode.Compress,CompressionLevel.BestSpeed);
+                    this.zStream = new ZlibStream(this.netStream, CompressionMode.Compress, CompressionLevel.BestSpeed);
                     this.zStream.FlushMode = FlushType.Sync;
                     this.zStreamSetup = true;
                 }

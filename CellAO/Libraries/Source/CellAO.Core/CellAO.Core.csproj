@@ -95,6 +95,8 @@
     <Compile Include="Entities\ITargetingEntity.cs" />
     <Compile Include="Entities\TradeSkillInfo.cs" />
     <Compile Include="Entities\Waypoint.cs" />
+    <Compile Include="Entities\WeatherEntry.cs" />
+    <Compile Include="Entities\WeatherSettings.cs" />
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
     <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />

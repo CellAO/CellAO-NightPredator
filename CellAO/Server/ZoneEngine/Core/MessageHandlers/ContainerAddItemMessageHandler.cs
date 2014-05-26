@@ -88,7 +88,7 @@ namespace ZoneEngine.Core.MessageHandlers
              */
 
             IInventoryPage sendingPage =
-                Pool.Instance.GetObject<IInventoryPage>(
+                Pool.Instance.GetObject<IInventoryPage>(message.Identity,
                     new Identity()
                     {
                         Type = (IdentityType)message.Identity.Instance,

@@ -51,17 +51,22 @@ namespace CellAO.ObjectManager
         /// </summary>
         /// <param name="pooledIn">
         /// </param>
+        /// <param name="parent">
+        /// </param>
         /// <param name="id">
         /// </param>
-        public PooledObject(Identity id)
+        public PooledObject(Identity parent, Identity id)
         {
             this.Identity = id;
-            Pool.Instance.AddObject(this);
+            this.Parent = parent;
+            Pool.Instance.AddObject(parent, this);
         }
 
         /// <summary>
         /// </summary>
         public Identity Identity { get; private set; }
+
+        public virtual Identity Parent { get; private set; }
 
         /// <summary>
         /// </summary>

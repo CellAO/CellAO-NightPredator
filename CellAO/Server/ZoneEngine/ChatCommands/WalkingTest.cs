@@ -60,7 +60,7 @@ namespace ZoneEngine.ChatCommands
         {
             if (args[0].ToLower() == "walktest")
             {
-                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, character.SelectedTarget);
                 if (npc != null)
                 {
                     Vector3 newcoords = new Vector3();
@@ -73,7 +73,7 @@ namespace ZoneEngine.ChatCommands
             }
             if (args[0].ToLower() == "walkback")
             {
-                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, character.SelectedTarget);
                 if (npc != null)
                 {
                     Vector3 newcoords = new Vector3();
@@ -86,7 +86,7 @@ namespace ZoneEngine.ChatCommands
             }
             if (args[0].ToLower() == "followtest")
             {
-                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, character.SelectedTarget);
                 if (npc != null)
                 {
                     npc.Controller.Follow(character.Identity);
@@ -94,7 +94,7 @@ namespace ZoneEngine.ChatCommands
             }
             if (args[0].ToLower() == "showcoords")
             {
-                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, character.SelectedTarget);
                 if (npc != null)
                 {
                     character.Playfield.Publish(
@@ -112,7 +112,7 @@ namespace ZoneEngine.ChatCommands
             {
                 CellAO.Core.Vector.Vector3 v = character.Coordinates().coordinate;
                 bool running = character.MoveMode == MoveModes.Run;
-                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.SelectedTarget);
+                ICharacter npc = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, character.SelectedTarget);
                 if (npc != null)
                 {
                     npc.AddWaypoint(v, running);

@@ -71,7 +71,7 @@ namespace ZoneEngine.ChatCommands
         {
             if (args[1].ToLower() == "save")
             {
-                Character mob = Pool.Instance.GetObject<Character>(target);
+                Character mob = Pool.Instance.GetObject<Character>(character.Playfield.Identity, target);
                 if (mob == null)
                 {
                     character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Not a NPC?"));
@@ -138,7 +138,7 @@ namespace ZoneEngine.ChatCommands
 
             if (args[1].ToLower() == "knubot")
             {
-                ICharacter cmob = Pool.Instance.GetObject<ICharacter>(target);
+                ICharacter cmob = Pool.Instance.GetObject<ICharacter>(character.Playfield.Identity, target);
                 if (cmob == null)
                 {
                     character.Playfield.Publish(

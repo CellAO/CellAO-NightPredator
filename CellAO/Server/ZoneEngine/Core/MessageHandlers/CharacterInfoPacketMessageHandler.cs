@@ -239,11 +239,11 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             // Only for Characters now
             // Need more info whether to send for non Characters too
-            var obj = Pool.Instance.GetObject(identity) as ICharacter;
+            var obj = Pool.Instance.GetObject(character.Playfield.Identity, identity) as ICharacter;
 
             if (obj != null)
             {
-                if (obj.Stats[StatIds.npcfamily].Value != 0)
+                if (obj.Stats[StatIds.npcfamily].Value == 0)
                 {
                     // !=0 -> Monster
                     this.Send(character, obj);

@@ -107,7 +107,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
 
                 fullCharacterMessage.Identity = character.Identity;
-                fullCharacterMessage.Unknown1 = 25;
+                fullCharacterMessage.MsgVersion = 25;
                 fullCharacterMessage.InventorySlots = inventory.ToArray();
 
                 /* part 2 of data */
@@ -116,18 +116,19 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 /* part 3 of data */
                 /* number of entries */
-                fullCharacterMessage.Unknown2 = new object[0];
+                fullCharacterMessage.Unknown2 = new FullCharacterSub[0];
 
                 /* No idea what these are */
                 /* used to be skill locks + some unknown data */
 
                 // TODO: Find out what following 6 ints are
                 fullCharacterMessage.Unknown3 = 1;
-                fullCharacterMessage.Unknown4 = 0;
-                fullCharacterMessage.Unknown5 = 1;
-                fullCharacterMessage.Unknown6 = 0;
-                fullCharacterMessage.Unknown7 = 1;
-                fullCharacterMessage.Unknown8 = 0;
+                fullCharacterMessage.UnknownI1 = 0;
+                fullCharacterMessage.Unknown4 = new FullCharacterSub2[0];
+                fullCharacterMessage.UnknownI2 = 0;
+                fullCharacterMessage.Unknown5 = new FullCharacterSub2[0];
+                fullCharacterMessage.UnknownI3 = 0;
+                fullCharacterMessage.Unknown6 = new FullCharacterSub2[0];
 
                 IZoneClient client = character.Controller.Client;
 

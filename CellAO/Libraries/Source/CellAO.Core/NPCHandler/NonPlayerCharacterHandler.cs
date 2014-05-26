@@ -93,15 +93,15 @@ namespace CellAO.Core.NPCHandler
             IController controller,
             int level)
         {
-            IPlayfield playfield = Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
+            IPlayfield playfield = Pool.Instance.GetObject<IPlayfield>(Identity.None, playfieldIdentity);
             if (playfield != null)
             {
                 int newInstanceId = Pool.Instance.GetFreeInstance<Character>(1000000, IdentityType.CanbeAffected);
                 Identity newIdentity = new Identity() { Type = IdentityType.CanbeAffected, Instance = newInstanceId };
-                Character mobCharacter = new Character(newIdentity, controller);
+                Character mobCharacter = new Character(playfield.Identity, newIdentity, controller);
                 mobCharacter.Read();
                 mobCharacter.Coordinates(coord);
-                mobCharacter.Playfield = Pool.Instance.GetObject<IPlayfield>(playfieldIdentity);
+                mobCharacter.Playfield = Pool.Instance.GetObject<IPlayfield>(Identity.None, playfieldIdentity);
                 mobCharacter.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.life, (uint)mob.Health);
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.level, (uint)level);
@@ -152,11 +152,11 @@ namespace CellAO.Core.NPCHandler
             if (playfield != null)
             {
                 Identity mobId = new Identity() { Type = IdentityType.CanbeAffected, Instance = mob.Id };
-                if (Pool.Instance.GetObject(mobId) != null)
+                if (Pool.Instance.GetObject(playfield.Identity, mobId) != null)
                 {
                     throw new Exception("Object " + mobId.ToString(true) + " already exists!!");
                 }
-                Character cmob = new Character(mobId, npccontroller);
+                Character cmob = new Character(playfield.Identity, mobId, npccontroller);
                 cmob.Read();
                 cmob.Playfield = playfield;
                 cmob.Coordinates(new Coordinate() { x = mob.X, y = mob.Y, z = mob.Z });

@@ -47,7 +47,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <param name="ownerInstance">
         /// </param>
-        public BankInventoryPage(int ownerInstance)
+        public BankInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.Bank, 50, 0, ownerInstance)
         {
             this.NeedsItemCheck = false;
