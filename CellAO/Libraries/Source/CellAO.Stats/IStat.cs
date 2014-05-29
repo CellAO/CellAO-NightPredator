@@ -81,6 +81,8 @@ namespace CellAO.Stats
 
         #region Public Methods and Operators
 
+        bool NotDefault();
+
         /// <summary>
         /// </summary>
         void CalcTrickle();

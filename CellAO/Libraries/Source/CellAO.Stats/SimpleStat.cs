@@ -29,69 +29,68 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace CellAO.Stats
 {
-    #region Usings ...
-
-    using CellAO.Core.Entities;
-    using CellAO.Enums;
-
-    using MsgPack;
-
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-
-    #endregion
-
-    /// <summary>
-    /// </summary>
-    internal class systemtext : FunctionPrototype
+    public class SimpleStat : IStat
     {
-        #region Public Properties
+        private int statValue = 0;
 
-        /// <summary>
-        /// </summary>
-        public override FunctionType FunctionId
+        public SimpleStat(int statId)
+        {
+            this.StatId = statId;
+        }
+
+        public bool AnnounceToPlayfield { get; set; }
+
+        public uint BaseValue { get; set; }
+
+        public bool Changed { get; set; }
+
+        public int Modifier { get; set; }
+
+        public int PercentageModifier { get; set; }
+
+        public bool ReCalculate { get; set; }
+
+        public int StatId { get; set; }
+
+        public IStatList Stats { get; private set; }
+
+        public int Trickle { get; set; }
+
+        public int Value
         {
             get
             {
-                return FunctionType.SystemText;
+                return this.statValue;
+            }
+            set
+            {
+                this.statValue = value;
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public override bool Execute(
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments)
+        public bool NotDefault()
         {
-            string text = arguments[0].AsString();
-            var message = new FormatFeedbackMessage()
-                          {
-                              Identity = self.Identity,
-                              FormattedMessage = "~&!!!\":!!!)<s"+(char)(text.Length+1),
-                              Unknown1 = 0,
-                              Unknown2 = 0,
-                          };
-            ((ICharacter)self).Send(message);
             return true;
         }
 
-        #endregion
+        public void CalcTrickle()
+        {
+        }
+
+        public uint GetMaxValue(uint old)
+        {
+            return old;
+        }
+
+        public void Set(uint value, bool starting = false)
+        {
+            this.statValue = (int)value;
+        }
+
+        public void SetBaseValue(uint value)
+        {
+        }
     }
 }

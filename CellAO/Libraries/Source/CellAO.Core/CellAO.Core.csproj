@@ -71,7 +71,6 @@
     <Compile Include="Components\MemBusAdapter.cs" />
     <Compile Include="Components\MessageHandlerAttribute.cs" />
     <Compile Include="Components\MessageWrapper.cs" />
-    <Compile Include="Components\WeakReference.cs" />
     <Compile Include="Encryption\BigInteger.cs" />
     <Compile Include="Components\IContainer.cs" />
     <Compile Include="Components\IHandle.cs" />
@@ -94,6 +93,7 @@
     <Compile Include="Entities\INamedEntity.cs" />
     <Compile Include="Entities\ITargetingEntity.cs" />
     <Compile Include="Entities\TradeSkillInfo.cs" />
+    <Compile Include="Entities\Vendor.cs" />
     <Compile Include="Entities\Waypoint.cs" />
     <Compile Include="Entities\WeatherEntry.cs" />
     <Compile Include="Entities\WeatherSettings.cs" />
@@ -130,6 +130,8 @@
     <Compile Include="Inventory\PlayerShopInventoryPage.cs" />
     <Compile Include="Inventory\SocialArmorInventoryPage.cs" />
     <Compile Include="Inventory\UnitInventory.cs" />
+    <Compile Include="Inventory\VendorInventory.cs" />
+    <Compile Include="Inventory\VendorInventoryPage.cs" />
     <Compile Include="Inventory\WeaponInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
@@ -177,6 +179,7 @@
     <Compile Include="Vector\Coordinate.cs" />
     <Compile Include="Vector\Quaternion.cs" />
     <Compile Include="Vector\Vector3.cs" />
+    <Compile Include="VendorHandler\VendorHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InstancedEntities\" />

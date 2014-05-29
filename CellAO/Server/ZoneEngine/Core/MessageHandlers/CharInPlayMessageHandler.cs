@@ -37,7 +37,9 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
@@ -93,6 +95,15 @@ namespace ZoneEngine.Core.MessageHandlers
                     mob.SendToClient(client);
                 }
             }*/
+
+            foreach (
+                Vendor vendor in
+                    Pool.Instance.GetAll<Vendor>(
+                        client.Controller.Character.Playfield.Identity,
+                        (int)IdentityType.VendingMachine))
+            {
+                VendingMachineFullUpdateMessageHandler.Default.Send(client.Controller.Character, vendor);
+            }
 
             foreach (WeatherEntry w in WeatherSettings.Instance.WeatherList)
             {

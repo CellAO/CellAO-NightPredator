@@ -209,7 +209,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool Read()
+        public virtual bool Read()
         {
             int containerType = (int)this.Identity.Type;
 
@@ -355,7 +355,7 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool Write()
+        public virtual bool Write()
         {
             List<DBInstancedItem> DBinstanced = new List<DBInstancedItem>();
             List<DBItem> DBuninstanced = new List<DBItem>();

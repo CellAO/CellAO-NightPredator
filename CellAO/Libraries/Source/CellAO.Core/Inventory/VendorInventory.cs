@@ -29,69 +29,22 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace CellAO.Core.Inventory
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
-    using CellAO.Enums;
-
-    using MsgPack;
-
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    internal class systemtext : FunctionPrototype
+    public class VendorInventory : BaseInventoryPages
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public override FunctionType FunctionId
+        public VendorInventory(IItemContainer owner)
+            : base(0, owner)
         {
-            get
-            {
-                return FunctionType.SystemText;
-            }
+            this.StandardPage = (int)IdentityType.ShopInventory;
+            VendorInventoryPage inventoryPage = new VendorInventoryPage(owner.Identity);
+            this.Pages.Add((int)IdentityType.ShopInventory, inventoryPage);
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public override bool Execute(
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments)
-        {
-            string text = arguments[0].AsString();
-            var message = new FormatFeedbackMessage()
-                          {
-                              Identity = self.Identity,
-                              FormattedMessage = "~&!!!\":!!!)<s"+(char)(text.Length+1),
-                              Unknown1 = 0,
-                              Unknown2 = 0,
-                          };
-            ((ICharacter)self).Send(message);
-            return true;
-        }
-
-        #endregion
     }
 }

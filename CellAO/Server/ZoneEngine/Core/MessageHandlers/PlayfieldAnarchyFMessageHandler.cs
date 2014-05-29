@@ -33,9 +33,12 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Linq;
+
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Vector;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -97,6 +100,21 @@ namespace ZoneEngine.Core.MessageHandlers
                                  };
                 x.PlayfieldX = Playfields.GetPlayfieldX(character.Playfield.Identity.Instance);
                 x.PlayfieldZ = Playfields.GetPlayfieldZ(character.Playfield.Identity.Instance);
+
+                var vendors = Pool.Instance.GetAll<Vendor>(
+                    character.Playfield.Identity,
+                    (int)IdentityType.VendingMachine);
+
+/*                if (vendors.Any())
+                {
+                    x.PlayfieldVendorInfo = new PlayfieldVendorInfo()
+                                            {
+                                                VendorCount = vendors.Count(),
+                                                FirstVendorId =
+                                                    vendors.ElementAt(0).Identity.Instance
+                                            };
+                }*/
+
             };
 
             // TODO: Add the VendorHandler again

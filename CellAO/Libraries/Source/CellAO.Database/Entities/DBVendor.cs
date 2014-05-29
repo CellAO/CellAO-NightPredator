@@ -72,7 +72,7 @@ namespace CellAO.Database.Entities
 
         /// <summary>
         /// </summary>
-        public float HeadinfW { get; set; }
+        public float HeadingW { get; set; }
 
         /// <summary>
         /// </summary>
