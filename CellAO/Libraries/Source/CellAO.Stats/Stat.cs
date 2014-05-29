@@ -365,6 +365,11 @@ namespace CellAO.Stats
 
         #region Public Methods and Operators
 
+        public bool NotDefault()
+        {
+            return this.DefaultValue != this.Value;
+        }
+
         /// <summary>
         /// </summary>
         public virtual void CalcTrickle()

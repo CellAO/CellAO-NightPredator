@@ -239,20 +239,30 @@ namespace CellAO.ObjectManager
             List<T> temp = new List<T>();
             ulong parentId = parent.Long();
 
+            Dictionary<int, Dictionary<ulong, IEntity>> pfPool = null;
             lock (this.pool)
             {
                 if (this.pool.ContainsKey(parentId))
                 {
-                    lock (this.pool[parentId])
+                    pfPool = this.pool[parentId];
+                }
+            }
+            Dictionary<ulong, IEntity> localPool = null;
+            if (pfPool != null)
+            {
+                lock (pfPool)
+                {
+                    if (pfPool.ContainsKey(identitytype))
                     {
-                        if (this.pool[parentId].ContainsKey(identitytype))
-                        {
-                            lock (this.pool[parentId][identitytype])
-                            {
-                                temp.AddRange(this.pool[parentId][identitytype].Values.OfType<T>());
-                            }
-                        }
+                        localPool = pfPool[identitytype];
                     }
+                }
+            }
+            if (localPool != null)
+            {
+                lock (localPool)
+                {
+                    temp.AddRange(localPool.Values.OfType<T>());
                 }
             }
 
@@ -604,6 +614,7 @@ namespace CellAO.ObjectManager
                     }
                     else
                     {
+                        bool foundNoneOfType = true;
                         foreach (ulong parentid in parentIds)
                         {
                             Dictionary<ulong, IEntity> entries = null;
@@ -613,6 +624,7 @@ namespace CellAO.ObjectManager
                             }
                             if (entries != null)
                             {
+                                foundNoneOfType = false;
                                 lock (entries)
                                 {
                                     if (entries.ContainsKey(temp.Long()))
@@ -627,6 +639,11 @@ namespace CellAO.ObjectManager
                                     }
                                 }
                             }
+                        }
+                        if (foundNoneOfType)
+                        {
+                            this.reservedIds.Add(temp.Long());
+                            foundEmpty = true;
                         }
                     }
                 }

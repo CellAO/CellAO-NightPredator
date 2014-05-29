@@ -29,7 +29,7 @@
 
 #endregion
 
-namespace CellAO.Core.Components
+namespace Utility
 {
     #region Usings ...
 

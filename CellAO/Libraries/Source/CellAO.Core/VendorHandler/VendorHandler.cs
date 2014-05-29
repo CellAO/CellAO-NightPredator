@@ -29,69 +29,51 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace CellAO.Core.VendorHandler
 {
     #region Usings ...
 
+    using System.Collections.Generic;
+
     using CellAO.Core.Entities;
-    using CellAO.Enums;
+    using CellAO.Core.Playfields;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+    using CellAO.ObjectManager;
 
-    using MsgPack;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using Quaternion = CellAO.Core.Vector.Quaternion;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    internal class systemtext : FunctionPrototype
+    public static class VendorHandler
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public override FunctionType FunctionId
+        public static void SpawnVendorFromTemplate(DBVendor vendor, IPlayfield playfield)
         {
-            get
+            Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = vendor.Playfield };
+            Identity freeIdentity = new Identity()
+                                    {
+                                        Type = IdentityType.VendingMachine,
+                                        Instance =
+                                            Pool.Instance.GetFreeInstance<Vendor>(
+                                                0x70000000,
+                                                IdentityType.VendingMachine)
+                                    };
+
+            Vendor v = new Vendor(pfIdentity, freeIdentity, vendor.Hash);
+            v.RawCoordinates = new Vector3(vendor.X, vendor.Y, vendor.Z);
+            v.Heading = new Quaternion(vendor.HeadingX, vendor.HeadingY, vendor.HeadingZ, vendor.HeadingW);
+            v.Playfield = playfield;
+        }
+
+        public static void SpawnVendorsForPlayfield(IPlayfield playfield)
+        {
+            IEnumerable<DBVendor> vendors = VendorDao.Instance.GetWhere(new { Playfield = playfield.Identity.Instance });
+            foreach (DBVendor vendor in vendors)
             {
-                return FunctionType.SystemText;
+                SpawnVendorFromTemplate(vendor, playfield);
             }
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public override bool Execute(
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments)
-        {
-            string text = arguments[0].AsString();
-            var message = new FormatFeedbackMessage()
-                          {
-                              Identity = self.Identity,
-                              FormattedMessage = "~&!!!\":!!!)<s"+(char)(text.Length+1),
-                              Unknown1 = 0,
-                              Unknown2 = 0,
-                          };
-            ((ICharacter)self).Send(message);
-            return true;
-        }
-
-        #endregion
     }
 }

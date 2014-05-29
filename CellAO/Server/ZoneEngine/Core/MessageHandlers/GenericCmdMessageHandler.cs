@@ -39,6 +39,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -78,18 +79,25 @@ namespace ZoneEngine.Core.MessageHandlers
                     }
                     else
                     {
-                        // Use statel (doors, grid terminals etc)
+                        if (Pool.Instance.Contains(message.Target))
+                        {
+                            // TODO: Call OnUse of the targets controller
+                        }
+                        else
+                        {
+                            // Use statel (doors, grid terminals etc)
 #if DEBUG
-                        string s = string.Format(
-                            "Generic Command received:\r\nAction: {0} ({1}){2}Target: {3} {4}",
-                            message.Action,
-                            (int)message.Action,
-                            Environment.NewLine,
-                            message.Target.Type,
-                            message.Target.ToString(true));
-                        ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
+                            string s = string.Format(
+                                "Generic Command received:\r\nAction: {0} ({1}){2}Target: {3} {4}",
+                                message.Action,
+                                (int)message.Action,
+                                Environment.NewLine,
+                                message.Target.Type,
+                                message.Target.ToString(true));
+                            ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
 #endif
-                        client.Controller.UseStatel(message.Target);
+                            client.Controller.UseStatel(message.Target);
+                        }
                     }
 
                     break;

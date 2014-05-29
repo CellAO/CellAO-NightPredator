@@ -65,10 +65,6 @@ namespace CellAO.Core.Entities
         Quaternion Heading { get; set; }
 
         /// <summary>
-        /// </summary>
-        IInventoryPage MainInventory { get; }
-
-        /// <summary>
         /// Caching Mesh layer structure
         /// </summary>
         MeshLayers MeshLayer { get; }

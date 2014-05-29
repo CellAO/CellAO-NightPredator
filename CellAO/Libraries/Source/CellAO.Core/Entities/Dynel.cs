@@ -50,6 +50,8 @@ namespace CellAO.Core.Entities
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using Utility;
+
     using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
@@ -201,10 +203,6 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        public IInventoryPage MainInventory { get; private set; }
-
-        /// <summary>
-        /// </summary>
         public IInventoryPages BaseInventory { get; set; }
 
         /// <summary>
@@ -324,12 +322,6 @@ namespace CellAO.Core.Entities
         {
             this.DoNotDoTimers = true;
             this.Stats.Read();
-
-            // load depending on identity type
-            switch (this.Identity.Type)
-            {
-                    // case IdentityType.
-            }
 
             this.BaseInventory.Read();
 

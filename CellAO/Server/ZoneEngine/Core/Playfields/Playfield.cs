@@ -149,6 +149,12 @@ namespace CellAO.Core.Playfields
 
             this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
             this.LoadMobSpawns(playfieldIdentity);
+            this.LoadVendors(playfieldIdentity);
+        }
+
+        private void LoadVendors(Identity playfieldIdentity)
+        {
+            VendorHandler.VendorHandler.SpawnVendorsForPlayfield(this);
         }
 
         private void LoadMobSpawns(Identity playfieldIdentity)
@@ -688,9 +694,9 @@ namespace CellAO.Core.Playfields
                     LogUtil.Debug(DebugInfoDetail.AoTomation, msg.Body.GetType().ToString());
                     msg.client.SendCompressed(msg.Body);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString());
+                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString()+Environment.NewLine+e.Message);
                     // /!\ This happens sometimes, dont know why tho, need more investigation
                     // throw;
                 }
@@ -812,7 +818,7 @@ namespace CellAO.Core.Playfields
             IEnumerable<IEntity> dynels = null;
             dynels =
                 Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
-                    .Where(xx => xx.InPlayfield(this.Identity));
+                    .Where(xx => !xx.DoNotDoTimers && xx.InPlayfield(this.Identity));
 
             foreach (ICharacter dynel in dynels)
             {

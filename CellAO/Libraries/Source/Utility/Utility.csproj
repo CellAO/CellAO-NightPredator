@@ -67,6 +67,7 @@
     <Compile Include="ServerConsoleCommandEntry.cs" />
     <Compile Include="ServerConsoleCommands.cs" />
     <Compile Include="TestEmailRegex.cs" />
+    <Compile Include="WeakReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

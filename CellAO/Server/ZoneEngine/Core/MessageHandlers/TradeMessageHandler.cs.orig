@@ -64,23 +64,14 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </param>
         protected override void Read(TradeMessage message, IZoneClient client)
         {
+<<<<<<< HEAD
+            ICharacter target = Pool.Instance.GetObject<ICharacter>(message.Target);
+=======
             Character target = Pool.Instance.GetObject<Character>(client.Controller.Character.Playfield.Identity, message.Target);
+>>>>>>> 40949a7bae1f682a443721b218ec0cd6a03bbdc5
             if (target != null)
             {
                 target.Controller.Trade(message.Identity);
-                /*
-            // /!\ THIS IS ONLY A TEST /!\
-            // Right click on mob lets them walk away 20m
-            // This does NOT work on all mobs tho. (Depends on character flags, vendors wont, like bartender. Leets will)
-                InventoryUpdateMessageHandler.Default.Send(
-                    client.Controller.Character,
-                    target.BaseInventory.Pages[(int)IdentityType.ArmorPage]);
-                Vector3 start = new Vector3();
-                start.X = target.RawCoordinates.X + 20;
-                start.Y = target.RawCoordinates.Y;
-                start.Z = target.RawCoordinates.Z;
-                FollowTargetMessageHandler.Default.Send(target, target.RawCoordinates, start);
-             */
             }
             // TODO: Add shop code here
             // something like

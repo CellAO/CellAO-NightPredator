@@ -29,69 +29,55 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace CellAO.Core.Entities
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
-    using CellAO.Enums;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
 
-    using MsgPack;
+    using CellAO.Core.Exceptions;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+    using CellAO.ObjectManager;
+    using CellAO.Stats;
 
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using MsgPack.Serialization.EmittingSerializers;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    internal class systemtext : FunctionPrototype
+    public class Vendor : Dynel
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public override FunctionType FunctionId
+        public Vendor(Identity parent, Identity id, string templateHash)
+            : base(parent, id)
         {
-            get
+            DBVendorTemplate vendorTemplate =
+                VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();
+            if (vendorTemplate == null)
             {
-                return FunctionType.SystemText;
+                throw new DataBaseException("Could not find a vendor template for hash '" + templateHash + "'.");
             }
+
+
+            this.Stats = new SimpleStatList();
+            this.Template = ItemLoader.ItemList[vendorTemplate.ItemTemplate];
+            foreach (var s in this.Template.Stats)
+            {
+                this.Stats[s.Key].Value = s.Value;
+            }
+            this.TemplateHash = vendorTemplate.Hash;
+            this.Name = vendorTemplate.Name;
+
+            this.BaseInventory = new VendorInventory(this);
+            this.BaseInventory.Read();
         }
 
-        #endregion
+        public ItemTemplate Template { get; private set; }
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public override bool Execute(
-            INamedEntity self,
-            INamedEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments)
-        {
-            string text = arguments[0].AsString();
-            var message = new FormatFeedbackMessage()
-                          {
-                              Identity = self.Identity,
-                              FormattedMessage = "~&!!!\":!!!)<s"+(char)(text.Length+1),
-                              Unknown1 = 0,
-                              Unknown2 = 0,
-                          };
-            ((ICharacter)self).Send(message);
-            return true;
-        }
-
-        #endregion
+        public string TemplateHash { get; private set; }
     }
 }

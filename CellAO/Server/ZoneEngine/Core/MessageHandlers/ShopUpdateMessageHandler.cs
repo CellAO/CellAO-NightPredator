@@ -37,7 +37,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Stats;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -45,60 +47,28 @@ namespace ZoneEngine.Core.MessageHandlers
     #endregion
 
     [MessageHandler(MessageHandlerDirection.OutboundOnly)]
-    public class VendingMachineFullUpdateMessageHandler :
-        BaseMessageHandler<VendingMachineFullUpdateMessage, VendingMachineFullUpdateMessageHandler>
+    public class ShopUpdateMessageHandler : BaseMessageHandler<ShopUpdateMessage, ShopUpdateMessageHandler>
     {
-        public void Send(ICharacter character, Vendor vendor)
+        public void Send(ICharacter receiver, IEntity shop, IInventoryPage page)
         {
-            this.Send(character, this.Filler(vendor));
+            base.Send(receiver, this.Filler(shop, page));
         }
 
-        private MessageDataFiller Filler(Vendor vendor)
+        private MessageDataFiller Filler(IEntity shop, IInventoryPage page)
         {
             return x =>
             {
-                x.Identity = vendor.Identity;
-                x.Unknown = 0;
-                x.Coordinates = new Vector3()
-                                {
-                                    X = vendor.Coordinates().x,
-                                    Y = vendor.Coordinates().y,
-                                    Z = vendor.Coordinates().z
-                                };
-
-                x.Heading = new Quaternion()
-                            {
-                                X = vendor.Heading.xf,
-                                Y = vendor.Heading.yf,
-                                Z = vendor.Heading.zf,
-                                W = vendor.Heading.wf
-                            };
-
-                x.NpcIdentity = Identity.None;
-                x.TypeIdentifier = 0x0b;
-                x.PlayfieldId = vendor.Playfield.Identity.Instance;
-                x.Unknown4 = 0xf424f;
-                x.Unknown5 = 0;
-                x.Unknown6 = 111;
-                List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
-                foreach (IStat stat in vendor.Stats.All)
+                x.Identity = shop.Identity;
+                x.Unknown = 1;
+                List<VendingMachineSlot> tempList = new List<VendingMachineSlot>();
+                foreach (IItem item in page.List().Values)
                 {
-                    if (stat.NotDefault())
-                    {
-                        temp.Add(
-                            new GameTuple<CharacterStat, uint>()
-                            {
-                                Value1 = (CharacterStat)stat.StatId,
-                                Value2 = (uint)stat.Value
-                            });
-                    }
+                    VendingMachineSlot temp = new VendingMachineSlot();
+                    temp.ItemHighId = item.HighID;
+                    temp.ItemLowId = item.LowID;
+                    temp.Quality = item.Quality;
                 }
-                x.Stats = temp.ToArray();
-                x.Unknown7 = vendor.Name+"\0";
-                x.Unknown8 = 2;
-                x.Unknown9 = 50;
-                x.Unknown10 = new Identity[0];
-                x.Unknown11 = 3;
+                x.VendingMachineSlots = tempList.ToArray();
             };
         }
     }
