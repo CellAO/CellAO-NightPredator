@@ -106,12 +106,17 @@ namespace CellAO.Stats.SpecialStats
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// </summary>
-        public override void CalcTrickle()
+        public override int Trickle
         {
-            this.ReCalculate = true;
-            this.Trickle = (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
+            get
+            {
+                return (int)Math.Floor((double)(this.Stats[StatIds.nanoenergypool].Value / 100));
+            }
+
+            set
+            {
+                base.Trickle = value;
+            }
         }
 
         #endregion
