@@ -81,7 +81,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20 };
+                uint[] nanodelta = { 3, 3, 4, 2, 12, 15, 20, 20, 20, 20, 20, 20 };
                 return nanodelta[this.Stats[StatIds.breed].BaseValue - 1];
             }
         }
@@ -92,7 +92,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                uint baseval = this.GetBaseValue;
+                uint baseval = this.GetBaseValue + (uint)this.Trickle;
                 if (this.Stats.All.Single(x => x.StatId == (int)StatIds.currentmovementmode).Value == (int)MoveModes.Sit)
                 {
                     baseval = baseval + (baseval >> 1);

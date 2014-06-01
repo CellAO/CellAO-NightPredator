@@ -48,6 +48,15 @@ namespace ZoneEngine.Core.MessageHandlers
     [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class StatMessageHandler : BaseMessageHandler<StatMessage, StatMessageHandler>
     {
+
+        public void SendChanged(ICharacter character)
+        {
+            Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();
+            Dictionary<int, uint> toPlayfield = new Dictionary<int, uint>();
+            character.Stats.GetChangedStats(toPlayer, toPlayfield);
+            this.SendBulk(character, toPlayer, toPlayfield);
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="character">

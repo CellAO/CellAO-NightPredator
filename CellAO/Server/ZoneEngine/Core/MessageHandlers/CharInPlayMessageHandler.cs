@@ -84,6 +84,10 @@ namespace ZoneEngine.Core.MessageHandlers
                 client.Controller.Character.Stats[StatIds.gmlevel].Value;
             client.Controller.Character.Stats[StatIds.expansion].Value =
                 client.Controller.Character.Stats[StatIds.expansion].Value;
+            client.Controller.Character.Stats[StatIds.healinterval].Value = 0;
+            client.Controller.Character.Stats[StatIds.healdelta].Value = 0;
+            client.Controller.Character.Stats[StatIds.nanointerval].Value = 0;
+            client.Controller.Character.Stats[StatIds.nanodelta].Value = 0;
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN

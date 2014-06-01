@@ -4320,6 +4320,7 @@ namespace CellAO.Stats
             // add Tricklers, try not to do circulars!!
             this.SetAbilityTricklers();
             this.bodyDevelopment.Affects.Add(this.life.StatId);
+            this.bodyDevelopment.Affects.Add(this.healDelta.StatId);
             this.nanoEnergyPool.Affects.Add(this.maxNanoEnergy.StatId);
             this.nanoEnergyPool.Affects.Add(this.nanoDelta.StatId);
             this.currentMovementMode.Affects.Add(this.nanoDelta.StatId);

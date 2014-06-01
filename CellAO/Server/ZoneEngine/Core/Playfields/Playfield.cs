@@ -54,6 +54,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Enums;
     using CellAO.Interfaces;
     using CellAO.ObjectManager;
+    using CellAO.Stats.SpecialStats;
 
     using MemBus;
     using MemBus.Configurators;
@@ -870,6 +871,33 @@ namespace CellAO.Core.Playfields
                     {
                         continue;
                     }
+
+                    bool changed = false;
+                    StatHealInterval healInterval = (StatHealInterval)dynel.Stats[StatIds.healinterval];
+                    if (healInterval.LastTick < DateTime.UtcNow)
+                    {
+                        int interval = healInterval.Value;
+                        int delta = dynel.Stats[StatIds.healdelta].Value;
+                        dynel.Stats[StatIds.health].Value += delta;
+                        healInterval.LastTick = DateTime.UtcNow + TimeSpan.FromSeconds(interval);
+                        changed = true;
+                    }
+
+                    StatNanoInterval nanoInterval = (StatNanoInterval)dynel.Stats[StatIds.nanointerval];
+                    if (nanoInterval.LastTick < DateTime.UtcNow)
+                    {
+                        int interval = nanoInterval.Value;
+                        int delta = dynel.Stats[StatIds.nanodelta].Value;
+                        dynel.Stats[StatIds.currentnano].Value += delta;
+                        nanoInterval.LastTick = DateTime.UtcNow + TimeSpan.FromSeconds(interval);
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
+                        dynel.SendChangedStats();
+                    }
+                    
 
                     if (dynel.Controller.IsFollowing())
                     {

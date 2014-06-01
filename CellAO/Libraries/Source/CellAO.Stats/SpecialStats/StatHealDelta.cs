@@ -80,7 +80,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                uint[] healDelta = { 3, 3, 2, 4, 12, 15, 20 };
+                uint[] healDelta = { 3, 3, 2, 4, 12, 15, 20, 20, 20, 20, 20 };
                 return healDelta[this.Stats[StatIds.breed].BaseValue - 1];
             }
         }
@@ -91,7 +91,7 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                uint baseval = this.BaseValue;
+                uint baseval = this.BaseValue + (uint)this.Trickle;
                 if (this.Stats[StatIds.currentmovementmode].Value == (int)MoveModes.Sit)
                 {
                     baseval += baseval >> 1;

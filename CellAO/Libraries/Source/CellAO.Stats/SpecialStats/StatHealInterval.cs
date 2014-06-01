@@ -74,6 +74,8 @@ namespace CellAO.Stats.SpecialStats
 
         #region Public Properties
 
+        public DateTime LastTick = DateTime.UtcNow + TimeSpan.FromSeconds(1);
+
         /// <summary>
         /// </summary>
         public override uint GetBaseValue
