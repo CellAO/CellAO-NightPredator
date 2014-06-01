@@ -110,6 +110,7 @@ namespace ZoneEngine.ChatCommands
                 }
                 catch (Exception)
                 {
+                    statId = 1234567890;
                 }
             }
 
