@@ -869,11 +869,11 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat extenalDoorInstance;
+        private readonly Stat externalDoorInstance;
 
         /// <summary>
         /// </summary>
-        private readonly Stat extenalPlayfieldInstance;
+        private readonly Stat externalPlayfieldInstance;
 
         /// <summary>
         /// </summary>
@@ -3107,8 +3107,8 @@ namespace CellAO.Stats
             this.exitInstance = new Stat(this, 189, 1234567890, false, false, false);
             this.expansion = new StatExpansion(this, 389, 0, false, true, false);
             this.expansionPlayfield = new Stat(this, 531, 1234567890, false, false, false);
-            this.extenalDoorInstance = new Stat(this, 193, 1234567890, false, false, false);
-            this.extenalPlayfieldInstance = new Stat(this, 192, 1234567890, false, false, false);
+            this.externalDoorInstance = new Stat(this, 193, 1234567890, false, false, false);
+            this.externalPlayfieldInstance = new Stat(this, 192, 1234567890, false, false, false);
             this.extendedFlags = new Stat(this, 598, 1234567890, false, false, false);
             this.extendedTime = new Stat(this, 373, 1234567890, false, false, false);
             this.extroverty = new Stat(this, 203, 1234567890, false, false, false);
@@ -3804,8 +3804,8 @@ namespace CellAO.Stats
             this.all.Add(this.exitInstance);
             this.all.Add(this.nextDoorInBuilding);
             this.all.Add(this.lastConcretePlayfieldInstance);
-            this.all.Add(this.extenalPlayfieldInstance);
-            this.all.Add(this.extenalDoorInstance);
+            this.all.Add(this.externalPlayfieldInstance);
+            this.all.Add(this.externalDoorInstance);
             this.all.Add(this.inPlay);
             this.all.Add(this.accessKey);
             this.all.Add(this.petMaster);
@@ -6390,21 +6390,21 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        public Stat ExtenalDoorInstance
+        public Stat ExternalDoorInstance
         {
             get
             {
-                return this.extenalDoorInstance;
+                return this.externalDoorInstance;
             }
         }
 
         /// <summary>
         /// </summary>
-        public Stat ExtenalPlayfieldInstance
+        public Stat ExternalPlayfieldInstance
         {
             get
             {
-                return this.extenalPlayfieldInstance;
+                return this.externalPlayfieldInstance;
             }
         }
 

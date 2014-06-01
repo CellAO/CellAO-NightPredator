@@ -261,8 +261,8 @@ namespace CellAO.Stats
             NameList.Add(189, "ExitInstance");
             NameList.Add(190, "NextDoorInBuilding");
             NameList.Add(191, "LastConcretePlayfieldInstance");
-            NameList.Add(192, "ExtenalPlayfieldInstance");
-            NameList.Add(193, "ExtenalDoorInstance");
+            NameList.Add(192, "ExternalPlayfieldInstance");
+            NameList.Add(193, "ExternalDoorInstance");
             NameList.Add(194, "InPlay");
             NameList.Add(195, "AccessKey");
             NameList.Add(196, "PetMaster");

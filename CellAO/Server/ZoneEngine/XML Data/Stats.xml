@@ -768,11 +768,11 @@
     <FullName />
     <Default>0</Default>
   </Stat>
-  <Stat id="192" Name="ExtenalPlayfieldInstance">
+  <Stat id="192" Name="ExternalPlayfieldInstance">
     <FullName />
     <Default>1234567890</Default>
   </Stat>
-  <Stat id="193" Name="ExtenalDoorInstance">
+  <Stat id="193" Name="ExternalDoorInstance">
     <FullName />
     <Default>1234567890</Default>
   </Stat>
