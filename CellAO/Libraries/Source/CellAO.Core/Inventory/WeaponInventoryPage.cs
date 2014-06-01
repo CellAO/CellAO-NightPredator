@@ -99,7 +99,7 @@ namespace CellAO.Core.Inventory
                                 MessagePackObject mpo = new MessagePackObject();
                                 mpo = itemSlot;
                                 copy.Arguments.Values.Add(mpo);
-                                character.Controller.CallFunction(copy);
+                                character.Controller.CallFunction(copy, character);
                             }
                         }
                     }

@@ -34,86 +34,42 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     #region Usings ...
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Nanos;
-    using CellAO.Database.Dao;
+    using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
     using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class uploadnano : FunctionPrototype
+    internal class teleportproxy2 : FunctionPrototype
     {
-        #region Fields
-
-        /// <summary>
-        /// </summary>
-        private FunctionType functionId = FunctionType.UploadNano;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
         public override FunctionType FunctionId
         {
             get
             {
-                return this.functionId;
+                return FunctionType.TeleportProxy2;
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
         public override bool Execute(
             INamedEntity self,
             IEntity caller,
             IInstancedEntity target,
             MessagePackObject[] arguments)
         {
-            var temp = new UploadedNano() { NanoId = arguments[0].AsInt32() };
-            ((Character)self).UploadedNanos.Add(temp);
-            UploadedNanosDao.Instance.WriteNano(((Character)self).Identity.Instance, temp);
-
-            if (((Character)self).Controller.Client != null)
-            {
-                var message = new CharacterActionMessage()
-                              {
-                                  Identity = self.Identity,
-                                  Action = CharacterActionType.UploadNano,
-                                  Target = self.Identity,
-                                  Parameter1 = (int)IdentityType.NanoProgram,
-                                  Parameter2 = temp.NanoId,
-                                  Unknown = 0
-                              };
-
-                ((Character)self).Controller.Client.SendCompressed(message);
-            }
-
+            // Coords need to be adjusted!
+            // We need to extract them from the rdb somehow
+            self.Stats[StatIds.externalplayfieldinstance].Value = self.Playfield.Identity.Instance;
+            self.Stats[StatIds.externaldoorinstance].Value = arguments[3].AsInt32();
+            self.Playfield.Teleport(
+                (Dynel)self,
+                new Coordinate(100, 10, 100),
+                ((ICharacter)self).Heading,
+                new Identity() { Type = (IdentityType)arguments[0].AsInt32(), Instance = arguments[1].AsInt32() });
             return true;
         }
-
-        #endregion
     }
 }

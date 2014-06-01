@@ -29,15 +29,30 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Database.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Database.Dao;
 
-using Utility;
+    #endregion
 
-#endregion
+    [Tablename("teleports")]
+    public class DBTeleport : IDBEntity
+    {
+        public int Id { get; set; }
 
-[assembly: AssemblyVersion("1.4.1.2795")]
-[assembly: AssemblyFileVersion("1.4.1.2900")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+        public int playfield { get; set; }
+
+        public int statelType { get; set; }
+
+        public uint statelInstance { get; set; }
+
+        public int destinationPlayfield { get; set; }
+
+        public int destinationType { get; set; }
+
+        public uint destinationInstance { get; set; }
+
+    }
+}

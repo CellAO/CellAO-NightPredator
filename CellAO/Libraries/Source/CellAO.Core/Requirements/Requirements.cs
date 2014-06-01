@@ -137,6 +137,11 @@ namespace CellAO.Core.Requirements
             return copy;
         }
 
+        public override string ToString()
+        {
+            return this.Target + " " + this.Statnumber + " " + this.Operator + " " + this.Value;
+        }
+
         #endregion
     }
 }

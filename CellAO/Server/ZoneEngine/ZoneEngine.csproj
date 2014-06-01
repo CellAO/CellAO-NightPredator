@@ -89,13 +89,18 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
+    <Compile Include="ChatCommands\DebugItem.cs" />
+    <Compile Include="ChatCommands\InstaGrid.cs" />
     <Compile Include="ChatCommands\Npc.cs" />
+    <Compile Include="ChatCommands\SaveProxy.cs" />
     <Compile Include="ChatCommands\Spawn.cs" />
     <Compile Include="ChatCommands\TeleportDynel.cs" />
     <Compile Include="ChatCommands\Teleport.cs" />
     <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
+    <Compile Include="ChatCommands\tpout.cs" />
+    <Compile Include="ChatCommands\tptoproxy.cs" />
     <Compile Include="ChatCommands\WalkingTest.cs" />
     <Compile Include="ChatCommands\Weather.cs" />
     <Compile Include="Core\Controllers\NPCController.cs" />
@@ -111,9 +116,13 @@
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\openbank.cs" />
+    <Compile Include="Core\Functions\GameFunctions\teleportproxy.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
     <Compile Include="Core\Functions\GameFunctions\systemtext.cs" />
     <Compile Include="Core\Functions\GameFunctions\teleport.cs" />
+    <Compile Include="Core\Functions\GameFunctions\teleportproxy2.cs" />
     <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
@@ -157,6 +166,7 @@
     <Compile Include="Core\MessageHandlers\LookAtMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\PlayfieldAnarchyFMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ShopUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\SimpleItemFullUpdateMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\SkillMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\SocialActionCmdMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\StatMessageHandler.cs" />

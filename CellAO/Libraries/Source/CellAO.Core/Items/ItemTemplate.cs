@@ -35,10 +35,13 @@ namespace CellAO.Core.Items
 
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System.Text;
 
     using CellAO.Core.Actions;
     using CellAO.Core.Events;
+    using CellAO.Database.Dao;
     using CellAO.Stats;
 
     #endregion
@@ -749,7 +752,7 @@ namespace CellAO.Core.Items
         /// </returns>
         public bool StatelCollisionDisabled()
         {
-            return (this.Stats[0] & (1 << 31)) > 0;
+            return (this.Stats[0] & (1 << 31)) != 0;
         }
 
         /// <summary>
@@ -834,6 +837,29 @@ namespace CellAO.Core.Items
 
             // TODO: Might need adjustments for Items
             return StatNamesDefaults.GetDefault(number);
+        }
+
+        public string DebugString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Item template " + this.ID + " '" + ItemNamesDao.Instance.Get(this.ID).Name + "'");
+            sb.Append("Actions: ");
+            foreach (AOAction ac in this.Actions)
+            {
+                sb.Append(ac.ActionType.ToString()+", ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+
+            sb.AppendLine();
+
+            sb.Append("Events: ");
+            foreach (Event ev in this.Events)
+            {
+                sb.Append(ev.EventType.ToString() + ", ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         #endregion

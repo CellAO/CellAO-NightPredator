@@ -82,6 +82,8 @@ namespace ZoneEngine.Core.MessageHandlers
             // Needed fix, so gmlevel will be loaded
             client.Controller.Character.Stats[StatIds.gmlevel].Value =
                 client.Controller.Character.Stats[StatIds.gmlevel].Value;
+            client.Controller.Character.Stats[StatIds.expansion].Value =
+                client.Controller.Character.Stats[StatIds.expansion].Value;
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
@@ -108,6 +110,12 @@ namespace ZoneEngine.Core.MessageHandlers
             foreach (WeatherEntry w in WeatherSettings.Instance.WeatherList)
             {
                 WeatherControlMessageHandler.Default.Send(client.Controller.Character, w);
+            }
+
+            var list = Pool.Instance.GetAll<StaticDynel>(client.Controller.Character.Playfield.Identity);
+            foreach (StaticDynel sd in list)
+            {
+                SimpleItemFullUpdateMessageHandler.Default.Send(client.Controller.Character, sd);
             }
         }
 

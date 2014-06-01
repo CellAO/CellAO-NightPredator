@@ -42,6 +42,8 @@ namespace CellAO.ObjectManager
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -150,7 +152,15 @@ namespace CellAO.ObjectManager
                         parentList.Add((int)obj.Identity.Type, temp);
                     }
                     // I dont check for duplicates here, thrown exceptions should be enough
-                    parentList[(int)obj.Identity.Type].Add(obj.Identity.Long(), obj);
+                    try
+                    {
+                        parentList[(int)obj.Identity.Type].Add(obj.Identity.Long(), obj);
+                    }
+                    catch (Exception ef)
+                    {
+                        Console.WriteLine(obj.DebugString());
+                        Console.ReadLine();
+                    }
                     this.reservedIds.Remove(obj.Identity.Long());
                 }
             }
@@ -268,6 +278,35 @@ namespace CellAO.ObjectManager
 
             return temp;
         }
+
+        public IEnumerable<T> GetAll<T>(Identity parent) where T : class
+        {
+            List<T> temp = new List<T>();
+            ulong parentId = parent.Long();
+
+            Dictionary<int, Dictionary<ulong, IEntity>> pfPool = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    pfPool = this.pool[parentId];
+                }
+            }
+            if (pfPool != null)
+            {
+                lock (pfPool)
+                {
+                    foreach (Dictionary<ulong, IEntity> type in pfPool.Values)
+                    {
+                        temp.AddRange(type.Values.OfType<T>());
+                    }
+                }
+            }
+
+            return temp;
+        }
+
+
 
         /// <summary>
         /// </summary>

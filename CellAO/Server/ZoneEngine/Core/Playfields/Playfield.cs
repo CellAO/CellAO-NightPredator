@@ -35,6 +35,7 @@ namespace CellAO.Core.Playfields
 
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -43,6 +44,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
     using CellAO.Core.Functions;
+    using CellAO.Core.Items;
     using CellAO.Core.Network;
     using CellAO.Core.NPCHandler;
     using CellAO.Core.Statels;
@@ -84,6 +86,8 @@ namespace CellAO.Core.Playfields
     public class Playfield : PooledObject, IPlayfield
     {
         #region Fields
+
+        private readonly List<StaticDynel> staticDynels = new List<StaticDynel>();
 
         /// <summary>
         /// </summary>
@@ -150,6 +154,39 @@ namespace CellAO.Core.Playfields
             this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
             this.LoadMobSpawns(playfieldIdentity);
             this.LoadVendors(playfieldIdentity);
+            this.LoadStaticDynels(playfieldIdentity);
+        }
+
+
+
+        private void LoadStaticDynels(Identity playfieldIdentity)
+        {
+            var dynels = StaticDynelDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            foreach (DBStaticDynel sd in dynels)
+            {
+                List<GameTuple<CharacterStat, uint>> tempStats =
+                    MessagePackZip.DeserializeData<GameTuple<CharacterStat, uint>>(sd.stats.ToArray());
+
+                if (tempStats.Any(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid))
+                {
+                    int id = (int)tempStats.First(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid).Value2;
+                    StaticDynel sdy = new StaticDynel(this.Identity, new Identity() { Type = (IdentityType)sd.Type, Instance = sd.Instance }, ItemLoader.ItemList[id]);
+                    
+                    foreach (GameTuple<CharacterStat, uint> stat in tempStats)
+                    {
+                        
+                        if (sdy.Stats.ContainsKey((int)stat.Value1))
+                        {
+                            sdy.Stats[(int)stat.Value1] = (int)stat.Value2;
+                            continue;
+                        }
+                        sdy.Stats.Add((int)stat.Value1, (int)stat.Value2);
+                    }
+
+                    sdy.Coordinate = new Coordinate(sd.X, sd.Y, sd.Z);
+                    sdy.Heading = new SmokeLounge.AOtomation.Messaging.GameData.Quaternion() { X = sd.HeadingX, Y = sd.HeadingY, Z = sd.HeadingZ, W = sd.HeadingW };
+                }
+            }
         }
 
         private void LoadVendors(Identity playfieldIdentity)
@@ -529,7 +566,10 @@ namespace CellAO.Core.Playfields
                                ServerIpAddress = tempIp,
                                ServerPort = (ushort)this.server.TcpEndPoint.Port
                            };
-            client.SendCompressed(redirect);
+            if (client != null)
+            {
+                client.SendCompressed(redirect);
+            }
             // client.Server.DisconnectClient(client);
         }
 
@@ -696,7 +736,7 @@ namespace CellAO.Core.Playfields
                 }
                 catch (Exception e)
                 {
-                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString()+Environment.NewLine+e.Message);
+                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString() + Environment.NewLine + e.Message);
                     // /!\ This happens sometimes, dont know why tho, need more investigation
                     // throw;
                 }
@@ -760,11 +800,13 @@ namespace CellAO.Core.Playfields
             foreach (StatelData sd in this.statels)
             {
                 foreach (Event ev in
-                    sd.Events.Where(x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)))
+                    sd.Events.Where(x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter) || (x.EventType == EventType.OnTargetInVicinity)))
                 {
                     if (sd.Coord().Distance3D(dynel.Coordinates()) < 2.0f)
                     {
-                        ev.Perform(dynel, dynel);
+                        LogUtil.Debug(DebugInfoDetail.Statel, "Stepped on Statel " + sd.Identity.ToString(true));
+                        LogUtil.Debug(DebugInfoDetail.Statel, ev.ToString());
+                        ev.Perform(dynel, sd);
                     }
                 }
             }

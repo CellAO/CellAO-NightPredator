@@ -39,6 +39,7 @@ namespace CellAO.Core.Entities
     using CellAO.Core.Network;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -401,7 +402,7 @@ namespace CellAO.Core.Entities
         /// </summary>
         /// <param name="function">
         /// </param>
-        void CallFunction(Function function);
+        void CallFunction(Function function, IEntity caller);
 
         /// <summary>
         /// Walk/Run Character to destination coordinates

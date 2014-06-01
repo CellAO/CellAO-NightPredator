@@ -36,8 +36,10 @@ namespace CellAO.Core.Functions
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Text;
 
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
 
     using MsgPack;
     using MsgPack.Serialization;
@@ -226,6 +228,21 @@ namespace CellAO.Core.Functions
             copy.TickInterval = this.TickInterval;
 
             return copy;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Functiontype: " + ((FunctionType)this.FunctionType).ToString() + " (" + this.FunctionType + ")");
+            sb.AppendLine("Tick: Interval " + this.TickInterval + " Count " + this.TickCount);
+            sb.AppendLine("Requirements: " + this.Requirements.Count);
+            foreach (Requirement r in this.Requirements)
+            {
+                sb.AppendLine(r.ToString());
+            }
+            sb.AppendLine("Arguments: " + this.Arguments.Values.Count);
+            sb.AppendLine(this.Arguments.ToString());
+            return sb.ToString();
         }
 
         #endregion

@@ -29,15 +29,44 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Database.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using System.Data.Linq;
 
-using Utility;
+    using CellAO.Database.Dao;
 
-#endregion
+    #endregion
 
-[assembly: AssemblyVersion("1.4.1.2795")]
-[assembly: AssemblyFileVersion("1.4.1.2900")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+    [Tablename("staticdynels")]
+    public class DBStaticDynel : IDBEntity
+    {
+        public int Id { get; set; }
+
+        public int Type { get; set; }
+
+        public int Instance { get; set; }
+
+        public int Playfield { get; set; }
+
+        public float X { get; set; }
+
+        public float Y { get; set; }
+
+        public float Z { get; set; }
+
+        public float HeadingX { get; set; }
+
+        public float HeadingY { get; set; }
+
+        public float HeadingZ { get; set; }
+
+        public float HeadingW { get; set; }
+
+        public Binary stats { get; set; }
+        
+        // For future use (override item templates events
+        public Binary customevents { get; set; }
+    }
+}

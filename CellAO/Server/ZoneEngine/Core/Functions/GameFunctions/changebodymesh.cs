@@ -35,6 +35,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
     using CellAO.Core.Entities;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using MsgPack;
 
@@ -82,7 +83,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// </returns>
         public override bool Execute(
             INamedEntity self,
-            INamedEntity caller,
+            IEntity caller,
             IInstancedEntity target,
             MessagePackObject[] arguments)
         {
@@ -106,7 +107,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// </returns>
         public bool FunctionExecute(
             INamedEntity Self,
-            INamedEntity Caller,
+            IEntity Caller,
             IInstancedEntity Target,
             MessagePackObject[] Arguments)
         {

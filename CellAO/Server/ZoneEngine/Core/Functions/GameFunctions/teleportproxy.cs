@@ -33,87 +33,76 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Core.Entities;
-    using CellAO.Core.Nanos;
-    using CellAO.Database.Dao;
+    using CellAO.Core.Statels;
+    using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
     using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using ZoneEngine.Core.Playfields;
+
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class uploadnano : FunctionPrototype
+    internal class teleportproxy : FunctionPrototype
     {
-        #region Fields
+        private const FunctionType functionId = FunctionType.TeleportProxy;
 
-        /// <summary>
-        /// </summary>
-        private FunctionType functionId = FunctionType.UploadNano;
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
         public override FunctionType FunctionId
         {
             get
             {
-                return this.functionId;
+                return functionId;
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
         public override bool Execute(
             INamedEntity self,
             IEntity caller,
             IInstancedEntity target,
             MessagePackObject[] arguments)
         {
-            var temp = new UploadedNano() { NanoId = arguments[0].AsInt32() };
-            ((Character)self).UploadedNanos.Add(temp);
-            UploadedNanosDao.Instance.WriteNano(((Character)self).Identity.Instance, temp);
+            
+            ICharacter character = (ICharacter)self;
 
-            if (((Character)self).Controller.Client != null)
+            int statelId = (int)((uint)0xC0000000 | arguments[1].AsInt32() | (arguments[2].AsInt32() << 16));
+            character.Stats[StatIds.externaldoorinstance].BaseValue = (uint)caller.Identity.Instance;
+            character.Stats[StatIds.externalplayfieldinstance].BaseValue = (uint)character.Playfield.Identity.Instance;
+
+            if (arguments[1].AsInt32() > 0)
             {
-                var message = new CharacterActionMessage()
-                              {
-                                  Identity = self.Identity,
-                                  Action = CharacterActionType.UploadNano,
-                                  Target = self.Identity,
-                                  Parameter1 = (int)IdentityType.NanoProgram,
-                                  Parameter2 = temp.NanoId,
-                                  Unknown = 0
-                              };
+                StatelData sd = PlayfieldLoader.PFData[arguments[1].AsInt32()].GetDoor(statelId);
+                if (sd == null)
+                {
+                    throw new Exception(
+                        "Statel " + arguments[3].AsInt32().ToString("X") + " not found? Check the rdb dammit");
+                }
 
-                ((Character)self).Controller.Client.SendCompressed(message);
+                Vector3 v = new Vector3(sd.X, sd.Y, sd.Z);
+
+                Quaternion q = new Quaternion(sd.HeadingX, sd.HeadingY, sd.HeadingZ, sd.HeadingW);
+
+                Quaternion.Normalize(q);
+                Vector3 n = (Vector3)q.RotateVector3(Vector3.AxisX);
+
+                v.x += n.z * 2;
+                v.z += n.x * 2;
+                character.Playfield.Teleport(
+                    (Dynel)character,
+                    new Coordinate(v),
+                    q,
+                    new Identity() { Type = (IdentityType)arguments[0].AsInt32(), Instance = arguments[1].AsInt32() });
             }
 
             return true;
         }
-
-        #endregion
     }
 }

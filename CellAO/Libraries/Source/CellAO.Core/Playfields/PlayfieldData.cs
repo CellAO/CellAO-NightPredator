@@ -34,8 +34,11 @@ namespace CellAO.Core.Playfields
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Linq;
 
     using CellAO.Core.Statels;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
@@ -69,6 +72,18 @@ namespace CellAO.Core.Playfields
         /// <summary>
         /// </summary>
         public List<PlayfieldWalls> Walls = new List<PlayfieldWalls>();
+
+        public StatelData GetStatel(int instance)
+        {
+            return this.Statels.FirstOrDefault(x => x.Identity.Instance == instance);
+        }
+
+        public StatelData GetDoor(int instance)
+        {
+            return
+                this.Statels.FirstOrDefault(
+                    x => (x.Identity.Type == IdentityType.Door) && (x.Identity.Instance == instance));
+        }
 
         #endregion
     }

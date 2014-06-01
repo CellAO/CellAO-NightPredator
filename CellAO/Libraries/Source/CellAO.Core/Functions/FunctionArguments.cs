@@ -35,7 +35,9 @@ namespace CellAO.Core.Functions
 
     using System;
     using System.Collections.Generic;
+    using System.Runtime.InteropServices;
     using System.Runtime.Serialization;
+    using System.Text;
 
     using CellAO.Interfaces;
 
@@ -143,5 +145,15 @@ namespace CellAO.Core.Functions
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var v in this.Values)
+            {
+                sb.AppendLine(v.UnderlyingType.ToString().PadRight(20) + " " + v.ToString());
+            }
+            return sb.ToString();
+        }
     }
 }

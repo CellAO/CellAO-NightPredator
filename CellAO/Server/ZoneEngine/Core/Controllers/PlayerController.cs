@@ -49,6 +49,7 @@ namespace ZoneEngine.Core.Controllers
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.Interfaces;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -124,13 +125,13 @@ namespace ZoneEngine.Core.Controllers
 
         public IZoneClient Client { get; set; }
 
-        public void CallFunction(Function function)
+        public void CallFunction(Function function, IEntity caller)
         {
             // TODO: Make it more versatile, not just applying stuff on yourself
             FunctionCollection.Instance.CallFunction(
                 function.FunctionType,
                 this.Character,
-                this.Character,
+                caller,
                 this.Character,
                 function.Arguments.Values.ToArray());
         }
@@ -556,7 +557,7 @@ namespace ZoneEngine.Core.Controllers
                 StatelData sd =
                     PlayfieldLoader.PFData[this.Character.Playfield.Identity.Instance].Statels.FirstOrDefault(
                         x =>
-                            (x.StatelIdentity.Type == identity.Type) && (x.StatelIdentity.Instance == identity.Instance));
+                            (x.Identity.Type == identity.Type) && (x.Identity.Instance == identity.Instance));
 
                 if (sd != null)
                 {
@@ -564,7 +565,7 @@ namespace ZoneEngine.Core.Controllers
                     Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
                     if (onUse != null)
                     {
-                        onUse.Perform(this.Character, this.Character);
+                        onUse.Perform(this.Character, sd);
                     }
                 }
             }

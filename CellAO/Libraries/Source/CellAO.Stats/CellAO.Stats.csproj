@@ -49,6 +49,7 @@
     <Compile Include="SpecialStats\OverridingModifierStat.cs" />
     <Compile Include="SpecialStats\StatAlienNextXP.cs" />
     <Compile Include="SpecialStats\StatCurrentNano.cs" />
+    <Compile Include="SpecialStats\StatExpansion.cs" />
     <Compile Include="SpecialStats\StatGMLevel.cs" />
     <Compile Include="SpecialStats\StatHeadmesh.cs" />
     <Compile Include="SpecialStats\StatHealDelta.cs" />

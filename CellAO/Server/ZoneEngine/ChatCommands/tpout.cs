@@ -29,93 +29,64 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions
+namespace ZoneEngine.ChatCommands
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
-    using CellAO.Enums;
-    using CellAO.Interfaces;
+    using System;
+    using System.Collections.Generic;
 
-    using MsgPack;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Statels;
+    using CellAO.Core.Vector;
+    using CellAO.Enums;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
+
+    using ZoneEngine.Core.Playfields;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public abstract class FunctionPrototype
+    public class tpout : AOChatCommand
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public abstract FunctionType FunctionId { get; }
-
-        /// <summary>
-        /// </summary>
-        public string FunctionName
+        public override bool CheckCommandArguments(string[] args)
         {
-            get
+            return true;
+        }
+
+        public override void CommandHelp(ICharacter character)
+        {
+        }
+
+        public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
+        {
+            uint upfId = character.Stats[StatIds.externalplayfieldinstance].BaseValue;
+            uint udoor = character.Stats[StatIds.externaldoorinstance].BaseValue;
+            int pfId = (int)upfId;
+            int door = BitConverter.ToInt32(BitConverter.GetBytes(udoor), 0);
+            StatelData sd = PlayfieldLoader.PFData[pfId].GetDoor(door);
+            if (sd == null)
             {
-                return this.FunctionId.ToString();
+                LogUtil.Debug(DebugInfoDetail.Error, "No statel found");
+                return;
             }
+            character.Playfield.Teleport(
+                (Dynel)character,
+                new Coordinate(sd.X, sd.Y, sd.Z),
+                character.Heading,
+                new Identity() { Type = IdentityType.Playfield, Instance = pfId });
         }
 
-        /// <summary>
-        /// </summary>
-        public int FunctionNumber
+        public override int GMLevelNeeded()
         {
-            get
-            {
-                return (int)this.FunctionId;
-            }
+            return 1;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// Locks function targets and executes the function
-        /// </summary>
-        /// <param name="self">
-        /// Dynel (Character or NPC)
-        /// </param>
-        /// <param name="caller">
-        /// Caller of the function
-        /// </param>
-        /// <param name="target">
-        /// Target of the Function (Dynel or Statel)
-        /// </param>
-        /// <param name="arguments">
-        /// Function Arguments
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public abstract bool Execute(
-            INamedEntity self,
-            IEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public virtual string ReturnName()
+        public override List<string> ListCommands()
         {
-            return this.FunctionName;
+            return new List<string>() { "tpo" };
         }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public virtual int ReturnNumber()
-        {
-            return this.FunctionNumber;
-        }
-
-        #endregion
     }
 }

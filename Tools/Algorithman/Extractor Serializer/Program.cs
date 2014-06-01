@@ -390,10 +390,15 @@ namespace Extractor_Serializer
             int[] instances = extractor.GetRecordInstances(Extractor.RecordType.Playfield);
             foreach (int recnum in instances)
             {
+                if (recnum < 120)
+                {
+                    continue;
+                }
+
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
 
-                // Console.WriteLine("Parsing PF " + recnum);
+                
                 int[] doors = extractor.GetRecordInstances(Extractor.RecordType.Door);
                 if (doors.Contains(recnum))
                 {
@@ -403,7 +408,11 @@ namespace Extractor_Serializer
 
                 pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum));
                 pf.Destinations = PlayfieldParser.ParseDestinations(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum)).Destinations;
-
+                /*Console.WriteLine("Parsing PF " + recnum+" "+pf.Name);
+                if (recnum == 500)
+                {
+                    Console.ReadLine();
+                }*/
                 if (extractor.GetRecordInstances(Extractor.RecordType.Wall).Contains(recnum))
                 {
                     pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(Extractor.RecordType.Wall, recnum));
@@ -858,11 +867,13 @@ namespace Extractor_Serializer
                         throw;
                     }
                 }
-
-                if (counter % perc == 0)
+                if (perc > 0)
                 {
-                    Console.Write("\r" + counter2 + "% done");
-                    counter2++;
+                    if (counter % perc == 0)
+                    {
+                        Console.Write("\r" + counter2 + "% done");
+                        counter2++;
+                    }
                 }
 
                 counter++;

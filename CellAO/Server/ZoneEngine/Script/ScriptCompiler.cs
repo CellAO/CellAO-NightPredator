@@ -29,8 +29,6 @@
 
 #endregion
 
-#region NameSpace
-
 namespace ZoneEngine.Script
 {
     #region Usings ...
@@ -38,20 +36,6 @@ namespace ZoneEngine.Script
     using CellAO.Core.Network;
 
     using ZoneEngine.Core.MessageHandlers;
-
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
 
     using System;
     using System.CodeDom.Compiler;
@@ -75,20 +59,6 @@ namespace ZoneEngine.Script
 
     #endregion
 
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
     #region Class ScriptCompiler
 
     /// <summary>
@@ -108,14 +78,6 @@ namespace ZoneEngine.Script
         /// <summary>
         /// </summary>
         private readonly Dictionary<string, Type> chatCommands = new Dictionary<string, Type>();
-
-        public List<string> ChatCommands
-        {
-            get
-            {
-                return this.chatCommands.Keys.ToList();
-            }
-        }
 
         /// <summary>
         /// Our CSharp compiler object
@@ -165,6 +127,14 @@ namespace ZoneEngine.Script
         /// <summary>
         /// </summary>
         private readonly Dictionary<string, Type> scriptList = new Dictionary<string, Type>();
+
+        public List<string> ChatCommands
+        {
+            get
+            {
+                return this.chatCommands.Keys.ToList();
+            }
+        }
 
         #endregion
 
@@ -768,5 +738,3 @@ namespace ZoneEngine.Script
 
     #endregion Class ScriptCompiler
 }
-
-#endregion NameSpace

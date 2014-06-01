@@ -861,7 +861,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat expansion;
+        private readonly StatExpansion expansion;
 
         /// <summary>
         /// </summary>
@@ -3105,7 +3105,7 @@ namespace CellAO.Stats
             this.equippedWeapons = new Stat(this, 274, 1234567890, false, false, false);
             this.evade = new StatSkill(this, 155, 5, true, false, false);
             this.exitInstance = new Stat(this, 189, 1234567890, false, false, false);
-            this.expansion = new Stat(this, 389, 0, false, true, false);
+            this.expansion = new StatExpansion(this, 389, 0, false, true, false);
             this.expansionPlayfield = new Stat(this, 531, 1234567890, false, false, false);
             this.extenalDoorInstance = new Stat(this, 193, 1234567890, false, false, false);
             this.extenalPlayfieldInstance = new Stat(this, 192, 1234567890, false, false, false);

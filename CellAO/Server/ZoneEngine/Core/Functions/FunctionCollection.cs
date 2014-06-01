@@ -41,6 +41,7 @@ namespace ZoneEngine.Core.Functions
 
     using CellAO.Core.Entities;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using MsgPack;
 
@@ -109,7 +110,7 @@ namespace ZoneEngine.Core.Functions
         public bool CallFunction(
             int functionNumber,
             INamedEntity self,
-            INamedEntity caller,
+            IEntity caller,
             IInstancedEntity target,
             MessagePackObject[] arguments)
         {
@@ -169,8 +170,7 @@ namespace ZoneEngine.Core.Functions
                     this.assembly.GetTypes()
                         .Where(
                             x =>
-                                x.IsClass && (x.Namespace == "ZoneEngine.Core.Functions.GameFunctions")
-                                && ((x.Name != "FunctionPrototype") && (x.Name != "FunctionCollection"))))
+                                x.IsClass && (x.BaseType==typeof(FunctionPrototype))))
                 {
                     {
                         FunctionPrototype temp = (FunctionPrototype)this.assembly.CreateInstance(t.FullName);

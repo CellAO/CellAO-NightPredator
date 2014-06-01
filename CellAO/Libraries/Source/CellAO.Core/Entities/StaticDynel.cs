@@ -29,15 +29,48 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Core.Entities
+{
+    #region Usings ...
 
-using System.Reflection;
+    using System.Collections.Generic;
 
-using Utility;
+    using CellAO.Core.Actions;
+    using CellAO.Core.Events;
+    using CellAO.Core.Items;
+    using CellAO.Core.Vector;
+    using CellAO.ObjectManager;
 
-#endregion
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
-[assembly: AssemblyVersion("1.4.1.2795")]
-[assembly: AssemblyFileVersion("1.4.1.2900")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
+
+    #endregion
+
+    public class StaticDynel : PooledObject
+    {
+        public SortedDictionary<int, int> Stats = new SortedDictionary<int, int>();
+
+        public Coordinate Coordinate = new Coordinate();
+
+        public Quaternion Heading = new Quaternion();
+
+        public ItemTemplate Template = null;
+
+        public List<Event> Events = null;
+
+        public List<AOAction> Actions = null;
+
+        public StaticDynel(Identity parent, Identity id, ItemTemplate template)
+            : base(parent, id)
+        {
+            this.Template = template;
+            this.Events = this.Template.Events;
+            this.Actions = this.Template.Actions;
+            foreach (KeyValuePair<int, int> s in this.Template.Stats)
+            {
+                this.Stats.Add(s.Key, s.Value);
+            }
+        }
+    }
+}

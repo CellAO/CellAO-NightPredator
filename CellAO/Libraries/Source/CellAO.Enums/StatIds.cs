@@ -801,11 +801,11 @@ namespace CellAO.Enums
 
         /// <summary>
         /// </summary>
-        extenalplayfieldinstance = 192,
+        externalplayfieldinstance = 192,
 
         /// <summary>
         /// </summary>
-        extenaldoorinstance = 193,
+        externaldoorinstance = 193,
 
         /// <summary>
         /// </summary>

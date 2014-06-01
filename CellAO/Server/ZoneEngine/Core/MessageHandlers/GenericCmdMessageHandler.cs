@@ -35,10 +35,13 @@ namespace ZoneEngine.Core.MessageHandlers
 
     // TODO: Make this to EntityEnvent or something like this
     using System;
+    using System.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
+    using CellAO.Core.Events;
     using CellAO.Core.Network;
+    using CellAO.Enums;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -82,6 +85,19 @@ namespace ZoneEngine.Core.MessageHandlers
                         if (Pool.Instance.Contains(message.Target))
                         {
                             // TODO: Call OnUse of the targets controller
+                            // Static dynels first
+
+                            StaticDynel temp =
+                                Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity,message.Target);
+                            if (temp != null)
+                            {
+                                Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
+                                if (ev!=null)
+                                {
+                                    ev.Perform(client.Controller.Character, temp);
+                                }
+                            }
+
                         }
                         else
                         {

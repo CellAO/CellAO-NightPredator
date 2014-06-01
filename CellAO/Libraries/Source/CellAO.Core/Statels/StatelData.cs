@@ -37,6 +37,7 @@ namespace CellAO.Core.Statels
 
     using CellAO.Core.Events;
     using CellAO.Core.Vector;
+    using CellAO.Interfaces;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -44,7 +45,7 @@ namespace CellAO.Core.Statels
 
     /// <summary>
     /// </summary>
-    public class StatelData
+    public class StatelData : IEntity
     {
         #region Fields
 
@@ -71,10 +72,6 @@ namespace CellAO.Core.Statels
         /// <summary>
         /// </summary>
         public int PlayfieldId = 0;
-
-        /// <summary>
-        /// </summary>
-        public Identity StatelIdentity = new Identity();
 
         /// <summary>
         /// </summary>
@@ -106,5 +103,9 @@ namespace CellAO.Core.Statels
         }
 
         #endregion
+
+        public Identity Identity { get; set; }
+
+        public Identity Parent { get; set; }
     }
 }

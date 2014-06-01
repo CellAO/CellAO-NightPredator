@@ -35,11 +35,13 @@ namespace CellAO.Core.Events
 
     using System;
     using System.Collections.Generic;
+    using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
     using CellAO.Core.Requirements;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     #endregion
 
@@ -105,7 +107,7 @@ namespace CellAO.Core.Events
         /// </param>
         /// <param name="caller">
         /// </param>
-        public void Perform(ICharacter self, ICharacter caller)
+        public void Perform(ICharacter self, IEntity caller)
         {
             foreach (Function functions in this.Functions)
             {
@@ -121,9 +123,22 @@ namespace CellAO.Core.Events
 
                 if (result)
                 {
-                    self.Controller.CallFunction(functions);
+                    self.Controller.CallFunction(functions, caller);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Eventtype: " + this.EventType+" ("+((int)this.EventType).ToString()+")");
+            sb.AppendLine("Functions: " + this.Functions.Count);
+            foreach (Function fc in this.Functions)
+            {
+                sb.AppendLine(fc.ToString());
+            }
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         #endregion

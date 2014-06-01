@@ -42,6 +42,7 @@ namespace ZoneEngine.Core.Controllers
     using CellAO.Core.Network;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.Interfaces;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -312,12 +313,12 @@ namespace ZoneEngine.Core.Controllers
             StatMessageHandler.Default.SendBulk(this.Character, toPlayer, toPlayfield);
         }
 
-        public void CallFunction(Function function)
+        public void CallFunction(Function function, IEntity caller)
         {
             FunctionCollection.Instance.CallFunction(
                 function.FunctionType,
                 this.Character,
-                this.Character,
+                caller,
                 this.Character,
                 function.Arguments.Values.ToArray());
         }

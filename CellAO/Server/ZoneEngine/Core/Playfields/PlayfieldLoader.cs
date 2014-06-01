@@ -94,7 +94,7 @@ namespace ZoneEngine.Core.Playfields
                 {
                     if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
                     {
-                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision()
+                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision() && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
                             && (!sd.Events.Any(x => x.EventType == EventType.OnCollide))
                             && sd.Events.Any(x => x.EventType == EventType.OnUse))
                         {

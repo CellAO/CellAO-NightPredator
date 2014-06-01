@@ -43,11 +43,14 @@ namespace ZoneEngine.ChatCommands
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
+
+    using Utility;
 
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
@@ -98,6 +101,7 @@ namespace ZoneEngine.ChatCommands
             string reply = "Looking up for statel in playfield " + character.Playfield.Identity.Instance;
             replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             StatelData o = null;
+            StaticDynel o2 = null;
             if (!PlayfieldLoader.PFData.ContainsKey(character.Playfield.Identity.Instance))
             {
                 reply = "Could not find data for playfield " + character.Playfield.Identity.Instance;
@@ -123,57 +127,58 @@ namespace ZoneEngine.ChatCommands
                     }
                 }
 
-                if (o == null)
+                foreach (StaticDynel sd in Pool.Instance.GetAll<StaticDynel>(character.Playfield.Identity))
+                {
+                    if (o2 == null)
+                    {
+                        o2 = sd;
+                    }
+                    else
+                    {
+                        if (Coordinate.Distance2D(tempCoordinate, sd.Coordinate)
+                            < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))
+                        {
+                            o2 = sd;
+                        }
+                    }
+
+                }
+
+
+
+                if ((o == null) && (o2 == null))
                 {
                     replies.Add(
                         ChatTextMessageHandler.Default.Create(
                             character,
-                            "No statel on this playfield... Very odd, where exactly are you???"));
+                            "No statel/static dynel on this playfield... Very odd, where exactly are you???"));
                 }
                 else
                 {
-                    replies.Add(
-                        ChatTextMessageHandler.Default.Create(
-                            character,
-                            o.StatelIdentity.Type.ToString() + " " + ((int)o.StatelIdentity.Type).ToString("X8") + ":"
-                            + o.StatelIdentity.Instance.ToString("X8")));
-                    replies.Add(ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o.TemplateId));
-                    foreach (Event se in o.Events)
+                    if (((o != null) && (o2 == null))
+                        || ((o != null) && (Coordinate.Distance2D(tempCoordinate, o.Coord())
+                            < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))))
                     {
+
                         replies.Add(
                             ChatTextMessageHandler.Default.Create(
                                 character,
-                                "Event: " + se.EventType.ToString() + " # of Functions: "
-                                + se.Functions.Count.ToString()));
-
-                        foreach (Function sf in se.Functions)
+                                o.Identity.Type.ToString() + " " + ((int)o.Identity.Type).ToString("X8") + ":"
+                                + o.Identity.Instance.ToString("X8")));
+                        replies.Add(
+                            ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o.TemplateId));
+                        foreach (Event se in o.Events)
                         {
-                            string Fargs = string.Empty;
-                            foreach (MessagePackObject obj in sf.Arguments.Values)
-                            {
-                                if (Fargs.Length > 0)
-                                {
-                                    Fargs = Fargs + ", ";
-                                }
-
-                                Fargs = Fargs + obj.ToString();
-                            }
-
-                            replies.Add(
-                                ChatTextMessageHandler.Default.Create(
-                                    character,
-                                    "    Fn: " + ((FunctionType)sf.FunctionType).ToString() + "("
-                                    + sf.FunctionType.ToString() + "), # of Args: "
-                                    + sf.Arguments.Values.Count.ToString()));
-                            replies.Add(ChatTextMessageHandler.Default.Create(character, "    Args: " + Fargs));
-
-                            foreach (Requirement sfr in sf.Requirements)
-                            {
-                                string req;
-                                req = "Attr: " + sfr.Statnumber.ToString() + " Value: " + sfr.Value.ToString()
-                                      + " Target: " + sfr.Target.ToString() + " Op: " + sfr.Operator.ToString();
-                                replies.Add(ChatTextMessageHandler.Default.Create(character, req));
-                            }
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));
+                        }
+                    }
+                    else
+                    {
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, o2.Identity.ToString() + " " + o2.Identity.ToString(true)));
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, "Item template Id: "+o2.Stats[(int)StatIds.acgitemtemplateid].ToString()));
+                        foreach (Event se in o2.Events)
+                        {
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));
                         }
                     }
                 }

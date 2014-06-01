@@ -79,7 +79,9 @@
     <Compile Include="Dao\ReceivedMessagesDao.cs" />
     <Compile Include="Dao\ShopInventoryTemplateDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
+    <Compile Include="Dao\StaticDynelDao.cs" />
     <Compile Include="Dao\TablenameAttribute.cs" />
+    <Compile Include="Dao\TeleportDao.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
     <Compile Include="Dao\UploadedNanosDao.cs" />
     <Compile Include="Dao\VendorDao.cs" />
@@ -87,6 +89,8 @@
     <Compile Include="Entities\DBMobDroptable.cs" />
     <Compile Include="Entities\DBMobSpawn.cs" />
     <Compile Include="Entities\DBMobSpawnStat.cs" />
+    <Compile Include="Entities\DBStaticDynel.cs" />
+    <Compile Include="Entities\DBTeleport.cs" />
     <Compile Include="Entities\MobSpawnWaypoint.cs" />
     <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
@@ -197,6 +201,7 @@
     <Content Include="SqlTables\stats.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SqlTables\teleports.sql" />
     <Content Include="SqlTables\tradeskill.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

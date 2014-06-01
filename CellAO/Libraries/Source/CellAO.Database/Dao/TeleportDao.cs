@@ -29,15 +29,15 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Database.Dao
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Database.Entities;
 
-using Utility;
+    #endregion
 
-#endregion
-
-[assembly: AssemblyVersion("1.4.1.2795")]
-[assembly: AssemblyFileVersion("1.4.1.2900")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+    public class TeleportDao : Dao<DBTeleport, TeleportDao>
+    {
+    }
+}

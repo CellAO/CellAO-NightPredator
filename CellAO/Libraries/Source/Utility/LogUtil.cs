@@ -540,5 +540,7 @@ namespace Utility
         AoTomation = 2048,
 
         KnuBot = 4096,
+
+        Statel = 8192,
     }
 }

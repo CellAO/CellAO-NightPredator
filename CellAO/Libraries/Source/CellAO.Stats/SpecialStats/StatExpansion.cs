@@ -29,15 +29,33 @@
 
 #endregion
 
-#region Usings ...
+namespace CellAO.Stats.SpecialStats
+{
+    #region Usings ...
 
-using System.Reflection;
+    using CellAO.Database.Dao;
 
-using Utility;
+    #endregion
 
-#endregion
+    public class StatExpansion : Stat
+    {
+        public StatExpansion(
+            Stats statList,
+            int number,
+            uint defaultValue,
+            bool sendBaseValue,
+            bool dontWrite,
+            bool announceToPlayfield)
+            : base(statList, number, defaultValue, sendBaseValue, dontWrite, announceToPlayfield)
+        {
+        }
 
-[assembly: AssemblyVersion("1.4.1.2795")]
-[assembly: AssemblyFileVersion("1.4.1.2900")]
-[assembly: RevisionName("Night Predator")]
-[assembly: AssemblyCopyright("Copyright © 2014 CellAO Team")]
+        public override int GetValue
+        {
+            get
+            {
+                return LoginDataDao.Instance.GetByCharacterId(this.Stats.Owner.Instance).Expansions;
+            }
+        }
+    }
+}

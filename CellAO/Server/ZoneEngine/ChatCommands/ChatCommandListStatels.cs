@@ -95,7 +95,7 @@ namespace ZoneEngine.ChatCommands
                 messList.Add(
                     ChatTextMessageHandler.Default.Create(
                         character,
-                        ((int)s.StatelIdentity.Type).ToString("X8") + ":" + s.StatelIdentity.Instance.ToString("X8")));
+                        ((int)s.Identity.Type).ToString("X8") + ":" + s.Identity.Instance.ToString("X8")));
             }
 
             character.Playfield.Publish(Bulk.CreateIM(character.Controller.Client, messList.ToArray()));

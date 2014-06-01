@@ -29,93 +29,64 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions
+namespace ZoneEngine.ChatCommands
 {
     #region Usings ...
 
-    using CellAO.Core.Entities;
-    using CellAO.Enums;
-    using CellAO.Interfaces;
+    using System;
+    using System.Collections.Generic;
 
-    using MsgPack;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
+
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public abstract class FunctionPrototype
+    public class DebugItem : AOChatCommand
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
-        public abstract FunctionType FunctionId { get; }
-
-        /// <summary>
-        /// </summary>
-        public string FunctionName
+        public override bool CheckCommandArguments(string[] args)
         {
-            get
+            List<Type> check = new List<Type>();
+            check.Add(typeof(int));
+            bool check1 = CheckArgumentHelper(check, args);
+            return check1;
+        }
+
+        public override void CommandHelp(ICharacter character)
+        {
+            character.Playfield.Publish(
+                ChatTextMessageHandler.Default.CreateIM(character, "Syntax: .debugitem <itemid>"));
+        }
+
+        public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
+        {
+            if (ItemLoader.ItemList.ContainsKey(int.Parse(args[1])))
             {
-                return this.FunctionId.ToString();
+                character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(
+                        character,
+                        ItemLoader.ItemList[int.Parse(args[1])].DebugString()));
+            }
+            else
+            {
+                character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(character, "No item with id " + args[1]));
             }
         }
 
-        /// <summary>
-        /// </summary>
-        public int FunctionNumber
+        public override int GMLevelNeeded()
         {
-            get
-            {
-                return (int)this.FunctionId;
-            }
+            return 1;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// Locks function targets and executes the function
-        /// </summary>
-        /// <param name="self">
-        /// Dynel (Character or NPC)
-        /// </param>
-        /// <param name="caller">
-        /// Caller of the function
-        /// </param>
-        /// <param name="target">
-        /// Target of the Function (Dynel or Statel)
-        /// </param>
-        /// <param name="arguments">
-        /// Function Arguments
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public abstract bool Execute(
-            INamedEntity self,
-            IEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments);
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public virtual string ReturnName()
+        public override List<string> ListCommands()
         {
-            return this.FunctionName;
+            return new List<string>() { "debugitem" };
         }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public virtual int ReturnNumber()
-        {
-            return this.FunctionNumber;
-        }
-
-        #endregion
     }
 }
