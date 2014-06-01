@@ -276,7 +276,7 @@ namespace LoginEngine.Packets
                 });
 
             // Flags
-            stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 0, StatValue = 20 });
+            stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 0, StatValue = 0x00081241 });
 
             // Level
             stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 54, StatValue = 1 });

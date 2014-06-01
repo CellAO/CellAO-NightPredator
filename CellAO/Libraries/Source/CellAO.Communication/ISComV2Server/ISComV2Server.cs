@@ -125,7 +125,7 @@ namespace CellAO.Communication.ISComV2Server
         /// </summary>
         /// <returns>
         /// </returns>
-        protected override IClient CreateClient()
+        protected override IClient CreateClient(IPAddress address)
         {
             IClient temp;
             lock (this.clients)

@@ -281,8 +281,6 @@ namespace ZoneEngine.Core.MessageHandlers
 
             client.Controller.Character.DoNotDoTimers = false;
 
-            client.Controller.Character.Stats.ClearChangedFlags();
-
             // Apply item functions before sending the appearanceupdate message
             client.Controller.Character.CalculateSkills();
 

@@ -171,9 +171,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // done
 
-            // Timers are allowed to update client stats now.
-            client.Controller.Character.DoNotDoTimers = false;
-
+            
             // spawn all active monsters to client
             // TODO: Implement NonPlayerCharacterHandler
             // NonPlayerCharacterHandler.SpawnMonstersInPlayfieldToClient(client, client.Character.PlayField);
@@ -197,6 +195,9 @@ namespace ZoneEngine.Core.PacketHandlers
             // done, so we call a hook.
             // Call all OnConnect script Methods
             ScriptCompiler.Instance.CallMethod("OnConnect", client.Controller.Character);
+        
+            // Timers are allowed to update client stats now.
+            client.Controller.Character.DoNotDoTimers = false;
         }
 
         #endregion

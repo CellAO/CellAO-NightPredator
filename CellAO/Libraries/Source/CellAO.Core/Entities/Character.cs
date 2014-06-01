@@ -370,7 +370,6 @@ namespace CellAO.Core.Entities
 
             this.BaseInventory.Read();
             base.Read();
-            this.DoNotDoTimers = false;
 
             // Implement error checking
             return true;
@@ -480,6 +479,7 @@ namespace CellAO.Core.Entities
             // TODO: Reintroduce skill calculation (walk inventory and active nanos)
 
             // First, walk inventory and get buffs from there
+            bool oldsend = this.DoNotDoTimers;
             this.DoNotDoTimers = true;
             this.Stats.ClearModifiers();
             this.Textures.Clear();
@@ -511,8 +511,10 @@ namespace CellAO.Core.Entities
                 this.Playfield.AnnounceAppearanceUpdate(this);
                 this.ChangedAppearance = false;
             }
-
-            this.DoNotDoTimers = false;
+            if (!oldsend)
+            {
+                this.DoNotDoTimers = oldsend;
+            }
         }
 
         /// <summary>

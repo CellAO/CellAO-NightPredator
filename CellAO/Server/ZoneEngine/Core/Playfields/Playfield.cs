@@ -506,7 +506,9 @@ namespace CellAO.Core.Playfields
             Thread.Sleep(200);
             int dynelId = dynel.Identity.Instance;
 
+            // Disable sending stat changes and wait a bit to clear the queue
             dynel.DoNotDoTimers = true;
+            Thread.Sleep(1000);
 
             // Teleport to another playfield
             TeleportMessageHandler.Default.Send(

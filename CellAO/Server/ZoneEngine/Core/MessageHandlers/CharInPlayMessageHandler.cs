@@ -33,6 +33,8 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Threading;
+
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Network;
@@ -69,7 +71,8 @@ namespace ZoneEngine.Core.MessageHandlers
         protected override void Read(CharInPlayMessage message, IZoneClient client)
         {
             LogUtil.Debug(DebugInfoDetail.NetworkMessages, "Client connected...");
-
+            client.Controller.Character.DoNotDoTimers = true;
+            Thread.Sleep(1000);
             // client got all the needed data and
             // wants to enter the world. After we
             // reply to this, the character will really be in game
@@ -78,6 +81,8 @@ namespace ZoneEngine.Core.MessageHandlers
 
             // Player is in game now, starting is over, set stats normally now
             client.Controller.Character.Starting = false;
+
+            client.Controller.Character.Stats.ClearChangedFlags();
 
             // Needed fix, so gmlevel will be loaded
             client.Controller.Character.Stats[StatIds.gmlevel].Value =
@@ -88,6 +93,8 @@ namespace ZoneEngine.Core.MessageHandlers
             client.Controller.Character.Stats[StatIds.healdelta].Value = 0;
             client.Controller.Character.Stats[StatIds.nanointerval].Value = 0;
             client.Controller.Character.Stats[StatIds.nanodelta].Value = 0;
+
+            client.Controller.SendChangedStats();
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.
             // for instance: the waypoints the mob went through will NOT be saved and therefore when you re-enter the PF, it will AGAIN
@@ -121,6 +128,7 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 SimpleItemFullUpdateMessageHandler.Default.Send(client.Controller.Character, sd);
             }
+            client.Controller.Character.DoNotDoTimers = false;
         }
 
         #endregion

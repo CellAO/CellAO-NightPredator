@@ -262,7 +262,7 @@ namespace ChatEngine.CoreServer
         /// </summary>
         /// <returns>
         /// </returns>
-        protected override IClient CreateClient()
+        protected override IClient CreateClient(IPAddress address)
         {
             return new Client(this);
         }

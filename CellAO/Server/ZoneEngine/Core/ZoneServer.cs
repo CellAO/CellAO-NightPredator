@@ -38,6 +38,7 @@ namespace ZoneEngine.Core
     using System.Linq;
     using System.Net;
     using System.Reflection;
+    using System.Threading;
 
     using Cell.Core;
 
@@ -55,6 +56,8 @@ namespace ZoneEngine.Core
     using SmokeLounge.AOtomation.Messaging.Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
+
+    using Utility;
 
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Script;
@@ -127,7 +130,9 @@ namespace ZoneEngine.Core
             this.CheckSubscribedMessageHandlers();
         }
 
-        private void SubscribeMessage<T, TU>() where T : AbstractMessageHandler<TU> where TU : MessageBody, new()
+        private void SubscribeMessage<T, TU>()
+            where T : AbstractMessageHandler<TU>
+            where TU : MessageBody, new()
         {
             T def =
                 (T)
@@ -266,8 +271,20 @@ namespace ZoneEngine.Core
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        protected override IClient CreateClient()
+        protected override IClient CreateClient(IPAddress address)
         {
+            bool delay = false;
+            if (address != null)
+            {
+                lock (connectDelayList)
+                {
+                    delay = connectDelayList.Any(x => x.Key.Equals(address) && (x.Value < DateTime.UtcNow));
+                }
+            }
+            if (delay)
+            {
+                Thread.Sleep(1000);
+            }
             return new ZoneClient(this, this.messageSerializer, this.zoneBus);
         }
 
@@ -343,6 +360,9 @@ namespace ZoneEngine.Core
             }
         }
 
+        private Dictionary<IPAddress, DateTime> connectDelayList = new Dictionary<IPAddress, DateTime>();
+
+
         /// <summary>
         /// </summary>
         /// <param name="client">
@@ -352,6 +372,22 @@ namespace ZoneEngine.Core
         private void ZoneServerClientDisconnected(IClient client, bool forced)
         {
             ZoneClient cli = (ZoneClient)client;
+            IPAddress address = cli.ClientAddress;
+            if (address != null)
+            {
+                lock (connectDelayList)
+                {
+                    if (connectDelayList.Any(x => x.Key.Equals(address)))
+                    {
+                        KeyValuePair<IPAddress, DateTime> kv = connectDelayList.First(x => x.Key.Equals(address));
+                        connectDelayList[kv.Key] = DateTime.UtcNow + TimeSpan.FromSeconds(2);
+                    }
+                    else
+                    {
+                        connectDelayList.Add(address, DateTime.UtcNow + TimeSpan.FromSeconds(2));
+                    }
+                }
+            }
             if (cli != null)
             {
                 cli.Dispose();

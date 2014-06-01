@@ -120,9 +120,25 @@ namespace CellAO.Core.Entities
             }
         }
 
+        private bool doNotDoTimers = true;
+
         /// <summary>
         /// </summary>
-        public bool DoNotDoTimers { get; set; }
+        public bool DoNotDoTimers
+        {
+            get
+            {
+                return this.doNotDoTimers;
+            }
+            set
+            {
+                this.doNotDoTimers = value;
+                if (this.Stats != null)
+                {
+                    this.Stats.ClearChangedFlags();
+                }
+            }
+        }
 
         /// <summary>
         /// </summary>
@@ -320,14 +336,17 @@ namespace CellAO.Core.Entities
         /// </exception>
         public virtual bool Read()
         {
+            bool oldtimers = this.doNotDoTimers;
             this.DoNotDoTimers = true;
             this.Stats.Read();
 
             this.BaseInventory.Read();
 
             // base.Read();
-
-            this.DoNotDoTimers = false;
+            if (!oldtimers)
+            {
+                this.DoNotDoTimers = false;
+            }
             return true;
         }
 
