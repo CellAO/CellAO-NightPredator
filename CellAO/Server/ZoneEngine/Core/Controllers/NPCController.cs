@@ -474,9 +474,27 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
+        private int activeWaypoint = 0;
+
         private Waypoint FindNextWaypoint()
         {
             Waypoint result = null;
+            if (this.Character.Waypoints.Count <= 2)
+            {
+                return null;
+            }
+            if (this.Character.Waypoints.Count <= activeWaypoint)
+            {
+                activeWaypoint = 0;
+            }
+            int len = this.Character.Waypoints.Count;
+            do
+            {
+                activeWaypoint = (activeWaypoint + 1) % len;
+                result = this.Character.Waypoints[activeWaypoint];
+            }
+            while (result.Position.Distance2D(this.Character.Coordinates().coordinate)<0.2f);
+            return result;
             double wpDistance = double.MaxValue;
             foreach (Waypoint wp in this.Character.Waypoints)
             {

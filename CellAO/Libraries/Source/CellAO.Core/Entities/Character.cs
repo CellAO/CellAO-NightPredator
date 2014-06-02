@@ -763,7 +763,7 @@ namespace CellAO.Core.Entities
 
         public void AddWaypoint(Vector3 v, bool running)
         {
-            this.Waypoints.Add(new Waypoint(v, running));
+            this.Waypoints.Add(new Waypoint(new Vector3(v.x, v.y, v.z), running));
             if (this.Waypoints.Count > 1)
             {
                 this.Controller.State = CharacterState.Patrolling;

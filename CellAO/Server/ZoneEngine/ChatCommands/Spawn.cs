@@ -42,6 +42,8 @@ namespace ZoneEngine.ChatCommands
     using CellAO.Core.NPCHandler;
     using CellAO.Core.Vector;
     using CellAO.Database.Dao;
+    using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -110,7 +112,7 @@ Filter will be applied to mob name"));
             Coordinate coord = character.Coordinates();
 
             DBMobTemplate[] templates = MobTemplateDao.Instance.GetAll().ToArray();
-            Random rnd = new Random();
+            Random rnd = new Random(Environment.TickCount);
 
             int mobNumber = rnd.Next(templates.Length);
 
@@ -127,14 +129,19 @@ Filter will be applied to mob name"));
             character.Playfield.Announce(mess);
             AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
 
-            Vector3 v = new Vector3(coord.x, coord.y, coord.z + 10+rnd.Next(10));
+            Vector3 v = new Vector3(coord.x, coord.y, coord.z + 5);
             mobCharacter.AddWaypoint(v, false);
-            v = new Vector3(coord.x + 10+rnd.Next(10), coord.y, coord.z + 10+rnd.Next(10));
+            v.x += 10 - rnd.Next(20);
+            v.z -= 10 - rnd.Next(20);
+
             mobCharacter.AddWaypoint(v, false);
-            v.z -= 10+rnd.Next(10);
+            v.x += 10 - rnd.Next(20);
+            v.z -= 10 - rnd.Next(20);
             mobCharacter.AddWaypoint(v, false);
-            v.x -= 10 + rnd.Next(10);
+            v.x += 10 - rnd.Next(20);
+            v.z -= 10 - rnd.Next(20);
             mobCharacter.AddWaypoint(v, false);
+            mobCharacter.Stats[StatIds.health].Value = 10000;
             mobCharacter.DoNotDoTimers = false;
         }
 
@@ -151,6 +158,12 @@ Filter will be applied to mob name"));
             if (string.Compare(args[0], "spawnrandom", true) == 0)
             {
                 this.SpawnRandomMob(character);
+                return;
+            }
+
+            if (string.Compare(args[0], "spawncount", true) == 0)
+            {
+                this.SpawnCount(character);
                 return;
             }
 
@@ -202,6 +215,9 @@ Filter will be applied to mob name"));
                     SimpleCharFullUpdateMessage mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
                     character.Playfield.Announce(mess);
                     AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
+                    // HEAL!!!!
+                    mobCharacter.Stats[StatIds.health].Value = mobCharacter.Stats[StatIds.life].Value;
+                    mobCharacter.DoNotDoTimers = false;
                 }
             }
 
@@ -259,6 +275,11 @@ Filter will be applied to mob name"));
             //    new Identity() { Type = IdentityType.Playfield, Instance = pf });
         }
 
+        private void SpawnCount(ICharacter character)
+        {
+            character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, "Spawncount on this PF: "+Pool.Instance.GetAll<ICharacter>(character.Playfield.Identity).Count(x => x.Controller is NPCController)));
+        }
+
         /// <summary>
         /// </summary>
         /// <returns>
@@ -274,7 +295,7 @@ Filter will be applied to mob name"));
         /// </returns>
         public override List<string> ListCommands()
         {
-            return new List<string> { "spawn", "spawnrandom" };
+            return new List<string> { "spawn", "spawnrandom", "spawncount" };
         }
 
         #endregion

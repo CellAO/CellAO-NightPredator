@@ -76,9 +76,9 @@ namespace ZoneEngine.ChatCommands
             character.Playfield.Publish(
                 ChatTextMessageHandler.Default.CreateIM(
                     character,
-                    "Arguments: <fadeIn> <duration> <fadeOut> <Weathertype> <Intensity> <Wind> <Clouds> <thunderstrikes> <tremors> <tremorpercentage> <thunderstrikepercentage> <ambientColor> <fogColor> <zBufferMax>\r\n"
+                    "Arguments: <fadeIn> <duration> <fadeOut> <Range> <Weathertype> <Intensity> <Wind> <Clouds> <thunderstrikes> <tremors> <tremorpercentage> <thunderstrikepercentage> <ambientColor> <fogColor> <zBufferMax>\r\n"
                     + "Weathertypes: 0 = Rain, 1 = Fog, 2 = Unknown, 3 = Quake, 4 = Sandstorm, 5 = AshStorm, 6 = RedFalloutStorm, 7 = GreenFalloutStorm\r\n"
-                    + "Type is 0-7, all other values are 0-100"));
+                    + "Type is 0-7, Range is Single, all other values are 0-100"));
         }
 
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
