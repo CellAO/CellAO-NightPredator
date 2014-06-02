@@ -134,7 +134,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         StaticDynel temp = Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity, message.Target[1]);
                         if (temp != null)
                         {
-                            Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
+                            Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUseItemOn);
                             if (ev != null)
                             {
                                 ev.Perform(client.Controller.Character, temp);

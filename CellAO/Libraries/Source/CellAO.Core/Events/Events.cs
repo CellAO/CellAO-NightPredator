@@ -112,9 +112,20 @@ namespace CellAO.Core.Events
             foreach (Function functions in this.Functions)
             {
                 bool result = true;
-                foreach (Requirement requirements in functions.Requirements)
+                for (int i = 0;i<functions.Requirements.Count;i++)
                 {
-                    result &= requirements.CheckRequirement(self);
+                    if ((i == 0) && (functions.Requirements[i].ChildOperator == Operator.Or))
+                    {
+                        result = false;
+                    }
+                    if (functions.Requirements[i].ChildOperator == Operator.Or)
+                    {
+                        result |= functions.Requirements[i].CheckRequirement(self);
+                    }
+                    else
+                    {
+                        result &= functions.Requirements[i].CheckRequirement(self);
+                    }
                     if (!result)
                     {
                         break;
