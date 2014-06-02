@@ -236,7 +236,7 @@ namespace Extractor_Serializer
             string lastline = null;
             while ((line = tr.ReadLine()) != null)
             {
-                if (line != lastline)
+                if ((line != lastline) && (!string.IsNullOrEmpty(line)))
                 {
                     string[] rels = line.Split(' ');
                     List<int> temp = new List<int>();
@@ -398,7 +398,7 @@ namespace Extractor_Serializer
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
 
-                
+
                 int[] doors = extractor.GetRecordInstances(Extractor.RecordType.Door);
                 if (doors.Contains(recnum))
                 {
@@ -907,7 +907,7 @@ namespace Extractor_Serializer
 
                 newItemrelations.Sort();
 
-                TextWriter tw = new StreamWriter("itemrelations.txt");
+                TextWriter tw = new StreamWriter("itemrelations.txt", true);
                 foreach (string s in newItemrelations)
                 {
                     tw.WriteLine(s);
