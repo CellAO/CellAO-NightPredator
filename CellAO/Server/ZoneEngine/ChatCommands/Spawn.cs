@@ -35,10 +35,12 @@ namespace ZoneEngine.ChatCommands
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.NPCHandler;
+    using CellAO.Core.Vector;
     using CellAO.Database.Dao;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -47,6 +49,8 @@ namespace ZoneEngine.ChatCommands
     using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
+
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
@@ -64,6 +68,10 @@ namespace ZoneEngine.ChatCommands
         /// </returns>
         public override bool CheckCommandArguments(string[] args)
         {
+            if (args[0] == "spawnrandom")
+            {
+                return true;
+            }
             List<Type> check = new List<Type>();
             check.Add(typeof(string));
             check.Add(typeof(uint));
@@ -97,6 +105,39 @@ For a list of available templates: /command spawn list [filter1,filter2...]
 Filter will be applied to mob name"));
         }
 
+        public void SpawnRandomMob(ICharacter character)
+        {
+            Coordinate coord = character.Coordinates();
+
+            DBMobTemplate[] templates = MobTemplateDao.Instance.GetAll().ToArray();
+            Random rnd = new Random();
+
+            int mobNumber = rnd.Next(templates.Length);
+
+            DBMobTemplate template = templates[mobNumber];
+            NPCController npcController = new NPCController();
+            Character mobCharacter = NonPlayerCharacterHandler.SpawnMobFromTemplate(
+                template.Hash,
+                character.Playfield.Identity,
+                character.Coordinates(),
+                character.RawHeading,
+                npcController);
+            mobCharacter.Playfield = character.Playfield;
+            SimpleCharFullUpdateMessage mess = SimpleCharFullUpdate.ConstructMessage(mobCharacter);
+            character.Playfield.Announce(mess);
+            AppearanceUpdateMessageHandler.Default.Send(mobCharacter);
+
+            Vector3 v = new Vector3(coord.x, coord.y, coord.z + 10+rnd.Next(10));
+            mobCharacter.AddWaypoint(v, false);
+            v = new Vector3(coord.x + 10+rnd.Next(10), coord.y, coord.z + 10+rnd.Next(10));
+            mobCharacter.AddWaypoint(v, false);
+            v.z -= 10+rnd.Next(10);
+            mobCharacter.AddWaypoint(v, false);
+            v.x -= 10 + rnd.Next(10);
+            mobCharacter.AddWaypoint(v, false);
+            mobCharacter.DoNotDoTimers = false;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="character">
@@ -107,6 +148,12 @@ Filter will be applied to mob name"));
         /// </param>
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
+            if (string.Compare(args[0], "spawnrandom", true) == 0)
+            {
+                this.SpawnRandomMob(character);
+                return;
+            }
+
             if (string.Compare(args[1], "list", true) == 0)
             {
                 // list templates
@@ -227,7 +274,7 @@ Filter will be applied to mob name"));
         /// </returns>
         public override List<string> ListCommands()
         {
-            return new List<string> { "spawn" };
+            return new List<string> { "spawn", "spawnrandom" };
         }
 
         #endregion

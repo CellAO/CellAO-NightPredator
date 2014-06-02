@@ -104,6 +104,10 @@ namespace CellAO.Core.Entities
         {
             get
             {
+                if (this.playfieldIdentity.Equals(Identity.None))
+                {
+                    return null;
+                }
                 return Pool.Instance.GetObject<IPlayfield>(Identity.None, this.playfieldIdentity);
             }
 
