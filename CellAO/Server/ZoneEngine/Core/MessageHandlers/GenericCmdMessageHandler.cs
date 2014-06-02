@@ -40,6 +40,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
+    using CellAO.Core.Inventory;
+    using CellAO.Core.Items;
     using CellAO.Core.Network;
     using CellAO.Enums;
     using CellAO.ObjectManager;
@@ -116,6 +118,17 @@ namespace ZoneEngine.Core.MessageHandlers
                         }
                     }
 
+                    break;
+                    case GenericCmdAction.UseItemOnItem:
+                    IItem item =
+                        Pool.Instance.GetObject<IInventoryPage>(
+                            new Identity()
+                            {
+                                Type = (IdentityType)client.Controller.Character.Identity.Instance,
+                                Instance = (int)message.Target.Type
+                            })[message.Target.Instance];
+                    client.Controller.Character.Stats[StatIds.secondaryitemtemplate].Value=item.LowID;
+                    //client.Controller.Character.Stats[StatIds.secondaryitemtype]
                     break;
             }
         }

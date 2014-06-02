@@ -33,6 +33,8 @@ namespace CellAO.Stats.SpecialStats
 {
     #region Usings ...
 
+    using System;
+
     using CellAO.Database.Dao;
 
     #endregion
@@ -54,7 +56,14 @@ namespace CellAO.Stats.SpecialStats
         {
             get
             {
-                return LoginDataDao.Instance.GetByCharacterId(this.Stats.Owner.Instance).Expansions;
+                try
+                {
+                    return LoginDataDao.Instance.GetByCharacterId(this.Stats.Owner.Instance).Expansions;
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
             }
         }
     }
