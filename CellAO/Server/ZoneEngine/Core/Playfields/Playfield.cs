@@ -899,17 +899,22 @@ namespace CellAO.Core.Playfields
                     {
                         dynel.SendChangedStats();
                     }
-                    
+
 
                     if (dynel.Controller.IsFollowing())
                     {
                         dynel.Controller.DoFollow();
                     }
                     else
-                        if (dynel.Controller.State == CharacterState.Patrolling)
+                    {
+                        if (dynel.Controller is NPCController)
                         {
-                            dynel.Controller.StartPatrolling();
+                            if (dynel.Controller.State == CharacterState.Patrolling)
+                            {
+                                dynel.Controller.StartPatrolling();
+                            }
                         }
+                    }
 
                     this.CheckWallCollision(dynel);
                     this.CheckStatelCollision(dynel);

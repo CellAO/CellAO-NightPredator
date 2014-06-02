@@ -190,7 +190,7 @@ namespace CellAO.Core.NPCHandler
                 {
                     cmob.Controller.State = CharacterState.Patrolling;
                 }
-
+                cmob.DoNotDoTimers = false;
                 return cmob;
             }
             return null;

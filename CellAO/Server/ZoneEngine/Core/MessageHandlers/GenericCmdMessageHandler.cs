@@ -75,26 +75,26 @@ namespace ZoneEngine.Core.MessageHandlers
                 case GenericCmdAction.Drop:
                     break;
                 case GenericCmdAction.Use:
-                    if (message.Target.Type == IdentityType.Inventory)
+                    if (message.Target[0].Type == IdentityType.Inventory)
                     {
-                        client.Controller.UseItem(message.Target);
+                        client.Controller.UseItem(message.Target[0]);
 
                         // Acknowledge action
                         this.Acknowledge(client.Controller.Character, message);
                     }
                     else
                     {
-                        if (Pool.Instance.Contains(message.Target))
+                        if (Pool.Instance.Contains(message.Target[0]))
                         {
                             // TODO: Call OnUse of the targets controller
                             // Static dynels first
 
                             StaticDynel temp =
-                                Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity,message.Target);
+                                Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity, message.Target[0]);
                             if (temp != null)
                             {
                                 Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
-                                if (ev!=null)
+                                if (ev != null)
                                 {
                                     ev.Perform(client.Controller.Character, temp);
                                 }
@@ -110,25 +110,41 @@ namespace ZoneEngine.Core.MessageHandlers
                                 message.Action,
                                 (int)message.Action,
                                 Environment.NewLine,
-                                message.Target.Type,
-                                message.Target.ToString(true));
+                                message.Target[0].Type,
+                                message.Target[0].ToString(true));
                             ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
 #endif
-                            client.Controller.UseStatel(message.Target);
+                            client.Controller.UseStatel(message.Target[0]);
                         }
                     }
 
                     break;
-                    case GenericCmdAction.UseItemOnItem:
+                case GenericCmdAction.UseItemOnItem:
                     IItem item =
                         Pool.Instance.GetObject<IInventoryPage>(
                             new Identity()
                             {
                                 Type = (IdentityType)client.Controller.Character.Identity.Instance,
-                                Instance = (int)message.Target.Type
-                            })[message.Target.Instance];
-                    client.Controller.Character.Stats[StatIds.secondaryitemtemplate].Value=item.LowID;
+                                Instance = (int)message.Target[0].Type
+                            })[message.Target[0].Instance];
+                    client.Controller.Character.Stats[StatIds.secondaryitemtemplate].Value = item.LowID;
                     //client.Controller.Character.Stats[StatIds.secondaryitemtype]
+                    if (Pool.Instance.Contains(message.Target[1]))
+                    {
+                        StaticDynel temp = Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity, message.Target[1]);
+                        if (temp != null)
+                        {
+                            Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
+                            if (ev != null)
+                            {
+                                ev.Perform(client.Controller.Character, temp);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        client.Controller.UseStatel(message.Target[1]);
+                    }
                     break;
             }
         }
