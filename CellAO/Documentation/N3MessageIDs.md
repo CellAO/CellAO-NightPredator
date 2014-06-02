@@ -60,6 +60,8 @@
 
 **CorpseFullUpdate** = 0x4F474E05,
 
+**CreateQuest** = 0x291F361B,
+
 **Despawn** = 0x36510078,
 
 **DoorFullUpdate** = 0x365A5071,
@@ -170,7 +172,7 @@
 
 **PerkUpdate** = 0x435F7023,
 
-**PetCommand** = 0x63333303,
+**PetCommand** = 0x6B333303,
 
 **PetToMaster** = 0x0D381F02,
 
@@ -206,7 +208,7 @@
 
 **ResearchRequest** = 0x3115534D,
 
-**ResearchUpdate** = 0x253D024C,
+**ResearchUpdate** = 0x253D0240,
 
 **Resurrect** = 0x445F2A0B,
 
@@ -302,8 +304,8 @@
 
 ----------
 
-*Copyright © 2013 CellAO Team*
+*Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.874 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
 
 

@@ -34,6 +34,10 @@
 
 **CanbeAffected** = 50000,
 
+**Terminal** = 51005,
+
+**Door** = 51016,
+
 **WeaponInstance** = 51018,
 
 **VendingMachine** = 51035,
@@ -42,6 +46,8 @@
 
 **Corpse** = 51050,
 
+**MailTerminal** = 51059,
+
 **Playfield1** = 51100,
 
 **Playfield** = 51101,
@@ -49,6 +55,8 @@
 **NanoProgram** = 53019,
 
 **GfxEffect** = 53030,
+
+**MissionTerminal** = 56481,
 
 **TeamWindow** = 57001,
 
@@ -61,8 +69,8 @@
 
 ----------
 
-*Copyright © 2013 CellAO Team*
+*Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.874 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
 
 

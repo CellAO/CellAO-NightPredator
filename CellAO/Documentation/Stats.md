@@ -21,7 +21,7 @@
 **Default value:** 1929912817
 
 **Tags:** 
-`Save in Database`  
+`Save in Database`  , `Announce to Playfield`  
 
 ----------
 
@@ -150,10 +150,10 @@
 
 **Class type:** CellAO.Stats.SpecialStats.OverridingModifierStat
 
-**Default value:** 17530
+**Default value:** 0
 
 **Tags:** 
-`Save in Database`  
+
 
 ----------
 
@@ -633,7 +633,7 @@
 **Default value:** 1500
 
 **Tags:** 
-`Save in Database`  
+
 
 ----------
 
@@ -765,7 +765,7 @@
 **Default value:** 0
 
 **Tags:** 
-`Save in Database`  
+`Save in Database`  , `Announce to Playfield`  
 
 ----------
 
@@ -2073,7 +2073,7 @@
 **Default value:** 3
 
 **Tags:** 
-`Save in Database`  
+`Save in Database`  , `Announce to Playfield`  
 
 ----------
 
@@ -2294,7 +2294,7 @@
 ----------
 
 
-**extenalplayfieldinstance [192]**
+**externalplayfieldinstance [192]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -2306,7 +2306,7 @@
 ----------
 
 
-**extenaldoorinstance [193]**
+**externaldoorinstance [193]**
 
 **Class type:** CellAO.Stats.Stat
 
@@ -4648,7 +4648,7 @@
 
 **expansion [389]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatExpansion
 
 **Default value:** 0
 
@@ -5574,7 +5574,7 @@
 
 **Class type:** CellAO.Stats.Stat
 
-**Default value:** 1234567890
+**Default value:** 15
 
 **Tags:** 
 `Save in Database`  
@@ -8442,8 +8442,8 @@
 
 ----------
 
-*Copyright © 2013 CellAO Team*
+*Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.874 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
 
 
