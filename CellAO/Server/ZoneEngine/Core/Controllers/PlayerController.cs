@@ -550,7 +550,7 @@ namespace ZoneEngine.Core.Controllers
             return true;
         }
 
-        public bool UseStatel(Identity identity)
+        public bool UseStatel(Identity identity, EventType eventType = EventType.OnUse)
         {
             if (PlayfieldLoader.PFData.ContainsKey(this.Character.Playfield.Identity.Instance))
             {
@@ -562,11 +562,12 @@ namespace ZoneEngine.Core.Controllers
                 if (sd != null)
                 {
                     this.SendChatText("Found Statel with " + sd.Events.Count + " events");
-                    Event onUse = sd.Events.FirstOrDefault(x => x.EventType == (int)EventType.OnUse);
+                    Event onUse = sd.Events.FirstOrDefault(x => x.EventType == eventType);
                     if (onUse != null)
                     {
                         onUse.Perform(this.Character, sd);
                     }
+                    
                 }
             }
             return true;

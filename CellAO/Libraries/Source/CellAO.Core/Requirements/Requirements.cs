@@ -101,7 +101,7 @@ namespace CellAO.Core.Requirements
                 try
                 {
                     this.theCheckFunc = RequirementLambdaCreator.Create(this);
-                    return this.theCheckFunc(entity);
+                    //return this.theCheckFunc(entity);
                 }
                 catch (Exception)
                 {
@@ -118,7 +118,16 @@ namespace CellAO.Core.Requirements
                     return false;
                 }
             }
-
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Values:");
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Target:       " + (this.Target));
+            LogUtil.Debug(
+                DebugInfoDetail.GameFunctions,
+                "StatId:       " + (this.Statnumber + " (" + StatNamesDefaults.GetStatName(this.Statnumber))
+                + ")");
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Operator:     " + (this.Operator));
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Value:        " + this.Value + " <-> " + entity.Stats[this.Statnumber].Value.ToString());
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "ChildOperator:" + (this.ChildOperator));
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Result:       " + this.theCheckFunc(entity));
             return this.theCheckFunc(entity);
         }
 

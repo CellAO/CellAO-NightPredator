@@ -126,10 +126,6 @@ namespace CellAO.Core.Events
                     {
                         result &= functions.Requirements[i].CheckRequirement(self);
                     }
-                    if (!result)
-                    {
-                        break;
-                    }
                 }
 
                 if (result)

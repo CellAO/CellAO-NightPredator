@@ -113,7 +113,7 @@ namespace ZoneEngine.Core.Controllers
             throw new NotImplementedException();
         }
 
-        public bool UseStatel(Identity identity)
+        public bool UseStatel(Identity identity, EventType eventType = EventType.OnUse)
         {
             throw new NotImplementedException();
         }

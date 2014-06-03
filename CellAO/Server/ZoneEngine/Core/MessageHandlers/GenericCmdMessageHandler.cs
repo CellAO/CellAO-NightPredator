@@ -143,7 +143,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     }
                     else
                     {
-                        client.Controller.UseStatel(message.Target[1]);
+                        client.Controller.UseStatel(message.Target[1], EventType.OnUseItemOn);
                     }
                     break;
             }

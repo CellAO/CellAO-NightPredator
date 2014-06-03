@@ -126,7 +126,7 @@ namespace CellAO.Core.Requirements
         /// </returns>
         public static Expression<Func<IInstancedEntity, int>> GetStatValExpression(int statId)
         {
-            return (k) => k.Stats.GetStatByNumber(statId).Value;
+            return (k) => k.Stats[statId].Value;
         }
 
         /// <summary>

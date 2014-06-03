@@ -82,7 +82,7 @@ namespace CellAO.Core.Entities
         /// </param>
         /// <returns>
         /// </returns>
-        bool UseStatel(Identity identity);
+        bool UseStatel(Identity identity, EventType eventType = EventType.OnUse);
 
         /// <summary>
         /// </summary>

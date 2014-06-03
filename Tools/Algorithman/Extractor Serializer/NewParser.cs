@@ -155,6 +155,7 @@ namespace Extractor_Serializer
             int rectype = (int)recordType;
             this.br = new BufferedReader(rectype, recnum, data);
             ItemTemplate aoi = new ItemTemplate();
+
             aoi.ID = recnum;
             this.br.Skip(16);
 
@@ -202,7 +203,7 @@ namespace Extractor_Serializer
                 itemNamesSqlList.Add(string.Format("( {0} , '{1}' , '{2}', '{3}' ) ",
                     recnum,
                     itemname.Replace("'", "''"),
-                    Enum.GetName(typeof(Extractor.RecordType), recordType), 
+                    Enum.GetName(typeof(Extractor.RecordType), recordType),
                     aoi.getItemAttribute(79)));
             }
 
@@ -412,11 +413,14 @@ namespace Extractor_Serializer
             int numreqs = rreqs.Count;
 
             List<Requirement> output = new List<Requirement>();
-
+            Requirement aor = null;
             for (int i = 0; i < numreqs; i++)
             {
                 rawreqs rr = rreqs[i];
-                Requirement aor = new Requirement();
+                if (aor == null)
+                {
+                    aor = new Requirement();
+                }
 
                 aor.Target = ItemTarget.Self; // 0x13
                 aor.Statnumber = rr.stat;
@@ -451,20 +455,29 @@ namespace Extractor_Serializer
                     int aval = rreqs[i + 1].val;
                     int aop = rreqs[i + 1].ops;
 
-                    if ((((aop == (int)Operator.Or) || (aop == (int)Operator.And)) || (aop == (int)Operator.Not)) && (anum == (int)Operator.EqualTo))
+                    if ((((aop == (int)Operator.Or) || (aop == (int)Operator.And)) || (aop == (int)Operator.Not)) || (anum == (int)Operator.EqualTo))
                     {
                         aor.ChildOperator = (Operator)Enum.ToObject(typeof(Operator), aop);
                         i++;
                     }
                 }
-
                 output.Add(aor);
+                aor = null;
             }
 
+            if (output.Count > 1)
+            {
+                output[0].ChildOperator = output[1].ChildOperator;
+            }
+            else
+            {
+                output[0].ChildOperator = Operator.Or;
+            }
+            /*output[0].ChildOperator = Operator.Or;
             for (int i = 0; i < output.Count - 2; i++)
             {
                 output[i].ChildOperator = output[i + 1].ChildOperator;
-            }
+            }*/
 
             return output;
         }
