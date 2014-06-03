@@ -34,6 +34,7 @@ namespace ChatEngine.Relay
     using CellAO.Database.Dao;
 
     using IrcDotNet;
+    using System;
 
     #endregion
 
@@ -53,6 +54,8 @@ namespace ChatEngine.Relay
             this.IrcUser = ircUser;
         }
 
+        
+
         #endregion
 
         // public CellAoUser CellAoUser
@@ -70,6 +73,11 @@ namespace ChatEngine.Relay
         /// <summary>
         /// </summary>
         public bool IsAuthenticated { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int GMlevel { get; private set; }
 
         #endregion
 
@@ -103,7 +111,6 @@ namespace ChatEngine.Relay
                 }
 
                 this.IsAuthenticated = true;
-
                 return true;
             }
             catch (SqlException)
@@ -112,11 +119,18 @@ namespace ChatEngine.Relay
             }
         }
 
+        public int GMLevel(string username)
+        {
+            this.GMlevel = LoginDataDao.GetByUsername(username).GM;
+            return this.GMlevel;
+        }
+
         /// <summary>
         /// </summary>
         public void LogOut()
         {
             this.IsAuthenticated = false;
+            this.GMlevel = 0;
         }
 
         #endregion

@@ -41,6 +41,7 @@ namespace Chatengine.Relay
     using Utility;
 
     using Config = Utility.Config.ConfigReadWrite;
+    using System;
 
     #endregion
 
@@ -410,37 +411,34 @@ namespace Chatengine.Relay
             IList<string> parameters)
         {
             var sourceUser = (IrcUser)source;
-
+            var CellAOUser = this.cellAoBotUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
             // var sourceUser = (IrcUser)source;
             // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
-            // if (twitterUser != null)
-            // throw new InvalidOperationException(string.Format(
-            // "User '{0}' is already logged in to Twitter as {1}.", sourceUser.NickName,
-            // twitterUser.TwitterUser.ScreenName));
+            if (sourceUser != null)
+                throw new InvalidOperationException(string.Format(
+                    "User '{0}' is already logged in to CellAO as {1}.", sourceUser));
+            if (parameters.Count != 2)
+                throw new InvalidCommandParametersException(1);
 
-            // if (parameters.Count != 2)
-            // throw new InvalidCommandParametersException(1);
+            // // Create new CellAO user and log in to service.
+            var cellaoBotUser = new CellAoBotUser(sourceUser);
+            var success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
+            var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
+            if (success)
+            {
+                // Log-in succeeded.
+                
+                // this.twitterUsers.Add(twitterBotUser);
 
-            // // Create new Twitter user and log in to service.
-            // var twitterBotUser = new TwitterBotUser(sourceUser);
-            // var success = twitterBotUser.LogIn(parameters[0], parameters[1]);
+                // client.LocalUser.SendMessage(replyTargets, "You are now logged in as {0} / '{1}'.",
+                // twitterBotUser.TwitterUser.ScreenName, twitterBotUser.TwitterUser.Name);
+                // }
+                // else
+                // {
+                // // Log-in failed.
 
-            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            // if (success)
-            // {
-            // // Log-in succeeded.
-
-            // this.twitterUsers.Add(twitterBotUser);
-
-            // client.LocalUser.SendMessage(replyTargets, "You are now logged in as {0} / '{1}'.",
-            // twitterBotUser.TwitterUser.ScreenName, twitterBotUser.TwitterUser.Name);
-            // }
-            // else
-            // {
-            // // Log-in failed.
-
-            // client.LocalUser.SendMessage(replyTargets, "Invalid log-in username/password.");
-            // }
+                // client.LocalUser.SendMessage(replyTargets, "Invalid log-in username/password.");
+            }
         }
 
         /// <summary>
@@ -613,7 +611,7 @@ namespace Chatengine.Relay
         }
 
         #endregion
-
+        #region Maybe Delete this if my code bellow works.
         // TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
 
         // private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
@@ -624,5 +622,14 @@ namespace Chatengine.Relay
         // "User '{0}' is not logged in to Twitter.", ircUser.NickName));
         // return twitterUser;
         // }
+        #endregion
+        private CellAoBotUser GetCellAOBotUser(IrcUser ircUSer)
+        {
+            var CellAOUser = this.cellAoBotUsers.SingleOrDefault(tu => tu.IrcUser == ircUSer);
+            if (CellAOUser == null)
+                throw new InvalidOperationException(string.Format(
+                    "User '{0}' is not logged in to Cellao.", ircUSer.NickName));
+            return CellAOUser;
+        }
     }
 }
