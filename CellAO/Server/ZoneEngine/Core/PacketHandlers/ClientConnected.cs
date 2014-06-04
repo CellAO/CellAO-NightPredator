@@ -35,7 +35,9 @@ namespace ZoneEngine.Core.PacketHandlers
 
     using System.Text;
 
+    using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -99,6 +101,16 @@ namespace ZoneEngine.Core.PacketHandlers
             /* send playfield info to client */
             PlayfieldAnarchyFMessageHandler.Default.Send(client.Controller.Character);
 
+
+            foreach (
+Vendor vendor in
+Pool.Instance.GetAll<Vendor>(
+client.Controller.Character.Playfield.Identity,
+(int)IdentityType.VendingMachine))
+            {
+                VendingMachineFullUpdateMessageHandler.Default.Send(client.Controller.Character, vendor);
+            }
+
             var sendSCFUs = new IMSendPlayerSCFUs { toClient = client };
             ((Playfield)client.Playfield).SendSCFUsToClient(sendSCFUs);
 
@@ -128,6 +140,7 @@ namespace ZoneEngine.Core.PacketHandlers
                                       Unknown4 = 80183.3125f
                                   };
             client.SendCompressed(gameTimeMessage);
+
 
             /* set SocialStatus to 0 */
             // Stat.SendDirect(client, 521, 0, false);
@@ -171,7 +184,7 @@ namespace ZoneEngine.Core.PacketHandlers
 
             // done
 
-            
+
             // spawn all active monsters to client
             // TODO: Implement NonPlayerCharacterHandler
             // NonPlayerCharacterHandler.SpawnMonstersInPlayfieldToClient(client, client.Character.PlayField);
@@ -195,7 +208,7 @@ namespace ZoneEngine.Core.PacketHandlers
             // done, so we call a hook.
             // Call all OnConnect script Methods
             ScriptCompiler.Instance.CallMethod("OnConnect", client.Controller.Character);
-        
+
             // Timers are allowed to update client stats now.
             client.Controller.Character.DoNotDoTimers = false;
         }

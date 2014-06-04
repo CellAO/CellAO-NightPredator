@@ -158,8 +158,7 @@ namespace CellAO.ObjectManager
                     }
                     catch (Exception ef)
                     {
-                        Console.WriteLine(obj.DebugString());
-                        Console.ReadLine();
+                        LogUtil.ErrorException(ef);
                     }
                     this.reservedIds.Remove(obj.Identity.Long());
                 }
@@ -398,7 +397,7 @@ namespace CellAO.ObjectManager
                             return (T)temp;
                         }
                         throw new TypeInstanceMismatchException(
-                            "Tried to retrieve " + identity.Type.ToString("X8") + ":" + identity.Instance.ToString("X8")
+                            "Tried to retrieve " + identity.ToString(true)
                             + " with the wrong type (" + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
                     }
                 }

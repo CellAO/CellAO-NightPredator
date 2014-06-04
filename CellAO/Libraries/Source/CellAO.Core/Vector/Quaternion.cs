@@ -492,6 +492,34 @@ namespace CellAO.Core.Vector
             return string.Format("{0} {1} {2} {3}", this.x, this.y, this.z, this.w);
         }
 
+        public double Angle
+        {
+            get
+            {
+                // Magnitude of quaternion times sine and cosine
+                double msin = Math.Sqrt(xf * xf + yf * yf + zf * zf);
+                double mcos = wf;
+
+                if (!(msin <= Double.MaxValue))
+                {
+                    // Overflowed probably in squaring, so let's scale
+                    // the values.  We don't need to include _w in the 
+                    // scale factor because we're not going to square
+                    // it.
+                    double maxcoeff = Math.Max(Math.Abs(xf), Math.Max(Math.Abs(yf), Math.Abs(zf)));
+                    double x = xf / maxcoeff;
+                    double y = yf / maxcoeff;
+                    double z = zf / maxcoeff;
+                    msin = Math.Sqrt(x * x + y * y + z * z);
+                    // Scale mcos too.
+                    mcos = wf / maxcoeff;
+                }
+
+                // Atan2 is better than acos.  (More precise and more efficient.)
+                return Math.Atan2(msin, mcos) * (360.0 / Math.PI);
+            }
+        } 
+
         #endregion
     }
 }

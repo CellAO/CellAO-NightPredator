@@ -35,6 +35,7 @@ namespace Extractor_Serializer
     using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
+    using CellAO.Core.Vector;
 
     using Extractor_Serializer.Structs;
 
@@ -103,11 +104,6 @@ namespace Extractor_Serializer
                     // Getting the events from the template item if no events are provided in the RDB record
                     if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
                     {
-                        if (sd.TemplateId == 226319)
-                        {
-                            Console.WriteLine("Portal found");
-                            Console.ReadLine();
-                        }
                         ItemTemplate template = ItemLoader.ItemList[sd.TemplateId];
                         if (template.Events.Count > 0)
                         {

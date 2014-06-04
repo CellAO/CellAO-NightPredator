@@ -495,27 +495,6 @@ namespace ZoneEngine.Core.Controllers
             }
             while (result.Position.Distance2D(this.Character.Coordinates().coordinate)<0.2f);
             return result;
-            double wpDistance = double.MaxValue;
-            foreach (Waypoint wp in this.Character.Waypoints)
-            {
-                double distance = wp.Position.Distance2D(this.Character.Coordinates().coordinate);
-                if (distance > 0.2f)
-                {
-                    if (wpDistance > distance)
-                    {
-                        result = wp;
-                        wpDistance = distance;
-                    }
-                }
-                else
-                {
-                    // If we stand on a waypoint already, then take the next (or first) one
-                    result =
-                        this.Character.Waypoints[
-                            (this.Character.Waypoints.IndexOf(wp) + 1) % this.Character.Waypoints.Count];
-                }
-            }
-            return result;
         }
 
         public void StartMovement()

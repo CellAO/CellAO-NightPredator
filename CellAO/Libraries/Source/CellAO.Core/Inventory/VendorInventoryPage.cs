@@ -72,41 +72,49 @@ namespace CellAO.Core.Inventory
 
         public override bool Read()
         {
-            Random rnd = new Random();
+            Random rnd = new Random(Environment.TickCount);
 
             string templateHash = this.ownerReference.Target.TemplateHash;
-            DBVendorTemplate vendorTemplate =
-                VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();
-            if (vendorTemplate == null)
+            if (!string.IsNullOrEmpty(templateHash))
             {
-                throw new DataBaseException(
-                    "No vendor found for Template " + templateHash + "." + Environment.NewLine
-                    + "Please fill in the database :)");
-            }
 
-            int slotNumber = 0;
-            DBShopInventoryTemplate[] inventoryEntries =
-                ShopInventoryTemplateDao.Instance.GetWhere(new { Hash = vendorTemplate.ShopInvHash }).ToArray();
-            foreach (DBShopInventoryTemplate inventoryEntry in inventoryEntries)
-            {
-                // Skip entries which are out of vendortemplate's QL range
-                if ((inventoryEntry.MinQl > vendorTemplate.MaxQl) || (inventoryEntry.MaxQl < vendorTemplate.MinQl))
+                DBVendorTemplate vendorTemplate =
+                    VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();
+                if (vendorTemplate == null)
                 {
-                    continue;
+                    throw new DataBaseException(
+                        "No vendor found for Template " + templateHash + "." + Environment.NewLine
+                        + "Please fill in the database :)");
                 }
 
-                // narrow down the range to least amount of QL
-                int minQl = inventoryEntry.MinQl > vendorTemplate.MinQl ? inventoryEntry.MinQl : vendorTemplate.MinQl;
-                int maxQl = inventoryEntry.MaxQl < vendorTemplate.MaxQl ? inventoryEntry.MaxQl : vendorTemplate.MaxQl;
-
-                int itemQl = minQl + rnd.Next(maxQl - minQl);
-
-                Item item = new Item(itemQl, inventoryEntry.LowId, inventoryEntry.HighId);
-                this.Add(slotNumber, item);
-                slotNumber++;
-                if (slotNumber >= this.MaxSlots)
+                int slotNumber = 0;
+                DBShopInventoryTemplate[] inventoryEntries =
+                    ShopInventoryTemplateDao.Instance.GetWhere(new { Hash = vendorTemplate.ShopInvHash }).ToArray();
+                foreach (DBShopInventoryTemplate inventoryEntry in inventoryEntries)
                 {
-                    break;
+                    // Skip entries which are out of vendortemplate's QL range
+                    if ((inventoryEntry.MinQl > vendorTemplate.MaxQl) || (inventoryEntry.MaxQl < vendorTemplate.MinQl))
+                    {
+                        continue;
+                    }
+
+                    // narrow down the range to least amount of QL
+                    int minQl = inventoryEntry.MinQl > vendorTemplate.MinQl
+                        ? inventoryEntry.MinQl
+                        : vendorTemplate.MinQl;
+                    int maxQl = inventoryEntry.MaxQl < vendorTemplate.MaxQl
+                        ? inventoryEntry.MaxQl
+                        : vendorTemplate.MaxQl;
+
+                    int itemQl = minQl + rnd.Next(maxQl - minQl);
+
+                    Item item = new Item(itemQl, inventoryEntry.LowId, inventoryEntry.HighId);
+                    this.Add(slotNumber, item);
+                    slotNumber++;
+                    if (slotNumber >= this.MaxSlots)
+                    {
+                        break;
+                    }
                 }
             }
             return true;

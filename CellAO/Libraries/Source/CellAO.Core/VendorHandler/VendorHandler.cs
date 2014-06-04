@@ -34,14 +34,20 @@ namespace CellAO.Core.VendorHandler
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
+    using CellAO.Core.Statels;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
 
@@ -49,7 +55,7 @@ namespace CellAO.Core.VendorHandler
 
     public static class VendorHandler
     {
-        public static void SpawnVendorFromTemplate(DBVendor vendor, IPlayfield playfield)
+        public static void SpawnVendorFromDatabaseTemplate(DBVendor vendor, IPlayfield playfield)
         {
             Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = vendor.Playfield };
             Identity freeIdentity = new Identity()
@@ -67,12 +73,47 @@ namespace CellAO.Core.VendorHandler
             v.Playfield = playfield;
         }
 
-        public static void SpawnVendorsForPlayfield(IPlayfield playfield)
+        public static void SpawnEmptyVendorFromTemplate(StatelData statelData, IPlayfield playfield, int instance)
+        {
+            Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = statelData.PlayfieldId };
+            Identity freeIdentity = new Identity()
+            {
+                Type = IdentityType.VendingMachine,
+                Instance =
+                    Pool.Instance.GetFreeInstance<Vendor>(
+                        0x70000000,
+                        IdentityType.VendingMachine)
+            };
+            Vendor v = new Vendor(pfIdentity, freeIdentity, statelData.TemplateId);
+            v.RawCoordinates = new Vector3(statelData.X, statelData.Y, statelData.Z);
+            v.Heading = new Quaternion(
+                statelData.HeadingX,
+                statelData.HeadingY,
+                statelData.HeadingZ,
+                statelData.HeadingW);
+            v.Playfield = playfield;
+        }
+
+
+        public static void SpawnVendorsForPlayfield(IPlayfield playfield, StatelData[] rdbVendors)
         {
             IEnumerable<DBVendor> vendors = VendorDao.Instance.GetWhere(new { Playfield = playfield.Identity.Instance });
-            foreach (DBVendor vendor in vendors)
+
+            foreach (StatelData sd in rdbVendors)
             {
-                SpawnVendorFromTemplate(vendor, playfield);
+                int id = (int)((((uint)sd.Identity.Instance) >> 16) & 0xff | (playfield.Identity.Instance << 16));
+
+                DBVendor vendor = vendors.FirstOrDefault(x => x.Id == id);
+                if (vendor != null)
+                {
+                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString(true) + " - DB " + vendor.TemplateId);
+                    SpawnVendorFromDatabaseTemplate(vendor, playfield);
+                }
+                else
+                {
+                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString(true) + " -    " + sd.TemplateId);
+                    SpawnEmptyVendorFromTemplate(sd, playfield, id);
+                }
             }
         }
     }

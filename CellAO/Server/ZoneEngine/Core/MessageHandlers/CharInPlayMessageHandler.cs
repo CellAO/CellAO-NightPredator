@@ -109,15 +109,6 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
             }*/
 
-            foreach (
-                Vendor vendor in
-                    Pool.Instance.GetAll<Vendor>(
-                        client.Controller.Character.Playfield.Identity,
-                        (int)IdentityType.VendingMachine))
-            {
-                VendingMachineFullUpdateMessageHandler.Default.Send(client.Controller.Character, vendor);
-            }
-
             foreach (WeatherEntry w in WeatherSettings.Instance.WeatherList)
             {
                 WeatherControlMessageHandler.Default.Send(client.Controller.Character, w);

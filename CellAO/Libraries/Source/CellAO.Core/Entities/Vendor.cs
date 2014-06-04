@@ -33,18 +33,15 @@ namespace CellAO.Core.Entities
 {
     #region Usings ...
 
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     using CellAO.Core.Exceptions;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
-    using CellAO.ObjectManager;
     using CellAO.Stats;
-
-    using MsgPack.Serialization.EmittingSerializers;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -62,15 +59,35 @@ namespace CellAO.Core.Entities
                 throw new DataBaseException("Could not find a vendor template for hash '" + templateHash + "'.");
             }
 
-
             this.Stats = new SimpleStatList();
             this.Template = ItemLoader.ItemList[vendorTemplate.ItemTemplate];
-            foreach (var s in this.Template.Stats)
+            foreach (KeyValuePair<int, int> s in this.Template.Stats)
             {
                 this.Stats[s.Key].Value = s.Value;
             }
             this.TemplateHash = vendorTemplate.Hash;
             this.Name = vendorTemplate.Name;
+
+            this.BaseInventory = new VendorInventory(this);
+            this.BaseInventory.Read();
+        }
+
+        public Vendor(Identity parent, Identity id, int templateId)
+            : base(parent, id)
+        {
+            this.Stats = new SimpleStatList();
+            this.Template = ItemLoader.ItemList[templateId];
+            foreach (KeyValuePair<int, int> s in this.Template.Stats)
+            {
+                this.Stats[s.Key].Value = s.Value;
+            }
+
+            this.Stats[0x17].Value = templateId;
+            this.Stats[0x1f5].Value = 2;
+
+            
+            this.TemplateHash = "";
+            this.Name = ItemNamesDao.Instance.Get(this.Template.ID).Name;
 
             this.BaseInventory = new VendorInventory(this);
             this.BaseInventory.Read();

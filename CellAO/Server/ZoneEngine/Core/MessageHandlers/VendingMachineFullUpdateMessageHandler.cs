@@ -34,6 +34,7 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
@@ -81,18 +82,26 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Unknown5 = 0;
                 x.Unknown6 = 111;
                 List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
-                foreach (IStat stat in vendor.Stats.All)
+                var templist = vendor.Stats.GetStatValues();
+                SortedDictionary<int,uint> templist2 = new SortedDictionary<int, uint>();
+                foreach (KeyValuePair<int, uint> kv in templist)
+                {
+                    templist2.Add(kv.Key,kv.Value);
+                }
+                
+                foreach (KeyValuePair<int,uint> stat in templist2)
+                /*foreach (IStat stat in vendor.Stats.All)
                 {
                     if (stat.NotDefault())
-                    {
-                        temp.Add(
+                    {*/
+                {        temp.Add(
                             new GameTuple<CharacterStat, uint>()
                             {
-                                Value1 = (CharacterStat)stat.StatId,
+                                Value1 = (CharacterStat)stat.Key,
                                 Value2 = (uint)stat.Value
-                            });
-                    }
-                }
+                            });}
+                    /*}
+                }*/
                 x.Stats = temp.ToArray();
                 x.Unknown7 = vendor.Name+"\0";
                 x.Unknown8 = 2;

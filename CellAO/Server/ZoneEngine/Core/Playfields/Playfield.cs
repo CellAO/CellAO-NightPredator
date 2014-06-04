@@ -192,7 +192,7 @@ namespace CellAO.Core.Playfields
 
         private void LoadVendors(Identity playfieldIdentity)
         {
-            VendorHandler.VendorHandler.SpawnVendorsForPlayfield(this);
+            VendorHandler.VendorHandler.SpawnVendorsForPlayfield(this, PlayfieldLoader.PFData[playfieldIdentity.Instance].Statels.Where(x=>x.Identity.Type==IdentityType.VendingMachine).ToArray());
         }
 
         private void LoadMobSpawns(Identity playfieldIdentity)
