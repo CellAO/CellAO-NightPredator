@@ -183,6 +183,18 @@ namespace CellAO.Communication.ISComV2Server
             }
         }
 
+        public List<string> GetZoneEngineIds()
+        {
+            List<string> temp = new List<string>(this.clients.Count);
+            lock (this.clients)
+            {
+                foreach (IClient cl in this.clients)
+                {
+                    temp.Add(cl.ClientAddress.ToString());
+                }
+            }
+            return temp;
+        }
         #endregion
     }
 }
