@@ -39,6 +39,8 @@ namespace CellAO.ObjectManager
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
+
     #endregion
 
     /// <summary>
@@ -60,6 +62,9 @@ namespace CellAO.ObjectManager
             this.Identity = id;
             this.Parent = parent;
             Pool.Instance.AddObject(parent, this);
+            LogUtil.Debug(
+                DebugInfoDetail.Pool,
+                "Created new object " + id.ToString(true) + " of " + parent.ToString(true));
         }
 
         /// <summary>
@@ -72,6 +77,7 @@ namespace CellAO.ObjectManager
         /// </summary>
         public void Dispose()
         {
+            LogUtil.Debug(DebugInfoDetail.Pool, "Removed object " + this.Identity.ToString(true) + " of " + this.Parent.ToString(true));
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }

@@ -40,6 +40,8 @@ namespace CellAO.ObjectManager
     using CellAO.Core.Exceptions;
     using CellAO.Interfaces;
 
+    using Microsoft.Win32;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
     using Utility;
@@ -66,6 +68,8 @@ namespace CellAO.ObjectManager
         private bool disposed = false;
 
         private readonly List<ulong> reservedIds = new List<ulong>();
+
+        private readonly Dictionary<int, int> maxIds = new Dictionary<int, int>();
 
         /// <summary>
         /// </summary>
@@ -130,6 +134,16 @@ namespace CellAO.ObjectManager
         {
             ulong parentId = parent.Long();
             Dictionary<int, Dictionary<ulong, IEntity>> parentList = null;
+            if (maxIds.ContainsKey((int)obj.Identity.Type))
+            {
+                maxIds[(int)obj.Identity.Type] = maxIds[(int)obj.Identity.Type] < obj.Identity.Instance
+                    ? obj.Identity.Instance
+                    : maxIds[(int)obj.Identity.Type];
+            }
+            else
+            {
+                maxIds[(int)obj.Identity.Type] = obj.Identity.Instance;
+            }
             lock (this.reservedIds)
             {
                 lock (this.pool)
@@ -637,56 +651,13 @@ namespace CellAO.ObjectManager
 
             lock (this.reservedIds)
             {
-                List<ulong> parentIds = new List<ulong>();
-                lock (this.pool)
+                if (maxIds.ContainsKey((int)type))
                 {
-                    parentIds.AddRange(this.pool.Keys);
+                    minId = minId < maxIds[(int)type] + 1 ? maxIds[(int)type] + 1 : minId;
                 }
-
-                bool foundEmpty = false;
-                while (!foundEmpty)
-                {
-                    if (this.reservedIds.Contains(temp.Long()))
-                    {
-                        temp.Instance++;
-                    }
-                    else
-                    {
-                        bool foundNoneOfType = true;
-                        foreach (ulong parentid in parentIds)
-                        {
-                            Dictionary<ulong, IEntity> entries = null;
-                            if (this.pool[parentid].ContainsKey((int)type))
-                            {
-                                entries = this.pool[parentid][(int)type];
-                            }
-                            if (entries != null)
-                            {
-                                foundNoneOfType = false;
-                                lock (entries)
-                                {
-                                    if (entries.ContainsKey(temp.Long()))
-                                    {
-                                        temp.Instance++;
-                                    }
-                                    else
-                                    {
-                                        this.reservedIds.Add(temp.Long());
-                                        foundEmpty = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        if (foundNoneOfType)
-                        {
-                            this.reservedIds.Add(temp.Long());
-                            foundEmpty = true;
-                        }
-                    }
-                }
+                maxIds[(int)type] = minId;
             }
-
+            temp.Instance = minId;
             return temp.Instance;
         }
     }

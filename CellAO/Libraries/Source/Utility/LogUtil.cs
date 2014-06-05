@@ -542,5 +542,7 @@ namespace Utility
         KnuBot = 4096,
 
         Statel = 8192,
+
+        Pool = 16384,
     }
 }
