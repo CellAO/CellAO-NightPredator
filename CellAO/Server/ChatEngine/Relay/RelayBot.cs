@@ -641,21 +641,6 @@ namespace Chatengine.Relay
 
         #endregion
 
-        #region Maybe delete this if my code below works.
-
-        // TODO: Set this up after I figure out how to Get Chat to gather user information? or Character Info?
-
-        // private TwitterBotUser GetTwitterBotUser(IrcUser ircUser)
-        // {
-        // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == ircUser);
-        // if (twitterUser == null)
-        // throw new InvalidOperationException(string.Format(
-        // "User '{0}' is not logged in to Twitter.", ircUser.NickName));
-        // return twitterUser;
-        // }
-
-        #endregion
-
         // List of all currently logged-in Twitter users.
         // private List<CellAOUsers> cellAoUserses;
 
