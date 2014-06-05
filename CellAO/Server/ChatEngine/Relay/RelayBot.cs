@@ -83,6 +83,8 @@ namespace Chatengine.Relay
         /// </summary>
         private IrcClient client = null;
 
+        private int GMlevel = 0;
+
         #endregion
 
         #region Constructors and Destructors
@@ -433,8 +435,6 @@ namespace Chatengine.Relay
         {
             var sourceUser = (IrcUser)source;
             CellAoBotUser CellAOUser = this.cellAoBotUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
-            // var sourceUser = (IrcUser)source;
-            // var twitterUser = this.twitterUsers.SingleOrDefault(tu => tu.IrcUser == sourceUser);
 
             if (CellAOUser != null)
             {
@@ -451,9 +451,11 @@ namespace Chatengine.Relay
 
             // // Create new CellAO user and log in to service.
             var cellaoBotUser = new CellAoBotUser(sourceUser);
-            bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
+           // bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
+            cellaoBotUser.LogIn(parameters[0], parameters[1]);
+            
             IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
-            if (success)
+            if (cellaoBotUser.IsAuthenticated)
             {
                 this.cellAoBotUsers.Add(cellaoBotUser);
                 client.LocalUser.SendMessage(
@@ -461,18 +463,7 @@ namespace Chatengine.Relay
                     "You are now logged in as {0} / '{1}'.",
                     cellaoBotUser.IrcUser.NickName,
                     cellaoBotUser.IrcUser.NickName);
-                // Log-in succeeded.
-
-                // this.twitterUsers.Add(twitterBotUser);
-
-                // client.LocalUser.SendMessage(replyTargets, "You are now logged in as {0} / '{1}'.",
-                // twitterBotUser.TwitterUser.ScreenName, twitterBotUser.TwitterUser.Name);
-                // }
-                // else
-                // {
-                // // Log-in failed.
-
-                // client.LocalUser.SendMessage(replyTargets, "Invalid log-in username/password.");
+                GMlevel = cellaoBotUser.GMLevel(username);
             }
             else
             {
@@ -499,18 +490,17 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            // var sourceUser = (IrcUser)source;
-            // var twitterBotUser = GetTwitterBotUser(sourceUser);
+            var sourceUser = (IrcUser)source;
+            var cellaoBotUser = GetCellAOBotUser(sourceUser);
+            if (parameters.Count != 0)
+                throw new InvalidCommandParametersException(1);
 
-            // if (parameters.Count != 0)
-            // throw new InvalidCommandParametersException(1);
+            // Log out CellAO user.
+            cellaoBotUser.LogOut();
 
-            //// Log out Twitter user.
-            // twitterBotUser.LogOut();
-            // this.twitterUsers.Remove(twitterBotUser);
-
-            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            // client.LocalUser.SendMessage(replyTargets, "You are now logged out.");
+            this.cellAoBotUsers.Remove(cellaoBotUser);
+            IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
+            client.LocalUser.SendMessage(replyTargets, "You are now logged out.");
         }
 
         /// <summary>

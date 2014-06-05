@@ -87,20 +87,19 @@ namespace ChatEngine.Relay
         /// </param>
         /// <returns>
         /// </returns>
-        public bool LogIn(string username, string password)
+        public void  LogIn(string username, string password)
         {
             try
             {
                 string dUser = LoginDataDao.Instance.GetByUsername(username).Username;
+                string dPass = LoginDataDao.Instance.GetByUsername(username).Password;
 
                 if (dUser != username)
                 {
-                    return false;
+                    this.IsAuthenticated = false;
                 }
 
                 this.IsAuthenticated = true;
-
-                return true;
             }
             catch (SqlException)
             {
@@ -123,19 +122,5 @@ namespace ChatEngine.Relay
         }
 
         #endregion
-
-        // public CellAoUser CellAoUser
-        // {
-        // get;
-        // private set;
-        // }
-
-        // TODO: Figure out how to get ChatServe to gather some information about Users?
-
-        // public TwitterUser TwitterUser
-        // {
-        // get;
-        // private set;
-        // }
     }
 }
