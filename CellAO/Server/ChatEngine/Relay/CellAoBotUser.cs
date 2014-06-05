@@ -70,6 +70,11 @@ namespace ChatEngine.Relay
         /// </summary>
         public bool IsAuthenticated { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public int GMlevel { get; private set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -103,11 +108,18 @@ namespace ChatEngine.Relay
             }
         }
 
+        public int GMLevel(string username)
+        {
+            this.GMlevel = LoginDataDao.Instance.GetByUsername(username).GM;
+            return this.GMlevel;
+        }
+
         /// <summary>
         /// </summary>
         public void LogOut()
         {
             this.IsAuthenticated = false;
+            this.GMlevel = 0;
         }
 
         #endregion
