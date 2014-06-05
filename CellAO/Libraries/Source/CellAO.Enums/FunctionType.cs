@@ -866,5 +866,8 @@ namespace CellAO.Enums
         /// <summary>
         /// </summary>
         WeaponEffectColor = 53042,
+
+        // Our own "functions" here
+        ExitProxyPlayfield = 100000,
     }
 }

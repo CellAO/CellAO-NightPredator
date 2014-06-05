@@ -36,8 +36,10 @@ namespace ZoneEngine.Core.Playfields
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
 
     using CellAO.Core.Events;
+    using CellAO.Core.Functions;
     using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
@@ -101,6 +103,46 @@ namespace ZoneEngine.Core.Playfields
                             Event ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
                             ev.EventType = EventType.OnCollide;
                             sd.Events.Add(ev);
+                        }
+                    }
+
+                    bool foundproxyteleport = false;
+                    int playfieldid = 0;
+                    int doorinstance = 0;
+                    foreach (Event ev in sd.Events)
+                    {
+                        foreach (Function f in ev.Functions)
+                        {
+                            if (f.FunctionType == (int)FunctionType.TeleportProxy)
+                            {
+                                foundproxyteleport = true;
+                                playfieldid = f.Arguments.Values[1].AsInt32();
+                                doorinstance = (int)((uint)0xC0000000 | f.Arguments.Values[1].AsInt32() | (f.Arguments.Values[2].AsInt32() << 16));
+                                break;
+                            }
+                        }
+                        if (foundproxyteleport)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (foundproxyteleport)
+                    {
+                        if (PlayfieldLoader.PFData.ContainsKey(playfieldid))
+                        {
+                            StatelData internalDoor = PlayfieldLoader.PFData[playfieldid].GetDoor(doorinstance);
+                            if (internalDoor != null)
+                            {
+                                if (internalDoor.Events.All(x => x.EventType != EventType.OnEnter))
+                                {
+                                    Event ev = new Event();
+                                    ev.EventType = EventType.OnEnter;
+                                    ev.Functions.Add(
+                                        new Function() { FunctionType = (int)FunctionType.ExitProxyPlayfield });
+                                    internalDoor.Events.Add(ev);
+                                }
+                            }
                         }
                     }
                 }

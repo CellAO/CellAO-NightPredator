@@ -91,10 +91,10 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                 Quaternion q = new Quaternion(sd.HeadingX, sd.HeadingY, sd.HeadingZ, sd.HeadingW);
 
                 Quaternion.Normalize(q);
-                Vector3 n = (Vector3)q.RotateVector3(Vector3.AxisX);
+                Vector3 n = (Vector3)q.RotateVector3(Vector3.AxisZ);
 
-                v.x += n.z * 2;
-                v.z += n.x * 2;
+                v.x += n.x * 2.5;
+                v.z += n.z * 2.5;
                 character.Playfield.Teleport(
                     (Dynel)character,
                     new Coordinate(v),

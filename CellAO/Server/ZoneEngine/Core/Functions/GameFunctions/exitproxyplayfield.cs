@@ -36,7 +36,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     using System.Linq;
 
     using CellAO.Core.Entities;
-    using CellAO.Core.Playfields;
+    using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
@@ -47,79 +47,53 @@ namespace ZoneEngine.Core.Functions.GameFunctions
 
     using ZoneEngine.Core.Playfields;
 
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = CellAO.Core.Vector.Vector3;
+
     #endregion
 
-    /// <summary>
-    /// </summary>
-    internal class lineteleport : FunctionPrototype
+    internal class exitproxyplayfield : FunctionPrototype
     {
-        #region Public Properties
-
-        /// <summary>
-        /// </summary>
         public override FunctionType FunctionId
         {
             get
             {
-                return FunctionType.LineTeleport;
+                return FunctionType.ExitProxyPlayfield;
             }
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <param name="self">
-        /// </param>
-        /// <param name="caller">
-        /// </param>
-        /// <param name="target">
-        /// </param>
-        /// <param name="arguments">
-        /// </param>
-        /// <returns>
-        /// </returns>
         public override bool Execute(
             INamedEntity self,
             IEntity caller,
             IInstancedEntity target,
             MessagePackObject[] arguments)
         {
-            if (arguments.Count() != 3)
+            uint externalDoorInstance = self.Stats[StatIds.externaldoorinstance].BaseValue;
+            int externalPlayfieldId = self.Stats[StatIds.externalplayfieldinstance].Value;
+
+            StatelData door =
+                PlayfieldLoader.PFData[externalPlayfieldId].Statels.FirstOrDefault(
+                    x =>
+                        (uint)x.Identity.Instance == externalDoorInstance
+                        && (x.Identity.Type == IdentityType.Door /*|| x.Identity.Type==IdentityType.MissionEntrance*/));
+            if (door != null)
             {
-                return false;
+                Vector3 v = new Vector3(door.X, door.Y, door.Z);
+
+                Quaternion q = new Quaternion(door.HeadingX, door.HeadingY, door.HeadingZ, door.HeadingW);
+
+                Quaternion.Normalize(q);
+                Vector3 n = (Vector3)q.RotateVector3(Vector3.AxisZ);
+
+                v.x += n.x * 2.5;
+                v.z += n.z * 2.5;
+                self.Playfield.Teleport(
+                    (Dynel)self,
+                    new Coordinate(v),
+                    q,
+                    new Identity() { Type = IdentityType.Playfield, Instance = externalPlayfieldId });
             }
-
-            uint arg1 = arguments[1].AsUInt32();
-            int toPlayfield = arguments[2].AsInt32();
-
-            byte destinationIndex = (byte)(arg1 >> 16);
-            PlayfieldData pfd = PlayfieldLoader.PFData[toPlayfield];
-            PlayfieldDestination pfDestination = pfd.Destinations[destinationIndex];
-
-            float newX = (pfDestination.EndX - pfDestination.StartX) * 0.5f + pfDestination.StartX;
-            float newZ = (pfDestination.EndZ - pfDestination.StartZ) * 0.5f + pfDestination.StartZ;
-            float dist = WallCollision.Distance(
-                pfDestination.StartX,
-                pfDestination.StartZ,
-                pfDestination.EndX,
-                pfDestination.EndZ);
-            float headDistX = (pfDestination.EndX - pfDestination.StartX) / dist;
-            float headDistZ = (pfDestination.EndZ - pfDestination.StartZ) / dist;
-            newX -= headDistZ * 4;
-            newZ += headDistX * 4;
-
-            Coordinate destCoordinate = new Coordinate(newX, pfDestination.EndY, newZ);
-
-            ((ICharacter)self).Teleport(
-                destCoordinate,
-                ((ICharacter)self).Heading,
-                new Identity() { Type = IdentityType.Playfield, Instance = toPlayfield });
-            return true;
+            return door != null;
         }
-
-        #endregion
     }
 }
