@@ -24,7 +24,7 @@
   <Locale>en</Locale>
   <!-- IRC Config-->
   <UseIRCRelay>true</UseIRCRelay>
-  <IRCServer>irc.darkkittenstudio.com</IRCServer>
+  <IRCServer>irc.aocell.info</IRCServer>
   <RelayBotNick>CellAO</RelayBotNick>
   <RelayBotIdent>CellAO</RelayBotIdent>
   <IRCChannel>#CellAORelay</IRCChannel>
