@@ -47,7 +47,7 @@ namespace CellAO.Core.Items
     /// <summary>
     /// Item Interface
     /// </summary>
-    public interface IItem
+    public interface IItem : IEventHolder
     {
         #region Public Properties
 
@@ -69,10 +69,6 @@ namespace CellAO.Core.Items
         /// <summary>
         /// </summary>
         List<AOAction> ItemActions { get; }
-
-        /// <summary>
-        /// </summary>
-        List<Event> ItemEvents { get; }
 
         /// <summary>
         /// LowId of the item template

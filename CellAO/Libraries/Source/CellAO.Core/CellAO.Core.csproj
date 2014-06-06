@@ -101,6 +101,7 @@
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
     <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />
+    <Compile Include="Events\IEventHolder.cs" />
     <Compile Include="Events\IEvents.cs" />
     <Compile Include="Functions\Constants.cs" />
     <Compile Include="Functions\FunctionArguments.cs" />

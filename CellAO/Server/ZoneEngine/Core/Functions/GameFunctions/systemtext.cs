@@ -85,7 +85,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             var message = new FormatFeedbackMessage()
                           {
                               Identity = self.Identity,
-                              FormattedMessage = "~&!!!\":!!!)<s"+(char)(text.Length+1),
+                              FormattedMessage = "~&!!!\":!!!)<s" + (char)(text.Length + 1),
                               Unknown1 = 0,
                               Unknown2 = 0,
                           };

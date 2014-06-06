@@ -35,8 +35,6 @@ namespace CellAO.Core.VendorHandler
 
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
-    using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Playfields;
@@ -77,14 +75,15 @@ namespace CellAO.Core.VendorHandler
         {
             Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = statelData.PlayfieldId };
             Identity freeIdentity = new Identity()
-            {
-                Type = IdentityType.VendingMachine,
-                Instance =
-                    Pool.Instance.GetFreeInstance<Vendor>(
-                        0x70000000,
-                        IdentityType.VendingMachine)
-            };
+                                    {
+                                        Type = IdentityType.VendingMachine,
+                                        Instance =
+                                            Pool.Instance.GetFreeInstance<Vendor>(
+                                                0x70000000,
+                                                IdentityType.VendingMachine)
+                                    };
             Vendor v = new Vendor(pfIdentity, freeIdentity, statelData.TemplateId);
+            v.OriginalIdentity = statelData.Identity;
             v.RawCoordinates = new Vector3(statelData.X, statelData.Y, statelData.Z);
             v.Heading = new Quaternion(
                 statelData.HeadingX,
@@ -94,14 +93,13 @@ namespace CellAO.Core.VendorHandler
             v.Playfield = playfield;
         }
 
-
         public static void SpawnVendorsForPlayfield(IPlayfield playfield, StatelData[] rdbVendors)
         {
             IEnumerable<DBVendor> vendors = VendorDao.Instance.GetWhere(new { Playfield = playfield.Identity.Instance });
 
             foreach (StatelData sd in rdbVendors)
             {
-                int id = (int)((((uint)sd.Identity.Instance) >> 16) & 0xff | (playfield.Identity.Instance << 16));
+                int id = (((sd.Identity.Instance) >> 16) & 0xff | (playfield.Identity.Instance << 16));
 
                 DBVendor vendor = vendors.FirstOrDefault(x => x.Id == id);
                 if (vendor != null)

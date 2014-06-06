@@ -79,7 +79,7 @@ namespace CellAO.Core.Inventory
                 IItem item = this[itemSlot];
                 if (item != null)
                 {
-                    foreach (Event events in item.ItemEvents.Where(x => x.EventType == EventType.OnWear))
+                    foreach (Event events in item.Events.Where(x => x.EventType == EventType.OnWear))
                     {
                         foreach (
                             Function functions in events.Functions.Where(x => this.IsSocialTabFunction(x.FunctionType)))

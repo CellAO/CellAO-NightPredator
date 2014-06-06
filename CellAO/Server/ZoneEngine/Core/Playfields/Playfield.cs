@@ -35,7 +35,6 @@ namespace CellAO.Core.Playfields
 
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
     using System.Net.Sockets;
@@ -49,6 +48,7 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.NPCHandler;
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
+    using CellAO.Core.VendorHandler;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
     using CellAO.Enums;
@@ -77,7 +77,7 @@ namespace CellAO.Core.Playfields
     using ZoneEngine.Script;
 
     using Config = Utility.Config.ConfigReadWrite;
-    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
@@ -158,11 +158,10 @@ namespace CellAO.Core.Playfields
             this.LoadStaticDynels(playfieldIdentity);
         }
 
-
-
         private void LoadStaticDynels(Identity playfieldIdentity)
         {
-            var dynels = StaticDynelDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            IEnumerable<DBStaticDynel> dynels =
+                StaticDynelDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
             foreach (DBStaticDynel sd in dynels)
             {
                 List<GameTuple<CharacterStat, uint>> tempStats =
@@ -171,11 +170,13 @@ namespace CellAO.Core.Playfields
                 if (tempStats.Any(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid))
                 {
                     int id = (int)tempStats.First(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid).Value2;
-                    StaticDynel sdy = new StaticDynel(this.Identity, new Identity() { Type = (IdentityType)sd.Type, Instance = sd.Instance }, ItemLoader.ItemList[id]);
-                    
+                    StaticDynel sdy = new StaticDynel(
+                        this.Identity,
+                        new Identity() { Type = (IdentityType)sd.Type, Instance = sd.Instance },
+                        ItemLoader.ItemList[id]);
+
                     foreach (GameTuple<CharacterStat, uint> stat in tempStats)
                     {
-                        
                         if (sdy.Stats.ContainsKey((int)stat.Value1))
                         {
                             sdy.Stats[(int)stat.Value1] = (int)stat.Value2;
@@ -185,14 +186,23 @@ namespace CellAO.Core.Playfields
                     }
 
                     sdy.Coordinate = new Coordinate(sd.X, sd.Y, sd.Z);
-                    sdy.Heading = new SmokeLounge.AOtomation.Messaging.GameData.Quaternion() { X = sd.HeadingX, Y = sd.HeadingY, Z = sd.HeadingZ, W = sd.HeadingW };
+                    sdy.Heading = new Quaternion()
+                                  {
+                                      X = sd.HeadingX,
+                                      Y = sd.HeadingY,
+                                      Z = sd.HeadingZ,
+                                      W = sd.HeadingW
+                                  };
                 }
             }
         }
 
         private void LoadVendors(Identity playfieldIdentity)
         {
-            VendorHandler.VendorHandler.SpawnVendorsForPlayfield(this, PlayfieldLoader.PFData[playfieldIdentity.Instance].Statels.Where(x=>x.Identity.Type==IdentityType.VendingMachine).ToArray());
+            VendorHandler.SpawnVendorsForPlayfield(
+                this,
+                PlayfieldLoader.PFData[playfieldIdentity.Instance].Statels.Where(
+                    x => x.Identity.Type == IdentityType.VendingMachine).ToArray());
         }
 
         private void LoadMobSpawns(Identity playfieldIdentity)
@@ -201,7 +211,11 @@ namespace CellAO.Core.Playfields
             foreach (DBMobSpawn mob in mobs)
             {
                 IEnumerable<DBMobSpawnStat> stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
-                ICharacter cmob = NonPlayerCharacterHandler.InstantiateMobSpawn(mob, stats.ToArray(), new NPCController(), this);
+                ICharacter cmob = NonPlayerCharacterHandler.InstantiateMobSpawn(
+                    mob,
+                    stats.ToArray(),
+                    new NPCController(),
+                    this);
                 if (mob.KnuBotScriptName != "")
                 {
                     ScriptCompiler.Instance.CallMethod(mob.KnuBotScriptName, cmob);
@@ -514,7 +528,7 @@ namespace CellAO.Core.Playfields
             TeleportMessageHandler.Default.Send(
                 dynel as ICharacter,
                 destination.coordinate,
-                (Quaternion)heading,
+                (Vector.Quaternion)heading,
                 playfield);
 
             // Send packet, disconnect, and other playfield waits for connect
@@ -522,7 +536,7 @@ namespace CellAO.Core.Playfields
             DespawnMessage despawnMessage = DespawnMessageHandler.Default.Create(dynel.Identity);
             this.AnnounceOthers(despawnMessage, dynel.Identity);
             dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
-            dynel.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
+            dynel.RawHeading = new Vector.Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
 
             // IMPORTANT!!
             // Dispose the character object, save new playfield data and then recreate it
@@ -534,7 +548,9 @@ namespace CellAO.Core.Playfields
             // Set client=null so dynel can really dispose
 
             IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
-            Pool.Instance.GetObject<Playfield>(Identity.None, new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+            Pool.Instance.GetObject<Playfield>(
+                Identity.None,
+                new Identity() { Type = playfield.Type, Instance = playfield.Instance });
 
             if (newPlayfield == null)
             {
@@ -739,7 +755,9 @@ namespace CellAO.Core.Playfields
                 }
                 catch (Exception e)
                 {
-                    LogUtil.Debug(DebugInfoDetail.Error, msg.Body.GetType().ToString() + Environment.NewLine + e.Message);
+                    LogUtil.Debug(
+                        DebugInfoDetail.Error,
+                        msg.Body.GetType().ToString() + Environment.NewLine + e.Message);
                     // /!\ This happens sometimes, dont know why tho, need more investigation
                     // throw;
                 }
@@ -803,7 +821,10 @@ namespace CellAO.Core.Playfields
             foreach (StatelData sd in this.statels)
             {
                 foreach (Event ev in
-                    sd.Events.Where(x => (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter) || (x.EventType == EventType.OnTargetInVicinity)))
+                    sd.Events.Where(
+                        x =>
+                            (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)
+                            || (x.EventType == EventType.OnTargetInVicinity)))
                 {
                     if (sd.Coord().Distance3D(dynel.Coordinates()) < 2.0f)
                     {
@@ -821,7 +842,9 @@ namespace CellAO.Core.Playfields
         /// </param>
         private void CheckWallCollision(ICharacter dynel)
         {
-            WallCollisionResult wcr = WallCollision.CheckCollision(dynel.Coordinates(), dynel.Playfield.Identity.Instance);
+            WallCollisionResult wcr = WallCollision.CheckCollision(
+                dynel.Coordinates(),
+                dynel.Playfield.Identity.Instance);
             if (wcr != null)
             {
                 int destPlayfield = wcr.SecondWall.DestinationPlayfield;
@@ -899,7 +922,6 @@ namespace CellAO.Core.Playfields
                     {
                         dynel.SendChangedStats();
                     }
-
 
                     if (dynel.Controller.IsFollowing())
                     {

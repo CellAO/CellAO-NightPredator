@@ -47,7 +47,7 @@ namespace CellAO.Core.Entities
 
     #endregion
 
-    public class StaticDynel : PooledObject
+    public class StaticDynel : PooledObject, IEventHolder
     {
         public SortedDictionary<int, int> Stats = new SortedDictionary<int, int>();
 
@@ -57,9 +57,9 @@ namespace CellAO.Core.Entities
 
         public ItemTemplate Template = null;
 
-        public List<Event> Events = null;
+        public List<Event> Events { get; private set; }
 
-        public List<AOAction> Actions = null;
+        public List<AOAction> Actions { get; private set; }
 
         public StaticDynel(Identity parent, Identity id, ItemTemplate template)
             : base(parent, id)

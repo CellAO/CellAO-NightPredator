@@ -29,88 +29,16 @@
 
 #endregion
 
-namespace CellAO.Core.Statels
+namespace CellAO.Core.Events
 {
     #region Usings ...
 
     using System.Collections.Generic;
 
-    using CellAO.Core.Events;
-    using CellAO.Core.Vector;
-    using CellAO.Interfaces;
-
-    using SmokeLounge.AOtomation.Messaging.GameData;
-
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class StatelData : IEntity, IEventHolder
+    public interface IEventHolder
     {
-        #region Fields
-
-        public StatelData()
-        {
-            this.Events = new List<Event>();
-        }
-
-        /// <summary>
-        /// </summary>
-        public List<Event> Events { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public float HeadingW;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingX;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingY;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingZ;
-
-        /// <summary>
-        /// </summary>
-        public int PlayfieldId = 0;
-
-        /// <summary>
-        /// </summary>
-        public int TemplateId = 0;
-
-        /// <summary>
-        /// </summary>
-        public float X;
-
-        /// <summary>
-        /// </summary>
-        public float Y;
-
-        /// <summary>
-        /// </summary>
-        public float Z;
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public Coordinate Coord()
-        {
-            return new Coordinate(this.X, this.Y, this.Z);
-        }
-
-        #endregion
-
-        public Identity Identity { get; set; }
-
-        public Identity Parent { get; set; }
+        List<Event> Events { get; }
     }
 }

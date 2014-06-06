@@ -29,88 +29,59 @@
 
 #endregion
 
-namespace CellAO.Core.Statels
+namespace ZoneEngine.Core.Functions.GameFunctions
 {
     #region Usings ...
 
-    using System.Collections.Generic;
-
-    using CellAO.Core.Events;
-    using CellAO.Core.Vector;
+    using CellAO.Core.Entities;
+    using CellAO.Enums;
     using CellAO.Interfaces;
+
+    using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using ZoneEngine.Core.MessageHandlers;
+
     #endregion
 
-    /// <summary>
-    /// </summary>
-    public class StatelData : IEntity, IEventHolder
+    public class shophash : FunctionPrototype
     {
-        #region Fields
-
-        public StatelData()
+        public override FunctionType FunctionId
         {
-            this.Events = new List<Event>();
+            get
+            {
+                return FunctionType.Shophash;
+            }
         }
 
-        /// <summary>
-        /// </summary>
-        public List<Event> Events { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public float HeadingW;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingX;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingY;
-
-        /// <summary>
-        /// </summary>
-        public float HeadingZ;
-
-        /// <summary>
-        /// </summary>
-        public int PlayfieldId = 0;
-
-        /// <summary>
-        /// </summary>
-        public int TemplateId = 0;
-
-        /// <summary>
-        /// </summary>
-        public float X;
-
-        /// <summary>
-        /// </summary>
-        public float Y;
-
-        /// <summary>
-        /// </summary>
-        public float Z;
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public Coordinate Coord()
+        public override bool Execute(
+            INamedEntity self,
+            IEntity caller,
+            IInstancedEntity target,
+            MessagePackObject[] arguments)
         {
-            return new Coordinate(this.X, this.Y, this.Z);
+            Vendor temp = caller as Vendor;
+            if (temp != null)
+            {
+                if (temp.BaseInventory.Pages[temp.BaseInventory.StandardPage].List().Count == 0)
+                {
+                    if (temp.OriginalIdentity.Equals(Identity.None))
+                    {
+                    }
+                    else
+                    {
+                        int id = temp.Playfield.Identity.Instance << 16
+                                 | ((temp.OriginalIdentity.Instance >> 16) & 0xff);
+                        ((ICharacter)self).Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                ((ICharacter)self),
+                                "This shop has no entry in the database yet. Please enter a new entry with the id "
+                                + id.ToString() + "."));
+                    }
+                }
+            }
+            return true;
         }
-
-        #endregion
-
-        public Identity Identity { get; set; }
-
-        public Identity Parent { get; set; }
     }
 }

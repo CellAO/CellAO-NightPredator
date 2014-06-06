@@ -30,11 +30,8 @@
 #endregion
 
 namespace CellAO.Core.Items
-
 {
     #region Usings ...
-
-    using System.Collections.Generic;
 
     using CellAO.Core.Events;
 
@@ -44,15 +41,7 @@ namespace CellAO.Core.Items
     /// Adding Item / Nano Events to class
     /// TODO: complete with methods
     /// </summary>
-    public interface IItemNanoEvents
+    public interface IItemNanoEvents : IEventHolder
     {
-        #region Public Properties
-
-        /// <summary>
-        /// List of Game Events (onWear, onCollide etc)
-        /// </summary>
-        List<Event> Events { get; }
-
-        #endregion
     }
 }

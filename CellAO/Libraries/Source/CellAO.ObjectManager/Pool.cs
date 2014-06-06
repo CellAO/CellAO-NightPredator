@@ -371,7 +371,7 @@ namespace CellAO.ObjectManager
             return null;
         }
 
-        public T GetObject<T>(Identity parent, Identity identity)
+        public T GetObject<T>(Identity parent, Identity identity) where T : class
         {
             ulong parentId = parent.Long();
             ulong id = identity.Long();
@@ -406,7 +406,7 @@ namespace CellAO.ObjectManager
                         catch (Exception)
                         {
                         }
-                        if (temp is T)
+                        if ((temp as T) != null)
                         {
                             return (T)temp;
                         }

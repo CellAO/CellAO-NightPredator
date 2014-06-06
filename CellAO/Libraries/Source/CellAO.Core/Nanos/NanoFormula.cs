@@ -69,7 +69,7 @@ namespace CellAO.Core.Nanos
         /// <summary>
         /// List of Item events
         /// </summary>
-        public List<Event> Events = new List<Event>();
+        public List<Event> Events { get; set; }
 
         /// <summary>
         /// Nano ID
@@ -102,6 +102,11 @@ namespace CellAO.Core.Nanos
         public int flags;
 
         #endregion
+
+        public NanoFormula()
+        {
+            this.Events=new List<Event>();
+        }
 
         #region Public Methods and Operators
 

@@ -52,7 +52,7 @@ namespace CellAO.Core.Items
 
     /// <summary>
     /// </summary>
-    public class Item : IItem
+    public class Item : IItem, IEventHolder
     {
         #region Fields
 
@@ -92,6 +92,7 @@ namespace CellAO.Core.Items
         /// </exception>
         public Item(int QL, int lowID, int highID)
         {
+            this.events=new List<Event>();
             // Checks:
             if ((!ItemLoader.ItemList.ContainsKey(lowID)) || (!ItemLoader.ItemList.ContainsKey(highID)))
             {
@@ -146,7 +147,7 @@ namespace CellAO.Core.Items
 
         /// <summary>
         /// </summary>
-        public List<Event> ItemEvents
+        public List<Event> Events
         {
             get
             {
@@ -156,6 +157,10 @@ namespace CellAO.Core.Items
                 }
 
                 return this.events;
+            }
+            private set
+            {
+                this.events = value;
             }
         }
 
@@ -291,7 +296,7 @@ namespace CellAO.Core.Items
         /// </param>
         public void PerformAction(ICharacter character, EventType eventType, int itemSlot)
         {
-            foreach (Event events in this.ItemEvents.Where(x => x.EventType == eventType))
+            foreach (Event events in this.Events.Where(x => x.EventType == eventType))
             {
                 foreach (Function functions in events.Functions)
                 {
@@ -470,5 +475,6 @@ namespace CellAO.Core.Items
         }
 
         #endregion
+
     }
 }

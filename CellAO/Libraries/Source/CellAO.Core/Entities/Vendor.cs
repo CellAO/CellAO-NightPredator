@@ -36,6 +36,7 @@ namespace CellAO.Core.Entities
     using System.Collections.Generic;
     using System.Linq;
 
+    using CellAO.Core.Events;
     using CellAO.Core.Exceptions;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
@@ -47,8 +48,10 @@ namespace CellAO.Core.Entities
 
     #endregion
 
-    public class Vendor : Dynel
+    public class Vendor : Dynel, IEventHolder
     {
+        public Identity OriginalIdentity = Identity.None;
+
         public Vendor(Identity parent, Identity id, string templateHash)
             : base(parent, id)
         {
@@ -85,7 +88,6 @@ namespace CellAO.Core.Entities
             this.Stats[0x17].Value = templateId;
             this.Stats[0x1f5].Value = 2;
 
-            
             this.TemplateHash = "";
             this.Name = ItemNamesDao.Instance.Get(this.Template.ID).Name;
 
@@ -96,5 +98,13 @@ namespace CellAO.Core.Entities
         public ItemTemplate Template { get; private set; }
 
         public string TemplateHash { get; private set; }
+
+        public List<Event> Events
+        {
+            get
+            {
+                return this.Template.Events;
+            }
+        }
     }
 }

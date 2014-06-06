@@ -44,6 +44,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Items;
     using CellAO.Core.Network;
     using CellAO.Enums;
+    using CellAO.Interfaces;
     using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -88,19 +89,31 @@ namespace ZoneEngine.Core.MessageHandlers
                         {
                             // TODO: Call OnUse of the targets controller
                             // Static dynels first
-                            StaticDynel temp = null;
+                            IEventHolder temp = null;
                             try
                             {
-                                temp = Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity, message.Target[0]);
+                                temp = Pool.Instance.GetObject<IEventHolder>(client.Controller.Character.Playfield.Identity, message.Target[0]);
                             }
                             catch (Exception)
                             { }
                             if (temp != null)
                             {
-                                Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
-                                if (ev != null)
+                                var entity = temp as IEntity;
+                                if (entity != null)
                                 {
-                                    ev.Perform(client.Controller.Character, temp);
+                                    Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUse);
+                                    if (ev != null)
+                                    {
+                                        ev.Perform(client.Controller.Character, entity);
+                                    }
+                                    else
+                                    {
+                                        ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnTrade);
+                                        if (ev != null)
+                                        {
+                                            ev.Perform(client.Controller.Character, entity);
+                                        }
+                                    }
                                 }
                             }
 
