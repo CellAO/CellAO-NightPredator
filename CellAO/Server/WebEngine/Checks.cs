@@ -94,7 +94,6 @@ namespace WebEngine
                     _config.Instance.CurrentConfig.WebHostPhpPath + @"\php.ini");
                 Directory.CreateDirectory(@"c:\temp");
                 Console.WriteLine("Done.");
-                zip.Dispose();
             }
         }
 
@@ -150,7 +149,6 @@ namespace WebEngine
                     ze.Extract(_config.Instance.CurrentConfig.WebHostRoot, ExtractExistingFileAction.OverwriteSilently);
                 }
                 Console.WriteLine("Done.");
-                zip.Dispose();
             }
         }
     }

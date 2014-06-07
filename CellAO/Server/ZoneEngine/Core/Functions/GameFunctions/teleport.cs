@@ -121,6 +121,10 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             Coordinate destination = new Coordinate(Arguments[0].AsInt32(), Arguments[1].AsInt32(), Arguments[2].AsInt32());
             IQuaternion heading = new Quaternion(0.0, 0.0, 0.0, 0.0);
             Identity playfield = new Identity() { Type = IdentityType.Playfield, Instance = Arguments[3].AsInt32() };
+            if (playfield.Instance==0)
+            {
+                playfield = Self.Playfield.Identity;
+            }
             ((Character)Self).Teleport(destination, heading, playfield);
             return true;
         }

@@ -46,6 +46,8 @@ namespace ZoneEngine.Core.MessageHandlers
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
+    using ZoneEngine.Core.Controllers;
+
     #endregion
 
     /// <summary>
@@ -75,6 +77,22 @@ namespace ZoneEngine.Core.MessageHandlers
             }
             switch (message.Action)
             {
+                case TradeAction.None:
+                {
+                    ICharacter isnpc =
+                        Pool.Instance.GetObject<ICharacter>(
+                            client.Controller.Character.Playfield.Identity,
+                            message.Target);
+                    if (isnpc != null)
+                    {
+                        NPCController controller = isnpc.Controller as NPCController;
+                        if (controller != null)
+                        {
+                            controller.Trade(message.Identity);
+                        }
+                    }
+                    break;
+                }
                 case TradeAction.AddItem:
                 {
                     if (client.Controller.Character.ShoppingBag == null)

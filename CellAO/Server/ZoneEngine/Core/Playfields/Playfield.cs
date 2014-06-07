@@ -219,6 +219,12 @@ namespace CellAO.Core.Playfields
                 if (mob.KnuBotScriptName != "")
                 {
                     ScriptCompiler.Instance.CallMethod(mob.KnuBotScriptName, cmob);
+/*                    if ((cmob.Stats[0].Value
+                        & (int)SimpleCharFullUpdateFlags.IsImmune) == (int)SimpleCharFullUpdateFlags.IsImmune)
+                    {
+                        cmob.Stats[0].Value -= (int)SimpleCharFullUpdateFlags.IsImmune;
+                        cmob.Stats[0].Value |= (int)SimpleCharFullUpdateFlags.UnknownFlag5;
+                    }*/
                 }
             }
         }

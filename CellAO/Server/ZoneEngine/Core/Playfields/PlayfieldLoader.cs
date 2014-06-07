@@ -43,7 +43,12 @@ namespace ZoneEngine.Core.Playfields
     using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
     using CellAO.Enums;
+
+    using MsgPack;
+    using MsgPack.Serialization.EmittingSerializers;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -94,17 +99,6 @@ namespace ZoneEngine.Core.Playfields
             {
                 foreach (StatelData sd in pfd.Statels)
                 {
-                    if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
-                    {
-                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision() && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
-                            && (!sd.Events.Any(x => x.EventType == EventType.OnCollide))
-                            && sd.Events.Any(x => x.EventType == EventType.OnUse))
-                        {
-                            Event ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
-                            ev.EventType = EventType.OnCollide;
-                            sd.Events.Add(ev);
-                        }
-                    }
 
                     bool foundproxyteleport = false;
                     int playfieldid = 0;
@@ -118,12 +112,32 @@ namespace ZoneEngine.Core.Playfields
                                 foundproxyteleport = true;
                                 playfieldid = f.Arguments.Values[1].AsInt32();
                                 doorinstance = (int)((uint)0xC0000000 | f.Arguments.Values[1].AsInt32() | (f.Arguments.Values[2].AsInt32() << 16));
+                                DBTeleport teleporter =
+                                    TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
+                                        .FirstOrDefault();
+                                if (teleporter != null)
+                                {
+                                    doorinstance = (int)teleporter.destinationInstance;
+                                    f.Arguments.Values[2]=new MessagePackObject(((doorinstance >> 16) & 0xff));
+                                }
                                 break;
                             }
                         }
                         if (foundproxyteleport)
                         {
                             break;
+                        }
+                    }
+
+                    if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
+                    {
+                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision() && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
+                            && (sd.Events.All(x => x.EventType != EventType.OnCollide))
+                            && sd.Events.Any(x => x.EventType == EventType.OnUse))
+                        {
+                            Event ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
+                            ev.EventType = EventType.OnCollide;
+                            sd.Events.Add(ev);
                         }
                     }
 

@@ -472,7 +472,13 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Send(MessageBody messageBody)
         {
-            this.Controller.Client.SendCompressed(messageBody);
+            if (this.Controller != null)
+            {
+                if (this.Controller.Client != null)
+                {
+                    this.Controller.Client.SendCompressed(messageBody);
+                }
+            }
         }
 
         #endregion

@@ -43,7 +43,7 @@ namespace CellAO.Stats
         {
             get; private set; }
 
-        IStat IStatList.this[int index]
+        public IStat this[int index]
         {
             get
             {
@@ -57,7 +57,7 @@ namespace CellAO.Stats
             }
         }
 
-        IStat IStatList.this[StatIds i]
+        public IStat this[StatIds i]
         {
             get
             {
@@ -71,7 +71,7 @@ namespace CellAO.Stats
             }
         }
 
-        IStat IStatList.this[string name]
+        public IStat this[string name]
         {
             get
             {

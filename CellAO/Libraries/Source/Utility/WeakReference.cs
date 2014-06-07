@@ -114,11 +114,6 @@ namespace Utility
         /// </summary> 
         public static implicit operator WeakReference<T>(T target)
         {
-            if (target == null)
-            {
-                throw new ArgumentNullException("target");
-            }
-
             return new WeakReference<T>(target);
         }
 
@@ -132,10 +127,7 @@ namespace Utility
             {
                 return reference.Target;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }
