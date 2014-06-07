@@ -69,7 +69,7 @@ namespace CellAO.Database.Dao
                 DBUploadedNano temp = new DBUploadedNano();
                 temp.CharacterId = charId;
                 temp.NanoId = nanos.NanoId;
-                this.Save(temp);
+                this.Add(temp);
             }
         }
 
