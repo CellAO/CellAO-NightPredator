@@ -135,7 +135,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                 }
             }
 
-            AppearanceUpdateMessageHandler.Default.Send((Character)Self);
+            ((Character)Self).ChangedAppearance = true;
 
             return true;
         }

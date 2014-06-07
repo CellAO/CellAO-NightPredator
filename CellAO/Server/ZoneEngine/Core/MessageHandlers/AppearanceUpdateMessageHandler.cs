@@ -213,7 +213,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 Layer = (byte)mesh.Layer
                             }).ToArray();
                 message.VisualFlags = (short)VisualFlags;
-                message.Unknown1 = (byte)bodyMesh;
+                message.Unknown1 = 0;
             };
         }
 

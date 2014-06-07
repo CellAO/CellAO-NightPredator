@@ -285,10 +285,12 @@ namespace ZoneEngine.Core.MessageHandlers
             // Apply item functions before sending the appearanceupdate message
             client.Controller.Character.CalculateSkills();
 
+            /*
             if (!noAppearanceUpdate)
             {
                 AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
             }
+            */
         }
 
         /// <summary>
