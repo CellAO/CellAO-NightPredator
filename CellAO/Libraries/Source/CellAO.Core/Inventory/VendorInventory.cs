@@ -42,9 +42,9 @@ namespace CellAO.Core.Inventory
         public VendorInventory(IItemContainer owner)
             : base(0, owner)
         {
-            this.StandardPage = (int)IdentityType.ShopInventory;
+            this.StandardPage = (int)IdentityType.Inventory;
             VendorInventoryPage inventoryPage = new VendorInventoryPage(owner.Identity);
-            this.Pages.Add((int)IdentityType.ShopInventory, inventoryPage);
+            this.Pages.Add((int)IdentityType.Inventory, inventoryPage);
         }
     }
 }

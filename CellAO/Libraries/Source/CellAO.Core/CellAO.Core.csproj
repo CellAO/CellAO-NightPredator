@@ -93,6 +93,7 @@
     <Compile Include="Entities\INamedEntity.cs" />
     <Compile Include="Entities\ITargetingEntity.cs" />
     <Compile Include="Entities\StaticDynel.cs" />
+    <Compile Include="Entities\TemporaryBag.cs" />
     <Compile Include="Entities\TradeSkillInfo.cs" />
     <Compile Include="Entities\Vendor.cs" />
     <Compile Include="Entities\Waypoint.cs" />

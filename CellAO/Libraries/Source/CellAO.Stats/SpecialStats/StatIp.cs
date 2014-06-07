@@ -75,6 +75,7 @@ namespace CellAO.Stats.SpecialStats
 
         #region Public Properties
 
+        
         /// <summary>
         /// </summary>
         public override int GetValue
@@ -121,8 +122,9 @@ namespace CellAO.Stats.SpecialStats
                 }
 
                 baseIP += 1500 + (characterLevel - 1) * 4000;
-
-                return baseIP - Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats));
+                this.ReCalculate = true;
+                int calcIp = Convert.ToInt32(SkillUpdate.CalculateIP(this.Stats));
+                return baseIP - calcIp;
             }
         }
 

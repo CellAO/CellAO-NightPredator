@@ -94,6 +94,10 @@ namespace ZoneEngine.Core.MessageHandlers
             client.Controller.Character.Stats[StatIds.nanointerval].Value = 0;
             client.Controller.Character.Stats[StatIds.nanodelta].Value = 0;
 
+            // Extra to calculate IP
+            client.Controller.Character.Stats[StatIds.ip].Value = 0;
+                
+
             client.Controller.SendChangedStats();
 
             // Mobs get sent whenever player enters playfield, BUT (!) they are NOT synchronized, because the mobs don't save stuff yet.

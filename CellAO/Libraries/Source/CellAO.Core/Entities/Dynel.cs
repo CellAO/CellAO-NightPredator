@@ -444,7 +444,7 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Send(SystemMessage message)
         {
-            this.Playfield.Send(this.Controller.Client, message);
+            this.Controller.Client.SendCompressed(message);
         }
 
         /// <summary>
@@ -472,7 +472,7 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Send(MessageBody messageBody)
         {
-            this.Playfield.Send(this.Controller.Client, messageBody);
+            this.Controller.Client.SendCompressed(messageBody);
         }
 
         #endregion

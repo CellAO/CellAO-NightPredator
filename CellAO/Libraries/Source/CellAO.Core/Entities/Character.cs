@@ -184,6 +184,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         public string LastName { get; set; }
 
+        public TemporaryBag ShoppingBag { get; set; }
+
         /// <summary>
         /// </summary>
         public Dictionary<int, IActiveNano> ActiveNanos { get; private set; }

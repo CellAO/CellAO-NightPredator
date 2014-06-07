@@ -46,9 +46,11 @@ namespace CellAO.Core.Entities
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
+
     #endregion
 
-    public class Vendor : Dynel, IEventHolder
+    public class Vendor : Dynel, IEventHolder, IItemContainer
     {
         public Identity OriginalIdentity = Identity.None;
 
@@ -59,20 +61,26 @@ namespace CellAO.Core.Entities
                 VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();
             if (vendorTemplate == null)
             {
-                throw new DataBaseException("Could not find a vendor template for hash '" + templateHash + "'.");
+                LogUtil.Debug(
+                    DebugInfoDetail.Shopping,
+                    "Could not find a hash entry for this shop, pls check vendors table.");
             }
 
             this.Stats = new SimpleStatList();
-            this.Template = ItemLoader.ItemList[vendorTemplate.ItemTemplate];
+            // Fallback on Advy adv. crystals shop
+            this.Template = ItemLoader.ItemList[vendorTemplate != null ? vendorTemplate.ItemTemplate : 46522];
             foreach (KeyValuePair<int, int> s in this.Template.Stats)
             {
                 this.Stats[s.Key].Value = s.Value;
             }
-            this.TemplateHash = vendorTemplate.Hash;
-            this.Name = vendorTemplate.Name;
-
             this.BaseInventory = new VendorInventory(this);
-            this.BaseInventory.Read();
+            if (vendorTemplate != null)
+            {
+                this.TemplateHash = vendorTemplate.Hash;
+                this.Name = vendorTemplate.Name;
+
+                this.BaseInventory.Read();
+            }
         }
 
         public Vendor(Identity parent, Identity id, int templateId)

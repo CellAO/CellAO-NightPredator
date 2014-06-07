@@ -34,8 +34,10 @@ namespace ZoneEngine.Core
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Net.Sockets;
+    using System.Threading;
 
     using Cell.Core;
 
@@ -104,6 +106,12 @@ namespace ZoneEngine.Core
 
         private bool disposed = false;
 
+        private readonly Queue<byte[]> sendQueue = new Queue<byte[]>();
+
+        private Thread dispatcherThread;
+
+        private bool stopDispatcher = false;
+
         #endregion
 
         #region Constructors and Destructors
@@ -122,6 +130,8 @@ namespace ZoneEngine.Core
             this.server = server;
             this.messageSerializer = messageSerializer;
             this.bus = bus;
+            this.dispatcherThread = new Thread(this.DispatchMessages);
+            this.dispatcherThread.Start();
         }
 
         #endregion
@@ -166,9 +176,11 @@ namespace ZoneEngine.Core
 
             byte[] buffer = this.messageSerializer.Serialize(message);
 
+            lock (this.sendQueue)
+            {
+                this.sendQueue.Enqueue(buffer);
+            }
             LogUtil.Debug(DebugInfoDetail.AoTomation, messageBody.GetType().ToString());
-
-            this.SendCompressed(buffer);
         }
 
         /// <summary>
@@ -314,6 +326,13 @@ namespace ZoneEngine.Core
             {
                 if (!this.disposed)
                 {
+                    this.stopDispatcher = true;
+
+                    while (this.stopDispatcher)
+                    {
+                        Thread.Sleep(10);
+                    }
+
                     // Remove reference of character
                     if (this.Controller.Character != null)
                     {
@@ -441,6 +460,30 @@ namespace ZoneEngine.Core
             this.bus.Publish(wrapped);
 
             return true;
+        }
+
+        private void DispatchMessages()
+        {
+            while (!this.stopDispatcher)
+            {
+                byte[] data = null;
+                lock (this.sendQueue)
+                {
+                    if (this.sendQueue.Count > 0)
+                    {
+                        data = this.sendQueue.Dequeue();
+                    }
+                }
+                if (data != null)
+                {
+                    this.SendCompressed(data);
+                }
+                else
+                {
+                    Thread.Sleep(5);
+                }
+            }
+            this.stopDispatcher = false;
         }
 
         #endregion

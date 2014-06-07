@@ -129,12 +129,12 @@ namespace CellAO.Database.Dao
                 {
                     using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
                     {
+                        Instance.Delete(
+                            new { items[0].containertype, items[0].containerinstance },
+                            connection,
+                            transaction);
                         foreach (DBItem item in items)
                         {
-                            Instance.Delete(
-                                new { items[0].containertype, items[0].containerinstance },
-                                connection,
-                                transaction);
                             Instance.Add(item, connection, transaction);
                         }
 

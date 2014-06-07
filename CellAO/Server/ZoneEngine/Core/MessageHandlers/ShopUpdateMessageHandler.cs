@@ -34,6 +34,8 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using System.Collections.Generic;
+    using System;
+    using System.Data.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
@@ -67,6 +69,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     temp.ItemHighId = item.HighID;
                     temp.ItemLowId = item.LowID;
                     temp.Quality = item.Quality;
+                    tempList.Add(temp);
                 }
                 x.VendingMachineSlots = tempList.ToArray();
             };

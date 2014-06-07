@@ -34,6 +34,7 @@ namespace CellAO.Core.Inventory
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using CellAO.Core.Components;
@@ -118,6 +119,11 @@ namespace CellAO.Core.Inventory
                 }
             }
             return true;
+        }
+
+        public IItem Remove(int slotNum)
+        {
+            return this[slotNum];
         }
 
         public override bool Write()

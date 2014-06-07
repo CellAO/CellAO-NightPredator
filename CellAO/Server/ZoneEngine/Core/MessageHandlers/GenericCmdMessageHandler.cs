@@ -92,10 +92,14 @@ namespace ZoneEngine.Core.MessageHandlers
                             IEventHolder temp = null;
                             try
                             {
-                                temp = Pool.Instance.GetObject<IEventHolder>(client.Controller.Character.Playfield.Identity, message.Target[0]);
+                                temp =
+                                    Pool.Instance.GetObject<IEventHolder>(
+                                        client.Controller.Character.Playfield.Identity,
+                                        message.Target[0]);
                             }
                             catch (Exception)
-                            { }
+                            {
+                            }
                             if (temp != null)
                             {
                                 var entity = temp as IEntity;
@@ -105,6 +109,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                     if (ev != null)
                                     {
                                         ev.Perform(client.Controller.Character, entity);
+                                        this.Acknowledge(client.Controller.Character, message);
                                     }
                                     else
                                     {
@@ -112,11 +117,28 @@ namespace ZoneEngine.Core.MessageHandlers
                                         if (ev != null)
                                         {
                                             ev.Perform(client.Controller.Character, entity);
+
+
+
+                                            TemporaryBag tempBag = new TemporaryBag(
+                                                client.Controller.Character.Identity,
+                                                new Identity()
+                                                {
+                                                    Type = IdentityType.TempBag,
+                                                    Instance =
+                                                        Pool.Instance.GetFreeInstance<TemporaryBag>(
+                                                            0,
+                                                            IdentityType.TempBag)
+                                                },
+                                                client.Controller.Character.Identity,
+                                                message.Target[0]);
+                                            client.Controller.Character.ShoppingBag = tempBag;
+                                            TradeMessageHandler.Default.Send(client.Controller.Character, tempBag);
+                                            this.Acknowledge(client.Controller.Character, message);
                                         }
                                     }
                                 }
                             }
-
                         }
                         else
                         {
@@ -148,7 +170,10 @@ namespace ZoneEngine.Core.MessageHandlers
                     //client.Controller.Character.Stats[StatIds.secondaryitemtype]
                     if (Pool.Instance.Contains(message.Target[1]))
                     {
-                        StaticDynel temp = Pool.Instance.GetObject<StaticDynel>(client.Controller.Character.Playfield.Identity, message.Target[1]);
+                        StaticDynel temp =
+                            Pool.Instance.GetObject<StaticDynel>(
+                                client.Controller.Character.Playfield.Identity,
+                                message.Target[1]);
                         if (temp != null)
                         {
                             Event ev = temp.Events.FirstOrDefault(x => x.EventType == EventType.OnUseItemOn);
@@ -195,9 +220,12 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             return x =>
             {
-                x = message;
-                x.Identity = character.Identity;
+                x.Identity = message.Identity;
+                x.N3MessageType = message.N3MessageType;
+                x.Target = message.Target.ToList().ToArray();
                 x.Temp1 = 1;
+                x.Temp4 = message.Temp4;
+                x.User = message.User;
                 x.Unknown = 0;
             };
         }

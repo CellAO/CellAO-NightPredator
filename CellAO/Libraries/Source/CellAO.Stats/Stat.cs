@@ -344,9 +344,9 @@ namespace CellAO.Stats
             {
                 if (this.ReCalculate)
                 {
+                    this.ReCalculate = false;
                     int temp = this.GetValue;
                     this.Changed |= temp != this.LastCalculatedValue;
-                    this.ReCalculate = false;
 
                     this.LastCalculatedValue = temp;
                 }

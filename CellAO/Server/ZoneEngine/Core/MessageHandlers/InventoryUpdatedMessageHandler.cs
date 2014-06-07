@@ -29,63 +29,34 @@
 
 #endregion
 
-namespace ZoneEngine.Core.Functions.GameFunctions
+namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Enums;
-    using CellAO.Interfaces;
-
-    using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-
-    using ZoneEngine.Core.MessageHandlers;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     #endregion
 
-    public class shophash : FunctionPrototype
+    [MessageHandler(MessageHandlerDirection.OutboundOnly)]
+    public class InventoryUpdatedMessageHandler :
+        BaseMessageHandler<InventoryUpdatedMessage, InventoryUpdatedMessageHandler>
     {
-        public override FunctionType FunctionId
+        public void Send(ICharacter character, Identity shopIdentity)
         {
-            get
-            {
-                return FunctionType.Shophash;
-            }
+            this.Send(character, this.Filler(shopIdentity));
         }
 
-        public override bool Execute(
-            INamedEntity self,
-            IEntity caller,
-            IInstancedEntity target,
-            MessagePackObject[] arguments)
+        private MessageDataFiller Filler(Identity shopIdentity)
         {
-            Vendor temp = caller as Vendor;
-            if (temp != null)
+            return x =>
             {
-                if (temp.BaseInventory.Pages[temp.BaseInventory.StandardPage].List().Count == 0)
-                {
-                    if (temp.OriginalIdentity.Equals(Identity.None))
-                    {
-                    }
-                    else
-                    {
-                        int id = temp.Playfield.Identity.Instance << 16
-                                 | ((temp.OriginalIdentity.Instance >> 16) & 0xff);
-                        ((ICharacter)self).Playfield.Publish(
-                            ChatTextMessageHandler.Default.CreateIM(
-                                ((ICharacter)self),
-                                "This shop has no entry in the database yet. Please enter a new entry with the id "
-                                + id.ToString() + "."));
-                    }
-                }
-                else
-                {
-                    ShopUpdateMessageHandler.Default.Send((ICharacter)self, caller, ((Vendor)caller).BaseInventory.Pages[((Vendor)caller).BaseInventory.StandardPage]);
-                }
-            }
-            return true;
+                x.Unknown1 = 5;
+                x.Identity = shopIdentity;
+            };
         }
     }
 }

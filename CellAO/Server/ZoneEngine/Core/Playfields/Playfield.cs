@@ -942,8 +942,13 @@ namespace CellAO.Core.Playfields
                     this.CheckStatelCollision(dynel);
                 }
             }
-
-            this.heartBeat.Change(10, 0);
+            try
+            {
+                this.heartBeat.Change(10, 0);
+            }
+            catch (ObjectDisposedException)
+            {
+            }
         }
 
         #endregion

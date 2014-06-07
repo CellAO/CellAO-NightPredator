@@ -544,5 +544,7 @@ namespace Utility
         Statel = 8192,
 
         Pool = 16384,
+
+        Shopping = 32768,
     }
 }

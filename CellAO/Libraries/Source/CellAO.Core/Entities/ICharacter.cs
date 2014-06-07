@@ -64,6 +64,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         string LastName { get; set; }
 
+        TemporaryBag ShoppingBag { get; set; }
+
         /// <summary>
         /// Active Nanos list
         /// </summary>

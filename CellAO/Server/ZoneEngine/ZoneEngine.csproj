@@ -91,6 +91,7 @@
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
     <Compile Include="ChatCommands\DebugItem.cs" />
     <Compile Include="ChatCommands\InstaGrid.cs" />
+    <Compile Include="ChatCommands\MakeShop.cs" />
     <Compile Include="ChatCommands\Npc.cs" />
     <Compile Include="ChatCommands\SaveProxy.cs" />
     <Compile Include="ChatCommands\Spawn.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Core\MessageHandlers\FollowTargetMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\FullCharacterMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\GenericCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\InventoryUpdatedMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\InventoryUpdateMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAnswerListMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\KnuBotAnswerMessageHandler.cs" />

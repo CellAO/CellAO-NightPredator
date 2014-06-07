@@ -40,6 +40,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
     using CellAO.Core.Actions;
     using CellAO.Core.Components;
+    using CellAO.Core.Entities;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Core.Network;
@@ -55,7 +56,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    [MessageHandler(MessageHandlerDirection.InboundOnly)]
+    [MessageHandler(MessageHandlerDirection.All)]
     public class ContainerAddItemMessageHandler :
         BaseMessageHandler<ContainerAddItemMessage, ContainerAddItemMessageHandler>
     {
@@ -340,6 +341,23 @@ namespace ZoneEngine.Core.MessageHandlers
             }
 
             return action;
+        }
+
+        public void Send(ICharacter character, Identity sourceContainer, int slot)
+        {
+            this.Send(character, this.FillContainerAddItem(character, sourceContainer, slot));
+        }
+
+        private MessageDataFiller FillContainerAddItem(ICharacter character, Identity sourceContainer, int slot)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.SourceContainer = sourceContainer;
+                x.TargetPlacement = slot;
+                x.Target = character.Identity;
+                x.Unknown = 0;
+            };
         }
 
         #endregion
