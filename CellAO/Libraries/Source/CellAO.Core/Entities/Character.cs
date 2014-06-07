@@ -399,6 +399,8 @@ namespace CellAO.Core.Entities
                 (int)this.Playfield.Identity.Type,
                 this.Playfield.Identity.Instance);
 
+            UploadedNanosDao.Instance.WriteNanos(this.Identity.Instance, this.UploadedNanos);
+
             return base.Write();
         }
 

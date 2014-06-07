@@ -72,5 +72,17 @@ namespace CellAO.Database.Dao
                 this.Save(temp);
             }
         }
+
+        public void WriteNanos(int charId, List<IUploadedNanos> nanos)
+        {
+            List<int> temp = this.ReadNanos(charId).ToList();
+            foreach (IUploadedNanos nano in nanos)
+            {
+                if (!temp.Contains(nano.NanoId))
+                {
+                    this.Add(new DBUploadedNano() { CharacterId = charId, NanoId = nano.NanoId });
+                }
+            }
+        }
     }
 }

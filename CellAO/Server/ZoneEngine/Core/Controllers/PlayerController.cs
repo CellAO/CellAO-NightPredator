@@ -532,7 +532,7 @@ namespace ZoneEngine.Core.Controllers
             if (ItemLoader.ItemList[item.HighID].IsConsumable())
             {
                 item.MultipleCount--;
-                if (item.MultipleCount == 0)
+                if (item.MultipleCount <= 0)
                 {
                     this.Character.BaseInventory.RemoveItem(
                         (int)itemPosition.Type,

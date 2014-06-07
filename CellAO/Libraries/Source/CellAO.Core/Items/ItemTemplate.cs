@@ -855,10 +855,10 @@ namespace CellAO.Core.Items
             sb.Append("Events: ");
             foreach (Event ev in this.Events)
             {
-                sb.Append(ev.EventType.ToString() + ", ");
+                sb.AppendLine(ev.EventType.ToString()+":");
+                sb.AppendLine(ev.ToString());
+                sb.AppendLine();
             }
-            sb.Remove(sb.Length - 2, 2);
-            sb.AppendLine();
             return sb.ToString();
         }
 

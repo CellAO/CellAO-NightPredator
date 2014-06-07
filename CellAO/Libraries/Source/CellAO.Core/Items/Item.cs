@@ -92,7 +92,6 @@ namespace CellAO.Core.Items
         /// </exception>
         public Item(int QL, int lowID, int highID)
         {
-            this.events=new List<Event>();
             // Checks:
             if ((!ItemLoader.ItemList.ContainsKey(lowID)) || (!ItemLoader.ItemList.ContainsKey(highID)))
             {
