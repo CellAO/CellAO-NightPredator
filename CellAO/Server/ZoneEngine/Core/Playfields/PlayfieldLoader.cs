@@ -36,7 +36,6 @@ namespace ZoneEngine.Core.Playfields
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
 
     using CellAO.Core.Events;
     using CellAO.Core.Functions;
@@ -48,7 +47,6 @@ namespace ZoneEngine.Core.Playfields
     using CellAO.Enums;
 
     using MsgPack;
-    using MsgPack.Serialization.EmittingSerializers;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -99,7 +97,6 @@ namespace ZoneEngine.Core.Playfields
             {
                 foreach (StatelData sd in pfd.Statels)
                 {
-
                     bool foundproxyteleport = false;
                     int playfieldid = 0;
                     int doorinstance = 0;
@@ -111,16 +108,35 @@ namespace ZoneEngine.Core.Playfields
                             {
                                 foundproxyteleport = true;
                                 playfieldid = f.Arguments.Values[1].AsInt32();
-                                doorinstance = (int)((uint)0xC0000000 | f.Arguments.Values[1].AsInt32() | (f.Arguments.Values[2].AsInt32() << 16));
+                                doorinstance =
+                                    (int)
+                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                         | (f.Arguments.Values[2].AsInt32() << 16));
                                 DBTeleport teleporter =
                                     TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
                                         .FirstOrDefault();
                                 if (teleporter != null)
                                 {
                                     doorinstance = (int)teleporter.destinationInstance;
-                                    f.Arguments.Values[2]=new MessagePackObject(((doorinstance >> 16) & 0xff));
+                                    f.Arguments.Values[2] = new MessagePackObject(((doorinstance >> 16) & 0xff));
                                 }
                                 break;
+                            }
+                            if (f.FunctionType == (int)FunctionType.TeleportProxy2)
+                            {
+                                playfieldid = f.Arguments.Values[1].AsInt32();
+                                doorinstance =
+                                    (int)
+                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                         | (f.Arguments.Values[2].AsInt32() << 16));
+                                DBTeleport teleporter =
+                                    TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
+                                        .FirstOrDefault();
+                                if (teleporter != null)
+                                {
+                                    doorinstance = (int)teleporter.destinationInstance;
+                                    f.Arguments.Values[2] = new MessagePackObject(((doorinstance >> 16) & 0xff));
+                                }
                             }
                         }
                         if (foundproxyteleport)
@@ -131,7 +147,8 @@ namespace ZoneEngine.Core.Playfields
 
                     if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
                     {
-                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision() && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
+                        if (ItemLoader.ItemList[sd.TemplateId].WantsCollision()
+                            && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
                             && (sd.Events.All(x => x.EventType != EventType.OnCollide))
                             && sd.Events.Any(x => x.EventType == EventType.OnUse))
                         {
@@ -143,9 +160,9 @@ namespace ZoneEngine.Core.Playfields
 
                     if (foundproxyteleport)
                     {
-                        if (PlayfieldLoader.PFData.ContainsKey(playfieldid))
+                        if (PFData.ContainsKey(playfieldid))
                         {
-                            StatelData internalDoor = PlayfieldLoader.PFData[playfieldid].GetDoor(doorinstance);
+                            StatelData internalDoor = PFData[playfieldid].GetDoor(doorinstance);
                             if (internalDoor != null)
                             {
                                 if (internalDoor.Events.All(x => x.EventType != EventType.OnEnter))

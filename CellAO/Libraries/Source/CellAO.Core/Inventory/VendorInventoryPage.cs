@@ -34,10 +34,8 @@ namespace CellAO.Core.Inventory
     #region Usings ...
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
-    using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Exceptions;
     using CellAO.Core.Items;
@@ -78,7 +76,6 @@ namespace CellAO.Core.Inventory
             string templateHash = this.ownerReference.Target.TemplateHash;
             if (!string.IsNullOrEmpty(templateHash))
             {
-
                 DBVendorTemplate vendorTemplate =
                     VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();
                 if (vendorTemplate == null)
