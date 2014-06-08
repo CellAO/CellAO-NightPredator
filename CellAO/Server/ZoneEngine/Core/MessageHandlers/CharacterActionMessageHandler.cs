@@ -115,7 +115,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     var tChar = tPlayer as Character;
                     if (tChar != null)
                     {
-                        // Is it a Player?
+                        // Is it a Character object? (player and npcs)
                         CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, tChar);
                     }
                     else
@@ -222,9 +222,9 @@ namespace ZoneEngine.Core.MessageHandlers
                 {
                     // Leave Team
                     /*
-                                                var team = new TeamClass();
-                                                team.LeaveTeam(client);
-                                                 */
+                                                    var team = new TeamClass();
+                                                    team.LeaveTeam(client);
+                                                     */
                 }
 
                     break;
@@ -240,54 +240,54 @@ namespace ZoneEngine.Core.MessageHandlers
                     // Team Join Request
                     // Send Team Invite Request To Target Player
                     /*
-                                                var team = new TeamClass();
-                                                team.SendTeamRequest(client, packet.Target);
-                                                 */
+                                                    var team = new TeamClass();
+                                                    team.SendTeamRequest(client, packet.Target);
+                                                     */
                 }
 
                     break;
                 case CharacterActionType.TeamRequestReply:
                 {
                     /*
-                                                 Request Reply
-                                                 Check if positive or negative response
+                                                     Request Reply
+                                                     Check if positive or negative response
 
-                                                 if positive
-                                                var team = new TeamClass();
-                                                var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
+                                                     if positive
+                                                    var team = new TeamClass();
+                                                    var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
 
-                                                 Destination Client 0 = Sender, 1 = Reciever
+                                                     Destination Client 0 = Sender, 1 = Reciever
 
-                                                 Reciever Packets
-                                                ///////////////////
+                                                     Reciever Packets
+                                                    ///////////////////
 
-                                                 CharAction 15
-                                                team.TeamRequestReply(client, packet.Target);
+                                                     CharAction 15
+                                                    team.TeamRequestReply(client, packet.Target);
 
-                                                 CharAction 23
-                                                team.TeamRequestReplyCharacterAction23(client, packet.Target);
+                                                     CharAction 23
+                                                    team.TeamRequestReplyCharacterAction23(client, packet.Target);
 
-                                                 TeamMember Packet
-                                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
+                                                     TeamMember Packet
+                                                    team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
 
-                                                 TeamMemberInfo Packet
-                                                team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
+                                                     TeamMemberInfo Packet
+                                                    team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
 
-                                                 TeamMember Packet
-                                                team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
+                                                     TeamMember Packet
+                                                    team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
 
-                                                 Sender Packets
-                                                /////////////////
+                                                     Sender Packets
+                                                    /////////////////
 
-                                                 TeamMember Packet
-                                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
+                                                     TeamMember Packet
+                                                    team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
 
-                                                 TeamMemberInfo Packet
-                                                team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
+                                                     TeamMemberInfo Packet
+                                                    team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
 
-                                                 TeamMember Packet
-                                                team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
-                                                 */
+                                                     TeamMember Packet
+                                                    team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
+                                                     */
                 }
 
                     break;
@@ -304,7 +304,7 @@ namespace ZoneEngine.Core.MessageHandlers
                         (int)targetIdentityType,
                         message.Target.Instance);
 
-                    this.Acknowledge(client.Controller.Character, message);
+                    this.AcknowledgeDelete(client.Controller.Character, message);
                     break;
 
                 case CharacterActionType.Split: // Split?
@@ -579,7 +579,37 @@ namespace ZoneEngine.Core.MessageHandlers
         /// </returns>
         private MessageDataFiller Reply(CharacterActionMessage message)
         {
-            return x => { x = message; };
+            return x =>
+            {
+                x.Action = message.Action;
+                x.Identity = message.Identity;
+                x.Parameter1 = message.Parameter1;
+                x.Parameter2 = message.Parameter2;
+                x.Target = message.Target;
+                x.Unknown1 = message.Unknown1;
+                x.Unknown2 = message.Unknown2;
+                x.Unknown = message.Unknown;
+            };
+        }
+
+        private void AcknowledgeDelete(ICharacter character, CharacterActionMessage message)
+        {
+            this.Send(character, this.ReplyWithoutParameters(message));
+        }
+
+        private MessageDataFiller ReplyWithoutParameters(CharacterActionMessage message)
+        {
+            return x =>
+            {
+                x.Action = message.Action;
+                x.Identity = message.Identity;
+                x.Parameter1 = 0;
+                x.Parameter2 = 0;
+                x.Target = message.Target;
+                x.Unknown1 = message.Unknown1;
+                x.Unknown2 = message.Unknown2;
+                x.Unknown = message.Unknown;
+            };
         }
 
         /// <summary>

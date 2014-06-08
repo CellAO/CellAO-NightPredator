@@ -244,8 +244,9 @@ namespace ZoneEngine.Core.MessageHandlers
                         {
                             IItem[] items = shoppingBag.GetBoughtItems();
                             double CLFactor = 1
-                                              - (double)(client.Controller.Character.Stats[StatIds.computerliteracy].Value
-                                                 / 4000.0f);
+                                              - (double)
+                                                  (client.Controller.Character.Stats[StatIds.computerliteracy].Value
+                                                   / 4000.0f);
                             int cash = 0;
                             foreach (IItem item in items)
                             {
@@ -259,7 +260,9 @@ namespace ZoneEngine.Core.MessageHandlers
                             }
 
                             items = shoppingBag.GetSoldItems();
-                            CLFactor = 0.04 + ((double)client.Controller.Character.Stats[StatIds.computerliteracy].Value / 100000.0f);
+                            CLFactor = 0.04
+                                       + ((double)client.Controller.Character.Stats[StatIds.computerliteracy].Value
+                                          / 100000.0f);
                             foreach (IItem item in items)
                             {
                                 cash -= (int)(CLFactor * item.GetAttribute(74));

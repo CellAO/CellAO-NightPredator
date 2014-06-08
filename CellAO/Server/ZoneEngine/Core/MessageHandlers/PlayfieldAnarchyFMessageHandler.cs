@@ -33,7 +33,7 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
-    using System.Linq;
+    using System.Collections.Generic;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
@@ -82,12 +82,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                  Instance = character.Playfield.Identity.Instance
                              };
                 Coordinate temp = character.Coordinates();
-                x.CharacterCoordinates = new Vector3
-                                         {
-                                             X = temp.x,
-                                             Y = temp.y,
-                                             Z = temp.z,
-                                         };
+                x.CharacterCoordinates = new Vector3 { X = temp.x, Y = temp.y, Z = temp.z, };
                 x.PlayfieldId1 = new Identity
                                  {
                                      Type = IdentityType.Playfield1,
@@ -101,11 +96,11 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.PlayfieldX = Playfields.GetPlayfieldX(character.Playfield.Identity.Instance);
                 x.PlayfieldZ = Playfields.GetPlayfieldZ(character.Playfield.Identity.Instance);
 
-                var vendors = Pool.Instance.GetAll<Vendor>(
+                IEnumerable<Vendor> vendors = Pool.Instance.GetAll<Vendor>(
                     character.Playfield.Identity,
                     (int)IdentityType.VendingMachine);
 
-/*                if (vendors.Any())
+                /*                if (vendors.Any())
                 {
                     x.PlayfieldVendorInfo = new PlayfieldVendorInfo()
                                             {
@@ -114,7 +109,6 @@ namespace ZoneEngine.Core.MessageHandlers
                                                     vendors.ElementAt(0).Identity.Instance
                                             };
                 }*/
-
             };
 
             // TODO: Add the VendorHandler again

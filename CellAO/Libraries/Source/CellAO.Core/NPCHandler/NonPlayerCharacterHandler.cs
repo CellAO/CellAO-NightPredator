@@ -168,6 +168,8 @@ namespace CellAO.Core.NPCHandler
                 {
                     cmob.Stats.SetBaseValueWithoutTriggering(stat.Stat, (uint)stat.Value);
                 }
+
+                cmob.Stats.SetBaseValueWithoutTriggering((int)StatIds.visualprofession,cmob.Stats[StatIds.profession].BaseValue);
                 // initiate affected stats calculation
                 int temp = cmob.Stats[StatIds.level].Value;
                 temp = cmob.Stats[StatIds.agility].Value;

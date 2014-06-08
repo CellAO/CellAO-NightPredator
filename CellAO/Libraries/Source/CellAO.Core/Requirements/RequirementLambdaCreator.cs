@@ -95,6 +95,7 @@ namespace CellAO.Core.Requirements
                 case Operator.NotBitAnd:
                 case Operator.BitOr:
                 case Operator.Unequal:
+                case Operator.Not:
                     Func<int, int, bool> tmp = SwitchStatOperator((int)o).Compile();
                     Func<IInstancedEntity, IInstancedEntity> tmp2 = GetTarget(t).Compile();
                     return k => tmp.Invoke(tmp2.Invoke(k).Stats[statId].Value, statValue);
@@ -206,6 +207,8 @@ namespace CellAO.Core.Requirements
                 case (int)Operator.BitOr:
                     return BitOrExpression();
                 case (int)Operator.Unequal:
+                    return UnequalExpression();
+                case (int)Operator.Not:
                     return UnequalExpression();
                 default:
                     return null;

@@ -88,13 +88,13 @@ namespace ZoneEngine.Core.MessageHandlers
              * DEAD Trade Window (incoming) It's bank now (when you put something into the bank)
              */
 
-            IInventoryPage sendingPage =
-                Pool.Instance.GetObject<IInventoryPage>(message.Identity,
-                    new Identity()
-                    {
-                        Type = (IdentityType)message.Identity.Instance,
-                        Instance = (int)message.SourceContainer.Type
-                    });
+            IInventoryPage sendingPage = Pool.Instance.GetObject<IInventoryPage>(
+                message.Identity,
+                new Identity()
+                {
+                    Type = (IdentityType)message.Identity.Instance,
+                    Instance = (int)message.SourceContainer.Type
+                });
             int fromPlacement = message.SourceContainer.Instance;
             Identity toIdentity = message.Target;
             int toPlacement = message.TargetPlacement;

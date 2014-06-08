@@ -34,8 +34,6 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using System.Collections.Generic;
-    using System;
-    using System.Data.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;

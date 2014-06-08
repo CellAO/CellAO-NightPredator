@@ -123,12 +123,12 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 // TODO: Find out what following 6 ints are
                 fullCharacterMessage.Unknown3 = 1;
-                
-                fullCharacterMessage.Unknown4 = new FullCharacterSub2[]{};
+
+                fullCharacterMessage.Unknown4 = new FullCharacterSub2[] { };
                 fullCharacterMessage.UnknownI2 = 1;
-                fullCharacterMessage.Unknown5 = new FullCharacterSub2[]{};
+                fullCharacterMessage.Unknown5 = new FullCharacterSub2[] { };
                 fullCharacterMessage.UnknownI3 = 1;
-                fullCharacterMessage.Unknown6 = new FullCharacterSub2[]{};
+                fullCharacterMessage.Unknown6 = new FullCharacterSub2[] { };
 
                 IZoneClient client = character.Controller.Client;
 

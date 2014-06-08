@@ -34,11 +34,9 @@ namespace ZoneEngine.Core.MessageHandlers
     #region Usings ...
 
     using System.Collections.Generic;
-    using System.Linq;
 
     using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
@@ -82,28 +80,30 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Unknown5 = 0;
                 x.Unknown6 = 111;
                 List<GameTuple<CharacterStat, uint>> temp = new List<GameTuple<CharacterStat, uint>>();
-                var templist = vendor.Stats.GetStatValues();
-                SortedDictionary<int,uint> templist2 = new SortedDictionary<int, uint>();
+                Dictionary<int, uint> templist = vendor.Stats.GetStatValues();
+                SortedDictionary<int, uint> templist2 = new SortedDictionary<int, uint>();
                 foreach (KeyValuePair<int, uint> kv in templist)
                 {
-                    templist2.Add(kv.Key,kv.Value);
+                    templist2.Add(kv.Key, kv.Value);
                 }
-                
-                foreach (KeyValuePair<int,uint> stat in templist2)
-                /*foreach (IStat stat in vendor.Stats.All)
+
+                foreach (KeyValuePair<int, uint> stat in templist2)
+                    /*foreach (IStat stat in vendor.Stats.All)
                 {
                     if (stat.NotDefault())
                     {*/
-                {        temp.Add(
-                            new GameTuple<CharacterStat, uint>()
-                            {
-                                Value1 = (CharacterStat)stat.Key,
-                                Value2 = (uint)stat.Value
-                            });}
-                    /*}
+                {
+                    temp.Add(
+                        new GameTuple<CharacterStat, uint>()
+                        {
+                            Value1 = (CharacterStat)stat.Key,
+                            Value2 = (uint)stat.Value
+                        });
+                }
+                /*}
                 }*/
                 x.Stats = temp.ToArray();
-                x.Unknown7 = vendor.Name+"\0";
+                x.Unknown7 = vendor.Name + "\0";
                 x.Unknown8 = 2;
                 x.Unknown9 = 50;
                 x.Unknown10 = new Identity[0];

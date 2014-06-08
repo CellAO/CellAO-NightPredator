@@ -160,6 +160,10 @@ namespace ZoneEngine.Core
         /// </param>
         public void SendCompressed(MessageBody messageBody)
         {
+            if ((this.controller == null) || (this.controller.Character == null))
+            {
+                return;
+            }
             var message = new Message
                           {
                               Body = messageBody,

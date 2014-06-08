@@ -330,6 +330,9 @@ namespace LoginEngine.Packets
             stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 1, StatValue = 1 });
             stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 214, StatValue = 1 });
 
+            // NPCFamily / 455
+            stats.Add(new DBStats { Type = 50000, Instance = charID, StatId = 455, StatValue = 0 });
+
             stats.Add(
                 new DBStats
                 {

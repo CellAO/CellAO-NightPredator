@@ -87,7 +87,6 @@ namespace ZoneEngine.Core.MessageHandlers
             client.Controller.Character.Playfield.Publish(new IMSendAOtomationMessageToPlayfield { Body = announce });
         }
 
-
         public void Send(ICharacter character, Vector3 stopPosition)
         {
             this.SendToPlayfield(character, this.FillerFullStopAt(character, stopPosition));
@@ -108,9 +107,9 @@ namespace ZoneEngine.Core.MessageHandlers
                              Dummy1 = 0,
                              MoveType = 21 // Magic number FULL STOP
                          };
-
             };
         }
+
         /// <summary>
         /// </summary>
         /// <param name="character">
@@ -178,9 +177,9 @@ namespace ZoneEngine.Core.MessageHandlers
                         movetype = 25;
                         break;
                     case MoveModes.Walk:
-                    default: movetype = 24;
+                    default:
+                        movetype = 24;
                         break;
-
                 }
                 x.Info = new FollowCoordinateInfo()
                          {

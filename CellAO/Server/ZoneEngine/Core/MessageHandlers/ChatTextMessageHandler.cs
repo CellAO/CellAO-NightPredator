@@ -149,7 +149,8 @@ namespace ZoneEngine.Core.MessageHandlers
                                character,
                                Filler(
                                    character,
-                                   text.Replace("<","&lt;").Replace(">","&gt;"),
+                                   text.Replace("<", "&lt;")
+                           .Replace(">", "&gt;"),
                                    unknown1,
                                    unknown2,
                                    unknown3)),

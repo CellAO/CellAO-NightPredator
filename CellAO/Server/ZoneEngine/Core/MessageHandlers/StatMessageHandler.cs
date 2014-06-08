@@ -48,7 +48,6 @@ namespace ZoneEngine.Core.MessageHandlers
     [MessageHandler(MessageHandlerDirection.OutboundOnly)]
     public class StatMessageHandler : BaseMessageHandler<StatMessage, StatMessageHandler>
     {
-
         public void SendChanged(ICharacter character)
         {
             Dictionary<int, uint> toPlayer = new Dictionary<int, uint>();

@@ -192,7 +192,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                  Level = (byte)tPlayer.Stats[StatIds.level].Value,
                                  TitleLevel = (byte)tPlayer.Stats[StatIds.titlelevel].Value,
                                  VisualProfession =
-                                     (Profession)tPlayer.Stats[StatIds.visualflags].Value,
+                                     (Profession)tPlayer.Stats[StatIds.visualprofession].Value,
                                  SideXp = 0,
                                  Health = tPlayer.Stats[StatIds.health].Value,
                                  MaxHealth = tPlayer.Stats[StatIds.life].Value,

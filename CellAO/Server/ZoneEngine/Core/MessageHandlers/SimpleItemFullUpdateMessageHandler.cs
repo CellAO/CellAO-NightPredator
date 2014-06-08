@@ -61,8 +61,7 @@ namespace ZoneEngine.Core.MessageHandlers
             {
                 try
                 {
-
-                    x.Coordinate = new SmokeLounge.AOtomation.Messaging.GameData.Vector3(dynel.Coordinate.x, dynel.Coordinate.y, dynel.Coordinate.z);
+                    x.Coordinate = new Vector3(dynel.Coordinate.x, dynel.Coordinate.y, dynel.Coordinate.z);
                     x.Heading = new Quaternion()
                                 {
                                     X = dynel.Heading.X,
@@ -70,7 +69,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                     Z = dynel.Heading.Z,
                                     W = dynel.Heading.W
                                 };
-                    
+
                     x.Identity = dynel.Identity;
                     x.Owner = Identity.None;
                     x.Playfield = dynel.Parent.Instance;
@@ -94,9 +93,8 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
                 catch (Exception e)
                 {
-                    LogUtil.Debug(DebugInfoDetail.Error, e.Message+e.StackTrace);
+                    LogUtil.Debug(DebugInfoDetail.Error, e.Message + e.StackTrace);
                 }
-
             };
         }
     }

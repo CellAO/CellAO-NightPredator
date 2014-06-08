@@ -118,8 +118,6 @@ namespace ZoneEngine.Core.MessageHandlers
                                         {
                                             ev.Perform(client.Controller.Character, entity);
 
-
-
                                             TemporaryBag tempBag = new TemporaryBag(
                                                 client.Controller.Character.Identity,
                                                 new Identity()

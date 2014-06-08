@@ -33,6 +33,7 @@ namespace ZoneEngine.Core.MessageHandlers
 {
     #region Usings ...
 
+    using System.Collections.Generic;
     using System.Threading;
 
     using CellAO.Core.Components;
@@ -41,7 +42,6 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Enums;
     using CellAO.ObjectManager;
 
-    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using Utility;
@@ -96,7 +96,6 @@ namespace ZoneEngine.Core.MessageHandlers
 
             // Extra to calculate IP
             client.Controller.Character.Stats[StatIds.ip].Value = 0;
-                
 
             client.Controller.SendChangedStats();
 
@@ -118,7 +117,8 @@ namespace ZoneEngine.Core.MessageHandlers
                 WeatherControlMessageHandler.Default.Send(client.Controller.Character, w);
             }
 
-            var list = Pool.Instance.GetAll<StaticDynel>(client.Controller.Character.Playfield.Identity);
+            IEnumerable<StaticDynel> list =
+                Pool.Instance.GetAll<StaticDynel>(client.Controller.Character.Playfield.Identity);
             foreach (StaticDynel sd in list)
             {
                 SimpleItemFullUpdateMessageHandler.Default.Send(client.Controller.Character, sd);
