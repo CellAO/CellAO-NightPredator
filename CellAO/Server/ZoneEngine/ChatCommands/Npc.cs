@@ -149,7 +149,7 @@ namespace ZoneEngine.ChatCommands
                 }
 
                 string scriptname = args[2];
-                scriptname = ScriptCompiler.Instance.ScriptExists(scriptname);
+                scriptname = ScriptCompiler.Instance.ClassExists(scriptname);
                 if (scriptname != "")
                 {
                     DBMobSpawn mob = MobSpawnDao.Instance.Get(target.Instance);
@@ -173,7 +173,8 @@ namespace ZoneEngine.ChatCommands
                                     "Saved initialization script '{0}' for spawn {1}.",
                                     args[2],
                                     target.ToString(true))));
-                        ((NPCController)cmob.Controller).SetKnuBot(ScriptCompiler.Instance.CreateKnuBot(scriptname, cmob.Identity));
+                        ((NPCController)cmob.Controller).SetKnuBot(
+                            ScriptCompiler.Instance.CreateKnuBot(scriptname, cmob.Identity));
                     }
                 }
                 else

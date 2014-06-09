@@ -31,7 +31,7 @@
 
 namespace ZoneEngine.Script
 {
-    using System.Security.AccessControl;
+    #region Usings ...
 
     using ZoneEngine.Core.KnuBot;
 
@@ -60,6 +60,8 @@ namespace ZoneEngine.Script
     using Utility;
 
     using ZoneEngine.ChatCommands;
+
+    #endregion
 
     #endregion
 
@@ -115,6 +117,7 @@ namespace ZoneEngine.Script
                                                         "CellAO.Stats.dll",
                                                         "CellAO.Interfaces.dll",
                                                         "Cell.Core.dll",
+                                                        "CellAO.Enums.dll",
                                                         "SmokeLounge.AOtomation.Messaging.dll",
                                                         "CellAO.ObjectManager.dll",
                                                         "MySql.Data.dll",
@@ -333,6 +336,25 @@ namespace ZoneEngine.Script
             return result;
         }
 
+        public string ClassExists(string scriptname)
+        {
+            string result = "";
+
+            foreach (Assembly asm in this.multipleDllList)
+            {
+                Type tp =
+                    asm.GetTypes()
+                        .FirstOrDefault(
+                            x => (x.BaseType == typeof(BaseKnuBot)) && (x.Name.ToLower() == scriptname.ToLower()));
+                if (tp != null)
+                {
+                    result = tp.Name;
+                    break;
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="commandName">
@@ -472,7 +494,7 @@ namespace ZoneEngine.Script
                 if (knubotType != null)
                 {
                     BaseKnuBot bk = (BaseKnuBot)Activator.CreateInstance(knubotType, new object[] { mobId });
-                        
+
                     return bk;
                 }
             }

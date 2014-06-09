@@ -134,7 +134,7 @@ namespace ZoneEngine.Core.KnuBot
 
         /// <summary>
         /// </summary>
-        private WeakReference<KnuBotDialogTree> parent = new WeakReference<KnuBotDialogTree>(null);
+        private KnuBotDialogTree parent = null;
 
         /// <summary>
         /// </summary>
@@ -142,7 +142,7 @@ namespace ZoneEngine.Core.KnuBot
 
         /// <summary>
         /// </summary>
-        private readonly WeakReference<BaseKnuBot> knuBot = new WeakReference<BaseKnuBot>(null);
+        private BaseKnuBot knuBot = null;
 
         /// <summary>
         /// </summary>
@@ -219,7 +219,7 @@ namespace ZoneEngine.Core.KnuBot
                 temp = temp.Parent;
             }
 
-            BaseKnuBot knu = this.knuBot.Target;
+            BaseKnuBot knu = this.knuBot;
             if (knu == null)
             {
                 throw new Exception("Base KnuBot gone away.");
@@ -234,7 +234,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </param>
         internal void SetKnuBot(BaseKnuBot knu)
         {
-            this.knuBot.Target = knu;
+            this.knuBot = knu;
         }
 
         /// <summary>
@@ -311,6 +311,7 @@ namespace ZoneEngine.Core.KnuBot
             // Check for "loose ends"
             string[] nextDialogIds = this.FlattenNextDialogIds();
 
+            /*
             // Check for double Id's
             if (nextDialogIds.GroupBy(n => n).Any(c => c.Count() > 1))
             {
@@ -318,10 +319,19 @@ namespace ZoneEngine.Core.KnuBot
                     "Please check your Dialog Ids: " + Environment.NewLine
                     + string.Join(Environment.NewLine, nextDialogIds.GroupBy(n => n).Select(c => c.Count() > 1)));
             }
-
+            */
             // Now check if there are actions pointing to a non existing Node
             // When creating the tree, this is perfectly fine. But there has to be a check in the end.
             string[] dialogIds = this.FlattenDialogIds();
+
+                        // Check for double Id's
+            if (dialogIds.GroupBy(n => n).Any(c => c.Count() > 1))
+            {
+                throw new Exception(
+                    "Please check your Dialog Ids: " + Environment.NewLine
+                    + string.Join(Environment.NewLine, dialogIds.GroupBy(n => n).Select(c => c.Count() > 1)));
+            }
+
             foreach (string dialogId in dialogIds)
             {
                 // Checking for Dialogs which are not called

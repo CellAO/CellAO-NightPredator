@@ -206,9 +206,12 @@ namespace ZoneEngine.Core.KnuBot
                 }
 
                 // Only start over if its not the same node or option
-                if ((answer!=(int)KnuBotOptionId.DialogStart) || (oldNode!=this.selectedNode))
+                if (this.Character.Target != null)
                 {
-                    this.Answer(KnuBotOptionId.DialogStart);
+                    if ((answer != (int)KnuBotOptionId.DialogStart) || (oldNode != this.selectedNode))
+                    {
+                        this.Answer(KnuBotOptionId.DialogStart);
+                    }
                 }
             }
             else
@@ -255,7 +258,7 @@ namespace ZoneEngine.Core.KnuBot
 
         protected void WriteLine(string text = "")
         {
-            this.Write(text+"\n");
+            this.Write(text + "\n");
         }
 
         /// <summary>
