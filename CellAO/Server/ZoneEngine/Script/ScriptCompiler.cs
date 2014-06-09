@@ -31,6 +31,10 @@
 
 namespace ZoneEngine.Script
 {
+    using System.Security.AccessControl;
+
+    using ZoneEngine.Core.KnuBot;
+
     #region Usings ...
 
     using CellAO.Core.Network;
@@ -456,6 +460,23 @@ namespace ZoneEngine.Script
                     }
                 }
             }
+        }
+
+        public BaseKnuBot CreateKnuBot(string knuBotName, Identity mobId)
+        {
+            foreach (Assembly assembly in this.multipleDllList)
+            {
+                Type knubotType =
+                    assembly.GetTypes()
+                        .FirstOrDefault(x => (x.BaseType == typeof(BaseKnuBot)) && (x.Name == knuBotName));
+                if (knubotType != null)
+                {
+                    BaseKnuBot bk = (BaseKnuBot)Activator.CreateInstance(knubotType, new object[] { mobId });
+                        
+                    return bk;
+                }
+            }
+            return null;
         }
 
         /// <summary>

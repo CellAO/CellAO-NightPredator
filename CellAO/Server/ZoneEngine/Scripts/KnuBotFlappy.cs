@@ -45,39 +45,9 @@ namespace ZoneEngine.Scripts
 
     #endregion
 
-    public class KnuBotFlappy : IAOScript
+    public class KnuBotFlappy : BaseKnuBot
     {
-        /*    Option0_1
-          0 ------------> 01
-            | Option0_2
-            ------------> 02
-        */
-
-        public KnuBotFlappy()
-        {
-        }
-
-        public void Main(string[] args)
-        {
-        }
-
-        public void InitializeFlappy(ICharacter character)
-        {
-            FlappyKnuBot temp = new FlappyKnuBot(character.Identity);
-            var controller = character.Controller as NPCController;
-            if (controller != null)
-            {
-                controller.SetKnuBot(temp);
-                LogUtil.Debug(
-                    DebugInfoDetail.Engine,
-                    " Initialized Flappy with npc " + character.Identity.ToString(true));
-            }
-        }
-    }
-
-    public class FlappyKnuBot : BaseKnuBot
-    {
-        public FlappyKnuBot(Identity identity)
+        public KnuBotFlappy(Identity identity)
             : base(identity)
         {
             KnuBotDialogTree temp = new KnuBotDialogTree(

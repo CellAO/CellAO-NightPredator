@@ -173,7 +173,7 @@ namespace ZoneEngine.ChatCommands
                                     "Saved initialization script '{0}' for spawn {1}.",
                                     args[2],
                                     target.ToString(true))));
-                        ScriptCompiler.Instance.CallMethod(scriptname, cmob);
+                        ((NPCController)cmob.Controller).SetKnuBot(ScriptCompiler.Instance.CreateKnuBot(scriptname, cmob.Identity));
                     }
                 }
                 else

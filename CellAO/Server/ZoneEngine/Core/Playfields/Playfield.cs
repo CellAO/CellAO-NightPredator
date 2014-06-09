@@ -218,7 +218,8 @@ namespace CellAO.Core.Playfields
                     this);
                 if (mob.KnuBotScriptName != "")
                 {
-                    ScriptCompiler.Instance.CallMethod(mob.KnuBotScriptName, cmob);
+                    ((NPCController)cmob.Controller).SetKnuBot(ScriptCompiler.Instance.CreateKnuBot(mob.KnuBotScriptName, cmob.Identity));
+
 /*                    if ((cmob.Stats[0].Value
                         & (int)SimpleCharFullUpdateFlags.IsImmune) == (int)SimpleCharFullUpdateFlags.IsImmune)
                     {
