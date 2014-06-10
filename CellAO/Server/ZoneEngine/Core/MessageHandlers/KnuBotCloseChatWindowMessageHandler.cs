@@ -37,6 +37,7 @@ namespace ZoneEngine.Core.MessageHandlers
     using CellAO.Core.Entities;
     using CellAO.ObjectManager;
 
+    using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
     using ZoneEngine.Core.Controllers;
@@ -46,7 +47,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
     /// <summary>
     /// </summary>
-    [MessageHandler(MessageHandlerDirection.InboundOnly)]
+    [MessageHandler(MessageHandlerDirection.All)]
     public class KnuBotCloseChatWindowMessageHandler :
         BaseMessageHandler<KnuBotCloseChatWindowMessage, KnuBotCloseChatWindowMessageHandler>
     {
@@ -65,6 +66,24 @@ namespace ZoneEngine.Core.MessageHandlers
                 ((NPCController)npc.Controller).KnuBot.Answer(KnuBotOptionId.WindowClosed);
                 ((NPCController)npc.Controller).KnuBot.CloseChatWindow();
             }
+        }
+
+        public void Send(ICharacter character, Identity knuBotIdentity, int secondsToClose = 3)
+        {
+            this.Send(character, this.FillClose(character, knuBotIdentity, secondsToClose));
+        }
+
+        private MessageDataFiller FillClose(ICharacter character, Identity knuBotIdentity, int secondsToClose)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Target = knuBotIdentity;
+                x.Unknown = 0;
+                x.Unknown1 = 2;
+                x.Seconds = secondsToClose;
+                x.Unknown3 = 0;
+            };
         }
     }
 }

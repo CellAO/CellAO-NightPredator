@@ -38,7 +38,6 @@ namespace ZoneEngine.Core.KnuBot
     using System.Linq;
     using System.Threading;
 
-    using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
 
@@ -142,7 +141,6 @@ namespace ZoneEngine.Core.KnuBot
                     this.OpenWindow();
                     this.Answer(KnuBotOptionId.DialogStart);
                     LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Start Dialog"));
-
                 }
             }
 
@@ -241,7 +239,9 @@ namespace ZoneEngine.Core.KnuBot
         protected void SendAnswerList(params string[] choices)
         {
             KnuBotAnswerListMessageHandler.Default.Send(this.GetCharacter(), this.KnuBotIdentity, choices);
-            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Sending KnuBot Choice List ({0} choices)", choices.Length));
+            LogUtil.Debug(
+                DebugInfoDetail.KnuBot,
+                string.Format("Sending KnuBot Choice List ({0} choices)", choices.Length));
         }
 
         /// <summary>
@@ -303,11 +303,14 @@ namespace ZoneEngine.Core.KnuBot
         {
             IItem temp = this.GetCharacter().BaseInventory.Pages[(int)container][slotNumber];
             // TODO: Remove item from Character's inventory and check against script reqs
-            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Trade item in container {0} slot {1}", container.ToString(), slotNumber));
+            LogUtil.Debug(
+                DebugInfoDetail.KnuBot,
+                string.Format("KnuBut Trade item in container {0} slot {1}", container.ToString(), slotNumber));
         }
 
         public void CloseChatWindow()
         {
+            KnuBotCloseChatWindowMessageHandler.Default.Send(this.Character.Target, this.KnuBotIdentity);
             this.Character = new WeakReference<ICharacter>(null);
             LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Close KnuBot window"));
         }

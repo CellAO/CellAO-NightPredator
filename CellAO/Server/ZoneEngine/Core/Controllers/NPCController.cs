@@ -191,7 +191,7 @@ namespace ZoneEngine.Core.Controllers
         public bool Trade(Identity target)
         {
             // Do we have a attached KnuBot?
-            if (this.KnuBot != null)
+            if ((this.KnuBot != null) && (this.KnuBot.Character.Target==null))
             {
                 return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(Character.Playfield.Identity, target));
             }
