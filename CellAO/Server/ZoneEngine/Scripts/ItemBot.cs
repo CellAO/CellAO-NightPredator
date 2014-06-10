@@ -28,8 +28,11 @@
 // 
 
 #endregion
+
 namespace ZoneEngine.Scripts
 {
+    #region Usings ...
+
     using CellAO.Core.Entities;
     using CellAO.Core.Items;
     using CellAO.Enums;
@@ -41,7 +44,7 @@ namespace ZoneEngine.Scripts
     using ZoneEngine.Core.KnuBot;
     using ZoneEngine.Script;
     using ZoneEngine.Core.MessageHandlers;
-
+    #endregion
 
     public class ItemBot : BaseKnuBot
     {
@@ -50,34 +53,36 @@ namespace ZoneEngine.Scripts
         public ItemBot(Identity identity)
             : base(identity)
         {
-            KnuBotDialogTree temp = new KnuBotDialogTree("0", this.TreeCondition0, new[] {
-                    this.CAS(this.MainDialog, "self"), 
-                    this.CAS(this.Items, "01"), 
-                    this.CAS(this.GoodBye, "self")
-                });
+            KnuBotDialogTree temp = new KnuBotDialogTree(
+                "0",
+                this.TreeCondition0,
+                new[] { this.CAS(this.MainDialog, "self"), this.CAS(this.Items, "01"), this.CAS(this.GoodBye, "self") });
             this.SetRootNode(temp);
 
-            temp = temp.AddNode(new KnuBotDialogTree("01", this.TreeCondition2, new[] {
-                    this.CAS(this.WantItem, "self"),
-                    this.CAS(this.WantMiyMelee, "02"),
-                    this.CAS(this.TooBad, "parent")
-
-                }));
-            temp = temp.AddNode(new KnuBotDialogTree("02", this.MiyMeleeQL, new[] {
-                    this.CAS(this.QL, "self"),
-                    this.CAS(this.QL1, "03"),
-                    this.CAS(this.QL2, "03"),
-                    this.CAS(this.QL3, "03"),
-                    this.CAS(this.QL4, "03"),
-                    this.CAS(this.QL5, "03"), 
-                    this.CAS(this.TooBad, "parent")
-
-                }));
-            temp = temp.AddNode(new KnuBotDialogTree("03", this.MiyMelee, new[] {
-                    this.CAS(this.GiveMiyMelee, "root")
-                }));
+            temp =
+                temp.AddNode(
+                    new KnuBotDialogTree(
+                        "01",
+                        this.TreeCondition2,
+                        new[]
+                        {
+                            this.CAS(this.WantItem, "self"), this.CAS(this.WantMiyMelee, "02"),
+                            this.CAS(this.TooBad, "parent")
+                        }));
+            temp =
+                temp.AddNode(
+                    new KnuBotDialogTree(
+                        "02",
+                        this.MiyMeleeQL,
+                        new[]
+                        {
+                            this.CAS(this.QL, "self"), this.CAS(this.QL1, "03"), this.CAS(this.QL2, "03"),
+                            this.CAS(this.QL3, "03"), this.CAS(this.QL4, "03"), this.CAS(this.QL5, "03"),
+                            this.CAS(this.TooBad, "parent")
+                        }));
+            temp = temp.AddNode(
+                new KnuBotDialogTree("03", this.MiyMelee, new[] { this.CAS(this.GiveMiyMelee, "root") }));
         }
-
 
         #region node0
 
@@ -94,6 +99,7 @@ namespace ZoneEngine.Scripts
             }
             return null;
         }
+
         private void MainDialog()
         {
             // Hey
@@ -110,10 +116,11 @@ namespace ZoneEngine.Scripts
         {
             this.CloseChatWindow();
         }
+
         #endregion
 
-
         #region node2
+
         private KnuBotAction TreeCondition2(KnuBotOptionId id)
         {
             switch (id)
@@ -124,28 +131,26 @@ namespace ZoneEngine.Scripts
                     return this.WantMiyMelee;
                 case KnuBotOptionId.Option2:
                     return this.TooBad;
-
             }
             return null;
         }
-        void WantItem()
+
+        private void WantItem()
         {
             this.WriteLine("What items do you want?");
             this.SendAnswerList("Full Miy`s Melee", "I dont know yet");
         }
 
-        void WantMiyMelee()
+        private void WantMiyMelee()
         {
-
         }
 
-        void TooBad()
+        private void TooBad()
         {
             this.WriteLine("...");
         }
 
         #endregion
-
 
         #region SelectQLMiy
 
@@ -170,22 +175,42 @@ namespace ZoneEngine.Scripts
             }
             return null;
         }
-        void QL()
+
+        private void QL()
         {
             this.WriteLine("What QL?");
             this.SendAnswerList("50", "100", "150", "200", "250", "Other armor type please");
         }
 
-        void QL1() { ql = 50; }
-        void QL2() { ql = 100; }
-        void QL3() { ql = 150; }
-        void QL4() { ql = 200; }
-        void QL5() { ql = 250; }
+        private void QL1()
+        {
+            this.ql = 50;
+        }
 
+        private void QL2()
+        {
+            this.ql = 100;
+        }
+
+        private void QL3()
+        {
+            this.ql = 150;
+        }
+
+        private void QL4()
+        {
+            this.ql = 200;
+        }
+
+        private void QL5()
+        {
+            this.ql = 250;
+        }
 
         #endregion
 
         #region MiyMelee
+
         private KnuBotAction MiyMelee(KnuBotOptionId id)
         {
             switch (id)
@@ -196,30 +221,28 @@ namespace ZoneEngine.Scripts
             return null;
         }
 
-        void GiveMiyMelee()
+        private void GiveMiyMelee()
         {
-            GiveItem(ql, 268850, 268851);
-            GiveItem(ql, 268854, 268855);
-            GiveItem(ql, 268854, 268855);
-            GiveItem(ql, 268848, 268849);
-            GiveItem(ql, 268852, 268853);
-            GiveItem(ql, 270338, 270339);
-            GiveItem(ql, 268858, 268850);
-            GiveItem(ql, 268856, 268857);
-
+            this.GiveItem(this.ql, 268850, 268851);
+            this.GiveItem(this.ql, 268854, 268855);
+            this.GiveItem(this.ql, 268854, 268855);
+            this.GiveItem(this.ql, 268848, 268849);
+            this.GiveItem(this.ql, 268852, 268853);
+            this.GiveItem(this.ql, 270338, 270339);
+            this.GiveItem(this.ql, 268858, 268850);
+            this.GiveItem(this.ql, 268856, 268857);
         }
 
-
         #endregion
-
 
         // Give the player a item
         public void GiveItem(int qualityLevel, int lowID, int highID)
         {
             Item item = new Item(qualityLevel, lowID, highID);
-            this.GetCharacter().BaseInventory.TryAdd(item);
-            AddTemplateMessageHandler.Default.Send(this.GetCharacter(), item);
-
+            if (this.GetCharacter().BaseInventory.TryAdd(item) == InventoryError.OK)
+            {
+                AddTemplateMessageHandler.Default.Send(this.GetCharacter(), item);
+            }
         }
     }
 }

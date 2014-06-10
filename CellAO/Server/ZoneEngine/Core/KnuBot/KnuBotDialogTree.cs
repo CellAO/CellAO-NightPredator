@@ -37,12 +37,9 @@ namespace ZoneEngine.Core.KnuBot
     using System.Collections.Generic;
     using System.Linq;
 
-    using CellAO.Core.Components;
     using CellAO.Core.Entities;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-
-    using Utility;
 
     #endregion
 
@@ -324,7 +321,7 @@ namespace ZoneEngine.Core.KnuBot
             // When creating the tree, this is perfectly fine. But there has to be a check in the end.
             string[] dialogIds = this.FlattenDialogIds();
 
-                        // Check for double Id's
+            // Check for double Id's
             if (dialogIds.GroupBy(n => n).Any(c => c.Count() > 1))
             {
                 throw new Exception(
