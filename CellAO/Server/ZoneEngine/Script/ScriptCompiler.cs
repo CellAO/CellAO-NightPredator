@@ -106,26 +106,7 @@ namespace ZoneEngine.Script
                                                     GenerateInMemory = false,
                                                     GenerateExecutable = false,
                                                     IncludeDebugInformation = true,
-                                                    OutputAssembly = "Scripts.dll", 
-
-                                                    // TODO: Figure out how to parse the file and return the usings, then load those.
-                                                    ReferencedAssemblies =
-                                                    {
-                                                        "System.dll",
-                                                        "System.Core.dll",
-                                                        "CellAO.Core.dll",
-                                                        "CellAO.Stats.dll",
-                                                        "CellAO.Interfaces.dll",
-                                                        "Cell.Core.dll",
-                                                        "CellAO.Enums.dll",
-                                                        "SmokeLounge.AOtomation.Messaging.dll",
-                                                        "CellAO.ObjectManager.dll",
-                                                        "MySql.Data.dll",
-                                                        "Utility.dll",
-                                                        "ZoneEngine.exe",
-                                                        "ChatEngine.exe",
-                                                        "LoginEngine.exe"
-                                                    },
+                                                    OutputAssembly = "Scripts.dll",
                                                     TreatWarningsAsErrors = false,
                                                     WarningLevel = 3,
                                                     CompilerOptions = "/optimize"
@@ -514,6 +495,12 @@ namespace ZoneEngine.Script
                 return false;
             }
 
+            // Add all loaded assemblies to the Referenced assemblies list
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(x=>x.IsDynamic==false))
+            {
+                this.p.ReferencedAssemblies.Add(assembly.Location);
+            }
+
             if (multipleFiles)
             {
                 LogScriptAction(
@@ -606,6 +593,48 @@ namespace ZoneEngine.Script
             }
 
             return true;
+        }
+
+        private bool TryResolve(CompilerError e, string scriptFile)
+        {
+            bool resolved = false;
+            string line = this.GetLineOfFile(scriptFile, e.Line).Replace("using", "").Replace(";", "").Trim();
+            bool runLoop = true;
+            while (runLoop)
+            {
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, line + ".dll")))
+                {
+                    this.p.ReferencedAssemblies.Add(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, line + ".dll"));
+                    resolved = true;
+                    break;
+                }
+
+                runLoop = line.IndexOf(".") > -1;
+                if (line.IndexOf(".") > -1)
+                {
+                    line = line.Substring(0, line.LastIndexOf("."));
+                }
+            }
+            return resolved;
+        }
+
+        private string GetLineOfFile(string scriptFile, int p)
+        {
+            string res = "";
+            using (TextReader sr = new StreamReader(scriptFile))
+            {
+                while (p > 0)
+                {
+                    res = sr.ReadLine();
+                    p--;
+                    if ((p==0) && (string.IsNullOrWhiteSpace(res)))
+                    {
+                        res=sr.ReadLine();
+                    }
+                }
+            }
+            return res;
         }
 
         #endregion
