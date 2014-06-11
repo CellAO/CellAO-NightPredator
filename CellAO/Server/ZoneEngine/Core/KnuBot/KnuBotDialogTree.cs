@@ -62,7 +62,7 @@ namespace ZoneEngine.Core.KnuBot
 
         /// <summary>
         /// </summary>
-        DialogStart = 10,
+        DialogStart = 99,
 
         // END Self made
         /// <summary>
@@ -100,6 +100,27 @@ namespace ZoneEngine.Core.KnuBot
         /// <summary>
         /// </summary>
         Option9 = 8,
+        Option10 = 9,
+        Option11 = 10,
+        Option12 = 11,
+        Option13 = 12,
+        Option14 = 13,
+        Option15 = 14,
+        Option16 = 15,
+        Option17 = 16,
+        Option18 = 17,
+        Option19 = 18,
+        Option20 = 19,
+        Option21 = 20,
+        Option22 = 21,
+        Option23 = 22,
+        Option24 = 23,
+        Option25 = 24,
+        Option26 = 25,
+        Option27 = 26,
+        Option28 = 27,
+        Option29 = 28,
+
     }
 
     /// <summary>
