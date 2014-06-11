@@ -64,7 +64,7 @@ namespace ZoneEngine.Core.MessageHandlers
             if (npc != null)
             {
                 ((NPCController)npc.Controller).KnuBot.Answer(KnuBotOptionId.WindowClosed);
-                ((NPCController)npc.Controller).KnuBot.CloseChatWindow();
+                // ((NPCController)npc.Controller).KnuBot.CloseChatWindow();
             }
         }
 
