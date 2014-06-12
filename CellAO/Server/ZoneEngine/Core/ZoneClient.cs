@@ -47,6 +47,7 @@ namespace ZoneEngine.Core
     using CellAO.Core.Playfields;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
+    using CellAO.Enums;
     using CellAO.ObjectManager;
 
     using Ionic.Zlib;
@@ -231,6 +232,7 @@ namespace ZoneEngine.Core
             this.Controller.Character.Playfield = pf;
             this.Playfield = pf;
             this.Controller.Character.Stats.Read();
+            this.controller.Character.Stats[StatIds.visualprofession].BaseValue = (uint)this.controller.Character.Stats[StatIds.profession].Value;
         }
 
         /// <summary>

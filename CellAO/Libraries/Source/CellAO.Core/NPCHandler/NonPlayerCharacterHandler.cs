@@ -120,6 +120,7 @@ namespace CellAO.Core.NPCHandler
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.runspeed, 513);
                 mobCharacter.Stats[StatIds.headmesh].BaseValue = (uint)mob.HeadMesh;
                 mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.losheight, 15);
+                mobCharacter.Stats.SetBaseValueWithoutTriggering((int)StatIds.visualprofession, 15);
 
                 /*
                 // For testing only, blue trousers and a helmet
@@ -169,7 +170,7 @@ namespace CellAO.Core.NPCHandler
                     cmob.Stats.SetBaseValueWithoutTriggering(stat.Stat, (uint)stat.Value);
                 }
 
-                cmob.Stats.SetBaseValueWithoutTriggering((int)StatIds.visualprofession,cmob.Stats[StatIds.profession].BaseValue);
+                cmob.Stats.SetBaseValueWithoutTriggering((int)StatIds.visualprofession, cmob.Stats[StatIds.profession].BaseValue);
                 // initiate affected stats calculation
                 int temp = cmob.Stats[StatIds.level].Value;
                 temp = cmob.Stats[StatIds.agility].Value;

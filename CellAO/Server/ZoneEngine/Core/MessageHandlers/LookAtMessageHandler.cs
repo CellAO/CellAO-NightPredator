@@ -64,7 +64,7 @@ namespace ZoneEngine.Core.MessageHandlers
         {
             if (client.Controller.LookAt(message.Target))
             {
-                if (message.ReturnInfo == 1)
+                if (message.ReturnInfo != 1)
                 {
                     CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, message.Target);
                 }

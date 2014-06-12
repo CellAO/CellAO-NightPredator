@@ -2821,7 +2821,7 @@ namespace CellAO.Stats
 
         /// <summary>
         /// </summary>
-        private readonly Stat visualProfession;
+        private readonly StatVisualProfession visualProfession;
 
         /// <summary>
         /// </summary>
@@ -3594,7 +3594,7 @@ namespace CellAO.Stats
             this.visualBreed = new Stat(this, 367, 1234567890, false, false, true);
             this.visualFlags = new Stat(this, 673, 31, false, false, false);
             this.visualLodLevel = new Stat(this, 888, 1234567890, false, false, false);
-            this.visualProfession = new Stat(this, 368, 1234567890, false, false, true);
+            this.visualProfession = new StatVisualProfession(this, 368, 1, false, false, true);
             this.visualSex = new Stat(this, 369, 1234567890, false, false, true);
             this.volumeMass = new Stat(this, 2, 1234567890, false, false, false);
             this.voteCount = new Stat(this, 306, 1234567890, false, false, false);

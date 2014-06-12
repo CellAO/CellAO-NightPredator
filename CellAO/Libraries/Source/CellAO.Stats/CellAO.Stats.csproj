@@ -64,6 +64,7 @@
     <Compile Include="SpecialStats\StatNextXP.cs" />
     <Compile Include="SpecialStats\StatSkill.cs" />
     <Compile Include="SpecialStats\StatTitleLevel.cs" />
+    <Compile Include="SpecialStats\StatVisualProfession.cs" />
     <Compile Include="SpecialStats\XPTable.cs" />
     <Compile Include="Stat.cs" />
     <Compile Include="Stats.cs" />

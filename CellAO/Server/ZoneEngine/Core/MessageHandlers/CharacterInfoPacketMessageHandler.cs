@@ -144,7 +144,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 int? orgId;
                 string orgRank;
-                InfoPacketType type;
+                InfoPacketType type = InfoPacketType.Character;
                 if (tPlayer.Stats[StatIds.clan].BaseValue == 0)
                 {
                     type = InfoPacketType.Character;
@@ -165,11 +165,14 @@ namespace ZoneEngine.Core.MessageHandlers
                     }
                 }
 
-                if (character.Stats[StatIds.npcfamily].Value != 0)
+                if (tPlayer.Stats[StatIds.npcfamily].Value != 0)
                 {
                     type = InfoPacketType.Monster;
+                    x.Unknown = 1;
                     x.Info = new MonsterInfoPacket()
                              {
+                                 Unknown1=1,
+                                 Unknown2=0,
                                  CurrentHealth = tPlayer.Stats[StatIds.health].Value,
                                  Level = (byte)tPlayer.Stats[StatIds.level].Value,
                                  MaxHealth = tPlayer.Stats[StatIds.life].Value,
@@ -185,6 +188,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
                 else
                 {
+                    x.Unknown = 0;
                     x.Info = new CharacterInfoPacket
                              {
                                  Unknown1 = 0x01,
@@ -222,7 +226,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 }
 
                 x.Type = type;
-                x.Unknown = 0;
+                
                 x.Identity = tPlayer.Identity;
             };
         }
