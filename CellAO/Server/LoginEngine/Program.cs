@@ -34,6 +34,8 @@ namespace LoginEngine
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
 
@@ -99,12 +101,113 @@ namespace LoginEngine
 
         #region Methods
 
+        private static bool CheckUsername(string username)
+        {
+            return !LoginDataDao.Instance.GetWhere(new { Username = username }).Any();
+        }
+
+        private static bool IsNumber(string number)
+        {
+            int temp = 0;
+            return Int32.TryParse(number, out temp);
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="obj">
         /// </param>
         private static void AddUser(string[] obj)
         {
+            if (obj.Length == 1)
+            {
+                List<string> temp = new List<string>();
+                temp.Add("adduser");
+
+                while (true)
+                {
+                    Console.Write("Username: ");
+                    string test = Console.ReadLine();
+                    if ((string.IsNullOrWhiteSpace(test)) || (test.Length < 6))
+                    {
+                        Console.WriteLine("Please enter a username (at least 6 chars)...");
+                        continue;
+                    }
+                    if (CheckUsername(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                while (true)
+                {
+                    Console.Write("Password: ");
+                    string test = Console.ReadLine();
+                    if ((string.IsNullOrWhiteSpace(test)) || (test.Length < 6))
+                    {
+                        Console.WriteLine("Please enter a password (at least 6 chars) for your safety...");
+                        continue;
+                    }
+                    temp.Add(test);
+                    break;
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("Number of character slots: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.WriteLine("Expansions: Enter 2047 for all expansions (i know you want that)");
+                while (true)
+                {
+                    Console.Write("Expansions: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.WriteLine(
+                    "GM-Level: Anything above 0 is GM, but there are differences. Full Client GM = 1 (using keyboard shortcuts) but for some items you have to be GM Level 511");
+                while (true)
+                {
+                    Console.Write("GM-Level: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("E-Mail: ");
+                    string test = Console.ReadLine();
+                    if (TestEmailRegex.TestEmail(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.Write("First name: ");
+                temp.Add(Console.ReadLine());
+
+                Console.Write("Last name: ");
+                temp.Add(Console.ReadLine());
+
+                obj = temp.ToArray();
+            }
+
             Colouring.Push(ConsoleColor.Red);
             bool argsOk = CheckAddUserParameters(obj);
             Colouring.Pop();

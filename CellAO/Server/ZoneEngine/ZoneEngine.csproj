@@ -209,9 +209,9 @@
     <None Include="Scripts\InfoBot.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Scripts\ItemBot.cs">
+    <Compile Include="Scripts\KnuBotItemGiver.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Compile>
     <Compile Include="Script\IAOScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
   </ItemGroup>

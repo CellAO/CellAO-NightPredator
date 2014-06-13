@@ -153,7 +153,7 @@ namespace ZoneEngine.ChatCommands
                 if (scriptname != "")
                 {
                     DBMobSpawn mob = MobSpawnDao.Instance.Get(target.Instance);
-                    if (mob.Id == 0)
+                    if (mob == null)
                     {
                         character.Playfield.Publish(
                             ChatTextMessageHandler.Default.CreateIM(
