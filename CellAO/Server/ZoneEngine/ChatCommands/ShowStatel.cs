@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -38,12 +43,16 @@ namespace ZoneEngine.ChatCommands
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
 
+    using Utility;
+
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
 
@@ -73,7 +82,8 @@ namespace ZoneEngine.ChatCommands
         /// </param>
         public override void CommandHelp(ICharacter character)
         {
-            character.Playfield.Publish(ChatText.CreateIM(character, "Usage: /command showstatel"));
+            character.Playfield.Publish(
+                ChatTextMessageHandler.Default.CreateIM(character, "Usage: /command showstatel"));
             return;
         }
 
@@ -89,15 +99,17 @@ namespace ZoneEngine.ChatCommands
         {
             List<MessageBody> replies = new List<MessageBody>();
             string reply = "Looking up for statel in playfield " + character.Playfield.Identity.Instance;
-            replies.Add(ChatText.Create(character, reply));
+            replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             StatelData o = null;
+            StaticDynel o2 = null;
             if (!PlayfieldLoader.PFData.ContainsKey(character.Playfield.Identity.Instance))
             {
                 reply = "Could not find data for playfield " + character.Playfield.Identity.Instance;
-                replies.Add(ChatText.Create(character, reply));
+                replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             }
             else
             {
+                Coordinate tempCoordinate = character.Coordinates();
                 PlayfieldData pfData = PlayfieldLoader.PFData[character.Playfield.Identity.Instance];
                 foreach (StatelData s in pfData.Statels)
                 {
@@ -107,69 +119,72 @@ namespace ZoneEngine.ChatCommands
                     }
                     else
                     {
-                        if (Coordinate.Distance2D(character.Coordinates, s.Coord())
-                            < Coordinate.Distance2D(character.Coordinates, o.Coord()))
+                        if (Coordinate.Distance2D(tempCoordinate, s.Coord())
+                            < Coordinate.Distance2D(tempCoordinate, o.Coord()))
                         {
                             o = s;
                         }
                     }
                 }
 
-                if (o == null)
+                foreach (StaticDynel sd in Pool.Instance.GetAll<StaticDynel>(character.Playfield.Identity))
+                {
+                    if (o2 == null)
+                    {
+                        o2 = sd;
+                    }
+                    else
+                    {
+                        if (Coordinate.Distance2D(tempCoordinate, sd.Coordinate)
+                            < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))
+                        {
+                            o2 = sd;
+                        }
+                    }
+
+                }
+
+
+
+                if ((o == null) && (o2 == null))
                 {
                     replies.Add(
-                        ChatText.Create(character, "No statel on this playfield... Very odd, where exactly are you???"));
+                        ChatTextMessageHandler.Default.Create(
+                            character,
+                            "No statel/static dynel on this playfield... Very odd, where exactly are you???"));
                 }
                 else
                 {
-                    replies.Add(
-                        ChatText.Create(
-                            character, 
-                            o.StatelIdentity.Type.ToString() + " " + ((int)o.StatelIdentity.Type).ToString("X8") + ":"
-                            + o.StatelIdentity.Instance.ToString("X8")));
-                    replies.Add(ChatText.Create(character, "Item Template Id: " + o.TemplateId));
-                    foreach (Events se in o.Events)
+                    if (((o != null) && (o2 == null))
+                        || ((o != null) && (Coordinate.Distance2D(tempCoordinate, o.Coord())
+                            < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))))
                     {
+
                         replies.Add(
-                            ChatText.Create(
-                                character, 
-                                "Event: " + se.EventType.ToString() + " # of Functions: "
-                                + se.Functions.Count.ToString()));
-
-                        foreach (Functions sf in se.Functions)
+                            ChatTextMessageHandler.Default.Create(
+                                character,
+                                o.Identity.Type.ToString() + " " + ((int)o.Identity.Type).ToString("X8") + ":"
+                                + o.Identity.Instance.ToString("X8")));
+                        replies.Add(
+                            ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o.TemplateId));
+                        foreach (Event se in o.Events)
                         {
-                            string Fargs = string.Empty;
-                            foreach (MessagePackObject obj in sf.Arguments.Values)
-                            {
-                                if (Fargs.Length > 0)
-                                {
-                                    Fargs = Fargs + ", ";
-                                }
-
-                                Fargs = Fargs + obj.ToString();
-                            }
-
-                            replies.Add(
-                                ChatText.Create(
-                                    character, 
-                                    "    Fn: " + ((FunctionType)sf.FunctionType).ToString() + "("
-                                    + sf.FunctionType.ToString() + "), # of Args: "
-                                    + sf.Arguments.Values.Count.ToString()));
-                            replies.Add(ChatText.Create(character, "    Args: " + Fargs));
-
-                            foreach (Requirements sfr in sf.Requirements)
-                            {
-                                string req;
-                                req = "Attr: " + sfr.Statnumber.ToString() + " Value: " + sfr.Value.ToString()
-                                      + " Target: " + sfr.Target.ToString() + " Op: " + sfr.Operator.ToString();
-                                replies.Add(ChatText.Create(character, req));
-                            }
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));
+                        }
+                    }
+                    else
+                    {
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, o2.Identity.ToString() + " " + o2.Identity.ToString(true)));
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, "Item template Id: "+o2.Stats[(int)StatIds.acgitemtemplateid].ToString()));
+                        foreach (Event se in o2.Events)
+                        {
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));
                         }
                     }
                 }
             }
 
-            character.Playfield.Publish(Bulk.CreateIM(character.Client, replies.ToArray()));
+            character.Playfield.Publish(Bulk.CreateIM(character.Controller.Client, replies.ToArray()));
         }
 
         /// <summary>

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -35,7 +40,11 @@ namespace CellAO.ObjectManager
     using CellAO.Core.Exceptions;
     using CellAO.Interfaces;
 
+    using Microsoft.Win32;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
+
+    using Utility;
 
     #endregion
 
@@ -47,11 +56,73 @@ namespace CellAO.ObjectManager
 
         /// <summary>
         /// </summary>
-        private Dictionary<int, Dictionary<ulong, IEntity>> pool = new Dictionary<int, Dictionary<ulong, IEntity>>();
+        private readonly Dictionary<ulong, Dictionary<int, Dictionary<ulong, IEntity>>> pool =
+            new Dictionary<ulong, Dictionary<int, Dictionary<ulong, IEntity>>>();
 
         #endregion
 
+        /// <summary>
+        /// </summary>
+        private static readonly Pool instance = new Pool();
+
+        private bool disposed = false;
+
+        private readonly List<ulong> reservedIds = new List<ulong>();
+
+        private readonly Dictionary<int, int> maxIds = new Dictionary<int, int>();
+
+        /// <summary>
+        /// </summary>
+        public static Pool Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    lock (this.pool)
+                    {
+                        foreach (Dictionary<int, Dictionary<ulong, IEntity>> ownerEntries in this.pool.Values)
+                        {
+                            lock (ownerEntries)
+                            {
+                                foreach (Dictionary<ulong, IEntity> list in ownerEntries.Values)
+                                {
+                                    lock (list)
+                                    {
+                                        foreach (IDisposable disposable in list.Values)
+                                        {
+                                            disposable.Dispose();
+                                        }
+                                        list.Clear();
+                                    }
+                                }
+                                ownerEntries.Clear();
+                            }
+                        }
+                        this.pool.Clear();
+                    }
+                }
+            }
+            this.disposed = true;
+        }
 
         /// <summary>
         /// </summary>
@@ -59,30 +130,51 @@ namespace CellAO.ObjectManager
         /// </param>
         /// <typeparam name="T">
         /// </typeparam>
-        public void AddObject<T>(T obj) where T : class, IDisposable, IEntity
+        public void AddObject<T>(Identity parent, T obj) where T : class, IDisposable, IEntity
         {
-            if (!this.pool.ContainsKey((int)obj.Identity.Type))
+            ulong parentId = parent.Long();
+            Dictionary<int, Dictionary<ulong, IEntity>> parentList = null;
+            if (maxIds.ContainsKey((int)obj.Identity.Type))
             {
-                var temp = new Dictionary<ulong, IEntity>();
-                temp.Add(obj.Identity.Long(), obj);
-                this.pool.Add((int)obj.Identity.Type, temp);
+                maxIds[(int)obj.Identity.Type] = maxIds[(int)obj.Identity.Type] < obj.Identity.Instance
+                    ? obj.Identity.Instance
+                    : maxIds[(int)obj.Identity.Type];
             }
             else
             {
-                // I dont check for duplicates here, thrown exceptions should be enough
-                this.pool[(int)obj.Identity.Type].Add(obj.Identity.Long(), obj);
+                maxIds[(int)obj.Identity.Type] = obj.Identity.Instance;
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        public void Dispose()
-        {
-            foreach (Dictionary<ulong, IEntity> list in this.pool.Values)
+            lock (this.reservedIds)
             {
-                foreach (IDisposable disposable in list.Values)
+                lock (this.pool)
                 {
-                    disposable.Dispose();
+                    if (!this.pool.ContainsKey(parentId))
+                    {
+                        parentList = new Dictionary<int, Dictionary<ulong, IEntity>>();
+                        this.pool.Add(parentId, parentList);
+                    }
+                    else
+                    {
+                        parentList = this.pool[parentId];
+                    }
+                }
+                lock (parentList)
+                {
+                    if (!parentList.ContainsKey((int)obj.Identity.Type))
+                    {
+                        var temp = new Dictionary<ulong, IEntity>();
+                        parentList.Add((int)obj.Identity.Type, temp);
+                    }
+                    // I dont check for duplicates here, thrown exceptions should be enough
+                    try
+                    {
+                        parentList[(int)obj.Identity.Type].Add(obj.Identity.Long(), obj);
+                    }
+                    catch (Exception ef)
+                    {
+                        LogUtil.ErrorException(ef);
+                    }
+                    this.reservedIds.Remove(obj.Identity.Long());
                 }
             }
         }
@@ -95,8 +187,139 @@ namespace CellAO.ObjectManager
         /// </returns>
         public IEnumerable<IEntity> GetAll(int identityType)
         {
-            return this.pool[identityType].Values.ToList();
+            List<IEntity> temp = new List<IEntity>();
+            lock (this.pool)
+            {
+                foreach (Dictionary<int, Dictionary<ulong, IEntity>> entries in this.pool.Values)
+                {
+                    lock (entries)
+                    {
+                        if (entries.ContainsKey(identityType))
+                        {
+                            temp.AddRange(entries[identityType].Values);
+                        }
+                    }
+                }
+            }
+
+            return temp;
         }
+
+        public IEnumerable<IEntity> GetAll(Identity parentIdentity, int identitytype)
+        {
+            List<IEntity> temp = new List<IEntity>();
+            ulong parentId = parentIdentity.Long();
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    lock (this.pool[parentId])
+                    {
+                        if (this.pool[parentId].ContainsKey(identitytype))
+                        {
+                            temp.AddRange(this.pool[parentId][identitytype].Values);
+                        }
+                    }
+                }
+            }
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identitytype">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        public IEnumerable<T> GetAll<T>(int identitytype) where T : class
+        {
+            List<T> temp = new List<T>();
+
+            lock (this.pool)
+            {
+                foreach (Dictionary<int, Dictionary<ulong, IEntity>> list in this.pool.Values)
+                {
+                    lock (list)
+                    {
+                        if (list.ContainsKey(identitytype))
+                        {
+                            lock (list[identitytype])
+                            {
+                                temp.AddRange(list[identitytype].Values.OfType<T>());
+                            }
+                        }
+                    }
+                }
+            }
+
+            return temp;
+        }
+
+        public IEnumerable<T> GetAll<T>(Identity parent, int identitytype) where T : class
+        {
+            List<T> temp = new List<T>();
+            ulong parentId = parent.Long();
+
+            Dictionary<int, Dictionary<ulong, IEntity>> pfPool = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    pfPool = this.pool[parentId];
+                }
+            }
+            Dictionary<ulong, IEntity> localPool = null;
+            if (pfPool != null)
+            {
+                lock (pfPool)
+                {
+                    if (pfPool.ContainsKey(identitytype))
+                    {
+                        localPool = pfPool[identitytype];
+                    }
+                }
+            }
+            if (localPool != null)
+            {
+                lock (localPool)
+                {
+                    temp.AddRange(localPool.Values.OfType<T>());
+                }
+            }
+
+            return temp;
+        }
+
+        public IEnumerable<T> GetAll<T>(Identity parent) where T : class
+        {
+            List<T> temp = new List<T>();
+            ulong parentId = parent.Long();
+
+            Dictionary<int, Dictionary<ulong, IEntity>> pfPool = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    pfPool = this.pool[parentId];
+                }
+            }
+            if (pfPool != null)
+            {
+                lock (pfPool)
+                {
+                    foreach (Dictionary<ulong, IEntity> type in pfPool.Values)
+                    {
+                        temp.AddRange(type.Values.OfType<T>());
+                    }
+                }
+            }
+
+            return temp;
+        }
+
+
 
         /// <summary>
         /// </summary>
@@ -108,22 +331,173 @@ namespace CellAO.ObjectManager
         /// </returns>
         /// <exception cref="TypeInstanceMismatchException">
         /// </exception>
-        public T GetObject<T>(Identity identity) where T : class, IDisposable, IEntity
+        public T GetObject<T>(Identity identity) where T : class, IEntity
         {
-            if (this.pool.ContainsKey((int)identity.Type))
+            ulong id = identity.Long();
+            lock (this.pool)
             {
-                ulong id = identity.Long();
-                if (this.pool[(int)identity.Type].ContainsKey(id))
+                foreach (Dictionary<int, Dictionary<ulong, IEntity>> list in this.pool.Values)
                 {
-                    IEntity temp = this.pool[(int)identity.Type].First(x => x.Key == id).Value;
-                    if (temp is T)
+                    lock (list)
                     {
-                        return (T)temp;
+                        if (list.ContainsKey((int)identity.Type))
+                        {
+                            lock (list[(int)identity.Type])
+                            {
+                                IEntity temp = null;
+                                try
+                                {
+                                    temp = list[(int)identity.Type][id];
+                                }
+                                catch (Exception)
+                                {
+                                }
+                                if (temp is T)
+                                {
+                                    return (T)temp;
+                                }
+                                if (temp != null)
+                                {
+                                    throw new TypeInstanceMismatchException(
+                                        "Tried to retrieve " + identity.Type.ToString("X") + ":"
+                                        + identity.Instance.ToString("X") + " with the wrong type ("
+                                        + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
+                                }
+                            }
+                        }
                     }
+                }
+            }
+            return null;
+        }
 
-                    throw new TypeInstanceMismatchException(
-                        "Tried to retrieve " + identity.Type.ToString("X8") + ":" + identity.Instance.ToString("X8")
-                        + " with the wrong type (" + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
+        public T GetObject<T>(Identity parent, Identity identity) where T : class
+        {
+            ulong parentId = parent.Long();
+            ulong id = identity.Long();
+
+            Dictionary<int, Dictionary<ulong, IEntity>> list = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    list = this.pool[parentId];
+                }
+            }
+            if (list != null)
+            {
+                Dictionary<ulong, IEntity> entries = null;
+                lock (list)
+                {
+                    if (list.ContainsKey((int)identity.Type))
+                    {
+                        entries = list[(int)identity.Type];
+                    }
+                }
+                if (entries != null)
+                {
+                    lock (entries)
+                    {
+                        IEntity temp = null;
+                        try
+                        {
+                            temp = entries[id];
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        if ((temp as T) != null)
+                        {
+                            return (T)temp;
+                        }
+                        throw new TypeInstanceMismatchException(
+                            "Tried to retrieve " + identity.ToString(true)
+                            + " with the wrong type (" + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
+                    }
+                }
+                throw new Exception("Identity type not in this parent's list");
+            }
+            throw new ParentNotInPoolException("Parent " + parent.ToString(true) + " not in Pool list");
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public object GetObject(Identity identity)
+        {
+            List<ulong> parentIds = new List<ulong>();
+            lock (this.pool)
+            {
+                parentIds.AddRange(this.pool.Keys);
+            }
+            foreach (ulong parentId in parentIds)
+            {
+                Dictionary<int, Dictionary<ulong, IEntity>> list = this.pool[parentId];
+                Dictionary<ulong, IEntity> entries = null;
+
+                lock (list)
+                {
+                    if (list.ContainsKey((int)identity.Type))
+                    {
+                        entries = list[(int)identity.Type];
+                    }
+                }
+                if (entries != null)
+                {
+                    lock (entries)
+                    {
+                        IEntity temp = null;
+                        try
+                        {
+                            temp = entries[identity.Long()];
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        return temp;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public IEntity GetObject(Identity parent, Identity identity)
+        {
+            ulong parentId = parent.Long();
+            ulong id = identity.Long();
+
+            Dictionary<int, Dictionary<ulong, IEntity>> list = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    list = this.pool[parentId];
+                }
+            }
+
+            if (list != null)
+            {
+                lock (list)
+                {
+                    if (list.ContainsKey((int)identity.Type))
+                    {
+                        lock (list[(int)identity.Type])
+                        {
+                            IEntity temp = null;
+                            try
+                            {
+                                temp = list[(int)identity.Type][id];
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            return temp;
+                        }
+                    }
                 }
             }
 
@@ -140,26 +514,151 @@ namespace CellAO.ObjectManager
         /// </exception>
         public void RemoveObject<T>(T obj) where T : IDisposable, IEntity
         {
-            if (this.pool.ContainsKey((int)obj.Identity.Type))
+            Dictionary<int, Dictionary<ulong, IEntity>> list = null;
+            lock (this.pool)
             {
-                ulong id = obj.Identity.Long();
-                if (this.pool[(int)obj.Identity.Type].ContainsKey(id))
+                if (this.pool.ContainsKey(obj.Parent.Long()))
                 {
-                    IEntity temp = this.pool[(int)obj.Identity.Type].First(x => x.Key == id).Value;
-                    if (temp is T)
+                    list = this.pool[obj.Parent.Long()];
+                }
+            }
+            if (list != null)
+            {
+                lock (list)
+                {
+                    if (list.ContainsKey((int)obj.Identity.Type))
                     {
-                        this.pool[(int)obj.Identity.Type].Remove(obj.Identity.Long());
-                        return;
+                        lock (list[(int)obj.Identity.Type])
+                        {
+                            IEntity temp = null;
+                            try
+                            {
+                                temp = list[(int)obj.Identity.Type][obj.Identity.Long()];
+                            }
+                            catch (Exception)
+                            {
+                            }
+                            if (temp is T)
+                            {
+                                list[(int)obj.Identity.Type].Remove(obj.Identity.Long());
+                            }
+                            else
+                            {
+                                if (temp != null)
+                                {
+                                    throw new TypeInstanceMismatchException(
+                                        "Tried to remove " + obj.Identity.Type.ToString("X8") + ":"
+                                        + obj.Identity.Instance.ToString("X8") + " with the wrong type ("
+                                        + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
+                                }
+                                else
+                                {
+                                    throw new ArgumentNullException(
+                                        "Tried to remove object, which is not in the pool: "
+                                        + obj.Identity.ToString(true));
+                                }
+                            }
+                        }
                     }
-
-                    throw new TypeInstanceMismatchException(
-                        "Tried to remnve " + obj.Identity.Type.ToString("X8") + ":"
-                        + obj.Identity.Instance.ToString("X8") + " with the wrong type (" + typeof(T).ToString()
-                        + " != " + temp.GetType().ToString() + ")");
                 }
             }
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool Contains(Identity identity)
+        {
+            bool result = false;
+            List<ulong> parentIds = new List<ulong>();
+            lock (this.pool)
+            {
+                parentIds.AddRange(this.pool.Keys);
+            }
+
+            foreach (ulong parentId in parentIds)
+            {
+                Dictionary<int, Dictionary<ulong, IEntity>> list = this.pool[parentId];
+                Dictionary<ulong, IEntity> entries = null;
+                lock (list)
+                {
+                    if (list.ContainsKey((int)identity.Type))
+                    {
+                        entries = list[(int)identity.Type];
+                    }
+                }
+                if (entries != null)
+                {
+                    lock (entries)
+                    {
+                        if (list[(int)identity.Type].ContainsKey(identity.Long()))
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public bool Contains(Identity parent, Identity identity)
+        {
+            bool result = false;
+            ulong parentId = parent.Long();
+            Dictionary<int, Dictionary<ulong, IEntity>> list = null;
+            lock (this.pool)
+            {
+                if (this.pool.ContainsKey(parentId))
+                {
+                    list = this.pool[parentId];
+                }
+            }
+
+            if (list != null)
+            {
+                Dictionary<ulong, IEntity> entries = null;
+                lock (list)
+                {
+                    if (list.ContainsKey((int)identity.Type))
+                    {
+                        entries = list[(int)identity.Type];
+                    }
+                }
+                if (entries != null)
+                {
+                    lock (entries)
+                    {
+                        if (entries.ContainsKey(identity.Long()))
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         #endregion
+
+        public int GetFreeInstance<T>(int minId, IdentityType type)
+        {
+            Identity temp = new Identity() { Type = type, Instance = minId };
+
+            lock (this.reservedIds)
+            {
+                if (maxIds.ContainsKey((int)type))
+                {
+                    minId = minId < maxIds[(int)type] + 1 ? maxIds[(int)type] + 1 : minId;
+                }
+                maxIds[(int)type] = minId;
+            }
+            temp.Instance = minId;
+            return temp.Instance;
+        }
     }
 }

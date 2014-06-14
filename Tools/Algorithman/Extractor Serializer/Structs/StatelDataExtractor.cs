@@ -53,7 +53,7 @@ namespace Extractor_Serializer.Structs
             StatelData statel = new StatelData();
             FlatIdentity fi = new FlatIdentity();
             fi.ReadFromStream(stream);
-            statel.StatelIdentity = fi.Id;
+            statel.Identity = fi.Id;
 
             // Skip 4, is always 1?
             stream.ReadByte();

@@ -60,6 +60,7 @@
     <Compile Include="Messages\Ping.cs" />
     <Compile Include="Messages\Playfields.cs" />
     <Compile Include="Messages\VicinityChatMessage.cs" />
+    <Compile Include="OnDataReceivedArgs.cs" />
     <Compile Include="ZoneComClient.cs" />
     <Compile Include="HandleClientRequest.cs" />
     <Compile Include="OnMessageArgs.cs" />
@@ -82,10 +83,6 @@
     <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NiceHexOutput\NiceHexOutput.csproj">
-      <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
-      <Name>NiceHexOutput</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>

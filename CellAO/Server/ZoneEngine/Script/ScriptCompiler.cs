@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,26 +25,21 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
-
-#region NameSpace
 
 namespace ZoneEngine.Script
 {
     #region Usings ...
 
-    #region Usings ...
+    using ZoneEngine.Core.KnuBot;
 
     #region Usings ...
 
-    #region Usings ...
+    using CellAO.Core.Network;
 
-    #region Usings ...
-
-    #region Usings ...
-
-    #region Usings ...
+    using ZoneEngine.Core.MessageHandlers;
 
     using System;
     using System.CodeDom.Compiler;
@@ -61,18 +60,6 @@ namespace ZoneEngine.Script
     using Utility;
 
     using ZoneEngine.ChatCommands;
-    using ZoneEngine.Core;
-    using ZoneEngine.Core.Packets;
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
-
-    #endregion
 
     #endregion
 
@@ -90,6 +77,8 @@ namespace ZoneEngine.Script
     {
         // Holder for Chat commands
 
+        public static ScriptCompiler Instance = new ScriptCompiler();
+
         #region Fields
 
         /// <summary>
@@ -106,38 +95,34 @@ namespace ZoneEngine.Script
         /// </summary>
         private readonly List<Assembly> multipleDllList = new List<Assembly>();
 
+        private bool disposed = false;
+
         /// <summary>
         /// Our compiler parameter command line to pass 
         /// when we compile the scripts.
         /// </summary>
         private readonly CompilerParameters p = new CompilerParameters
                                                 {
-                                                    GenerateInMemory = false, 
-                                                    GenerateExecutable = false, 
-                                                    IncludeDebugInformation = true, 
-                                                    OutputAssembly = "Scripts.dll", 
-
-                                                    // TODO: Figure out how to parse the file and return the usings, then load those.
-                                                    ReferencedAssemblies =
-                                                    {
-                                                        "System.dll", 
-                                                        "System.Core.dll", 
-                                                        "CellAO.Core.dll", 
-                                                        "CellAO.Stats.dll", 
-                                                        "Cell.Core.dll", 
-                                                        "MySql.Data.dll", 
-                                                        "ZoneEngine.exe", 
-                                                        "ChatEngine.exe", 
-                                                        "LoginEngine.exe"
-                                                    }, 
-                                                    TreatWarningsAsErrors = false, 
-                                                    WarningLevel = 3, 
+                                                    GenerateInMemory = false,
+                                                    GenerateExecutable = false,
+                                                    IncludeDebugInformation = true,
+                                                    OutputAssembly = "Scripts.dll",
+                                                    TreatWarningsAsErrors = false,
+                                                    WarningLevel = 3,
                                                     CompilerOptions = "/optimize"
                                                 };
 
         /// <summary>
         /// </summary>
         private readonly Dictionary<string, Type> scriptList = new Dictionary<string, Type>();
+
+        public List<string> ChatCommands
+        {
+            get
+            {
+                return this.chatCommands.Keys.ToList();
+            }
+        }
 
         #endregion
 
@@ -150,6 +135,14 @@ namespace ZoneEngine.Script
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Turn our script names into dll names.
@@ -185,9 +178,9 @@ namespace ZoneEngine.Script
         /// The color to display the message in.
         /// </param>
         public static void LogScriptAction(
-            string owner, 
-            ConsoleColor ownerColor, 
-            string message, 
+            string owner,
+            ConsoleColor ownerColor,
+            string message,
             ConsoleColor messageColor)
         {
             Colouring.Push(ownerColor);
@@ -310,6 +303,39 @@ namespace ZoneEngine.Script
             return chatCommands;
         }
 
+        public string ScriptExists(string scriptname)
+        {
+            string result = "";
+            foreach (string name in this.scriptList.Keys)
+            {
+                if (name.Substring(name.IndexOf(":", StringComparison.Ordinal) + 1).ToLower() == scriptname.ToLower())
+                {
+                    result = name.Substring(name.IndexOf(":", StringComparison.Ordinal) + 1);
+                    break;
+                }
+            }
+            return result;
+        }
+
+        public string ClassExists(string scriptname)
+        {
+            string result = "";
+
+            foreach (Assembly asm in this.multipleDllList)
+            {
+                Type tp =
+                    asm.GetTypes()
+                        .FirstOrDefault(
+                            x => (x.BaseType == typeof(BaseKnuBot)) && (x.Name.ToLower() == scriptname.ToLower()));
+                if (tp != null)
+                {
+                    result = tp.Name;
+                    break;
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="commandName">
@@ -320,7 +346,7 @@ namespace ZoneEngine.Script
         /// </param>
         /// <param name="commandArguments">
         /// </param>
-        public void CallChatCommand(string commandName, ZoneClient client, Identity target, string[] commandArguments)
+        public void CallChatCommand(string commandName, IZoneClient client, Identity target, string[] commandArguments)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             if (commandName.ToUpperInvariant() != "LISTCOMMANDS")
@@ -337,12 +363,12 @@ namespace ZoneEngine.Script
                         if (aoc != null)
                         {
                             // Check GM Level bitwise
-                            if ((client.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
+                            if ((client.Controller.Character.Stats[StatIds.gmlevel].Value < aoc.GMLevelNeeded())
                                 && (aoc.GMLevelNeeded() > 0))
                             {
-                                client.Character.Playfield.Publish(
-                                    ChatText.CreateIM(
-                                        client.Character, 
+                                client.Controller.Character.Playfield.Publish(
+                                    ChatTextMessageHandler.Default.CreateIM(
+                                        client.Controller.Character,
                                         "You are not authorized to use this command!. This incident will be recorded."));
 
                                 // It is not yet :)
@@ -354,7 +380,7 @@ namespace ZoneEngine.Script
                             {
                                 if (commandArguments[1].ToUpperInvariant() == "HELP")
                                 {
-                                    aoc.CommandHelp(client.Character);
+                                    aoc.CommandHelp(client.Controller.Character);
                                     return;
                                 }
                             }
@@ -362,11 +388,11 @@ namespace ZoneEngine.Script
                             // Execute the command with the given command arguments, if CheckCommandArguments is true else print command help
                             if (aoc.CheckCommandArguments(commandArguments))
                             {
-                                aoc.ExecuteCommand(client.Character, target, commandArguments);
+                                aoc.ExecuteCommand(client.Controller.Character, target, commandArguments);
                             }
                             else
                             {
-                                aoc.CommandHelp(client.Character);
+                                aoc.CommandHelp(client.Controller.Character);
                             }
                         }
                     }
@@ -374,14 +400,15 @@ namespace ZoneEngine.Script
             }
             else
             {
-                client.Character.Playfield.Publish(ChatText.CreateIM(client.Character, "Available Commands:"));
+                client.Controller.Character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(client.Controller.Character, "Available Commands:"));
                 string[] scriptNames = this.chatCommands.Keys.ToArray();
                 for (int i = 0; i < scriptNames.Length; i++)
                 {
                     scriptNames[i] = scriptNames[i].Substring(scriptNames[i].IndexOf(":", StringComparison.Ordinal) + 1)
                                      + ":"
                                      + scriptNames[i].Substring(
-                                         0, 
+                                         0,
                                          scriptNames[i].IndexOf(":", StringComparison.Ordinal));
                 }
 
@@ -393,11 +420,11 @@ namespace ZoneEngine.Script
                     AOChatCommand aoc = (AOChatCommand)assembly.CreateInstance(typename);
                     if (aoc != null)
                     {
-                        if (client.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
+                        if (client.Controller.Character.Stats[StatIds.gmlevel].Value >= aoc.GMLevelNeeded())
                         {
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    client.Character, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
                                     scriptName.Substring(0, scriptName.IndexOf(":", StringComparison.Ordinal))));
                         }
                     }
@@ -411,7 +438,7 @@ namespace ZoneEngine.Script
         /// </param>
         /// <param name="character">
         /// </param>
-        public void CallMethod(string functionName, Character character)
+        public void CallMethod(string functionName, ICharacter character)
         {
             foreach (Assembly assembly in this.multipleDllList)
             {
@@ -426,16 +453,33 @@ namespace ZoneEngine.Script
                         if (aoScript != null)
                         {
                             kv.Value.InvokeMember(
-                                functionName, 
-                                BindingFlags.Default | BindingFlags.InvokeMethod, 
-                                null, 
-                                aoScript, 
-                                new object[] { character }, 
+                                functionName,
+                                BindingFlags.Default | BindingFlags.InvokeMethod,
+                                null,
+                                aoScript,
+                                new object[] { character },
                                 CultureInfo.InvariantCulture);
                         }
                     }
                 }
             }
+        }
+
+        public BaseKnuBot CreateKnuBot(string knuBotName, Identity mobId)
+        {
+            foreach (Assembly assembly in this.multipleDllList)
+            {
+                Type knubotType =
+                    assembly.GetTypes()
+                        .FirstOrDefault(x => (x.BaseType == typeof(BaseKnuBot)) && (x.Name == knuBotName));
+                if (knubotType != null)
+                {
+                    BaseKnuBot bk = (BaseKnuBot)Activator.CreateInstance(knubotType, new object[] { mobId });
+
+                    return bk;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -451,17 +495,23 @@ namespace ZoneEngine.Script
                 return false;
             }
 
+            // Add all loaded assemblies to the Referenced assemblies list
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(x=>x.IsDynamic==false))
+            {
+                this.p.ReferencedAssemblies.Add(assembly.Location);
+            }
+
             if (multipleFiles)
             {
                 LogScriptAction(
-                    "ScriptCompiler:", 
-                    ConsoleColor.Yellow, 
-                    "multiple scripts configuration active.", 
+                    "ScriptCompiler:",
+                    ConsoleColor.Yellow,
+                    "multiple scripts configuration active.",
                     ConsoleColor.Magenta);
                 foreach (string scriptFile in this.ScriptsList)
                 {
                     this.p.OutputAssembly = string.Format(
-                        CultureInfo.CurrentCulture, 
+                        CultureInfo.CurrentCulture,
                         Path.Combine("tmp", DllName(scriptFile)));
 
                     // CreateIM the directory if it doesnt exist
@@ -483,9 +533,9 @@ namespace ZoneEngine.Script
                     }
 
                     LogScriptAction(
-                        "Script " + scriptFile, 
-                        ConsoleColor.Green, 
-                        "Compiled to: " + this.p.OutputAssembly, 
+                        "Script " + scriptFile,
+                        ConsoleColor.Green,
+                        "Compiled to: " + this.p.OutputAssembly,
                         ConsoleColor.Green);
 
                     // Add the compiled assembly to our list
@@ -522,9 +572,9 @@ namespace ZoneEngine.Script
                 catch (FileLoadException ee)
                 {
                     LogScriptAction(
-                        "ERROR", 
-                        ConsoleColor.Red, 
-                        "File loading not successful:\r\n" + ee, 
+                        "ERROR",
+                        ConsoleColor.Red,
+                        "File loading not successful:\r\n" + ee,
                         ConsoleColor.Red);
                     return false;
                 }
@@ -545,12 +595,46 @@ namespace ZoneEngine.Script
             return true;
         }
 
-        /// <summary>
-        /// </summary>
-        public void Dispose()
+        private bool TryResolve(CompilerError e, string scriptFile)
         {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
+            bool resolved = false;
+            string line = this.GetLineOfFile(scriptFile, e.Line).Replace("using", "").Replace(";", "").Trim();
+            bool runLoop = true;
+            while (runLoop)
+            {
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, line + ".dll")))
+                {
+                    this.p.ReferencedAssemblies.Add(
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, line + ".dll"));
+                    resolved = true;
+                    break;
+                }
+
+                runLoop = line.IndexOf(".") > -1;
+                if (line.IndexOf(".") > -1)
+                {
+                    line = line.Substring(0, line.LastIndexOf("."));
+                }
+            }
+            return resolved;
+        }
+
+        private string GetLineOfFile(string scriptFile, int p)
+        {
+            string res = "";
+            using (TextReader sr = new StreamReader(scriptFile))
+            {
+                while (p > 0)
+                {
+                    res = sr.ReadLine();
+                    p--;
+                    if ((p==0) && (string.IsNullOrWhiteSpace(res)))
+                    {
+                        res=sr.ReadLine();
+                    }
+                }
+            }
+            return res;
         }
 
         #endregion
@@ -565,8 +649,12 @@ namespace ZoneEngine.Script
         {
             if (disposing)
             {
-                this.compiler.Dispose();
+                if (!this.disposed)
+                {
+                    this.compiler.Dispose();
+                }
             }
+            this.disposed = true;
         }
 
         /// <summary>
@@ -629,9 +717,9 @@ namespace ZoneEngine.Script
                             if (scriptObject != null)
                             {
                                 LogScriptAction(
-                                    "Script", 
-                                    ConsoleColor.Green, 
-                                    scriptObject.GetType().Name + " Loaded.", 
+                                    "Script",
+                                    ConsoleColor.Green,
+                                    scriptObject.GetType().Name + " Loaded.",
                                     ConsoleColor.Green);
 
                                 // Lets run our script and display its results
@@ -688,18 +776,18 @@ namespace ZoneEngine.Script
             catch (UnauthorizedAccessException)
             {
                 LogScriptAction(
-                    "Error", 
-                    ConsoleColor.Red, 
-                    "You don't have permission to access this directory", 
+                    "Error",
+                    ConsoleColor.Red,
+                    "You don't have permission to access this directory",
                     ConsoleColor.Red);
                 return false;
             }
             catch (IOException)
             {
                 LogScriptAction(
-                    "Error", 
-                    ConsoleColor.Red, 
-                    "I/O Error occured. (Path is filename or network error)", 
+                    "Error",
+                    ConsoleColor.Red,
+                    "I/O Error occured. (Path is filename or network error)",
                     ConsoleColor.Red);
                 return false;
             }
@@ -707,9 +795,9 @@ namespace ZoneEngine.Script
             if (this.ScriptsList.Length == 0)
             {
                 LogScriptAction(
-                    "Error:", 
-                    ConsoleColor.Red, 
-                    "Scripts directory contains no scripts!", 
+                    "Error:",
+                    ConsoleColor.Red,
+                    "Scripts directory contains no scripts!",
                     ConsoleColor.Yellow);
                 return false;
             }
@@ -722,5 +810,3 @@ namespace ZoneEngine.Script
 
     #endregion Class ScriptCompiler
 }
-
-#endregion NameSpace

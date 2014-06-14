@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -137,8 +142,8 @@ namespace CellAO.Core.Vector
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "value", 
-                        value, 
+                        "value",
+                        value,
                         "The magnitude of a Vector must be positive or 0.");
                 }
                 else if (this.Magnitude == 0)
@@ -234,8 +239,8 @@ namespace CellAO.Core.Vector
         public static Vector3 Cross(IVector3 vLeft, IVector3 vRight)
         {
             return new Vector3(
-                vLeft.y * vRight.z - vLeft.z * vRight.y, 
-                vLeft.z * vRight.x - vLeft.x * vRight.z, 
+                vLeft.y * vRight.z - vLeft.z * vRight.y,
+                vLeft.z * vRight.x - vLeft.x * vRight.z,
                 vLeft.x * vRight.y - vLeft.y * vRight.x);
         }
 
@@ -384,8 +389,8 @@ namespace CellAO.Core.Vector
         {
             return new SmokeLounge.AOtomation.Messaging.GameData.Vector3()
                    {
-                       X = (float)c.x, 
-                       Y = (float)c.y, 
+                       X = (float)c.x,
+                       Y = (float)c.y,
                        Z = (float)c.z
                    };
         }
@@ -602,6 +607,18 @@ namespace CellAO.Core.Vector
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "({0}, {1}, {2})", this.x, this.y, this.z);
+        }
+
+        public static double Distance2D(Vector3 c1, Vector3 c2)
+        {
+            Vector3 difference = c1 - c2;
+
+            return Math.Sqrt((difference.x * difference.x) + (difference.z * difference.z));
+        }
+
+        public double Distance2D(Vector3 c2)
+        {
+            return Distance2D(this, c2);
         }
 
         #endregion

@@ -1,8 +1,9 @@
 CREATE TABLE  `charactersmeshs` (
-  `ID` int(11) NOT NULL,
-  `playfield` int(11) NOT NULL,
-  `meshvalue1` int(11) NOT NULL,
-  `meshvalue2` int(11) NOT NULL,
-  `meshvalue3` int(11) NOT NULL,
-  PRIMARY KEY (`ID`)
+	`Id` int(32) NOT NULL AUTO_INCREMENT,
+	`CharacterId`int(32) NOT NULL,
+  `Playfield` int(11) NOT NULL,
+  `MeshValue1` int(11) NOT NULL,
+  `MeshValue2` int(11) NOT NULL,
+  `MeshValue3` int(11) NOT NULL,
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

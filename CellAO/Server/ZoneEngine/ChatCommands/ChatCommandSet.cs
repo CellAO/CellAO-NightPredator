@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -32,11 +37,12 @@ namespace ZoneEngine.ChatCommands
     using System.Collections.Generic;
 
     using CellAO.Core.Entities;
+    using CellAO.ObjectManager;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using ZoneEngine.Core.Packets;
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
@@ -74,7 +80,7 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(character, "Syntax: /get <stat name|stat id> <new stat value>"));
+                ChatTextMessageHandler.Default.CreateIM(character, "Syntax: /set <stat name|stat id> <new stat value>"));
         }
 
         /// <summary>
@@ -90,8 +96,8 @@ namespace ZoneEngine.ChatCommands
             // Fallback to self if no target is selected
             if (target.Instance == 0)
             {
-                target.Type = character.Client.Character.Identity.Type;
-                target.Instance = character.Client.Character.Identity.Instance;
+                target.Type = character.Identity.Type;
+                target.Instance = character.Identity.Instance;
             }
 
             int statId = 1234567890;
@@ -104,12 +110,14 @@ namespace ZoneEngine.ChatCommands
                 }
                 catch (Exception)
                 {
+                    statId = 1234567890;
                 }
             }
 
             if (statId == 1234567890)
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Unknown Stat name " + args[1]));
+                character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(character, "Unknown Stat name " + args[1]));
                 return;
             }
 
@@ -133,31 +141,36 @@ namespace ZoneEngine.ChatCommands
                 }
             }
 
-            IInstancedEntity tempch = character.Playfield.FindByIdentity(target);
-
-            uint statOldValue;
-            try
+            Character tempch = Pool.Instance.GetObject<Character>(character.Playfield.Identity, target);
+            if (tempch != null)
             {
-                statOldValue = tempch.Stats[statId].BaseValue;
-                tempch.Stats[statId].Value = (int)statNewValue;
-            }
-            catch
-            {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Unknown StatId " + statId));
-                return;
-            }
+                uint statOldValue;
+                try
+                {
+                    statOldValue = tempch.Stats[statId].BaseValue;
+                    tempch.Stats[statId].Value = (int)statNewValue;
+                }
+                catch
+                {
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "Unknown StatId " + statId));
+                    return;
+                }
 
-            string name = string.Empty;
-            if (tempch is INamedEntity)
-            {
-                name = ((INamedEntity)tempch).Name + " ";
-            }
+                string name = string.Empty;
+                if (tempch is INamedEntity)
+                {
+                    name = ((INamedEntity)tempch).Name + " ";
+                }
 
-            string response = "Dynel " + name + "(" + target.Type + ":" + target.Instance + "): Stat "
-                              + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
-            response += " Old: " + statOldValue;
-            response += " New: " + statNewValue;
-            character.Playfield.Publish(ChatText.CreateIM(character, response));
+                tempch.Controller.SendChangedStats();
+
+                string response = "Dynel " + name + "(" + target.Type + ":" + target.Instance + "): Stat "
+                                  + StatNamesDefaults.GetStatName(statId) + " (" + statId + ") =";
+                response += " Old: " + statOldValue;
+                response += " New: " + statNewValue;
+                character.Playfield.Publish(ChatTextMessageHandler.Default.CreateIM(character, response));
+            }
         }
 
         /// <summary>

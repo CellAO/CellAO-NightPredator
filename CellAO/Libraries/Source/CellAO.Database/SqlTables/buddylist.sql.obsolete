@@ -1,0 +1,13 @@
+﻿--
+-- List of buddies moved to the Character.Buddies 
+--
+
+--CREATE TABLE `buddylist` (
+--	`ID` int(32) NOT NULL AUTO_INCREMENT,
+
+--	`PlayerID` INT(32) NOT NULL, -- FK1
+--	`BuddyID` INT(32) NOT NULL,  -- FK2
+--	PRIMARY KEY (`ID`)
+--	INDEX `index1` (`PlayerID`)
+--)
+--ENGINE=InnoDB;

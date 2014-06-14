@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -36,6 +41,7 @@ namespace AO.Core.Encryption
     using System.Security.Cryptography;
     using System.Text;
 
+    using CellAO.Core.Encryption;
     using CellAO.Database.Dao;
 
     using Utility;
@@ -53,7 +59,11 @@ namespace AO.Core.Encryption
         /// <summary>
         /// 
         /// </summary>
-        public bool i_Enable = Convert.ToBoolean(ConfigReadWrite.Instance.CurrentConfig.UsePassword);
+#if DEBUG
+        public bool i_Enable = false;
+#else
+        public bool i_Enable = true;
+#endif
 
         #endregion
 
@@ -86,7 +96,7 @@ namespace AO.Core.Encryption
                 new BigInteger("7ad852c6494f664e8df21446285ecd6f400cf20e1d872ee96136d7744887424b", 16);
             BigInteger Prime =
                 new BigInteger(
-                    "eca2e8c85d863dcdc26a429a71a9815ad052f6139669dd659f98ae159d313d13c6bf2838e10a69b6478b64a24bd054ba8248e8fa778703b418408249440b2c1edd28853e240d8a7e49540b76d120d3b1ad2878b1b99490eb4a2a5e84caa8a91cecbdb1aa7c816e8be343246f80c637abc653b893fd91686cf8d32d6cfe5f2a6f", 
+                    "eca2e8c85d863dcdc26a429a71a9815ad052f6139669dd659f98ae159d313d13c6bf2838e10a69b6478b64a24bd054ba8248e8fa778703b418408249440b2c1edd28853e240d8a7e49540b76d120d3b1ad2878b1b99490eb4a2a5e84caa8a91cecbdb1aa7c816e8be343246f80c637abc653b893fd91686cf8d32d6cfe5f2a6f",
                     16);
 
             string TeaKey = ClientPublicKey.modPow(ServerPrivateKey, Prime).ToString(16).ToLower();
@@ -134,12 +144,7 @@ namespace AO.Core.Encryption
         /// </returns>
         public string GeneratePasswordHash(string clearPassword)
         {
-            byte[] Salt = new byte[2];
-            RNGCryptoServiceProvider rand = new RNGCryptoServiceProvider();
-
-            rand.GetBytes(Salt);
-
-            return this.GeneratePasswordHash(clearPassword, Salt);
+            return PasswordHash.CreateHash(clearPassword);
         }
 
         /// <summary>
@@ -155,7 +160,7 @@ namespace AO.Core.Encryption
         /// </returns>
         public bool IsCharacterOnAccount(string UserName, uint CharacterID)
         {
-            return CharacterDao.IsCharacterOnAccount(UserName, CharacterID);
+            return CharacterDao.Instance.IsCharacterOnAccount(UserName, CharacterID);
         }
 
         /// <summary>
@@ -201,7 +206,7 @@ namespace AO.Core.Encryption
                 return false;
             }
 
-            if (!this.IsValidPasswordHash(ClientPassword, passwordHash))
+            if (!PasswordHash.ValidatePassword(ClientPassword, passwordHash))
             {
                 return false;
             }
@@ -371,76 +376,23 @@ namespace AO.Core.Encryption
 
         /// <summary>
         /// </summary>
-        /// <param name="clearPassword">
-        /// </param>
-        /// <param name="Salt">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private string GeneratePasswordHash(string clearPassword, byte[] Salt)
-        {
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-
-            // Note we use ASCII here not UTF8 for better compatability with PHP/etc
-            byte[] clearPasswordBytes = Encoding.ASCII.GetBytes(clearPassword);
-            byte[] saltedPasswordBytes = new byte[clearPasswordBytes.Length + Salt.Length];
-
-            Array.Copy(Salt, 0, saltedPasswordBytes, 0, Salt.Length);
-            Array.Copy(clearPasswordBytes, 0, saltedPasswordBytes, Salt.Length, clearPasswordBytes.Length);
-
-            byte[] passwordHash = md5.ComputeHash(saltedPasswordBytes);
-
-            return BitConverter.ToString(Salt).ToLower().Replace("-", string.Empty).PadLeft(4, '0') + "$"
-                   + BitConverter.ToString(passwordHash).ToLower().Replace("-", string.Empty).PadLeft(32, '0');
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="RecvLogin">
         /// </param>
         /// <returns>
         /// </returns>
         private string GetLoginPassword(string RecvLogin)
         {
-            DBLoginData loginPassword = LoginDataDao.GetByUsername(RecvLogin);
+            DBLoginData loginPassword = LoginDataDao.Instance.GetByUsername(RecvLogin);
 
             if (loginPassword != null)
             {
                 return loginPassword.Password;
             }
 
-            LogUtil.Debug(string.Format("No entry for account username '{0}' found", RecvLogin));
+            LogUtil.Debug(
+                DebugInfoDetail.Database,
+                string.Format("No entry for account username '{0}' found", RecvLogin));
             return string.Empty;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="clientPassword">
-        /// </param>
-        /// <param name="passwordHash">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        private bool IsValidPasswordHash(string clientPassword, string passwordHash)
-        {
-            if (passwordHash == string.Empty)
-            {
-                return false;
-            }
-
-            byte[] Salt = new byte[2];
-
-            Salt[0] = Convert.ToByte(passwordHash.Substring(0, 2), 16);
-            Salt[1] = Convert.ToByte(passwordHash.Substring(2, 2), 16);
-
-            string clientHash = this.GeneratePasswordHash(clientPassword, Salt);
-
-            if (clientHash != passwordHash)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion

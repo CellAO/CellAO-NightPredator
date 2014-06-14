@@ -33,6 +33,8 @@ namespace Extractor_Serializer.Structs
     using System.Net;
 
     using CellAO.Core.Events;
+    using CellAO.Enums;
+    using System;
 
     #endregion
 
@@ -83,10 +85,10 @@ namespace Extractor_Serializer.Structs
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Events ToEvents()
+        internal Event ToEvents()
         {
-            Events ev = new Events();
-            ev.EventType = this.EventType;
+            Event ev = new Event();
+            ev.EventType = (EventType) Enum.ToObject(typeof(EventType), this.EventType);
             foreach (HLFlatFunction flf in this.Functions)
             {
                 ev.Functions.Add(flf.ToFunctions());

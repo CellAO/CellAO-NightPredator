@@ -45,6 +45,7 @@
     <Compile Include="ActionType.cs" />
     <Compile Include="ArmorSlots.cs" />
     <Compile Include="CanFlags.cs" />
+    <Compile Include="CharacterState.cs" />
     <Compile Include="EventType.cs" />
     <Compile Include="Expansions.cs" />
     <Compile Include="FunctionType.cs" />

@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\..\packages\Dapper.1.13\lib\net40\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\..\..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
@@ -54,9 +57,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="zlib.net">
-      <HintPath>..\..\..\packages\zlib.net.1.0.4.0\lib\zlib.net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
@@ -64,34 +64,45 @@
     </Compile>
     <Compile Include="Actions\Actions.cs" />
     <Compile Include="Actions\IActions.cs" />
-    <Compile Include="Controllers\IController.cs" />
-    <Compile Include="Controllers\NPCController.cs" />
-    <Compile Include="Controllers\PlayerController.cs" />
-    <Compile Include="Encryption\BigInteger.cs" />
+    <Compile Include="Components\AbstractMessageHandler.cs" />
+    <Compile Include="Components\BaseMessageHandler.cs" />
     <Compile Include="Components\IBus.cs" />
+    <Compile Include="Components\IMessageHandler.cs" />
+    <Compile Include="Components\MemBusAdapter.cs" />
+    <Compile Include="Components\MessageHandlerAttribute.cs" />
+    <Compile Include="Components\MessageWrapper.cs" />
+    <Compile Include="Encryption\BigInteger.cs" />
     <Compile Include="Components\IContainer.cs" />
     <Compile Include="Components\IHandle.cs" />
     <Compile Include="Components\IHandleMessage.cs" />
     <Compile Include="Components\IMessagePublisher.cs" />
     <Compile Include="Components\IMessageSerializer.cs" />
     <Compile Include="Components\MefContainer.cs" />
-    <Compile Include="Components\MemBusAdapter.cs" />
     <Compile Include="Components\MemBusIoCAdapter.cs" />
     <Compile Include="Components\MessagePublisher.cs" />
     <Compile Include="Components\MessageSerializer.cs" />
+    <Compile Include="Encryption\PasswordHash.cs" />
     <Compile Include="Entities\Character.cs" />
     <Compile Include="Entities\Dynel.cs" />
     <Compile Include="Entities\Dynel.Stats.cs" />
     <Compile Include="Entities\ICharacter.cs" />
+    <Compile Include="Entities\IController.cs" />
+    <Compile Include="Entities\IDynel.cs" />
     <Compile Include="Entities\IInstancedEntity.cs" />
     <Compile Include="Entities\IMoving.cs" />
     <Compile Include="Entities\INamedEntity.cs" />
-    <Compile Include="Entities\INonPlayerCharacter.cs" />
     <Compile Include="Entities\ITargetingEntity.cs" />
+    <Compile Include="Entities\StaticDynel.cs" />
+    <Compile Include="Entities\TemporaryBag.cs" />
     <Compile Include="Entities\TradeSkillInfo.cs" />
+    <Compile Include="Entities\Vendor.cs" />
+    <Compile Include="Entities\Waypoint.cs" />
+    <Compile Include="Entities\WeatherEntry.cs" />
+    <Compile Include="Entities\WeatherSettings.cs" />
     <Compile Include="EventHandlers\Events\MessageReceivedEvent.cs" />
     <Compile Include="EventHandlers\Handlers\MessageReceivedHandler.cs" />
     <Compile Include="Events\Events.cs" />
+    <Compile Include="Events\IEventHolder.cs" />
     <Compile Include="Events\IEvents.cs" />
     <Compile Include="Functions\Constants.cs" />
     <Compile Include="Functions\FunctionArguments.cs" />
@@ -122,6 +133,8 @@
     <Compile Include="Inventory\PlayerShopInventoryPage.cs" />
     <Compile Include="Inventory\SocialArmorInventoryPage.cs" />
     <Compile Include="Inventory\UnitInventory.cs" />
+    <Compile Include="Inventory\VendorInventory.cs" />
+    <Compile Include="Inventory\VendorInventoryPage.cs" />
     <Compile Include="Inventory\WeaponInventoryPage.cs" />
     <Compile Include="Items\IItem.cs" />
     <Compile Include="Items\IItemNanoActions.cs" />
@@ -135,6 +148,22 @@
     <Compile Include="Nanos\NanoLoader.cs" />
     <Compile Include="Nanos\UploadedNano.cs" />
     <Compile Include="Network\IZoneClient.cs" />
+    <Compile Include="NPCHandler\NonPlayerCharacterHandler.cs" />
+    <Compile Include="Pathfinding\General\Pair.cs" />
+    <Compile Include="Pathfinding\General\PriorityQueue.cs" />
+    <Compile Include="Pathfinding\General\SingletonHolder.cs" />
+    <Compile Include="Pathfinding\General\Triple.cs" />
+    <Compile Include="Pathfinding\General\Util.cs" />
+    <Compile Include="Pathfinding\GridPos.cs" />
+    <Compile Include="Pathfinding\GridRect.cs" />
+    <Compile Include="Pathfinding\Grid\BaseGrid.cs" />
+    <Compile Include="Pathfinding\Grid\DynamicGrid.cs" />
+    <Compile Include="Pathfinding\Grid\DynamicGridWPool.cs" />
+    <Compile Include="Pathfinding\Grid\PartialGridWPool.cs" />
+    <Compile Include="Pathfinding\Grid\StaticGrid.cs" />
+    <Compile Include="Pathfinding\Heuristic.cs" />
+    <Compile Include="Pathfinding\JumpPointFinder.cs" />
+    <Compile Include="Pathfinding\NodePool.cs" />
     <Compile Include="Playfields\IPlayfield.cs" />
     <Compile Include="Playfields\PlayfieldData.cs" />
     <Compile Include="Playfields\PlayfieldDestination.cs" />
@@ -153,6 +182,7 @@
     <Compile Include="Vector\Coordinate.cs" />
     <Compile Include="Vector\Quaternion.cs" />
     <Compile Include="Vector\Vector3.cs" />
+    <Compile Include="VendorHandler\VendorHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="InstancedEntities\" />
@@ -165,6 +195,10 @@
     <ProjectReference Include="..\Cell.Core\Cell.Core.csproj">
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cell.Util\Cell.Util.csproj">
+      <Project>{77D1AEF7-AA59-4B5A-B114-E0C1EBE1B3C9}</Project>
+      <Name>Cell.Util</Name>
     </ProjectReference>
     <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
       <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
@@ -186,9 +220,9 @@
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+    <ProjectReference Include="..\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
-      <Name>Exceptions</Name>
+      <Name>CellAO.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -28,46 +33,27 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
-    using System.Data;
+    using System.Linq;
 
+    using CellAO.Database.Entities;
     using CellAO.Interfaces;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public static class UploadedNanosDao
+    public class UploadedNanosDao : Dao<DBUploadedNano, UploadedNanosDao>
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// </summary>
         /// <param name="charId">
         /// </param>
         /// <returns>
         /// </returns>
-        public static IEnumerable<int> ReadNanos(int charId)
+        public IEnumerable<int> ReadNanos(int charId)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<int>(
-                        "SELECT Nano from charactersuploadednanos where id=@characterId", 
-                        new { characterId = charId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetAll(new { CharacterId = charId }).Select(x => x.NanoId).ToList();
         }
 
         /// <summary>
@@ -76,24 +62,27 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="nanos">
         /// </param>
-        public static void WriteNano(int charId, IUploadedNanos nanos)
+        public void WriteNano(int charId, IUploadedNanos nanos)
         {
-            try
+            if (!this.ReadNanos(charId).Contains(nanos.NanoId))
             {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "REPLACE INTO charactersuploadednanos (ID, Nano) VALUES (@charid, @nano)", 
-                        new { charid = charId, nano = nanos.NanoId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
+                DBUploadedNano temp = new DBUploadedNano();
+                temp.CharacterId = charId;
+                temp.NanoId = nanos.NanoId;
+                this.Add(temp);
             }
         }
 
-        #endregion
+        public void WriteNanos(int charId, List<IUploadedNanos> nanos)
+        {
+            List<int> temp = this.ReadNanos(charId).ToList();
+            foreach (IUploadedNanos nano in nanos)
+            {
+                if (!temp.Contains(nano.NanoId))
+                {
+                    this.Add(new DBUploadedNano() { CharacterId = charId, NanoId = nano.NanoId });
+                }
+            }
+        }
     }
 }

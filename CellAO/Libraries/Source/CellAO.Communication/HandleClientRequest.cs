@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -46,7 +51,7 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private TcpClient clientSocket;
+        private readonly TcpClient clientSocket;
 
         /// <summary>
         /// </summary>
@@ -54,11 +59,11 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        private object streamLockRead = new object();
+        private readonly object streamLockRead = new object();
 
         /// <summary>
         /// </summary>
-        private object streamLockWrite = new object();
+        private readonly object streamLockWrite = new object();
 
         #endregion
 
@@ -79,19 +84,19 @@ namespace CellAO.Communication
 
         /// <summary>
         /// </summary>
-        public delegate void ConnectHandler();
+        public delegate void ConnectHandler(object sender, EventArgs e);
 
         /// <summary>
         /// </summary>
-        public delegate void DisconnectHandler();
+        public delegate void DisconnectHandler(object sender, EventArgs e);
 
         /// <summary>
         /// </summary>
-        /// <param name="request">
+        /// <param name="sender">
         /// </param>
-        /// <param name="onMessageArgs">
+        /// <param name="e">
         /// </param>
-        public delegate void MessageReceivedHandler(HandleClientRequest request, OnMessageArgs onMessageArgs);
+        public delegate void MessageReceivedHandler(object sender, OnMessageArgs e);
 
         #endregion
 
@@ -129,7 +134,7 @@ namespace CellAO.Communication
                     {
                         network.Close();
                         this.clientSocket.Close();
-                        this.OnDisconnect();
+                        this.OnDisconnect(this, null);
                         return;
                     }
 
@@ -186,7 +191,7 @@ namespace CellAO.Communication
         {
             this.networkStream = this.clientSocket.GetStream();
             this.WaitForRequest();
-            this.OnConnect();
+            this.OnConnect(this, null);
         }
 
         /// <summary>
@@ -202,7 +207,7 @@ namespace CellAO.Communication
             {
                 this.clientSocket.Close();
                 this.networkStream.Close();
-                this.OnDisconnect();
+                this.OnDisconnect(this, null);
             }
         }
 

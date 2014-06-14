@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -39,7 +44,7 @@ namespace ZoneEngine.Core.PacketHandlers
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
     using SmokeLounge.AOtomation.Messaging.Messages.N3Messages.OrgServerMessages;
 
-    using ZoneEngine.Core.Packets;
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
@@ -66,25 +71,29 @@ namespace ZoneEngine.Core.PacketHandlers
                              * name of org is message.CommandArgs
                              */
 
-                    if (OrganizationDao.CreateOrganization(
-                        message.CommandArgs, 
-                        DateTime.UtcNow, 
-                        client.Character.Identity.Instance))
+                    if (OrganizationDao.Instance.CreateOrganization(
+                        message.CommandArgs,
+                        DateTime.UtcNow,
+                        client.Controller.Character.Identity.Instance))
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(client.Character, "You have created the guild: " + message.CommandArgs));
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
+                                "You have created the guild: " + message.CommandArgs));
 
-                        int orgID = OrganizationDao.GetOrganizationId(message.CommandArgs);
+                        int orgID = OrganizationDao.Instance.GetOrganizationId(message.CommandArgs);
 
                         // Make sure the order of these next two lines is not swapped -NV
-                        client.Character.Stats[StatIds.clanlevel].Value = 0;
-                        client.Character.Stats[StatIds.clan].Value = orgID;
+                        client.Controller.Character.Stats[StatIds.clanlevel].Value = 0;
+                        client.Controller.Character.Stats[StatIds.clan].Value = orgID;
                         break;
                     }
                     else
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(client.Character, "This guild already <font color=#DC143C>exists</font>"));
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
+                                "This guild already <font color=#DC143C>exists</font>"));
                         break;
                     }
                 }
@@ -94,18 +103,23 @@ namespace ZoneEngine.Core.PacketHandlers
                     // org ranks
                     // Displays Org Rank Structure.
                     /* Select governingform from DB, Roll through display from GovForm */
-                    if (client.Character.Stats[StatIds.clan].BaseValue == 0)
+                    if (client.Controller.Character.Stats[StatIds.clan].BaseValue == 0)
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(client.Character, "You're not in an organization!"));
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
+                                "You're not in an organization!"));
                         break;
                     }
 
                     int governingForm =
-                        OrganizationDao.GetGovernmentForm((int)client.Character.Stats[StatIds.clan].BaseValue);
+                        OrganizationDao.Instance.GetGovernmentForm(
+                            (int)client.Controller.Character.Stats[StatIds.clan].BaseValue);
 
-                    client.Character.Playfield.Publish(
-                        ChatText.CreateIM(client.Character, "Current Rank Structure: " + GetRankList(governingForm)));
+                    client.Controller.Character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(
+                            client.Controller.Character,
+                            "Current Rank Structure: " + GetRankList(governingForm)));
                     break;
 
                 case 3:
@@ -122,14 +136,14 @@ namespace ZoneEngine.Core.PacketHandlers
                     IInstancedEntity tPlayer = null;
                     if ((tPlayer = client.Playfield.FindByIdentity(message.Target)) != null)
                     {
-                        string orgDescription = string.Empty, 
-                            orgObjective = string.Empty, 
-                            orgHistory = string.Empty, 
+                        string orgDescription = string.Empty,
+                            orgObjective = string.Empty,
+                            orgHistory = string.Empty,
                             orgLeaderName = string.Empty;
                         int orgGoverningForm = 0, orgLeaderID = 0;
 
-                        DBOrganization orgData =
-                            OrganizationDao.GetOrganizationData((int)tPlayer.Stats[StatIds.clan].BaseValue);
+                        DBOrganization orgData = OrganizationDao.Instance.Get(
+                            (int)tPlayer.Stats[StatIds.clan].BaseValue);
 
                         if (orgData != null)
                         {
@@ -137,10 +151,10 @@ namespace ZoneEngine.Core.PacketHandlers
                             orgObjective = orgData.Objective;
                             orgHistory = orgData.History;
                             orgGoverningForm = orgData.GovernmentForm;
-                            orgLeaderID = orgData.LeaderID;
+                            orgLeaderID = orgData.LeaderId;
                         }
 
-                        orgLeaderName = CharacterDao.GetCharacterNameById(orgLeaderID);
+                        orgLeaderName = CharacterDao.Instance.GetCharacterNameById(orgLeaderID);
 
                         string textGovForm = null;
                         if (orgGoverningForm == 0)
@@ -176,14 +190,14 @@ namespace ZoneEngine.Core.PacketHandlers
 
                         var infoMessage = new OrgInfoMessage
                                           {
-                                              Identity = tPlayer.Identity, 
-                                              Unknown = 0x00, 
-                                              Unknown1 = 0x00000000, 
-                                              Unknown2 = 0x00000000, 
+                                              Identity = tPlayer.Identity,
+                                              Unknown = 0x00,
+                                              Unknown1 = 0x00000000,
+                                              Unknown2 = 0x00000000,
                                               Organization =
                                                   new Identity
                                                   {
-                                                      Type = IdentityType.Organization, 
+                                                      Type = IdentityType.Organization,
                                                       Instance =
                                                           (int)
                                                           tPlayer.Stats[StatIds.clan]
@@ -192,12 +206,12 @@ namespace ZoneEngine.Core.PacketHandlers
 
                                               // TODO: Possible NULL here
                                               OrganizationName =
-                                                  (tPlayer as Character).OrganizationName, 
-                                              Description = orgDescription, 
-                                              Objective = orgObjective, 
-                                              GoverningForm = textGovForm, 
-                                              LeaderName = orgLeaderName, 
-                                              Rank = orgRank, 
+                                                  (tPlayer as Character).OrganizationName,
+                                              Description = orgDescription,
+                                              Objective = orgObjective,
+                                              GoverningForm = textGovForm,
+                                              LeaderName = orgLeaderName,
+                                              Rank = orgRank,
                                               Unknown3 = new object[0]
                                           };
 
@@ -211,11 +225,11 @@ namespace ZoneEngine.Core.PacketHandlers
 
                     // Add Org Bank to prez
                     DBOrganization orgDisband =
-                        OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
-                    client.Character.Stats[StatIds.cash].BaseValue += (uint)orgDisband.Bank;
+                        OrganizationDao.Instance.Get((int)client.Controller.Character.Stats[StatIds.clan].BaseValue);
+                    client.Controller.Character.Stats[StatIds.cash].BaseValue += (uint)orgDisband.Bank;
 
                     // Clear stat 5 (Clan) from all chars where value=orgId
-                    StatDao.DisbandOrganization((int)client.Character.Stats[StatIds.clan].BaseValue);
+                    StatDao.DisbandOrganization((int)client.Controller.Character.Stats[StatIds.clan].BaseValue);
                     break;
 
                 case 7:
@@ -246,25 +260,29 @@ namespace ZoneEngine.Core.PacketHandlers
                     if (toPromote != null)
                     {
                         // First we check if target is in the same org as you
-                        if (toPromote.Stats[StatIds.clan].BaseValue != client.Character.Stats[StatIds.clan].BaseValue)
+                        if (toPromote.Stats[StatIds.clan].BaseValue
+                            != client.Controller.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // not in same org
 
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(client.Character, "Target is not in your organization!"));
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
+                                    "Target is not in your organization!"));
                             break;
                         }
 
                         // Target is in same org, are you eligible to promote?  Promoter Rank has to be TargetRank-2 or == 0
-                        if ((client.Character.Stats[StatIds.clanlevel].Value
+                        if ((client.Controller.Character.Stats[StatIds.clanlevel].Value
                              == (toPromote.Stats[StatIds.clanlevel].Value - 2))
-                            || (client.Character.Stats[StatIds.clanlevel].Value == 0))
+                            || (client.Controller.Character.Stats[StatIds.clanlevel].Value == 0))
                         {
                             // Promoter is eligible. Start the process
 
                             // First we get the details about the org itself
                             DBOrganization orgPromote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                                OrganizationDao.Instance.Get(
+                                    (int)client.Controller.Character.Stats[StatIds.clan].BaseValue);
 
                             int promoteGovForm = -1;
                             string promotedToRank = string.Empty;
@@ -280,20 +298,20 @@ namespace ZoneEngine.Core.PacketHandlers
                                                  * Reset OrgName to set changes
                                                  */
 
-                                    OrganizationDao.SetNewPrez(orgPromote.ID, toPromote.Identity.Instance);
+                                    OrganizationDao.Instance.SetNewPrez(orgPromote.Id, toPromote.Identity.Instance);
                                     toPromote.Stats[StatIds.clanlevel].Value = 0;
-                                    client.Character.Stats[StatIds.clanlevel].Value = 1;
+                                    client.Controller.Character.Stats[StatIds.clanlevel].Value = 1;
 
-                                    client.Character.Playfield.Publish(
-                                        ChatText.CreateIM(
-                                            client.Character, 
+                                    client.Controller.Character.Playfield.Publish(
+                                        ChatTextMessageHandler.Default.CreateIM(
+                                            client.Controller.Character,
                                             "You've passed leadership of the organization to: "
                                             + (toPromote as Character).Name));
-                                    client.Character.Playfield.Publish(
-                                        ChatText.CreateIM(
-                                            toPromote, 
+                                    client.Controller.Character.Playfield.Publish(
+                                        ChatTextMessageHandler.Default.CreateIM(
+                                            toPromote,
                                             "You've been promoted to the rank of " + promotedToRank + " by "
-                                            + client.Character.Name));
+                                            + client.Controller.Character.Name));
                                 }
                                 else
                                 {
@@ -302,29 +320,31 @@ namespace ZoneEngine.Core.PacketHandlers
                                     targetNewRank = targetOldRank - 1;
                                     promotedToRank = GetRank(promoteGovForm, (uint)targetNewRank);
                                     toPromote.Stats[StatIds.clanlevel].Value = targetNewRank;
-                                    client.Character.Playfield.Publish(
-                                        ChatText.CreateIM(
-                                            client.Character, 
+                                    client.Controller.Character.Playfield.Publish(
+                                        ChatTextMessageHandler.Default.CreateIM(
+                                            client.Controller.Character,
                                             "You've promoted " + (toPromote as Character).Name + " to " + promotedToRank));
-                                    client.Character.Playfield.Publish(
-                                        ChatText.CreateIM(
-                                            toPromote, 
+                                    client.Controller.Character.Playfield.Publish(
+                                        ChatTextMessageHandler.Default.CreateIM(
+                                            toPromote,
                                             "You've been promoted to the rank of " + promotedToRank + " by "
-                                            + client.Character.Name));
+                                            + client.Controller.Character.Name));
                                 }
                             }
                             else
                             {
-                                client.Character.Playfield.Publish(
-                                    ChatText.CreateIM(client.Character, "Organization does not exist?"));
+                                client.Controller.Character.Playfield.Publish(
+                                    ChatTextMessageHandler.Default.CreateIM(
+                                        client.Controller.Character,
+                                        "Organization does not exist?"));
                             }
                         }
                         else
                         {
                             // Promoter not eligible to promote
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    client.Character, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
                                     "Your Rank is not high enough to promote " + (toPromote as Character).Name));
                         }
                     }
@@ -339,42 +359,50 @@ namespace ZoneEngine.Core.PacketHandlers
                     Character toDemote = null;
                     int targetCurRank = -1;
                     int targetNewerRank = -1;
-                    toDemote = client.Character.Playfield.FindByIdentity<Character>(message.Target);
+                    toDemote = client.Controller.Character.Playfield.FindByIdentity<Character>(message.Target);
                     if (toDemote != null)
                     {
                         // First we check if target is in the same org as you
-                        if (toDemote.Stats[StatIds.clan].BaseValue != client.Character.Stats[StatIds.clan].BaseValue)
+                        if (toDemote.Stats[StatIds.clan].BaseValue
+                            != client.Controller.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // not in same org
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(client.Character, "Target is not in your organization!"));
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
+                                    "Target is not in your organization!"));
                             break;
                         }
 
                         // Target is in same org, are you eligible to demote?  Promoter Rank has to be TargetRank-2 or == 0
-                        if ((client.Character.Stats[StatIds.clanlevel].Value
+                        if ((client.Controller.Character.Stats[StatIds.clanlevel].Value
                              <= (toDemote.Stats[StatIds.clanlevel].Value - 2))
-                            || (client.Character.Stats[StatIds.clanlevel].Value == 0))
+                            || (client.Controller.Character.Stats[StatIds.clanlevel].Value == 0))
                         {
                             // Promoter is eligible. Start the process
 
                             // First we get the details about the org itself
                             DBOrganization orgDemote =
-                                OrganizationDao.GetOrganizationData((int)client.Character.Stats[StatIds.clan].BaseValue);
+                                OrganizationDao.Instance.Get(
+                                    (int)client.Controller.Character.Stats[StatIds.clan].BaseValue);
                             int demoteGovForm = -1;
                             string demotedToRank = string.Empty;
                             if (orgDemote == null)
                             {
-                                client.Character.Playfield.Publish(
-                                    ChatText.CreateIM(client.Character, "Organization does not exist?"));
+                                client.Controller.Character.Playfield.Publish(
+                                    ChatTextMessageHandler.Default.CreateIM(
+                                        client.Controller.Character,
+                                        "Organization does not exist?"));
                                 break;
                             }
 
                             // Check whether new rank would be lower than lowest for current govform
                             if ((targetCurRank + 1) > GetLowestRank(orgDemote.GovernmentForm))
                             {
-                                client.Character.Playfield.Publish(
-                                    ChatText.CreateIM(client.Character, "You can't demote character any lower!"));
+                                client.Controller.Character.Playfield.Publish(
+                                    ChatTextMessageHandler.Default.CreateIM(
+                                        client.Controller.Character,
+                                        "You can't demote character any lower!"));
                                 break;
                             }
 
@@ -382,23 +410,23 @@ namespace ZoneEngine.Core.PacketHandlers
                             targetNewerRank = targetCurRank + 1;
                             demotedToRank = GetRank(demoteGovForm, (uint)targetNewerRank);
                             toDemote.Stats[StatIds.clanlevel].Value = targetNewerRank;
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    client.Character, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
                                     "You've demoted " + (toDemote as Character).Name + " to " + demotedToRank));
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    toDemote, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    toDemote,
                                     "You've been demoted to the rank of " + demotedToRank + " by "
-                                    + client.Character.Name));
+                                    + client.Controller.Character.Name));
                             break;
                         }
                         else
                         {
                             // Promoter not eligible to promote
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    client.Character, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
                                     "Your Rank is not high enough to demote " + (toDemote as Character).Name));
                             break;
                         }
@@ -416,13 +444,13 @@ namespace ZoneEngine.Core.PacketHandlers
                     // <name> is CmdStr
 
                     // create the t_player Client namespace, using CmdStr to find character id, in replacement of target.Instance
-                    uint kickedFrom = client.Character.Stats[StatIds.clan].BaseValue;
-                    DBCharacter kickChar = CharacterDao.GetByCharName(message.CommandArgs);
+                    uint kickedFrom = client.Controller.Character.Stats[StatIds.clan].BaseValue;
+                    DBCharacter kickChar = CharacterDao.Instance.GetByCharName(message.CommandArgs);
                     if (kickChar == null)
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(
-                                client.Character, 
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
                                 "No character with name " + message.CommandArgs + " exists."));
                         break;
                     }
@@ -438,19 +466,19 @@ namespace ZoneEngine.Core.PacketHandlers
                         // Check if CmdStr is actually part of the org
 
                         uint kickeeOrgId = targetPlayer.Stats[StatIds.clan].BaseValue;
-                        if (kickeeOrgId != client.Character.Stats[StatIds.clan].BaseValue)
+                        if (kickeeOrgId != client.Controller.Character.Stats[StatIds.clan].BaseValue)
                         {
                             // Not part of Org. break out.
-                            client.Character.Playfield.Publish(
-                                ChatText.CreateIM(
-                                    client.Character, 
+                            client.Controller.Character.Playfield.Publish(
+                                ChatTextMessageHandler.Default.CreateIM(
+                                    client.Controller.Character,
                                     message.CommandArgs + "is not a member of your organization!"));
                             break;
                         }
 
                         // They are part of the org, so begin the processing...
                         // First we check if the player is online...
-                        int onlineStatus = OnlineDao.IsOnline(client.Character.Identity.Instance).Online;
+                        int onlineStatus = CharacterDao.Instance.IsOnline(client.Controller.Character.Identity.Instance);
 
                         if (onlineStatus == 0)
                         {
@@ -465,9 +493,9 @@ namespace ZoneEngine.Core.PacketHandlers
                         targetPlayer[StatIds.clanlevel].Value = 0;
                         targetPlayer[StatIds.clan].Value = 0;
 
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(
-                                targetPlayer, 
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                targetPlayer,
                                 "You've been kicked from the organization " + kickedFromName));
                     }
 
@@ -479,47 +507,51 @@ namespace ZoneEngine.Core.PacketHandlers
                     Character tPlayer = client.Playfield.FindByIdentity<Character>(message.Target);
                     if (tPlayer != null)
                     {
-                        var inviteMessage = new OrgInviteMessage
-                                            {
-                                                Identity = tPlayer.Identity, 
-                                                Unknown = 0x00, 
-                                                Unknown1 = 0x00000000, 
-                                                Unknown2 = 0x00000000, 
-                                                Organization =
-                                                    new Identity
-                                                    {
-                                                        Type = IdentityType.Organization, 
-                                                        Instance =
-                                                            (int)
-                                                            client.Character.Stats[
-                                                                (int)StatIds.clan].Value
-                                                    }, 
-                                                OrganizationName = client.Character.OrganizationName, 
-                                                Unknown3 = 0x00000000
-                                            };
+                        if (tPlayer.Controller.Client != null)
+                        {
+                            var inviteMessage = new OrgInviteMessage
+                                                {
+                                                    Identity = tPlayer.Identity,
+                                                    Unknown = 0x00,
+                                                    Unknown1 = 0x00000000,
+                                                    Unknown2 = 0x00000000,
+                                                    Organization =
+                                                        new Identity
+                                                        {
+                                                            Type =
+                                                                IdentityType
+                                                                .Organization,
+                                                            Instance =
+                                                                (int)
+                                                                client.Controller
+                                                                .Character.Stats[
+                                                                    (int)StatIds.clan]
+                                                                .Value
+                                                        },
+                                                    OrganizationName =
+                                                        client.Controller.Character.OrganizationName,
+                                                    Unknown3 = 0x00000000
+                                                };
 
-                        tPlayer.Client.SendCompressed(inviteMessage);
+                            tPlayer.Controller.Client.SendCompressed(inviteMessage);
+                        }
                     }
                 }
 
                     break;
 
-                    
-
                 case 15:
                 {
                     // target.Instance holds the OrgID of the Org wishing to be joined.
                     int orgIdtoJoin = message.Target.Instance;
-                    int gov_form = OrganizationDao.GetGovernmentForm(orgIdtoJoin);
+                    int gov_form = OrganizationDao.Instance.GetGovernmentForm(orgIdtoJoin);
 
                     // Make sure the order of these next two lines is not swapped -NV
-                    client.Character.Stats[StatIds.clanlevel].Value = GetLowestRank(gov_form);
-                    client.Character.Stats[StatIds.clan].Value = orgIdtoJoin;
+                    client.Controller.Character.Stats[StatIds.clanlevel].Value = GetLowestRank(gov_form);
+                    client.Controller.Character.Stats[StatIds.clan].Value = orgIdtoJoin;
                 }
 
                     break;
-
-                    
 
                     #region /org leave
 
@@ -532,21 +564,25 @@ namespace ZoneEngine.Core.PacketHandlers
                     // Just because something happens on TL, doesnt mean its a good idea. Really tbh id prefer it if you had to explicitly type /org disband to disband rather than /org leave doing it... -NV
                     // Agreeing with NV.  Org Leader can't leave without passing lead on.  org disband requires /org disband to specifically be issued, with a Yes/No box.
 
-                    int govern_form = OrganizationDao.GetGovernmentForm(client.Character.Stats[StatIds.clan].Value);
+                    int govern_form =
+                        OrganizationDao.Instance.GetGovernmentForm(
+                            client.Controller.Character.Stats[StatIds.clan].Value);
 
-                    if ((client.Character.Stats[StatIds.clanlevel].Value == 0) && (govern_form != 4))
+                    if ((client.Controller.Character.Stats[StatIds.clanlevel].Value == 0) && (govern_form != 4))
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(
-                                client.Character, 
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
                                 "Organization Leader cannot leave organization without Disbanding or Passing Leadership!"));
                     }
                     else
                     {
-                        int oldOrgId = client.Character.Stats[StatIds.clan].Value;
-                        string orgName = OrganizationDao.GetOrganizationData(oldOrgId).Name;
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(client.Character, "You left the organization " + orgName + "."));
+                        int oldOrgId = client.Controller.Character.Stats[StatIds.clan].Value;
+                        string orgName = OrganizationDao.Instance.Get(oldOrgId).Name;
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
+                                "You left the organization " + orgName + "."));
                     }
 
                     break;
@@ -562,8 +598,10 @@ namespace ZoneEngine.Core.PacketHandlers
                     // if no <tax>, then just send chat text with current tax info
                     if (message.CommandArgs == null)
                     {
-                        client.Character.Playfield.Publish(
-                            ChatText.CreateIM(client.Character, "The current organization tax rate is: "));
+                        client.Controller.Character.Playfield.Publish(
+                            ChatTextMessageHandler.Default.CreateIM(
+                                client.Controller.Character,
+                                "The current organization tax rate is: "));
                         break;
                     }
                     else
@@ -948,7 +986,7 @@ namespace ZoneEngine.Core.PacketHandlers
         {
             string[] Department =
             {
-                "President", "General", "Squad Commander", "Unit Commander", "Unit Leader", 
+                "President", "General", "Squad Commander", "Unit Commander", "Unit Leader",
                 "Unit Member", "Applicant"
             };
             string[] Faction = { "Director", "Board Member", "Executive", "Member", "Applicant" };

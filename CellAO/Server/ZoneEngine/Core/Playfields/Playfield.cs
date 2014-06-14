@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -38,13 +43,18 @@ namespace CellAO.Core.Playfields
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
     using CellAO.Core.Functions;
+    using CellAO.Core.Items;
     using CellAO.Core.Network;
+    using CellAO.Core.NPCHandler;
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
+    using CellAO.Core.VendorHandler;
     using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
     using CellAO.ObjectManager;
+    using CellAO.Stats.SpecialStats;
 
     using MemBus;
     using MemBus.Configurators;
@@ -57,24 +67,28 @@ namespace CellAO.Core.Playfields
 
     using Utility;
 
-    using ZoneEngine;
     using ZoneEngine.Core;
+    using ZoneEngine.Core.Controllers;
     using ZoneEngine.Core.Functions;
     using ZoneEngine.Core.InternalMessages;
+    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Core.Packets;
     using ZoneEngine.Core.Playfields;
+    using ZoneEngine.Script;
 
     using Config = Utility.Config.ConfigReadWrite;
-    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Quaternion = SmokeLounge.AOtomation.Messaging.GameData.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class Playfield : IPlayfield
+    public class Playfield : PooledObject, IPlayfield
     {
         #region Fields
+
+        private readonly List<StaticDynel> staticDynels = new List<StaticDynel>();
 
         /// <summary>
         /// </summary>
@@ -94,15 +108,17 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        private Timer heartBeat;
+        private readonly Timer heartBeat;
 
         /// <summary>
         /// </summary>
-        private List<StatelData> statels = new List<StatelData>();
+        private readonly List<StatelData> statels = new List<StatelData>();
 
         /// <summary>
         /// </summary>
         private float x;
+
+        private bool disposed = false;
 
         #endregion
 
@@ -115,21 +131,11 @@ namespace CellAO.Core.Playfields
         /// <param name="playfieldIdentity">
         /// </param>
         public Playfield(ZoneServer zoneServer, Identity playfieldIdentity)
-            : this(zoneServer)
-        {
-            this.Identity = playfieldIdentity;
-            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="zoneServer">
-        /// </param>
-        private Playfield(ZoneServer zoneServer)
+            : base(Identity.None, playfieldIdentity)
         {
             this.server = zoneServer;
-
             this.playfieldBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
+
             this.memBusDisposeContainer.Add(
                 this.playfieldBus.Subscribe<IMSendAOtomationMessageToClient>(SendAOtomationMessageToClient));
             this.memBusDisposeContainer.Add(
@@ -144,8 +150,84 @@ namespace CellAO.Core.Playfields
                     this.SendAOtomationMessageBodiesToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMSendPlayerSCFUs>(this.SendSCFUsToClient));
             this.memBusDisposeContainer.Add(this.playfieldBus.Subscribe<IMExecuteFunction>(this.ExecuteFunction));
-            this.Entities = new Pool();
             this.heartBeat = new Timer(this.HeartBeatTimer, null, 10, 0);
+
+            this.statels = PlayfieldLoader.PFData[this.Identity.Instance].Statels;
+            this.LoadMobSpawns(playfieldIdentity);
+            this.LoadVendors(playfieldIdentity);
+            this.LoadStaticDynels(playfieldIdentity);
+        }
+
+        private void LoadStaticDynels(Identity playfieldIdentity)
+        {
+            IEnumerable<DBStaticDynel> dynels =
+                StaticDynelDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            foreach (DBStaticDynel sd in dynels)
+            {
+                List<GameTuple<CharacterStat, uint>> tempStats =
+                    MessagePackZip.DeserializeData<GameTuple<CharacterStat, uint>>(sd.stats.ToArray());
+
+                if (tempStats.Any(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid))
+                {
+                    int id = (int)tempStats.First(x => x.Value1 == (CharacterStat)StatIds.acgitemtemplateid).Value2;
+                    StaticDynel sdy = new StaticDynel(
+                        this.Identity,
+                        new Identity() { Type = (IdentityType)sd.Type, Instance = sd.Instance },
+                        ItemLoader.ItemList[id]);
+
+                    foreach (GameTuple<CharacterStat, uint> stat in tempStats)
+                    {
+                        if (sdy.Stats.ContainsKey((int)stat.Value1))
+                        {
+                            sdy.Stats[(int)stat.Value1] = (int)stat.Value2;
+                            continue;
+                        }
+                        sdy.Stats.Add((int)stat.Value1, (int)stat.Value2);
+                    }
+
+                    sdy.Coordinate = new Coordinate(sd.X, sd.Y, sd.Z);
+                    sdy.Heading = new Quaternion()
+                                  {
+                                      X = sd.HeadingX,
+                                      Y = sd.HeadingY,
+                                      Z = sd.HeadingZ,
+                                      W = sd.HeadingW
+                                  };
+                }
+            }
+        }
+
+        private void LoadVendors(Identity playfieldIdentity)
+        {
+            VendorHandler.SpawnVendorsForPlayfield(
+                this,
+                PlayfieldLoader.PFData[playfieldIdentity.Instance].Statels.Where(
+                    x => x.Identity.Type == IdentityType.VendingMachine).ToArray());
+        }
+
+        private void LoadMobSpawns(Identity playfieldIdentity)
+        {
+            IEnumerable<DBMobSpawn> mobs = MobSpawnDao.Instance.GetWhere(new { Playfield = playfieldIdentity.Instance });
+            foreach (DBMobSpawn mob in mobs)
+            {
+                IEnumerable<DBMobSpawnStat> stats = MobSpawnStatDao.Instance.GetWhere(new { mob.Id, mob.Playfield });
+                ICharacter cmob = NonPlayerCharacterHandler.InstantiateMobSpawn(
+                    mob,
+                    stats.ToArray(),
+                    new NPCController(),
+                    this);
+                if (mob.KnuBotScriptName != "")
+                {
+                    ((NPCController)cmob.Controller).SetKnuBot(ScriptCompiler.Instance.CreateKnuBot(mob.KnuBotScriptName, cmob.Identity));
+
+/*                    if ((cmob.Stats[0].Value
+                        & (int)SimpleCharFullUpdateFlags.IsImmune) == (int)SimpleCharFullUpdateFlags.IsImmune)
+                    {
+                        cmob.Stats[0].Value -= (int)SimpleCharFullUpdateFlags.IsImmune;
+                        cmob.Stats[0].Value |= (int)SimpleCharFullUpdateFlags.UnknownFlag5;
+                    }*/
+                }
+            }
         }
 
         #endregion
@@ -169,19 +251,11 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        public Pool Entities { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        public List<Functions> EnvironmentFunctions { get; private set; }
+        public List<Function> EnvironmentFunctions { get; private set; }
 
         /// <summary>
         /// </summary>
         public Expansions Expansion { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Identity Identity { get; set; }
 
         /// <summary>
         /// </summary>
@@ -220,16 +294,6 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="clientMessage">
-        /// </param>
-        public static void SendAOtomationMessageToClient(IMSendAOtomationMessageToClient clientMessage)
-        {
-            LogUtil.Debug(clientMessage.message.Body.GetType().ToString());
-            clientMessage.client.SendCompressed(clientMessage.message.Body);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="message">
         /// </param>
         /// <exception cref="NotImplementedException">
@@ -245,15 +309,22 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Announce(MessageBody messageBody)
         {
-            foreach (IEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (Character entity in
+                Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                    .Where(x => x.InPlayfield(this.Identity)))
             {
-                var character = entity as Character;
-
-                if (character != null)
+                if (entity != null)
                 {
                     // Make this whole thing unblocking with publishing single internal messages
-                    this.Publish(
-                        new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
+                    if (entity.Controller.Client != null)
+                    {
+                        this.Publish(
+                            new IMSendAOtomationMessageBodyToClient()
+                            {
+                                client = entity.Controller.Client,
+                                Body = messageBody
+                            });
+                    }
                 }
             }
         }
@@ -264,7 +335,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceAppearanceUpdate(ICharacter character)
         {
-            AppearanceUpdate.AnnounceAppearanceUpdate(character);
+            AppearanceUpdateMessageHandler.Default.Send(character);
         }
 
         /// <summary>
@@ -275,16 +346,21 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void AnnounceOthers(MessageBody messageBody, Identity dontSend)
         {
-            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            foreach (Character entity in
+                Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                    .Where(xx => xx.InPlayfield(this.Identity)))
             {
-                var character = entity as Character;
-                if (character != null)
+                if (entity != null)
                 {
-                    if (character.Identity != dontSend)
+                    if (entity.Identity != dontSend)
                     {
                         // Make this whole thing unblocking with publishing single internal messages
                         this.Publish(
-                            new IMSendAOtomationMessageBodyToClient() { client = character.Client, Body = messageBody });
+                            new IMSendAOtomationMessageBodyToClient()
+                            {
+                                client = entity.Controller.Client,
+                                Body = messageBody
+                            });
                     }
                 }
             }
@@ -296,24 +372,241 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void Despawn(Identity identity)
         {
-            this.Announce(ZoneEngine.Core.Packets.Despawn.Create(identity));
+            this.Announce(DespawnMessageHandler.Default.Create(identity));
         }
 
         /// <summary>
         /// </summary>
         public void DisconnectAllClients()
         {
-            IEnumerable<IEntity> templist =
-                this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(et => et is Character).ToList();
+            IEnumerable<Character> templist = Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).ToList();
             for (int i = templist.Count() - 1; i >= 0; i--)
             {
                 IEntity entity = templist.ElementAt(i);
                 if ((entity as Character) != null)
                 {
-                    this.server.DisconnectClient((entity as Character).Client);
+                    if ((entity as Character).Controller.Client != null)
+                    {
+                        this.server.DisconnectClient((entity as Character).Controller.Client);
+                    }
                     (entity as Character).Dispose();
                 }
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public IInstancedEntity FindByIdentity(Identity identity)
+        {
+            return Pool.Instance.GetObject<IInstancedEntity>(identity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="identity">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// </returns>
+        public T FindByIdentity<T>(Identity identity) where T : class, IEntity
+        {
+            return Pool.Instance.GetObject<T>(identity);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dynel">
+        /// </param>
+        /// <param name="range">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public List<IDynel> FindInRange(IDynel dynel, float range)
+        {
+            List<IDynel> temp = new List<IDynel>();
+            Coordinate coord = dynel.Coordinates();
+            foreach (Dynel entity in
+                Pool.Instance.GetAll<Dynel>((int)IdentityType.CanbeAffected).Where(xx => xx.InPlayfield(this.Identity)))
+            {
+                if (entity == dynel)
+                {
+                    continue;
+                }
+
+                if (entity.Coordinates().Distance2D(coord) <= range)
+                {
+                    temp.Add(entity);
+                }
+            }
+
+            return temp;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool IsInstancedPlayfield()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int NumberOfDynels()
+        {
+            return Pool.Instance.GetAll((int)IdentityType.CanbeAffected).Count();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int NumberOfPlayers()
+        {
+            return Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected).Count();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj">
+        /// </param>
+        public void Publish(object obj)
+        {
+            this.playfieldBus.Publish(obj);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="body">
+        /// </param>
+        public void Send(IZoneClient client, MessageBody body)
+        {
+            this.Publish(new IMSendAOtomationMessageBodyToClient() { client = client, Body = body });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="client">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        public void Send(IZoneClient client, Message message)
+        {
+            this.Publish(new IMSendAOtomationMessageToClient() { client = client, message = message });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="dynel">
+        /// </param>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        public void Teleport(Dynel dynel, Coordinate destination, IQuaternion heading, Identity playfield)
+        {
+            // Prevent client from entering this again
+            if (dynel.DoNotDoTimers)
+            {
+                return;
+            }
+            Thread.Sleep(200);
+            int dynelId = dynel.Identity.Instance;
+
+            // Disable sending stat changes and wait a bit to clear the queue
+            dynel.DoNotDoTimers = true;
+            Thread.Sleep(1000);
+
+            // Teleport to another playfield
+            TeleportMessageHandler.Default.Send(
+                dynel as ICharacter,
+                destination.coordinate,
+                (Vector.Quaternion)heading,
+                playfield);
+
+            // Send packet, disconnect, and other playfield waits for connect
+
+            DespawnMessage despawnMessage = DespawnMessageHandler.Default.Create(dynel.Identity);
+            this.AnnounceOthers(despawnMessage, dynel.Identity);
+            dynel.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
+            dynel.RawHeading = new Vector.Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
+
+            // IMPORTANT!!
+            // Dispose the character object, save new playfield data and then recreate it
+            // else you would end up at weird coordinates in the same playfield
+
+            // Save client object
+            ZoneClient client = (ZoneClient)dynel.Controller.Client;
+
+            // Set client=null so dynel can really dispose
+
+            IPlayfield newPlayfield = this.server.PlayfieldById(playfield);
+            Pool.Instance.GetObject<Playfield>(
+                Identity.None,
+                new Identity() { Type = playfield.Type, Instance = playfield.Instance });
+
+            if (newPlayfield == null)
+            {
+                newPlayfield = new Playfield(this.server, playfield);
+            }
+
+            dynel.Playfield = newPlayfield;
+            dynel.Controller.Client = null;
+            dynel.Dispose();
+
+            LogUtil.Debug(DebugInfoDetail.Database, "Saving to pf " + playfield.Instance);
+
+            // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
+            // for now, just transmit our ip and port
+
+            IPAddress tempIp;
+            if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
+            {
+                IPHostEntry zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
+                foreach (IPAddress ip in zoneHost.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        tempIp = ip;
+                        break;
+                    }
+                }
+            }
+
+            var redirect = new ZoneRedirectionMessage
+                           {
+                               ServerIpAddress = tempIp,
+                               ServerPort = (ushort)this.server.TcpEndPoint.Port
+                           };
+            if (client != null)
+            {
+                client.SendCompressed(redirect);
+            }
+            // client.Server.DisconnectClient(client);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="clientMessage">
+        /// </param>
+        public static void SendAOtomationMessageToClient(IMSendAOtomationMessageToClient clientMessage)
+        {
+            LogUtil.Debug(DebugInfoDetail.AoTomation, clientMessage.message.Body.GetType().ToString());
+            clientMessage.client.SendCompressed(clientMessage.message.Body);
         }
 
         /// <summary>
@@ -322,7 +615,7 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void DisconnectClient(IInstancedEntity entity)
         {
-            this.Entities.RemoveObject(entity);
+            Pool.Instance.RemoveObject(entity);
         }
 
         /// <summary>
@@ -372,64 +665,37 @@ namespace CellAO.Core.Playfields
                 var temp = user as Character;
                 if (temp != null)
                 {
-                    temp.Client.SendCompressed(
-                        new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                    if (temp.Controller.Client != null)
+                    {
+                        temp.Controller.Client.SendCompressed(
+                            new ChatTextMessage { Identity = temp.Identity, Text = "No valid target found" });
+                    }
                     return;
                 }
             }
 
             FunctionCollection.Instance.CallFunction(
-                imExecuteFunction.Function.FunctionType, 
-                (INamedEntity)user, 
-                (INamedEntity)user, 
-                target, 
+                imExecuteFunction.Function.FunctionType,
+                (INamedEntity)user,
+                (INamedEntity)user,
+                target,
                 imExecuteFunction.Function.Arguments.Values.ToArray());
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public IInstancedEntity FindByIdentity(Identity identity)
+        public List<ICharacter> FindCharacterInRange(IDynel dynel, float range)
         {
-            return this.Entities.GetObject<IInstancedEntity>(identity);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="identity">
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// </returns>
-        public T FindByIdentity<T>(Identity identity) where T : Character
-        {
-            return this.Entities.GetObject<T>(identity);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="range">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public List<Character> FindInRange(ICharacter character, float range)
-        {
-            List<Character> temp = new List<Character>();
-            Coordinate coord = character.Coordinates;
-            foreach (IInstancedEntity entity in this.Entities.GetAll((int)IdentityType.CanbeAffected))
+            List<ICharacter> temp = new List<ICharacter>();
+            Coordinate coord = dynel.Coordinates();
+            foreach (ICharacter entity in
+                Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
+                    .Where(xx => xx.InPlayfield(this.Identity)))
             {
-                if (entity == character)
+                if (entity == dynel)
                 {
                     continue;
                 }
 
-                if (((Character)entity).Coordinates.Distance2D(coord) <= range)
+                if (((Character)entity).Coordinates().Distance2D(coord) <= range)
                 {
                     temp.Add((Character)entity);
                 }
@@ -446,18 +712,7 @@ namespace CellAO.Core.Playfields
         /// </returns>
         public INamedEntity FindNamedEntityByIdentity(Identity identity)
         {
-            return this.Entities.GetObject<INamedEntity>(identity);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public bool IsInstancedPlayfield()
-        {
-            throw new NotImplementedException();
+            return Pool.Instance.GetObject<INamedEntity>(identity);
         }
 
         /// <summary>
@@ -469,55 +724,6 @@ namespace CellAO.Core.Playfields
         public Dictionary<Identity, string> ListAvailablePlayfields(bool global = true)
         {
             return this.server.ListAvailablePlayfields(global);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public int NumberOfDynels()
-        {
-            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public int NumberOfPlayers()
-        {
-            return this.Entities.GetAll((int)IdentityType.CanbeAffected).Count(x => x is Character);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="obj">
-        /// </param>
-        public void Publish(object obj)
-        {
-            this.playfieldBus.Publish(obj);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="body">
-        /// </param>
-        public void Send(IZoneClient client, MessageBody body)
-        {
-            this.Publish(new IMSendAOtomationMessageBodyToClient() { client = client, Body = body });
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="message">
-        /// </param>
-        public void Send(IZoneClient client, Message message)
-        {
-            this.Publish(new IMSendAOtomationMessageToClient() { client = client, message = message });
         }
 
         /// <summary>
@@ -549,7 +755,19 @@ namespace CellAO.Core.Playfields
         {
             if (msg.client != null)
             {
-                msg.client.SendCompressed(msg.Body);
+                try
+                {
+                    LogUtil.Debug(DebugInfoDetail.AoTomation, msg.Body.GetType().ToString());
+                    msg.client.SendCompressed(msg.Body);
+                }
+                catch (Exception e)
+                {
+                    LogUtil.Debug(
+                        DebugInfoDetail.Error,
+                        msg.Body.GetType().ToString() + Environment.NewLine + e.Message);
+                    // /!\ This happens sometimes, dont know why tho, need more investigation
+                    // throw;
+                }
             }
         }
 
@@ -577,88 +795,24 @@ namespace CellAO.Core.Playfields
         /// </param>
         public void SendSCFUsToClient(IMSendPlayerSCFUs sendSCFUs)
         {
-            Identity dontSendTo = sendSCFUs.toClient.Character.Identity;
-            lock (this.Entities)
+            Identity dontSendTo = sendSCFUs.toClient.Controller.Character.Identity;
+            foreach (IEntity entity in
+                Pool.Instance.GetAll<IPacketReceivingEntity>((int)IdentityType.CanbeAffected))
             {
-                foreach (IEntity entity in
-                    this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is IPacketReceivingEntity))
+                if (entity.Identity != dontSendTo)
                 {
-                    if (entity.Identity != dontSendTo)
+                    var temp = entity as Character;
+                    if (temp != null)
                     {
-                        var temp = entity as Character;
-                        if (temp != null)
-                        {
-                            // TODO: make it NPC-safe
-                            SimpleCharFullUpdateMessage simpleCharFullUpdate =
-                                SimpleCharFullUpdate.ConstructMessage(temp);
-                            sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
+                        // TODO: make it NPC-safe
+                        SimpleCharFullUpdateMessage simpleCharFullUpdate = SimpleCharFullUpdate.ConstructMessage(temp);
+                        sendSCFUs.toClient.SendCompressed(simpleCharFullUpdate);
 
-                            var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
-                            sendSCFUs.toClient.SendCompressed(charInPlay);
-                        }
+                        var charInPlay = new CharInPlayMessage { Identity = temp.Identity, Unknown = 0x00 };
+                        sendSCFUs.toClient.SendCompressed(charInPlay);
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="character">
-        /// </param>
-        /// <param name="destination">
-        /// </param>
-        /// <param name="heading">
-        /// </param>
-        /// <param name="playfield">
-        /// </param>
-        public void Teleport(Character character, Coordinate destination, IQuaternion heading, Identity playfield)
-        {
-            // Prevent client from entering this again
-            if (character.DoNotDoTimers)
-            {
-                return;
-            }
-
-            character.DoNotDoTimers = true;
-
-            // Teleport to another playfield
-            ZoneEngine.Core.Packets.Teleport.Send(character, destination, heading, playfield);
-
-            // Send packet, disconnect, and other playfield waits for connect
-
-            DespawnMessage despawnMessage = ZoneEngine.Core.Packets.Despawn.Create(character.Identity);
-            this.AnnounceOthers(despawnMessage, character.Identity);
-            character.RawCoordinates = new Vector3() { X = destination.x, Y = destination.y, Z = destination.z };
-            character.RawHeading = new Quaternion(heading.xf, heading.yf, heading.zf, heading.wf);
-            character.Save();
-            CharacterDao.SetPlayfield(character.Identity.Instance, (int)playfield.Type, playfield.Instance);
-
-            // TODO: Get new server ip from chatengine (which has to log all zoneengine's playfields)
-            // for now, just transmit our ip and port
-
-            IPAddress tempIp;
-            if (IPAddress.TryParse(Config.Instance.CurrentConfig.ZoneIP, out tempIp) == false)
-            {
-                IPHostEntry zoneHost = Dns.GetHostEntry(Config.Instance.CurrentConfig.ZoneIP);
-                foreach (IPAddress ip in zoneHost.AddressList)
-                {
-                    if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        tempIp = ip;
-                        break;
-                    }
-                }
-            }
-
-            var redirect = new ZoneRedirectionMessage
-                           {
-                               ServerIpAddress = tempIp, 
-                               ServerPort = (ushort)this.server.TcpEndPoint.Port
-                           };
-            character.Client.SendCompressed(redirect);
-            character.DoNotDoTimers = false;
-
-            // character.Client.Server.DisconnectClient(character.Client);
         }
 
         #endregion
@@ -667,19 +821,23 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="c">
+        /// <param name="dynel">
         /// </param>
-        private void CheckStatelCollision(ICharacter c)
+        private void CheckStatelCollision(ICharacter dynel)
         {
             foreach (StatelData sd in this.statels)
             {
-                foreach (Events ev in
+                foreach (Event ev in
                     sd.Events.Where(
-                        x => (x.EventType == (int)EventType.OnCollide) || (x.EventType == (int)EventType.OnEnter)))
+                        x =>
+                            (x.EventType == EventType.OnCollide) || (x.EventType == EventType.OnEnter)
+                            || (x.EventType == EventType.OnTargetInVicinity)))
                 {
-                    if (sd.Coord().Distance3D(c.Coordinates) < 2.0)
+                    if (sd.Coord().Distance3D(dynel.Coordinates()) < 2.0f)
                     {
-                        ev.Perform(c, c);
+                        LogUtil.Debug(DebugInfoDetail.Statel, "Stepped on Statel " + sd.Identity.ToString(true));
+                        LogUtil.Debug(DebugInfoDetail.Statel, ev.ToString());
+                        ev.Perform(dynel, sd);
                     }
                 }
             }
@@ -687,28 +845,24 @@ namespace CellAO.Core.Playfields
 
         /// <summary>
         /// </summary>
-        /// <param name="c">
+        /// <param name="dynel">
         /// </param>
-        private void CheckWallCollision(ICharacter c)
+        private void CheckWallCollision(ICharacter dynel)
         {
-            WallCollisionResult wcr = WallCollision.CheckCollision(c.Coordinates, c.Playfield.Identity.Instance);
+            WallCollisionResult wcr = WallCollision.CheckCollision(
+                dynel.Coordinates(),
+                dynel.Playfield.Identity.Instance);
             if (wcr != null)
             {
                 int destPlayfield = wcr.SecondWall.DestinationPlayfield;
                 if (destPlayfield > 0)
                 {
-                    if (Program.DebugZoning)
-                    {
-                        LogUtil.Debug(wcr.ToString());
-                    }
+                    LogUtil.Debug(DebugInfoDetail.Zoning, wcr.ToString());
 
                     PlayfieldDestination dest =
                         PlayfieldLoader.PFData[destPlayfield].Destinations[wcr.SecondWall.DestinationIndex];
 
-                    if (Program.DebugZoning)
-                    {
-                        LogUtil.Debug(dest.ToString());
-                    }
+                    LogUtil.Debug(DebugInfoDetail.Zoning, dest.ToString());
 
                     float newX = (dest.EndX - dest.StartX) * wcr.Factor + dest.StartX;
                     float newZ = (dest.EndZ - dest.StartZ) * wcr.Factor + dest.StartZ;
@@ -718,12 +872,12 @@ namespace CellAO.Core.Playfields
                     newX -= headDistZ * 8;
                     newZ += headDistX * 8;
 
-                    Coordinate destinationCoordinate = new Coordinate(newX, c.RawCoordinates.Y, newZ);
+                    Coordinate destinationCoordinate = new Coordinate(newX, dynel.RawCoordinates.Y, newZ);
 
                     this.Teleport(
-                        (Character)c, 
-                        destinationCoordinate, 
-                        c.RawHeading, 
+                        (Character)dynel,
+                        destinationCoordinate,
+                        dynel.RawHeading,
                         new Identity() { Type = IdentityType.Playfield, Instance = destPlayfield });
                     return;
                 }
@@ -736,29 +890,97 @@ namespace CellAO.Core.Playfields
         /// </param>
         private void HeartBeatTimer(object sender)
         {
-            IEnumerable<IEntity> temp = null;
-            lock (this.Entities)
-            {
-                temp = this.Entities.GetAll((int)IdentityType.CanbeAffected).Where(x => x is ICharacter);
-            }
+            IEnumerable<IEntity> dynels = null;
+            dynels =
+                Pool.Instance.GetAll<ICharacter>((int)IdentityType.CanbeAffected)
+                    .Where(xx => !xx.DoNotDoTimers && xx.InPlayfield(this.Identity));
 
-            foreach (ICharacter c in temp)
+            foreach (ICharacter dynel in dynels)
             {
-                if (c != null)
+                if (dynel != null)
                 {
-                    if (c.DoNotDoTimers || c.Starting)
+                    if (dynel.DoNotDoTimers || dynel.Starting)
                     {
                         continue;
                     }
 
-                    this.CheckWallCollision(c);
-                    this.CheckStatelCollision(c);
+                    bool changed = false;
+                    StatHealInterval healInterval = (StatHealInterval)dynel.Stats[StatIds.healinterval];
+                    if (healInterval.LastTick < DateTime.UtcNow)
+                    {
+                        int interval = healInterval.Value;
+                        int delta = dynel.Stats[StatIds.healdelta].Value;
+                        dynel.Stats[StatIds.health].Value += delta;
+                        healInterval.LastTick = DateTime.UtcNow + TimeSpan.FromSeconds(interval);
+                        changed = true;
+                    }
+
+                    StatNanoInterval nanoInterval = (StatNanoInterval)dynel.Stats[StatIds.nanointerval];
+                    if (nanoInterval.LastTick < DateTime.UtcNow)
+                    {
+                        int interval = nanoInterval.Value;
+                        int delta = dynel.Stats[StatIds.nanodelta].Value;
+                        dynel.Stats[StatIds.currentnano].Value += delta;
+                        nanoInterval.LastTick = DateTime.UtcNow + TimeSpan.FromSeconds(interval);
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
+                        dynel.SendChangedStats();
+                    }
+
+                    if (dynel.Controller.IsFollowing())
+                    {
+                        dynel.Controller.DoFollow();
+                    }
+                    else
+                    {
+                        if (dynel.Controller is NPCController)
+                        {
+                            if (dynel.Controller.State == CharacterState.Patrolling)
+                            {
+                                dynel.Controller.StartPatrolling();
+                            }
+                        }
+                    }
+
+                    this.CheckWallCollision(dynel);
+                    this.CheckStatelCollision(dynel);
                 }
             }
-
-            this.heartBeat.Change(10, 0);
+            try
+            {
+                this.heartBeat.Change(10, 0);
+            }
+            catch (ObjectDisposedException)
+            {
+            }
         }
 
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    // We wont save any NPCs to character table/character's stats table
+                    this.DisconnectAllClients();
+                    if (this.memBusDisposeContainer != null)
+                    {
+                        this.memBusDisposeContainer.Dispose();
+                    }
+                    if (this.heartBeat != null)
+                    {
+                        this.heartBeat.Dispose();
+                    }
+                }
+            }
+            this.disposed = true;
+
+            base.Dispose(disposing);
+        }
     }
 }

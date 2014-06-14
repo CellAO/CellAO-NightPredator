@@ -35,6 +35,7 @@ namespace Extractor_Serializer
     using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
+    using CellAO.Core.Vector;
 
     using Extractor_Serializer.Structs;
 
@@ -70,7 +71,6 @@ namespace Extractor_Serializer
 
             try
             {
-                ms.Close();
                 br.Close();
             }
             catch (Exception)
@@ -155,7 +155,6 @@ namespace Extractor_Serializer
             }
 
             br.Close();
-            ms.Close();
             return name;
         }
 

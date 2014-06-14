@@ -38,6 +38,7 @@ namespace Extractor_Serializer.Structs
     using CellAO.Core.Requirements;
 
     using MsgPack;
+    using CellAO.Enums;
 
     #endregion
 
@@ -57,7 +58,7 @@ namespace Extractor_Serializer.Structs
 
         /// <summary>
         /// </summary>
-        public List<Requirements> Requirements = new List<Requirements>();
+        public List<Requirement> Requirements = new List<Requirement>();
 
         /// <summary>
         /// </summary>
@@ -96,35 +97,41 @@ namespace Extractor_Serializer.Structs
         /// </param>
         /// <returns>
         /// </returns>
-        public List<Requirements> ParseReqs(List<rawreqs> rreqs)
+        public List<Requirement> ParseReqs(List<rawreqs> rreqs)
         {
             int numreqs = rreqs.Count;
 
-            List<Requirements> output = new List<Requirements>();
+            List<Requirement> output = new List<Requirement>();
 
             for (int i = 0; i < numreqs; i++)
             {
                 rawreqs rr = rreqs[i];
-                Requirements aor = new Requirements();
+                Requirement aor = new Requirement();
 
-                aor.Target = 0x13;
+                aor.Target = ItemTarget.Self;
                 aor.Statnumber = rr.stat;
-                aor.Operator = rr.ops;
+                aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 aor.Value = rr.val;
-                aor.ChildOperator = 255;
+                aor.ChildOperator = Operator.Unknown;
 
                 if ((i < numreqs - 1)
-                    && ((aor.Operator == 0x12) || (aor.Operator == 0x13) || (aor.Operator == 0x1a)
-                        || (aor.Operator == 0x1b) || (aor.Operator == 0x1c) || (aor.Operator == 0x1d)
-                        || (aor.Operator == 0x1e) || (aor.Operator == 0x25) || (aor.Operator == 0x64)
-                        || (aor.Operator == 110)))
+                    && ((aor.Operator == Operator.OnTarget) 
+                    || (aor.Operator == Operator.OnSelf) 
+                    || (aor.Operator == Operator.OnUser)
+                        || (aor.Operator == Operator.OnValidTarget) 
+                        || (aor.Operator == Operator.OnInvalidUser) 
+                        || (aor.Operator == Operator.OnValidUser)
+                        || (aor.Operator == Operator.OnInvalidUser)
+                        || (aor.Operator == Operator.OnGeneralBeholder) 
+                        || (aor.Operator == Operator.OnCaster)
+                        || (aor.Operator == Operator.Unknown3)))
                 {
-                    aor.Target = aor.Operator;
+                    aor.Target = (ItemTarget)Enum.ToObject(typeof(ItemTarget), aor.Operator);
                     i++;
                     rr = rreqs[i];
                     aor.Statnumber = rr.stat;
                     aor.Value = rr.val;
-                    aor.Operator = rr.ops;
+                    aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 }
 
                 if (!((i >= numreqs - 1) || (numreqs == 2)))
@@ -135,7 +142,7 @@ namespace Extractor_Serializer.Structs
 
                     if ((((aop == 3) || (aop == 4)) || (aop == 0x2a)) && (anum == 0))
                     {
-                        aor.ChildOperator = aop;
+                        aor.ChildOperator = (Operator)Enum.ToObject(typeof(Operator), aop);
                         i++;
                     }
                 }
@@ -178,7 +185,7 @@ namespace Extractor_Serializer.Structs
                 reqCount--;
             }
 
-            foreach (Requirements req in this.ParseReqs(raws))
+            foreach (Requirement req in this.ParseReqs(raws))
             {
                 this.Requirements.Add(req);
             }
@@ -238,9 +245,9 @@ namespace Extractor_Serializer.Structs
         /// </summary>
         /// <returns>
         /// </returns>
-        internal Functions ToFunctions()
+        internal Function ToFunctions()
         {
-            Functions f = new Functions();
+            Function f = new Function();
             f.FunctionType = this.FunctionType;
             f.Target = this.Target;
             f.TickCount = this.TickCount;

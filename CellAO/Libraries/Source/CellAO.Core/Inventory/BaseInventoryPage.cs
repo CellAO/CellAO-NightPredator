@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -36,6 +41,7 @@ namespace CellAO.Core.Inventory
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Enums;
+    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -43,17 +49,13 @@ namespace CellAO.Core.Inventory
 
     /// <summary>
     /// </summary>
-    public abstract class BaseInventoryPage : IInventoryPage
+    public abstract class BaseInventoryPage : PooledObject, IInventoryPage
     {
         #region Fields
 
         /// <summary>
         /// </summary>
-        private readonly IDictionary<int, IItem> Content;
-
-        /// <summary>
-        /// </summary>
-        private Identity identity;
+        private readonly IDictionary<int, IItem> Content = new Dictionary<int, IItem>();
 
         #endregion
 
@@ -69,21 +71,11 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <param name="ownerInstance">
         /// </param>
-        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, int ownerInstance)
-            : this()
+        public BaseInventoryPage(int pagenum, int maxslots, int firstslotnumber, Identity ownerInstance)
+            : base(ownerInstance, new Identity() { Type = (IdentityType)ownerInstance.Instance, Instance = pagenum })
         {
-            this.identity.Type = (IdentityType)pagenum;
-            this.identity.Instance = ownerInstance;
             this.MaxSlots = maxslots;
             this.FirstSlotNumber = firstslotnumber;
-        }
-
-        /// <summary>
-        /// </summary>
-        private BaseInventoryPage()
-        {
-            this.Identity = new Identity();
-            this.Content = new Dictionary<int, IItem>();
         }
 
         #endregion
@@ -93,21 +85,6 @@ namespace CellAO.Core.Inventory
         /// <summary>
         /// </summary>
         public int FirstSlotNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Identity Identity
-        {
-            get
-            {
-                return this.identity;
-            }
-
-            set
-            {
-                this.identity = value;
-            }
-        }
 
         /// <summary>
         /// </summary>
@@ -123,13 +100,14 @@ namespace CellAO.Core.Inventory
         {
             get
             {
-                return (int)this.identity.Type;
+                return (int)this.Identity.Type;
             }
 
-            set
+            // Commenting this for now, we probably wont need it
+            /*set
             {
-                this.identity.Type = (IdentityType)value;
-            }
+                this.Identity.Type = (IdentityType)value;
+            }*/
         }
 
         #endregion
@@ -191,76 +169,11 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Added(ItemTemplate item)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="character">
         /// </param>
         public virtual void CalculateModifiers(Character character)
         {
             // Do nothing
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckAdd(int slot, ItemTemplate item, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="templ">
-        /// </param>
-        /// <param name="err">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CheckRemove(int slot, ItemTemplate templ, ref InventoryError err)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            IItem toEquip = sendingPage[fromPlacement];
-
-            // First: Check if the item can be worn
-            bool canBeWornCheck = (toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear;
-
-            if (canBeWornCheck)
-            {
-                this.Add(toPlacement, toEquip);
-                sendingPage.Remove(fromPlacement);
-            }
         }
 
         /// <summary>
@@ -285,28 +198,6 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
-        /// <param name="sendingPage">
-        /// </param>
-        /// <param name="fromPlacement">
-        /// </param>
-        /// <param name="toPlacement">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
-        {
-            IItem toEquip = sendingPage[fromPlacement];
-            IItem hotSwapItem = this[toPlacement];
-
-            sendingPage.Remove(fromPlacement);
-            this.Remove(toPlacement);
-
-            sendingPage.Add(fromPlacement, hotSwapItem);
-            this.Add(toPlacement, toEquip);
-        }
-
-        /// <summary>
-        /// </summary>
         /// <returns>
         /// </returns>
         public IDictionary<int, IItem> List()
@@ -318,9 +209,14 @@ namespace CellAO.Core.Inventory
         /// </summary>
         /// <returns>
         /// </returns>
-        public bool Read()
+        public virtual bool Read()
         {
-            foreach (DBItem item in ItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            int containerType = (int)this.Identity.Type;
+
+            // omg, i forgot to clear before read... - Algorithman
+            this.Content.Clear();
+
+            foreach (DBItem item in ItemDao.Instance.GetAllInContainer(containerType, this.Identity.Instance))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
@@ -331,14 +227,16 @@ namespace CellAO.Core.Inventory
                 newItem.Flags |= 0x1;
             }
 
-            foreach (DBInstancedItem item in
-                InstancedItemDao.GetAllInContainer((int)this.Identity.Type, this.Identity.Instance))
+            foreach (
+                DBInstancedItem item in
+                    InstancedItemDao.Instance.GetAll(
+                        new { containertype = containerType, containerinstance = this.Identity.Instance }))
             {
                 Item newItem = new Item(item.quality, item.lowid, item.highid);
                 newItem.SetAttribute(412, item.multiplecount);
                 Identity temp = new Identity();
                 temp.Type = (IdentityType)item.itemtype;
-                temp.Instance = item.iteminstance;
+                temp.Instance = item.Id;
                 newItem.Identity = temp;
 
                 byte[] binaryStats = item.stats.ToArray();
@@ -383,30 +281,31 @@ namespace CellAO.Core.Inventory
             }
 
             IItem temp = this.Content[slotNum];
+            int containerType = (int)this.Identity.Type;
+
             if (temp.Identity.Type == IdentityType.None)
             {
-                ItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                ItemDao.Instance.Delete(
+                    new
+                    {
+                        containertype = containerType,
+                        containerinstance = this.Identity.Instance,
+                        containerplacement = slotNum
+                    });
             }
             else
             {
-                InstancedItemDao.RemoveItem((int)this.Identity.Type, this.Identity.Instance, slotNum);
+                InstancedItemDao.Instance.Delete(
+                    new
+                    {
+                        containertype = containerType,
+                        containerinstance = this.Identity.Instance,
+                        containerplacement = slotNum
+                    });
             }
 
             this.Content.Remove(slotNum);
             return temp;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slot">
-        /// </param>
-        /// <param name="item">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Removed(int slot, ItemTemplate item)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -441,6 +340,169 @@ namespace CellAO.Core.Inventory
 
         /// <summary>
         /// </summary>
+        /// <param name="slotNum">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public bool ValidSlot(int slotNum)
+        {
+            return (this.FirstSlotNumber <= slotNum) && (slotNum < this.FirstSlotNumber + this.MaxSlots);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public virtual bool Write()
+        {
+            List<DBInstancedItem> DBinstanced = new List<DBInstancedItem>();
+            List<DBItem> DBuninstanced = new List<DBItem>();
+            foreach (KeyValuePair<int, IItem> kv in this.Content)
+            {
+                if (kv.Value.Identity.Type != IdentityType.None)
+                {
+                    DBInstancedItem dbi = new DBInstancedItem
+                                          {
+                                              containerinstance = this.Identity.Instance,
+                                              containertype = (int)this.Identity.Type,
+                                              containerplacement = kv.Key,
+                                              itemtype = (int)kv.Value.Identity.Type,
+                                              Id = kv.Value.Identity.Instance,
+                                              lowid = kv.Value.LowID,
+                                              highid = kv.Value.HighID,
+                                              quality = kv.Value.Quality,
+                                              multiplecount = kv.Value.MultipleCount,
+                                              stats = new Binary(kv.Value.GetItemAttributes())
+                                          };
+
+                    DBinstanced.Add(dbi);
+                }
+                else
+                {
+                    DBItem dbi = new DBItem
+                                 {
+                                     containerinstance = this.Identity.Instance,
+                                     containertype = (int)this.Identity.Type,
+                                     containerplacement = kv.Key,
+                                     lowid = kv.Value.LowID,
+                                     highid = kv.Value.HighID,
+                                     quality = kv.Value.Quality,
+                                     multiplecount = kv.Value.MultipleCount
+                                 };
+
+                    DBuninstanced.Add(dbi);
+                }
+            }
+
+            ItemDao.Instance.Save(DBuninstanced, null, null);
+            InstancedItemDao.Instance.Save(DBinstanced, null, null);
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Added(ItemTemplate item)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckAdd(int slot, ItemTemplate item, InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="templ">
+        /// </param>
+        /// <param name="err">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CheckRemove(int slot, ItemTemplate templ, InventoryError err)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Equip(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+
+            // First: Check if the item can be worn
+            bool canBeWornCheck = (toEquip.GetAttribute(30) & (int)CanFlags.Wear) == (int)CanFlags.Wear;
+
+            if (canBeWornCheck)
+            {
+                this.Add(toPlacement, toEquip);
+                sendingPage.Remove(fromPlacement);
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sendingPage">
+        /// </param>
+        /// <param name="fromPlacement">
+        /// </param>
+        /// <param name="toPlacement">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void HotSwap(IInventoryPage sendingPage, int fromPlacement, int toPlacement)
+        {
+            IItem toEquip = sendingPage[fromPlacement];
+            IItem hotSwapItem = this[toPlacement];
+
+            sendingPage.Remove(fromPlacement);
+            this.Remove(toPlacement);
+
+            sendingPage.Add(fromPlacement, hotSwapItem);
+            this.Add(toPlacement, toEquip);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">
+        /// </param>
+        /// <param name="item">
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Removed(int slot, ItemTemplate item)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="slotFrom">
         /// </param>
         /// <param name="slotTo">
@@ -449,7 +511,7 @@ namespace CellAO.Core.Inventory
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void TryHotSwap(int slotFrom, int slotTo, ref InventoryError err)
+        public void TryHotSwap(int slotFrom, int slotTo, InventoryError err)
         {
             throw new NotImplementedException();
         }
@@ -469,69 +531,6 @@ namespace CellAO.Core.Inventory
             IItem toUnEquip = this[fromPlacement];
             receivingPage.Add(toPlacement, toUnEquip);
             this.Remove(fromPlacement);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="slotNum">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public bool ValidSlot(int slotNum)
-        {
-            return (this.FirstSlotNumber <= slotNum) && (slotNum < this.FirstSlotNumber + this.MaxSlots);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool Write()
-        {
-            List<DBInstancedItem> DBinstanced = new List<DBInstancedItem>();
-            List<DBItem> DBuninstanced = new List<DBItem>();
-            foreach (KeyValuePair<int, IItem> kv in this.Content)
-            {
-                if (kv.Value.Identity.Type != IdentityType.None)
-                {
-                    DBInstancedItem dbi = new DBInstancedItem
-                                          {
-                                              containerinstance = this.Identity.Instance, 
-                                              containertype = (int)this.Identity.Type, 
-                                              containerplacement = kv.Key, 
-                                              itemtype = (int)kv.Value.Identity.Type, 
-                                              iteminstance = kv.Value.Identity.Instance, 
-                                              lowid = kv.Value.LowID, 
-                                              highid = kv.Value.HighID, 
-                                              quality = kv.Value.Quality, 
-                                              multiplecount = kv.Value.MultipleCount, 
-                                              stats = new Binary(kv.Value.GetItemAttributes())
-                                          };
-
-                    DBinstanced.Add(dbi);
-                }
-                else
-                {
-                    DBItem dbi = new DBItem
-                                 {
-                                     containerinstance = this.Identity.Instance, 
-                                     containertype = (int)this.Identity.Type, 
-                                     containerplacement = kv.Key, 
-                                     lowid = kv.Value.LowID, 
-                                     highid = kv.Value.HighID, 
-                                     quality = kv.Value.Quality, 
-                                     multiplecount = kv.Value.MultipleCount
-                                 };
-
-                    DBuninstanced.Add(dbi);
-                }
-            }
-
-            ItemDao.Save(DBuninstanced);
-            InstancedItemDao.Save(DBinstanced);
-            return true;
         }
 
         #endregion

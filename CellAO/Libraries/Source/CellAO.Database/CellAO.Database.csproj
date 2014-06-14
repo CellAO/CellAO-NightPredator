@@ -52,6 +52,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,43 +65,73 @@
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Connector.cs" />
-    <Compile Include="Dao\BuddyListDao.cs" />
     <Compile Include="Dao\CharacterDao.cs" />
+    <Compile Include="Dao\Dao.cs" />
+    <Compile Include="Dao\DaoSingleton.cs" />
+    <Compile Include="Dao\IDao.cs" />
+    <Compile Include="Dao\MobDroptableDao.cs" />
+    <Compile Include="Dao\MobSpawnDao.cs" />
+    <Compile Include="Dao\MobSpawnStatDao.cs" />
+    <Compile Include="Dao\MobTemplateDao.cs" />
     <Compile Include="Dao\InstancedItemDao.cs" />
     <Compile Include="Dao\ItemDao.cs" />
     <Compile Include="Dao\ItemNamesDao.cs" />
     <Compile Include="Dao\LoginDataDao.cs" />
-    <Compile Include="Dao\OnlineDao.cs" />
     <Compile Include="Dao\OrganizationDao.cs" />
-    <Compile Include="Dao\RecentMessagesDao.cs" />
+    <Compile Include="Dao\ReceivedMessagesDao.cs" />
+    <Compile Include="Dao\ShopInventoryTemplateDao.cs" />
     <Compile Include="Dao\StatDao.cs" />
+    <Compile Include="Dao\StaticDynelDao.cs" />
+    <Compile Include="Dao\TablenameAttribute.cs" />
+    <Compile Include="Dao\TeleportDao.cs" />
     <Compile Include="Dao\TradeSkillDao.cs" />
     <Compile Include="Dao\UploadedNanosDao.cs" />
-    <Compile Include="Entities\DBBuddyListEntry.cs" />
+    <Compile Include="Dao\VendorDao.cs" />
+    <Compile Include="Dao\VendorTemplateDao.cs" />
+    <Compile Include="Entities\DBMobDroptable.cs" />
+    <Compile Include="Entities\DBMobSpawn.cs" />
+    <Compile Include="Entities\DBMobSpawnStat.cs" />
+    <Compile Include="Entities\DBStaticDynel.cs" />
+    <Compile Include="Entities\DBTeleport.cs" />
+    <Compile Include="Entities\MobSpawnWaypoint.cs" />
+    <Compile Include="Entities\DBMobTemplate.cs" />
     <Compile Include="Entities\DBCharacter.cs" />
     <Compile Include="Entities\DBInstancedItem.cs" />
     <Compile Include="Entities\DBItem.cs" />
     <Compile Include="Entities\DBItemName.cs" />
     <Compile Include="Entities\DBLoginData.cs" />
-    <Compile Include="Entities\DBOnline.cs" />
     <Compile Include="Entities\DBOrganization.cs" />
-    <Compile Include="Entities\DBRecentMessages.cs" />
+    <Compile Include="Entities\DBReceivedMessages.cs" />
+    <Compile Include="Entities\DBShopInventoryTemplate.cs" />
     <Compile Include="Entities\DBStats.cs" />
     <Compile Include="Entities\DBTradeSkill.cs" />
+    <Compile Include="Entities\DBUploadedNano.cs" />
+    <Compile Include="Entities\DBVendor.cs" />
+    <Compile Include="Entities\DBVendorTemplate.cs" />
+    <Compile Include="Entities\ForeignKeyAttribute.cs" />
+    <Compile Include="Entities\IDBEntity.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
     <Compile Include="NpgsqlConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MSSqlConnector.cs" />
+    <Compile Include="SqlMapperUtil.cs" />
+    <Content Include="SqlTables\characterstimers.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}</Project>
+      <Name>CellAO.Enums</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Exceptions\Exceptions.csproj">
+    <ProjectReference Include="..\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
-      <Name>Exceptions</Name>
+      <Name>CellAO.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
@@ -108,135 +140,84 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="SqlTables\buddylist.sql">
-      <SubType>Component</SubType>
+    <Content Include="SqlTables\characters.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\charactersactivenanos.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\charactersmeshs.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\charactersuploadednanos.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\instanceditems.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\itemnames.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlTables\items.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SqlTables\login.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SqlTables\receivedmsgs.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SqlTables\bank.sql">
+    <Content Include="SqlTables\mobdroptable.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\characters.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawns.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\charactersactivenanos.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawnsactivenanos.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\charactersaddmeshs.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawnsinventory.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\charactersinventory.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawnsmeshs.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\charactersmeshs.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawnsuploadednanos.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\characterstimers.sql">
+    </Content>
+    <Content Include="SqlTables\mobspawns_stats.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\charactersuploadednanos.sql">
+    </Content>
+    <Content Include="SqlTables\mobtemplate.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\doors.sql">
+    </Content>
+    <Content Include="SqlTables\organizations.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\instanceditems.sql">
+    </Content>
+    <Content Include="SqlTables\proxydestinations.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\itemnames.sql">
+    </Content>
+    <Content Include="SqlTables\receivedmessages.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\items.sql">
+    </Content>
+    <Content Include="SqlTables\shopinventorytemplates.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobdroptable.sql">
+    </Content>
+    <Content Include="SqlTables\staticdynels.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawns.sql">
+    </Content>
+    <Content Include="SqlTables\stats.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnsactivenanos.sql">
+    </Content>
+    <Content Include="SqlTables\teleports.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnsinventory.sql">
+    </Content>
+    <Content Include="SqlTables\tradeskill.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnsmeshs.sql">
+    </Content>
+    <Content Include="SqlTables\vendors.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnstimers.sql">
+    </Content>
+    <Content Include="SqlTables\vendortemplate.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnsuploadednanos.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnswaypoints.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawnsweaponpairs.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\mobspawns_stats.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\MobTemplate.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\organizations.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\petstemplate.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\proxydestinations.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\shopinventorytemplates.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\socialtab.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\statels.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\statel_events.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\statel_functions.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\statel_function_arguments.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\statel_function_reqs.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\staticitemstemplate.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\stats.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\tradeskill.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\vendors.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\vendortemplate.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="SqlTables\wompahs.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

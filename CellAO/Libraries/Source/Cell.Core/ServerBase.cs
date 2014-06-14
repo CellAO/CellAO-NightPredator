@@ -386,7 +386,7 @@ namespace Cell.Core
 		/// <seealso cref="ServerBase.Start"/>
 		/// </summary>
 		/// <returns>A client object to wrap an incoming connection.</returns>
-		protected abstract IClient CreateClient();
+		protected abstract IClient CreateClient(IPAddress address);
 
 		/// <summary>
 		/// Removes a client from the internal client list.
@@ -659,8 +659,8 @@ namespace Cell.Core
 					LogManager.GetLogger(CellDef.CORE_LOG_FNAME).Info(Resources.ServerNotRunning);
 					return;
 				}
-
-				IClient client = CreateClient();
+			    IPAddress address = ((IPEndPoint)args.AcceptSocket.RemoteEndPoint).Address;
+				IClient client = CreateClient(address);
 				client.TcpSocket = args.AcceptSocket;
 				client.BeginReceive();
 

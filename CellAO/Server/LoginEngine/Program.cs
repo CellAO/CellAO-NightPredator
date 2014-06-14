@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,6 +34,8 @@ namespace LoginEngine
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
 
@@ -61,15 +68,11 @@ namespace LoginEngine
 
         /// <summary>
         /// </summary>
-        public static bool DebugNetwork;
-
-        /// <summary>
-        /// </summary>
         private static readonly IContainer Container = new MefContainer();
 
         /// <summary>
         /// </summary>
-        private static ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
+        private static readonly ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
 
         /// <summary>
         /// </summary>
@@ -98,12 +101,113 @@ namespace LoginEngine
 
         #region Methods
 
+        private static bool CheckUsername(string username)
+        {
+            return !LoginDataDao.Instance.GetWhere(new { Username = username }).Any();
+        }
+
+        private static bool IsNumber(string number)
+        {
+            int temp = 0;
+            return Int32.TryParse(number, out temp);
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="obj">
         /// </param>
         private static void AddUser(string[] obj)
         {
+            if (obj.Length == 1)
+            {
+                List<string> temp = new List<string>();
+                temp.Add("adduser");
+
+                while (true)
+                {
+                    Console.Write("Username: ");
+                    string test = Console.ReadLine();
+                    if ((string.IsNullOrWhiteSpace(test)) || (test.Length < 6))
+                    {
+                        Console.WriteLine("Please enter a username (at least 6 chars)...");
+                        continue;
+                    }
+                    if (CheckUsername(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                while (true)
+                {
+                    Console.Write("Password: ");
+                    string test = Console.ReadLine();
+                    if ((string.IsNullOrWhiteSpace(test)) || (test.Length < 6))
+                    {
+                        Console.WriteLine("Please enter a password (at least 6 chars) for your safety...");
+                        continue;
+                    }
+                    temp.Add(test);
+                    break;
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("Number of character slots: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.WriteLine("Expansions: Enter 2047 for all expansions (i know you want that)");
+                while (true)
+                {
+                    Console.Write("Expansions: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.WriteLine(
+                    "GM-Level: Anything above 0 is GM, but there are differences. Full Client GM = 1 (using keyboard shortcuts) but for some items you have to be GM Level 511");
+                while (true)
+                {
+                    Console.Write("GM-Level: ");
+                    string test = Console.ReadLine();
+                    if (IsNumber(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("E-Mail: ");
+                    string test = Console.ReadLine();
+                    if (TestEmailRegex.TestEmail(test))
+                    {
+                        temp.Add(test);
+                        break;
+                    }
+                }
+
+                Console.Write("First name: ");
+                temp.Add(Console.ReadLine());
+
+                Console.Write("Last name: ");
+                temp.Add(Console.ReadLine());
+
+                obj = temp.ToArray();
+            }
+
             Colouring.Push(ConsoleColor.Red);
             bool argsOk = CheckAddUserParameters(obj);
             Colouring.Pop();
@@ -115,16 +219,16 @@ namespace LoginEngine
 
             DBLoginData login = new DBLoginData
                                 {
-                                    Username = obj[1], 
-                                    AccountFlags = 0, 
-                                    Allowed_Characters = int.Parse(obj[3]), 
-                                    CreationDate = DateTime.Now, 
-                                    Email = obj[6], 
-                                    Expansions = int.Parse(obj[4]), 
-                                    FirstName = obj[7], 
-                                    LastName = obj[8], 
-                                    GM = int.Parse(obj[5]), 
-                                    Flags = 0, 
+                                    Username = obj[1],
+                                    AccountFlags = 0,
+                                    AllowedCharacters = int.Parse(obj[3]),
+                                    CreationDate = DateTime.Now,
+                                    Email = obj[6],
+                                    Expansions = int.Parse(obj[4]),
+                                    FirstName = obj[7],
+                                    LastName = obj[8],
+                                    GM = int.Parse(obj[5]),
+                                    Flags = 0,
                                     Password = new LoginEncryption().GeneratePasswordHash(obj[2])
                                 };
 
@@ -136,7 +240,7 @@ namespace LoginEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(
-                    "An error occured while trying to add a new user account:" + Environment.NewLine + "{0}", 
+                    "An error occured while trying to add a new user account:" + Environment.NewLine + "{0}",
                     ex.Message);
                 Colouring.Pop();
                 return;
@@ -216,7 +320,7 @@ namespace LoginEngine
             bool result = true;
             try
             {
-                LoginDataDao.GetAll();
+                LoginDataDao.Instance.GetAll();
             }
             catch (Exception)
             {
@@ -507,7 +611,7 @@ namespace LoginEngine
                                                            {
                                                                Username = username,
                                                                AccountFlags = 0,
-                                                               Allowed_Characters = numChars,
+                                                               AllowedCharacters = numChars,
                                                                CreationDate = DateTime.Now,
                                                                Email = email,
                                                                Expansions = expansions,
@@ -653,13 +757,28 @@ namespace LoginEngine
             consoleCommands.AddEntry("stop", StopServer);
             consoleCommands.AddEntry("exit", ShutDownServer);
             consoleCommands.AddEntry("quit", ShutDownServer);
-            consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
+            consoleCommands.AddEntry("debug", SetDebug);
             consoleCommands.AddEntry("adduser", AddUser);
             consoleCommands.AddEntry("hash", SetHash);
             consoleCommands.AddEntry("setgm", SetGMLevel);
             consoleCommands.AddEntry("logoffchars", LogoffCharacters);
             consoleCommands.AddEntry("setpass", SetPassword);
             return true;
+        }
+
+        private static void SetDebug(string[] obj)
+        {
+            if (obj.Length == 1)
+            {
+                LogUtil.Toggle("");
+            }
+            else
+            {
+                for (int i = 1; i < obj.Length; i++)
+                {
+                    LogUtil.Toggle(obj[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -758,7 +877,7 @@ namespace LoginEngine
             }
             else
             {
-                LoginDataDao.LogoffChars(obj[1]);
+                LoginDataDao.Instance.LogoffChars(obj[1]);
             }
         }
 
@@ -793,26 +912,6 @@ namespace LoginEngine
 
             // NLog<->Mono lockup fix
             LogManager.Configuration = null;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="obj">
-        /// </param>
-        private static void SetDebugNetwork(string[] obj)
-        {
-            DebugNetwork = !DebugNetwork;
-            Colouring.Push(ConsoleColor.Green);
-            if (DebugNetwork)
-            {
-                Console.WriteLine("Debugging of network traffic enabled");
-            }
-            else
-            {
-                Console.WriteLine("Debugging of network traffic disabled");
-            }
-
-            Colouring.Pop();
         }
 
         /// <summary>

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,27 +35,34 @@ namespace ZoneEngine.Core
 
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
+    using System.Linq;
     using System.Net;
+    using System.Reflection;
+    using System.Threading;
 
     using Cell.Core;
 
     using CellAO.Communication.Messages;
+    using CellAO.Core.Components;
     using CellAO.Core.Entities;
-    using CellAO.Core.Network;
     using CellAO.Core.Playfields;
-    using CellAO.Database.Dao;
+    using CellAO.ObjectManager;
+
+    using MemBus;
+    using MemBus.Configurators;
+    using MemBus.Support;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages;
 
-    using ZoneEngine.Component;
-    using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Script;
+
+    using IBus = MemBus.IBus;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    [Export]
     public class ZoneServer : ServerBase
     {
         #region Fields
@@ -65,27 +77,105 @@ namespace ZoneEngine.Core
 
         /// <summary>
         /// </summary>
-        private readonly ClientFactory clientFactory;
-
-        /// <summary>
-        /// </summary>
         private readonly List<IPlayfield> playfields = new List<IPlayfield>();
+
+        private readonly DisposeContainer memBusDisposeContainer = new DisposeContainer();
+
+        private readonly IBus zoneBus;
+
+        private readonly MessageSerializer messageSerializer = new MessageSerializer();
 
         #endregion
 
         #region Constructors and Destructors
 
+        private readonly List<Type> subscribedMessageHandlers = new List<Type>();
+
         /// <summary>
         /// </summary>
-        /// <param name="clientFactory">
-        /// </param>
-        [ImportingConstructor]
-        public ZoneServer(ClientFactory clientFactory)
+        public ZoneServer()
         {
             // TODO: Get the Server id from chatengine or config file
             this.Id = 0x356;
-            this.clientFactory = clientFactory;
             this.ClientDisconnected += this.ZoneServerClientDisconnected;
+
+            // New Bus initialization
+            this.zoneBus = BusSetup.StartWith<AsyncConfiguration>().Construct();
+
+            this.subscribedMessageHandlers.Clear();
+
+            IEnumerable<Type> types =
+                Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(
+                        x =>
+                            x.GetCustomAttributes(typeof(MessageHandlerAttribute), false)
+                                .Any(
+                                    y => ((MessageHandlerAttribute)y).Direction != MessageHandlerDirection.OutboundOnly));
+
+            MethodInfo subscriptMethodInfo = typeof(ZoneServer).GetMethod(
+                "SubscribeMessage",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (Type type in
+                types)
+            {
+                Type[] temp = type.BaseType.GetGenericArguments();
+                MethodInfo generic = subscriptMethodInfo.MakeGenericMethod(new Type[] { temp[1], temp[0] });
+                generic.Invoke(this, null);
+            }
+            this.CheckSubscribedMessageHandlers();
+        }
+
+        private void SubscribeMessage<T, TU>() where T : AbstractMessageHandler<TU> where TU : MessageBody, new()
+        {
+            T def =
+                (T)
+                    typeof(T).GetProperty(
+                        "Default",
+                        BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.Public).GetValue(null, null);
+            this.memBusDisposeContainer.Add(this.zoneBus.Subscribe<MessageWrapper<TU>>(def.Receive));
+            this.subscribedMessageHandlers.Add(typeof(TU));
+        }
+
+        private void CheckSubscribedMessageHandlers()
+        {
+            bool warned = false;
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            foreach (Type type in
+                assembly.GetTypes()
+                    .Where(x => x.IsClass && (x.GetCustomAttributes(typeof(MessageHandlerAttribute), true).Any())))
+            {
+                if (type.BaseType != null)
+                {
+                    Type genericArgument = type.BaseType.GetGenericArguments()[0];
+                    MessageHandlerAttribute handlerAttribute =
+                        (MessageHandlerAttribute)
+                            type.GetCustomAttributes(typeof(MessageHandlerAttribute), true).FirstOrDefault();
+
+                    if (handlerAttribute.Direction == MessageHandlerDirection.None)
+                    {
+                        Console.WriteLine(
+                            "Warning: '" + type.Name
+                            + "' has no Direction defined (MessageHandlerAttribute missing in declaration?)");
+                    }
+                    else
+                    {
+                        if (handlerAttribute.Direction != MessageHandlerDirection.OutboundOnly)
+                        {
+                            if (!this.subscribedMessageHandlers.Contains(genericArgument))
+                            {
+                                // Found a Messagehandler which is not subscribed
+                                if (!warned)
+                                {
+                                    Console.WriteLine("Warning! Following Messagehandlers have not been subscribed!");
+                                    warned = true;
+                                }
+                                Console.WriteLine("Missing: " + type.Name);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
@@ -137,24 +227,26 @@ namespace ZoneEngine.Core
         /// </param>
         /// <returns>
         /// </returns>
-        public IPlayfield PlayfieldById(int id)
+        public IPlayfield PlayfieldById(Identity id)
         {
             // TODO: This needs to be changed to check for whole Identity
             foreach (IPlayfield pf in this.playfields)
             {
-                if (pf.Identity.Instance == id)
+                if (pf.Identity == id)
                 {
                     return pf;
                 }
             }
 
-            this.CreatePlayfield(new Identity { Instance = id });
+            this.CreatePlayfield(id);
             return this.PlayfieldById(id);
         }
 
         #endregion
 
         #region Methods
+
+        private readonly Dictionary<IPAddress, DateTime> connectDelayList = new Dictionary<IPAddress, DateTime>();
 
         /// <summary>
         /// </summary>
@@ -175,9 +267,21 @@ namespace ZoneEngine.Core
         /// </returns>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        protected override IClient CreateClient()
+        protected override IClient CreateClient(IPAddress address)
         {
-            return this.clientFactory.Create(this);
+            bool delay = false;
+            if (address != null)
+            {
+                lock (this.connectDelayList)
+                {
+                    delay = this.connectDelayList.Any(x => x.Key.Equals(address) && (x.Value < DateTime.UtcNow));
+                }
+            }
+            if (delay)
+            {
+                Thread.Sleep(1000);
+            }
+            return new ZoneClient(this, this.messageSerializer, this.zoneBus);
         }
 
         /// <summary>
@@ -227,17 +331,28 @@ namespace ZoneEngine.Core
         /// </param>
         private void HandleChatCommand(ChatCommand chatCommand)
         {
-            foreach (Playfield playfield in this.playfields)
+            ICharacter character =
+                Pool.Instance.GetObject<Character>(
+                    new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
+            if (character != null)
             {
-                IInstancedEntity character =
-                    playfield.FindByIdentity(
-                        new Identity { Type = IdentityType.CanbeAffected, Instance = chatCommand.CharacterId });
-                if (character != null)
+                string fullArgs = chatCommand.ChatCommandString.TrimEnd(char.MinValue).TrimStart('.');
+
+                string temp = string.Empty;
+                do
                 {
-                    ChatCommandHandler.Read(
-                        chatCommand.ChatCommandString.TrimStart('.'), 
-                        (ZoneClient)((Character)character).Client);
+                    temp = fullArgs;
+                    fullArgs = fullArgs.Replace("  ", " ");
                 }
+                while (temp != fullArgs);
+
+                string[] cmdArgs = fullArgs.Trim().Split(' ');
+
+                ScriptCompiler.Instance.CallChatCommand(
+                    cmdArgs[0].ToLower(),
+                    character.Controller.Client,
+                    character.SelectedTarget,
+                    cmdArgs);
             }
         }
 
@@ -250,16 +365,35 @@ namespace ZoneEngine.Core
         private void ZoneServerClientDisconnected(IClient client, bool forced)
         {
             ZoneClient cli = (ZoneClient)client;
-            if (cli.Character != null)
+            IPAddress address = cli.ClientAddress;
+            if (address != null)
             {
-                ((Character)cli.Character).StartLogoutTimer();
-                OnlineDao.SetOffline(((IZoneClient)client).Character.Identity.Instance);
-
-                // Will be saved at character dispose too, but just to be sure...
-                ((IZoneClient)client).Character.Save();
+                lock (this.connectDelayList)
+                {
+                    if (this.connectDelayList.Any(x => x.Key.Equals(address)))
+                    {
+                        KeyValuePair<IPAddress, DateTime> kv = this.connectDelayList.First(x => x.Key.Equals(address));
+                        this.connectDelayList[kv.Key] = DateTime.UtcNow + TimeSpan.FromSeconds(2);
+                    }
+                    else
+                    {
+                        this.connectDelayList.Add(address, DateTime.UtcNow + TimeSpan.FromSeconds(2));
+                    }
+                }
             }
+            if (cli != null)
+            {
+                cli.Dispose();
+            }
+        }
 
-            cli.Dispose();
+        public override void Stop()
+        {
+            foreach (Playfield pf in this.playfields)
+            {
+                pf.Dispose();
+            }
+            base.Stop();
         }
 
         #endregion

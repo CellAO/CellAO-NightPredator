@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -38,7 +43,7 @@ namespace ZoneEngine.ChatCommands
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
-    using ZoneEngine.Core.Packets;
+    using ZoneEngine.Core.MessageHandlers;
 
     #endregion
 
@@ -70,8 +75,8 @@ namespace ZoneEngine.ChatCommands
         public override void CommandHelp(ICharacter character)
         {
             character.Playfield.Publish(
-                ChatText.CreateIM(
-                    character, 
+                ChatTextMessageHandler.Default.CreateIM(
+                    character,
                     "Usage: Select target and /command giveitem id ql\r\nIt doesn't matter if high or low id is given"));
             return;
         }
@@ -104,19 +109,30 @@ namespace ZoneEngine.ChatCommands
                 int ql;
                 if (!int.TryParse(args[1], out lowId))
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "LowId is no number"));
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "LowId is no number"));
                     return;
                 }
 
                 if (!int.TryParse(args[2], out ql))
                 {
-                    character.Playfield.Publish(ChatText.CreateIM(character, "QualityLevel is no number"));
+                    character.Playfield.Publish(
+                        ChatTextMessageHandler.Default.CreateIM(character, "QualityLevel is no number"));
                     return;
                 }
 
                 // Determine low and high id depending on ql
+                int lowIdStore = lowId;
                 lowId = ItemLoader.ItemList[lowId].GetLowId(ql);
-                highId = ItemLoader.ItemList[lowId].GetHighId(ql);
+                if (lowId != -1)
+                {
+                    highId = ItemLoader.ItemList[lowId].GetHighId(ql);
+                }
+                else
+                {
+                    lowId = lowIdStore;
+                    highId = lowId;
+                }
 
                 Item item = new Item(ql, lowId, highId);
                 if (ItemLoader.ItemList[lowId].IsStackable())
@@ -128,17 +144,18 @@ namespace ZoneEngine.ChatCommands
                 if (err != InventoryError.OK)
                 {
                     character.Playfield.Publish(
-                        ChatText.CreateIM(character, "Could not add to inventory. (" + err + ")"));
+                        ChatTextMessageHandler.Default.CreateIM(character, "Could not add to inventory. (" + err + ")"));
                 }
 
                 if (targetEntity as Character != null)
                 {
-                    AddTemplate.Send((targetEntity as Character).Client, item);
+                    AddTemplateMessageHandler.Default.Send((ICharacter)targetEntity, item);
                 }
             }
             else
             {
-                character.Playfield.Publish(ChatText.CreateIM(character, "Target has no Inventory."));
+                character.Playfield.Publish(
+                    ChatTextMessageHandler.Default.CreateIM(character, "Target has no Inventory."));
             }
         }
 

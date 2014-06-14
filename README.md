@@ -38,7 +38,11 @@ Installation instructions follow soon.
 - **Pactor** - Our new Script Engine Creator.
 - **MrSecret** - for being our Forum guy.
 - **Spectrome** - <+Spectrome> i havn't done anything <+Spectrome> ive scratched my ass at the code and annoy chris
-
+- **iphoneprodigy** - For giving us our webcore.
+- **T0t4r4** - Thank you coming soon(tm)
+- **Estrid** - For continueing the support of the Webcore.
+- **Swifty** - For contributing Example Scripts for CellAO. 
+- **Kyle873** -  Note to come later 
 
 **Others:**
 
@@ -46,5 +50,7 @@ Installation instructions follow soon.
 - **Moose**
 - **Ruffus**
 - and the guys at **WCell**
+- We would also like to give a warm and special thank you to [Funcom](http://www.funcom.com) for giving us [Anarchy Online](http://www.anarchy-online.com)
+
 
 If you feel your name should be in here, just pester me on IRC or email: darkkitten@gmail.com I will eventualy add you I guess ;)

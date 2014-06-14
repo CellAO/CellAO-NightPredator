@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,416 +35,426 @@ namespace CellAO.Enums
     /// </summary>
     public enum Operator : int
     {
+        Unknown = 255,
+
+        Unknown2 = 272,
+
+        Unknown3 = 110,
+
+        /// <summary>
+        /// </summary>
+        And = 4,
+
         /// <summary>
         /// </summary>
-        And = 4, 
+        AreaTargetInVicinity = 60,
 
         /// <summary>
         /// </summary>
-        AreaTargetInVicinity = 60, 
+        AreaZMinMax = 15,
 
         /// <summary>
         /// </summary>
-        AreaZMinMax = 15, 
+        BitAnd = 22,
 
         /// <summary>
         /// </summary>
-        BitAnd = 22, 
+        BitOr = 23,
 
         /// <summary>
         /// </summary>
-        BitOr = 23, 
+        CanAttackChar = 79,
 
         /// <summary>
         /// </summary>
-        CanAttackChar = 79, 
+        CanDisableDefenseShield = 83,
 
         /// <summary>
         /// </summary>
-        CanDisableDefenseShield = 83, 
+        CanExecuteFormulaIOnTarget = 59,
 
         /// <summary>
         /// </summary>
-        CanExecuteFormulaIOnTarget = 59, 
+        DistanceTo = 51,
 
         /// <summary>
         /// </summary>
-        DistanceTo = 51, 
+        EqualTo = 0,
 
         /// <summary>
         /// </summary>
-        EqualTo = 0, 
+        False = 99,
 
         /// <summary>
         /// </summary>
-        False = 99, 
+        GreaterThan = 2,
 
         /// <summary>
         /// </summary>
-        GreaterThan = 2, 
+        HasChangedRoomWhileFighting = 64,
 
         /// <summary>
         /// </summary>
-        HasChangedRoomWhileFighting = 64, 
+        HasEnteredNonPvpZone = 87,
 
         /// <summary>
         /// </summary>
-        HasEnteredNonPvpZone = 87, 
+        HasFormula = 35,
 
         /// <summary>
         /// </summary>
-        HasFormula = 35, 
+        HasMaster = 58,
 
         /// <summary>
         /// </summary>
-        HasMaster = 58, 
+        HasMeOnPetList = 72,
 
         /// <summary>
         /// </summary>
-        HasMeOnPetList = 72, 
+        HasMoveToTarget = 96,
 
         /// <summary>
         /// </summary>
-        HasMoveToTarget = 96, 
+        HasNotFormula = 36,
 
         /// <summary>
         /// </summary>
-        HasNotFormula = 36, 
+        HasNotPerk = 103,
 
         /// <summary>
         /// </summary>
-        HasNotPerk = 103, 
+        HasNotRunningNano = 101,
 
         /// <summary>
         /// </summary>
-        HasNotRunningNano = 101, 
+        HasNotRunningNanoLine = 102,
 
         /// <summary>
         /// </summary>
-        HasNotRunningNanoLine = 102, 
+        HasNotWieldedItem = 34,
 
         /// <summary>
         /// </summary>
-        HasNotWieldedItem = 34, 
+        HasNotWornItem = 32,
 
         /// <summary>
         /// </summary>
-        HasNotWornItem = 32, 
+        HasPerk = 93,
 
         /// <summary>
         /// </summary>
-        HasPerk = 93, 
+        HasPetPendingNanoFormula = 76,
 
         /// <summary>
         /// </summary>
-        HasPetPendingNanoFormula = 76, 
+        HasRunningNano = 91,
 
         /// <summary>
         /// </summary>
-        HasRunningNano = 91, 
+        HasRunningNanoLine = 92,
 
         /// <summary>
         /// </summary>
-        HasRunningNanoLine = 92, 
+        HasWieldedItem = 33,
 
         /// <summary>
         /// </summary>
-        HasWieldedItem = 33, 
+        HasWornItem = 31,
 
         /// <summary>
         /// </summary>
-        HasWornItem = 31, 
+        Id = 9,
 
         /// <summary>
         /// </summary>
-        Id = 9, 
+        Illegal = 25,
 
         /// <summary>
         /// </summary>
-        Illegal = 25, 
+        InventorySlotIsEmpty = 82,
 
         /// <summary>
         /// </summary>
-        InventorySlotIsEmpty = 82, 
+        InventorySlotIsFull = 81,
 
         /// <summary>
         /// </summary>
-        InventorySlotIsFull = 81, 
+        IsAlive = 40,
 
         /// <summary>
         /// </summary>
-        IsAlive = 40, 
+        IsAnyoneLooking = 47,
 
         /// <summary>
         /// </summary>
-        IsAnyoneLooking = 47, 
+        IsAttacked = 46,
 
         /// <summary>
         /// </summary>
-        IsAttacked = 46, 
+        IsFactionReactionSet = 95,
 
         /// <summary>
         /// </summary>
-        IsFactionReactionSet = 95, 
+        IsFalling = 89,
 
         /// <summary>
         /// </summary>
-        IsFalling = 89, 
+        IsFighting = 45,
 
         /// <summary>
         /// </summary>
-        IsFighting = 45, 
+        IsFlying = 70,
 
         /// <summary>
         /// </summary>
-        IsFlying = 70, 
+        IsFoe = 48,
 
         /// <summary>
         /// </summary>
-        IsFoe = 48, 
+        IsInDungeon = 49,
 
         /// <summary>
         /// </summary>
-        IsInDungeon = 49, 
+        IsInNoFightingArea = 52,
 
         /// <summary>
         /// </summary>
-        IsInNoFightingArea = 52, 
+        IsInvalid = 39,
 
         /// <summary>
         /// </summary>
-        IsInvalid = 39, 
+        IsLocationOk = 62,
 
         /// <summary>
         /// </summary>
-        IsLocationOk = 62, 
+        IsNotTooHighLevel = 63,
 
         /// <summary>
         /// </summary>
-        IsNotTooHighLevel = 63, 
+        IsNpc = 44,
 
         /// <summary>
         /// </summary>
-        IsNpc = 44, 
+        IsNpcOrNpcControlledPet = 84,
 
         /// <summary>
         /// </summary>
-        IsNpcOrNpcControlledPet = 84, 
+        IsOnDifferentPlayfield = 90,
 
         /// <summary>
         /// </summary>
-        IsOnDifferentPlayfield = 90, 
+        IsPerkLocked = 94,
 
         /// <summary>
         /// </summary>
-        IsPerkLocked = 94, 
+        IsPerkUnlocked = 97,
 
         /// <summary>
         /// </summary>
-        IsPerkUnlocked = 97, 
+        IsPet = 77,
 
         /// <summary>
         /// </summary>
-        IsPet = 77, 
+        IsPetOverEquipped = 75,
 
         /// <summary>
         /// </summary>
-        IsPetOverEquipped = 75, 
+        IsPlayerOrPlayerControlledPet = 86,
 
         /// <summary>
         /// </summary>
-        IsPlayerOrPlayerControlledPet = 86, 
+        IsSameAs = 50,
 
         /// <summary>
         /// </summary>
-        IsSameAs = 50, 
+        IsTeleporting = 69,
 
         /// <summary>
         /// </summary>
-        IsTeleporting = 69, 
+        IsTowerCreateAllowed = 80,
 
         /// <summary>
         /// </summary>
-        IsTowerCreateAllowed = 80, 
+        IsUnderHeavyAttack = 61,
 
         /// <summary>
         /// </summary>
-        IsUnderHeavyAttack = 61, 
+        IsValid = 38,
 
         /// <summary>
         /// </summary>
-        IsValid = 38, 
+        IsWithinVicinity = 41,
 
         /// <summary>
         /// </summary>
-        IsWithinVicinity = 41, 
+        IsWithinWeaponrange = 43,
 
         /// <summary>
         /// </summary>
-        IsWithinWeaponrange = 43, 
+        ItemAnim = 17,
 
         /// <summary>
         /// </summary>
-        ItemAnim = 17, 
+        ItemHas = 7,
 
         /// <summary>
         /// </summary>
-        ItemHas = 7, 
+        ItemHasnot = 8,
 
         /// <summary>
         /// </summary>
-        ItemHasnot = 8, 
+        KullNumberOf = 65,
 
         /// <summary>
         /// </summary>
-        KullNumberOf = 65, 
+        LessThan = 1,
 
         /// <summary>
         /// </summary>
-        LessThan = 1, 
+        MinMaxLevelCompare = 54,
 
         /// <summary>
         /// </summary>
-        MinMaxLevelCompare = 54, 
+        MonsterTemplate = 57,
 
         /// <summary>
         /// </summary>
-        MonsterTemplate = 57, 
+        Not = 42,
 
         /// <summary>
         /// </summary>
-        Not = 42, 
+        NotBitAnd = 107,
 
         /// <summary>
         /// </summary>
-        NotBitAnd = 107, 
+        NumberOfItems = 67,
 
         /// <summary>
         /// </summary>
-        NumberOfItems = 67, 
+        ObtainedItem = 108,
 
         /// <summary>
         /// </summary>
-        ObtainedItem = 108, 
+        OnCaster = 100,
 
         /// <summary>
         /// </summary>
-        OnCaster = 100, 
+        OnGeneralBeholder = 37,
 
         /// <summary>
         /// </summary>
-        OnGeneralBeholder = 37, 
+        OnInvalidTarget = 28,
 
         /// <summary>
         /// </summary>
-        OnInvalidTarget = 28, 
+        OnInvalidUser = 30,
 
         /// <summary>
         /// </summary>
-        OnInvalidUser = 30, 
+        OnSecondaryItem = 21,
 
         /// <summary>
         /// </summary>
-        OnSecondaryItem = 21, 
+        OnSelf = 19,
 
         /// <summary>
         /// </summary>
-        OnSelf = 19, 
+        OnTarget = 18,
 
         /// <summary>
         /// </summary>
-        OnTarget = 18, 
+        OnUser = 26,
 
         /// <summary>
         /// </summary>
-        OnUser = 26, 
+        OnValidTarget = 27,
 
         /// <summary>
         /// </summary>
-        OnValidTarget = 27, 
+        OnValidUser = 29,
 
         /// <summary>
         /// </summary>
-        OnValidUser = 29, 
+        Or = 3,
 
         /// <summary>
         /// </summary>
-        Or = 3, 
+        PrimaryItem = 13,
 
         /// <summary>
         /// </summary>
-        PrimaryItem = 13, 
+        PrimaryTemplate = 68,
 
         /// <summary>
         /// </summary>
-        PrimaryTemplate = 68, 
+        SameAsSelectedTarget = 85,
 
         /// <summary>
         /// </summary>
-        SameAsSelectedTarget = 85, 
+        ScanForStat = 71,
 
         /// <summary>
         /// </summary>
-        ScanForStat = 71, 
+        SecondaryItem = 14,
 
         /// <summary>
         /// </summary>
-        SecondaryItem = 14, 
+        Signal = 20,
 
         /// <summary>
         /// </summary>
-        Signal = 20, 
+        TargetId = 10,
 
         /// <summary>
         /// </summary>
-        TargetId = 10, 
+        TargetSignal = 11,
 
         /// <summary>
         /// </summary>
-        TargetSignal = 11, 
+        TargetStat = 12,
 
         /// <summary>
         /// </summary>
-        TargetStat = 12, 
+        TemplateCompare = 53,
 
         /// <summary>
         /// </summary>
-        TemplateCompare = 53, 
+        TestNumPets = 66,
 
         /// <summary>
         /// </summary>
-        TestNumPets = 66, 
+        TimeLarger = 6,
 
         /// <summary>
         /// </summary>
-        TimeLarger = 6, 
+        TimeLess = 5,
 
         /// <summary>
         /// </summary>
-        TimeLess = 5, 
+        TrickleDownLarger = 73,
 
         /// <summary>
         /// </summary>
-        TrickleDownLarger = 73, 
+        TrickleDownLess = 74,
 
         /// <summary>
         /// </summary>
-        TrickleDownLess = 74, 
+        True = 98,
 
         /// <summary>
         /// </summary>
-        True = 98, 
+        Unequal = 24,
 
         /// <summary>
         /// </summary>
-        Unequal = 24, 
+        UseLocation = 88,
 
         /// <summary>
         /// </summary>
-        UseLocation = 88, 
+        User = 16,
 
         /// <summary>
         /// </summary>
-        User = 16, 
+        FlyingAllowed = 112,
     }
 }

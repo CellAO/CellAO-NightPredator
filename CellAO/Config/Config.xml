@@ -14,8 +14,6 @@
   <!-- Server MOTD -->
   <!-- {0} will be replaced with Cellao Name and Version eg Yalm 1.3.2.267 -->
   <Motd>Welcome to CellAO {0}, please visit our Forums at http://www.aocell.info</Motd>
-  <!-- Set this to true if you want to use encrypted passwords with your server you will need to supply each user the launcher we have created -->
-  <UsePassword>false</UsePassword>
   <!-- Choose your SQL Databse Type here, MySql, MsSql, PostgreSQL-->
   <SQLType>MySql</SQLType>
   <!-- Sql Connection Setup Area -->
@@ -26,9 +24,16 @@
   <Locale>en</Locale>
   <!-- IRC Config-->
   <UseIRCRelay>true</UseIRCRelay>
-  <IRCServer>irc.darkkittenstudio.com</IRCServer>
+  <IRCServer>irc.aocell.info</IRCServer>
   <RelayBotNick>CellAO</RelayBotNick>
   <RelayBotIdent>CellAO</RelayBotIdent>
   <IRCChannel>#CellAORelay</IRCChannel>
   <RelayIngameChannel>CellAO-Relay</RelayIngameChannel>
+  <!-- WebEngine Setup -->
+  <WebHostName>test.aocell.info</WebHostName>
+  <WebHostPort>8181</WebHostPort>
+  <WebHostRoot>htdocs</WebHostRoot>
+  <WebCoreRepo>https://github.com/CellAO/CellAO-WebCore/archive/master.zip</WebCoreRepo>
+  <WebHostDefaultPage>index.php</WebHostDefaultPage>
+  <WebHostPhpPath>php</WebHostPhpPath>
 </Config>

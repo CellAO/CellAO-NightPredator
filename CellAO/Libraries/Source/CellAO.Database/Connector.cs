@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -68,18 +73,17 @@ namespace CellAO.Database
         /// <summary>
         /// Type of SQL from config file
         /// </summary>
-        private static string sqlType = ConfigReadWrite.Instance.CurrentConfig.SQLType;
+        private static readonly string sqlType = ConfigReadWrite.Instance.CurrentConfig.SQLType;
 
         #endregion
-
-        // CONNECTION POOLING IS A MUST!!!
-        // TODO: Rewrite needed for config.xml, only providing username, password and database. Create connection string via stringbuilders
 
         #region Public Methods and Operators
 
         /// <summary>
         /// Get IDbConnection depending on configuration file
         /// </summary>
+        /// <param name="existingConnection">
+        /// </param>
         /// <returns>
         /// IDbConnection to the database
         /// </returns>
@@ -123,9 +127,13 @@ namespace CellAO.Database
             }
 
             conn.Open();
+
             return conn;
         }
 
         #endregion
+
+        // CONNECTION POOLING IS A MUST!!!
+        // TODO: Rewrite needed for config.xml, only providing username, password and database. Create connection string via stringbuilders
     }
 }

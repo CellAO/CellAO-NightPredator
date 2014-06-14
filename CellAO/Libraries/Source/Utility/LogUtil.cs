@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,7 +34,9 @@ namespace Utility
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Reflection;
     using System.Threading;
 
     using NLog;
@@ -56,6 +63,10 @@ namespace Utility
         /// </summary>
         private static bool init;
 
+        private static DebugInfoDetail debugInfoDetail = DebugInfoDetail.Engine | DebugInfoDetail.Error;
+
+        // Start with Engine messages enabled
+
         #endregion
 
         #region Public Events
@@ -68,13 +79,98 @@ namespace Utility
 
         #region Public Methods and Operators
 
+        public static void Debug(DebugInfoDetail detail, string msg)
+        {
+            if (debugInfoDetail.HasFlag(detail))
+            {
+                Debug(msg);
+            }
+        }
+
+        public static void Toggle(DebugInfoDetail detail)
+        {
+            if (debugInfoDetail.HasFlag(detail))
+            {
+                debugInfoDetail ^= detail;
+                Debug(string.Format("Debugging of {0} disabled.", detail.ToString()));
+            }
+            else
+            {
+                debugInfoDetail |= detail;
+                Debug(string.Format("Debugging of {0} enabled.", detail.ToString()));
+            }
+        }
+
+        public static void Toggle(string name)
+        {
+            FieldInfo[] fields = typeof(DebugInfoDetail).GetFields();
+            foreach (FieldInfo info in fields)
+            {
+                if (info.IsLiteral)
+                {
+                    if (String.Equals(info.Name, name, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Toggle((DebugInfoDetail)info.GetRawConstantValue());
+                        return;
+                    }
+                }
+            }
+
+            Console.Write("Enabled debug details: ");
+            string output = "";
+            List<string> details = new List<string>();
+            foreach (FieldInfo info in fields)
+            {
+                if (info.IsLiteral)
+                {
+                    if (debugInfoDetail.HasFlag((DebugInfoDetail)info.GetRawConstantValue()))
+                    {
+                        details.Add(info.Name);
+                    }
+                }
+            }
+
+            output = output + string.Join(", ", details);
+            output += ".";
+            ConsoleColor oldColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(output);
+            Console.ForegroundColor = oldColor;
+
+            if (name != "")
+            {
+                Console.WriteLine("Didn't recognize '{0}' as debug detail. Please choose from the following constants:");
+            }
+            else
+            {
+                Console.WriteLine("Available debug detail constants:");
+            }
+
+            foreach (FieldInfo info in fields)
+            {
+                if (info.IsLiteral)
+                {
+                    if (info.Name != "None")
+                    {
+                        Console.WriteLine(info.Name);
+                    }
+                }
+            }
+            Console.WriteLine();
+        }
+
+        public static bool HasDetail(DebugInfoDetail detail)
+        {
+            return (debugInfoDetail & detail) == detail;
+        }
+
         /// <summary>
         /// Writes a message into log (debug)
         /// </summary>
         /// <param name="msg">
         /// Message to write
         /// </param>
-        public static void Debug(string msg)
+        private static void Debug(string msg)
         {
             log.Debug(msg);
         }
@@ -203,10 +299,10 @@ namespace Utility
         /// <param name="format">
         /// </param>
         public static void LogException(
-            Action<string> logger, 
-            Exception e, 
-            bool addSystemInfo, 
-            string msg, 
+            Action<string> logger,
+            Exception e,
+            bool addSystemInfo,
+            string msg,
             params object[] format)
         {
             if (!string.IsNullOrEmpty(msg))
@@ -414,5 +510,41 @@ namespace Utility
         }
 
         #endregion
+    }
+
+    [Flags]
+    public enum DebugInfoDetail
+    {
+        Movement = 1,
+
+        Stats = 2,
+
+        Network = 4,
+
+        Database = 8,
+
+        NetworkMessages = 16,
+
+        ISComm = 32,
+
+        Zoning = 64,
+
+        Engine = 128,
+
+        GameFunctions = 256,
+
+        Error = 512,
+
+        Memory = 1024,
+
+        AoTomation = 2048,
+
+        KnuBot = 4096,
+
+        Statel = 8192,
+
+        Pool = 16384,
+
+        Shopping = 32768,
     }
 }

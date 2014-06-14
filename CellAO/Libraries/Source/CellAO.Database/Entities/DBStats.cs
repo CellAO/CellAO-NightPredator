@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,38 +25,50 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
 namespace CellAO.Database.Dao
 {
+    #region Usings ...
+
+    using CellAO.Database.Entities;
+
+    #endregion
+
     /// <summary>
     /// Data object for stats
     /// </summary>
-    public class DBStats
+    [Tablename("stats")]
+    public class DBStats : IDBEntity
     {
         #region Public Properties
 
         /// <summary>
-        /// Instance of the stat's owner
-        /// </summary>
-        public int instance { get; set; }
-
-        /// <summary>
         /// Stat number 
         /// </summary>
-        public int statid { get; set; }
+        public int StatId { get; set; }
 
         /// <summary>
         /// Stat's value
         /// </summary>
-        public int statvalue { get; set; }
+        public int StatValue { get; set; }
 
         /// <summary>
         /// Type id of the stat's owner
         /// </summary>
-        public int type { get; set; }
+        [ForeignKey]
+        public int Type { get; set; }
+
+        [ForeignKey]
+        public int Instance { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Instance of the stat's owner
+        /// </summary>
+        public int Id { get; set; }
     }
 }

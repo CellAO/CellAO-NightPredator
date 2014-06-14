@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,29 +35,31 @@ namespace CellAO.Core.Events
 
     using System;
     using System.Collections.Generic;
+    using System.Text;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Functions;
     using CellAO.Core.Requirements;
+    using CellAO.Enums;
+    using CellAO.Interfaces;
 
     #endregion
 
     /// <summary>
     /// </summary>
     [Serializable]
-    public class Events : IEvents
+    public class Event : IEvent
     {
         #region Fields
 
         /// <summary>
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        private int eventType;
-
+        // private int eventType;
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        private List<Functions> functions = new List<Functions>(10);
+        //private List<Functions> functions = new List<Functions>(10);
 
         #endregion
 
@@ -61,36 +68,19 @@ namespace CellAO.Core.Events
         /// <summary>
         /// Type of the Event (constants in ItemLoader)
         /// </summary>
-        public int EventType
-        {
-            get
-            {
-                return this.eventType;
-            }
-
-            set
-            {
-                this.eventType = value;
-            }
-        }
+        public EventType EventType { get; set; }
 
         /// <summary>
         /// List of Functions of the Event
         /// </summary>
-        public List<Functions> Functions
-        {
-            get
-            {
-                return this.functions;
-            }
-
-            set
-            {
-                this.functions = value;
-            }
-        }
+        public List<Function> Functions { get; set; }
 
         #endregion
+
+        public Event()
+        {
+            this.Functions = new List<Function>(10);
+        }
 
         #region Public Methods and Operators
 
@@ -98,12 +88,12 @@ namespace CellAO.Core.Events
         /// </summary>
         /// <returns>
         /// </returns>
-        public Events Copy()
+        public Event Copy()
         {
-            Events copy = new Events();
+            Event copy = new Event();
 
             copy.EventType = this.EventType;
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 copy.Functions.Add(functions.Copy());
             }
@@ -117,25 +107,45 @@ namespace CellAO.Core.Events
         /// </param>
         /// <param name="caller">
         /// </param>
-        public void Perform(ICharacter self, ICharacter caller)
+        public void Perform(ICharacter self, IEntity caller)
         {
-            foreach (Functions functions in this.Functions)
+            foreach (Function functions in this.Functions)
             {
                 bool result = true;
-                foreach (Requirements requirements in functions.Requirements)
+                for (int i = 0;i<functions.Requirements.Count;i++)
                 {
-                    result &= requirements.CheckRequirement(self);
-                    if (!result)
+                    if ((i == 0) && (functions.Requirements[i].ChildOperator == Operator.Or))
                     {
-                        break;
+                        result = false;
+                    }
+                    if (functions.Requirements[i].ChildOperator == Operator.Or)
+                    {
+                        result |= functions.Requirements[i].CheckRequirement(self);
+                    }
+                    else
+                    {
+                        result &= functions.Requirements[i].CheckRequirement(self);
                     }
                 }
 
                 if (result)
                 {
-                    self.Client.CallFunction(functions);
+                    self.Controller.CallFunction(functions, caller);
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Eventtype: " + this.EventType+" ("+((int)this.EventType).ToString()+")");
+            sb.AppendLine("Functions: " + this.Functions.Count);
+            foreach (Function fc in this.Functions)
+            {
+                sb.AppendLine(fc.ToString());
+            }
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         #endregion

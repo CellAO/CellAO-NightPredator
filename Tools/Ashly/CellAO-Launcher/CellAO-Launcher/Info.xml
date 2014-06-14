@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <!-- Server Ip in the form of an IP address 192.168.0.1 as an example -->
+  <ServerIP>192.168.0.1</ServerIP>
+  <!-- This is the Port of the Server you wish to connect to-->
+  <ServerPort>7500</ServerPort>
+  <!-- Host Type, IPaddress or Hostname-->
+  <HostType></HostType>
+  <!-- Directory of the EXE to run Anarchy Online-->
+  <AOExecutable></AOExecutable>
+  <!-- true or false statement here..-->
+  <UseEncryption>false</UseEncryption>
+  <!-- URL to set browser to-->
+  <Url>http://www.aocell.info</Url>
+</Config>

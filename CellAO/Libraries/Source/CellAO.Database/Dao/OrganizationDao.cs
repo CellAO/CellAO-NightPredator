@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -29,19 +34,14 @@ namespace CellAO.Database.Dao
     #region Usings ...
 
     using System;
-    using System.Data;
     using System.Linq;
-
-    using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// Data access object for Organization queries
     /// </summary>
-    public static class OrganizationDao
+    public class OrganizationDao : Dao<DBOrganization, OrganizationDao>
     {
         #region Public Methods and Operators
 
@@ -60,28 +60,19 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// true if successful
         /// </returns>
-        public static bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
+        public bool CreateOrganization(string desiredOrgName, DateTime creationDate, int leaderId)
         {
-            try
+            bool canBeCreated = !OrgExists(desiredOrgName);
+            if (canBeCreated)
             {
-                bool canBeCreated = !OrgExists(desiredOrgName);
-                if (canBeCreated)
-                {
-                    using (IDbConnection conn = Connector.GetConnection())
-                    {
-                        conn.Execute(
-                            "INSERT INTO organizations (creation, Name, LeaderID, GovernmentForm) VALUES (@creation, @name, @leaderid, 0)", 
-                            new { creation = creationDate, name = desiredOrgName, leaderid = leaderId });
-                    }
-                }
+                DBOrganization newOrganization = new DBOrganization();
+                newOrganization.LeaderId = leaderId;
+                newOrganization.Creation = creationDate;
+                newOrganization.Name = desiredOrgName;
+                this.Add(newOrganization);
+            }
 
-                return canBeCreated;
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return canBeCreated;
         }
 
         /// <summary>
@@ -93,59 +84,15 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// Government form as int
         /// </returns>
-        public static int GetGovernmentForm(int orgId)
+        public int GetGovernmentForm(int orgId)
         {
             if (orgId == 0)
             {
                 return 0;
             }
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<int>("SELECT GovernmentForm FROM organizations WHERE ID=@orgId", new { orgId })
-                            .Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
 
-        /// <summary>
-        /// Get data about the organization
-        /// </summary>
-        /// <param name="orgId">
-        /// Id of the organization
-        /// </param>
-        /// <returns>
-        /// DBOrganization object
-        /// </returns>
-        public static DBOrganization GetOrganizationData(int orgId)
-        {
-            try
-            {
-                if (!OrgExists(orgId))
-                {
-                    return null;
-                }
-
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBOrganization>("SELECT * FROM organizations WHERE ID=@orgId", new { orgId })
-                            .Single();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.Debug("Searched for org id:" + orgId);
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            DBOrganization temp = this.Get(orgId);
+            return temp.GovernmentForm;
         }
 
         /// <summary>
@@ -157,22 +104,15 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// Id of the organization
         /// </returns>
-        public static int GetOrganizationId(string orgName)
+        public int GetOrganizationId(string orgName)
         {
-            try
+            DBOrganization temp = this.GetAll(new { Name = orgName }).FirstOrDefault();
+            if (temp != null)
             {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<int>("SELECT ID FROM organizations WHERE Name=@name", new { name = orgName })
-                            .Single();
-                }
+                return temp.Id;
             }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+
+            return 0;
         }
 
         /// <summary>
@@ -184,23 +124,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// true if the organization exists
         /// </returns>
-        public static bool OrgExists(string name)
+        public bool OrgExists(string name)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<int>("SELECT count(*) FROM organizations WHERE Name=@name", new { name })
-                            .Single()
-                            .Equals(1);
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetAll(new { Name = name }).Any();
         }
 
         /// <summary>
@@ -212,20 +138,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// true if the organization exists
         /// </returns>
-        public static bool OrgExists(int orgId)
+        public bool OrgExists(int orgId)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query("SELECT ID FROM organizations WHERE ID=@orgId", new { orgId }).Any();
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.Get(orgId) != null;
         }
 
         /// <summary>
@@ -237,22 +152,11 @@ namespace CellAO.Database.Dao
         /// <param name="newLeaderId">
         /// Id of the new president
         /// </param>
-        public static void SetNewPrez(int orgId, int newLeaderId)
+        public void SetNewPrez(int orgId, int newLeaderId)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "UPDATE organizations SET LeaderID=@leaderId WHERE ID=@orgId", 
-                        new { newLeaderId, orgId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            DBOrganization temp = this.Get(orgId);
+            temp.LeaderId = newLeaderId;
+            this.Save(temp);
         }
 
         #endregion

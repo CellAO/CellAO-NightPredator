@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -28,70 +33,90 @@ namespace CellAO.Database.Dao
 {
     #region Usings ...
 
-    using System;
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
 
     using CellAO.Database.Entities;
+    using CellAO.Enums;
 
     using Dapper;
-
-    using Utility;
 
     #endregion
 
     /// <summary>
     /// Character Data Access Object
     /// </summary>
-    public static class CharacterDao
+    public class CharacterDao : Dao<DBCharacter, CharacterDao>
     {
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        /// <param name="buddyId">
+        /// </param>
+        public void AddBuddy(int characterId, int buddyId)
+        {
+            DBCharacter character = this.Get(characterId);
+            if (character != null)
+            {
+                // add the buddy to the character 
+                character.AddBuddy(buddyId);
+
+                // saves to the database
+                // DynamicParameters parameters = new DynamicParameters(character);  new{character.BuddyList should do it too
+                // parameters.Add("BuddyList", character.BuddyList); not needed, AddBuddy already adds the id to the CSV string
+                // this.Save(character, new { character.BuddyList });
+
+                // New: (we need to pass the id as parameter here)
+                this.Save(character, new { character.BuddyList, character.Id });
+            }
+        }
 
         /// <summary>
-        /// Insert a new character
         /// </summary>
-        /// <param name="character">
-        /// The DBCharacter object to store
+        /// <param name="id">
         /// </param>
-        public static void AddCharacter(DBCharacter character)
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        public new void Delete(int id, IDbConnection connection = null, IDbTransaction transaction = null)
         {
-            try
+            // NEW AND FUUUUUCK YOU VS
+            using (IDbConnection conn = connection ?? Connector.GetConnection())
             {
-                using (IDbConnection conn = Connector.GetConnection())
+                using (IDbTransaction trans = transaction ?? conn.BeginTransaction())
                 {
-                    conn.Execute(
-                        "INSERT INTO characters (Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4"
-                        + ",playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW,Username) VALUES (@Name, @FirstName, "
-                        + "@LastName, @Textures0, @Textures1, @Textures3, @Textures4, @Playfield, @X, @Y, @Z, @HeadingX, @HeadingY, "
-                        + "@HeadingZ, @HeadingW, @Online,@username)", 
-                        new
-                        {
-                            character.Name, 
-                            character.FirstName, 
-                            character.LastName, 
-                            character.Textures0, 
-                            character.Textures1, 
-                            character.Textures2, 
-                            character.Textures3, 
-                            character.Textures4, 
-                            character.Playfield, 
-                            character.X, 
-                            character.Y, 
-                            character.Z, 
-                            character.HeadingX, 
-                            character.HeadingY, 
-                            character.HeadingZ, 
-                            character.HeadingW, 
-                            Online = 0, 
-                            username = character.Username
-                        });
+                    // TODO : move these two to their own DAOs
+
+                    // remove this character from organisations
+
+                    DBOrganization org = OrganizationDao.Instance.GetAll(new { LeaderId = id }).FirstOrDefault();
+                    if (org != null)
+                    {
+                        // What to do if the leader deletes himself?
+                        // Lets remove the org for now, later on should it switch to secondhighest char in org?
+                        OrganizationDao.Instance.Delete(org.Id, conn, trans);
+
+                        // Remove the org's Stat from the other characters in the org too
+                        StatDao.Instance.Delete(new { StatValue = org.Id, StatId = (int)StatIds.clan });
+                    }
+
+                    // empty this characters inventory (items and instanced items)
+                    ItemDao.Instance.Delete(new { ContainerInstance = id });
+                    InstancedItemDao.Instance.Delete(new { ContainerInstance = id });
+
+                    // deletes this character
+                    base.Delete(id, conn, trans);
+
+                    // delete characters stats
+                    StatDao.Instance.Delete(new { type = 50000, Id = id });
+                    if (transaction == null)
+                    {
+                        trans.Commit();
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
             }
         }
 
@@ -104,72 +129,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// returns 1 if it exists
         /// </returns>
-        public static int CharExists(string name)
+        public bool ExistsByName(string name)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    int temp =
-                        conn.Query<int>("SELECT ID FROM characters where Name = @charname", new { charname = name })
-                            .Count();
-                    return temp;
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="charid">
-        /// </param>
-        public static void DeleteCharacter(int charid)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("charid", charid);
-                    conn.Execute("DELETE FROM `characters` WHERE ID = @charid", p);
-                    conn.Execute("DELETE FROM `organizations` WHERE ID = @charid", p);
-                    conn.Execute("DELETE FROM `inventory` WHERE ID = @charid", p);
-                }
-
-                StatDao.DeleteStats(50000, charid);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Load all Character data
-        /// </summary>
-        /// <returns>
-        /// Collection of DBCharacter
-        /// </returns>
-        public static IEnumerable<DBCharacter> GetAll()
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters");
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.GetByCharName(name) != null;
         }
 
         /// <summary>
@@ -181,23 +143,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// Collection of DBCharacter
         /// </returns>
-        public static IEnumerable<DBCharacter> GetAllForUser(string username)
+        public IEnumerable<DBCharacter> GetAllForUser(string username)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT ID, Username, Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW FROM characters WHERE Username=@username", 
-                            new { username });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return Instance.GetAll(new { Username = username });
         }
 
         /// <summary>
@@ -209,48 +157,9 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// DBCharacter object or null
         /// </returns>
-        public static DBCharacter GetByCharName(string name)
+        public DBCharacter GetByCharName(string name)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return conn.Query<DBCharacter>("SELECT * FROM characters WHERE Name=@name", new { name }).First();
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Load a Character by id
-        /// </summary>
-        /// <param name="characterId">
-        /// Id of the Character
-        /// </param>
-        /// <returns>
-        /// DBCharacter object
-        /// </returns>
-        public static IEnumerable<DBCharacter> GetById(int characterId)
-        {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<DBCharacter>(
-                            "SELECT Name, FirstName, LastName, Textures0,Textures1,Textures2,Textures3,Textures4,playfield as Playfield, "
-                            + "X,Y,Z,HeadingX,HeadingY,HeadingZ,HeadingW, UserName FROM characters where id = @id", 
-                            new { id = characterId });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return Instance.GetAll(new { Name = name }).FirstOrDefault();
         }
 
         /// <summary>
@@ -262,21 +171,21 @@ namespace CellAO.Database.Dao
         /// <returns>
         /// Name of the Character or string.Empty
         /// </returns>
-        public static string GetCharacterNameById(int characterId)
+        public string GetCharacterNameById(int characterId)
         {
-            try
+            const string SQL = "SELECT Name FROM characters WHERE ID=@characterId";
+            string name = null;
+            using (IDbConnection conn = Connector.GetConnection())
             {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    return
-                        conn.Query<string>("SELECT Name FROM characters WHERE ID=@characterId", new { characterId })
-                            .Single();
-                }
+                name = conn.Query<string>(SQL, new { characterId }).FirstOrDefault();
             }
-            catch
+
+            if (name == null)
             {
-                return string.Empty;
+                name = string.Empty;
             }
+
+            return name;
         }
 
         /// <summary>
@@ -287,24 +196,43 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <returns>
         /// </returns>
-        public static bool IsCharacterOnAccount(string userName, uint characterId)
+        public bool IsCharacterOnAccount(string userName, uint characterId)
         {
-            try
+            const string SQL = "SELECT id FROM characters where username=@userName AND id=@characterId";
+            bool result;
+
+            using (IDbConnection conn = Connector.GetConnection())
             {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    DynamicParameters p = new DynamicParameters();
-                    p.Add("userName", userName);
-                    p.Add("characterId", characterId);
-                    return
-                        conn.Query<int>("SELECT id FROM characters where username=@userName AND id=@characterId", p)
-                            .Count() == 1;
-                }
+                result = conn.Query<int>(SQL, new { userName, characterId }).Count() == 1;
             }
-            catch (Exception e)
+
+            return result;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="characterId">
+        /// </param>
+        /// <param name="buddyId">
+        /// </param>
+        public void RemoveBuddy(int characterId, int buddyId)
+        {
+            DBCharacter character = this.Get(characterId);
+            if (character != null)
             {
-                LogUtil.ErrorException(e);
-                throw;
+                // remove the buddy from the character 
+                character.RemoveBuddy(buddyId);
+
+                // saves to the database
+                // parameters.Add("BuddyList", character.BuddyList); Obsolete, RemoveBuddy removes from character object already
+
+                // CAUTION
+                // This could lead to a nasty multithreading issue
+                // RemoveBuddy reads, char logs (and saves) out and RemoveBuddy saves over it again
+                // this.Save(character, character);
+
+                // New:
+                this.Save(character, new { character.BuddyList, character.Id });
             }
         }
 
@@ -316,58 +244,57 @@ namespace CellAO.Database.Dao
         /// </param>
         /// <param name="pfNum">
         /// </param>
-        public static void SetPlayfield(int charId, int pfType, int pfNum)
+        /// <param name="connection">
+        /// </param>
+        /// <param name="transaction">
+        /// </param>
+        public void SetPlayfield(
+            int charId,
+            int pfType,
+            int pfNum,
+            IDbConnection connection = null,
+            IDbTransaction transaction = null)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    // TODO: extend character table for GameServerId, SgId and playfield type
-                    conn.Execute(
-                        "UPDATE characters SET playfield=@PF WHERE ID=@characterId", 
-                        new { PF = pfNum, characterId = charId });
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            // TODO: extend character table for GameServerId, SgId and playfield type
+            int rowsAffected = Instance.Save(
+                new DBCharacter(),
+                // completely empty one is enough here, parameters have higher priority
+                new { Playfield = pfNum, Id = charId });
+
+            // should ensure that rowsAffected == 1 otherwise ???
         }
 
         /// <summary>
-        /// Write back the position of the Characer
+        /// Check if character (id) is online
         /// </summary>
-        /// <param name="character">
-        /// DBCharacte object
+        /// <param name="id">
+        /// Id of the character
         /// </param>
-        public static void UpdatePosition(DBCharacter character)
+        /// <returns>
+        /// </returns>
+        public int IsOnline(int id)
         {
-            try
-            {
-                using (IDbConnection conn = Connector.GetConnection())
-                {
-                    conn.Execute(
-                        "UPDATE characters SET X = @X, Y = @Y, Z = @Z, HeadingX=@hX, HeadingY=@hY, HeadingZ=@hZ, HeadingW=@hW WHERE id=@Id", 
-                        new
-                        {
-                            character.X, 
-                            character.Y, 
-                            character.Z, 
-                            character.Id, 
-                            hX = character.HeadingX, 
-                            hZ = character.HeadingZ, 
-                            hY = character.HeadingY, 
-                            hW = character.HeadingW
-                        });
-                }
-            }
-            catch (Exception e)
-            {
-                LogUtil.ErrorException(e);
-                throw;
-            }
+            return this.Get(id).Online;
         }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        /// <param name="id">
+        /// </param>
+        public void SetOffline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 0 }, new { Id = id, Online = 0 });
+        }
+
+        /// <summary>
+        /// Set online flag in table
+        /// </summary>
+        /// <param name="id">
+        /// Id of the character
+        /// </param>
+        public void SetOnline(int id)
+        {
+            this.Save(new DBCharacter() { Id = id, Online = 1 }, new { Id = id, Online = 1 });
+        }
     }
 }

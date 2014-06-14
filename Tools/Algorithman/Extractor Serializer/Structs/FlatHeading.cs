@@ -65,10 +65,10 @@ namespace Extractor_Serializer.Structs
         public void ReadFromStream(Stream stream)
         {
             BinaryReader br = new BinaryReader(stream);
-            this.X = br.ReadSingle();
-            this.Y = br.ReadSingle();
-            this.Z = br.ReadSingle();
             this.W = br.ReadSingle();
+            this.Z = br.ReadSingle();
+            this.Y = br.ReadSingle();
+            this.X = br.ReadSingle();
         }
 
         #endregion

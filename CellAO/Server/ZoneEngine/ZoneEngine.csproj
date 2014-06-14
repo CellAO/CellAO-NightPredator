@@ -13,16 +13,22 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
     <OutputPath>..\..\Built\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,7 +42,24 @@
   <PropertyGroup>
     <ApplicationIcon>zone.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <BaseAddress>4194304</BaseAddress>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.12.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Dapper.1.13\lib\net40\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetZip.1.9.2\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="MemBus, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MemBus.2.0.2\lib\Net40-Client\MemBus.dll</HintPath>
@@ -52,15 +75,12 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, PublicKeyToken=47d7877cb3620160">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\zlib.net.1.0.4.0\lib\zlib.net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionAssemblyInfo.cs">
@@ -69,25 +89,43 @@
     <Compile Include="ChatCommands\ChatCommandGet.cs" />
     <Compile Include="ChatCommands\ChatCommandGiveItem.cs" />
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
-    <Compile Include="ChatCommands\ChatCommandTeleport.cs" />
-    <Compile Include="ChatCommands\ListStatels.cs" />
+    <Compile Include="ChatCommands\DebugItem.cs" />
+    <Compile Include="ChatCommands\InstaGrid.cs" />
+    <Compile Include="ChatCommands\MakeShop.cs" />
+    <Compile Include="ChatCommands\Npc.cs" />
+    <Compile Include="ChatCommands\SaveProxy.cs" />
+    <Compile Include="ChatCommands\Spawn.cs" />
+    <Compile Include="ChatCommands\TeleportDynel.cs" />
+    <Compile Include="ChatCommands\Teleport.cs" />
+    <Compile Include="ChatCommands\ChatCommandListStatels.cs" />
     <Compile Include="ChatCommands\PlayfieldList.cs" />
     <Compile Include="ChatCommands\ShowStatel.cs" />
-    <Compile Include="Component\ClientFactory.cs" />
+    <Compile Include="ChatCommands\tpout.cs" />
+    <Compile Include="ChatCommands\tptoproxy.cs" />
+    <Compile Include="ChatCommands\WalkingTest.cs" />
+    <Compile Include="ChatCommands\Weather.cs" />
+    <Compile Include="Core\Controllers\NPCController.cs" />
+    <Compile Include="Core\Controllers\PlayerController.cs" />
     <Compile Include="Core\Functions\FunctionCollection.cs" />
     <Compile Include="Core\Functions\FunctionPrototype.cs" />
     <Compile Include="Core\Functions\GameFunctions\applytexture.cs" />
     <Compile Include="Core\Functions\GameFunctions\backmesh.cs" />
     <Compile Include="Core\Functions\GameFunctions\changebodymesh.cs" />
+    <Compile Include="Core\Functions\GameFunctions\shophash.cs" />
+    <Compile Include="Core\Functions\GameFunctions\exitproxyplayfield.cs" />
     <Compile Include="Core\Functions\GameFunctions\headmesh.cs" />
     <Compile Include="Core\Functions\GameFunctions\hit.cs" />
     <Compile Include="Core\Functions\GameFunctions\lineteleport.cs" />
     <Compile Include="Core\Functions\GameFunctions\modify.cs" />
     <Compile Include="Core\Functions\GameFunctions\modifypercentage.cs" />
     <Compile Include="Core\Functions\GameFunctions\openbank.cs" />
+    <Compile Include="Core\Functions\GameFunctions\teleportproxy.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\Functions\GameFunctions\set.cs" />
     <Compile Include="Core\Functions\GameFunctions\systemtext.cs" />
     <Compile Include="Core\Functions\GameFunctions\teleport.cs" />
+    <Compile Include="Core\Functions\GameFunctions\teleportproxy2.cs" />
     <Compile Include="Core\Functions\GameFunctions\uploadnano.cs" />
     <Compile Include="Core\IntermalMessageEvents\PlayfieldMessageReceivedEvent.cs" />
     <Compile Include="Core\InternalMessages\IMExecuteFunction.cs" />
@@ -99,44 +137,59 @@
     <Compile Include="Core\InternalMessages\IMSendPlayerSCFUs.cs" />
     <Compile Include="Core\InternalMessages\InternalMessage.cs" />
     <Compile Include="Core\InternalMessages\InternalMessageBody.cs" />
-    <Compile Include="Core\MessageHandlers\CharacterActionHandler.cs" />
-    <Compile Include="Core\MessageHandlers\CharDCMoveHandler.cs" />
-    <Compile Include="Core\MessageHandlers\CharInPlayHandler.cs" />
-    <Compile Include="Core\MessageHandlers\ChatCmdHandler.cs" />
-    <Compile Include="Core\MessageHandlers\ContainerAddItemHandler.cs" />
-    <Compile Include="Core\MessageHandlers\FollowTargetHandler.cs" />
-    <Compile Include="Core\MessageHandlers\GenericCmdHandler.cs" />
-    <Compile Include="Core\MessageHandlers\LookAtHandler.cs" />
-    <Compile Include="Core\MessageHandlers\SkillHandler.cs" />
-    <Compile Include="Core\MessageHandlers\SocialActionCmdHandler.cs" />
-    <Compile Include="Core\MessageHandlers\VicinityChatHandler.cs" />
+    <Compile Include="Core\KnuBot\BaseKnuBot.cs" />
+    <Compile Include="Core\KnuBot\KnuBotDialogTree.cs" />
+    <Compile Include="Core\MessageHandlers\AddTemplateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\AppearanceUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\BankMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CastNanoMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CharacterActionMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CharacterInfoPacketMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CharDCMoveMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\CharInPlayMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ChatCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ChatServerInfoMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ChatTextMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ContainerAddItemMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\DespawnMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\FeedbackMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\FollowTargetMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\FullCharacterMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\GenericCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\InventoryUpdatedMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\InventoryUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotAnswerListMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotAnswerMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotAppendTextMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotCloseChatWindowMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotFinishTradeMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotOpenChatWindowMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotRejectedItemsMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotStartTradeMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\KnuBotTradeMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\LookAtMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\PlayfieldAnarchyFMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ResearchRequestMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ResearchUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\ShopUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\SimpleItemFullUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\SkillMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\SocialActionCmdMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\StatMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\TeleportMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\TemplateActionMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\TradeMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\VendingMachineFullUpdateMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\VicinityChatMessageHandler.cs" />
+    <Compile Include="Core\MessageHandlers\WeatherControlMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\ZoneLoginMessageHandler.cs" />
-    <Compile Include="Core\PacketHandlers\CharacterAction.cs" />
-    <Compile Include="Core\PacketHandlers\CharacterInPlay.cs" />
-    <Compile Include="Core\PacketHandlers\CharDCMove.cs" />
     <Compile Include="Core\PacketHandlers\ClientConnected.cs" />
-    <Compile Include="Core\PacketHandlers\ContainerAddItem.cs" />
-    <Compile Include="Core\PacketHandlers\GenericCmd.cs" />
-    <Compile Include="Core\PacketHandlers\N3Teleport.cs" />
     <Compile Include="Core\PacketHandlers\OrgClient.cs" />
     <Compile Include="Core\PacketHandlers\TradeSkillReceiver.cs" />
-    <Compile Include="Core\Packets\AddTemplate.cs" />
-    <Compile Include="Core\Packets\AppearanceUpdate.cs" />
-    <Compile Include="Core\PacketHandlers\ChatCommandHandler.cs" />
     <Compile Include="Core\Packets\Bulk.cs" />
-    <Compile Include="Core\Packets\ChatServerInfo.cs" />
-    <Compile Include="Core\Packets\ChatText.cs" />
-    <Compile Include="Core\Packets\DeleteItem.cs" />
-    <Compile Include="Core\Packets\Despawn.cs" />
     <Compile Include="Core\Packets\Equip.cs" />
-    <Compile Include="Core\Packets\FullCharacter.cs" />
-    <Compile Include="Core\Packets\OpenBank.cs" />
-    <Compile Include="Core\Packets\PlayfieldAnarchyF.cs" />
-    <Compile Include="Core\Packets\SendFeedback.cs" />
     <Compile Include="Core\Packets\SimpleCharFullUpdate.cs" />
     <Compile Include="Core\Packets\Stat.cs" />
-    <Compile Include="Core\Packets\Teleport.cs" />
-    <Compile Include="Core\Packets\TemplateAction.cs" />
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />
@@ -152,6 +205,15 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ChatCommands\AOChatCommand.cs" />
+    <None Include="Scripts\KnuBotFlappy.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Scripts\InfoBot.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Scripts\KnuBotItemGiver.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Script\IAOScript.cs" />
     <Compile Include="Script\ScriptCompiler.cs" />
   </ItemGroup>
@@ -192,17 +254,13 @@
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\Exceptions\Exceptions.csproj">
+    <ProjectReference Include="..\..\Libraries\Source\Exceptions\CellAO.Exceptions.csproj">
       <Project>{ddd3b520-1f43-4eef-a2a9-fc621424090a}</Project>
-      <Name>Exceptions</Name>
+      <Name>CellAO.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\NiceHexOutput\NiceHexOutput.csproj">
-      <Project>{2ea014b6-1118-4ad0-8602-33d476efdd24}</Project>
-      <Name>NiceHexOutput</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Translations\Translations.csproj">
       <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>
@@ -316,6 +374,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Component\" />
     <Folder Include="Core\InternalMessageHandler\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

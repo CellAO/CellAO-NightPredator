@@ -1,14 +1,14 @@
 CREATE TABLE  `shopinventorytemplates` (
-  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `HASH` varchar(100) NOT NULL,
-  `lowID` int(11) DEFAULT NULL,
-  `highID` int(11) DEFAULT NULL,
-  `minQL` int(11) DEFAULT NULL,
-  `maxQL` int(11) DEFAULT NULL,
-  `multiplecount` int(11) DEFAULT NULL,
-  `admindescription`varchar(256) NOT NULL DEFAULT '""',
-  `active` int(1) DEFAULT NULL,
-  PRIMARY KEY (`ID`,`HASH`)
+  `Id` int(32) unsigned NOT NULL AUTO_INCREMENT,
+  `Hash` varchar(100) NOT NULL,
+  `LowId` int(32) DEFAULT NULL,
+  `HighId` int(32) DEFAULT NULL,
+  `MinQl` int(32) DEFAULT NULL,
+  `MaxQl` int(32) DEFAULT NULL,
+  `MultipleCount` int(32) DEFAULT NULL,
+  `AdminDescription`varchar(256) NOT NULL DEFAULT '""',
+  `Active` int(1) DEFAULT NULL,
+  PRIMARY KEY (`Id`,`HASH`)
 ) ENGINE=MyISAM AUTO_INCREMENT=313745 DEFAULT CHARSET=latin1;
 
 insert into `shopinventorytemplates` (`HASH`,`lowID`,`highID`,`minQL`,`maxQL`,`multiplecount`,`admindescription`,`active`) VALUES ('GenN',26464,26464,10,10,1, 'Nano Crystal (1H Blunt Weapon Expertise)', 1);

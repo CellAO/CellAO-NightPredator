@@ -41,6 +41,44 @@ namespace Extractor_Serializer
     /// </summary>
     public class Extractor : IDisposable
     {
+        public enum RecordType
+        {
+            /// <summary>
+            /// 0xF4254
+            /// </summary>
+            Item = 0xF4254,
+            
+            /// <summary>
+            ///  0xFDE85
+            /// </summary>
+            Nano = 0xFDE85,
+            
+            /// <summary>
+            /// 1000001
+            /// </summary>
+            Playfield = 1000001,
+
+            /// <summary>
+            /// 1000030
+            /// </summary>
+            Door = 1000030,
+            /// <summary>
+            /// 1000021
+            /// </summary>
+            Wall = 1000021,
+
+            /// <summary>
+            /// 1000026
+            /// </summary>
+            Statel = 1000026,
+            
+            /// <summary>
+            /// 1010008
+            /// </summary>
+            Icon = 1010008
+
+        }
+
         #region Fields
 
         /// <summary>
@@ -141,7 +179,6 @@ namespace Extractor_Serializer
             }
 
             bStream.Close();
-            bStream.Dispose();
         }
 
         /// <summary>
@@ -197,19 +234,20 @@ namespace Extractor_Serializer
         /// </returns>
         /// <exception cref="InvalidDataException">
         /// </exception>
-        public byte[] GetRecordData(int RecordType, int RecordInstance, bool decode = false)
+        public byte[] GetRecordData(Extractor.RecordType recordType, int recinstance, bool decode = false)
         {
-            uint position = this.Records[RecordType][RecordInstance];
+            int rectype = (int)recordType;
+            uint position = this.Records[rectype][recinstance];
             byte[] buffer = this.SegRead(34u, position);
             bStream bStream = new bStream(buffer);
             int num = bStream.ReadInt32_At(10u);
-            if (RecordType != num)
+            if (rectype != num)
             {
                 throw new InvalidDataException("Invalid Record Type");
             }
 
             int num2 = bStream.ReadInt32();
-            if (RecordInstance != num2)
+            if (recinstance != num2)
             {
                 throw new InvalidDataException("Invalid Record Instance");
             }
@@ -218,7 +256,7 @@ namespace Extractor_Serializer
             byte[] array = this.SegRead(count, 4294967295u);
             if (decode)
             {
-                ulong num3 = (ulong)RecordInstance;
+                ulong num3 = (ulong)recinstance;
                 int i = 0;
                 while (i < array.Length)
                 {
@@ -242,9 +280,9 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="int[]"/>.
         /// </returns>
-        public int[] GetRecordInstances(int recordType)
+        public int[] GetRecordInstances(Extractor.RecordType recordType)
         {
-            return this.Records[recordType].Keys.ToArray();
+            return this.Records[(int)recordType].Keys.ToArray();
         }
 
         /// <summary>
@@ -261,18 +299,18 @@ namespace Extractor_Serializer
         /// <summary>
         /// The is valid instance.
         /// </summary>
-        /// <param name="RecordType">
+        /// <param name="recordType">
         /// The record type.
         /// </param>
-        /// <param name="RecordInstance">
+        /// <param name="recordInstance">
         /// The record instance.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool IsValidInstance(int RecordType, int RecordInstance)
+        public bool IsValidInstance(Extractor.RecordType recordType, int recordInstance)
         {
-            return this.Records.ContainsKey(RecordType) && this.Records[RecordType].ContainsKey(RecordInstance);
+            return this.Records.ContainsKey((int)recordType) && this.Records[(int)recordType].ContainsKey(recordInstance);
         }
 
         /// <summary>
@@ -284,9 +322,9 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool IsValidType(int recordType)
+        public bool IsValidType(Extractor.RecordType recordType)
         {
-            return this.Records.ContainsKey(recordType);
+            return this.Records.ContainsKey((int) recordType);
         }
 
         #endregion
@@ -306,7 +344,6 @@ namespace Extractor_Serializer
                 foreach (bStream current in this.DATs)
                 {
                     current.Close();
-                    current.Dispose();
                 }
             }
         }

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -33,10 +38,15 @@ namespace ZoneEngine.Core.Playfields
     using System.Linq;
 
     using CellAO.Core.Events;
+    using CellAO.Core.Functions;
     using CellAO.Core.Items;
     using CellAO.Core.Playfields;
     using CellAO.Core.Statels;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
     using CellAO.Enums;
+
+    using MsgPack;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
 
@@ -87,21 +97,88 @@ namespace ZoneEngine.Core.Playfields
             {
                 foreach (StatelData sd in pfd.Statels)
                 {
+                    bool foundproxyteleport = false;
+                    int playfieldid = 0;
+                    int doorinstance = 0;
+                    foreach (Event ev in sd.Events)
+                    {
+                        foreach (Function f in ev.Functions)
+                        {
+                            if (f.FunctionType == (int)FunctionType.TeleportProxy)
+                            {
+                                foundproxyteleport = true;
+                                playfieldid = f.Arguments.Values[1].AsInt32();
+                                doorinstance =
+                                    (int)
+                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                         | (f.Arguments.Values[2].AsInt32() << 16));
+                                DBTeleport teleporter =
+                                    TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
+                                        .FirstOrDefault();
+                                if (teleporter != null)
+                                {
+                                    doorinstance = (int)teleporter.destinationInstance;
+                                    f.Arguments.Values[2] = new MessagePackObject(((doorinstance >> 16) & 0xff));
+                                }
+                                break;
+                            }
+                            if (f.FunctionType == (int)FunctionType.TeleportProxy2)
+                            {
+                                playfieldid = f.Arguments.Values[1].AsInt32();
+                                doorinstance =
+                                    (int)
+                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                         | (f.Arguments.Values[2].AsInt32() << 16));
+                                DBTeleport teleporter =
+                                    TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
+                                        .FirstOrDefault();
+                                if (teleporter != null)
+                                {
+                                    doorinstance = (int)teleporter.destinationInstance;
+                                    f.Arguments.Values[2] = new MessagePackObject(((doorinstance >> 16) & 0xff));
+                                }
+                            }
+                        }
+                        if (foundproxyteleport)
+                        {
+                            break;
+                        }
+                    }
+
                     if (ItemLoader.ItemList.ContainsKey(sd.TemplateId))
                     {
                         if (ItemLoader.ItemList[sd.TemplateId].WantsCollision()
-                            && (!sd.Events.Any(x => x.EventType == (int)EventType.OnCollide))
-                            && sd.Events.Any(x => x.EventType == (int)EventType.OnUse))
+                            && !ItemLoader.ItemList[sd.TemplateId].StatelCollisionDisabled()
+                            && (sd.Events.All(x => x.EventType != EventType.OnCollide))
+                            && sd.Events.Any(x => x.EventType == EventType.OnUse))
                         {
-                            Events ev = sd.Events.First(x => x.EventType == (int)EventType.OnUse).Copy();
-                            ev.EventType = (int)EventType.OnCollide;
+                            Event ev = sd.Events.First(x => x.EventType == EventType.OnUse).Copy();
+                            ev.EventType = EventType.OnCollide;
                             sd.Events.Add(ev);
+                        }
+                    }
+
+                    if (foundproxyteleport)
+                    {
+                        if (PFData.ContainsKey(playfieldid))
+                        {
+                            StatelData internalDoor = PFData[playfieldid].GetDoor(doorinstance);
+                            if (internalDoor != null)
+                            {
+                                if (internalDoor.Events.All(x => x.EventType != EventType.OnEnter))
+                                {
+                                    Event ev = new Event();
+                                    ev.EventType = EventType.OnEnter;
+                                    ev.Functions.Add(
+                                        new Function() { FunctionType = (int)FunctionType.ExitProxyPlayfield });
+                                    internalDoor.Events.Add(ev);
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            GC.Collect();
             return PFData.Count;
         }
 

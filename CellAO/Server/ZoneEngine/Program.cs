@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -30,12 +35,15 @@ namespace ZoneEngine
 
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Client;
     using CellAO.Communication.Messages;
-    using CellAO.Core.Components;
+    using CellAO.Core.Actions;
+    using CellAO.Core.Events;
     using CellAO.Core.Items;
     using CellAO.Core.Nanos;
     using CellAO.Database;
@@ -62,25 +70,7 @@ namespace ZoneEngine
     /// </summary>
     internal class Program
     {
-        // TODO: Find out why the MEFs are not working under MONO 2.10
-
         #region Static Fields
-
-        /// <summary>
-        /// </summary>
-        public static readonly IContainer Container = new MefContainer();
-
-        /// <summary>
-        /// </summary>
-        public static bool DebugGameFunctions;
-
-        /// <summary>
-        /// </summary>
-        public static bool DebugNetwork;
-
-        /// <summary>
-        /// </summary>
-        public static bool DebugZoning;
 
         /// <summary>
         /// </summary>
@@ -88,15 +78,11 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        public static ScriptCompiler csc;
-
-        /// <summary>
-        /// </summary>
         public static ZoneServer zoneServer;
 
         /// <summary>
         /// </summary>
-        private static ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
+        private static readonly ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
 
         /// <summary>
         /// </summary>
@@ -124,10 +110,11 @@ namespace ZoneEngine
         {
             try
             {
-                zoneServer = Container.GetInstance<ZoneServer>();
+                zoneServer = new ZoneServer();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return false;
             }
 
@@ -152,7 +139,7 @@ namespace ZoneEngine
                         if (args[0].ToLower() == "/autostart")
                         {
                             Console.WriteLine(locales.ServerConsoleAutostart);
-                            csc.Compile(false);
+                            ScriptCompiler.Instance.Compile(false);
                             StartTheServer();
                         }
                     }
@@ -160,7 +147,6 @@ namespace ZoneEngine
                     processedargs = true;
                 }
 
-                Console.Write(Environment.NewLine + "{0} >>", locales.ServerConsoleCommand);
                 string consoleCommand = Console.ReadLine();
 
                 if (consoleCommand != null)
@@ -169,6 +155,10 @@ namespace ZoneEngine
                     {
                         ShowCommandHelp();
                     }
+                }
+                else
+                {
+                    Thread.Sleep(1000);
                 }
             }
         }
@@ -184,8 +174,9 @@ namespace ZoneEngine
             if (zoneServer != null)
             {
                 exited = true;
+                ISComClient.ShutDown();
                 zoneServer.DisconnectAllClients();
-                LogUtil.Debug("Shutting down ZoneEngine hard");
+                LogUtil.Debug(DebugInfoDetail.Engine, "Shutting down ZoneEngine hard");
             }
         }
 
@@ -193,7 +184,7 @@ namespace ZoneEngine
         /// </summary>
         /// <param name="messageobject">
         /// </param>
-        private static void ISComClientOnReceiveData(DynamicMessage messageobject)
+        private static void ISComClientOnReceiveData(object sender, DynamicMessage messageobject)
         {
             zoneServer.ProcessISComMessage(messageobject);
         }
@@ -212,8 +203,9 @@ namespace ZoneEngine
                 chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
                 port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return false;
             }
 
@@ -222,8 +214,9 @@ namespace ZoneEngine
                 ISComClient.OnReceiveData += ISComClientOnReceiveData;
                 ISComClient.Connect(chatEngineIp, port);
             }
-            catch
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
                 return true;
             }
 
@@ -281,15 +274,6 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorTCPIPSetup);
-                Colouring.Pop();
-                Colouring.Pop();
-                return false;
-            }
-
-            if (!InitializeScriptCompiler())
-            {
-                Colouring.Push(ConsoleColor.Red);
-                Console.WriteLine(locales.ErrorCreatingScriptCompilerInstance);
                 Colouring.Pop();
                 Colouring.Pop();
                 return false;
@@ -362,13 +346,24 @@ namespace ZoneEngine
             consoleCommands.AddEntry("online", ShowOnlineCharacters);
             consoleCommands.AddEntry("ls", ListAvailableScripts);
 
-            consoleCommands.AddEntry("debuggamefunctions", SetDebugGameFunctions);
-
-            consoleCommands.AddEntry("debugnetwork", SetDebugNetwork);
-
-            consoleCommands.AddEntry("debugzoning", SetDebugZoning);
+            consoleCommands.AddEntry("debug", SetDebug);
 
             return true;
+        }
+
+        private static void SetDebug(string[] obj)
+        {
+            if (obj.Length == 1)
+            {
+                LogUtil.Toggle("");
+            }
+            else
+            {
+                for (int i = 1; i < obj.Length; i++)
+                {
+                    LogUtil.Toggle(obj[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -381,7 +376,7 @@ namespace ZoneEngine
             {
                 Colouring.Push(ConsoleColor.Green);
                 Console.WriteLine(
-                    "{0} Game functions loaded", 
+                    "{0} Game functions loaded",
                     FunctionCollection.Instance.NumberofRegisteredFunctions());
             }
             catch (Exception e)
@@ -415,28 +410,12 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorInitializingNLogNBug);
                 Console.WriteLine(e.Message);
                 Colouring.Pop();
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        private static bool InitializeScriptCompiler()
-        {
-            try
-            {
-                csc = new ScriptCompiler();
-            }
-            catch (Exception)
-            {
                 return false;
             }
 
@@ -465,11 +444,14 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorIPAddressParseFailed);
                 Console.Write(e.Message);
                 Colouring.Pop();
                 Console.ReadKey();
+
                 return false;
             }
 
@@ -506,8 +488,8 @@ namespace ZoneEngine
             Console.WriteLine(locales.ServerConsoleAvailableScripts + ":");
 
             string[] files = Directory.GetFiles(
-                "Scripts" + Path.DirectorySeparatorChar, 
-                "*.cs", 
+                "Scripts" + Path.DirectorySeparatorChar,
+                "*.cs",
                 SearchOption.AllDirectories);
             if (files.Length == 0)
             {
@@ -535,10 +517,13 @@ namespace ZoneEngine
             Colouring.Push(ConsoleColor.Green);
             try
             {
+                
                 Console.WriteLine(locales.ItemLoaderLoadedItems, ItemLoader.CacheAllItems());
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorReadingItemsFile);
@@ -557,6 +542,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine(locales.ErrorReadingNanosFile);
@@ -575,6 +562,8 @@ namespace ZoneEngine
             }
             catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 Colouring.Pop();
                 Colouring.Push(ConsoleColor.Red);
                 Console.WriteLine("Error reading statels.dat");
@@ -598,8 +587,10 @@ namespace ZoneEngine
             {
                 int temp = TradeSkill.Instance.ItemNames.Count;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                LogUtil.ErrorException(e);
+
                 return false;
             }
 
@@ -651,66 +642,6 @@ namespace ZoneEngine
 
         /// <summary>
         /// </summary>
-        /// <param name="parts">
-        /// </param>
-        private static void SetDebugGameFunctions(string[] parts)
-        {
-            DebugGameFunctions = !DebugGameFunctions;
-            Colouring.Push(ConsoleColor.Green);
-            if (DebugGameFunctions)
-            {
-                Console.WriteLine("Debugging Game functions enabled");
-            }
-            else
-            {
-                Console.WriteLine("Debugging Game functions disabled");
-            }
-
-            Colouring.Pop();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="parts">
-        /// </param>
-        private static void SetDebugNetwork(string[] parts)
-        {
-            DebugNetwork = !DebugNetwork;
-            Colouring.Push(ConsoleColor.Green);
-            if (DebugNetwork)
-            {
-                Console.WriteLine("Debugging of network traffic enabled");
-            }
-            else
-            {
-                Console.WriteLine("Debugging of network traffic disabled");
-            }
-
-            Colouring.Pop();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="parts">
-        /// </param>
-        private static void SetDebugZoning(string[] parts)
-        {
-            DebugZoning = !DebugZoning;
-            Colouring.Push(ConsoleColor.Green);
-            if (DebugZoning)
-            {
-                Console.WriteLine("Debugging of zoning enabled");
-            }
-            else
-            {
-                Console.WriteLine("Debugging of zoning disabled");
-            }
-
-            Colouring.Pop();
-        }
-
-        /// <summary>
-        /// </summary>
         private static void ShowCommandHelp()
         {
             Colouring.Push(ConsoleColor.White);
@@ -738,7 +669,8 @@ namespace ZoneEngine
                     foreach (ZoneClient c in zoneServer.Clients)
                     {
                         Console.WriteLine(
-                            "Character " + c.Character.Name + " online in PF " + c.Character.Playfield.Identity.Instance);
+                            "Character " + c.Controller.Character.Name + " online in PF "
+                            + c.Controller.Character.Playfield.Identity.Instance);
                     }
                 }
 
@@ -776,7 +708,7 @@ namespace ZoneEngine
             else
             {
                 // TODO: Add Sql Check.
-                csc.Compile(false);
+                ScriptCompiler.Instance.Compile(false);
                 StartTheServer();
             }
         }
@@ -797,7 +729,7 @@ namespace ZoneEngine
             else
             {
                 // TODO: Add Sql Check.
-                csc.Compile(true);
+                ScriptCompiler.Instance.Compile(true);
                 StartTheServer();
             }
         }
@@ -808,13 +740,14 @@ namespace ZoneEngine
         {
             // TODO: Read playfield data, check which playfields have to be created, and create them
             // TODO: Cache neccessary Spawns and Mobs
-            // TODO: Cache neccessary Doors
+            // TODO: Cache neccessary Doors 
             // TODO: Cache neccessary statels
             // TODO: Cache Vendors
 
             // Console.WriteLine(Core.Playfields.Playfields.Instance.playfields[0].name);
 
-            Console.WriteLine(csc.AddScriptMembers() + " chat commands loaded");
+            ScriptCompiler.Instance.Compile(true);
+            Console.WriteLine(ScriptCompiler.Instance.AddScriptMembers() + " chat commands loaded");
             zoneServer.Start(true, false);
         }
 

@@ -43,7 +43,7 @@ namespace Extractor_Serializer
 
     using MsgPack;
 
-    using NiceHexOutput;
+    using Utility;
 
     #endregion
 
@@ -145,15 +145,17 @@ namespace Extractor_Serializer
         /// <param name="data">
         /// The data.
         /// </param>
-        /// <param name="itemnamessql">
+        /// <param name="itemNamesSqlList">
         /// </param>
         /// <returns>
         /// The <see cref="AOItem"/>.
         /// </returns>
-        public ItemTemplate ParseItem(int rectype, int recnum, byte[] data, List<string> itemnamessql)
+        public ItemTemplate ParseItem(Extractor.RecordType recordType, int recnum, byte[] data, List<string> itemNamesSqlList)
         {
+            int rectype = (int)recordType;
             this.br = new BufferedReader(rectype, recnum, data);
             ItemTemplate aoi = new ItemTemplate();
+
             aoi.ID = recnum;
             this.br.Skip(16);
 
@@ -196,9 +198,13 @@ namespace Extractor_Serializer
                 itemname = this.br.ReadString(num5);
             }
 
-            if (itemnamessql != null)
+            if (itemNamesSqlList != null)
             {
-                itemnamessql.Add("(" + recnum + ",'" + itemname.Replace("'", "''") + "')");
+                itemNamesSqlList.Add(string.Format("( {0} , '{1}' , '{2}', '{3}' ) ",
+                    recnum,
+                    itemname.Replace("'", "''"),
+                    Enum.GetName(typeof(Extractor.RecordType), recordType),
+                    aoi.getItemAttribute(79)));
             }
 
             if (num6 > 0)
@@ -211,7 +217,7 @@ namespace Extractor_Serializer
             {
                 while (this.br.Ptr < this.br.Buffer.Length - 8 && flag4)
                 {
-                    switch (this.br.ReadInt32())
+                    switch (this.br.ReadInt32()) // what are these ints ?
                     {
                         case 2:
                             this.ParseFunctionSet(aoi.Events);
@@ -236,12 +242,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aoi.Attack, aoi.Defend);
                             break;
                         case 6:
-                        {
-                            this.br.Skip(4);
-                            int count = this.br.Read3F1() * 8;
-                            this.br.Skip(count);
-                            break;
-                        }
+                            {
+                                this.br.Skip(4);
+                                int count = this.br.Read3F1() * 8;
+                                this.br.Skip(count);
+                                break;
+                            }
 
                         case 14:
                             this.ParseAnimSoundSet(1, aoi);
@@ -260,7 +266,7 @@ namespace Extractor_Serializer
                     }
 
                     continue;
-                    IL_4BF:
+                IL_4BF:
                     flag4 = false;
                 }
             }
@@ -286,9 +292,9 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="AONanos"/>.
         /// </returns>
-        public NanoFormula ParseNano(int rectype, int recnum, byte[] data, string sqlFile)
+        public NanoFormula ParseNano(int recnum, byte[] data, string sqlFile)
         {
-            this.br = new BufferedReader(rectype, recnum, data);
+            this.br = new BufferedReader((int)Extractor.RecordType.Nano, recnum, data);
             NanoFormula aon = new NanoFormula();
             aon.ID = recnum;
             this.br.Skip(16);
@@ -361,12 +367,12 @@ namespace Extractor_Serializer
                             this.ParseAtkDefSet(aon.Attack, aon.Defend);
                             break;
                         case 6:
-                        {
-                            this.br.Skip(4);
-                            int count = this.br.Read3F1() * 8;
-                            this.br.Skip(count);
-                            break;
-                        }
+                            {
+                                this.br.Skip(4);
+                                int count = this.br.Read3F1() * 8;
+                                this.br.Skip(count);
+                                break;
+                            }
 
                         case 14:
                             this.ParseAnimSoundSet(1, null);
@@ -385,7 +391,7 @@ namespace Extractor_Serializer
                     }
 
                     continue;
-                    IL_4BF:
+                IL_4BF:
                     flag4 = false;
                 }
             }
@@ -402,35 +408,45 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<Requirements> ParseReqs(List<rawreqs> rreqs)
+        public List<Requirement> ParseReqs(List<rawreqs> rreqs)
         {
             int numreqs = rreqs.Count;
 
-            List<Requirements> output = new List<Requirements>();
-
+            List<Requirement> output = new List<Requirement>();
+            Requirement aor = null;
             for (int i = 0; i < numreqs; i++)
             {
                 rawreqs rr = rreqs[i];
-                Requirements aor = new Requirements();
+                if (aor == null)
+                {
+                    aor = new Requirement();
+                }
 
-                aor.Target = 0x13;
+                aor.Target = ItemTarget.Self; // 0x13
                 aor.Statnumber = rr.stat;
-                aor.Operator = rr.ops;
+                aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 aor.Value = rr.val;
-                aor.ChildOperator = 255;
+                aor.ChildOperator = Operator.Unknown;
 
                 if ((i < numreqs - 1)
-                    && ((aor.Operator == 0x12) || (aor.Operator == 0x13) || (aor.Operator == 0x1a)
-                        || (aor.Operator == 0x1b) || (aor.Operator == 0x1c) || (aor.Operator == 0x1d)
-                        || (aor.Operator == 0x1e) || (aor.Operator == 0x25) || (aor.Operator == 0x64)
-                        || (aor.Operator == 110)))
+                    && (
+                    (aor.Operator == Operator.OnTarget)
+                    || (aor.Operator == Operator.OnSelf)
+                    || (aor.Operator == Operator.OnUser)
+                        || (aor.Operator == Operator.OnValidTarget)
+                        || (aor.Operator == Operator.OnInvalidTarget)
+                        || (aor.Operator == Operator.OnValidUser)
+                        || (aor.Operator == Operator.OnInvalidUser)
+                        || (aor.Operator == Operator.OnGeneralBeholder)
+                        || (aor.Operator == Operator.OnCaster)
+                        || (aor.Operator == Operator.Unknown2)))
                 {
-                    aor.Target = aor.Operator;
+                    aor.Target = (ItemTarget)(int)aor.Operator;
                     i++;
                     rr = rreqs[i];
                     aor.Statnumber = rr.stat;
                     aor.Value = rr.val;
-                    aor.Operator = rr.ops;
+                    aor.Operator = (Operator)Enum.ToObject(typeof(Operator), rr.ops);
                 }
 
                 if (!((i >= numreqs - 1) || (numreqs == 2)))
@@ -439,20 +455,29 @@ namespace Extractor_Serializer
                     int aval = rreqs[i + 1].val;
                     int aop = rreqs[i + 1].ops;
 
-                    if ((((aop == 3) || (aop == 4)) || (aop == 0x2a)) && (anum == 0))
+                    if ((((aop == (int)Operator.Or) || (aop == (int)Operator.And)) || (aop == (int)Operator.Not)) || (anum == (int)Operator.EqualTo))
                     {
-                        aor.ChildOperator = aop;
+                        aor.ChildOperator = (Operator)Enum.ToObject(typeof(Operator), aop);
                         i++;
                     }
                 }
-
                 output.Add(aor);
+                aor = null;
             }
 
+            if (output.Count > 1)
+            {
+                output[0].ChildOperator = output[1].ChildOperator;
+            }
+            else
+            {
+                output[0].ChildOperator = Operator.Or;
+            }
+            /*output[0].ChildOperator = Operator.Or;
             for (int i = 0; i < output.Count - 2; i++)
             {
                 output[i].ChildOperator = output[i + 1].ChildOperator;
-            }
+            }*/
 
             return output;
         }
@@ -466,7 +491,7 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<Requirements> ReadReqs(int numreqs)
+        public List<Requirement> ReadReqs(int numreqs)
         {
             int num4 = numreqs;
             bool flag = num4 > 0;
@@ -499,7 +524,7 @@ namespace Extractor_Serializer
                 return this.ParseReqs(list);
             }
 
-            return new List<Requirements>();
+            return new List<Requirement>();
         }
 
         #endregion
@@ -534,7 +559,7 @@ namespace Extractor_Serializer
         /// </param>
         /// <exception cref="Exception">
         /// </exception>
-        private void ParseActionSet(List<Actions> actions)
+        private void ParseActionSet(List<AOAction> actions)
         {
             bool flag = this.br.ReadInt32() != 36;
             if (flag)
@@ -557,18 +582,20 @@ namespace Extractor_Serializer
                     }
 
                     int actionNum = this.br.ReadInt32();
-                    Actions aoa = new Actions();
-                    aoa.ActionType = actionNum;
+
+                    AOAction aoa = new AOAction();
+                    aoa.ActionType = (ActionType)Enum.ToObject(typeof(ActionType), actionNum);
+
                     int numreqs = this.br.Read3F1();
-                    List<Requirements> cookedreqs = this.ReadReqs(numreqs);
-                    foreach (Requirements REQ in cookedreqs)
+                    List<Requirement> cookedreqs = this.ReadReqs(numreqs);
+                    foreach (Requirement REQ in cookedreqs)
                     {
                         aoa.Requirements.Add(REQ);
                     }
 
                     if (actions == null)
                     {
-                        actions = new List<Actions>();
+                        actions = new List<AOAction>();
                     }
 
                     actions.Add(aoa);
@@ -598,7 +625,7 @@ namespace Extractor_Serializer
             if (flag)
             {
                 TextWriter lastitem = new StreamWriter("lastitem.txt");
-                lastitem.WriteLine(NiceHexOutput.Output(this.br.Buffer));
+                lastitem.WriteLine(HexOutput.Output(this.br.Buffer));
                 lastitem.Close();
                 throw new IndexOutOfRangeException("Not handled function " + funcNum.ToString());
             }
@@ -788,11 +815,11 @@ namespace Extractor_Serializer
         /// <param name="retlist">
         /// The retlist.
         /// </param>
-        private void ParseFunctionSet(List<Events> retlist)
+        private void ParseFunctionSet(List<Event> retlist)
         {
-            int eventNum = this.br.ReadInt32();
+            int eventTypeValue = this.br.ReadInt32();
             int num = this.br.Read3F1();
-            List<Functions> list = new List<Functions>();
+            List<Function> list = new List<Function>();
             int arg_2F_0 = 0;
             bool R;
             int num2 = num - 1;
@@ -806,7 +833,7 @@ namespace Extractor_Serializer
                     break;
                 }
 
-                Functions func = new Functions();
+                Function func = new Function();
 
                 func.FunctionType = this.br.ReadInt32();
                 this.br.Skip(8);
@@ -814,7 +841,7 @@ namespace Extractor_Serializer
                 bool flag = num5 > 0;
                 if (flag)
                 {
-                    foreach (Requirements ur in this.ReadReqs(num5))
+                    foreach (Requirement ur in this.ReadReqs(num5))
                     {
                         func.Requirements.Add(ur);
                     }
@@ -836,16 +863,17 @@ namespace Extractor_Serializer
                 num3++;
             }
 
-            Events aoe = new Events();
-            aoe.EventType = eventNum;
-            foreach (Functions ff in list)
+            Event aoe = new Event();
+            aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventTypeValue);
+
+            foreach (Function ff in list)
             {
                 aoe.Functions.Add(ff);
             }
 
             if (retlist == null)
             {
-                retlist = new List<Events>();
+                retlist = new List<Event>();
             }
 
             retlist.Add(aoe);
@@ -857,15 +885,15 @@ namespace Extractor_Serializer
         /// <param name="events">
         /// The events.
         /// </param>
-        private void ParseShopHash(List<Events> events)
+        private void ParseShopHash(List<Event> events)
         {
             int eventNum = this.br.ReadInt32();
             int num = this.br.Read3F1();
             int arg_2D_0 = 1;
             int num2 = num;
             int num3 = arg_2D_0;
-            Events aoe = new Events();
-            aoe.EventType = eventNum;
+            Event aoe = new Event();
+            aoe.EventType = (EventType)Enum.ToObject(typeof(EventType), eventNum);
             checked
             {
                 while (true)
@@ -890,7 +918,7 @@ namespace Extractor_Serializer
                     int count = Math.Min(11, this.br.Buffer.Length - this.br.Ptr);
                     this.br.Skip(count);
 
-                    Functions aof = new Functions();
+                    Function aof = new Function();
                     aof.Arguments.Values.Add(text);
                     aof.Arguments.Values.Add(num5);
                     aof.Arguments.Values.Add(num6);
@@ -906,7 +934,7 @@ namespace Extractor_Serializer
 
             if (events == null)
             {
-                events = new List<Events>();
+                events = new List<Event>();
             }
 
             events.Add(aoe);

@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -32,6 +37,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
     using CellAO.Core.Nanos;
     using CellAO.Database.Dao;
     using CellAO.Enums;
+    using CellAO.Interfaces;
 
     using MsgPack;
 
@@ -81,25 +87,29 @@ namespace ZoneEngine.Core.Functions.GameFunctions
         /// <returns>
         /// </returns>
         public override bool Execute(
-            INamedEntity self, 
-            INamedEntity caller, 
-            IInstancedEntity target, 
+            INamedEntity self,
+            IEntity caller,
+            IInstancedEntity target,
             MessagePackObject[] arguments)
         {
             var temp = new UploadedNano() { NanoId = arguments[0].AsInt32() };
             ((Character)self).UploadedNanos.Add(temp);
-            UploadedNanosDao.WriteNano(((Character)self).Identity.Instance, temp);
+            UploadedNanosDao.Instance.WriteNano(((Character)self).Identity.Instance, temp);
 
-            var message = new CharacterActionMessage()
-                          {
-                              Identity = self.Identity, 
-                              Action = CharacterActionType.UploadNano, 
-                              Target = self.Identity, 
-                              Parameter1 = (int)IdentityType.NanoProgram, 
-                              Parameter2 = temp.NanoId, 
-                              Unknown = 0
-                          };
-            ((Character)self).Client.SendCompressed(message);
+            if (((Character)self).Controller.Client != null)
+            {
+                var message = new CharacterActionMessage()
+                              {
+                                  Identity = self.Identity,
+                                  Action = CharacterActionType.UploadNano,
+                                  Target = self.Identity,
+                                  Parameter1 = (int)IdentityType.NanoProgram,
+                                  Parameter2 = temp.NanoId,
+                                  Unknown = 0
+                              };
+
+                ((Character)self).Controller.Client.SendCompressed(message);
+            }
 
             return true;
         }

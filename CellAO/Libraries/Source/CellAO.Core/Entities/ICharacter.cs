@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -31,87 +36,50 @@ namespace CellAO.Core.Entities
     using System;
     using System.Collections.Generic;
 
-    using CellAO.Core.Inventory;
+    using CellAO.Core.Nanos;
     using CellAO.Core.Network;
     using CellAO.Core.Textures;
     using CellAO.Core.Vector;
     using CellAO.Enums;
     using CellAO.Interfaces;
 
-    using SmokeLounge.AOtomation.Messaging.Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     using ZoneEngine.Core;
 
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using Quaternion = CellAO.Core.Vector.Quaternion;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public interface ICharacter : IPacketReceivingEntity, INamedEntity, ISummoner, IItemContainer, ITargetingEntity
+    public interface ICharacter : IDynel, ISummoner, ITargetingEntity
     {
-        #region Public Properties
+        /// <summary>
+        /// </summary>
+        string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        string LastName { get; set; }
+
+        TemporaryBag ShoppingBag { get; set; }
 
         /// <summary>
         /// Active Nanos list
         /// </summary>
-        List<IActiveNano> ActiveNanos { get; }
-
-        /// <summary>
-        /// </summary>
-        bool ChangedAppearance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        IZoneClient Client { get; }
-
-        /// <summary>
-        /// </summary>
-        Coordinate Coordinates { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Quaternion Heading { get; set; }
-
-        /// <summary>
-        /// </summary>
-        IInventoryPage MainInventory { get; }
-
-        /// <summary>
-        /// Caching Mesh layer structure
-        /// </summary>
-        MeshLayers MeshLayer { get; }
-
-        /// <summary>
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        MoveModes MoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        string OrganizationName { get; }
-
-        /// <summary>
-        /// </summary>
-        TimeSpan PredictionDuration { get; }
-
-        /// <summary>
-        /// </summary>
-        MoveModes PreviousMoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Vector3 RawCoordinates { get; set; }
-
-        /// <summary>
-        /// </summary>
-        Quaternion RawHeading { get; set; }
+        Dictionary<int, IActiveNano> ActiveNanos { get; }
 
         /// <summary>
         /// Caching Mesh layer for social tab items
         /// </summary>
         MeshLayers SocialMeshLayer { get; }
+
+        /// <summary>
+        /// Uploaded Nanos list
+        /// </summary>
+        List<IUploadedNanos> UploadedNanos { get; }
 
         /// <summary>
         /// </summary>
@@ -121,14 +89,25 @@ namespace CellAO.Core.Entities
         /// </summary>
         TradeSkillInfo TradeSkillTarget { get; set; }
 
+        List<Waypoint> Waypoints { get; set; }
+
         /// <summary>
-        /// Uploaded Nanos list
         /// </summary>
-        List<IUploadedNanos> UploadedNanos { get; }
+        MoveModes MoveMode { get; set; }
 
-        #endregion
+        /// <summary>
+        /// </summary>
+        MoveModes PreviousMoveMode { get; set; }
 
-        #region Public Methods and Operators
+        /// <summary>
+        /// </summary>
+        /// <param name="destination">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        /// <param name="playfield">
+        /// </param>
+        void Teleport(Coordinate destination, IQuaternion heading, Identity playfield);
 
         /// <summary>
         /// </summary>
@@ -138,44 +117,26 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        bool InLogoutTimerPeriod();
-
-        /// <summary>
-        /// </summary>
-        void Save();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        void Send(MessageBody messageBody, bool announceToPlayfield = false);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        void Send(SystemMessage message);
-
-        /// <summary>
-        /// </summary>
-        void SendChangedStats();
-
-        /// <summary>
-        /// Update move type
-        /// </summary>
-        /// <param name="moveType">
-        /// new move type
-        /// </param>
         void UpdateMoveType(byte moveType);
 
         /// <summary>
         /// </summary>
-        void WriteStats();
+        bool InLogoutTimerPeriod();
 
-        #endregion
+        void StopLogoutTimer();
+
+        void SetCoordinates(Coordinate newCoordinates, Quaternion heading);
+
+        void StartLogoutTimer(int time = 30000);
+
+        void Reconnect(IZoneClient zoneClient);
+
+        int CalculateNanoAttackTime(NanoFormula nano);
+
+        void StopMovement();
+
+        byte GetLastMoveType();
+
+        void AddWaypoint(Vector3 v, bool running);
     }
 }

@@ -1,11 +1,17 @@
 CREATE TABLE IF NOT EXISTS `mobdroptable` (
+  `Id` int(32) NOT NULL AUTO_INCREMENT,
   `Hash` tinytext NOT NULL,
-  `LowID` int(11) unsigned NOT NULL,
-  `HighID` int(11) unsigned NOT NULL,
-  `MinQL` int(10) unsigned NOT NULL,
-  `MaxQL` int(10) unsigned NOT NULL,
-  `RangeCheck` int(10) unsigned NOT NULL COMMENT '0 = can drop regardless of mob level (insignias, quest items, etc.), 1 = check against mob level'
+  `LowId` int(11) unsigned NOT NULL,
+  `HighId` int(11) unsigned NOT NULL,
+  `MinQl` int(10) unsigned NOT NULL,
+  `MaxQl` int(10) unsigned NOT NULL,
+  `RangeCheck` int(10) unsigned NOT NULL COMMENT '0 = can drop regardless of mob level (insignias, quest items, etc.), 1 = check against mob level',
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Below is an example set of a few mob drops, this must be updated during level design.
+--
 
 INSERT INTO `mobdroptable` (`Hash`,`LowID`,`HighID`,`MinQL`, `MaxQL`,`RangeCheck`) VALUES  ("INSTDC", 147073, 147073, 80, 80, 1);
 INSERT INTO `mobdroptable` (`Hash`,`LowID`,`HighID`,`MinQL`, `MaxQL`,`RangeCheck`) VALUES  ("INSTDC", 160840, 160840, 142, 142, 1);

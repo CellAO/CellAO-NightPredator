@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,22 +47,21 @@ namespace CellAO.Core.Entities
     using CellAO.Database.Entities;
     using CellAO.Enums;
     using CellAO.Interfaces;
-    using CellAO.ObjectManager;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
-    using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+
+    using Utility;
 
     using ZoneEngine.Core;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
-    using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
+    using Vector3 = CellAO.Core.Vector.Vector3;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class Character : Dynel, ICharacter
+    public class Character : Dynel, ICharacter, IDynel
     {
         #region Fields
 
@@ -66,17 +70,13 @@ namespace CellAO.Core.Entities
         public Dictionary<int, int> SocialTab = new Dictionary<int, int>();
 
         /// <summary>
+        /// Caching Mesh layer for social tab items
         /// </summary>
-        public List<AOTextures> Textures = new List<AOTextures>();
+        private MeshLayers socialMeshLayer = new MeshLayers();
 
         /// <summary>
         /// </summary>
         private Timer logoutTimer = null;
-
-        /// <summary>
-        /// Caching Mesh layer structure
-        /// </summary>
-        private MeshLayers meshLayer = new MeshLayers();
 
         /// <summary>
         /// </summary>
@@ -84,20 +84,13 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        private DateTime predictionTime;
-
-        /// <summary>
-        /// Caching Mesh layer for social tab items
-        /// </summary>
-        private MeshLayers socialMeshLayer = new MeshLayers();
-
-        /// <summary>
-        /// </summary>
-        private SpinOrStrafeDirections spinDirection;
-
-        /// <summary>
-        /// </summary>
         private SpinOrStrafeDirections strafeDirection;
+
+        private byte lastMoveType = 0;
+
+        private bool disposed = false;
+
+        public List<Waypoint> Waypoints { get; set; }
 
         #endregion
 
@@ -105,18 +98,19 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <param name="pooledIn">
-        /// </param>
         /// <param name="identity">
         /// </param>
-        /// <param name="zoneClient">
+        /// <param name="controller">
         /// </param>
-        public Character(Pool pooledIn, Identity identity, IZoneClient zoneClient)
-            : base(pooledIn, identity)
+        public Character(Identity parent, Identity identity, IController controller)
+            : base(parent, identity)
         {
             this.DoNotDoTimers = true;
-            this.Client = zoneClient;
-            this.ActiveNanos = new List<IActiveNano>();
+            // Create backlink to Controller
+            this.Controller = controller;
+            this.Controller.Character = this;
+
+            this.ActiveNanos = new Dictionary<int, IActiveNano>();
 
             this.UploadedNanos = new List<IUploadedNanos>();
 
@@ -124,26 +118,24 @@ namespace CellAO.Core.Entities
 
             this.SocialTab = new Dictionary<int, int>
                              {
-                                 { 0, 0 }, 
-                                 { 1, 0 }, 
-                                 { 2, 0 }, 
-                                 { 3, 0 }, 
-                                 { 4, 0 }, 
-                                 { 38, 0 }, 
-                                 { 1004, 0 }, 
-                                 { 1005, 0 }, 
-                                 { 64, 0 }, 
-                                 { 32, 0 }, 
-                                 { 1006, 0 }, 
+                                 { 0, 0 },
+                                 { 1, 0 },
+                                 { 2, 0 },
+                                 { 3, 0 },
+                                 { 4, 0 },
+                                 { 38, 0 },
+                                 { 1004, 0 },
+                                 { 1005, 0 },
+                                 { 64, 0 },
+                                 { 32, 0 },
+                                 { 1006, 0 },
                                  { 1007, 0 }
                              };
 
-            this.Read();
+            this.Waypoints = new List<Waypoint>();
 
             this.meshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
             this.socialMeshLayer.AddMesh(0, this.Stats[StatIds.headmesh].Value, 0, 4);
-
-            this.DoNotDoTimers = false;
         }
 
         #endregion
@@ -151,171 +143,90 @@ namespace CellAO.Core.Entities
         #region Public Properties
 
         /// <summary>
+        ///  Wrapper for Stats[StatIds.currentmovementmode]
         /// </summary>
-        public List<IActiveNano> ActiveNanos { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        public bool ChangedAppearance { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public IZoneClient Client { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Coordinate Coordinates
+        private MoveModes currentmovementmode
         {
+            // moveMode
             get
             {
-                if ((this.moveDirection == MoveDirections.None) && (this.strafeDirection == SpinOrStrafeDirections.None))
-                {
-                    return new Coordinate(this.RawCoordinates);
-                }
-                else if (this.spinDirection == SpinOrStrafeDirections.None)
-                {
-                    Vector.Vector3 moveVector = this.calculateMoveVector();
-
-                    moveVector = moveVector * this.PredictionDuration.TotalSeconds;
-
-                    return new Coordinate(this.RawCoordinates + moveVector);
-                }
-                else
-                {
-                    Vector.Vector3 moveVector;
-                    Vector.Vector3 positionFromCentreOfTurningCircle;
-                    double turnArcAngle;
-                    double y;
-                    double duration;
-
-                    duration = this.PredictionDuration.TotalSeconds;
-
-                    moveVector = this.calculateMoveVector();
-                    turnArcAngle = this.calculateTurnArcAngle();
-
-                    // This is calculated seperately as height is unaffected by turning
-                    y = this.RawCoordinates.Y + (moveVector.y * duration);
-
-                    if (this.spinDirection == SpinOrStrafeDirections.Left)
-                    {
-                        positionFromCentreOfTurningCircle = new Vector.Vector3(moveVector.z, y, -moveVector.x);
-                    }
-                    else
-                    {
-                        positionFromCentreOfTurningCircle = new Vector.Vector3(-moveVector.z, y, moveVector.x);
-                    }
-
-                    return
-                        new Coordinate(
-                            new Vector.Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
-                            + (Vector.Vector3)
-                                Quaternion.RotateVector3(
-                                    new Quaternion(Vector.Vector3.AxisY, turnArcAngle), 
-                                    positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
-                }
+                return (MoveModes)this.Stats[StatIds.currentmovementmode].Value;
             }
 
             set
             {
-                this.RawCoordinates = new Vector3() { X = value.x, Y = value.y, Z = value.z };
+                this.Stats[StatIds.currentmovementmode].Value = (int)value;
             }
         }
+
+        /// <summary>
+        /// Wrapper for Stats[StatIds.prevmovementmode]
+        /// </summary>
+        private MoveModes prevmovementmode
+        {
+            // previousMoveMode
+            get
+            {
+                return (MoveModes)this.Stats[StatIds.prevmovementmode].Value;
+            }
+
+            set
+            {
+                this.Stats[StatIds.prevmovementmode].Value = (int)value;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public string LastName { get; set; }
+
+        public TemporaryBag ShoppingBag { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public Dictionary<int, IActiveNano> ActiveNanos { get; private set; }
+
+        /// <summary>
+        /// </summary>
+        public List<IUploadedNanos> UploadedNanos { get; private set; }
 
         /// <summary>
         /// </summary>
         public Identity FightingTarget { get; set; }
 
         /// <summary>
-        /// Heading as Quaternion
         /// </summary>
-        public Quaternion Heading
+        public Identity SelectedTarget { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public TradeSkillInfo TradeSkillSource { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public TradeSkillInfo TradeSkillTarget { get; set; }
+
+        /// <summary>
+        /// </summary>
+        public MoveModes MoveMode
         {
             get
             {
-                if (this.spinDirection == SpinOrStrafeDirections.None)
-                {
-                    return this.RawHeading;
-                }
-                else
-                {
-                    double turnArcAngle;
-                    Quaternion turnQuaterion;
-                    Quaternion newHeading;
-
-                    turnArcAngle = this.calculateTurnArcAngle();
-                    turnQuaterion = new Quaternion(Vector.Vector3.AxisY, turnArcAngle);
-
-                    newHeading = Quaternion.Hamilton(turnQuaterion, this.RawHeading);
-                    newHeading.Normalize();
-
-                    return newHeading;
-                }
+                return this.currentmovementmode;
             }
-
             set
             {
+                this.currentmovementmode = value;
             }
         }
-
-        /// <summary>
-        /// </summary>
-        public IInventoryPage MainInventory { get; private set; }
-
-        /// <summary>
-        /// </summary>
-        public MeshLayers MeshLayer
-        {
-            get
-            {
-                return this.meshLayer;
-            }
-
-            private set
-            {
-                this.meshLayer = value;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public MoveModes MoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public string OrganizationName
-        {
-            get
-            {
-                try
-                {
-                    return OrganizationDao.GetOrganizationData(this.Stats[StatIds.clan].Value).Name;
-                }
-                catch (Exception)
-                {
-                    return string.Empty;
-                }
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public TimeSpan PredictionDuration { get; private set; }
 
         /// <summary>
         /// </summary>
         public MoveModes PreviousMoveMode { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Vector3 RawCoordinates { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Quaternion RawHeading { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Identity SelectedTarget { get; set; }
 
         /// <summary>
         /// </summary>
@@ -332,157 +243,102 @@ namespace CellAO.Core.Entities
             }
         }
 
-        /// <summary>
-        /// </summary>
-        public TradeSkillInfo TradeSkillSource { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public TradeSkillInfo TradeSkillTarget { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public List<IUploadedNanos> UploadedNanos { get; private set; }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// </summary>
-        private MoveModes moveMode
+        public override Coordinate Coordinates()
         {
-            get
-            {
-                return (MoveModes)this.Stats[StatIds.currentmovementmode].Value;
-            }
-
-            set
-            {
-                this.Stats[StatIds.currentmovementmode].Value = (int)value;
-            }
+            Coordinate result = this.CalculatePredictedPosition();
+            return result;
         }
 
-        /// <summary>
-        /// </summary>
-        private MoveModes previousMoveMode
+        public override void Coordinates(Vector3 position)
         {
-            get
-            {
-                return (MoveModes)this.Stats[StatIds.prevmovementmode].Value;
-            }
-
-            set
-            {
-                this.Stats[StatIds.prevmovementmode].Value = (int)value;
-            }
+            this.RawCoordinates = position;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.ToString());
+            this.PredictionTime = DateTime.UtcNow;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void CalculateSkills()
+        public override void Coordinates(SmokeLounge.AOtomation.Messaging.GameData.Vector3 position)
         {
-            // TODO: Reintroduce skill calculation (walk inventory and active nanos)
-
-            // First, walk inventory and get buffs from there
-            this.DoNotDoTimers = true;
-            this.Stats.ClearModifiers();
-            this.Textures.Clear();
-            this.meshLayer.Clear();
-            this.socialMeshLayer.Clear();
-            this.meshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
-            this.socialMeshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
-
-            this.SocialTab = new Dictionary<int, int>
-                             {
-                                 { 0, 0 }, 
-                                 { 1, 0 }, 
-                                 { 2, 0 }, 
-                                 { 3, 0 }, 
-                                 { 4, 0 }, 
-                                 { 38, 0 }, 
-                                 { 1004, 0 }, 
-                                 { 1005, 0 }, 
-                                 { 64, 0 }, 
-                                 { 32, 0 }, 
-                                 { 1006, 0 }, 
-                                 { 1007, 0 }
-                             };
-
-            this.BaseInventory.CalculateModifiers(this);
-
-            if (this.ChangedAppearance)
-            {
-                this.Playfield.AnnounceAppearanceUpdate(this);
-                this.ChangedAppearance = false;
-            }
-
-            this.DoNotDoTimers = false;
+            this.RawCoordinates = position;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.ToString());
+            this.PredictionTime = DateTime.UtcNow;
         }
 
-        /// <summary>
-        /// </summary>
-        public override void Dispose()
+        public override void Coordinates(Coordinate position)
         {
-            this.DoNotDoTimers = true;
-            this.Save();
-            this.DoNotDoTimers = true;
-            if (this.Client != null)
+            this.RawCoordinates = position.coordinate;
+            LogUtil.Debug(DebugInfoDetail.Movement, "Coord Set at: " + position.coordinate.ToString());
+            this.PredictionTime = DateTime.UtcNow;
+        }
+
+        internal Coordinate CalculatePredictedPosition()
+        {
+            if ((this.moveDirection == MoveDirections.None) && (this.strafeDirection == SpinOrStrafeDirections.None))
             {
-                this.Client.Server.DisconnectClient(this.Client);
-                if (this.Client != null)
+                return new Coordinate(this.RawCoordinates);
+            }
+            else if (this.spinDirection == SpinOrStrafeDirections.None)
+            {
+                Vector3 moveVector = this.CalculateMoveVector();
+
+                moveVector = moveVector * this.PredictionDuration.TotalSeconds;
+
+                /*this.RawCoordinates = new Vector3()
+                                      {
+                                          x = this.RawCoordinates.X + moveVector.x,
+                                          y = this.RawCoordinates.Y + moveVector.y,
+                                          z = this.RawCoordinates.Z + moveVector.z
+                                      };
+
+                this.PredictionTime = DateTime.UtcNow;*/
+                Coordinate result =
+                    new Coordinate(
+                        new Vector3(
+                            this.RawCoordinates.X + moveVector.x,
+                            this.RawCoordinates.Y + moveVector.y,
+                            this.RawCoordinates.Z + moveVector.z));
+                LogUtil.Debug(
+                    DebugInfoDetail.Movement,
+                    moveVector.ToString().PadRight(40) + "/" + result.ToString() + "/");
+                return result;
+            }
+            else
+            {
+                Vector3 moveVector;
+                Vector3 positionFromCentreOfTurningCircle;
+                double turnArcAngle;
+                double y;
+                double duration;
+
+                duration = this.PredictionDuration.TotalSeconds;
+
+                moveVector = this.CalculateMoveVector();
+                turnArcAngle = this.calculateTurnArcAngle();
+
+                // This is calculated seperately as height is unaffected by turning
+                y = this.RawCoordinates.Y + (moveVector.y * duration);
+
+                if (this.spinDirection == SpinOrStrafeDirections.Left)
                 {
-                    this.Client.Character = null;
+                    positionFromCentreOfTurningCircle = new Vector3(moveVector.z, y, -moveVector.x);
                 }
+                else
+                {
+                    positionFromCentreOfTurningCircle = new Vector3(-moveVector.z, y, moveVector.x);
+                }
+
+                return
+                    new Coordinate(
+                        new Vector3(this.RawCoordinates.X, this.RawCoordinates.Y, this.RawCoordinates.Z)
+                        + (Vector3)
+                            Quaternion.RotateVector3(
+                                new Quaternion(Vector3.AxisY, turnArcAngle),
+                                positionFromCentreOfTurningCircle) - positionFromCentreOfTurningCircle);
             }
-
-            this.Client = null;
-            OnlineDao.SetOffline(this.Identity.Instance);
-            this.Playfield.Despawn(this.Identity);
-            base.Dispose();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="nanoId">
-        /// </param>
-        /// <returns>
-        /// </returns>
-        public bool HasNano(int nanoId)
-        {
-            return this.UploadedNanos.Any(x => x.NanoId == nanoId);
-        }
+        #endregion
 
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public bool InLogoutTimerPeriod()
-        {
-            return this.logoutTimer != null;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="sender">
-        /// </param>
-        public void LogoutTimerCallback(object sender)
-        {
-            if (this.logoutTimer == null)
-            {
-                // Logout Timer has been cancelled
-                return;
-            }
-
-            this.logoutTimer = null;
-            this.Dispose();
-        }
+        #region Object
 
         /// <summary>
         /// </summary>
@@ -491,24 +347,31 @@ namespace CellAO.Core.Entities
         public override bool Read()
         {
             this.DoNotDoTimers = true;
-            DBCharacter daochar = CharacterDao.GetById(this.Identity.Instance).FirstOrDefault();
+            DBCharacter daochar = CharacterDao.Instance.Get(this.Identity.Instance);
             if (daochar != null)
             {
+                LogUtil.Debug(
+                    DebugInfoDetail.Database,
+                    "Read character coords " + daochar.X + "/" + daochar.Y + "/" + daochar.Z + "/" + daochar.Playfield);
                 this.Name = daochar.Name;
                 this.LastName = daochar.LastName;
                 this.FirstName = daochar.FirstName;
-                this.RawCoordinates = new Vector3 { X = daochar.X, Y = daochar.Y, Z = daochar.Z };
+                this.RawCoordinates = new SmokeLounge.AOtomation.Messaging.GameData.Vector3
+                                      {
+                                          X = daochar.X,
+                                          Y = daochar.Y,
+                                          Z = daochar.Z
+                                      };
                 this.RawHeading = new Quaternion(daochar.HeadingX, daochar.HeadingY, daochar.HeadingZ, daochar.HeadingW);
             }
 
-            foreach (int nano in UploadedNanosDao.ReadNanos(this.Identity.Instance))
+            foreach (int nano in UploadedNanosDao.Instance.ReadNanos(this.Identity.Instance))
             {
                 this.UploadedNanos.Add(new UploadedNano() { NanoId = nano });
             }
 
             this.BaseInventory.Read();
             base.Read();
-            this.DoNotDoTimers = false;
 
             // Implement error checking
             return true;
@@ -516,65 +379,71 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <param name="client">
-        /// </param>
-        public void Reconnect(IZoneClient client)
+        /// <returns>
+        /// </returns>
+        public override bool Write()
         {
-            this.Client = client;
-        }
-
-        /// <summary>
-        /// </summary>
-        public void Save()
-        {
-            this.Write();
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        /// <param name="announceToPlayfield">
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Send(MessageBody messageBody, bool announceToPlayfield)
-        {
-            if (!announceToPlayfield)
+            if (!this.Controller.SaveToDatabase)
             {
-                this.Send(messageBody);
-                return;
+                return true;
             }
+            this.BaseInventory.Write();
+            DBCharacter temp = this.GetDBCharacter();
+            LogUtil.Debug(
+                DebugInfoDetail.Database,
+                "Saving char " + temp.Name + " to coords " + temp.X + "/" + temp.Y + "/" + temp.Z + "/" + temp.Playfield);
+            CharacterDao.Instance.Save(this.GetDBCharacter());
 
-            this.Playfield.Announce(messageBody);
+            CharacterDao.Instance.SetPlayfield(
+                this.Identity.Instance,
+                (int)this.Playfield.Identity.Type,
+                this.Playfield.Identity.Instance);
+
+            UploadedNanosDao.Instance.WriteNanos(this.Identity.Instance, this.UploadedNanos);
+
+            return base.Write();
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="message">
-        /// </param>
-        public void Send(SystemMessage message)
+        protected override void Dispose(bool disposing)
         {
-            this.Playfield.Send(this.Client, message);
+            if (disposing)
+            {
+                if (!this.disposed)
+                {
+                    this.DoNotDoTimers = true;
+                    this.Playfield.Despawn(this.Identity);
+                    this.Save();
+
+                    // SetOffline has to be called AFTER save
+                    int charId = this.Identity.Instance;
+
+                    this.BaseInventory.Dispose();
+                    this.DoNotDoTimers = true;
+                    if (this.Controller != null)
+                    {
+                        if (this.Controller.Client != null)
+                        {
+                            this.Controller.Client.Server.DisconnectClient(this.Controller.Client);
+                            this.Controller.Client = null;
+                        }
+                        this.Controller.Dispose();
+                    }
+
+                    if (this.logoutTimer != null)
+                    {
+                        this.logoutTimer.Dispose();
+                    }
+
+                    CharacterDao.Instance.SetOffline(charId);
+                }
+            }
+            this.disposed = true;
+            base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// </summary>
-        public void SendChangedStats()
-        {
-            var message = new StatMessage() { Identity = this.Identity, };
-            message.Stats = this.Stats.ChangedAnnouncingStats;
-            if (message.Stats.Length > 0)
-            {
-                this.Playfield.AnnounceOthers(message, this.Identity);
-            }
+        #endregion
 
-            message.Stats = this.Stats.ChangedStats;
-            if (message.Stats.Length > 0)
-            {
-                this.Playfield.Send(this.Client, message);
-            }
-        }
+        #region Targeting
 
         /// <summary>
         /// </summary>
@@ -601,47 +470,100 @@ namespace CellAO.Core.Entities
             return true;
         }
 
+        #endregion
+
+        #region Nanos
+
         /// <summary>
         /// </summary>
-        public void StartLogoutTimer()
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void CalculateSkills()
         {
-            this.logoutTimer = new Timer(this.LogoutTimerCallback, null, 30000, 0);
+            // TODO: Reintroduce skill calculation (walk inventory and active nanos)
+
+            // First, walk inventory and get buffs from there
+            bool oldsend = this.DoNotDoTimers;
+            this.DoNotDoTimers = true;
+            this.Stats.ClearModifiers();
+            this.Textures.Clear();
+            this.meshLayer.Clear();
+            this.socialMeshLayer.Clear();
+            this.meshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
+            this.socialMeshLayer.AddMesh(0, (Int32)this.Stats[StatIds.headmesh].BaseValue, 0, 4);
+
+            this.SocialTab = new Dictionary<int, int>
+                             {
+                                 { 0, 0 },
+                                 { 1, 0 },
+                                 { 2, 0 },
+                                 { 3, 0 },
+                                 { 4, 0 },
+                                 { 38, 0 },
+                                 { 1004, 0 },
+                                 { 1005, 0 },
+                                 { 64, 0 },
+                                 { 32, 0 },
+                                 { 1006, 0 },
+                                 { 1007, 0 }
+                             };
+
+            this.BaseInventory.CalculateModifiers(this);
+
+            if (this.ChangedAppearance)
+            {
+                this.Playfield.AnnounceAppearanceUpdate(this);
+                this.ChangedAppearance = false;
+            }
+            if (!oldsend)
+            {
+                this.DoNotDoTimers = oldsend;
+            }
         }
 
         /// <summary>
         /// </summary>
-        public void StopLogoutTimer()
-        {
-            this.logoutTimer = null;
-        }
-
-        /// <summary>
-        /// </summary>
-        public void StopMovement()
-        {
-            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
-            this.RawCoordinates.X = this.Coordinates.x;
-            this.RawCoordinates.Y = this.Coordinates.y;
-            this.RawCoordinates.Z = this.Coordinates.z;
-            this.RawHeading = this.Heading;
-
-            this.spinDirection = SpinOrStrafeDirections.None;
-            this.strafeDirection = SpinOrStrafeDirections.None;
-            this.moveDirection = MoveDirections.None;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="destination">
+        /// <param name="nanoId">
         /// </param>
-        /// <param name="heading">
-        /// </param>
-        /// <param name="playfield">
-        /// </param>
-        public override void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
+        /// <returns>
+        /// </returns>
+        public bool HasNano(int nanoId)
         {
-            this.Playfield.Teleport(this, destination, heading, playfield);
+            return this.UploadedNanos.Any(x => x.NanoId == nanoId);
         }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        internal DBCharacter GetDBCharacter()
+        {
+            DBCharacter temp = new DBCharacter();
+            temp.FirstName = this.FirstName;
+            temp.LastName = this.LastName;
+
+            temp.HeadingW = this.RawHeading.wf;
+            temp.HeadingX = this.RawHeading.xf;
+            temp.HeadingY = this.RawHeading.yf;
+            temp.HeadingZ = this.RawHeading.zf;
+            temp.X = this.RawCoordinates.X;
+            temp.Y = this.RawCoordinates.Y;
+            temp.Z = this.RawCoordinates.Z;
+
+            temp.Id = this.Identity.Instance;
+            temp.Name = this.Name;
+            temp.Online = 1;
+            temp.Playfield = this.Playfield.Identity.Instance;
+            return temp;
+        }
+
+        #endregion
+
+        #region Movement
 
         /// <summary>
         /// </summary>
@@ -651,7 +573,7 @@ namespace CellAO.Core.Entities
         /// </exception>
         public void UpdateMoveType(byte moveType)
         {
-            this.predictionTime = DateTime.Now;
+            this.PredictionTime = DateTime.UtcNow;
 
             /*
              * NV: Would be nice to have all other possible values filled out for this at some point... *Looks at Suiv*
@@ -676,12 +598,20 @@ namespace CellAO.Core.Entities
                 15: same as 0
                 16: same as 0
              */
+
+            this.lastMoveType = moveType;
+
             switch (moveType)
             {
                 case 1: // Forward Start
                     this.moveDirection = MoveDirections.Forwards;
                     break;
                 case 2: // Forward Stop
+                    // Stop the predicition
+                    Coordinate temp = this.CalculatePredictedPosition();
+                    this.Coordinates(temp);
+                    LogUtil.Debug(DebugInfoDetail.Movement, "Stopped at " + temp);
+                    this.PredictionTime = DateTime.UtcNow;
                     this.moveDirection = MoveDirections.None;
                     break;
 
@@ -689,6 +619,9 @@ namespace CellAO.Core.Entities
                     this.moveDirection = MoveDirections.Backwards;
                     break;
                 case 4: // Reverse Stop
+                    // Stop the predicition
+                    this.Coordinates(this.CalculatePredictedPosition());
+                    this.PredictionTime = DateTime.UtcNow;
                     this.moveDirection = MoveDirections.None;
                     break;
 
@@ -750,26 +683,26 @@ namespace CellAO.Core.Entities
                 case 23: // Switch To Frozen Mode
                     break;
                 case 24: // Switch To Walk Mode
-                    this.moveMode = MoveModes.Walk;
+                    this.currentmovementmode = MoveModes.Walk;
                     break;
                 case 25: // Switch To Run Mode
-                    this.moveMode = MoveModes.Run;
+                    this.currentmovementmode = MoveModes.Run;
                     break;
                 case 26: // Switch To Swim Mode
                     break;
                 case 27: // Switch To Crawl Mode
-                    this.previousMoveMode = this.moveMode;
-                    this.moveMode = MoveModes.Crawl;
+                    this.prevmovementmode = this.currentmovementmode;
+                    this.currentmovementmode = MoveModes.Crawl;
                     break;
                 case 28: // Switch To Sneak Mode
-                    this.previousMoveMode = this.moveMode;
-                    this.moveMode = MoveModes.Sneak;
+                    this.prevmovementmode = this.currentmovementmode;
+                    this.currentmovementmode = MoveModes.Sneak;
                     break;
                 case 29: // Switch To Fly Mode
                     break;
                 case 30: // Switch To Sit Ground Mode
-                    this.previousMoveMode = this.moveMode;
-                    this.moveMode = MoveModes.Sit;
+                    this.prevmovementmode = this.currentmovementmode;
+                    this.currentmovementmode = MoveModes.Sit;
                     break;
 
                 case 31: // ? 19 = 20 = 22 = 31 = 32
@@ -778,26 +711,26 @@ namespace CellAO.Core.Entities
                     break;
 
                 case 33: // Switch To Sleep Mode
-                    this.moveMode = MoveModes.Sleep;
+                    this.currentmovementmode = MoveModes.Sleep;
                     break;
                 case 34: // Switch To Lounge Mode
-                    this.moveMode = MoveModes.Lounge;
+                    this.currentmovementmode = MoveModes.Lounge;
                     break;
 
                 case 35: // Leave Swim Mode
                     break;
                 case 36: // Leave Sneak Mode
-                    this.moveMode = this.previousMoveMode;
+                    this.currentmovementmode = this.prevmovementmode;
                     break;
                 case 37: // Leave Sit Mode
-                    this.moveMode = this.previousMoveMode;
+                    this.currentmovementmode = this.prevmovementmode;
                     break;
                 case 38: // Leave Frozen Mode
                     break;
                 case 39: // Leave Fly Mode
                     break;
                 case 40: // Leave Crawl Mode
-                    this.moveMode = this.previousMoveMode;
+                    this.currentmovementmode = this.prevmovementmode;
                     break;
                 case 41: // Leave Sleep Mode
                     break;
@@ -814,64 +747,31 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        /// <returns>
-        /// </returns>
-        public override bool Write()
+        public void StopMovement()
         {
-            this.BaseInventory.Write();
-            CharacterDao.UpdatePosition(this.GetDBCharacter());
-            CharacterDao.SetPlayfield(
-                this.Identity.Instance, 
-                (int)this.Playfield.Identity.Type, 
-                this.Playfield.Identity.Instance);
-            return base.Write();
+            // This should be used to stop the interpolating and save last interpolated value of movement before teleporting
+            this.RawCoordinates.X = this.Coordinates().x;
+            this.RawCoordinates.Y = this.Coordinates().y;
+            this.RawCoordinates.Z = this.Coordinates().z;
+            this.RawHeading = this.Heading;
+
+            this.spinDirection = SpinOrStrafeDirections.None;
+            this.strafeDirection = SpinOrStrafeDirections.None;
+            this.moveDirection = MoveDirections.None;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void WriteStats()
+        public byte GetLastMoveType()
         {
-            this.Stats.Write();
+            return this.lastMoveType;
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        internal DBCharacter GetDBCharacter()
+        public void AddWaypoint(Vector3 v, bool running)
         {
-            DBCharacter temp = new DBCharacter();
-            temp.FirstName = this.FirstName;
-            temp.LastName = this.LastName;
-
-            temp.HeadingW = this.RawHeading.wf;
-            temp.HeadingX = this.RawHeading.xf;
-            temp.HeadingY = this.RawHeading.yf;
-            temp.HeadingZ = this.RawHeading.zf;
-            temp.X = this.RawCoordinates.X;
-            temp.Y = this.RawCoordinates.Y;
-            temp.Z = this.RawCoordinates.Z;
-
-            temp.Id = this.Identity.Instance;
-            temp.Name = this.Name;
-            temp.Online = 1;
-            temp.Playfield = this.Playfield.Identity.Instance;
-            return temp;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="messageBody">
-        /// </param>
-        internal void Send(MessageBody messageBody)
-        {
-            this.Playfield.Send(this.Client, messageBody);
+            this.Waypoints.Add(new Waypoint(new Vector3(v.x, v.y, v.z), running));
+            if (this.Waypoints.Count > 1)
+            {
+                this.Controller.State = CharacterState.Patrolling;
+            }
         }
 
         /// <summary>
@@ -880,9 +780,9 @@ namespace CellAO.Core.Entities
         /// <returns>Can move=true</returns>
         private bool CanMove()
         {
-            if ((this.moveMode == MoveModes.Run) || (this.moveMode == MoveModes.Walk)
-                || (this.moveMode == MoveModes.Swim) || (this.moveMode == MoveModes.Crawl)
-                || (this.moveMode == MoveModes.Sneak) || (this.moveMode == MoveModes.Fly))
+            if ((this.currentmovementmode == MoveModes.Run) || (this.currentmovementmode == MoveModes.Walk)
+                || (this.currentmovementmode == MoveModes.Swim) || (this.currentmovementmode == MoveModes.Crawl)
+                || (this.currentmovementmode == MoveModes.Sneak) || (this.currentmovementmode == MoveModes.Fly))
             {
                 return true;
             }
@@ -898,7 +798,7 @@ namespace CellAO.Core.Entities
         {
             int effectiveRunSpeed;
 
-            switch (this.moveMode)
+            switch (this.currentmovementmode)
             {
                 case MoveModes.Run:
                     effectiveRunSpeed = this.Stats[StatIds.runspeed].Value; // Stat #156 = RunSpeed
@@ -958,7 +858,7 @@ namespace CellAO.Core.Entities
                 // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
                 speed = Math.Max(0, (effectiveRunSpeed * 0.005) + 4);
 
-                if (this.moveMode != MoveModes.Swim)
+                if (this.currentmovementmode != MoveModes.Swim)
                 {
                     speed = Math.Min(15, speed); // Forward speed is capped at 15 units/sec for non-swimming
                 }
@@ -968,7 +868,7 @@ namespace CellAO.Core.Entities
                 // NV: TODO: Verify this more. Especially with uber-low runspeeds (negative)
                 speed = -Math.Max(0, (effectiveRunSpeed * 0.0035) + 4);
 
-                if (this.moveMode != MoveModes.Swim)
+                if (this.currentmovementmode != MoveModes.Swim)
                 {
                     speed = Math.Max(-15, speed); // Backwards speed is capped at 15 units/sec for non-swimming
                 }
@@ -981,16 +881,16 @@ namespace CellAO.Core.Entities
         /// Calculate move vector
         /// </summary>
         /// <returns>Movevector</returns>
-        private Vector.Vector3 calculateMoveVector()
+        private Vector3 CalculateMoveVector()
         {
             double forwardSpeed;
             double strafeSpeed;
-            Vector.Vector3 forwardMove;
-            Vector.Vector3 strafeMove;
+            Vector3 forwardMove;
+            Vector3 strafeMove;
 
             if (!this.CanMove())
             {
-                return Vector.Vector3.Origin;
+                return Vector3.Origin;
             }
 
             forwardSpeed = this.calculateForwardSpeed();
@@ -998,12 +898,12 @@ namespace CellAO.Core.Entities
 
             if ((forwardSpeed == 0) && (strafeSpeed == 0))
             {
-                return Vector.Vector3.Origin;
+                return Vector3.Origin;
             }
 
             if (forwardSpeed != 0)
             {
-                forwardMove = (Vector.Vector3)Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisZ);
+                forwardMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisZ);
                 forwardMove.Magnitude = Math.Abs(forwardSpeed);
                 if (forwardSpeed < 0)
                 {
@@ -1012,12 +912,12 @@ namespace CellAO.Core.Entities
             }
             else
             {
-                forwardMove = Vector.Vector3.Origin;
+                forwardMove = Vector3.Origin;
             }
 
             if (strafeSpeed != 0)
             {
-                strafeMove = (Vector.Vector3)Quaternion.RotateVector3(this.RawHeading, Vector.Vector3.AxisX);
+                strafeMove = (Vector3)Quaternion.RotateVector3(this.RawHeading, Vector3.AxisX);
                 strafeMove.Magnitude = Math.Abs(strafeSpeed);
                 if (strafeSpeed < 0)
                 {
@@ -1026,7 +926,7 @@ namespace CellAO.Core.Entities
             }
             else
             {
-                strafeMove = Vector.Vector3.Origin;
+                strafeMove = Vector3.Origin;
             }
 
             return forwardMove + strafeMove;
@@ -1042,8 +942,8 @@ namespace CellAO.Core.Entities
             int effectiveRunSpeed;
 
             // Note, you can not strafe while swimming or crawling
-            if ((this.strafeDirection == SpinOrStrafeDirections.None) || (this.moveMode == MoveModes.Swim)
-                || (this.moveMode == MoveModes.Crawl) || (!this.CanMove()))
+            if ((this.strafeDirection == SpinOrStrafeDirections.None) || (this.currentmovementmode == MoveModes.Swim)
+                || (this.currentmovementmode == MoveModes.Crawl) || (!this.CanMove()))
             {
                 return 0;
             }
@@ -1061,44 +961,104 @@ namespace CellAO.Core.Entities
             return speed;
         }
 
+        #endregion
+
+        #region Connection
+
         /// <summary>
-        /// Calculate Turnangle
         /// </summary>
-        /// <returns>Turnangle</returns>
-        private double calculateTurnArcAngle()
+        /// <param name="client">
+        /// </param>
+        public void Reconnect(IZoneClient client)
         {
-            double turnTime;
-            double angle;
-            double modifiedDuration;
-
-            turnTime = this.calculateTurnTime();
-
-            modifiedDuration = this.PredictionDuration.TotalSeconds % turnTime;
-
-            angle = 2 * Math.PI * modifiedDuration / turnTime;
-
-            return angle;
+            this.Controller.Client = client;
         }
 
         /// <summary>
-        /// Calculate Turn time
         /// </summary>
-        /// <returns>Turn time</returns>
-        private double calculateTurnTime()
+        /// <param name="nano">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public int CalculateNanoAttackTime(NanoFormula nano)
         {
-            int turnSpeed;
-            double turnTime;
+            // Calculation in 100's of seconds!!
 
-            turnSpeed = this.Stats[StatIds.turnspeed].Value; // Stat #267 TurnSpeed
+            int aggdef = this.Stats[StatIds.aggdef].Value;
 
-            if (turnSpeed == 0)
+            int aggdefReduction = aggdef - 25;
+            int nanoinit = this.Stats[StatIds.nanoprowessinitiative].Value;
+            if (nanoinit > 1200)
             {
-                turnSpeed = 40000;
+                nanoinit = ((nanoinit - 1200) / 3) + 1200;
             }
 
-            turnTime = 70000 / turnSpeed;
+            int nanoInitreduction = nanoinit >> 1;
 
-            return turnTime;
+            int attackCap = nano.getItemAttribute(523); // AttackDelayCap
+
+            int attackDelay = nano.getItemAttribute(294); // AttackDelay
+
+            // The Math.Min is safeguard for calculation errors due to uint->int casting of originally negative values
+            return Math.Min(Math.Max(attackDelay - aggdefReduction - nanoInitreduction, attackCap), attackDelay);
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StartLogoutTimer(int time = 30000)
+        {
+            this.logoutTimer = new Timer(this.LogoutTimerCallback, null, time, 0);
+        }
+
+        /// <summary>
+        /// </summary>
+        public void StopLogoutTimer()
+        {
+            if (this.logoutTimer != null)
+            {
+                this.logoutTimer.Dispose();
+            }
+
+            this.logoutTimer = null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public bool InLogoutTimerPeriod()
+        {
+            return this.logoutTimer != null;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="newCoordinates">
+        /// </param>
+        /// <param name="heading">
+        /// </param>
+        public void SetCoordinates(Coordinate newCoordinates, Quaternion heading)
+        {
+            this.Coordinates(newCoordinates);
+            this.Heading = heading;
+            this.PredictionTime = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender">
+        /// </param>
+        public void LogoutTimerCallback(object sender)
+        {
+            if (this.logoutTimer == null)
+            {
+                // Logout Timer has been cancelled
+                return;
+            }
+
+            this.logoutTimer.Dispose();
+            this.logoutTimer = null;
+            this.Dispose();
         }
 
         #endregion

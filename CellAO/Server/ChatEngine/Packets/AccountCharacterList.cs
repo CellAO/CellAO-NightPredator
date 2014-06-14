@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -54,7 +59,7 @@ namespace ChatEngine.Packets
         public static byte[] Create(string username)
         {
             PacketWriter writer = new PacketWriter(0x07);
-            IEnumerable<DBCharacter> chars = CharacterDao.GetAllForUser(username);
+            IEnumerable<DBCharacter> chars = CharacterDao.Instance.GetAllForUser(username);
 
             byte[] numberOfCharacters = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)chars.Count()));
             writer.WriteBytes(numberOfCharacters);
@@ -72,13 +77,13 @@ namespace ChatEngine.Packets
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                writer.WriteUInt32((UInt32)StatDao.GetById(50000, character.Id, 54).statvalue);
+                writer.WriteUInt32((UInt32)StatDao.Instance.GetById(50000, character.Id, 54).StatValue);
             }
 
             writer.WriteBytes(numberOfCharacters);
             foreach (DBCharacter character in chars)
             {
-                writer.WriteUInt32((UInt32)OnlineDao.IsOnline(character.Id).Online);
+                writer.WriteUInt32((uint)CharacterDao.Instance.IsOnline(character.Id));
             }
 
             return writer.Finish();

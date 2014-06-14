@@ -208,13 +208,21 @@
 
 **NotBitAnd** = 107,
 
-**ObtainedItem** = 108
+**ObtainedItem** = 108,
+
+**Unknown3** = 110,
+
+**FlyingAllowed** = 112,
+
+**Unknown** = 255,
+
+**Unknown2** = 272
 
 
 ----------
 
-*Copyright © 2013 CellAO Team*
+*Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.874 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
 
 

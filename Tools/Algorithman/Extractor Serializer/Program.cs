@@ -74,10 +74,13 @@ namespace Extractor_Serializer
 
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
+    using System.Drawing.Imaging;
     using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Net.Mime;
     using System.Text;
     using System.Text.RegularExpressions;
 
@@ -161,26 +164,35 @@ namespace Extractor_Serializer
         /// <param name="recordtype">
         /// The recordtype.
         /// </param>
-        public static void GetData(string path, int recordtype)
+        public static void GetData(string path, Extractor.RecordType recordtype)
         {
             int[] items = extractor.GetRecordInstances(recordtype);
             int cou = 0;
             foreach (int item in items)
             {
-                var fileStream = new FileStream(
-                    path + item.ToString(CultureInfo.InvariantCulture), 
-                    FileMode.Create, 
-                    FileAccess.Write);
-
-                byte[] data = extractor.GetRecordData(recordtype, item);
-                fileStream.Write(data, 0, data.Length);
-                fileStream.Close();
-                if (cou % 10 == 0)
+                try
                 {
-                    Console.WriteLine(item);
-                }
 
-                cou++;
+                    using (
+                        var fileStream = new FileStream(Path.Combine(
+                            path, item.ToString(CultureInfo.InvariantCulture)),
+                            FileMode.Create,
+                            FileAccess.Write))
+                    {
+                        byte[] data = extractor.GetRecordData(recordtype, item);
+
+                        fileStream.Write(data, 0, data.Length);
+                    }
+                    if (cou % 10 == 0)
+                    {
+                        Console.WriteLine(item);
+                    }
+
+                    cou++;
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -224,7 +236,7 @@ namespace Extractor_Serializer
             string lastline = null;
             while ((line = tr.ReadLine()) != null)
             {
-                if (line != lastline)
+                if ((line != lastline) && (!string.IsNullOrEmpty(line)))
                 {
                     string[] rels = line.Split(' ');
                     List<int> temp = new List<int>();
@@ -335,21 +347,25 @@ namespace Extractor_Serializer
 
         /// <summary>
         /// </summary>
-        /// <param name="ItemNamesSql">
+        /// <param name="itemNamesSqls">
         /// </param>
         /// <returns>
         /// </returns>
-        private static List<ItemTemplate> ExtractItemTemplates(List<string> ItemNamesSql)
+        private static List<ItemTemplate> ExtractItemTemplates(List<string> itemNamesSqls)
         {
             var np = new NewParser();
-            List<ItemTemplate> rawItemList = new List<ItemTemplate>(extractor.GetRecordInstanceCount(0xF4254));
-            rawItemDictionary = new Dictionary<int, ItemTemplate>(extractor.GetRecordInstanceCount(0xF4254));
+            int[] instances = extractor.GetRecordInstances(Extractor.RecordType.Item);
+            List<ItemTemplate> rawItemList = new List<ItemTemplate>(instances.Length);
+            rawItemDictionary = new Dictionary<int, ItemTemplate>(instances.Length);
             int counter = 0;
-            foreach (int recnum in extractor.GetRecordInstances(0xF4254))
+            foreach (int recnum in instances)
             {
-                ItemTemplate xt = np.ParseItem(0xF4254, recnum, extractor.GetRecordData(0xF4254, recnum), ItemNamesSql);
+                byte[] data = extractor.GetRecordData(Extractor.RecordType.Item, recnum);
+                ItemTemplate xt = np.ParseItem(Extractor.RecordType.Item, recnum, data, itemNamesSqls);
+
                 rawItemList.Add(xt);
                 rawItemDictionary.Add(recnum, xt);
+
                 if ((counter % 7500) == 0)
                 {
                     Console.Write("\rItem ID: " + recnum.ToString().PadLeft(9));
@@ -371,23 +387,35 @@ namespace Extractor_Serializer
         private static List<PlayfieldData> ExtractPlayfieldData()
         {
             List<PlayfieldData> playfields = new List<PlayfieldData>(700);
-            foreach (int recnum in extractor.GetRecordInstances(1000001))
+            int[] instances = extractor.GetRecordInstances(Extractor.RecordType.Playfield);
+            foreach (int recnum in instances)
             {
+                if (recnum < 120)
+                {
+                    continue;
+                }
+
                 PlayfieldData pf = new PlayfieldData();
                 pf.PlayfieldId = recnum;
 
-                // Console.WriteLine("Parsing PF " + recnum);
-                if (extractor.GetRecordInstances(1000030).Contains(recnum))
+
+                int[] doors = extractor.GetRecordInstances(Extractor.RecordType.Door);
+                if (doors.Contains(recnum))
                 {
-                    pf.Doors1 = PlayfieldParser.ParseDoors(extractor.GetRecordData(1000030, recnum));
+                    byte[] doorData = extractor.GetRecordData(Extractor.RecordType.Door, recnum);
+                    pf.Doors1 = PlayfieldParser.ParseDoors(doorData);
                 }
 
-                pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(1000001, recnum));
-                pf.Destinations =
-                    PlayfieldParser.ParseDestinations(extractor.GetRecordData(1000001, recnum)).Destinations;
-                if (extractor.GetRecordInstances(1000021).Contains(recnum))
+                pf.Name = PlayfieldParser.ParseName(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum));
+                pf.Destinations = PlayfieldParser.ParseDestinations(extractor.GetRecordData(Extractor.RecordType.Playfield, recnum)).Destinations;
+                /*Console.WriteLine("Parsing PF " + recnum+" "+pf.Name);
+                if (recnum == 500)
                 {
-                    pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(1000021, recnum));
+                    Console.ReadLine();
+                }*/
+                if (extractor.GetRecordInstances(Extractor.RecordType.Wall).Contains(recnum))
+                {
+                    pf.Walls = PlayfieldParser.ParseWalls(extractor.GetRecordData(Extractor.RecordType.Wall, recnum));
                 }
 
                 playfields.Add(pf);
@@ -402,7 +430,7 @@ namespace Extractor_Serializer
         /// </param>
         private static void ExtractPlayfieldStatels(List<PlayfieldData> playfields)
         {
-            foreach (int recnum in extractor.GetRecordInstances(1000026))
+            foreach (int recnum in extractor.GetRecordInstances(Extractor.RecordType.Statel)) // statels
             {
                 Console.Write("Parsing Statels for playfield " + recnum + "\r");
 
@@ -410,9 +438,13 @@ namespace Extractor_Serializer
                 {
                     playfields.First(x => x.PlayfieldId == recnum)
                         .Statels.AddRange(
-                            PlayfieldParser.ParseStatels(extractor.GetRecordData(1000026, recnum))
+                            PlayfieldParser.ParseStatels(
+                                extractor.GetRecordData(Extractor.RecordType.Statel, recnum)
+                                )
 
-                        /* .Where(x => x.Events.Count > 0)*/);
+                        /* .Where(x => x.Events.Count > 0)*/
+
+                        );
                 }
             }
         }
@@ -549,10 +581,10 @@ namespace Extractor_Serializer
 
             PrepareItemNamesSQL();
 
-            Console.WriteLine("Number of Items to extract: " + extractor.GetRecordInstances(0xF4254).Length);
+            Console.WriteLine("Number of Items to extract: " + extractor.GetRecordInstances(Extractor.RecordType.Item).Length);
 
             // ITEM RECORD TYPE
-            Console.WriteLine("Number of Nanos to extract: " + extractor.GetRecordInstances(0xFDE85).Length);
+            Console.WriteLine("Number of Nanos to extract: " + extractor.GetRecordInstances(Extractor.RecordType.Nano).Length);
             Console.WriteLine();
 
             // NANO RECORD TYPE
@@ -590,7 +622,7 @@ namespace Extractor_Serializer
             Console.WriteLine("Creating serialized nano data file - please wait");
 
             string version = GetVersion(AOPath);
-            MessagePackZip.CompressData<NanoFormula>("nanos.dat", version, rawNanoList, 1000);
+            MessagePackZip.CompressData<NanoFormula>("nanos.dat", version, rawNanoList, (rawNanoList.Count / 12) + 1);
 
             Console.WriteLine();
             Console.WriteLine("Checking Nanos...");
@@ -603,7 +635,7 @@ namespace Extractor_Serializer
             Console.WriteLine();
             Console.WriteLine("Creating serialized item data file - please wait");
 
-            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 5000);
+            MessagePackZip.CompressData<ItemTemplate>("items.dat", GetVersion(AOPath), rawItemList, 10000);
 
             Console.WriteLine();
             Console.WriteLine("Checking Items...");
@@ -652,6 +684,97 @@ namespace Extractor_Serializer
                     break;
                 }
             }
+
+            while (true)
+            {
+                Console.WriteLine("Do you want to extract the icons for WebCore? [Y/N]");
+                string line = Console.ReadLine();
+                if (line.Trim().ToLower() == "y")
+                {
+                    ExtractIcons();
+                    break;
+                }
+                if (line.Trim().ToLower() == "n")
+                {
+                    break;
+                }
+            }
+
+            Console.WriteLine("Press a key to exit.");
+            Console.ReadLine();
+        }
+
+        private static void ExtractIcons()
+        {
+            if (!Directory.Exists("icons"))
+            {
+                Directory.CreateDirectory("icons");
+            }
+
+            // Delete all pngs in that folder (makes conversion much faster)
+            string[] filesToDelete = Directory.GetFiles("icons", "*.png", SearchOption.TopDirectoryOnly);
+            foreach (string file in filesToDelete)
+            {
+                File.Delete(file);
+            }
+
+            int GCcount = 0;
+            foreach (ItemTemplate template in ItemLoader.ItemList.Values)
+            {
+                string pngName = Path.Combine("icons", template.getItemAttribute(79) + ".png");
+                if (!File.Exists(pngName))
+                {
+                    byte[] icon;
+                    try
+                    {
+                        icon = extractor.GetRecordData(Extractor.RecordType.Icon, template.getItemAttribute(79));
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+
+                    FileStream fs = new FileStream(
+                        pngName,
+                        FileMode.Create,
+                        FileAccess.ReadWrite);
+                    fs.Write(icon, 0, icon.Length);
+                    fs.Close();
+
+                    MakeTransparent(pngName);
+                    GCcount++;
+                    if (GCcount % 100 == 0)
+                    {
+                        GC.Collect();
+                    }
+                }
+            }
+        }
+
+        private static void MakeTransparent(string p)
+        {
+            FileStream fs = new FileStream(p, FileMode.Open, FileAccess.Read);
+            using (Image original = new Bitmap(fs))
+            {
+                using (Bitmap image = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb))
+                {
+                    Graphics g = Graphics.FromImage(image);
+                    ImageAttributes ia = new ImageAttributes();
+                    ia.SetColorKey(Color.FromArgb(0, 0xde, 0), Color.FromArgb(33, 255, 5));
+                    g.DrawImage(
+                        original,
+                        new Rectangle(0, 0, original.Width, original.Height),
+                        0,
+                        0,
+                        original.Width,
+                        original.Height,
+                        GraphicsUnit.Pixel,
+                        ia);
+                    g.Dispose();
+                    ia.Dispose();
+                    image.Save(p, ImageFormat.Png);
+                }
+            }
         }
 
         /// <summary>
@@ -661,9 +784,11 @@ namespace Extractor_Serializer
             TextWriter tw = new StreamWriter("itemnames.sql", false, Encoding.GetEncoding("windows-1252"));
             tw.WriteLine("DROP TABLE IF EXISTS `itemnames`;");
             tw.WriteLine("CREATE TABLE `itemnames` (");
-            tw.WriteLine("  `AOID` int(10) NOT NULL,");
+            tw.WriteLine("  `Id` int(10) NOT NULL,");
             tw.WriteLine("  `Name` varchar(250) NOT NULL,");
-            tw.WriteLine("  PRIMARY KEY (`AOID`)");
+            tw.WriteLine("  `ItemType` varchar(50) NOT NULL,");
+            tw.WriteLine("  `Icon` varchar(20) NOT NULL,");
+            tw.WriteLine("  PRIMARY KEY (`Id`)");
             tw.WriteLine(") ENGINE=MyIsam DEFAULT CHARSET=latin1;");
             tw.WriteLine();
             tw.Close();
@@ -678,14 +803,16 @@ namespace Extractor_Serializer
             var np = new NewParser();
             List<NanoFormula> rawNanoList = new List<NanoFormula>();
             int counter = 0;
-            foreach (int recnum in extractor.GetRecordInstances(0xFDE85))
+            foreach (int recnum in extractor.GetRecordInstances(Extractor.RecordType.Nano))
             {
                 if (counter == 0)
                 {
                     counter = recnum;
                 }
 
-                rawNanoList.Add(np.ParseNano(0xFDE85, recnum, extractor.GetRecordData(0xFDE85, recnum), "temp.sql"));
+                byte[] data = extractor.GetRecordData(Extractor.RecordType.Nano, recnum);
+                NanoFormula nano = np.ParseNano(recnum, data, "temp.sql");
+                rawNanoList.Add(nano);
                 if ((counter % 2000) == 0)
                 {
                     Console.Write("\rNano ID: " + recnum.ToString().PadLeft(9));
@@ -740,11 +867,13 @@ namespace Extractor_Serializer
                         throw;
                     }
                 }
-
-                if (counter % perc == 0)
+                if (perc > 0)
                 {
-                    Console.Write("\r" + counter2 + "% done");
-                    counter2++;
+                    if (counter % perc == 0)
+                    {
+                        Console.Write("\r" + counter2 + "% done");
+                        counter2++;
+                    }
                 }
 
                 counter++;
@@ -778,7 +907,7 @@ namespace Extractor_Serializer
 
                 newItemrelations.Sort();
 
-                TextWriter tw = new StreamWriter("itemrelations.txt");
+                TextWriter tw = new StreamWriter("itemrelations.txt", true);
                 foreach (string s in newItemrelations)
                 {
                     tw.WriteLine(s);

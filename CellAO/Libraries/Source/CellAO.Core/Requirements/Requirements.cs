@@ -2,13 +2,17 @@
 
 // Copyright (c) 2005-2014, CellAO Team
 // 
+// 
 // All rights reserved.
 // 
+// 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+// 
 // 
 //     * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //     * Neither the name of the CellAO Team nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+// 
 // 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,6 +25,7 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
 
 #endregion
 
@@ -42,7 +47,7 @@ namespace CellAO.Core.Requirements
     /// Requirements
     /// </summary>
     [Serializable]
-    public class Requirements : IRequirements
+    public class Requirement : IRequirement
     {
         #region Fields
 
@@ -57,12 +62,12 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Child operator
         /// </summary>
-        public int ChildOperator { get; set; }
+        public Operator ChildOperator { get; set; }
 
         /// <summary>
         /// Operator
         /// </summary>
-        public int Operator { get; set; }
+        public Operator Operator { get; set; }
 
         /// <summary>
         /// Stat to check against
@@ -72,7 +77,7 @@ namespace CellAO.Core.Requirements
         /// <summary>
         /// Target, from constants
         /// </summary>
-        public int Target { get; set; }
+        public ItemTarget Target { get; set; }
 
         /// <summary>
         /// Value to check against
@@ -96,23 +101,33 @@ namespace CellAO.Core.Requirements
                 try
                 {
                     this.theCheckFunc = RequirementLambdaCreator.Create(this);
-                    return this.theCheckFunc(entity);
+                    //return this.theCheckFunc(entity);
                 }
                 catch (Exception)
                 {
-                    LogUtil.Debug("Could not create lambda for a requirement.");
-                    LogUtil.Debug("Values:");
-                    LogUtil.Debug("Target:       " + ((ItemTarget)this.Target));
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "Could not create lambda for a requirement.");
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "Values:");
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "Target:       " + (this.Target));
                     LogUtil.Debug(
+                        DebugInfoDetail.GameFunctions,
                         "StatId:       " + (this.Statnumber + " (" + StatNamesDefaults.GetStatName(this.Statnumber))
                         + ")");
-                    LogUtil.Debug("Operator:     " + ((Operator)this.Operator));
-                    LogUtil.Debug("Value:        " + this.Value);
-                    LogUtil.Debug("ChildOperator:" + ((Operator)this.ChildOperator));
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "Operator:     " + (this.Operator));
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "Value:        " + this.Value);
+                    LogUtil.Debug(DebugInfoDetail.GameFunctions, "ChildOperator:" + (this.ChildOperator));
                     return false;
                 }
             }
-
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Values:");
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Target:       " + (this.Target));
+            LogUtil.Debug(
+                DebugInfoDetail.GameFunctions,
+                "StatId:       " + (this.Statnumber + " (" + StatNamesDefaults.GetStatName(this.Statnumber))
+                + ")");
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Operator:     " + (this.Operator));
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Value:        " + this.Value + " <-> " + entity.Stats[this.Statnumber].Value.ToString());
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "ChildOperator:" + (this.ChildOperator));
+            LogUtil.Debug(DebugInfoDetail.GameFunctions, "Result:       " + this.theCheckFunc(entity));
             return this.theCheckFunc(entity);
         }
 
@@ -120,15 +135,20 @@ namespace CellAO.Core.Requirements
         /// </summary>
         /// <returns>
         /// </returns>
-        public Requirements Copy()
+        public Requirement Copy()
         {
-            Requirements copy = new Requirements();
+            Requirement copy = new Requirement();
             copy.Operator = this.Operator;
             copy.ChildOperator = this.ChildOperator;
             copy.Target = this.Target;
             copy.Statnumber = this.Statnumber;
             copy.Value = this.Value;
             return copy;
+        }
+
+        public override string ToString()
+        {
+            return this.Target + " " + this.Statnumber + " " + this.Operator + " " + this.Value;
         }
 
         #endregion
