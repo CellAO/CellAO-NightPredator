@@ -54,12 +54,7 @@ namespace ZoneEngine.Core
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-    using SmokeLounge.AOtomation.Messaging.Messages.SystemMessages;
 
-    using Utility;
-
-    using ZoneEngine.Core.MessageHandlers;
     using ZoneEngine.Script;
 
     using IBus = MemBus.IBus;
@@ -109,30 +104,29 @@ namespace ZoneEngine.Core
 
             this.subscribedMessageHandlers.Clear();
 
-            this.SubscribeMessage<CharacterActionMessageHandler, CharacterActionMessage>();
-            this.SubscribeMessage<CharDCMoveMessageHandler, CharDCMoveMessage>();
-            this.SubscribeMessage<CharInPlayMessageHandler, CharInPlayMessage>();
-            this.SubscribeMessage<ChatCmdMessageHandler, ChatCmdMessage>();
-            this.SubscribeMessage<ContainerAddItemMessageHandler, ContainerAddItemMessage>();
-            this.SubscribeMessage<FollowTargetMessageHandler, FollowTargetMessage>();
-            this.SubscribeMessage<GenericCmdMessageHandler, GenericCmdMessage>();
-            this.SubscribeMessage<LookAtMessageHandler, LookAtMessage>();
-            this.SubscribeMessage<SkillMessageHandler, SkillMessage>();
-            this.SubscribeMessage<SocialActionCmdMessageHandler, SocialActionCmdMessage>();
-            this.SubscribeMessage<VicinityChatMessageHandler, TextMessage>();
-            this.SubscribeMessage<TradeMessageHandler, TradeMessage>();
-            this.SubscribeMessage<ZoneLoginMessageHandler, ZoneLoginMessage>();
+            IEnumerable<Type> types =
+                Assembly.GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(
+                        x =>
+                            x.GetCustomAttributes(typeof(MessageHandlerAttribute), false)
+                                .Any(
+                                    y => ((MessageHandlerAttribute)y).Direction != MessageHandlerDirection.OutboundOnly));
 
-            this.SubscribeMessage<KnuBotAnswerMessageHandler, KnuBotAnswerMessage>();
-            this.SubscribeMessage<KnuBotCloseChatWindowMessageHandler, KnuBotCloseChatWindowMessage>();
-            this.SubscribeMessage<KnuBotFinishTradeMessageHandler, KnuBotFinishTradeMessage>();
-            this.SubscribeMessage<KnuBotTradeMessageHandler, KnuBotTradeMessage>();
+            MethodInfo subscriptMethodInfo = typeof(ZoneServer).GetMethod(
+                "SubscribeMessage",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (Type type in
+                types)
+            {
+                Type[] temp = type.BaseType.GetGenericArguments();
+                MethodInfo generic = subscriptMethodInfo.MakeGenericMethod(new Type[] { temp[1], temp[0] });
+                generic.Invoke(this, null);
+            }
             this.CheckSubscribedMessageHandlers();
         }
 
-        private void SubscribeMessage<T, TU>()
-            where T : AbstractMessageHandler<TU>
-            where TU : MessageBody, new()
+        private void SubscribeMessage<T, TU>() where T : AbstractMessageHandler<TU> where TU : MessageBody, new()
         {
             T def =
                 (T)
@@ -252,6 +246,8 @@ namespace ZoneEngine.Core
 
         #region Methods
 
+        private readonly Dictionary<IPAddress, DateTime> connectDelayList = new Dictionary<IPAddress, DateTime>();
+
         /// <summary>
         /// </summary>
         /// <param name="messageobject">
@@ -276,9 +272,9 @@ namespace ZoneEngine.Core
             bool delay = false;
             if (address != null)
             {
-                lock (connectDelayList)
+                lock (this.connectDelayList)
                 {
-                    delay = connectDelayList.Any(x => x.Key.Equals(address) && (x.Value < DateTime.UtcNow));
+                    delay = this.connectDelayList.Any(x => x.Key.Equals(address) && (x.Value < DateTime.UtcNow));
                 }
             }
             if (delay)
@@ -360,9 +356,6 @@ namespace ZoneEngine.Core
             }
         }
 
-        private Dictionary<IPAddress, DateTime> connectDelayList = new Dictionary<IPAddress, DateTime>();
-
-
         /// <summary>
         /// </summary>
         /// <param name="client">
@@ -375,16 +368,16 @@ namespace ZoneEngine.Core
             IPAddress address = cli.ClientAddress;
             if (address != null)
             {
-                lock (connectDelayList)
+                lock (this.connectDelayList)
                 {
-                    if (connectDelayList.Any(x => x.Key.Equals(address)))
+                    if (this.connectDelayList.Any(x => x.Key.Equals(address)))
                     {
-                        KeyValuePair<IPAddress, DateTime> kv = connectDelayList.First(x => x.Key.Equals(address));
-                        connectDelayList[kv.Key] = DateTime.UtcNow + TimeSpan.FromSeconds(2);
+                        KeyValuePair<IPAddress, DateTime> kv = this.connectDelayList.First(x => x.Key.Equals(address));
+                        this.connectDelayList[kv.Key] = DateTime.UtcNow + TimeSpan.FromSeconds(2);
                     }
                     else
                     {
-                        connectDelayList.Add(address, DateTime.UtcNow + TimeSpan.FromSeconds(2));
+                        this.connectDelayList.Add(address, DateTime.UtcNow + TimeSpan.FromSeconds(2));
                     }
                 }
             }
