@@ -418,13 +418,15 @@
 
 **Undefined** = 53240,
 
-**CastNano2** = 53242
+**CastNano2** = 53242,
+
+**ExitProxyPlayfield** = 100000
 
 
 ----------
 
 *Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.2.3365 - Night Predator*
 
 

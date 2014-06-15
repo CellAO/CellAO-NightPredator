@@ -34,6 +34,8 @@
 
 **CanbeAffected** = 50000,
 
+**CityController** = 50200,
+
 **Terminal** = 51005,
 
 **Door** = 51016,
@@ -56,6 +58,8 @@
 
 **GfxEffect** = 53030,
 
+**MissionEntrance** = 56006,
+
 **MissionTerminal** = 56481,
 
 **TeamWindow** = 57001,
@@ -71,6 +75,6 @@
 
 *Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.2.3365 - Night Predator*
 
 

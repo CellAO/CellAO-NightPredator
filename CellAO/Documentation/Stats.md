@@ -4396,9 +4396,9 @@
 
 **visualprofession [368]**
 
-**Class type:** CellAO.Stats.Stat
+**Class type:** CellAO.Stats.SpecialStats.StatVisualProfession
 
-**Default value:** 1234567890
+**Default value:** 1
 
 **Tags:** 
 `Save in Database`  , `Announce to Playfield`  
@@ -8444,6 +8444,6 @@
 
 *Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.2.3365 - Night Predator*
 
 

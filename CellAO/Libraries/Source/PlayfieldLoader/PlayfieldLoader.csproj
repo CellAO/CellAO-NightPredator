@@ -1,33 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2D1258F5-D00F-4C5A-B0FB-76ED66E11B47}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MarkDownDocumentator</RootNamespace>
-    <AssemblyName>MarkDownDocumentator</AssemblyName>
+    <RootNamespace>PlayfieldLoader</RootNamespace>
+    <AssemblyName>PlayfieldLoader</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\CellAO\Built\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\CellAO\Built\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,51 +40,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\CellAO\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="PlayfieldLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
-      <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
+    <ProjectReference Include="..\CellAO.Core\CellAO.Core.csproj">
+      <Project>{8AEF23B2-9E44-40A1-A74E-CF7348B45B62}</Project>
       <Name>CellAO.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
+    <ProjectReference Include="..\CellAO.Database\CellAO.Database.csproj">
       <Project>{63D6C409-58EB-4033-87E0-E0DDA6594075}</Project>
       <Name>CellAO.Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Enums\CellAO.Enums.csproj">
-      <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
+    <ProjectReference Include="..\CellAO.Enums\CellAO.Enums.csproj">
+      <Project>{0C09AF43-3456-4FD6-9041-D9A6D7C3F36C}</Project>
       <Name>CellAO.Enums</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Interfaces\CellAO.Interfaces.csproj">
+    <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">
       <Project>{d53f0612-fefe-4eaf-80aa-480f25c8dd76}</Project>
       <Name>CellAO.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Stats\CellAO.Stats.csproj">
-      <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
-      <Name>CellAO.Stats</Name>
+    <ProjectReference Include="..\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
+      <Project>{6E8C2296-21E9-4113-89C4-76376516AA14}</Project>
+      <Name>MsgPack.Mono</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj">
-      <Project>{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}</Project>
-      <Name>PlayfieldLoader</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\Utility\Utility.csproj">
-      <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{CB56F285-02AE-4816-9E8A-EC69991400E5}</Project>
       <Name>Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\CellAO\Server\ZoneEngine\ZoneEngine.csproj">
-      <Project>{60385925-84f5-4893-a5e0-c8c1d1190790}</Project>
-      <Name>ZoneEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
