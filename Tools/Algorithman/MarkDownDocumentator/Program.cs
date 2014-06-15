@@ -350,7 +350,7 @@ namespace MarkDownDocumentator
                 ItemTemplate template = ItemLoader.ItemList[templateid];
                 string name = ItemNamesDao.Instance.Get(templateid).Name;
 
-                tw.WriteLine("** "+name+" ** ["+templateid+"]");
+                tw.WriteLine("**"+name+"** ["+templateid+"]");
                 tw.WriteLine();
             }
             WriteFooter(tw);
