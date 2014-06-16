@@ -33,6 +33,11 @@ namespace WebEngine
 {
     #region Usings ...
 
+    using AO.Core.Encryption;
+
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -41,6 +46,7 @@ namespace WebEngine
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Web;
     using System.Xml.Linq;
 
     using Utility;
@@ -224,6 +230,133 @@ namespace WebEngine
         }
 
         /// <summary>
+        /// Updates the HTML file processes user interaction.
+        /// </summary>
+        /// <param name="">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private void UpdateHtml(string queryString, string filename)
+        {
+            string head = string.Empty;
+            string body = string.Empty;
+            string docType = string.Empty;
+            string webHostName = string.Empty;
+            string css = string.Empty;
+            string header = string.Empty;
+            string charactersList = string.Empty;
+            string contact = string.Empty;
+            string registerLink = string.Empty;
+            string infoTab = string.Empty;
+            string registeredUsers = string.Empty;
+            string readForm = string.Empty;
+            string document = string.Empty;
+            
+            // Get various information to display it.
+            List<DBCharacter> loggedIn = CharacterDao.Instance.GetLoggedInCharacters();
+            long registeredCount = LoginDataDao.Instance.GetRegisteredCount();
+
+            // Website properties .
+            docType = "<!DOCTYPE html>";
+            webHostName = _config.Instance.CurrentConfig.WebHostName;
+
+            // Styling stuff
+            StreamReader cssFile = new StreamReader("htdocs/style.css");
+            css = "<style type=\"text/css\">";
+            css += cssFile.ReadToEnd();
+            css += "</style>";
+            cssFile.Close();
+            
+            // Here comes our header :)
+            header = "<div class='headerwrapper'><h1>Welcome to " + _config.Instance.CurrentConfig.WebHostName + "</h1></div>";
+
+            // Prepare the output of characters info.
+            charactersList = "<div class='characterList'>";
+            charactersList += "<table><tr class='italic'>";
+            charactersList += "<th>Name</th><th>Level</th><th>Playfield</th><th>Status</th>";
+            charactersList += "</tr>";
+
+            foreach(DBCharacter character in loggedIn)
+            {
+                charactersList += "<tr><td>" + character.Name + "</td><td>lvl</td><td>" + character.Playfield + "</td><td><font color='green'>online</font></td></tr>";
+            }
+            charactersList += "</table></div>";
+
+            contact = "<div class='dataWrapper'><div class='dataBlock'><h2>Contact</h2>";
+            contact += "<a class='italic' href='contact.php'>Hit us up!</a></div>";
+
+
+            // Register formular.
+            registerLink = "<div class='dataBlock'><h2>Login and Register</h2>";
+            registerLink += "<a class='italic' href='register.php'>Register now!</a></div></div>";
+
+            // InfoTab to display some other stuff that I have no place for yet
+            infoTab = "<div class='dataWrapper'><div class='dataBlock'><h3>Known Bugs/Missing Features</h3><p>";
+            infoTab += "<ul class='italic'><li>Level doesn't get displayed</li><li>No feedback formulars yet (successfull, failed etc.)</li></ul></p></div>";
+
+            // Prepare the output of total registered user count.
+            registeredUsers = "<div class='dataBlock'><h2>Total registered Users</h2>" + "<p class='italic'>" + registeredCount + "</p></div></div>";
+
+            // Split post/get-arguments to process the data in it. UrlDecode() needed for '@' conversion
+            queryString = HttpUtility.UrlDecode(queryString);
+            string[] requestPartSplit = queryString.Split(new string[] { "&" }, StringSplitOptions.None);
+
+            List<string[]> split = new List<string[]>();
+            foreach (string t in requestPartSplit)
+            {
+                split.Add(t.Split(new string[] { "=" }, StringSplitOptions.None));
+            }
+
+            // Actually process post/get-arguments based on the "input" value
+            if (split.Count > 1)
+            {
+                switch (split[0][1])
+                {
+                    case "register":    // Check wether everything is filled in or not.
+                        if (!string.IsNullOrEmpty(split[1][1]) && !string.IsNullOrEmpty(split[2][1]) && !string.IsNullOrEmpty(split[3][1])
+                            && !string.IsNullOrEmpty(split[4][1]) && !string.IsNullOrEmpty(split[5][1]) && !string.IsNullOrEmpty(split[6][1]))
+                        {
+                            if (TestEmailRegex.TestEmail(split[1][1]))
+                            {
+                                if(split[5][1] == split[6][1])
+                                {
+                                    DBLoginData dbchar = new DBLoginData();
+
+                                    dbchar.AccountFlags = 0;
+                                    dbchar.AllowedCharacters = 12;
+                                    dbchar.CreationDate = DateTime.Now;
+                                    dbchar.Email = split[1][1];
+                                    dbchar.Expansions = 2047;
+                                    dbchar.FirstName = split[3][1];
+                                    dbchar.Flags = 0;
+                                    dbchar.GM = 0;
+                                    dbchar.LastName = split[4][1];
+                                    dbchar.Password = new LoginEncryption().GeneratePasswordHash(split[5][1]);
+                                    dbchar.Username = split[2][1];
+
+                                    CellAO.Database.Dao.LoginDataDao.Instance.Add(dbchar);
+                                    Console.WriteLine("Account created!");
+                                }  
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            // Merge the document and put it into our file
+            head = "<head><title>" + webHostName + "</title>" + css + "</head>";
+            body = "<body>" + header + "<div class='mainwrapper'>" + charactersList + contact + registerLink + infoTab + registeredUsers + "</div></body>";
+            document = docType + "<html>" + head + body +"</html>";
+
+            StreamWriter phpFile = new StreamWriter("htdocs/index.php");
+            phpFile.WriteLine(document);
+            phpFile.Close();
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="sockets">
         /// </param>
@@ -244,6 +377,7 @@ namespace WebEngine
 
             if (sockets.Connected == true)
             {
+
                 remoteAddress = sockets.RemoteEndPoint.ToString();
                 Console.WriteLine("Connected to {0}", remoteAddress);
 
@@ -322,6 +456,9 @@ namespace WebEngine
                         return;
                 }
 
+
+                
+
                 // Get the full name of the requested file
                 if (requestedFile.EndsWith("\\") || String.IsNullOrEmpty(requestedFile))
                 {
@@ -343,6 +480,9 @@ namespace WebEngine
                         return;
                     }
                 }
+
+                // generates a up to date html page per view
+                UpdateHtml(queryString, requestedFile);
 
                 filePath = this.serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
@@ -463,6 +603,9 @@ namespace WebEngine
                     var listening = new Thread(() => this.HttpThread(sockets));
 
                     listening.Start();
+
+
+                    
                 }
             }
             catch (Exception e)

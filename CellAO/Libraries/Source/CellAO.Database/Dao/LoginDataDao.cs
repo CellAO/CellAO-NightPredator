@@ -79,6 +79,24 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Returns the count of registered users.
+        /// </summary>
+        /// <param name="">
+        /// </param>
+        /// <returns>
+        /// long count
+        /// </returns>
+        public long GetRegisteredCount()
+        {
+            const string SQL = "SELECT COUNT(*) FROM login";
+            using (IDbConnection conn = Connector.GetConnection())
+            {
+                return conn.Query<long>(SQL).Single();
+            }
+        }
+
+
+        /// <summary>
         /// </summary>
         /// <param name="user">
         /// </param>

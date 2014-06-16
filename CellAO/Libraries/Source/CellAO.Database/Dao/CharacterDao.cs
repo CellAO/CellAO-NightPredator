@@ -237,6 +237,23 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Returns a List of logged in characters.
+        /// </summary>
+        /// <param name="">
+        /// </param>
+        /// <returns>
+        /// long count
+        /// </returns>
+        public List<DBCharacter> GetLoggedInCharacters()
+        {
+            IEnumerable <DBCharacter> a = this.GetWhere(new { Online = 1 });
+            List<DBCharacter> list = new List<DBCharacter>();
+
+            list = a.ToList();
+            return list;
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="charId">
         /// </param>
