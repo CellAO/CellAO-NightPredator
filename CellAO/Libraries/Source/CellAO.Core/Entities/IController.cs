@@ -306,6 +306,8 @@ namespace CellAO.Core.Entities
         /// </returns>
         bool Logout();
 
+        void LogoffCharacter();
+
         /// <summary>
         /// </summary>
         /// <returns>

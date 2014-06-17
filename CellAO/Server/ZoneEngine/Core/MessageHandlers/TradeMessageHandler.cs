@@ -274,7 +274,6 @@ namespace ZoneEngine.Core.MessageHandlers
                                 cash -= (int)(CLFactor * item.GetAttribute(74));
                             }
 
-                            
                             client.Controller.Character.Stats[StatIds.cash].Value -= cash;
 
                             this.Send(

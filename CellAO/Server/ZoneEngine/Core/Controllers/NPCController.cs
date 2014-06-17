@@ -73,6 +73,8 @@ namespace ZoneEngine.Core.Controllers
 
         private CharacterState state = CharacterState.Idle;
 
+        private int activeWaypoint = 0;
+
         public CharacterState State
         {
             get
@@ -191,9 +193,11 @@ namespace ZoneEngine.Core.Controllers
         public bool Trade(Identity target)
         {
             // Do we have a attached KnuBot?
-            if ((this.KnuBot != null) && (this.KnuBot.Character.Target==null))
+            if ((this.KnuBot != null) && (this.KnuBot.Character.Target == null))
             {
-                return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(Character.Playfield.Identity, target));
+                return
+                    this.KnuBot.StartDialog(
+                        Pool.Instance.GetObject<ICharacter>(this.Character.Playfield.Identity, target));
             }
             return false;
         }
@@ -246,6 +250,10 @@ namespace ZoneEngine.Core.Controllers
         public bool Logout()
         {
             throw new NotImplementedException();
+        }
+
+        public void LogoffCharacter()
+        {
         }
 
         public bool Login()
@@ -356,7 +364,9 @@ namespace ZoneEngine.Core.Controllers
             Vector3 targetPosition = this.followCoordinates;
             if (!this.followIdentity.Equals(Identity.None))
             {
-                ICharacter targetChar = Pool.Instance.GetObject<ICharacter>(Character.Playfield.Identity, this.followIdentity);
+                ICharacter targetChar = Pool.Instance.GetObject<ICharacter>(
+                    this.Character.Playfield.Identity,
+                    this.followIdentity);
                 if (targetChar == null)
                 {
                     // If target does not longer exist (death or zone or logoff) then stop following
@@ -474,8 +484,6 @@ namespace ZoneEngine.Core.Controllers
             }
         }
 
-        private int activeWaypoint = 0;
-
         private Waypoint FindNextWaypoint()
         {
             Waypoint result = null;
@@ -483,17 +491,17 @@ namespace ZoneEngine.Core.Controllers
             {
                 return null;
             }
-            if (this.Character.Waypoints.Count <= activeWaypoint)
+            if (this.Character.Waypoints.Count <= this.activeWaypoint)
             {
-                activeWaypoint = 0;
+                this.activeWaypoint = 0;
             }
             int len = this.Character.Waypoints.Count;
             do
             {
-                activeWaypoint = (activeWaypoint + 1) % len;
-                result = this.Character.Waypoints[activeWaypoint];
+                this.activeWaypoint = (this.activeWaypoint + 1) % len;
+                result = this.Character.Waypoints[this.activeWaypoint];
             }
-            while (result.Position.Distance2D(this.Character.Coordinates().coordinate)<0.2f);
+            while (result.Position.Distance2D(this.Character.Coordinates().coordinate) < 0.2f);
             return result;
         }
 

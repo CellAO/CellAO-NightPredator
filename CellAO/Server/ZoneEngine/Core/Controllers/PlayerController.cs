@@ -38,7 +38,6 @@ namespace ZoneEngine.Core.Controllers
     using System.Linq;
     using System.Threading;
 
-    using CellAO.Core.Components;
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
     using CellAO.Core.Functions;
@@ -48,6 +47,7 @@ namespace ZoneEngine.Core.Controllers
     using CellAO.Core.Network;
     using CellAO.Core.Statels;
     using CellAO.Core.Vector;
+    using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Interfaces;
     using CellAO.ObjectManager;
@@ -193,7 +193,7 @@ namespace ZoneEngine.Core.Controllers
         {
             // TODO: add Team lookup here too (F1-F6 for example)
             bool result = false;
-            if (Pool.Instance.Contains(Character.Playfield.Identity, target))
+            if (Pool.Instance.Contains(this.Character.Playfield.Identity, target))
             {
                 this.Character.SetTarget(target);
                 result = true;
@@ -556,8 +556,7 @@ namespace ZoneEngine.Core.Controllers
             {
                 StatelData sd =
                     PlayfieldLoader.PFData[this.Character.Playfield.Identity.Instance].Statels.FirstOrDefault(
-                        x =>
-                            (x.Identity.Type == identity.Type) && (x.Identity.Instance == identity.Instance));
+                        x => (x.Identity.Type == identity.Type) && (x.Identity.Instance == identity.Instance));
 
                 if (sd != null)
                 {
@@ -567,7 +566,6 @@ namespace ZoneEngine.Core.Controllers
                     {
                         onUse.Perform(this.Character, sd);
                     }
-                    
                 }
             }
             return true;
@@ -743,6 +741,11 @@ namespace ZoneEngine.Core.Controllers
             // 5. Logout
 
             throw new NotImplementedException();
+        }
+
+        public void LogoffCharacter()
+        {
+            CharacterDao.Instance.SetOffline(this.Character.Identity.Instance);
         }
 
         /// <summary>
