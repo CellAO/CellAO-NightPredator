@@ -149,3 +149,16 @@ insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('SNCB', 1, 'Shining Nano Clusters - Basic', 155308, 'CluS', 1, 50, 0.04, 1, 161);
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('SNCA', 1, 'Shining Nano Clusters - Advanced', 155309, 'CluS', 50, 90, 0.04, 1, 161);
 insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('SNCS', 1, 'Shining Nano Clusters - Superior', 155310, 'CluS', 90, 200, 0.04, 1, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('MedS', 1, 'Superior Medic Supplies', 151975, 'Med', 70, 125, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('MedA', 1, 'Advanced Medic Supplies', 99575, 'Med', 20, 90, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('MedB', 1, 'Basic Medic Supplies', 99574, 'Med', 1, 20, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('ToolS', 1, 'Superior Tools', 152012, 'Tool', 70, 200, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('ToolA', 1, 'Advanced Tools', 152008, 'Tool', 40, 125, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('ToolB', 1, 'Basic Tools', 99601, 'Tool', 1, 50, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AtkS', 1, 'Superior Attacks', 151982, 'Atk', 70, 200, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AtkA', 1, 'Advanced Attacks', 151981, 'Atk', 30, 125, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('AtkB', 1, 'Basic Attacks', 99602, 'Atk', 1, 50, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('BkStS', 1, 'Superior Bookstore', 155601, 'BkSt', 100, 200, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('BkStA', 1, 'Advanced Bookstore', 155600, 'BkSt', 50, 100, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('BkStB', 1, 'Basic Bookstore', 155599, 'BkSt', 1, 50, 0.04, 1.00, 161);
+insert into `vendortemplate` (`HASH`,`lvl`,`Name`,`itemtemplate`,`ShopInvHash`,`minQL`,`maxQL`,`buy`,`sell`,`skill`) VALUES ('ContG', 1, 'Containers', 99501, 'Cont', 1, 1, 0.04, 1.00, 161);
