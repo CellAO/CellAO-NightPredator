@@ -274,7 +274,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 cash -= (int)(CLFactor * item.GetAttribute(74));
                             }
 
-                            // TODO: DEDUCT CREDITS HERE!
+                            
                             client.Controller.Character.Stats[StatIds.cash].Value -= cash;
 
                             this.Send(
@@ -282,6 +282,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 TradeAction.Unknown,
                                 shoppingBag.Vendor,
                                 shoppingBag.Vendor);
+                            client.Controller.SendChangedStats();
                             shoppingBag.Dispose();
                         }
                     }
