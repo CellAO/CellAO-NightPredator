@@ -947,8 +947,11 @@ namespace CellAO.Core.Playfields
                         }
                     }
 
-                    this.CheckWallCollision(dynel);
-                    this.CheckStatelCollision(dynel);
+                    if (dynel.Controller is PlayerController)
+                    {
+                        this.CheckWallCollision(dynel);
+                        this.CheckStatelCollision(dynel);
+                    }
                 }
             }
             try
