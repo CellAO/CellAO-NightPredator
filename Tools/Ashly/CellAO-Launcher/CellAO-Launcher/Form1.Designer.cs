@@ -80,6 +80,7 @@
             this.label2.Size = new System.Drawing.Size(341, 65);
             this.label2.TabIndex = 3;
             this.label2.Text = "CellAO Launcher";
+            this.label2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1MouseDown);
             // 
             // label3
             // 
@@ -188,7 +189,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.CadetBlue;
-            this.ClientSize = new System.Drawing.Size(986, 466);
+            this.ClientSize = new System.Drawing.Size(982, 462);
             this.ControlBox = false;
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.bx_Port);
@@ -211,6 +212,7 @@
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Load += new System.EventHandler(this.Form1Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1MouseDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

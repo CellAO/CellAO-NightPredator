@@ -38,6 +38,7 @@ namespace CellAO_Launcher
     using System.Diagnostics;
     using System.IO;
     using System.Net;
+    using System.Runtime.InteropServices;
     using System.Windows.Forms;
 
     #endregion
@@ -53,6 +54,16 @@ namespace CellAO_Launcher
             this.InitializeComponent();
             this.DoubleBuffered = true;
         }
+
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd,
+                         int Msg, int wParam, int lParam);
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
 
         // These are the keys that will be sent to CellAO.
         /// <summary>
@@ -96,8 +107,8 @@ namespace CellAO_Launcher
         private void Button2Click(object sender, EventArgs e)
         {
             OpenFileDialog browseFile = new OpenFileDialog();
-            browseFile.Filter = "Exe Files (*.exe)|*.exe";
-            browseFile.Title = "Browse EXE files";
+            browseFile.Filter = "Anarchy Online|AnarchyOnline.exe";
+            browseFile.Title = "Browse for Anarchy Online";
             browseFile.FileName = "AnarchyOnline.exe";
 
             if (browseFile.ShowDialog() == DialogResult.OK)
@@ -144,20 +155,26 @@ namespace CellAO_Launcher
                         Injector.SuspendProcess(AO.Id);
 
                         // Search and replace keys
-                        Injector.SearchAndReplace(AO.Id, AO.Handle, FUNCOM_KEY_PUBLIC, this.CELLAO_KEY_PUBLIC);
+                        bool replaced = Injector.SearchAndReplace(AO.Id, AO.Handle, FUNCOM_KEY_PUBLIC, this.CELLAO_KEY_PUBLIC);
 
                         // Uncomment this when we have a own Prime - Algorithman
                         // Injector.SearchAndReplace(AO.Id, AO.Handle, FUNCOM_KEY_PRIME, CELLAO_KEY_PRIME);
 
                         // Resume client
                         Injector.ResumeProcess(AO.Id);
+
+                        if (!replaced)
+                        {
+                            MessageBox.Show(
+                                "Could not find/replace the encryption keys. Please bug Algorithman for a update.");
+                        }
                     }
 
                     // Save configuration data
                     _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
                     _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
                     _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
-                    _config.Instance.SaveConfig();;
+                    _config.Instance.SaveConfig(); ;
                     Application.Exit();
                 }
             }
@@ -182,13 +199,13 @@ namespace CellAO_Launcher
             this.bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
 #if DEBUG
             this.UseEncryption.Checked = false;
-#else 
+#else
             this.UseEncryption.Checked = true;
 
-                this.label4.Visible = true;
-                this.bx_converted.Visible = true;
-                this.bx_converted.ReadOnly = true;
-                this.button4.Visible = true;
+            this.label4.Visible = true;
+            this.bx_converted.Visible = true;
+            this.bx_converted.ReadOnly = true;
+            this.button4.Visible = true;
 #endif
 
         }
@@ -203,7 +220,7 @@ namespace CellAO_Launcher
         {
 #if DEBUG
             this.UseEncryption.Checked = true;
-#endif 
+#endif
             _config.Instance.CurrentConfig.AOExecutable = this.bx_AOExe.Text;
             _config.Instance.CurrentConfig.ServerIP = this.bx_IPAddress.Text;
             _config.Instance.CurrentConfig.ServerPort = Convert.ToInt32(this.bx_Port.Text);
@@ -274,11 +291,20 @@ namespace CellAO_Launcher
             this.button4.Visible = true;
 
 #else
-      
+
             this.bx_converted.Visible = false;
             this.label4.Visible = false;
             this.button4.Visible = false;
 #endif
+        }
+
+        private void Form1MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
         }
     }
 }
