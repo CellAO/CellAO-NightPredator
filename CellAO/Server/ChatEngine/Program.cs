@@ -55,6 +55,8 @@ namespace ChatEngine
 
     using Utility;
 
+    using ZoneEngine.Core.Playfields;
+
     using Config = Utility.Config.ConfigReadWrite;
 
     #endregion
@@ -81,6 +83,10 @@ namespace ChatEngine
         /// <summary>
         /// </summary>
         private static ConsoleText ct = new ConsoleText();
+
+        /// <summary>
+        /// </summary>
+        public static RelayBot Ircbot;
 
         #endregion
 
@@ -181,6 +187,9 @@ namespace ChatEngine
                     case "debugnetwork":
                         LogUtil.Toggle(DebugInfoDetail.Network);
                         break;
+                    case "debugiscom":
+                        LogUtil.Toggle(DebugInfoDetail.ISComm);
+                        break;
                 }
             }
         }
@@ -192,9 +201,9 @@ namespace ChatEngine
                 Console.WriteLine("Starting RelayBot. Version {0}", ProgramInfo.AssemblyVersion);
 
                 // Call the IRC Bot stuff here..
-                RelayBot ircbot = new RelayBot();
+                Ircbot = new RelayBot();
 
-                ircbot.Run(chatServer);
+                Ircbot.Run(chatServer);
             }
         }
 
@@ -222,6 +231,7 @@ namespace ChatEngine
                 {
                     return false;
                 }
+                PlayfieldLoader.CacheAllPlayfieldData();
             }
             catch (Exception e)
             {

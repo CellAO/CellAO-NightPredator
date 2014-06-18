@@ -58,7 +58,7 @@
     <Compile Include="Messages\MessageBase.cs" />
     <Compile Include="Messages\OnlineCharacters.cs" />
     <Compile Include="Messages\Ping.cs" />
-    <Compile Include="Messages\Playfields.cs" />
+    <Compile Include="Messages\RequestPlayfieldList.cs" />
     <Compile Include="Messages\VicinityChatMessage.cs" />
     <Compile Include="OnDataReceivedArgs.cs" />
     <Compile Include="ZoneComClient.cs" />
@@ -72,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}</Project>
+      <Name>SmokeLounge.AOtomation.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cell.Core\Cell.Core.csproj">
       <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
       <Name>Cell.Core</Name>

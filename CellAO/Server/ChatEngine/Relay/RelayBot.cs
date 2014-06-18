@@ -38,6 +38,8 @@ namespace Chatengine.Relay
     using System.Linq;
     using System.Text;
 
+    using CellAO.Communication.Messages;
+
     using ChatEngine;
     using ChatEngine.Channels;
     using ChatEngine.CoreServer;
@@ -47,6 +49,8 @@ namespace Chatengine.Relay
     using IrcDotNet;
 
     using Utility;
+
+    using ZoneEngine.Core.Playfields;
 
     using Config = Utility.Config.ConfigReadWrite;
 
@@ -179,6 +183,10 @@ namespace Chatengine.Relay
 
         #region Methods
 
+        public readonly Queue<RequestPlayfieldList> replyQueuePlayfieldList = new Queue<RequestPlayfieldList>();
+
+        private bool executingRequestPlayfieldList = false;
+
         /// <summary>
         /// </summary>
         protected void InitializeRelayChatCommandProcessors()
@@ -200,20 +208,55 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            int numberOfZoneEnginesConnected = Program.ISCom.ClientCount;
-            List<string> addressList = Program.ISCom.GetZoneEngineIds();
-            StringBuilder sb = new StringBuilder();
-            var sourceUser = (IrcUser)source;
-            IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
-
-            client.LocalUser.SendMessage(
-                replyTargets,
-                "{0}",
-                "Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
-            sb.AppendLine("Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
-            foreach (string s in addressList)
+            if (!this.executingRequestPlayfieldList)
             {
-                client.LocalUser.SendMessage(replyTargets, "{0}", s);
+                this.executingRequestPlayfieldList = true;
+                int numberOfZoneEnginesConnected = Program.ISCom.ClientCount;
+                List<string> addressList = Program.ISCom.GetZoneEngineIds();
+
+                Program.ISCom.BroadCast(new RequestPlayfieldList());
+
+                StringBuilder sb = new StringBuilder();
+                var sourceUser = (IrcUser)source;
+                IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
+
+                DateTime startWait = DateTime.UtcNow;
+
+                bool timeOut = true;
+                while ((DateTime.UtcNow - startWait < TimeSpan.FromSeconds(10) && timeOut))
+                {
+                    lock (this.replyQueuePlayfieldList)
+                    {
+                        if (this.replyQueuePlayfieldList.Count == Program.ISCom.ClientCount)
+                        {
+                            timeOut = false;
+                        }
+                    }
+                }
+                if (timeOut)
+                {
+                    client.LocalUser.SendMessage(replyTargets, "{0}", "Not all ZoneEngines replied.");
+                }
+
+                client.LocalUser.SendMessage(
+                    replyTargets,
+                    "{0}",
+                    "Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
+
+                while (this.replyQueuePlayfieldList.Count > 0)
+                {
+                    RequestPlayfieldList r = this.replyQueuePlayfieldList.Dequeue();
+                    client.LocalUser.SendMessage(
+                        replyTargets,
+                        "{0}: Playfields {1}",
+                        r.ZoneEngineAddress,
+                        string.Join(
+                            ", ",
+                            r.PlayfieldIds.Select(
+                                x => PlayfieldLoader.PFData[x.Instance].Name.Trim() + " (" + x.Instance + ")")
+                                .ToArray()));
+                }
+                this.executingRequestPlayfieldList = false;
             }
         }
 
@@ -451,9 +494,9 @@ namespace Chatengine.Relay
 
             // // Create new CellAO user and log in to service.
             var cellaoBotUser = new CellAoBotUser(sourceUser);
-           // bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
+            // bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
             cellaoBotUser.LogIn(parameters[0], parameters[1]);
-            
+
             IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
             if (cellaoBotUser.IsAuthenticated)
             {
@@ -463,7 +506,7 @@ namespace Chatengine.Relay
                     "You are now logged in as {0} / '{1}'.",
                     cellaoBotUser.IrcUser.NickName,
                     cellaoBotUser.IrcUser.NickName);
-                GMlevel = cellaoBotUser.GMLevel(username);
+                this.GMlevel = cellaoBotUser.GMLevel(this.username);
             }
             else
             {
@@ -491,9 +534,11 @@ namespace Chatengine.Relay
             IList<string> parameters)
         {
             var sourceUser = (IrcUser)source;
-            var cellaoBotUser = GetCellAOBotUser(sourceUser);
+            CellAoBotUser cellaoBotUser = this.GetCellAOBotUser(sourceUser);
             if (parameters.Count != 0)
+            {
                 throw new InvalidCommandParametersException(1);
+            }
 
             // Log out CellAO user.
             cellaoBotUser.LogOut();

@@ -37,6 +37,7 @@ namespace CellAO_Launcher
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
@@ -199,13 +200,16 @@ namespace CellAO_Launcher
             this.bx_Port.Text = Convert.ToString(_config.Instance.CurrentConfig.ServerPort);
 #if DEBUG
             this.UseEncryption.Checked = false;
+            this.bx_converted.Visible = true;
+            this.bx_converted.ReadOnly = false;
+            this.button4.Visible = true;
+            this.label4.Visible = true;
 #else
             this.UseEncryption.Checked = true;
-
-            this.label4.Visible = true;
             this.bx_converted.Visible = true;
             this.bx_converted.ReadOnly = true;
             this.button4.Visible = true;
+            this.label4.Visible = true;
 #endif
 
         }
@@ -286,7 +290,7 @@ namespace CellAO_Launcher
         private void CheckBox1CheckedChanged(object sender, EventArgs e)
         {
 #if DEBUG
-            this.bx_converted.Visible  = true;
+            this.bx_converted.Visible = true;
             this.label4.Visible = true;
             this.button4.Visible = true;
 

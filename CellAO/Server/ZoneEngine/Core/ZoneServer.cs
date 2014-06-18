@@ -255,10 +255,34 @@ namespace ZoneEngine.Core
         internal void ProcessISComMessage(DynamicMessage messageobject)
         {
             // Switch to handlers
-            if (messageobject.DataObject is ChatCommand)
+            var chatCommand = messageobject.DataObject as ChatCommand;
+            if (chatCommand != null)
             {
-                this.HandleChatCommand((ChatCommand)messageobject.DataObject);
+                this.HandleChatCommand(chatCommand);
             }
+
+            var requestPlayfieldList = messageobject.DataObject as RequestPlayfieldList;
+            if (requestPlayfieldList != null)
+            {
+                this.HandleRequestPlayfieldList(requestPlayfieldList);
+            }
+        }
+
+        private void HandleRequestPlayfieldList(RequestPlayfieldList requestPlayfieldList)
+        {
+            // Fill in the data
+            requestPlayfieldList.ZoneEngineAddress = this.TcpEndPoint.Address.ToString();
+            lock (this.playfields)
+            {
+                requestPlayfieldList.PlayfieldIds.Clear();
+                foreach (Playfield pf in this.playfields)
+                {
+                    requestPlayfieldList.PlayfieldIds.Add(pf.Identity);
+                }
+            }
+
+            // Now send it back to ChatEngine
+            Program.ISComClient.Send(requestPlayfieldList);
         }
 
         /// <summary>

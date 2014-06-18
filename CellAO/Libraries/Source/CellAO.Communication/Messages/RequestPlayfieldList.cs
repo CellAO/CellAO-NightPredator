@@ -34,18 +34,28 @@ namespace CellAO.Communication.Messages
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Net;
+
+    using SmokeLounge.AOtomation.Messaging.GameData;
 
     #endregion
 
     /// <summary>
     /// </summary>
-    public class Playfields : MessageBase
+    public class RequestPlayfieldList : MessageBase
     {
+        public RequestPlayfieldList()
+        {
+            this.PlayfieldIds = new List<Identity>();
+        }
+
         #region Fields
+
+        public string ZoneEngineAddress { get; set; }
 
         /// <summary>
         /// </summary>
-        public List<int> PlayfieldIds = new List<int>();
+        public List<Identity> PlayfieldIds { get; set; }
 
         #endregion
     }

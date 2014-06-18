@@ -47,8 +47,13 @@ namespace ChatEngine.CoreServer
     using ChatEngine.CoreClient;
     using ChatEngine.Packets;
 
+    using Chatengine.Relay;
+
+    using ChatEngine.Relay.Common;
+
     using SmokeLounge.AOtomation.Messaging.GameData;
 
+    using Utility;
     using Utility.Config;
 
     #endregion
@@ -214,6 +219,20 @@ namespace ChatEngine.CoreServer
             if (message != null)
             {
                 this.DistributeVicinityChat(message);
+            }
+            var requestPlayfieldList = messageObject.DataObject as RequestPlayfieldList;
+            if (requestPlayfieldList != null)
+            {
+                this.PushRequestPlayfieldListReply(requestPlayfieldList);
+            }
+        }
+
+        private void PushRequestPlayfieldListReply(RequestPlayfieldList requestPlayfieldList)
+        {
+            lock (Program.Ircbot.replyQueuePlayfieldList)
+            {
+                LogUtil.Debug(DebugInfoDetail.ISComm,"RequestPlayfieldList Answer received");
+                Program.Ircbot.replyQueuePlayfieldList.Enqueue(requestPlayfieldList);
             }
         }
 

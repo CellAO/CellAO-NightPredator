@@ -828,7 +828,7 @@ namespace LoginEngine
                 }
                 else
                 {
-                    loginServer.TcpIP = IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP);
+                    loginServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(Config.Instance.CurrentConfig.ListenIP), Port);
                 }
 
                 loginServer.MaximumPendingConnections = 100;
