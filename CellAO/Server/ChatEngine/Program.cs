@@ -38,7 +38,6 @@ namespace ChatEngine
     using System.Threading.Tasks;
 
     using CellAO.Communication.ISComV2Server;
-    using CellAO.Core.Components;
 
     using ChatEngine.CoreServer;
 
@@ -74,10 +73,6 @@ namespace ChatEngine
 
         /// <summary>
         /// </summary>
-        private static readonly IContainer Container = new MefContainer();
-
-        /// <summary>
-        /// </summary>
         private static ChatServer chatServer;
 
         /// <summary>
@@ -88,27 +83,89 @@ namespace ChatEngine
         /// </summary>
         public static RelayBot Ircbot;
 
+        /// <summary>
+        /// </summary>
+        private static readonly ServerConsoleCommands consoleCommands = new ServerConsoleCommands();
+
+        private const bool TcpEnable = true;
+
+        private const bool UdpEnable = false;
+
+        private static bool exited = false;
+
         #endregion
 
         #region Methods
 
         /// <summary>
         /// </summary>
+        /// <returns>
+        /// </returns>
+        private static bool InitializeConsoleCommands()
+        {
+            consoleCommands.Engine = "Chat";
+            consoleCommands.AddEntry("start", StartServer);
+            consoleCommands.AddEntry("running", IsServerRunning);
+            consoleCommands.AddEntry("stop", StopServer);
+            consoleCommands.AddEntry("exit", ShutDownServer);
+            consoleCommands.AddEntry("quit", ShutDownServer);
+            consoleCommands.AddEntry("debug", SetDebug);
+            return true;
+        }
+
+        private static void SetDebug(string[] obj)
+        {
+            {
+                if (obj.Length == 1)
+                {
+                    LogUtil.Toggle("");
+                }
+                else
+                {
+                    for (int i = 1; i < obj.Length; i++)
+                    {
+                        LogUtil.Toggle(obj[i]);
+                    }
+                }
+            }
+        }
+
+        private static void IsServerRunning(string[] obj)
+        {
+            Colouring.Push(ConsoleColor.White);
+            if (chatServer.IsRunning)
+            {
+                Console.WriteLine(locales.ServerConsoleServerIsRunning);
+            }
+            else
+            {
+                Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
+            }
+
+            Colouring.Pop();
+        }
+
+        private static void ShowCommandHelp()
+        {
+            Colouring.Push(ConsoleColor.White);
+            Console.WriteLine(locales.ServerConsoleAvailableCommands);
+            Console.WriteLine("---------------------------");
+            Console.WriteLine(consoleCommands.HelpAll());
+            Console.WriteLine("---------------------------");
+            Console.WriteLine();
+            Colouring.Pop();
+        }
+
+        /// <summary>
+        /// </summary>
         /// <param name="args">
         /// </param>
-        /// <exception cref="ArgumentNullException">
-        /// </exception>
         private static void CommandLoop(string[] args)
         {
-            // Hard coded, because we only use TCP connections
-            const bool TCPEnable = true;
-            const bool UDPEnable = false;
-
             bool processedargs = false;
+            Console.WriteLine(locales.ZoneEngineConsoleCommands);
 
-            string consoleCommand;
-
-            while (true)
+            while (!exited)
             {
                 if (!processedargs)
                 {
@@ -117,81 +174,57 @@ namespace ChatEngine
                         if (args[0].ToLower() == "/autostart")
                         {
                             Console.WriteLine(locales.ServerConsoleAutostart);
-                            StartRelayBot();
-                            chatServer.Start(TCPEnable, UDPEnable);
+                            StartServer(null);
                         }
+                    }
 
-                        processedargs = true;
+                    processedargs = true;
+                }
+
+                Console.Write(Environment.NewLine + "{0} >>", locales.ServerConsoleCommand);
+                string consoleCommand = Console.ReadLine();
+
+                if (consoleCommand != null)
+                {
+                    if (!consoleCommands.Execute(consoleCommand))
+                    {
+                        ShowCommandHelp();
                     }
                 }
-
-                Console.Write(Environment.NewLine + locales.ServerConsoleCommand + ">>");
-
-                consoleCommand = Console.ReadLine();
-
-                while (consoleCommand.IndexOf("  ") > -1)
-                {
-                    consoleCommand = consoleCommand.Replace("  ", " ");
-                }
-
-                consoleCommand = consoleCommand.Trim();
-                switch (consoleCommand.ToLower())
-                {
-                    case "start":
-                        if (chatServer.IsRunning)
-                        {
-                            Colouring.Push(ConsoleColor.Red);
-                            Console.WriteLine(locales.ServerConsoleServerIsRunning);
-                            Colouring.Pop();
-                            break;
-                        }
-
-                        StartRelayBot();
-                        chatServer.Start(TCPEnable, UDPEnable);
-                        break;
-                    case "stop":
-                        if (!chatServer.IsRunning)
-                        {
-                            Colouring.Push(ConsoleColor.Red);
-                            Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
-                            Colouring.Pop();
-                            break;
-                        }
-
-                        chatServer.Stop();
-                        break;
-                    case "exit":
-                        return;
-                    case "running":
-                        if (chatServer.IsRunning)
-                        {
-                            Console.WriteLine(locales.ServerConsoleServerIsRunning);
-                            break;
-                        }
-
-                        Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
-                        break;
-
-                    case "help":
-                        ct.TextRead("chatcmdhelp.txt");
-                        break;
-                    case "help start":
-                        Console.WriteLine(locales.ServerConsoleCommandHelp_start);
-                        break;
-                    case "help exit":
-                        Console.WriteLine(locales.ServerConsoleCommandHelp_stop);
-                        break;
-                    case "help running":
-                        ct.TextRead("chathelpcmdrunning.txt");
-                        break;
-                    case "debugnetwork":
-                        LogUtil.Toggle(DebugInfoDetail.Network);
-                        break;
-                    case "debugiscom":
-                        LogUtil.Toggle(DebugInfoDetail.ISComm);
-                        break;
-                }
             }
+        }
+
+        private static void ShutDownServer(string[] obj)
+        {
+            StopServer(null);
+            exited = true;
+        }
+
+        private static void StopServer(string[] obj)
+        {
+            if (!chatServer.IsRunning)
+            {
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ServerConsoleServerIsNotRunning);
+                Colouring.Pop();
+            }
+            else
+            {
+                chatServer.Stop();
+            }
+        }
+
+        private static void StartServer(string[] obj)
+        {
+            if (chatServer.IsRunning)
+            {
+                Colouring.Push(ConsoleColor.Red);
+                Console.WriteLine(locales.ServerConsoleServerIsRunning);
+                Colouring.Pop();
+            }
+
+            StartRelayBot();
+            chatServer.Start(TcpEnable, UdpEnable);
         }
 
         private static void StartRelayBot()
@@ -231,6 +264,12 @@ namespace ChatEngine
                 {
                     return false;
                 }
+
+                if (!InitializeConsoleCommands())
+                {
+                    return false;
+                }
+
                 PlayfieldLoader.CacheAllPlayfieldData();
             }
             catch (Exception e)
