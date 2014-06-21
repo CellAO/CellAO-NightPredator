@@ -193,6 +193,20 @@ namespace CellAO.Database.Dao
             }
         }
 
+        public bool Exists(string username)
+        {
+            bool exists = false;
+            using (IDbConnection conn = Connector.GetConnection())
+            {
+                exists =
+                    conn.Query<int>(
+                        string.Format("SELECT ID FROM login where username = @username"),
+                        new { username = username }).Count() == 1;
+            }
+
+            return exists;
+        }
+
         #endregion
     }
 }

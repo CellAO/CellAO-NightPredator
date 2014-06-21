@@ -236,7 +236,7 @@ namespace WebEngine
         /// </param>
         /// <returns>
         /// </returns>
-        private void UpdateHtml(string queryString)
+        private string ProcessRequest(string queryString)
         {
             List<string[]> split = new List<string[]>();
 
@@ -249,36 +249,28 @@ namespace WebEngine
             }
 
             // Execute an action based on the input value ('split[0][1]')
-            // It get's sent via post request, so you can interact from websitecontent <-> CellAO Engines
-            if (split.Count > 1)
+            // It get's sent via get/post request for interaction of websitecontent <-> CellAO Engines
+            if (split[0][0] == "action")
             {
                 switch (split[0][1])
                 {
                     case "register":
-                        RegisterAccount(split);
+                        queryString += "?result=" + RegisterAccount(split);
                         break;
-
+            
                     case "contact":
                         break;
-
+            
                     default:
                         break;
                 }
             }
 
-            // Create the website - content is stored in respectable files, so use this class
-            Websites.IndexPHP webSite = new Websites.IndexPHP();
 
-            // Define content for the headsection
-            webSite.DestinationFilename = "index.php";
-            webSite.Title = _config.Instance.CurrentConfig.WebHostName;
-            webSite.GetCSSContent("style.css");
-
-            // Write the updated file
-            webSite.WriteFile();
+            return queryString;
         }
 
-        private void RegisterAccount(List<string[]> split)
+        private string RegisterAccount(List<string[]> split)
         {
             /* 
              * NOT SQL-INJECTION SAFE YET!
@@ -290,29 +282,41 @@ namespace WebEngine
             if (!string.IsNullOrEmpty(split[1][1]) && !string.IsNullOrEmpty(split[2][1]) && !string.IsNullOrEmpty(split[3][1])
                             && !string.IsNullOrEmpty(split[4][1]) && !string.IsNullOrEmpty(split[5][1]) && !string.IsNullOrEmpty(split[6][1]))
             {
-                // Check Email format
-                if (TestEmailRegex.TestEmail(split[1][1]))
+                if (!LoginDataDao.Instance.Exists(split[2][1]))
                 {
-                    if (split[5][1] == split[6][1])
+                    // Check Email format
+                    if (TestEmailRegex.TestEmail(split[1][1]))
                     {
-                        DBLoginData dbchar = new DBLoginData();
+                        if (split[5][1] == split[6][1])
+                        {
+                            DBLoginData dbchar = new DBLoginData();
 
-                        dbchar.AccountFlags = 0;
-                        dbchar.AllowedCharacters = 12;
-                        dbchar.CreationDate = DateTime.Now;
-                        dbchar.Email = split[1][1];
-                        dbchar.Expansions = 2047;
-                        dbchar.FirstName = split[3][1];
-                        dbchar.Flags = 0;
-                        dbchar.GM = 0;
-                        dbchar.LastName = split[4][1];
-                        dbchar.Password = new LoginEncryption().GeneratePasswordHash(split[5][1]);
-                        dbchar.Username = split[2][1];
+                            dbchar.AccountFlags = 0;
+                            dbchar.AllowedCharacters = 12;
+                            dbchar.CreationDate = DateTime.Now;
+                            dbchar.Email = split[1][1];
+                            dbchar.Expansions = 2047;
+                            dbchar.FirstName = split[3][1];
+                            dbchar.Flags = 0;
+                            dbchar.GM = 0;
+                            dbchar.LastName = split[4][1];
+                            dbchar.Password = new LoginEncryption().GeneratePasswordHash(split[5][1]);
+                            dbchar.Username = split[2][1];
 
-                        CellAO.Database.Dao.LoginDataDao.Instance.Add(dbchar);
-                        Console.WriteLine("Account created!");
+                            CellAO.Database.Dao.LoginDataDao.Instance.Add(dbchar);
+                            Console.WriteLine("Account created.");
+
+                            return "Account created.";
+                        }
+                        return "Passwords are not matching, please retry.";
                     }
+                    return "Email is wrong, please retry.";
                 }
+                return "Username is already taken, please retry.";
+            }
+            else
+            {
+                return "n/a";
             }
         }
 
@@ -392,10 +396,6 @@ namespace WebEngine
 
                 switch (REQUESTED_METHOD)
                 {
-                    case "POST":
-                        requestedFile = request.Replace("/", "\\").Trim();
-                        queryString = @params[@params.Length - 1].Trim().Replace("\0", "");
-                        break;
                     case "GET":
                         lastPos = request.IndexOf('?');
                         if (lastPos > 0)
@@ -408,6 +408,15 @@ namespace WebEngine
                             requestedFile = request.Substring(0).Replace("/", "\\");
                         }
 
+                        break;
+                    case "POST":
+                        requestedFile = request.Replace("/", "\\").Trim();
+                        // Cut off GET requests here, WebEngine puts it into requestedFile,
+                        // which would lead to trying to send files like "index.php?action=someaction"
+                        // Example where this would occur: adding GET requests to the action field of a html form
+                        lastPos = request.IndexOf('?');
+                        requestedFile = request.Substring(0, lastPos).Replace("/", "\\");
+                        queryString = @params[@params.Length - 1].Trim().Replace("\0", "");
                         break;
                     case "HEAD":
                         break;
@@ -442,7 +451,7 @@ namespace WebEngine
                 }
 
                 // generates a up to date html page per view
-                UpdateHtml(queryString);
+                queryString = ProcessRequest(queryString);
 
                 filePath = this.serverRoot + "\\" + requestedFile;
                 Console.WriteLine("Requested file : {0}", filePath);
