@@ -46,6 +46,10 @@ namespace Chatengine.Relay
     using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
 
+    using CellAO.Database;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
     using IrcDotNet;
 
     using Utility;
@@ -441,15 +445,18 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            // var sourceUser = (IrcUser)source;
+            var sourceUser = (IrcUser)source;
+            if (parameters.Count != 0)
+                throw new InvalidCommandParametersException(1);
 
-            // if (parameters.Count != 0)
-            // throw new InvalidCommandParametersException(1);
-
-            //// List all currently logged-in twitter users.
-            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            // client.LocalUser.SendMessage(replyTargets, "Currently logged-in Twitter users ({0}):",
+            // List all currently logged-in twitter users.
+             var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
             // this.cellaoUsers.Count);
+            foreach (var tu in CharacterDao.Instance.GetLoggedInCharacters())
+            {
+                client.LocalUser.SendMessage(replyTargets, "Online Users: {0})",
+                tu.Name);
+            }
             // foreach (var tu in this.cellaoUsers)
             // {
             // //client.LocalUser.SendMessage(replyTargets, "{0} / {1} ({2} @ {3})",
