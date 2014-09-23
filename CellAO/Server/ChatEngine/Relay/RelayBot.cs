@@ -201,6 +201,7 @@ namespace Chatengine.Relay
             this.ChatCommandProcessors.Add("send", this.ProcessChatCommandSend);
             this.ChatCommandProcessors.Add("serverinfo", this.ProcessChatCommandServerInfo);
             this.ChatCommandProcessors.Add("zoneinfo", this.ProcessChatCommandZoneInfo);
+            this.ChatCommandProcessors.Add("register"), this.ProcessChatCommandRegister);
         }
 
         private void ProcessChatCommandZoneInfo(
@@ -581,6 +582,24 @@ namespace Chatengine.Relay
             // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
             // client.LocalUser.SendMessage(replyTargets, "Tweet sent by {0} at {1}.", tweetStatus.User.ScreenName,
             // tweetStatus.CreatedDate.ToLongTimeString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="source"></param>
+        /// <param name="targets"></param>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        private void ProcessChatCommandRegister(
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
+            IList<string> parameters)
+        {
+            //TODO: Add Command to register user for CellAO
         }
 
         /// <summary>
