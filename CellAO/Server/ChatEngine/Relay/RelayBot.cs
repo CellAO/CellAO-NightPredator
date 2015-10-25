@@ -201,7 +201,7 @@ namespace Chatengine.Relay
             this.ChatCommandProcessors.Add("send", this.ProcessChatCommandSend);
             this.ChatCommandProcessors.Add("serverinfo", this.ProcessChatCommandServerInfo);
             this.ChatCommandProcessors.Add("zoneinfo", this.ProcessChatCommandZoneInfo);
-            this.ChatCommandProcessors.Add("register"), this.ProcessChatCommandRegister);
+            this.ChatCommandProcessors.Add("register", this.ProcessChatCommandRegister);
         }
 
         private void ProcessChatCommandZoneInfo(
