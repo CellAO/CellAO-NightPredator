@@ -864,7 +864,7 @@ namespace Extractor_Serializer
                     }
                     catch (Exception)
                     {
-                        throw;
+                        // throw;
                     }
                 }
                 if (perc > 0)

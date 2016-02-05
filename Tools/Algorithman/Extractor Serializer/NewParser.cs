@@ -52,6 +52,7 @@ namespace Extractor_Serializer
     /// </summary>
     public class NewParser
     {
+
         #region Fields
 
         /// <summary>

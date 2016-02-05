@@ -36,6 +36,8 @@ namespace Extractor_Serializer
 
     #endregion
 
+
+
     /// <summary>
     /// The extractor.
     /// </summary>
@@ -47,12 +49,12 @@ namespace Extractor_Serializer
             /// 0xF4254
             /// </summary>
             Item = 0xF4254,
-            
+
             /// <summary>
             ///  0xFDE85
             /// </summary>
             Nano = 0xFDE85,
-            
+
             /// <summary>
             /// 1000001
             /// </summary>
@@ -71,14 +73,13 @@ namespace Extractor_Serializer
             /// 1000026
             /// </summary>
             Statel = 1000026,
-            
+
             /// <summary>
             /// 1010008
             /// </summary>
             Icon = 1010008
 
         }
-
         #region Fields
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace Extractor_Serializer
         /// <summary>
         /// The records.
         /// </summary>
-        private readonly Dictionary<int, Dictionary<int, uint>> Records = new Dictionary<int, Dictionary<int, uint>>();
+        private readonly Dictionary<int, Dictionary<int, ulong>> Records = new Dictionary<int, Dictionary<int, ulong>>();
 
         /// <summary>
         /// The block offset.
@@ -154,7 +155,7 @@ namespace Extractor_Serializer
             {
                 bStream.ReadInt32();
                 short num2 = bStream.ReadInt16();
-                bStream.Position += 22u;
+                bStream.Position += 18u;
                 this.totalRecords += (uint)num2;
                 while (true)
                 {
@@ -165,13 +166,15 @@ namespace Extractor_Serializer
                         break;
                     }
 
-                    uint value = bStream.ReadUInt32();
+                    ulong value = bStream.ReadUInt32();
+                    value = value << 32;
+                    value |= bStream.ReadUInt32();
                     int key = bStream.ReadInt32_MSB();
                     int key2 = bStream.ReadInt32_MSB();
-                    bStream.ReadInt32();
+
                     if (!this.Records.ContainsKey(key))
                     {
-                        this.Records.Add(key, new Dictionary<int, uint>());
+                        this.Records.Add(key, new Dictionary<int, ulong>());
                     }
 
                     this.Records[key].Add(key2, value);
@@ -179,6 +182,7 @@ namespace Extractor_Serializer
             }
 
             bStream.Close();
+            bStream.Dispose();
         }
 
         /// <summary>
@@ -234,20 +238,19 @@ namespace Extractor_Serializer
         /// </returns>
         /// <exception cref="InvalidDataException">
         /// </exception>
-        public byte[] GetRecordData(Extractor.RecordType recordType, int recinstance, bool decode = false)
+        public byte[] GetRecordData(Extractor.RecordType RecordType, int RecordInstance, bool decode = false)
         {
-            int rectype = (int)recordType;
-            uint position = this.Records[rectype][recinstance];
+            ulong position = this.Records[(int)RecordType][RecordInstance];
             byte[] buffer = this.SegRead(34u, position);
             bStream bStream = new bStream(buffer);
             int num = bStream.ReadInt32_At(10u);
-            if (rectype != num)
+            if ((int)RecordType != num)
             {
                 throw new InvalidDataException("Invalid Record Type");
             }
 
             int num2 = bStream.ReadInt32();
-            if (recinstance != num2)
+            if (RecordInstance != num2)
             {
                 throw new InvalidDataException("Invalid Record Instance");
             }
@@ -256,7 +259,7 @@ namespace Extractor_Serializer
             byte[] array = this.SegRead(count, 4294967295u);
             if (decode)
             {
-                ulong num3 = (ulong)recinstance;
+                ulong num3 = (ulong)RecordInstance;
                 int i = 0;
                 while (i < array.Length)
                 {
@@ -299,18 +302,18 @@ namespace Extractor_Serializer
         /// <summary>
         /// The is valid instance.
         /// </summary>
-        /// <param name="recordType">
+        /// <param name="RecordType">
         /// The record type.
         /// </param>
-        /// <param name="recordInstance">
+        /// <param name="RecordInstance">
         /// The record instance.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool IsValidInstance(Extractor.RecordType recordType, int recordInstance)
+        public bool IsValidInstance(int RecordType, int RecordInstance)
         {
-            return this.Records.ContainsKey((int)recordType) && this.Records[(int)recordType].ContainsKey(recordInstance);
+            return this.Records.ContainsKey(RecordType) && this.Records[RecordType].ContainsKey(RecordInstance);
         }
 
         /// <summary>
@@ -322,9 +325,9 @@ namespace Extractor_Serializer
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool IsValidType(Extractor.RecordType recordType)
+        public bool IsValidType(int recordType)
         {
-            return this.Records.ContainsKey((int) recordType);
+            return this.Records.ContainsKey(recordType);
         }
 
         #endregion
@@ -344,6 +347,7 @@ namespace Extractor_Serializer
                 foreach (bStream current in this.DATs)
                 {
                     current.Close();
+                    current.Dispose();
                 }
             }
         }
@@ -362,7 +366,7 @@ namespace Extractor_Serializer
         /// </returns>
         /// <exception cref="EndOfStreamException">
         /// </exception>
-        private byte[] SegRead(uint count, uint position = 4294967295u)
+        private byte[] SegRead(uint count, ulong position = 4294967295u)
         {
             if (position != 4294967295u)
             {
@@ -372,7 +376,7 @@ namespace Extractor_Serializer
                     position = (uint)(position - (this.dataFileSize - this.blockOffset) * (ulong)this.DF);
                 }
 
-                this.DATs[this.DF].Position = position;
+                this.DATs[this.DF].Position = (uint)position;
             }
 
             byte[] array = new byte[count];
