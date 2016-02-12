@@ -719,15 +719,16 @@ namespace Extractor_Serializer
             }
 
             int GCcount = 0;
-            foreach (ItemTemplate template in ItemLoader.ItemList.Values)
+            foreach (int inst in extractor.GetRecordInstances(Extractor.RecordType.Icon))
+            // foreach (ItemTemplate template in ItemLoader.ItemList.Values)
             {
-                string pngName = Path.Combine("icons", template.getItemAttribute(79) + ".png");
+                string pngName = Path.Combine("icons", inst + ".png");
                 if (!File.Exists(pngName))
                 {
                     byte[] icon;
                     try
                     {
-                        icon = extractor.GetRecordData(Extractor.RecordType.Icon, template.getItemAttribute(79));
+                        icon = extractor.GetRecordData(Extractor.RecordType.Icon, inst);
                     }
                     catch (Exception)
                     {
@@ -754,7 +755,11 @@ namespace Extractor_Serializer
         private static void MakeTransparent(string p)
         {
             FileStream fs = new FileStream(p, FileMode.Open, FileAccess.Read);
-            using (Image original = new Bitmap(fs))
+            MemoryStream ms = new MemoryStream();
+            fs.CopyTo(ms);
+            ms.Position = 0;
+            fs.Close();
+            using (Image original = new Bitmap(ms))
             {
                 using (Bitmap image = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppArgb))
                 {
@@ -770,9 +775,9 @@ namespace Extractor_Serializer
                         original.Height,
                         GraphicsUnit.Pixel,
                         ia);
+                    image.Save(p, ImageFormat.Png);
                     g.Dispose();
                     ia.Dispose();
-                    image.Save(p, ImageFormat.Png);
                 }
             }
         }
