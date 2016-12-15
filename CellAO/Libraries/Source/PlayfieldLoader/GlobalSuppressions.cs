@@ -4,5 +4,5 @@
 // Project-level suppressions either have no target or are given 
 // a specific target and scoped to a namespace, type, member, etc.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Object initialization can be simplified", Justification = "<Pending>", Scope = "member", Target = "~M:ZoneEngine.Core.Playfields.PlayfieldLoader.CacheAllPlayfieldData(System.String)~System.Int32")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Object initialization can be simplified", Justification = "It's how we do things in CellAO", Scope = "member", Target = "~M:ZoneEngine.Core.Playfields.PlayfieldLoader.CacheAllPlayfieldData(System.String)~System.Int32")]
 
