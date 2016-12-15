@@ -110,7 +110,7 @@ namespace ZoneEngine.Core.Playfields
                                 playfieldid = f.Arguments.Values[1].AsInt32();
                                 doorinstance =
                                     (int)
-                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                        (0xC0000000 | f.Arguments.Values[1].AsInt32()
                                          | (f.Arguments.Values[2].AsInt32() << 16));
                                 DBTeleport teleporter =
                                     TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
@@ -127,7 +127,7 @@ namespace ZoneEngine.Core.Playfields
                                 playfieldid = f.Arguments.Values[1].AsInt32();
                                 doorinstance =
                                     (int)
-                                        ((uint)0xC0000000 | f.Arguments.Values[1].AsInt32()
+                                        (0xC0000000 | f.Arguments.Values[1].AsInt32()
                                          | (f.Arguments.Values[2].AsInt32() << 16));
                                 DBTeleport teleporter =
                                     TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })

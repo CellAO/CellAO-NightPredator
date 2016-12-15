@@ -73,7 +73,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             
             ICharacter character = (ICharacter)self;
 
-            int statelId = (int)((uint)0xC0000000 | arguments[1].AsInt32() | (arguments[2].AsInt32() << 16));
+            int statelId = (int)(0xC0000000 | arguments[1].AsInt32() | (arguments[2].AsInt32() << 16));
             character.Stats[StatIds.externaldoorinstance].BaseValue = (uint)caller.Identity.Instance;
             character.Stats[StatIds.externalplayfieldinstance].BaseValue = (uint)character.Playfield.Identity.Instance;
 

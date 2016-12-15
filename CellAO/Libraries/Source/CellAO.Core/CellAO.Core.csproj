@@ -108,6 +108,7 @@
     <Compile Include="Functions\FunctionArguments.cs" />
     <Compile Include="Functions\Functions.cs" />
     <Compile Include="Functions\IFunctions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InternalMessaging\IIMSendAOtMessageToClient.cs" />
     <Compile Include="InternalMessaging\IInternalMessage.cs" />
     <Compile Include="InternalMessaging\IInternalMessageBody.cs" />
