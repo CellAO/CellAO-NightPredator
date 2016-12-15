@@ -90,6 +90,7 @@
     <Compile Include="CoreClient\Client.cs" />
     <Compile Include="Component\ClientFactory.cs" />
     <Compile Include="CoreServer\LoginServer.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MessageHandlers\CreateCharacterHandler.cs" />
     <Compile Include="MessageHandlers\DeleteCharacterHandler.cs" />
     <Compile Include="MessageHandlers\RandomNameRequestHandler.cs" />

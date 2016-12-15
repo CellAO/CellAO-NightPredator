@@ -51,6 +51,7 @@
     <Compile Include="..\..\..\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ISComV2Client\ISComV2Client.cs" />
     <Compile Include="ISComV2Client\ISComV2ClientBase.cs" />
     <Compile Include="ISComV2Server\ISComV2ClientHandler.cs" />

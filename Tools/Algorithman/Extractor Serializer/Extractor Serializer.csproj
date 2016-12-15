@@ -59,8 +59,8 @@
     </Reference>
     <Reference Include="Microsoft.VisualBasic.Compatibility.Data" />
     <Reference Include="NBug, Version=1.2.0.0, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CellAO\packages\NBug.1.2.2\lib\net40-client\NBug.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\CellAO\packages\NLog.5.0.0-beta03\lib\net45\NLog.dll</HintPath>
@@ -110,6 +110,7 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Parser.cs" />
     <Compile Include="PlayfieldParser.cs" />
     <Compile Include="Program.cs" />
@@ -145,7 +146,6 @@
     <None Include="FunctionSets.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

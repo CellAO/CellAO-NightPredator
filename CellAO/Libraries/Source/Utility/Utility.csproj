@@ -69,6 +69,7 @@
     <Compile Include="CpuRamUtilization.cs" />
     <Compile Include="DebugStrings.cs" />
     <Compile Include="FunctionArgumentList.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HexOutput.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="MessagePackZip.cs" />
@@ -78,9 +79,6 @@
     <Compile Include="ServerConsoleCommands.cs" />
     <Compile Include="TestEmailRegex.cs" />
     <Compile Include="WeakReference.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
@@ -95,6 +93,9 @@
       <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>
       <Name>Translations</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

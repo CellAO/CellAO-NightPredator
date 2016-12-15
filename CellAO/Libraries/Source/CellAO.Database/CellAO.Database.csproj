@@ -129,6 +129,7 @@
     <Compile Include="Entities\DBVendorTemplate.cs" />
     <Compile Include="Entities\ForeignKeyAttribute.cs" />
     <Compile Include="Entities\IDBEntity.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="MySQLConnector.cs" />
     <Compile Include="NpgsqlConnector.cs" />

@@ -9,3 +9,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>", Scope = "member", Target = "~M:ChatEngine.Relay.Common.IrcBot.ReadChatCommand(IrcDotNet.IrcClient,IrcDotNet.IIrcMessageSource,System.Collections.Generic.IList{IrcDotNet.IIrcMessageTarget},System.String,System.String[])")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>", Scope = "member", Target = "~M:ChatEngine.Relay.Common.IrcBot.ReadCommand(System.String,System.Collections.Generic.IList{System.String})")]
 
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Chatengine.Relay.RelayBot.client_ChannelListReceived(System.Object,IrcDotNet.IrcChannelListReceivedEventArgs)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~P:ChatEngine.Channels.ChannelBase.channelType")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~P:ChatEngine.Channels.IChannelBase.channelType")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~P:ChatEngine.CoreClient.Character.orgId")]
