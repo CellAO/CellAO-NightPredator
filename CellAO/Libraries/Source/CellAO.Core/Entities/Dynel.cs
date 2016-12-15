@@ -88,6 +88,8 @@ namespace CellAO.Core.Entities
         /// </summary>
         protected DateTime PredictionTime;
 
+        public bool IsTeleporting = false;
+
         private bool disposed = false;
 
         /// <summary>
@@ -391,6 +393,13 @@ namespace CellAO.Core.Entities
                 {
                     // Write stats to database
                     this.Write();
+                    if (!this.IsTeleporting)
+                    {
+                        if (this is Character)
+                        {
+                            this.Controller.LogoffCharacter();
+                        }
+                    }
                 }
             }
             this.disposed = true;
@@ -431,6 +440,7 @@ namespace CellAO.Core.Entities
         /// </param>
         public void Teleport(Coordinate destination, IQuaternion heading, Identity playfield)
         {
+            this.IsTeleporting = false;
             this.Playfield.Teleport(this, destination, heading, playfield);
         }
 

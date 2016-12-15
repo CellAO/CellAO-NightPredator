@@ -29,9 +29,15 @@ namespace CellAO_Launcher
     #region Usings ...
 
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Drawing.Design;
+    using System.IO;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Text;
+    using System.Windows.Forms;
+    using System.Data.Linq;
 
     #endregion
 
@@ -120,9 +126,18 @@ namespace CellAO_Launcher
         {
             Process proc = Process.GetProcessById(PID);
 
-            if (proc.ProcessName == string.Empty)
+            bool breakIt = false;
+            while (!breakIt)
             {
-                return;
+                proc = Process.GetProcessById(PID);
+                foreach (ProcessModule p in proc.Modules)
+                {
+                    if (Path.GetFileName(p.FileName).ToLower() == "gui.dll")
+                    {
+                        breakIt = true;
+                        break;
+                    }
+                }
             }
 
             foreach (ProcessThread pT in proc.Threads)
@@ -174,7 +189,7 @@ namespace CellAO_Launcher
         /// </param>
         /// <param name="replace">
         /// </param>
-        public static void SearchAndReplace(int ProcessId, IntPtr processHandle, string search, string replace)
+        public static bool SearchAndReplace(int ProcessId, IntPtr processHandle, string search, string replace)
         {
             SafeMemoryHandle handle = Memory.OpenProcess(ProcessAccessFlags.AllAccess, ProcessId);
             int found = 0;
@@ -194,6 +209,8 @@ namespace CellAO_Launcher
                 Memory.ChangeProtection(handle, memory, repl.Length, oldProt);
                 found++;
             }
+
+            return found != 0;
         }
     }
 }

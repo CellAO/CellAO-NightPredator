@@ -116,7 +116,7 @@
 
 **InventoryUpdate** = 0x4E536976,
 
-**InventoryUpdated** = 0x4B5E7202,
+**InventoryUpdated** = 0x485E7202,
 
 **KnuBotAnswer** = 0x2103247D,
 
@@ -306,6 +306,6 @@
 
 *Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.2.3368 - Night Predator*
 
 

@@ -299,7 +299,7 @@ namespace CellAO.Database
                 foreach (string pname in GetParametersFromObject(whereParameters, null, false).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname);
-                        // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
+                    // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }
                 sb.Remove(sb.Length - 3, 3); //  remove trailing 'AND'
             }
@@ -316,7 +316,27 @@ namespace CellAO.Database
                 foreach (string pname in GetParametersFromObject(whereParameters, null, false).ParameterNames)
                 {
                     sb.AppendFormat(" ( {0} = @{0} ) AND", pname);
-                        // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
+                    // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
+                }
+                sb.Remove(sb.Length - 3, 3); //  remove trailing 'AND'
+            }
+            return sb.ToString();
+        }
+
+        public static string CreateCountSQL(string tablename, object whereParameters = null)
+        {
+            StringBuilder sb =
+                new StringBuilder(
+                    string.Concat(
+                        "SELECT COUNT(*) FROM ",
+                        tablename,
+                        (whereParameters != null) ? " WHERE " : String.Empty));
+            if (whereParameters != null)
+            {
+                foreach (string pname in GetParametersFromObject(whereParameters, null, false).ParameterNames)
+                {
+                    sb.AppendFormat(" ( {0} = @{0} ) AND", pname);
+                    // AND *NO* WE WONT DO THE OR, XOR OR WHATEVER OTHER OPERATOR, SO DO NOT ASK :)
                 }
                 sb.Remove(sb.Length - 3, 3); //  remove trailing 'AND'
             }

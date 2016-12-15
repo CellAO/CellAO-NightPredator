@@ -29,6 +29,8 @@
 
 [Identity Types](./IdentityTypes.md)
 
+[Vending machine template Id's](./VendingmachineIds.md)
+
 ## Network related ##
 
 [N3 Message IDs](./N3MessageIDs.md)
@@ -39,6 +41,6 @@
 
 *Copyright © 2014 CellAO Team*
 
-*Created by MarkDownDocumentator Version 1.4.1.2882 - Night Predator*
+*Created by MarkDownDocumentator Version 1.4.2.3368 - Night Predator*
 
 

@@ -53,8 +53,7 @@ namespace CellAO.Database.Dao
     /// <typeparam name="TU">
     /// </typeparam>
     public class Dao<T, TU> : IDao<T>
-        where T : IDBEntity, new()
-        where TU : class, IDao<T>
+        where T : IDBEntity, new() where TU : class, IDao<T>
     {
         /// <summary>
         /// </summary>
@@ -536,6 +535,43 @@ namespace CellAO.Database.Dao
                 try
                 {
                     result = conn.Query<T>(SqlMapperUtil.CreateGetSQL(this.TableName, parameter), parameter, trans);
+                }
+                finally
+                {
+                    if (transaction == null)
+                    {
+                        if (trans != null)
+                        {
+                            trans.Commit();
+                            trans.Dispose();
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                if (connection == null)
+                {
+                    if (conn != null)
+                    {
+                        conn.Dispose();
+                    }
+                }
+            }
+            return result;
+        }
+
+        public long Count(object parameter = null, IDbConnection connection = null, IDbTransaction transaction = null)
+        {
+            long result = -1;
+            IDbConnection conn = connection;
+            try
+            {
+                conn = conn ?? Connector.GetConnection();
+                IDbTransaction trans = transaction;
+                try
+                {
+                    result = conn.Query<long>(SqlMapperUtil.CreateCountSQL(this.TableName, parameter), trans).Single();
                 }
                 finally
                 {

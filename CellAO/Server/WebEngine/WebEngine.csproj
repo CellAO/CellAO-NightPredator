@@ -65,6 +65,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseHeader.cs" />
+    <Compile Include="Websites\IndexPHP.cs" />
+    <Compile Include="Websites\WebSiteBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -75,6 +77,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
+      <Project>{71ab07ad-4d94-4693-8560-47862e5b6e61}</Project>
+      <Name>Cell.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Core\CellAO.Core.csproj">
+      <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
+      <Name>CellAO.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
+      <Project>{63d6c409-58eb-4033-87e0-e0dda6594075}</Project>
+      <Name>CellAO.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Translations\Translations.csproj">
       <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>
       <Name>Translations</Name>

@@ -66,7 +66,7 @@ namespace CellAO.Core.VendorHandler
                                     };
 
             Vendor v = new Vendor(pfIdentity, freeIdentity, vendor.Hash);
-            
+
             v.RawCoordinates = new Vector3(vendor.X, vendor.Y, vendor.Z);
             v.Heading = new Quaternion(vendor.HeadingX, vendor.HeadingY, vendor.HeadingZ, vendor.HeadingW);
             v.Playfield = playfield;

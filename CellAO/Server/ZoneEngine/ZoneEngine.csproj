@@ -20,7 +20,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
@@ -193,7 +193,6 @@
     <Compile Include="Core\Packets\TradeSkillPacket.cs" />
     <Compile Include="Core\Packets\UnEquip.cs" />
     <Compile Include="Core\Playfields\Playfield.cs" />
-    <Compile Include="Core\Playfields\PlayfieldLoader.cs" />
     <Compile Include="Core\Playfields\Playfields.cs" />
     <Compile Include="Core\Playfields\WallCollision.cs" />
     <Compile Include="Core\Playfields\WallCollisionResult.cs" />
@@ -261,6 +260,10 @@
     <ProjectReference Include="..\..\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
       <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
       <Name>MsgPack.Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj">
+      <Project>{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}</Project>
+      <Name>PlayfieldLoader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Translations\Translations.csproj">
       <Project>{4bbd60c6-aed0-4347-b4ca-a262d3474826}</Project>

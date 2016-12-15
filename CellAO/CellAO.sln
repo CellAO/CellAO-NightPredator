@@ -93,6 +93,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentations", "Documenta
 		Documentation\Operator.md = Documentation\Operator.md
 		Documentation\Playfield.png = Documentation\Playfield.png
 		Documentation\Stats.md = Documentation\Stats.md
+		Documentation\VendingmachineIds.md = Documentation\VendingmachineIds.md
 		Documentation\WeaponSlots.md = Documentation\WeaponSlots.md
 	EndProjectSection
 EndProject
@@ -105,6 +106,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCFUPacketFlagViewer", "..\Tools\Algorithman\SCFUPacketFlagViewer\SCFUPacketFlagViewer.csproj", "{B746D260-F136-4A32-A6B5-DA6AF6ADB33E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack.Mono", "Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj", "{6E8C2296-21E9-4113-89C4-76376516AA14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayfieldLoader", "Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj", "{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -414,6 +417,20 @@ Global
 		{6E8C2296-21E9-4113-89C4-76376516AA14}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6E8C2296-21E9-4113-89C4-76376516AA14}.Release|x64.ActiveCfg = Release|Any CPU
 		{6E8C2296-21E9-4113-89C4-76376516AA14}.Release|x86.ActiveCfg = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|x64.ActiveCfg = Release|Any CPU
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -436,11 +453,12 @@ Global
 		{65A705B0-F8BF-4D68-A8FD-C630A87DC120} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 		{6E8C2296-21E9-4113-89C4-76376516AA14} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_UpdateAssemblyVersion = True
 		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
 	EndGlobalSection
 EndGlobal

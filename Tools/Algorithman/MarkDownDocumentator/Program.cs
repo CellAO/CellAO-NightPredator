@@ -31,7 +31,11 @@ namespace MarkDownDocumentator
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
+    using CellAO.Core.Items;
+    using CellAO.Core.Statels;
+    using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Stats;
 
@@ -39,6 +43,8 @@ namespace MarkDownDocumentator
     using SmokeLounge.AOtomation.Messaging.Messages;
 
     using Utility;
+
+    using ZoneEngine.Core.Playfields;
 
     #endregion
 
@@ -297,6 +303,10 @@ namespace MarkDownDocumentator
                 "Identity Types",
                 typeof(IdentityType));
 
+            WriteLink(tw,"Vending machine template Id's","VendingmachineIds.md");
+            WriteVendingMachineIds(Path.Combine("..", Path.Combine("..", Path.Combine("Documentation", "VendingmachineIds.md"))));
+
+
             WriteHeader2(tw, "Network related");
             tw.WriteLine();
 
@@ -306,6 +316,43 @@ namespace MarkDownDocumentator
                 "N3 Message IDs",
                 typeof(N3MessageType));
 
+            WriteFooter(tw);
+            tw.Close();
+        }
+
+        private static void WriteVendingMachineIds(string fileName)
+        {
+            List<StatelData> temp = new List<StatelData>();
+            PlayfieldLoader.CacheAllPlayfieldData();
+            foreach (var pf in PlayfieldLoader.PFData)
+            {
+                temp.AddRange(pf.Value.Statels.Where(x=>x.Identity.Type==IdentityType.VendingMachine).ToArray());
+            }
+
+            List<int> templateIds = new List<int>();
+            foreach (StatelData sd in temp)
+            {
+                int templateid = sd.TemplateId;
+                if (!templateIds.Contains(templateid))
+                {
+                    templateIds.Add(templateid);
+                }
+            }
+            templateIds.Sort();
+
+            TextWriter tw = new StreamWriter(fileName);
+            ItemLoader.CacheAllItems();
+            WriteHeader1(tw,"Vending Machine template Ids");
+            tw.WriteLine();
+            WriteHorizonalLine(tw);
+            foreach (int templateid in templateIds)
+            {
+                ItemTemplate template = ItemLoader.ItemList[templateid];
+                string name = ItemNamesDao.Instance.Get(templateid).Name;
+
+                tw.WriteLine("**"+name+"** ["+templateid+"]");
+                tw.WriteLine();
+            }
             WriteFooter(tw);
             tw.Close();
         }

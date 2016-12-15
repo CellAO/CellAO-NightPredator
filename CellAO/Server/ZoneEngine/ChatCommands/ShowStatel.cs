@@ -34,6 +34,7 @@ namespace ZoneEngine.ChatCommands
     #region Usings ...
 
     using System.Collections.Generic;
+    using System.Linq;
 
     using CellAO.Core.Entities;
     using CellAO.Core.Events;
@@ -102,6 +103,8 @@ namespace ZoneEngine.ChatCommands
             replies.Add(ChatTextMessageHandler.Default.Create(character, reply));
             StatelData o = null;
             StaticDynel o2 = null;
+            Vendor o3 = null;
+            Coordinate tempCoordinate = character.Coordinates();
             if (!PlayfieldLoader.PFData.ContainsKey(character.Playfield.Identity.Instance))
             {
                 reply = "Could not find data for playfield " + character.Playfield.Identity.Instance;
@@ -109,44 +112,57 @@ namespace ZoneEngine.ChatCommands
             }
             else
             {
-                Coordinate tempCoordinate = character.Coordinates();
-                PlayfieldData pfData = PlayfieldLoader.PFData[character.Playfield.Identity.Instance];
-                foreach (StatelData s in pfData.Statels)
+                if (target.Equals(Identity.None))
                 {
-                    if (o == null)
+                    PlayfieldData pfData = PlayfieldLoader.PFData[character.Playfield.Identity.Instance];
+                    foreach (StatelData s in pfData.Statels)
                     {
-                        o = s;
-                    }
-                    else
-                    {
-                        if (Coordinate.Distance2D(tempCoordinate, s.Coord())
-                            < Coordinate.Distance2D(tempCoordinate, o.Coord()))
+                        if (o == null)
                         {
                             o = s;
                         }
-                    }
-                }
-
-                foreach (StaticDynel sd in Pool.Instance.GetAll<StaticDynel>(character.Playfield.Identity))
-                {
-                    if (o2 == null)
-                    {
-                        o2 = sd;
-                    }
-                    else
-                    {
-                        if (Coordinate.Distance2D(tempCoordinate, sd.Coordinate)
-                            < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))
+                        else
                         {
-                            o2 = sd;
+                            if (Coordinate.Distance2D(tempCoordinate, s.Coord())
+                                < Coordinate.Distance2D(tempCoordinate, o.Coord()))
+                            {
+                                o = s;
+                            }
                         }
                     }
 
+                    foreach (StaticDynel sd in Pool.Instance.GetAll<StaticDynel>(character.Playfield.Identity))
+                    {
+                        if (o2 == null)
+                        {
+                            o2 = sd;
+                        }
+                        else
+                        {
+                            if (Coordinate.Distance2D(tempCoordinate, sd.Coordinate)
+                                < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))
+                            {
+                                o2 = sd;
+                            }
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    o =
+                        PlayfieldLoader.PFData[character.Playfield.Identity.Instance].Statels.FirstOrDefault(
+                            x => x.Identity == target);
+                    o2 =
+                        Pool.Instance.GetAll<StaticDynel>(character.Playfield.Identity)
+                            .FirstOrDefault(x => x.Identity == target);
+                    o3 =
+                        Pool.Instance.GetAll<Vendor>(character.Playfield.Identity)
+                            .FirstOrDefault(x => x.Identity == target);
                 }
 
-
-
-                if ((o == null) && (o2 == null))
+                if ((o == null) && (o2 == null) && (o3 == null))
                 {
                     replies.Add(
                         ChatTextMessageHandler.Default.Create(
@@ -155,7 +171,21 @@ namespace ZoneEngine.ChatCommands
                 }
                 else
                 {
-                    if (((o != null) && (o2 == null))
+                    if (o3 != null)
+                    {
+                        replies.Add(
+                                                    ChatTextMessageHandler.Default.Create(
+                                                        character,
+                                                        o3.Identity.Type.ToString() + " " + ((int)o3.Identity.Type).ToString("X8") + ":"
+                                                        + o3.Identity.Instance.ToString("X8")));
+                        replies.Add(
+                            ChatTextMessageHandler.Default.Create(character, "Item Template Id: " + o3.Template.ID));
+                        foreach (Event se in o3.Events)
+                        {
+                            replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));
+                        }
+                    }
+                    else if (((o != null) && (o2 == null))
                         || ((o != null) && (Coordinate.Distance2D(tempCoordinate, o.Coord())
                             < Coordinate.Distance2D(tempCoordinate, o2.Coordinate))))
                     {
@@ -174,8 +204,9 @@ namespace ZoneEngine.ChatCommands
                     }
                     else
                     {
+
                         replies.Add(ChatTextMessageHandler.Default.Create(character, o2.Identity.ToString() + " " + o2.Identity.ToString(true)));
-                        replies.Add(ChatTextMessageHandler.Default.Create(character, "Item template Id: "+o2.Stats[(int)StatIds.acgitemtemplateid].ToString()));
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, "Item template Id: " + o2.Stats[(int)StatIds.acgitemtemplateid].ToString()));
                         foreach (Event se in o2.Events)
                         {
                             replies.Add(ChatTextMessageHandler.Default.Create(character, se.ToString()));

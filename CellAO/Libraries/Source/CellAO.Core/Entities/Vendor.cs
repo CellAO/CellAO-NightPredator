@@ -37,11 +37,11 @@ namespace CellAO.Core.Entities
     using System.Linq;
 
     using CellAO.Core.Events;
-    using CellAO.Core.Exceptions;
     using CellAO.Core.Inventory;
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
+    using CellAO.Enums;
     using CellAO.Stats;
 
     using SmokeLounge.AOtomation.Messaging.GameData;
@@ -80,6 +80,8 @@ namespace CellAO.Core.Entities
                 this.Name = vendorTemplate.Name;
 
                 this.BaseInventory.Read();
+                this.Stats[StatIds.sellmodifier].BaseValue = (uint)(vendorTemplate.Sell * 100.0f);
+                this.Stats[StatIds.buymodifier].BaseValue = (uint)(vendorTemplate.Buy * 100.0f);
             }
         }
 

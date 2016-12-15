@@ -109,3 +109,4 @@ UpgradeLog*.XML
 /*/AO.Core.XML
 /CellAO/Built
 CellAO/_dotMemory.CellAO/
+CellAO/CellAO.sln.DotSettings

@@ -200,7 +200,8 @@ namespace ZoneEngine
             try
             {
                 ISComClient = new ISComV2Client();
-                chatEngineIp = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ChatIP);
+                string chatip = ConfigReadWrite.Instance.CurrentConfig.ChatIP;
+                chatEngineIp = IPAddress.Parse(chatip);
                 port = ConfigReadWrite.Instance.CurrentConfig.CommPort;
             }
             catch (Exception e)
@@ -437,7 +438,7 @@ namespace ZoneEngine
                 }
                 else
                 {
-                    zoneServer.TcpIP = IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ListenIP);
+                    zoneServer.TcpEndPoint = new IPEndPoint(IPAddress.Parse(ConfigReadWrite.Instance.CurrentConfig.ListenIP), Port);
                 }
 
                 zoneServer.MaximumPendingConnections = 100;
@@ -517,7 +518,7 @@ namespace ZoneEngine
             Colouring.Push(ConsoleColor.Green);
             try
             {
-                
+
                 Console.WriteLine(locales.ItemLoaderLoadedItems, ItemLoader.CacheAllItems());
             }
             catch (Exception e)

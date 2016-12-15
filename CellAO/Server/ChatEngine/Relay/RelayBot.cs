@@ -38,15 +38,23 @@ namespace Chatengine.Relay
     using System.Linq;
     using System.Text;
 
+    using CellAO.Communication.Messages;
+
     using ChatEngine;
     using ChatEngine.Channels;
     using ChatEngine.CoreServer;
     using ChatEngine.Relay;
     using ChatEngine.Relay.Common;
 
+    using CellAO.Database;
+    using CellAO.Database.Dao;
+    using CellAO.Database.Entities;
+
     using IrcDotNet;
 
     using Utility;
+
+    using ZoneEngine.Core.Playfields;
 
     using Config = Utility.Config.ConfigReadWrite;
 
@@ -179,6 +187,10 @@ namespace Chatengine.Relay
 
         #region Methods
 
+        public readonly Queue<RequestPlayfieldList> replyQueuePlayfieldList = new Queue<RequestPlayfieldList>();
+
+        private bool executingRequestPlayfieldList = false;
+
         /// <summary>
         /// </summary>
         protected void InitializeRelayChatCommandProcessors()
@@ -187,10 +199,9 @@ namespace Chatengine.Relay
             this.ChatCommandProcessors.Add("login", this.ProcessChatCommandLogIn);
             this.ChatCommandProcessors.Add("logout", this.ProcessChatCommandLogOut);
             this.ChatCommandProcessors.Add("send", this.ProcessChatCommandSend);
-            this.ChatCommandProcessors.Add("home", this.ProcessChatCommandHome);
-            this.ChatCommandProcessors.Add("mentions", this.ProcessChatCommandMentions);
             this.ChatCommandProcessors.Add("serverinfo", this.ProcessChatCommandServerInfo);
             this.ChatCommandProcessors.Add("zoneinfo", this.ProcessChatCommandZoneInfo);
+            this.ChatCommandProcessors.Add("register", this.ProcessChatCommandRegister);
         }
 
         private void ProcessChatCommandZoneInfo(
@@ -200,20 +211,55 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            int numberOfZoneEnginesConnected = Program.ISCom.ClientCount;
-            List<string> addressList = Program.ISCom.GetZoneEngineIds();
-            StringBuilder sb = new StringBuilder();
-            var sourceUser = (IrcUser)source;
-            IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
-
-            client.LocalUser.SendMessage(
-                replyTargets,
-                "{0}",
-                "Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
-            sb.AppendLine("Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
-            foreach (string s in addressList)
+            if (!this.executingRequestPlayfieldList)
             {
-                client.LocalUser.SendMessage(replyTargets, "{0}", s);
+                this.executingRequestPlayfieldList = true;
+                int numberOfZoneEnginesConnected = Program.ISCom.ClientCount;
+                List<string> addressList = Program.ISCom.GetZoneEngineIds();
+
+                Program.ISCom.BroadCast(new RequestPlayfieldList());
+
+                StringBuilder sb = new StringBuilder();
+                var sourceUser = (IrcUser)source;
+                IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
+
+                DateTime startWait = DateTime.UtcNow;
+
+                bool timeOut = true;
+                while ((DateTime.UtcNow - startWait < TimeSpan.FromSeconds(10) && timeOut))
+                {
+                    lock (this.replyQueuePlayfieldList)
+                    {
+                        if (this.replyQueuePlayfieldList.Count == Program.ISCom.ClientCount)
+                        {
+                            timeOut = false;
+                        }
+                    }
+                }
+                if (timeOut)
+                {
+                    client.LocalUser.SendMessage(replyTargets, "{0}", "Not all ZoneEngines replied.");
+                }
+
+                client.LocalUser.SendMessage(
+                    replyTargets,
+                    "{0}",
+                    "Number of ZoneEngines connected: " + numberOfZoneEnginesConnected);
+
+                while (this.replyQueuePlayfieldList.Count > 0)
+                {
+                    RequestPlayfieldList r = this.replyQueuePlayfieldList.Dequeue();
+                    client.LocalUser.SendMessage(
+                        replyTargets,
+                        "{0}: Playfields {1}",
+                        r.ZoneEngineAddress,
+                        string.Join(
+                            ", ",
+                            r.PlayfieldIds.Select(
+                                x => PlayfieldLoader.PFData[x.Instance].Name.Trim() + " (" + x.Instance + ")")
+                                .ToArray()));
+                }
+                this.executingRequestPlayfieldList = false;
             }
         }
 
@@ -356,41 +402,6 @@ namespace Chatengine.Relay
         /// </param>
         /// <param name="parameters">
         /// </param>
-        private void ProcessChatCommandHome(
-            IrcClient client,
-            IIrcMessageSource source,
-            IList<IIrcMessageTarget> targets,
-            string command,
-            IList<string> parameters)
-        {
-            // var sourceUser = (IrcUser)source;
-            // var twitterBotUser = GetTwitterBotUser(sourceUser);
-
-            // if (parameters.Count != 0)
-            // throw new InvalidCommandParametersException(1);
-
-            //// List tweets on Home timeline of user.
-            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            // client.LocalUser.SendMessage(replyTargets, "Recent tweets on home timeline of '{0}':",
-            // twitterBotUser.TwitterUser.ScreenName);
-            // foreach (var tweet in twitterBotUser.ListTweetsOnHomeTimeline())
-            // {
-            // SendTweetInfo(client, replyTargets, tweet);
-            // }
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="client">
-        /// </param>
-        /// <param name="source">
-        /// </param>
-        /// <param name="targets">
-        /// </param>
-        /// <param name="command">
-        /// </param>
-        /// <param name="parameters">
-        /// </param>
         private void ProcessChatCommandListUsers(
             IrcClient client,
             IIrcMessageSource source,
@@ -398,20 +409,18 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            // var sourceUser = (IrcUser)source;
+            var sourceUser = (IrcUser)source;
+            if (parameters.Count != 0)
+                throw new InvalidCommandParametersException(1);
 
-            // if (parameters.Count != 0)
-            // throw new InvalidCommandParametersException(1);
+            // List all currently logged-in twitter users.
+             var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
 
-            //// List all currently logged-in twitter users.
-            // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
-            // client.LocalUser.SendMessage(replyTargets, "Currently logged-in Twitter users ({0}):",
-            // this.cellaoUsers.Count);
-            // foreach (var tu in this.cellaoUsers)
-            // {
-            // //client.LocalUser.SendMessage(replyTargets, "{0} / {1} ({2} @ {3})",
-            // // tu.TwitterUser.ScreenName, tu.TwitterUser.Name, tu.IrcUser.NickName, tu.IrcUser.Client.ServerName);
-            // }
+            foreach (var tu in CharacterDao.Instance.GetLoggedInCharacters())
+            {
+                     client.LocalUser.SendMessage(replyTargets, "Online Characters: {0}",
+                     tu.Name);
+            }
         }
 
         /// <summary>
@@ -451,9 +460,9 @@ namespace Chatengine.Relay
 
             // // Create new CellAO user and log in to service.
             var cellaoBotUser = new CellAoBotUser(sourceUser);
-           // bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
+            // bool success = cellaoBotUser.LogIn(parameters[0], parameters[1]);
             cellaoBotUser.LogIn(parameters[0], parameters[1]);
-            
+
             IList<IIrcMessageTarget> replyTargets = this.GetDefaultReplyTarget(client, sourceUser, targets);
             if (cellaoBotUser.IsAuthenticated)
             {
@@ -463,7 +472,7 @@ namespace Chatengine.Relay
                     "You are now logged in as {0} / '{1}'.",
                     cellaoBotUser.IrcUser.NickName,
                     cellaoBotUser.IrcUser.NickName);
-                GMlevel = cellaoBotUser.GMLevel(username);
+                this.GMlevel = cellaoBotUser.GMLevel(this.username);
             }
             else
             {
@@ -491,9 +500,11 @@ namespace Chatengine.Relay
             IList<string> parameters)
         {
             var sourceUser = (IrcUser)source;
-            var cellaoBotUser = GetCellAOBotUser(sourceUser);
+            CellAoBotUser cellaoBotUser = this.GetCellAOBotUser(sourceUser);
             if (parameters.Count != 0)
+            {
                 throw new InvalidCommandParametersException(1);
+            }
 
             // Log out CellAO user.
             cellaoBotUser.LogOut();
@@ -557,17 +568,38 @@ namespace Chatengine.Relay
             string command,
             IList<string> parameters)
         {
-            // var sourceUser = (IrcUser)source;
+            var sourceUser = (IrcUser)source;
             // var twitterBotUser = GetTwitterBotUser(sourceUser);
+            if (parameters.Count != 1)
+                throw new InvalidCommandParametersException(1);
 
-            // if (parameters.Count != 1)
-            // throw new InvalidCommandParametersException(1);
+            //Send System Message.
+            //TODO: Add GM Check and Sending System Message Code here
 
-            //// Send tweet from user.
+
+            //Twitter Code Delete this crap after new code is written.
             // var tweetStatus = twitterBotUser.SendTweet(parameters[0].TrimStart());
             // var replyTargets = GetDefaultReplyTarget(client, sourceUser, targets);
             // client.LocalUser.SendMessage(replyTargets, "Tweet sent by {0} at {1}.", tweetStatus.User.ScreenName,
             // tweetStatus.CreatedDate.ToLongTimeString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="source"></param>
+        /// <param name="targets"></param>
+        /// <param name="command"></param>
+        /// <param name="parameters"></param>
+        private void ProcessChatCommandRegister(
+            IrcClient client,
+            IIrcMessageSource source,
+            IList<IIrcMessageTarget> targets,
+            string command,
+            IList<string> parameters)
+        {
+            //TODO: Add Command to register user for CellAO
         }
 
         /// <summary>
@@ -593,7 +625,7 @@ namespace Chatengine.Relay
         {
             IList<IIrcMessageTarget> replyTarget = this.GetDefaultReplyTarget(client, source, targets);
 
-            client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: TBA");
+            client.LocalUser.SendMessage(replyTarget, "A How to Setup Connection to CellAO can be found here: {0}", Config.Instance.CurrentConfig.WebHostName);
             client.LocalUser.SendMessage(
                 replyTarget,
                 "This is the address for the server: " + Config.Instance.CurrentConfig.ListenIP + "  On Port: "

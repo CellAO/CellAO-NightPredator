@@ -79,6 +79,24 @@ namespace CellAO.Database.Dao
         }
 
         /// <summary>
+        /// Returns the count of registered users.
+        /// </summary>
+        /// <param name="">
+        /// </param>
+        /// <returns>
+        /// long count
+        /// </returns>
+        public long GetRegisteredCount()
+        {
+            const string SQL = "SELECT COUNT(*) FROM login";
+            using (IDbConnection conn = Connector.GetConnection())
+            {
+                return conn.Query<long>(SQL).Single();
+            }
+        }
+
+
+        /// <summary>
         /// </summary>
         /// <param name="user">
         /// </param>
@@ -173,6 +191,20 @@ namespace CellAO.Database.Dao
                 LogUtil.ErrorException(e);
                 return 0;
             }
+        }
+
+        public bool Exists(string username)
+        {
+            bool exists = false;
+            using (IDbConnection conn = Connector.GetConnection())
+            {
+                exists =
+                    conn.Query<int>(
+                        string.Format("SELECT ID FROM login where username = @username"),
+                        new { username = username }).Count() == 1;
+            }
+
+            return exists;
         }
 
         #endregion

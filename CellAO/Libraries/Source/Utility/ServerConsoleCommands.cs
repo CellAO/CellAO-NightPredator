@@ -164,7 +164,11 @@ namespace Utility
         /// </returns>
         private int MaxCommandLength()
         {
-            return this.entries.Max(x => x.CommandString.Length);
+            if (this.entries.Count > 0)
+            {
+                return this.entries.Max(x => x.CommandString.Length);
+            }
+            return 0;
         }
 
         #endregion

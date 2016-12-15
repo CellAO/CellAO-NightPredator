@@ -60,6 +60,10 @@
       <Project>{8aef23b2-9e44-40a1-a74e-cf7348b45b62}</Project>
       <Name>CellAO.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Database\CellAO.Database.csproj">
+      <Project>{63D6C409-58EB-4033-87E0-E0DDA6594075}</Project>
+      <Name>CellAO.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Enums\CellAO.Enums.csproj">
       <Project>{0c09af43-3456-4fd6-9041-d9a6d7c3f36c}</Project>
       <Name>CellAO.Enums</Name>
@@ -72,9 +76,17 @@
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj">
+      <Project>{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}</Project>
+      <Name>PlayfieldLoader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\Utility\Utility.csproj">
       <Project>{cb56f285-02ae-4816-9e8a-ec69991400e5}</Project>
       <Name>Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CellAO\Server\ZoneEngine\ZoneEngine.csproj">
+      <Project>{60385925-84f5-4893-a5e0-c8c1d1190790}</Project>
+      <Name>ZoneEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

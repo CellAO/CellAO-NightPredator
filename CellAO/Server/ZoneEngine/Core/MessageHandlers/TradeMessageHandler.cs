@@ -235,18 +235,22 @@ namespace ZoneEngine.Core.MessageHandlers
                         throw new InvalidOperationException("Characters shopping bag is null?? huh");
                     }
 
+                    TemporaryBag shoppingBag = client.Controller.Character.ShoppingBag;
+                    Vendor vendor = Pool.Instance.GetObject<Vendor>(
+                        client.Controller.Character.Playfield.Identity,
+                        shoppingBag.Vendor);
                     IItemContainer issuer = client.Controller.Character;
 
-                    if (issuer != null)
+                    if ((issuer != null) && (vendor != null))
                     {
-                        TemporaryBag shoppingBag = client.Controller.Character.ShoppingBag;
                         if (shoppingBag != null)
                         {
                             IItem[] items = shoppingBag.GetBoughtItems();
-                            double CLFactor = 1
-                                              - (double)
-                                                  (client.Controller.Character.Stats[StatIds.computerliteracy].Value
-                                                   / 4000.0f);
+                            double CLFactor = vendor.Stats[StatIds.sellmodifier].Value / 100.0f
+                                              * (double)
+                                                  (1
+                                                   - (client.Controller.Character.Stats[StatIds.computerliteracy].Value
+                                                      / 40) / 100.0f);
                             int cash = 0;
                             foreach (IItem item in items)
                             {
@@ -255,20 +259,21 @@ namespace ZoneEngine.Core.MessageHandlers
                                 {
                                     issuer.BaseInventory[issuer.BaseInventory.StandardPage].Add(nextSlot, item);
                                     AddTemplateMessageHandler.Default.Send(client.Controller.Character, (Item)item);
-                                    cash += (int)(CLFactor * item.GetAttribute(74));
+                                    cash += (int)Math.Round(CLFactor * item.GetAttribute(74));
                                 }
                             }
 
                             items = shoppingBag.GetSoldItems();
-                            CLFactor = 0.04
-                                       + ((double)client.Controller.Character.Stats[StatIds.computerliteracy].Value
-                                          / 100000.0f);
+                            CLFactor = vendor.Stats[StatIds.buymodifier].Value / 100.0f
+                                       + ((double)
+                                           ((int)
+                                               (client.Controller.Character.Stats[StatIds.computerliteracy].Value / 40))
+                                          / 2500.0f);
                             foreach (IItem item in items)
                             {
                                 cash -= (int)(CLFactor * item.GetAttribute(74));
                             }
 
-                            // TODO: DEDUCT CREDITS HERE!
                             client.Controller.Character.Stats[StatIds.cash].Value -= cash;
 
                             this.Send(
@@ -276,6 +281,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 TradeAction.Unknown,
                                 shoppingBag.Vendor,
                                 shoppingBag.Vendor);
+                            client.Controller.SendChangedStats();
                             shoppingBag.Dispose();
                         }
                     }
