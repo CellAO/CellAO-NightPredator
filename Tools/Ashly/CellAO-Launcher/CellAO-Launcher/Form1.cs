@@ -107,11 +107,12 @@ namespace CellAO_Launcher
         /// </param>
         private void Button2Click(object sender, EventArgs e)
         {
-            OpenFileDialog browseFile = new OpenFileDialog();
-            browseFile.Filter = "Anarchy Online|AnarchyOnline.exe";
-            browseFile.Title = "Browse for Anarchy Online";
-            browseFile.FileName = "AnarchyOnline.exe";
-
+            OpenFileDialog browseFile = new OpenFileDialog()
+            {
+                Filter = "Anarchy Online|AnarchyOnline.exe",
+                Title = "Browse for Anarchy Online",
+                FileName = "AnarchyOnline.exe"
+            };
             if (browseFile.ShowDialog() == DialogResult.OK)
             {
                 this.bx_AOExe.Text = browseFile.FileName;
@@ -140,11 +141,12 @@ namespace CellAO_Launcher
                 }
                 else
                 {
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-
-                    startInfo.FileName = this.bx_AOExe.Text;
-                    startInfo.Arguments = " IA " + this.ipConverted + " IP " + this.bx_Port.Text + " UI";
-                    startInfo.WorkingDirectory = Path.GetDirectoryName(this.bx_AOExe.Text);
+                    ProcessStartInfo startInfo = new ProcessStartInfo()
+                    {
+                        FileName = this.bx_AOExe.Text,
+                        Arguments = " IA " + this.ipConverted + " IP " + this.bx_Port.Text + " UI",
+                        WorkingDirectory = Path.GetDirectoryName(this.bx_AOExe.Text)
+                    };
                     Process AO = Process.Start(startInfo);
 
                     if (this.UseEncryption.Checked)
@@ -241,8 +243,7 @@ namespace CellAO_Launcher
         /// </returns>
         private uint ConvertHostToIp(string hostname)
         {
-            IPAddress tempIpAddress;
-            if (IPAddress.TryParse(hostname, out tempIpAddress))
+            if (IPAddress.TryParse(hostname, out var tempIpAddress))
             {
                 this.ipConverted = BitConverter.ToUInt32(IPAddress.Parse(hostname).GetAddressBytes(), 0);
             }
