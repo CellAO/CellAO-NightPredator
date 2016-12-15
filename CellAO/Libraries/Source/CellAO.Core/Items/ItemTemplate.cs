@@ -366,14 +366,15 @@ namespace CellAO.Core.Items
         /// </returns>
         public ItemTemplate Copy()
         {
-            ItemTemplate copy = new ItemTemplate();
-            copy.ID = this.ID;
-            copy.Flags = this.Flags;
-            copy.ItemType = this.ItemType;
-            copy.MultipleCount = this.MultipleCount;
-            copy.Nothing = this.Nothing;
-            copy.Quality = this.Quality;
-
+            ItemTemplate copy = new ItemTemplate()
+            {
+                ID = this.ID,
+                Flags = this.Flags,
+                ItemType = this.ItemType,
+                MultipleCount = this.MultipleCount,
+                Nothing = this.Nothing,
+                Quality = this.Quality
+            };
             foreach (KeyValuePair<int, int> kv in this.Attack)
             {
                 copy.Attack.Add(kv.Key, kv.Value);

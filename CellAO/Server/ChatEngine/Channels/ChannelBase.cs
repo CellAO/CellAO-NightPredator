@@ -148,7 +148,7 @@ namespace ChatEngine.Channels
                     ((Client)client).Channels.Add(this);
                     if (this.OnClientJoinChannel != null)
                     {
-                        this.OnClientJoinChannel(
+                        OnClientJoinChannel(
                             this,
                             new ClientJoinEventArgs() { PlayerName = ((Client)client).Character.characterName });
                     }
@@ -184,7 +184,7 @@ namespace ChatEngine.Channels
 
             if (this.OnChannelMessage != null)
             {
-                this.OnChannelMessage(
+                OnChannelMessage(
                     this,
                     new ChannelMessageEventArgs() { PlayerName = sourceClient.Character.characterName, Text = text });
             }
@@ -234,7 +234,7 @@ namespace ChatEngine.Channels
 
                 if (this.OnClientLeaveChannel != null)
                 {
-                    this.OnClientLeaveChannel(
+                    OnClientLeaveChannel(
                         this,
                         new ClientJoinEventArgs() { PlayerName = ((Client)client).Character.characterName });
                 }
@@ -260,7 +260,7 @@ namespace ChatEngine.Channels
         {
             if (this.OnChannelMessage != null)
             {
-                this.OnChannelMessage(this, new ChannelMessageEventArgs() { PlayerName = characterName, Text = text });
+                OnChannelMessage(this, new ChannelMessageEventArgs() { PlayerName = characterName, Text = text });
             }
         }
 

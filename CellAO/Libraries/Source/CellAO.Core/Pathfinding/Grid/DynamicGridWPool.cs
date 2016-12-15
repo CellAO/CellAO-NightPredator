@@ -46,11 +46,13 @@ namespace CellAO.Core.Pathfinding.Grid
         public DynamicGridWPool(NodePool iNodePool)
             : base()
         {
-            this.m_gridRect = new GridRect();
-            this.m_gridRect.minX = 0;
-            this.m_gridRect.minY = 0;
-            this.m_gridRect.maxX = 0;
-            this.m_gridRect.maxY = 0;
+            this.m_gridRect = new GridRect()
+            {
+                minX = 0,
+                minY = 0,
+                maxX = 0,
+                maxY = 0
+            };
             this.m_notSet = true;
             this.m_nodePool = iNodePool;
         }

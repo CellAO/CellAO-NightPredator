@@ -485,12 +485,14 @@ namespace CellAO.Core.Pathfinding
                                 currentSnapshot.stage = 1;
                                 stack.Push(currentSnapshot);
 
-                                newSnapshot = new JumpSnapshot();
-                                newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                                newSnapshot.iY = currentSnapshot.iY;
-                                newSnapshot.iPx = currentSnapshot.iX;
-                                newSnapshot.iPy = currentSnapshot.iY;
-                                newSnapshot.stage = 0;
+                                newSnapshot = new JumpSnapshot()
+                                {
+                                    iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                    iY = currentSnapshot.iY,
+                                    iPx = currentSnapshot.iX,
+                                    iPy = currentSnapshot.iY,
+                                    stage = 0
+                                };
                                 stack.Push(newSnapshot);
                                 continue;
                             }
@@ -507,23 +509,27 @@ namespace CellAO.Core.Pathfinding
                                     currentSnapshot.iX,
                                     currentSnapshot.iY + currentSnapshot.tDy))
                             {
-                                newSnapshot = new JumpSnapshot();
-                                newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                                newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                                newSnapshot.iPx = currentSnapshot.iX;
-                                newSnapshot.iPy = currentSnapshot.iY;
-                                newSnapshot.stage = 0;
+                                newSnapshot = new JumpSnapshot()
+                                {
+                                    iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                    iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                    iPx = currentSnapshot.iX,
+                                    iPy = currentSnapshot.iY,
+                                    stage = 0
+                                };
                                 stack.Push(newSnapshot);
                                 continue;
                             }
                             else if (iParam.CrossAdjacentPoint)
                             {
-                                newSnapshot = new JumpSnapshot();
-                                newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                                newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                                newSnapshot.iPx = currentSnapshot.iX;
-                                newSnapshot.iPy = currentSnapshot.iY;
-                                newSnapshot.stage = 0;
+                                newSnapshot = new JumpSnapshot()
+                                {
+                                    iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                    iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                    iPx = currentSnapshot.iX,
+                                    iPy = currentSnapshot.iY,
+                                    stage = 0
+                                };
                                 stack.Push(newSnapshot);
                                 continue;
                             }
@@ -599,12 +605,14 @@ namespace CellAO.Core.Pathfinding
                                 currentSnapshot.stage = 3;
                                 stack.Push(currentSnapshot);
 
-                                newSnapshot = new JumpSnapshot();
-                                newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                                newSnapshot.iY = currentSnapshot.iY;
-                                newSnapshot.iPx = currentSnapshot.iX;
-                                newSnapshot.iPy = currentSnapshot.iY;
-                                newSnapshot.stage = 0;
+                                newSnapshot = new JumpSnapshot()
+                                {
+                                    iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                    iY = currentSnapshot.iY,
+                                    iPx = currentSnapshot.iX,
+                                    iPy = currentSnapshot.iY,
+                                    stage = 0
+                                };
                                 stack.Push(newSnapshot);
                                 continue;
                             }
@@ -618,12 +626,14 @@ namespace CellAO.Core.Pathfinding
                                     currentSnapshot.iX,
                                     currentSnapshot.iY + currentSnapshot.tDy))
                             {
-                                newSnapshot = new JumpSnapshot();
-                                newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                                newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                                newSnapshot.iPx = currentSnapshot.iX;
-                                newSnapshot.iPy = currentSnapshot.iY;
-                                newSnapshot.stage = 0;
+                                newSnapshot = new JumpSnapshot()
+                                {
+                                    iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                    iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                    iPx = currentSnapshot.iX,
+                                    iPy = currentSnapshot.iY,
+                                    stage = 0
+                                };
                                 stack.Push(newSnapshot);
                                 continue;
                             }
@@ -636,12 +646,14 @@ namespace CellAO.Core.Pathfinding
                         currentSnapshot.stage = 2;
                         stack.Push(currentSnapshot);
 
-                        newSnapshot = new JumpSnapshot();
-                        newSnapshot.iX = currentSnapshot.iX;
-                        newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                        newSnapshot.iPx = currentSnapshot.iX;
-                        newSnapshot.iPy = currentSnapshot.iY;
-                        newSnapshot.stage = 0;
+                        newSnapshot = new JumpSnapshot()
+                        {
+                            iX = currentSnapshot.iX,
+                            iY = currentSnapshot.iY + currentSnapshot.tDy,
+                            iPx = currentSnapshot.iX,
+                            iPy = currentSnapshot.iY,
+                            stage = 0
+                        };
                         stack.Push(newSnapshot);
                         break;
                     case 2:
@@ -659,23 +671,27 @@ namespace CellAO.Core.Pathfinding
                                 currentSnapshot.iX,
                                 currentSnapshot.iY + currentSnapshot.tDy))
                         {
-                            newSnapshot = new JumpSnapshot();
-                            newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                            newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                            newSnapshot.iPx = currentSnapshot.iX;
-                            newSnapshot.iPy = currentSnapshot.iY;
-                            newSnapshot.stage = 0;
+                            newSnapshot = new JumpSnapshot()
+                            {
+                                iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                iPx = currentSnapshot.iX,
+                                iPy = currentSnapshot.iY,
+                                stage = 0
+                            };
                             stack.Push(newSnapshot);
                             continue;
                         }
                         else if (iParam.CrossAdjacentPoint)
                         {
-                            newSnapshot = new JumpSnapshot();
-                            newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                            newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                            newSnapshot.iPx = currentSnapshot.iX;
-                            newSnapshot.iPy = currentSnapshot.iY;
-                            newSnapshot.stage = 0;
+                            newSnapshot = new JumpSnapshot()
+                            {
+                                iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                iPx = currentSnapshot.iX,
+                                iPy = currentSnapshot.iY,
+                                stage = 0
+                            };
                             stack.Push(newSnapshot);
                             continue;
                         }
@@ -687,12 +703,14 @@ namespace CellAO.Core.Pathfinding
                         currentSnapshot.stage = 4;
                         stack.Push(currentSnapshot);
 
-                        newSnapshot = new JumpSnapshot();
-                        newSnapshot.iX = currentSnapshot.iX;
-                        newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                        newSnapshot.iPx = currentSnapshot.iX;
-                        newSnapshot.iPy = currentSnapshot.iY;
-                        newSnapshot.stage = 0;
+                        newSnapshot = new JumpSnapshot()
+                        {
+                            iX = currentSnapshot.iX,
+                            iY = currentSnapshot.iY + currentSnapshot.tDy,
+                            iPx = currentSnapshot.iX,
+                            iPy = currentSnapshot.iY,
+                            stage = 0
+                        };
                         stack.Push(newSnapshot);
                         break;
                     case 4:
@@ -710,12 +728,14 @@ namespace CellAO.Core.Pathfinding
                                 currentSnapshot.iX,
                                 currentSnapshot.iY + currentSnapshot.tDy))
                         {
-                            newSnapshot = new JumpSnapshot();
-                            newSnapshot.iX = currentSnapshot.iX + currentSnapshot.tDx;
-                            newSnapshot.iY = currentSnapshot.iY + currentSnapshot.tDy;
-                            newSnapshot.iPx = currentSnapshot.iX;
-                            newSnapshot.iPy = currentSnapshot.iY;
-                            newSnapshot.stage = 0;
+                            newSnapshot = new JumpSnapshot()
+                            {
+                                iX = currentSnapshot.iX + currentSnapshot.tDx,
+                                iY = currentSnapshot.iY + currentSnapshot.tDy,
+                                iPx = currentSnapshot.iX,
+                                iPy = currentSnapshot.iY,
+                                stage = 0
+                            };
                             stack.Push(newSnapshot);
                             continue;
                         }

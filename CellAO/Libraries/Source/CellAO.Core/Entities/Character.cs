@@ -542,22 +542,24 @@ namespace CellAO.Core.Entities
         /// </returns>
         internal DBCharacter GetDBCharacter()
         {
-            DBCharacter temp = new DBCharacter();
-            temp.FirstName = this.FirstName;
-            temp.LastName = this.LastName;
+            DBCharacter temp = new DBCharacter()
+            {
+                FirstName = this.FirstName,
+                LastName = this.LastName,
 
-            temp.HeadingW = this.RawHeading.wf;
-            temp.HeadingX = this.RawHeading.xf;
-            temp.HeadingY = this.RawHeading.yf;
-            temp.HeadingZ = this.RawHeading.zf;
-            temp.X = this.RawCoordinates.X;
-            temp.Y = this.RawCoordinates.Y;
-            temp.Z = this.RawCoordinates.Z;
+                HeadingW = this.RawHeading.wf,
+                HeadingX = this.RawHeading.xf,
+                HeadingY = this.RawHeading.yf,
+                HeadingZ = this.RawHeading.zf,
+                X = this.RawCoordinates.X,
+                Y = this.RawCoordinates.Y,
+                Z = this.RawCoordinates.Z,
 
-            temp.Id = this.Identity.Instance;
-            temp.Name = this.Name;
-            temp.Online = 1;
-            temp.Playfield = this.Playfield.Identity.Instance;
+                Id = this.Identity.Instance,
+                Name = this.Name,
+                Online = 1,
+                Playfield = this.Playfield.Identity.Instance
+            };
             return temp;
         }
 
