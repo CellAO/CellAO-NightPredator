@@ -110,12 +110,3 @@ UpgradeLog*.XML
 /CellAO/Built
 CellAO/_dotMemory.CellAO/
 CellAO/CellAO.sln.DotSettings
-/CellAO/.vs/*.sqlite
-/CellAO/Libraries/Source/CellAO.Core/*.config
-/CellAO/Libraries/Source/CellAO.Database/*.txt
-/CellAO/Libraries/Source/CellAO.Database/*.config
-/CellAO/Libraries/Source/CellAO.Stats/*.config
-/CellAO/Libraries/Source/PlayfieldLoader/*.config
-/CellAO/Server/ChatEngine/*.config
-/CellAO/Server/LoginEngine/*.config
-/CellAO/Server/ZoneEngine/*.config
