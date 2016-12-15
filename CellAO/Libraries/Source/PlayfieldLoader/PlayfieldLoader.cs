@@ -110,8 +110,10 @@ namespace ZoneEngine.Core.Playfields
                                 playfieldid = f.Arguments.Values[1].AsInt32();
                                 doorinstance =
                                     (int)
+#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
                                         (0xC0000000 | f.Arguments.Values[1].AsInt32()
                                          | (f.Arguments.Values[2].AsInt32() << 16));
+#pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
                                 DBTeleport teleporter =
                                     TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
                                         .FirstOrDefault();
@@ -127,8 +129,10 @@ namespace ZoneEngine.Core.Playfields
                                 playfieldid = f.Arguments.Values[1].AsInt32();
                                 doorinstance =
                                     (int)
+#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
                                         (0xC0000000 | f.Arguments.Values[1].AsInt32()
                                          | (f.Arguments.Values[2].AsInt32() << 16));
+#pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
                                 DBTeleport teleporter =
                                     TeleportDao.Instance.GetWhere(new { statelInstance = (uint)sd.Identity.Instance })
                                         .FirstOrDefault();

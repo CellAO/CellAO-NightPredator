@@ -174,8 +174,10 @@ namespace CellAO.Communication.ISComV2Client
         /// </param>
         public void Send(MessageBase dataObject)
         {
-            var temp = new DynamicMessage();
-            temp.DataObject = dataObject;
+            var temp = new DynamicMessage()
+            {
+                DataObject = dataObject
+            };
             this.Send(temp);
         }
 
@@ -217,7 +219,7 @@ namespace CellAO.Communication.ISComV2Client
                         this.clientBase.Connect(this.serverAddress, this.serverPort);
                         if (this.OnConnect != null)
                         {
-                            this.OnConnect(this, EventArgs.Empty);
+                            OnConnect(this, EventArgs.Empty);
                         }
                     }
                     catch
@@ -257,7 +259,7 @@ namespace CellAO.Communication.ISComV2Client
             // Is the handler set?
             if (this.OnReceiveData != null)
             {
-                this.OnReceiveData(this, tmp);
+                OnReceiveData(this, tmp);
             }
         }
 

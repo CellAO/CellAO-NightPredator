@@ -331,11 +331,7 @@ namespace Utility
                 }
             }
 
-            Action<string, Exception> evt = ExceptionRaised;
-            if (evt != null)
-            {
-                evt(msg, e);
-            }
+            ExceptionRaised?.Invoke(msg, e);
         }
 
         /// <summary>
@@ -344,7 +340,9 @@ namespace Utility
         /// </param>
         public static void LogStacktrace(Action<string> logger)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             StackTrace stackTrace = new StackTrace(Thread.CurrentThread, true);
+#pragma warning restore CS0618 // Type or member is obsolete
             string temp = string.Empty;
             foreach (StackFrame stackFrame in stackTrace.GetFrames())
             {
@@ -384,8 +382,10 @@ namespace Utility
         public static void SetupFileLogging(string fileName, LogLevel logLevel)
         {
             LoggingConfiguration config = LogManager.Configuration ?? new LoggingConfiguration();
-            var fileTarget = new FileTarget();
-            fileTarget.FileName = fileName;
+            var fileTarget = new FileTarget()
+            {
+                FileName = fileName
+            };
             config.AddTarget("logfile", fileTarget);
             config.LoggingRules.Add(new LoggingRule("*", logLevel, fileTarget));
             LogManager.Configuration = config;

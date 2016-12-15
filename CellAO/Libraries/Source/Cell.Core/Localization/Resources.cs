@@ -1,6 +1,6 @@
-namespace Cell.Core.Localization
-{
-    internal class Resources : Cell_Core
-    {
-    }
-}
+//namespace Cell.Core.Localization
+//{
+//    internal class Cell_Core : Cell_Core
+//    {
+//    }
+//}

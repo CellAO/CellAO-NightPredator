@@ -118,7 +118,7 @@ namespace CellAO.Core.Inventory
             return true;
         }
 
-        public IItem Remove(int slotNum)
+        public new IItem Remove(int slotNum)
         {
             return this[slotNum];
         }

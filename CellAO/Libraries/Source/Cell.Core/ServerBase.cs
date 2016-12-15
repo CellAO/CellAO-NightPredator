@@ -314,7 +314,7 @@ namespace Cell.Core
 			{
 				if (!_running)
 				{
-					log.Info(Resources.BaseStart);
+					log.Info(Cell_Core.BaseStart);
 					IsRunning = true;
 
 					if (useTcp)
@@ -328,18 +328,18 @@ namespace Cell.Core
 						StartUDP();
 					}
 
-					log.Info(Resources.ReadyForConnections, this);
+					log.Info(Cell_Core.ReadyForConnections, this);
 				}
 			}
 			catch (InvalidEndpointException ex)
 			{
-				log.Fatal(Resources.InvalidEndpoint, ex.Endpoint);
+				log.Fatal(Cell_Core.InvalidEndpoint, ex.Endpoint);
 
 				Stop();
 			}
 			catch (NoAvailableAdaptersException)
 			{
-				log.Fatal(Resources.NoNetworkAdapters);
+				log.Fatal(Cell_Core.NoNetworkAdapters);
 
 				Stop();
 			}
@@ -357,7 +357,7 @@ namespace Cell.Core
 		/// </summary>
 		public virtual void Stop()
 		{
-			log.Info(Resources.BaseStop);
+			log.Info(Cell_Core.BaseStop);
 
 			if (IsRunning)
 			{
@@ -423,8 +423,10 @@ namespace Cell.Core
 			}
 			catch (Exception e)
 			{
-				LogManager.GetLogger(CellDef.CORE_LOG_FNAME).ErrorException("Could not disconnect client", e);
-			}
+#pragma warning disable CS0618 // Type or member is obsolete
+                LogManager.GetLogger(CellDef.CORE_LOG_FNAME).ErrorException("Could not disconnect client", e);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 		}
 
 		/// <summary>
@@ -474,15 +476,11 @@ namespace Cell.Core
 		/// <returns>True if the connection is to be accepted.</returns>
 		protected virtual bool OnClientConnected(IClient client)
 		{
-			Info(client, Resources.ClientConnected);
+			Info(client, Cell_Core.ClientConnected);
 
-			ClientConnectedHandler handler = ClientConnected;
-			if (handler != null)
-			{
-				handler(client);
-			}
+            ClientConnected?.Invoke(client);
 
-			return true;
+            return true;
 		}
 
 		/// <summary>
@@ -492,13 +490,11 @@ namespace Cell.Core
 		/// <param name="forced">Indicates if the client disconnection was forced</param>
 		protected virtual void OnClientDisconnected(IClient client, bool forced)
 		{
-			Info(client, Resources.ClientDisconnected);
+			Info(client, Cell_Core.ClientDisconnected);
 
-			ClientDisconnectedHandler handler = ClientDisconnected;
-			if (handler != null)
-				handler(client, forced);
+            ClientDisconnected?.Invoke(client, forced);
 
-			client.Dispose();
+            client.Dispose();
 		}
 
 		#endregion
@@ -575,7 +571,7 @@ namespace Cell.Core
 				StartAccept(null);
 
 				TcpEnabledEnabled = true;
-				Info(null, Resources.ListeningTCPSocket, TcpEndPoint);
+				Info(null, Cell_Core.ListeningTCPSocket, TcpEndPoint);
 			}
 		}
 
@@ -599,7 +595,7 @@ namespace Cell.Core
 				_tcpListen = null;
 
 				TcpEnabledEnabled = false;
-				Info(null, Resources.ListeningTCPSocketStopped, TcpEndPoint);
+				Info(null, Cell_Core.ListeningTCPSocketStopped, TcpEndPoint);
 			}
 		}
 
@@ -621,7 +617,7 @@ namespace Cell.Core
 				StartReceivingUdp(null);
 
 				UdpEnabledEnabled = true;
-				Info(null, Resources.ListeningUDPSocket, UdpEndPoint);
+				Info(null, Cell_Core.ListeningUDPSocket, UdpEndPoint);
 			}
 		}
 
@@ -656,7 +652,7 @@ namespace Cell.Core
 			{
 				if (!_running)
 				{
-					LogManager.GetLogger(CellDef.CORE_LOG_FNAME).Info(Resources.ServerNotRunning);
+					LogManager.GetLogger(CellDef.CORE_LOG_FNAME).Info(Cell_Core.ServerNotRunning);
 					return;
 				}
 			    IPAddress address = ((IPEndPoint)args.AcceptSocket.RemoteEndPoint).Address;
@@ -685,13 +681,17 @@ namespace Cell.Core
 			}
 			catch (SocketException e)
 			{
-				// TODO: Add a proper exception handling for the different SocketExceptions Error Codes.
-				LogManager.GetLogger(CellDef.CORE_LOG_FNAME).WarnException(Resources.SocketExceptionAsyncAccept, e);
-			}
+                // TODO: Add a proper exception handling for the different SocketExceptions Error Codes.
+#pragma warning disable CS0618 // Type or member is obsolete
+                LogManager.GetLogger(CellDef.CORE_LOG_FNAME).WarnException(Cell_Core.SocketExceptionAsyncAccept, e);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 			catch (Exception e)
 			{
-				LogManager.GetLogger(CellDef.CORE_LOG_FNAME).FatalException(Resources.FatalAsyncAccept, e);
-			}
+#pragma warning disable CS0618 // Type or member is obsolete
+                LogManager.GetLogger(CellDef.CORE_LOG_FNAME).FatalException(Cell_Core.FatalAsyncAccept, e);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 		}
 
 		#region UDP
@@ -747,13 +747,17 @@ namespace Cell.Core
 			}
 			catch (SocketException e)
 			{
-				// TODO: Add a proper exception handling for the different SocketExceptions Error Codes.
-				LogManager.GetLogger(CellDef.CORE_LOG_FNAME).WarnException(Resources.SocketExceptionAsyncAccept, e);
-			}
+                // TODO: Add a proper exception handling for the different SocketExceptions Error Codes.
+#pragma warning disable CS0618 // Type or member is obsolete
+                LogManager.GetLogger(CellDef.CORE_LOG_FNAME).WarnException(Cell_Core.SocketExceptionAsyncAccept, e);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 			catch (Exception e)
 			{
-				LogManager.GetLogger(CellDef.CORE_LOG_FNAME).FatalException(Resources.FatalAsyncAccept, e);
-			}
+#pragma warning disable CS0618 // Type or member is obsolete
+                LogManager.GetLogger(CellDef.CORE_LOG_FNAME).FatalException(Cell_Core.FatalAsyncAccept, e);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 		}
 
 		/// <summary>
