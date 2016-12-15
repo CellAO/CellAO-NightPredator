@@ -87,7 +87,7 @@ namespace ChatEngine.Relay
         /// </param>
         /// <returns>
         /// </returns>
-        public void  LogIn(string username, string password)
+        public void LogIn(string username, string password)
         {
             try
             {
