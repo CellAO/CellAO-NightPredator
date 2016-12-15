@@ -73,7 +73,9 @@ namespace ZoneEngine.Core.Functions.GameFunctions
             
             ICharacter character = (ICharacter)self;
 
+#pragma warning disable CS0675 // Bitwise-or operator used on a sign-extended operand
             int statelId = (int)(0xC0000000 | arguments[1].AsInt32() | (arguments[2].AsInt32() << 16));
+#pragma warning restore CS0675 // Bitwise-or operator used on a sign-extended operand
             character.Stats[StatIds.externaldoorinstance].BaseValue = (uint)caller.Identity.Instance;
             character.Stats[StatIds.externalplayfieldinstance].BaseValue = (uint)character.Playfield.Identity.Instance;
 
