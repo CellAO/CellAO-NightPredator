@@ -129,12 +129,14 @@ namespace CellAO.Core.Functions
             IFunction newAOF = new Function();
             foreach (Requirement aor in this.Requirements)
             {
-                Requirement newAOR = new Requirement();
-                newAOR.ChildOperator = aor.ChildOperator;
-                newAOR.Operator = aor.Operator;
-                newAOR.Statnumber = aor.Statnumber;
-                newAOR.Target = aor.Target;
-                newAOR.Value = aor.Value;
+                Requirement newAOR = new Requirement()
+                {
+                    ChildOperator = aor.ChildOperator,
+                    Operator = aor.Operator,
+                    Statnumber = aor.Statnumber,
+                    Target = aor.Target,
+                    Value = aor.Value
+                };
                 newAOF.Requirements.Add(newAOR);
             }
 

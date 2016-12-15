@@ -165,9 +165,11 @@ namespace CellAO.Communication
         /// </param>
         public static void SendMessage(byte ID, byte[] data)
         {
-            OnMessageArgs args = new OnMessageArgs();
-            args.ID = ID;
-            args.Data = data;
+            OnMessageArgs args = new OnMessageArgs()
+            {
+                ID = ID,
+                Data = data
+            };
             client.SendData(args);
         }
 
@@ -181,9 +183,11 @@ namespace CellAO.Communication
         /// </param>
         public static void SendReply(HandleClientRequest request, byte ID, byte[] data)
         {
-            OnMessageArgs args = new OnMessageArgs();
-            args.ID = ID;
-            args.Data = data;
+            OnMessageArgs args = new OnMessageArgs()
+            {
+                ID = ID,
+                Data = data
+            };
             request.SendData(args);
         }
 
