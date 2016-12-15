@@ -48,34 +48,58 @@ namespace ZoneEngine.ChatCommands
 
     public class List : AOChatCommand
     {
+        private System.Text.RegularExpressions.Regex matchLevelRange = new System.Text.RegularExpressions.Regex(@"^\d{1,3}[-]\d{1,3}$");
+        private System.Text.RegularExpressions.Regex matchLevel = new System.Text.RegularExpressions.Regex(@"^\d{1,3}$");
+
         public override bool CheckCommandArguments(string[] args)
         {
-            return true;
+            return args.Length <= 2;
         }
 
         public override void CommandHelp(ICharacter character)
         {
-
             character.Playfield.Publish(
                 ChatTextMessageHandler.Default.CreateIM(
                     character,
-                    "Hello World"));
+                    "/list [level range|level|name|side]"));
         }
 
         public override void ExecuteCommand(ICharacter character, Identity target, string[] args)
         {
             var chars = CellAO.ObjectManager.Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
                     .Where(x => x.InPlayfield(character.Playfield.Identity));
+
+            string parm1 = args.Length > 1 ? args[1] : "";
+
+            if (!String.IsNullOrEmpty(parm1) && matchLevelRange.IsMatch(parm1))
+            {
+                chars = chars.Where(c =>
+                    (c.Stats[CellAO.Enums.StatIds.level].Value) >= Convert.ToInt32(parm1.Split('-')[0]) &&
+                    (c.Stats[CellAO.Enums.StatIds.level].Value) <= Convert.ToInt32(parm1.Split('-')[1]));
+            }
+            else if (!String.IsNullOrEmpty(parm1) && matchLevel.IsMatch(parm1))
+            {
+                chars = chars.Where(c =>
+                    (c.Stats[CellAO.Enums.StatIds.level].Value) == Convert.ToInt32(parm1));
+            }
+            else
+            {
+                chars = chars.Where(c =>
+                    (c.Stats[CellAO.Enums.StatIds.name].Value).ToString().ToLower().StartsWith(parm1.ToLower()) ||
+                    ((Profession)c.Stats[CellAO.Enums.StatIds.profession].Value).ToString().ToLower().StartsWith(parm1.ToLower()) ||
+                    ((Side)c.Stats[CellAO.Enums.StatIds.side].Value).ToString().ToLower().Equals(parm1.ToLower()));
+            }
+
             foreach (Character entity in chars)
             {
                 character.Playfield.Publish(
                 ChatTextMessageHandler.Default.CreateIM(
                     character,
-                    String.Format("Name: '{0}', profession: '{1}', level: {2}, Side: '{3}'", 
+                    String.Format("Name: '{0}', Profession: '{1}', Level: {2}, Side: '{3}'", 
                         entity.Name,
-                        ((SmokeLounge.AOtomation.Messaging.GameData.Profession)entity.Stats[CellAO.Enums.StatIds.visualprofession].Value).ToString(),
+                        ((Profession)entity.Stats[CellAO.Enums.StatIds.visualprofession].Value).ToString(),
                         (entity.Stats[CellAO.Enums.StatIds.level].Value).ToString(),
-                        ((SmokeLounge.AOtomation.Messaging.GameData.Side)entity.Stats[CellAO.Enums.StatIds.side].Value).ToString()
+                        ((Side)entity.Stats[CellAO.Enums.StatIds.side].Value).ToString()
                         )));
             }
             character.Playfield.Publish(
