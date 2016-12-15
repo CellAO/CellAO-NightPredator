@@ -55,7 +55,7 @@ namespace ZoneEngine.Core.KnuBot
     {
         /// <summary>
         /// </summary>
-        public WeakReference<ICharacter> Character;
+        public Utility.WeakReference<ICharacter> Character;
 
         /// <summary>
         /// </summary>
@@ -87,7 +87,7 @@ namespace ZoneEngine.Core.KnuBot
         /// </param>
         protected BaseKnuBot(Identity knubotIdentity)
         {
-            this.Character = new WeakReference<ICharacter>(null);
+            this.Character = new Utility.WeakReference<ICharacter>(null);
             this.KnuBotIdentity = knubotIdentity;
         }
 
@@ -191,14 +191,9 @@ namespace ZoneEngine.Core.KnuBot
                         if (nextId != "self")
                         {
                             KnuBotDialogTree nextSelectedNode = this.selectedNode.GetNode(nextId);
-                            if (nextSelectedNode == null)
-                            {
-                                throw new Exception(
+                            this.selectedNode = nextSelectedNode ?? throw new Exception(
                                     "Could not find dialog id '" + nextId + "' in tree '"
                                     + string.Join(Environment.NewLine, this.selectedNode.FlattenDialogIds()) + "'");
-                            }
-
-                            this.selectedNode = nextSelectedNode;
                         }
                     }
                 }
@@ -215,7 +210,7 @@ namespace ZoneEngine.Core.KnuBot
             else
             {
                 // Remove link to conversation partner
-                this.Character = new WeakReference<ICharacter>(null);
+                this.Character = new Utility.WeakReference<ICharacter>(null);
             }
         }
 
@@ -311,7 +306,7 @@ namespace ZoneEngine.Core.KnuBot
         public void CloseChatWindow()
         {
             KnuBotCloseChatWindowMessageHandler.Default.Send(this.Character.Target, this.KnuBotIdentity);
-            this.Character = new WeakReference<ICharacter>(null);
+            this.Character = new Utility.WeakReference<ICharacter>(null);
             LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Close KnuBot window"));
         }
     }

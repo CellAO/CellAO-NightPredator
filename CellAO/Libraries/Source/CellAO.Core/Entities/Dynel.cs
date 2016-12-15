@@ -69,7 +69,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        private WeakReference<IController> controller;
+        private Utility.WeakReference<IController> controller;
 
         /// <summary>
         /// </summary>

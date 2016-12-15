@@ -107,6 +107,10 @@ namespace ChatEngine.Relay.Common
         /// </summary>
         private bool isRunning;
 
+        /// <summary>
+        /// </summary>
+        private IrcClient client;
+
         #endregion
 
         #region Constructors and Destructors
@@ -277,7 +281,8 @@ namespace ChatEngine.Relay.Common
         protected void Connect(string server, IrcRegistrationInfo registrationInfo)
         {
             // Create new IRC client and connect to given server.
-            var client = new IrcClient();
+            //var client = new IrcClient();
+            client = new IrcClient();
             client.FloodPreventer = new IrcStandardFloodPreventer(4, 2000);
             client.Connected += this.IrcClient_Connected;
             client.Disconnected += this.IrcClient_Disconnected;

@@ -74,7 +74,7 @@ namespace ZoneEngine.Core.Controllers
 
         /// <summary>
         /// </summary>
-        private WeakReference<ICharacter> character;
+        private Utility.WeakReference<ICharacter> character;
 
         private bool disposed = false;
 
@@ -113,7 +113,7 @@ namespace ZoneEngine.Core.Controllers
                     throw new Exception("Dont try to weak reference null");
                 }
 
-                this.character = new WeakReference<ICharacter>(value);
+                this.character = new Utility.WeakReference<ICharacter>(value);
             }
         }
 

@@ -60,14 +60,16 @@ namespace LoginEngine.QueryBase
 
             foreach (DBCharacter ch in CharacterDao.Instance.GetAllForUser(accountName))
             {
-                var charentry = new CharacterEntry();
-                charentry.Id = ch.Id;
-                charentry.Name = ch.Name;
-                charentry.Playfield = ch.Playfield;
-                charentry.Level = StatDao.Instance.GetById(50000, ch.Id, 54).StatValue; // 54 = Level
-                charentry.Breed = StatDao.Instance.GetById(50000, ch.Id, 4).StatValue; // 4 = Breed
-                charentry.Gender = StatDao.Instance.GetById(50000, ch.Id, 59).StatValue; // 59 = Sex
-                charentry.Profession = StatDao.Instance.GetById(50000, ch.Id, 60).StatValue; // 60 = Profession
+                var charentry = new CharacterEntry()
+                {
+                    Id = ch.Id,
+                    Name = ch.Name,
+                    Playfield = ch.Playfield,
+                    Level = StatDao.Instance.GetById(50000, ch.Id, 54).StatValue, // 54 = Level
+                    Breed = StatDao.Instance.GetById(50000, ch.Id, 4).StatValue, // 4 = Breed
+                    Gender = StatDao.Instance.GetById(50000, ch.Id, 59).StatValue, // 59 = Sex
+                    Profession = StatDao.Instance.GetById(50000, ch.Id, 60).StatValue // 60 = Profession
+                };
                 characters.Add(charentry);
             }
 

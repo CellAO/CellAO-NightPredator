@@ -51,12 +51,12 @@ namespace CellAO.Core.Inventory
 
     public class VendorInventoryPage : BaseInventoryPage, IItemSlotHandler, IItemHotSwapHandler, IEquipmentPage
     {
-        private readonly WeakReference<Vendor> ownerReference;
+        private readonly Utility.WeakReference<Vendor> ownerReference;
 
         public VendorInventoryPage(Identity ownerInstance)
             : base((int)IdentityType.Inventory, 250, 0, ownerInstance)
         {
-            this.ownerReference = new WeakReference<Vendor>(Pool.Instance.GetObject<Vendor>(ownerInstance));
+            this.ownerReference = new Utility.WeakReference<Vendor>(Pool.Instance.GetObject<Vendor>(ownerInstance));
         }
 
         public int Stat(int statId)
