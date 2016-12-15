@@ -1,6 +1,6 @@
 ﻿#region License
 
-// Copyright (c) 2005-2014, CellAO Team
+// Copyright (c) 2005-2016, CellAO Team
 // 
 // 
 // All rights reserved.
