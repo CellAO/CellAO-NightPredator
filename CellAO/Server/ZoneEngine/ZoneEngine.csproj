@@ -100,6 +100,7 @@
     <Compile Include="ChatCommands\ChatCommandSet.cs" />
     <Compile Include="ChatCommands\DebugItem.cs" />
     <Compile Include="ChatCommands\InstaGrid.cs" />
+    <Compile Include="ChatCommands\List.cs" />
     <Compile Include="ChatCommands\MakeShop.cs" />
     <Compile Include="ChatCommands\Npc.cs" />
     <Compile Include="ChatCommands\SaveProxy.cs" />
