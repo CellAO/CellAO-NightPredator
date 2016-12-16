@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26009.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatEngine", "Server\ChatEngine\ChatEngine.csproj", "{B3514F3D-2D74-4DCF-BAB0-05FAAAFFDD83}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -108,6 +108,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack.Mono", "Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj", "{6E8C2296-21E9-4113-89C4-76376516AA14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayfieldLoader", "Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj", "{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pcapToJson", "pcapToJson\pcapToJson.csproj", "{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -431,6 +433,26 @@ Global
 		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|x64.ActiveCfg = Release|Any CPU
 		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Itanium.ActiveCfg = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Itanium.Build.0 = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|x64.Build.0 = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Debug|x86.Build.0 = Debug|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Itanium.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Itanium.Build.0 = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|x64.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|x64.Build.0 = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -454,11 +476,12 @@ Global
 		{B746D260-F136-4A32-A6B5-DA6AF6ADB33E} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 		{6E8C2296-21E9-4113-89C4-76376516AA14} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
 		{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4} = {7E3CCEE1-EEFC-48D3-823B-2E7CA4FEE88C}
+		{E3C48CF4-31A3-47C3-B2DD-AFAD1FDC197E} = {6A9A7146-702D-4F23-BC06-A385167ED6A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_AssemblyInfoFilename = SolutionAssemblyInfo.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 	EndGlobalSection
 EndGlobal
