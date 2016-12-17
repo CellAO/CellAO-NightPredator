@@ -31,630 +31,630 @@
 
 namespace ZoneEngine.Core.MessageHandlers
 {
-  #region Usings ...
+    #region Usings ...
 
-  using CellAO.Core.Components;
-  using CellAO.Core.Entities;
-  using CellAO.Core.Items;
-  using CellAO.Core.Network;
-  using CellAO.Database.Dao;
-  using CellAO.Enums;
+    using CellAO.Core.Components;
+    using CellAO.Core.Entities;
+    using CellAO.Core.Items;
+    using CellAO.Core.Network;
+    using CellAO.Database.Dao;
+    using CellAO.Enums;
 
-  using SmokeLounge.AOtomation.Messaging.GameData;
-  using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
+    using SmokeLounge.AOtomation.Messaging.GameData;
+    using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
 
-  using Utility;
+    using Utility;
 
-  using ZoneEngine.Core.PacketHandlers;
+    using ZoneEngine.Core.PacketHandlers;
 
-  using System.Linq;
+    using System.Linq;
 
-  #endregion
-
-  /// <summary>
-  /// </summary>
-  [MessageHandler(MessageHandlerDirection.All)]
-  public class CharacterActionMessageHandler :
-      BaseMessageHandler<CharacterActionMessage, CharacterActionMessageHandler>
-  {
-    /// <summary>
-    /// </summary>
-    public CharacterActionMessageHandler()
-    {
-      this.UpdateCharacterStatsOnReceive = true;
-    }
-
-    #region Inbound
+    #endregion
 
     /// <summary>
     /// </summary>
-    /// <param name="message">
-    /// </param>
-    /// <param name="client">
-    /// </param>
-    protected override void Read(CharacterActionMessage message, IZoneClient client)
+    [MessageHandler(MessageHandlerDirection.All)]
+    public class CharacterActionMessageHandler :
+        BaseMessageHandler<CharacterActionMessage, CharacterActionMessageHandler>
     {
-      LogUtil.Debug(DebugInfoDetail.NetworkMessages, "Reading CharacterActionMessage");
+        /// <summary>
+        /// </summary>
+        public CharacterActionMessageHandler()
+        {
+            this.UpdateCharacterStatsOnReceive = true;
+        }
 
-      // var actionNum = (int)characterAction.Action;
-      // int unknown1 = message.Unknown1;
-      // int args1 = message.Parameter1;
-      // int nanoId = message.Parameter2;
-      // short unknown2 = message.Unknown2;
+        #region Inbound
 
-      IdentityType targetIdentityType = message.Target.Type;
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <param name="client">
+        /// </param>
+        protected override void Read(CharacterActionMessage message, IZoneClient client)
+        {
+            LogUtil.Debug(DebugInfoDetail.NetworkMessages, "Reading CharacterActionMessage");
 
-      switch (message.Action)
-      {
-        case CharacterActionType.CastNano:
+            // var actionNum = (int)characterAction.Action;
+            // int unknown1 = message.Unknown1;
+            // int args1 = message.Parameter1;
+            // int nanoId = message.Parameter2;
+            // short unknown2 = message.Unknown2;
 
-          // Cast nano
-          // CastNanoSpell
+            IdentityType targetIdentityType = message.Target.Type;
 
-          // TODO: This has to be delayed (Casting attack speed) and needs to move to some other part
-          // TODO: Check nanoskill requirements
-          // TODO: Lower current nano points/check if enough nano points
-
-          client.Controller.CastNano(message.Parameter2, message.Target);
-
-          break;
-
-        /* this is here to prevent server crash that is caused by search action if server doesn't reply if something is found or not */
-        case CharacterActionType.Search:
-
-          // If action == search
-          /* Msg 110:136744723 = "No hidden objects found." */
-          // TODO: SEARCH!!
-          FeedbackMessageHandler.Default.Send(client.Controller.Character, 110, 136744723);
-          break;
-
-        case CharacterActionType.InfoRequest:
-
-          // If action == Info Request
-          IInstancedEntity tPlayer = client.Controller.Character.Playfield.FindByIdentity(message.Target);
-
-          // TODO: Think of a new method to distinguish players from mobs (NPCFamily for example)
-          var tChar = tPlayer as Character;
-          if (tChar != null)
-          {
-            // Is it a Character object? (player and npcs)
-            CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, tChar);
-          }
-          else
-          {
-            // TODO: NPC's
-            /*
-                var npc =
-                    (NonPlayerCharacterClass)
-                    FindDynel.FindDynelById(packet.Target);
-                if (npc != null)
-                {
-                    var infoPacket = new PacketWriter();
-
-                     Start packet header
-                    infoPacket.PushByte(0xDF);
-                    infoPacket.PushByte(0xDF);
-                    infoPacket.PushShort(10);
-                    infoPacket.PushShort(1);
-                    infoPacket.PushShort(0);
-                    infoPacket.PushInt(3086);  sender (server ID)
-                    infoPacket.PushInt(client.Character.Id.Instance);  receiver 
-                    infoPacket.PushInt(0x4D38242E);  packet ID
-                    infoPacket.PushIdentity(npc.Id);  affected identity
-                    infoPacket.PushByte(0);  ?
-
-                     End packet header
-                    infoPacket.PushByte(0x50);  npc's just have 0x50
-                    infoPacket.PushByte(1);  esi_001?
-                    infoPacket.PushByte((byte)npc.Stats.Profession.Value);  Profession
-                    infoPacket.PushByte((byte)npc.Stats.Level.Value);  Level
-                    infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value);  Titlelevel
-                    infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value);  Visual Profession
-
-                    infoPacket.PushShort(0);  no idea for npc's
-                    infoPacket.PushUInt(npc.Stats.Health.Value);  Current Health (Health)
-                    infoPacket.PushUInt(npc.Stats.Life.Value);  Max Health (Life)
-                    infoPacket.PushInt(0);  BreedHostility?
-                    infoPacket.PushUInt(0);  org ID
-                    infoPacket.PushShort(0);
-                    infoPacket.PushShort(0);
-                    infoPacket.PushShort(0);
-                    infoPacket.PushShort(0);
-                    infoPacket.PushInt(0x499602d2);
-                    infoPacket.PushInt(0x499602d2);
-                    infoPacket.PushInt(0x499602d2);
-                    var infoPacketA = infoPacket.Finish();
-                    client.SendCompressed(infoPacketA);
-                }*/
-          }
-
-          break;
-
-        case CharacterActionType.Logout:
-
-          // If action == Logout
-          // Start 30 second logout timer if client is not a GM (statid 215)
-          if (client.Controller.Character.Stats[StatIds.gmlevel].Value == 0)
-          {
-            client.Controller.Character.StartLogoutTimer();
-          }
-          else
-          {
-            // If client is a GM, disconnect without timer
-            client.Controller.Character.StartLogoutTimer(1000);
-          }
-
-          break;
-
-        case CharacterActionType.StopLogout:
-
-          // If action == Stop Logout
-          // Stop current logout timer and send stop logout packet
-          client.Controller.Character.StopLogoutTimer();
-          client.Controller.Character.UpdateMoveType((byte)client.Controller.Character.PreviousMoveMode);
-          client.Controller.Character.Playfield.Announce(message);
-          break;
-
-        case CharacterActionType.StandUp:
-          {
-            // If action == Stand
-            client.Controller.Character.UpdateMoveType(37);
-            client.Controller.Character.Playfield.Announce(message);
-
-            if (client.Controller.Character.InLogoutTimerPeriod())
+            switch (message.Action)
             {
-              this.Send(client.Controller.Character, this.StopLogout(client.Controller.Character), true);
-              client.Controller.Character.StopLogoutTimer();
+                case CharacterActionType.CastNano:
+
+                    // Cast nano
+                    // CastNanoSpell
+
+                    // TODO: This has to be delayed (Casting attack speed) and needs to move to some other part
+                    // TODO: Check nanoskill requirements
+                    // TODO: Lower current nano points/check if enough nano points
+
+                    client.Controller.CastNano(message.Parameter2, message.Target);
+
+                    break;
+
+                /* this is here to prevent server crash that is caused by search action if server doesn't reply if something is found or not */
+                case CharacterActionType.Search:
+
+                    // If action == search
+                    /* Msg 110:136744723 = "No hidden objects found." */
+                    // TODO: SEARCH!!
+                    FeedbackMessageHandler.Default.Send(client.Controller.Character, 110, 136744723);
+                    break;
+
+                case CharacterActionType.InfoRequest:
+
+                    // If action == Info Request
+                    IInstancedEntity tPlayer = client.Controller.Character.Playfield.FindByIdentity(message.Target);
+
+                    // TODO: Think of a new method to distinguish players from mobs (NPCFamily for example)
+                    var tChar = tPlayer as Character;
+                    if (tChar != null)
+                    {
+                        // Is it a Character object? (player and npcs)
+                        CharacterInfoPacketMessageHandler.Default.Send(client.Controller.Character, tChar);
+                    }
+                    else
+                    {
+                        // TODO: NPC's
+                        /*
+                            var npc =
+                                (NonPlayerCharacterClass)
+                                FindDynel.FindDynelById(packet.Target);
+                            if (npc != null)
+                            {
+                                var infoPacket = new PacketWriter();
+
+                                 Start packet header
+                                infoPacket.PushByte(0xDF);
+                                infoPacket.PushByte(0xDF);
+                                infoPacket.PushShort(10);
+                                infoPacket.PushShort(1);
+                                infoPacket.PushShort(0);
+                                infoPacket.PushInt(3086);  sender (server ID)
+                                infoPacket.PushInt(client.Character.Id.Instance);  receiver 
+                                infoPacket.PushInt(0x4D38242E);  packet ID
+                                infoPacket.PushIdentity(npc.Id);  affected identity
+                                infoPacket.PushByte(0);  ?
+
+                                 End packet header
+                                infoPacket.PushByte(0x50);  npc's just have 0x50
+                                infoPacket.PushByte(1);  esi_001?
+                                infoPacket.PushByte((byte)npc.Stats.Profession.Value);  Profession
+                                infoPacket.PushByte((byte)npc.Stats.Level.Value);  Level
+                                infoPacket.PushByte((byte)npc.Stats.TitleLevel.Value);  Titlelevel
+                                infoPacket.PushByte((byte)npc.Stats.VisualProfession.Value);  Visual Profession
+
+                                infoPacket.PushShort(0);  no idea for npc's
+                                infoPacket.PushUInt(npc.Stats.Health.Value);  Current Health (Health)
+                                infoPacket.PushUInt(npc.Stats.Life.Value);  Max Health (Life)
+                                infoPacket.PushInt(0);  BreedHostility?
+                                infoPacket.PushUInt(0);  org ID
+                                infoPacket.PushShort(0);
+                                infoPacket.PushShort(0);
+                                infoPacket.PushShort(0);
+                                infoPacket.PushShort(0);
+                                infoPacket.PushInt(0x499602d2);
+                                infoPacket.PushInt(0x499602d2);
+                                infoPacket.PushInt(0x499602d2);
+                                var infoPacketA = infoPacket.Finish();
+                                client.SendCompressed(infoPacketA);
+                            }*/
+                    }
+
+                    break;
+
+                case CharacterActionType.Logout:
+
+                    // If action == Logout
+                    // Start 30 second logout timer if client is not a GM (statid 215)
+                    if (client.Controller.Character.Stats[StatIds.gmlevel].Value == 0)
+                    {
+                        client.Controller.Character.StartLogoutTimer();
+                    }
+                    else
+                    {
+                        // If client is a GM, disconnect without timer
+                        client.Controller.Character.StartLogoutTimer(1000);
+                    }
+
+                    break;
+
+                case CharacterActionType.StopLogout:
+
+                    // If action == Stop Logout
+                    // Stop current logout timer and send stop logout packet
+                    client.Controller.Character.StopLogoutTimer();
+                    client.Controller.Character.UpdateMoveType((byte)client.Controller.Character.PreviousMoveMode);
+                    client.Controller.Character.Playfield.Announce(message);
+                    break;
+
+                case CharacterActionType.StandUp:
+                    {
+                        // If action == Stand
+                        client.Controller.Character.UpdateMoveType(37);
+                        client.Controller.Character.Playfield.Announce(message);
+
+                        if (client.Controller.Character.InLogoutTimerPeriod())
+                        {
+                            this.Send(client.Controller.Character, this.StopLogout(client.Controller.Character), true);
+                            client.Controller.Character.StopLogoutTimer();
+                        }
+
+                        // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
+                        // ((ZoneClient)client).StandCancelLogout();
+                    }
+
+                    break;
+
+                case CharacterActionType.TeamKickMember:
+                    {
+                        // Kick Team Member
+                    }
+
+                    break;
+
+                case CharacterActionType.LeaveTeam:
+                    {
+                        // Leave Team
+                        /*
+                                                        var team = new TeamClass();
+                                                        team.LeaveTeam(client);
+                                                         */
+                    }
+
+                    break;
+                case CharacterActionType.TransferLeader:
+                    {
+                        // Transfer Team Leadership
+                    }
+
+                    break;
+
+                case CharacterActionType.TeamRequestInvite:
+                    {
+                        var targetPlayer = CellAO.ObjectManager.Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                            .Where(x => x.Identity.Equals(message.Target)).FirstOrDefault();
+                        // Team Join Request
+                        // Send Team Invite Request To Target Player
+                        /*
+                                                        var team = new TeamClass();
+                                                        team.SendTeamRequest(client, packet.Target);
+                                                         */
+                        CharacterActionMessage packet = new CharacterActionMessage()
+                        {
+                            Action = CharacterActionType.TeamRequest,
+                            Target = message.Identity,
+                            Identity = message.Target
+                        };
+                        targetPlayer.Send(packet);
+                    }
+
+                    break;
+
+                case CharacterActionType.TeamAcceptInvite:
+                    // check if team exists with message.Target (team leader) on it already
+                    var team = CellAO.ObjectManager.Pool.Instance
+                        .GetAll<Team>((int)IdentityType.TeamWindow)
+                        .Where(t => t.HasMember(message.Target))
+                        .FirstOrDefault()
+                        // Otherwise create one
+                        ?? new Team(message.Target, Team.GenerateNewTeamIdentity());
+
+                    team.AddPlayer(client.Controller.Character.Identity);
+
+
+
+                    break;
+
+
+                case CharacterActionType.TeamRequestReply:
+                    {
+                        /*
+                                                         Request Reply
+                                                         Check if positive or negative response
+
+                                                         if positive
+                                                        var team = new TeamClass();
+                                                        var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
+
+                                                         Destination Client 0 = Sender, 1 = Reciever
+
+                                                         Reciever Packets
+                                                        ///////////////////
+
+                                                         CharAction 15
+                                                        team.TeamRequestReply(client, packet.Target);
+
+                                                         CharAction 23
+                                                        team.TeamRequestReplyCharacterAction23(client, packet.Target);
+
+                                                         TeamMember Packet
+                                                        team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
+
+                                                         TeamMemberInfo Packet
+                                                        team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
+
+                                                         TeamMember Packet
+                                                        team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
+
+                                                         Sender Packets
+                                                        /////////////////
+
+                                                         TeamMember Packet
+                                                        team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
+
+                                                         TeamMemberInfo Packet
+                                                        team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
+
+                                                         TeamMember Packet
+                                                        team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
+                                                         */
+                    }
+
+                    break;
+
+                case CharacterActionType.DeleteItem: // Remove/Delete item
+                    ItemDao.Instance.Delete(
+                        new
+                        {
+                            containertype = (int)targetIdentityType,
+                            containerinstance = client.Controller.Character.Identity.Instance,
+                            Id = message.Target.Instance
+                        });
+                    client.Controller.Character.BaseInventory.RemoveItem(
+                        (int)targetIdentityType,
+                        message.Target.Instance);
+
+                    this.AcknowledgeDelete(client.Controller.Character, message);
+                    break;
+
+                case CharacterActionType.Split: // Split?
+                    IItem it =
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance
+                            ];
+                    it.MultipleCount -= message.Parameter2;
+                    Item newItem = new Item(it.Quality, it.LowID, it.HighID);
+                    newItem.MultipleCount = message.Parameter2;
+
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(),
+                        newItem);
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
+
+                    // Does it need to Acknowledge? Need to check that - Algorithman
+                    break;
+
+                case CharacterActionType.AcceptTeamRequest:
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance]
+                        .MultipleCount +=
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2]
+                            .MultipleCount;
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
+                    this.Acknowledge(client.Controller.Character, message);
+                    break;
+
+                // ###################################################################################
+                // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
+                // currently i cannot find a missing packet or link which tells the server the player
+                // has stopped sneaking, hidden packet or something, will come back to later.
+                // ###################################################################################
+
+                // Sneak Packet Received
+                case CharacterActionType.StartSneak:
+
+                    // TODO: IF SNEAKING IS ALLOWED RUN THIS CODE.
+                    // TODO: Insert perception checks on receiving characters/mobs and then dont send to playfield
+                    // Send Action 162 : Enable Sneak
+
+                    this.Send(client.Controller.Character, this.Sneak(client.Controller.Character), true);
+
+                    // End of Enable sneak
+                    // TODO: IF SNEAKING IS NOT ALLOWED SEND REJECTION PACKET
+                    break;
+
+                case CharacterActionType.UseItemOnItem:
+                    {
+                        Identity item1 = message.Target;
+                        var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
+
+                        client.Controller.Character.TradeSkillSource = new TradeSkillInfo(
+                            0,
+                            (int)item1.Type,
+                            item1.Instance);
+                        client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(
+                            1,
+                            (int)item2.Type,
+                            item2.Instance);
+                        TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
+
+                        break;
+                    }
+
+                case CharacterActionType.ChangeVisualFlag:
+                    {
+                        client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
+
+                        ChatTextMessageHandler.Default.Send(
+                            client.Controller.Character,
+                            "Setting Visual Flag to " + message.Parameter2);
+                        AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
+                    }
+
+                    break;
+                case CharacterActionType.TradeskillSourceChanged:
+                    TradeSkillReceiver.TradeSkillSourceChanged(client, message.Parameter1, message.Parameter2);
+                    break;
+
+                case CharacterActionType.TradeskillTargetChanged:
+                    TradeSkillReceiver.TradeSkillTargetChanged(client, message.Parameter1, message.Parameter2);
+                    break;
+
+                case CharacterActionType.TradeskillBuildPressed:
+                    TradeSkillReceiver.TradeSkillBuildPressed(client, message.Target.Instance);
+                    break;
+
+                default:
+                    {
+                        // unkown
+                        client.Controller.Character.Playfield.Announce(message);
+                    }
+
+                    break;
             }
+        }
 
-            // Send stand up packet, and cancel timer/send stop logout packet if timer is enabled
-            // ((ZoneClient)client).StandCancelLogout();
-          }
+        #endregion
 
-          break;
+        #region Outbound
 
-        case CharacterActionType.TeamKickMember:
-          {
-            // Kick Team Member
-          }
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="actionType">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        public void FinishNanoCasting(
+            ICharacter character,
+            CharacterActionType actionType,
+            Identity target,
+            int unknown1,
+            int unknown2)
+        {
+            this.Send(character, this.ConstructFinishNanoCasting(character, target, unknown1, unknown2), true);
+        }
 
-          break;
-
-        case CharacterActionType.LeaveTeam:
-          {
-            // Leave Team
-            /*
-                                            var team = new TeamClass();
-                                            team.LeaveTeam(client);
-                                             */
-          }
-
-          break;
-        case CharacterActionType.TransferLeader:
-          {
-            // Transfer Team Leadership
-          }
-
-          break;
-
-        case CharacterActionType.TeamRequestInvite:
-          {
-            var targetPlayer = CellAO.ObjectManager.Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
-                .Where(x => x.Identity.Equals(message.Target)).FirstOrDefault();
-            // Team Join Request
-            // Send Team Invite Request To Target Player
-            /*
-                                            var team = new TeamClass();
-                                            team.SendTeamRequest(client, packet.Target);
-                                             */
-            CharacterActionMessage packet = new CharacterActionMessage()
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="unknown2">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller ConstructFinishNanoCasting(
+            ICharacter character,
+            Identity target,
+            int unknown1,
+            int unknown2)
+        {
+            return x =>
             {
-              Action = CharacterActionType.TeamRequest,
-              Target = message.Identity,
-              Identity = message.Target
+                x.Identity = character.Identity;
+                x.Unknown = 0x00;
+                x.Action = CharacterActionType.FinishNanoCasting;
+                x.Unknown1 = 0x00000000;
+                x.Target = Identity.None;
+                x.Parameter1 = unknown1;
+                x.Parameter2 = unknown2;
+                x.Unknown2 = 0x0000;
             };
-            targetPlayer.Send(packet);
-          }
+        }
 
-          break;
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="duration">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller ConstructSetNanoDuration(
+            ICharacter character,
+            Identity target,
+            int unknown1,
+            int duration = 0x249F0)
+        {
+            return x =>
+            {
+                x.Identity = target;
+                x.Unknown = 0x00;
+                x.Action = CharacterActionType.SetNanoDuration;
+                x.Unknown1 = 0x00000000;
+                x.Target = new Identity { Type = IdentityType.NanoProgram, Instance = unknown1 };
+                x.Parameter1 = character.Identity.Instance;
+                x.Parameter2 = duration; // duration
+          x.Unknown2 = 0x0000;
+            };
+        }
 
-        case CharacterActionType.TeamAcceptInvite:
-          // check if team exists with message.Target (team leader) on it already
-          var team = CellAO.ObjectManager.Pool.Instance
-              .GetAll<Team>((int)IdentityType.TeamWindow)
-              .Where(t => t.HasMember(message.Target))
-              .FirstOrDefault()
-              // Otherwise create one
-              ?? new Team(message.Target, Team.GenerateNewTeamIdentity());
-          
-          team.AddPlayer(client.Controller.Character.Identity);
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="target">
+        /// </param>
+        /// <param name="unknown1">
+        /// </param>
+        /// <param name="duration">
+        /// </param>
+        public void SetNanoDuration(ICharacter character, Identity target, int unknown1, int duration = 0x249F0)
+        {
+            this.Send(character, this.ConstructSetNanoDuration(character, target, unknown1, duration));
+        }
 
-          
-          
-          break;
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller DeleteItemAction(ICharacter character, int container, int placement)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Action = CharacterActionType.DeleteItem;
+                x.Target = new Identity() { Type = (IdentityType)container, Instance = placement };
+            };
+        }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="container">
+        /// </param>
+        /// <param name="placement">
+        /// </param>
+        public void SendDeleteItem(ICharacter character, int container, int placement)
+        {
+            this.Send(character, this.DeleteItemAction(character, container, placement));
+        }
 
-        case CharacterActionType.TeamRequestReply:
-          {
-            /*
-                                             Request Reply
-                                             Check if positive or negative response
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller Sneak(ICharacter character)
+        {
+            return x =>
+            {
+                x.Identity = character.Identity;
+                x.Unknown = 0x00;
+                x.Action = CharacterActionType.StartedSneaking;
+                x.Unknown1 = 0x00000000;
+                x.Target = Identity.None;
+                x.Parameter1 = 0;
+                x.Parameter2 = 0;
+                x.Unknown2 = 0;
+            };
+        }
 
-                                             if positive
-                                            var team = new TeamClass();
-                                            var teamID = TeamClass.GenerateNewTeamId(client, packet.Target);
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <param name="message">
+        /// </param>
+        private void Acknowledge(ICharacter character, CharacterActionMessage message)
+        {
+            this.Send(character, this.Reply(message));
+        }
 
-                                             Destination Client 0 = Sender, 1 = Reciever
+        /// <summary>
+        /// </summary>
+        /// <param name="message">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller Reply(CharacterActionMessage message)
+        {
+            return x =>
+            {
+                x.Action = message.Action;
+                x.Identity = message.Identity;
+                x.Parameter1 = message.Parameter1;
+                x.Parameter2 = message.Parameter2;
+                x.Target = message.Target;
+                x.Unknown1 = message.Unknown1;
+                x.Unknown2 = message.Unknown2;
+                x.Unknown = message.Unknown;
+            };
+        }
 
-                                             Reciever Packets
-                                            ///////////////////
+        private void AcknowledgeDelete(ICharacter character, CharacterActionMessage message)
+        {
+            this.Send(character, this.ReplyWithoutParameters(message));
+        }
 
-                                             CharAction 15
-                                            team.TeamRequestReply(client, packet.Target);
+        private MessageDataFiller ReplyWithoutParameters(CharacterActionMessage message)
+        {
+            return x =>
+            {
+                x.Action = message.Action;
+                x.Identity = message.Identity;
+                x.Parameter1 = 0;
+                x.Parameter2 = 0;
+                x.Target = message.Target;
+                x.Unknown1 = message.Unknown1;
+                x.Unknown2 = message.Unknown2;
+                x.Unknown = message.Unknown;
+            };
+        }
 
-                                             CharAction 23
-                                            team.TeamRequestReplyCharacterAction23(client, packet.Target);
+        /// <summary>
+        /// </summary>
+        /// <param name="character">
+        /// </param>
+        /// <returns>
+        /// </returns>
+        private MessageDataFiller StopLogout(ICharacter character)
+        {
+            return x =>
+            {
+                x.Action = CharacterActionType.StopLogout;
+                x.Identity = character.Identity;
+            };
+        }
 
-                                             TeamMember Packet
-                                            team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member1");
-
-                                             TeamMemberInfo Packet
-                                            team.TeamReplyPacketTeamMemberInfo(1, client, packet.Target);
-
-                                             TeamMember Packet
-                                            team.TeamReplyPacketTeamMember(1, client, packet.Target, "Member2");
-
-                                             Sender Packets
-                                            /////////////////
-
-                                             TeamMember Packet
-                                            team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member1");
-
-                                             TeamMemberInfo Packet
-                                            team.TeamReplyPacketTeamMemberInfo(0, client, packet.Target);
-
-                                             TeamMember Packet
-                                            team.TeamReplyPacketTeamMember(0, client, packet.Target, "Member2");
-                                             */
-          }
-
-          break;
-
-        case CharacterActionType.DeleteItem: // Remove/Delete item
-          ItemDao.Instance.Delete(
-              new
-              {
-                containertype = (int)targetIdentityType,
-                containerinstance = client.Controller.Character.Identity.Instance,
-                Id = message.Target.Instance
-              });
-          client.Controller.Character.BaseInventory.RemoveItem(
-              (int)targetIdentityType,
-              message.Target.Instance);
-
-          this.AcknowledgeDelete(client.Controller.Character, message);
-          break;
-
-        case CharacterActionType.Split: // Split?
-          IItem it =
-              client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance
-                  ];
-          it.MultipleCount -= message.Parameter2;
-          Item newItem = new Item(it.Quality, it.LowID, it.HighID);
-          newItem.MultipleCount = message.Parameter2;
-
-          client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
-              client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(),
-              newItem);
-          client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
-
-          // Does it need to Acknowledge? Need to check that - Algorithman
-          break;
-
-        case CharacterActionType.AcceptTeamRequest:
-          client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance]
-              .MultipleCount +=
-              client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2]
-                  .MultipleCount;
-          client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
-          client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
-          this.Acknowledge(client.Controller.Character, message);
-          break;
-
-        // ###################################################################################
-        // Spandexpants: This is all i have done so far as to make sneak turn on and off, 
-        // currently i cannot find a missing packet or link which tells the server the player
-        // has stopped sneaking, hidden packet or something, will come back to later.
-        // ###################################################################################
-
-        // Sneak Packet Received
-        case CharacterActionType.StartSneak:
-
-          // TODO: IF SNEAKING IS ALLOWED RUN THIS CODE.
-          // TODO: Insert perception checks on receiving characters/mobs and then dont send to playfield
-          // Send Action 162 : Enable Sneak
-
-          this.Send(client.Controller.Character, this.Sneak(client.Controller.Character), true);
-
-          // End of Enable sneak
-          // TODO: IF SNEAKING IS NOT ALLOWED SEND REJECTION PACKET
-          break;
-
-        case CharacterActionType.UseItemOnItem:
-          {
-            Identity item1 = message.Target;
-            var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
-
-            client.Controller.Character.TradeSkillSource = new TradeSkillInfo(
-                0,
-                (int)item1.Type,
-                item1.Instance);
-            client.Controller.Character.TradeSkillTarget = new TradeSkillInfo(
-                1,
-                (int)item2.Type,
-                item2.Instance);
-            TradeSkillReceiver.TradeSkillBuildPressed(client, 300);
-
-            break;
-          }
-
-        case CharacterActionType.ChangeVisualFlag:
-          {
-            client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
-
-            ChatTextMessageHandler.Default.Send(
-                client.Controller.Character,
-                "Setting Visual Flag to " + message.Parameter2);
-            AppearanceUpdateMessageHandler.Default.Send(client.Controller.Character);
-          }
-
-          break;
-        case CharacterActionType.TradeskillSourceChanged:
-          TradeSkillReceiver.TradeSkillSourceChanged(client, message.Parameter1, message.Parameter2);
-          break;
-
-        case CharacterActionType.TradeskillTargetChanged:
-          TradeSkillReceiver.TradeSkillTargetChanged(client, message.Parameter1, message.Parameter2);
-          break;
-
-        case CharacterActionType.TradeskillBuildPressed:
-          TradeSkillReceiver.TradeSkillBuildPressed(client, message.Target.Instance);
-          break;
-
-        default:
-          {
-            // unkown
-            client.Controller.Character.Playfield.Announce(message);
-          }
-
-          break;
-      }
+        #endregion
     }
-
-    #endregion
-
-    #region Outbound
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="actionType">
-    /// </param>
-    /// <param name="target">
-    /// </param>
-    /// <param name="unknown1">
-    /// </param>
-    /// <param name="unknown2">
-    /// </param>
-    public void FinishNanoCasting(
-        ICharacter character,
-        CharacterActionType actionType,
-        Identity target,
-        int unknown1,
-        int unknown2)
-    {
-      this.Send(character, this.ConstructFinishNanoCasting(character, target, unknown1, unknown2), true);
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="target">
-    /// </param>
-    /// <param name="unknown1">
-    /// </param>
-    /// <param name="unknown2">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller ConstructFinishNanoCasting(
-        ICharacter character,
-        Identity target,
-        int unknown1,
-        int unknown2)
-    {
-      return x =>
-      {
-        x.Identity = character.Identity;
-        x.Unknown = 0x00;
-        x.Action = CharacterActionType.FinishNanoCasting;
-        x.Unknown1 = 0x00000000;
-        x.Target = Identity.None;
-        x.Parameter1 = unknown1;
-        x.Parameter2 = unknown2;
-        x.Unknown2 = 0x0000;
-      };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="target">
-    /// </param>
-    /// <param name="unknown1">
-    /// </param>
-    /// <param name="duration">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller ConstructSetNanoDuration(
-        ICharacter character,
-        Identity target,
-        int unknown1,
-        int duration = 0x249F0)
-    {
-      return x =>
-      {
-        x.Identity = target;
-        x.Unknown = 0x00;
-        x.Action = CharacterActionType.SetNanoDuration;
-        x.Unknown1 = 0x00000000;
-        x.Target = new Identity { Type = IdentityType.NanoProgram, Instance = unknown1 };
-        x.Parameter1 = character.Identity.Instance;
-        x.Parameter2 = duration; // duration
-              x.Unknown2 = 0x0000;
-      };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="target">
-    /// </param>
-    /// <param name="unknown1">
-    /// </param>
-    /// <param name="duration">
-    /// </param>
-    public void SetNanoDuration(ICharacter character, Identity target, int unknown1, int duration = 0x249F0)
-    {
-      this.Send(character, this.ConstructSetNanoDuration(character, target, unknown1, duration));
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="container">
-    /// </param>
-    /// <param name="placement">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller DeleteItemAction(ICharacter character, int container, int placement)
-    {
-      return x =>
-      {
-        x.Identity = character.Identity;
-        x.Action = CharacterActionType.DeleteItem;
-        x.Target = new Identity() { Type = (IdentityType)container, Instance = placement };
-      };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="container">
-    /// </param>
-    /// <param name="placement">
-    /// </param>
-    public void SendDeleteItem(ICharacter character, int container, int placement)
-    {
-      this.Send(character, this.DeleteItemAction(character, container, placement));
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller Sneak(ICharacter character)
-    {
-      return x =>
-      {
-        x.Identity = character.Identity;
-        x.Unknown = 0x00;
-        x.Action = CharacterActionType.StartedSneaking;
-        x.Unknown1 = 0x00000000;
-        x.Target = Identity.None;
-        x.Parameter1 = 0;
-        x.Parameter2 = 0;
-        x.Unknown2 = 0;
-      };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <param name="message">
-    /// </param>
-    private void Acknowledge(ICharacter character, CharacterActionMessage message)
-    {
-      this.Send(character, this.Reply(message));
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="message">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller Reply(CharacterActionMessage message)
-    {
-      return x =>
-      {
-        x.Action = message.Action;
-        x.Identity = message.Identity;
-        x.Parameter1 = message.Parameter1;
-        x.Parameter2 = message.Parameter2;
-        x.Target = message.Target;
-        x.Unknown1 = message.Unknown1;
-        x.Unknown2 = message.Unknown2;
-        x.Unknown = message.Unknown;
-      };
-    }
-
-    private void AcknowledgeDelete(ICharacter character, CharacterActionMessage message)
-    {
-      this.Send(character, this.ReplyWithoutParameters(message));
-    }
-
-    private MessageDataFiller ReplyWithoutParameters(CharacterActionMessage message)
-    {
-      return x =>
-      {
-        x.Action = message.Action;
-        x.Identity = message.Identity;
-        x.Parameter1 = 0;
-        x.Parameter2 = 0;
-        x.Target = message.Target;
-        x.Unknown1 = message.Unknown1;
-        x.Unknown2 = message.Unknown2;
-        x.Unknown = message.Unknown;
-      };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="character">
-    /// </param>
-    /// <returns>
-    /// </returns>
-    private MessageDataFiller StopLogout(ICharacter character)
-    {
-      return x =>
-      {
-        x.Action = CharacterActionType.StopLogout;
-        x.Identity = character.Identity;
-      };
-    }
-
-    #endregion
-  }
 }
