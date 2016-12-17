@@ -186,7 +186,6 @@
     <Compile Include="Core\MessageHandlers\SkillMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\SocialActionCmdMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\StatMessageHandler.cs" />
-    <Compile Include="Core\MessageHandlers\TeamMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TeleportMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TemplateActionMessageHandler.cs" />
     <Compile Include="Core\MessageHandlers\TradeMessageHandler.cs" />
