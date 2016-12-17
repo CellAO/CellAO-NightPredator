@@ -47,7 +47,7 @@ namespace ZoneEngine.Core
             });
         }
 
-        static Identity GenerateNewTeamIdentity()
+        public static Identity GenerateNewTeamIdentity()
         {
             return new Identity() { Instance = Pool.Instance.GetFreeInstance<Team>(0, IdentityType.TeamWindow), Type = IdentityType.TeamWindow };
         }
