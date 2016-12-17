@@ -224,7 +224,14 @@ namespace ZoneEngine.Core.MessageHandlers
                     {
                         var teamToLeave = Team.GetCharacterTeam(client.Controller.Character.Identity);
 
-                        teamToLeave.RemovePlayer(client.Controller.Character.Identity);
+                        if (teamToLeave.LeaderIdentity.Equals(client.Controller.Character.Identity))
+                        {
+                            teamToLeave.Disband();
+                        }
+                        else
+                        {
+                            teamToLeave.RemovePlayer(client.Controller.Character.Identity);
+                        }
 
                         // Leave Team
                         /*

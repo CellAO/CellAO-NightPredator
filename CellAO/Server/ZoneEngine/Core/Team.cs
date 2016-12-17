@@ -72,6 +72,14 @@ namespace ZoneEngine.Core
             return this.Characters.Count(c => c.Equals(char1)) > 0;
         }
 
+        public void Disband()
+        {
+            for (var i = 0; i < Characters.Count; i++) {
+                if (Characters.Count > 0)
+                    RemovePlayer(Characters[i]);
+            }
+        }
+
         public void RemovePlayer(Identity charIdentity)
         {
             foreach (var member in this.Characters)
