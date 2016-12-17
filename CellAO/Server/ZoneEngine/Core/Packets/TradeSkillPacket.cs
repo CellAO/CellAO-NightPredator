@@ -79,7 +79,7 @@ namespace ZoneEngine.Core.Packets
                                   Unknown = 0,
                                   Target = new Identity(),
                                   Parameter1 = 0,
-                                  Parameter2 = min
+                                  Parameter2 = System.Convert.ToUInt32(min)
                               };
             character.Send(messageBody);
         }
@@ -101,7 +101,7 @@ namespace ZoneEngine.Core.Packets
                                   Unknown1 = 0,
                                   Target = new Identity(),
                                   Parameter1 = tradeSkillStatId,
-                                  Parameter2 = tradeSkillRequirement
+                                  Parameter2 = System.Convert.ToUInt32(tradeSkillRequirement)
                               };
             character.Send(messageBody);
         }
@@ -132,7 +132,7 @@ namespace ZoneEngine.Core.Packets
                                           Instance = high
                                       },
                                   Parameter1 = min,
-                                  Parameter2 = low
+                                  Parameter2 = System.Convert.ToUInt32(low)
                               };
 
             character.Send(messageBody);
@@ -153,7 +153,7 @@ namespace ZoneEngine.Core.Packets
                                   Unknown = 0,
                                   Target = new Identity(),
                                   Parameter1 = 0,
-                                  Parameter2 = count
+                                  Parameter2 = System.Convert.ToUInt32(count)
                               };
             character.Send(messageBody);
         }
@@ -173,7 +173,7 @@ namespace ZoneEngine.Core.Packets
                                   Unknown = 0,
                                   Target = new Identity(),
                                   Parameter1 = 0,
-                                  Parameter2 = count
+                                  Parameter2 = System.Convert.ToUInt32(count)
                               };
             character.Send(messageBody);
         }

@@ -563,6 +563,12 @@ namespace CellAO.Core.Entities
             return temp;
         }
 
+        public static Character GetCharacter(Identity charId)
+        {
+            return CellAO.ObjectManager.Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
+                            .Where(x => x.Identity.Equals(charId)).FirstOrDefault();
+        }
+
         #endregion
 
         #region Movement

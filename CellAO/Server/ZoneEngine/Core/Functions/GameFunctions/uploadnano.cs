@@ -104,7 +104,7 @@ namespace ZoneEngine.Core.Functions.GameFunctions
                                   Action = CharacterActionType.UploadNano,
                                   Target = self.Identity,
                                   Parameter1 = (int)IdentityType.NanoProgram,
-                                  Parameter2 = temp.NanoId,
+                                  Parameter2 = System.Convert.ToUInt32(temp.NanoId),
                                   Unknown = 0
                               };
 

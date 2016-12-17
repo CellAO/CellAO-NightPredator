@@ -191,9 +191,9 @@ namespace ZoneEngine.Core.KnuBot
                         if (nextId != "self")
                         {
                             KnuBotDialogTree nextSelectedNode = this.selectedNode.GetNode(nextId);
-                            this.selectedNode = nextSelectedNode ?? throw new Exception(
-                                    "Could not find dialog id '" + nextId + "' in tree '"
-                                    + string.Join(Environment.NewLine, this.selectedNode.FlattenDialogIds()) + "'");
+                            // this.selectedNode = nextSelectedNode ?? throw new Exception(
+                            //         "Could not find dialog id '" + nextId + "' in tree '"
+                            //         + string.Join(Environment.NewLine, this.selectedNode.FlattenDialogIds()) + "'");
                         }
                     }
                 }

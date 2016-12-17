@@ -95,7 +95,7 @@ namespace ZoneEngine.Core.MessageHandlers
                     // TODO: Check nanoskill requirements
                     // TODO: Lower current nano points/check if enough nano points
 
-                    client.Controller.CastNano(message.Parameter2, message.Target);
+                    client.Controller.CastNano(System.Convert.ToInt32(message.Parameter2), message.Target);
 
                     break;
 
@@ -220,15 +220,19 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     break;
 
-                case CharacterActionType.LeaveTeam:
+                case CharacterActionType.LeaveTeamInbound:
                     {
+                        var teamToLeave = Team.GetCharacterTeam(client.Controller.Character.Identity);
+
+                        teamToLeave.RemovePlayer(client.Controller.Character.Identity);
+
                         // Leave Team
                         /*
-                                                        var team = new TeamClass();
-                                                        team.LeaveTeam(client);
-                                                         */
-                    }
+                        var team = new TeamClass();
+                        team.LeaveTeam(client);
+                        */
 
+                    }
                     break;
                 case CharacterActionType.TransferLeader:
                     {
@@ -260,12 +264,9 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 case CharacterActionType.TeamAcceptInvite:
                     // check if team exists with message.Target (team leader) on it already
-                    var team = CellAO.ObjectManager.Pool.Instance
-                        .GetAll<Team>((int)IdentityType.TeamWindow)
-                        .Where(t => t.HasMember(message.Target))
-                        .FirstOrDefault()
+                    var team = Team.GetCharacterTeam(message.Target)
                         // Otherwise create one
-                        ?? new Team(message.Target, Team.GenerateNewTeamIdentity());
+                        ?? Team.GenerateNewTeam(message.Target);
 
                     team.AddPlayer(client.Controller.Character.Identity);
 
@@ -339,9 +340,9 @@ namespace ZoneEngine.Core.MessageHandlers
                     IItem it =
                         client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance
                             ];
-                    it.MultipleCount -= message.Parameter2;
+                    it.MultipleCount -= System.Convert.ToInt32(message.Parameter2);
                     Item newItem = new Item(it.Quality, it.LowID, it.HighID);
-                    newItem.MultipleCount = message.Parameter2;
+                    newItem.MultipleCount = System.Convert.ToInt32(message.Parameter2);
 
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Add(
                         client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].FindFreeSlot(),
@@ -354,9 +355,9 @@ namespace ZoneEngine.Core.MessageHandlers
                 case CharacterActionType.AcceptTeamRequest:
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Target.Instance]
                         .MultipleCount +=
-                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][message.Parameter2]
+                        client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType][System.Convert.ToInt32(message.Parameter2)]
                             .MultipleCount;
-                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(message.Parameter2);
+                    client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Remove(System.Convert.ToInt32(message.Parameter2));
                     client.Controller.Character.BaseInventory.Pages[(int)targetIdentityType].Write();
                     this.Acknowledge(client.Controller.Character, message);
                     break;
@@ -383,7 +384,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 case CharacterActionType.UseItemOnItem:
                     {
                         Identity item1 = message.Target;
-                        var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = message.Parameter2 };
+                        var item2 = new Identity { Type = (IdentityType)message.Parameter1, Instance = System.Convert.ToInt32(message.Parameter2) };
 
                         client.Controller.Character.TradeSkillSource = new TradeSkillInfo(
                             0,
@@ -400,7 +401,7 @@ namespace ZoneEngine.Core.MessageHandlers
 
                 case CharacterActionType.ChangeVisualFlag:
                     {
-                        client.Controller.Character.Stats[StatIds.visualflags].Value = message.Parameter2;
+                        client.Controller.Character.Stats[StatIds.visualflags].Value = System.Convert.ToInt32(message.Parameter2);
 
                         ChatTextMessageHandler.Default.Send(
                             client.Controller.Character,
@@ -410,11 +411,11 @@ namespace ZoneEngine.Core.MessageHandlers
 
                     break;
                 case CharacterActionType.TradeskillSourceChanged:
-                    TradeSkillReceiver.TradeSkillSourceChanged(client, message.Parameter1, message.Parameter2);
+                    TradeSkillReceiver.TradeSkillSourceChanged(client, message.Parameter1, System.Convert.ToInt32(message.Parameter2));
                     break;
 
                 case CharacterActionType.TradeskillTargetChanged:
-                    TradeSkillReceiver.TradeSkillTargetChanged(client, message.Parameter1, message.Parameter2);
+                    TradeSkillReceiver.TradeSkillTargetChanged(client, message.Parameter1, System.Convert.ToInt32(message.Parameter2));
                     break;
 
                 case CharacterActionType.TradeskillBuildPressed:
@@ -483,7 +484,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Unknown1 = 0x00000000;
                 x.Target = Identity.None;
                 x.Parameter1 = unknown1;
-                x.Parameter2 = unknown2;
+                x.Parameter2 = System.Convert.ToUInt32(unknown2);
                 x.Unknown2 = 0x0000;
             };
         }
@@ -514,7 +515,7 @@ namespace ZoneEngine.Core.MessageHandlers
                 x.Unknown1 = 0x00000000;
                 x.Target = new Identity { Type = IdentityType.NanoProgram, Instance = unknown1 };
                 x.Parameter1 = character.Identity.Instance;
-                x.Parameter2 = duration; // duration
+                x.Parameter2 = System.Convert.ToUInt32(duration); // duration
           x.Unknown2 = 0x0000;
             };
         }
