@@ -73,7 +73,23 @@ namespace ZoneEngine.Core
 
         public void TransferLeadership(Identity newLeader)
         {
-
+            Leader.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.AcceptTeamRequest,
+                Identity = Leader.Identity,
+                Target = newLeader,
+                Parameter1 = 0x0000DEA9,
+                Parameter2 = System.Convert.ToUInt32(this.Identity.Instance)
+            });
+            LeaderIdentity = newLeader;
+            Leader.Send(new CharacterActionMessage()
+            {
+                Action = CharacterActionType.AcceptTeamRequest,
+                Identity = Leader.Identity,
+                Target = newLeader,
+                Parameter1 = 0x0000DEA9,
+                Parameter2 = System.Convert.ToUInt32(this.Identity.Instance)
+            });
         }
 
         public void Disband()
