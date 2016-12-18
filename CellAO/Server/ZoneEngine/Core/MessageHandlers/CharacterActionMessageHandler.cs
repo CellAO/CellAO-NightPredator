@@ -232,13 +232,6 @@ namespace ZoneEngine.Core.MessageHandlers
                         {
                             teamToLeave.RemovePlayer(client.Controller.Character.Identity);
                         }
-
-                        // Leave Team
-                        /*
-                        var team = new TeamClass();
-                        team.LeaveTeam(client);
-                        */
-
                     }
                     break;
                 case CharacterActionType.TransferLeader:
@@ -252,12 +245,6 @@ namespace ZoneEngine.Core.MessageHandlers
                     {
                         var targetPlayer = CellAO.ObjectManager.Pool.Instance.GetAll<Character>((int)IdentityType.CanbeAffected)
                             .Where(x => x.Identity.Equals(message.Target)).FirstOrDefault();
-                        // Team Join Request
-                        // Send Team Invite Request To Target Player
-                        /*
-                                                        var team = new TeamClass();
-                                                        team.SendTeamRequest(client, packet.Target);
-                                                         */
                         CharacterActionMessage packet = new CharacterActionMessage()
                         {
                             Action = CharacterActionType.TeamRequest,

@@ -1058,6 +1058,19 @@ namespace CellAO.Core.Entities
         /// </param>
         public void LogoutTimerCallback(object sender)
         {
+            // Flip character online bit to let login server know after 15 seconds of DC
+
+            CharacterDao.Instance.SetOffline(this.Identity.Instance);
+
+
+
+            // Boot them from team
+            var team = Team.GetCharacterTeam(Identity);
+            if (team != null)
+            {
+                team.RemovePlayer(Identity);
+            }
+
             if (this.logoutTimer == null)
             {
                 // Logout Timer has been cancelled

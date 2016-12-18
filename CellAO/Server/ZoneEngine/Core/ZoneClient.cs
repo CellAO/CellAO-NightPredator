@@ -344,12 +344,12 @@ namespace ZoneEngine.Core
                     {
                         // Commenting this for now, since no logouttimer should occur on zoning, only on a network disconnect (like a client crash)
                         // only how should i find out..... - Algorithman
-                        /*
-                    if (this.character.Stats[StatIds.gmlevel].Value == 0)
-                    {
-                        this.character.StartLogoutTimer();
-                    }
-                     */
+                        
+                        if (this.Controller.Character.Stats[StatIds.gmlevel].Value == 0)
+                        {
+                            this.Controller.Character.StartLogoutTimer();
+                        }
+                     
                         //if (this == this.character.Client)
                         // {
                         //this.character.Client = null;

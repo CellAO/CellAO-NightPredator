@@ -206,7 +206,6 @@
     <Compile Include="Core\Playfields\Playfields.cs" />
     <Compile Include="Core\Playfields\WallCollision.cs" />
     <Compile Include="Core\Playfields\WallCollisionResult.cs" />
-    <Compile Include="Core\Team.cs" />
     <Compile Include="Core\TradeSkill.cs" />
     <Compile Include="Core\TradeSkillEntry.cs" />
     <Compile Include="Core\TradeSkillSkill.cs" />

@@ -186,6 +186,7 @@
     <Compile Include="Requirements\Requirements.cs" />
     <Compile Include="Statels\Door.cs" />
     <Compile Include="Statels\StatelData.cs" />
+    <Compile Include="Team.cs" />
     <Compile Include="Textures\AOMeshs.cs" />
     <Compile Include="Textures\AOTextures.cs" />
     <Compile Include="Textures\MeshLayers.cs" />
