@@ -216,6 +216,18 @@ namespace ZoneEngine.Core.MessageHandlers
                 case CharacterActionType.TeamKickMember:
                     {
                         // Kick Team Member
+                        try
+                        {
+                            Team
+                                .GetCharacterTeam(message.Identity)
+                                .RemovePlayer(message.Target);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            LogUtil.ErrorException(ex);
+                        }
+
+
                     }
 
                     break;
@@ -237,6 +249,17 @@ namespace ZoneEngine.Core.MessageHandlers
                 case CharacterActionType.TransferLeader:
                     {
                         // Transfer Team Leadership
+                        // Kick Team Member
+                        try
+                        {
+                            Team
+                                .GetCharacterTeam(message.Identity)
+                                .TransferLeadership(message.Target);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            LogUtil.ErrorException(ex);
+                        }
                     }
 
                     break;
