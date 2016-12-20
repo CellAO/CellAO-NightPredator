@@ -274,8 +274,31 @@ namespace ZoneEngine.Core
         /// </param>
         public void SendInitiateCompressionMessage(MessageBody messageBody)
         {
-            // TODO: Investigate if reciever is a timestamp
-            var message = new Message
+
+            // IMPORTANT!!!!
+            // DO NOT mess with this packet unless you're 9000% sure you know what you're doing.
+            // This is NOT N3 message, but a special message type.
+            // This is NOT fire and forget packet.
+            // This is a negotiating packet which means that client and server have to agree on values.
+            // out of sync = no go
+            // What is hardcoded here is a working version. Changing this may break things.
+            // ~Midian
+
+            var comressionNegotiatePacket = new byte[]
+                                            {
+                                                0xdf, 0xdf,
+                                                0x7f, 0x00,
+                                                0x00, 0x01,
+                                                0x00, 0x10,
+                                                0x01, 0x00, // RecvCompression 0x01,0x00 Yes/0x00,0x00 No
+                                                0x00, 0x00, // SendCompression 0x01,0x00 Yes/0x00,0x00 No
+                                                0x00, 0x00, 0x00, 0x00
+                                            };
+            this.Send(comressionNegotiatePacket);
+            this.packetNumber = 1;
+            // TODO: Make compression choosable in config.xml
+            
+            /* var message = new Message
                           {
                               Body = messageBody,
                               Header =
@@ -285,7 +308,7 @@ namespace ZoneEngine.Core
                                       PacketType = messageBody.PacketType,
                                       Unknown = 0x0001,
 
-                                      // TODO: Make compression choosable in config.xml
+                                      
                                       Sender = 0x01000000,
 
                                       // 01000000 = uncompressed, 03000000 = compressed
@@ -296,9 +319,7 @@ namespace ZoneEngine.Core
 
             LogUtil.Debug(DebugInfoDetail.Network, HexOutput.Output(buffer));
 
-            this.packetNumber = 1;
-
-            this.Send(buffer);
+            this.Send(buffer); */
 
             // Now create the compressed stream
             try
