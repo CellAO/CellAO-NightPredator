@@ -35,17 +35,13 @@ namespace CellAO.Core.Inventory
 
     using System;
     using System.Linq;
-
     using CellAO.Core.Entities;
     using CellAO.Core.Exceptions;
     using CellAO.Core.Items;
     using CellAO.Database.Dao;
     using CellAO.Database.Entities;
     using CellAO.ObjectManager;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
-
-    using Utility;
 
     #endregion
 
@@ -66,15 +62,27 @@ namespace CellAO.Core.Inventory
                 throw new Exception("Vendor still not initialized? Or is it gone already...");
             }
 
-            return this.ownerReference.Target.Stats[statId].Value;
+            Vendor owner;
+            if (!this.ownerReference.TryGetTarget(out owner))
+            {
+                throw new Exception("Could not retrieve vendor target.");
+            }
+            
+            return owner.Stats[statId].Value;
         }
 
         public override bool Read()
         {
             Random rnd = new Random(Environment.TickCount);
 
-            string templateHash = this.ownerReference.Target.TemplateHash;
-            if (!string.IsNullOrEmpty(templateHash))
+            Vendor owner;
+            if (!this.ownerReference.TryGetTarget(out owner))
+            {
+                throw new Exception("Could not retrieve vendor target.");
+            }
+
+            string templateHash = owner.TemplateHash;
+            if (!String.IsNullOrEmpty(templateHash))
             {
                 DBVendorTemplate vendorTemplate =
                     VendorTemplateDao.Instance.GetWhere(new { Hash = templateHash }).FirstOrDefault();

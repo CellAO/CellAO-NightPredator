@@ -33,11 +33,6 @@ namespace WebEngine
 {
     #region Usings ...
 
-    using AO.Core.Encryption;
-
-    using CellAO.Database.Dao;
-    using CellAO.Database.Entities;
-
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -48,12 +43,11 @@ namespace WebEngine
     using System.Threading;
     using System.Web;
     using System.Xml.Linq;
-
+    using AO.Core.Encryption;
+    using CellAO.Database.Dao;
     using Utility;
-
     using WebEngine.ErrorHandlers;
     using WebEngine.Handlers;
-
     using _config = Utility.Config.ConfigReadWrite;
 
     #endregion

@@ -103,7 +103,13 @@ namespace ZoneEngine.Core.Controllers
         {
             get
             {
-                return this.character.Target;
+                ICharacter character;
+                if (!this.character.TryGetTarget(out character))
+                {
+                    throw new Exception("Failed to retrieve weak reference target.");
+                }
+
+                return character;
             }
 
             set
