@@ -144,7 +144,7 @@ namespace ZoneEngine.ChatCommands
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            string.Format("Target {0} is no npc.", target.ToString(true))));
+                            string.Format("Target {0} is no npc.", target.ToString())));
                     return;
                 }
 
@@ -160,7 +160,7 @@ namespace ZoneEngine.ChatCommands
                                 character,
                                 string.Format(
                                     "Target npc {0} is not yet saved to mobspawn table.",
-                                    target.ToString(true))));
+                                    target.ToString())));
                     }
                     else
                     {
@@ -172,7 +172,7 @@ namespace ZoneEngine.ChatCommands
                                 string.Format(
                                     "Saved initialization script '{0}' for spawn {1}.",
                                     args[2],
-                                    target.ToString(true))));
+                                    target.ToString())));
                         ((NPCController)cmob.Controller).SetKnuBot(
                             ScriptCompiler.Instance.CreateKnuBot(scriptname, cmob.Identity));
                     }

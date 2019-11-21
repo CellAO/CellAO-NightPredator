@@ -111,12 +111,13 @@ namespace ZoneEngine.Core.KnuBot
         /// </exception>
         public ICharacter GetCharacter()
         {
-            /*            if (this.Character.Target == null)
-                        {
-                            throw new Exception("Character has gone away.");
-                        }
-                        */
-            return this.Character.Target;
+            ICharacter character;
+            if (!this.Character.TryGetTarget(out character))
+            {
+                throw new Exception("Failed to retrieve weak reference target.");
+            }
+
+            return character;
         }
 
         /// <summary>
@@ -127,24 +128,19 @@ namespace ZoneEngine.Core.KnuBot
         /// </returns>
         public bool StartDialog(ICharacter character)
         {
-            bool result = false;
-
             // Does the starting character exist?
-            if (character != null)
+            if (character is null)
             {
-                // if (this.GetCharacter() == null)
-                {
-                    // OK, no one is talking, lets initialize
-                    result = true;
-                    this.Character.Target = character;
-                    this.selectedNode = this.rootNode;
-                    this.OpenWindow();
-                    this.Answer(KnuBotOptionId.DialogStart);
-                    LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Start Dialog"));
-                }
+                return false;
             }
 
-            return result;
+            this.Character.SetTarget(character);
+            this.selectedNode = this.rootNode;
+            this.OpenWindow();
+            this.Answer(KnuBotOptionId.DialogStart);
+            LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("KnuBut Start Dialog"));
+
+            return true;
         }
 
         /// <summary>
@@ -204,7 +200,14 @@ namespace ZoneEngine.Core.KnuBot
                 }
 
                 // Only start over if its not the same node or option
-                if (this.Character.Target != null)
+
+                ICharacter character;
+                if (!this.Character.TryGetTarget(out character))
+                {
+                    throw new Exception("Failed to retrieve weak reference target.");
+                }
+
+                if (!(character is null))
                 {
                     if ((answer != (int)KnuBotOptionId.DialogStart) || (oldNode != this.selectedNode))
                     {
@@ -310,7 +313,13 @@ namespace ZoneEngine.Core.KnuBot
 
         public void CloseChatWindow()
         {
-            KnuBotCloseChatWindowMessageHandler.Default.Send(this.Character.Target, this.KnuBotIdentity);
+            ICharacter character;
+            if (!this.Character.TryGetTarget(out character))
+            {
+                throw new Exception("Failed to get weak reference target.");
+            }
+
+            KnuBotCloseChatWindowMessageHandler.Default.Send(character, this.KnuBotIdentity);
             this.Character = new WeakReference<ICharacter>(null);
             LogUtil.Debug(DebugInfoDetail.KnuBot, string.Format("Close KnuBot window"));
         }

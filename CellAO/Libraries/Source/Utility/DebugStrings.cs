@@ -31,18 +31,13 @@
 
 namespace Utility
 {
-    #region Usings ...
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Text;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Serialization.MappingAttributes;
-
-    #endregion
 
     public static class DebugStrings
     {
@@ -150,7 +145,7 @@ namespace Utility
 
         public static string DebugString(this Identity v)
         {
-            return v.Type.ToString().PadLeft(columnWidth) + " " + v.ToString(true).PadRight(columnWidth) + v.GetType().Name;
+            return v.Type.ToString().PadLeft(columnWidth) + " " + v.ToString().PadRight(columnWidth) + v.GetType().Name;
         }
 
         public static string DebugString(this Enum v)

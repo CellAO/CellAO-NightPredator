@@ -837,7 +837,7 @@ namespace CellAO.Core.Playfields
                 {
                     if (sd.Coord().Distance3D(dynel.Coordinates()) < 2.0f)
                     {
-                        LogUtil.Debug(DebugInfoDetail.Statel, "Stepped on Statel " + sd.Identity.ToString(true));
+                        LogUtil.Debug(DebugInfoDetail.Statel, "Stepped on Statel " + sd.Identity.ToString());
                         LogUtil.Debug(DebugInfoDetail.Statel, ev.ToString());
                         ev.Perform(dynel, sd);
                     }

@@ -118,7 +118,7 @@ namespace ZoneEngine.ChatCommands
                             if (dest.Statels.Count(x => x.Identity.Type == IdentityType.Door) > 0)
                             {
                                  door1 = dest.Statels.First(x => x.Identity.Type == IdentityType.Door);
-                                 LogUtil.Debug(DebugInfoDetail.Error, sd.PlayfieldId + " " + sd.Identity.ToString(true));
+                                 LogUtil.Debug(DebugInfoDetail.Error, sd.PlayfieldId + " " + sd.Identity.ToString());
                                  character.Stats[StatIds.externaldoorinstance].BaseValue = (uint)sd.Identity.Instance;
                                  character.Stats[StatIds.externalplayfieldinstance].BaseValue = (uint)sd.PlayfieldId;
                                  character.Playfield.Teleport(
@@ -128,7 +128,7 @@ namespace ZoneEngine.ChatCommands
                                      new Identity() { Type = (IdentityType)lastFound.Arguments.Values[0].AsInt32() , Instance = door1.PlayfieldId });
                                 return;
                             }
-                            LogUtil.Debug(DebugInfoDetail.Error, sd.PlayfieldId + " " + sd.Identity.ToString(true));
+                            LogUtil.Debug(DebugInfoDetail.Error, sd.PlayfieldId + " " + sd.Identity.ToString());
                             character.Stats[StatIds.externaldoorinstance].BaseValue = 0;
                             character.Stats[StatIds.externalplayfieldinstance].BaseValue = 0;
                             character.Playfield.Teleport(

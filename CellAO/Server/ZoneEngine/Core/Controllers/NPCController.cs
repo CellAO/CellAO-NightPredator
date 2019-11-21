@@ -192,13 +192,14 @@ namespace ZoneEngine.Core.Controllers
 
         public bool Trade(Identity target)
         {
-            // Do we have a attached KnuBot?
-            if ((this.KnuBot != null) && (this.KnuBot.Character.Target == null))
+            // Do we have an attached KnuBot?
+
+            ICharacter character;
+            if (this.KnuBot != null && !this.KnuBot.Character.TryGetTarget(out character) && !(character is null))
             {
-                return
-                    this.KnuBot.StartDialog(
-                        Pool.Instance.GetObject<ICharacter>(this.Character.Playfield.Identity, target));
+                return this.KnuBot.StartDialog(Pool.Instance.GetObject<ICharacter>(this.Character.Playfield.Identity, target));
             }
+
             return false;
         }
 

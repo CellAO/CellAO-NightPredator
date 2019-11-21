@@ -35,8 +35,6 @@ namespace CellAO.Core.Entities
 
     using System;
     using System.Collections.Generic;
-
-    using CellAO.Core.Components;
     using CellAO.Core.Inventory;
     using CellAO.Core.Playfields;
     using CellAO.Core.Textures;
@@ -49,8 +47,6 @@ namespace CellAO.Core.Entities
 
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-
-    using Utility;
 
     using Quaternion = CellAO.Core.Vector.Quaternion;
     using Vector3 = SmokeLounge.AOtomation.Messaging.GameData.Vector3;
@@ -69,7 +65,7 @@ namespace CellAO.Core.Entities
 
         /// <summary>
         /// </summary>
-        private WeakReference<IController> controller;
+        private System.WeakReference<IController> controller;
 
         /// <summary>
         /// </summary>

@@ -411,13 +411,13 @@ namespace CellAO.ObjectManager
                             return (T)temp;
                         }
                         throw new TypeInstanceMismatchException(
-                            "Tried to retrieve " + identity.ToString(true)
+                            "Tried to retrieve " + identity.ToString()
                             + " with the wrong type (" + typeof(T).ToString() + " != " + temp.GetType().ToString() + ")");
                     }
                 }
                 throw new Exception("Identity type not in this parent's list");
             }
-            throw new ParentNotInPoolException("Parent " + parent.ToString(true) + " not in Pool list");
+            throw new ParentNotInPoolException("Parent " + parent.ToString() + " not in Pool list");
         }
 
         /// <summary>
@@ -555,7 +555,7 @@ namespace CellAO.ObjectManager
                                 {
                                     throw new ArgumentNullException(
                                         "Tried to remove object, which is not in the pool: "
-                                        + obj.Identity.ToString(true));
+                                        + obj.Identity.ToString());
                                 }
                             }
                         }

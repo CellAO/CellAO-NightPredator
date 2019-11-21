@@ -155,7 +155,7 @@ namespace CellAO.Core.NPCHandler
                 Identity mobId = new Identity() { Type = IdentityType.CanbeAffected, Instance = mob.Id };
                 if (Pool.Instance.GetObject(playfield.Identity, mobId) != null)
                 {
-                    throw new Exception("Object " + mobId.ToString(true) + " already exists!!");
+                    throw new Exception("Object " + mobId.ToString() + " already exists!!");
                 }
                 Character cmob = new Character(playfield.Identity, mobId, npccontroller);
                 cmob.Read();
