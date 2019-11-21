@@ -52,8 +52,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+    <ProjectReference Include="..\..\..\CellAO\Libraries\Source\AOtomation\AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{3CEAC898-BFCA-45EA-BF34-C4BBB85D2DA4}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\CellAO\Libraries\Source\CellAO.Core\CellAO.Core.csproj">

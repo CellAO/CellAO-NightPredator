@@ -71,12 +71,12 @@ namespace CellAO.Core.Entities
             if (from.Equals(this.Shopper))
             {
                 this.vendorsBag.Add(this.vendorsBag.FindFreeSlot(), item);
-                LogUtil.Debug(DebugInfoDetail.Shopping, "Added Item from character " + from.ToString(true));
+                LogUtil.Debug(DebugInfoDetail.Shopping, "Added Item from character " + from.ToString());
             }
             else
             {
                 this.charactersBag.Add(from.Instance);
-                LogUtil.Debug(DebugInfoDetail.Shopping, "Added Item from shop on position " + from.ToString(true));
+                LogUtil.Debug(DebugInfoDetail.Shopping, "Added Item from shop on position " + from.ToString());
             }
 
             // For now no invalid trades

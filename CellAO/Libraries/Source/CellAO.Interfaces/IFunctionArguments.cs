@@ -35,7 +35,6 @@ namespace CellAO.Interfaces
 
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-
     using MsgPack;
 
     #endregion

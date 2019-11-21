@@ -64,7 +64,7 @@ namespace ZoneEngine.Scripts
                 controller.SetKnuBot(temp);
                 LogUtil.Debug(
                     DebugInfoDetail.Engine,
-                    " Initialized Infobot with npc " + character.Identity.ToString(true));
+                    " Initialized Infobot with npc " + character.Identity.ToString());
             }
         }
     }

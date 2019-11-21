@@ -57,17 +57,23 @@ namespace CellAO.Core.VendorHandler
         {
             Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = vendor.Playfield };
             Identity freeIdentity = new Identity()
-                                    {
-                                        Type = IdentityType.VendingMachine,
-                                        Instance =
+            {
+                Type = IdentityType.VendingMachine,
+                Instance =
                                             Pool.Instance.GetFreeInstance<Vendor>(
                                                 0x70000000,
                                                 IdentityType.VendingMachine)
-                                    };
+            };
 
             Vendor v = new Vendor(pfIdentity, freeIdentity, vendor.Hash);
 
-            v.RawCoordinates = new Vector3(vendor.X, vendor.Y, vendor.Z);
+            v.RawCoordinates = new Vector3()
+            {
+                X = vendor.X,
+                Y = vendor.Y,
+                Z = vendor.Z
+            };
+
             v.Heading = new Quaternion(vendor.HeadingX, vendor.HeadingY, vendor.HeadingZ, vendor.HeadingW);
             v.Playfield = playfield;
         }
@@ -76,16 +82,23 @@ namespace CellAO.Core.VendorHandler
         {
             Identity pfIdentity = new Identity() { Type = IdentityType.Playfield, Instance = statelData.PlayfieldId };
             Identity freeIdentity = new Identity()
-                                    {
-                                        Type = IdentityType.VendingMachine,
-                                        Instance =
+            {
+                Type = IdentityType.VendingMachine,
+                Instance =
                                             Pool.Instance.GetFreeInstance<Vendor>(
                                                 0x70000000,
                                                 IdentityType.VendingMachine)
-                                    };
+            };
+
             Vendor v = new Vendor(pfIdentity, freeIdentity, statelData.TemplateId);
             v.OriginalIdentity = statelData.Identity;
-            v.RawCoordinates = new Vector3(statelData.X, statelData.Y, statelData.Z);
+            v.RawCoordinates = new Vector3()
+            {
+                X = statelData.X,
+                Y = statelData.Y,
+                Z = statelData.Z
+            };
+
             v.Heading = new Quaternion(
                 statelData.HeadingX,
                 statelData.HeadingY,
@@ -105,12 +118,12 @@ namespace CellAO.Core.VendorHandler
                 DBVendor vendor = vendors.FirstOrDefault(x => x.Id == id);
                 if (vendor != null)
                 {
-                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString(true) + " - DB " + vendor.TemplateId);
+                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString() + " - DB " + vendor.TemplateId);
                     SpawnVendorFromDatabaseTemplate(vendor, playfield);
                 }
                 else
                 {
-                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString(true) + " -    " + sd.TemplateId);
+                    LogUtil.Debug(DebugInfoDetail.Statel, sd.Identity.ToString() + " -    " + sd.TemplateId);
                     SpawnEmptyVendorFromTemplate(sd, playfield, id);
                 }
             }

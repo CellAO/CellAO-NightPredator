@@ -158,8 +158,8 @@
     <Compile Include="Relay\RelayBot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\Source\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+    <ProjectReference Include="..\..\Libraries\Source\AOtomation\AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{18D555CD-B217-48C7-B3BC-0A678964100A}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\Cell.Core\Cell.Core.csproj">
@@ -185,10 +185,6 @@
     <ProjectReference Include="..\..\Libraries\Source\CellAO.Stats\CellAO.Stats.csproj">
       <Project>{3e414ed6-3cad-4c99-a35d-1802255de3cb}</Project>
       <Name>CellAO.Stats</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Source\msgpack-cli\src\MsgPack.Mono\MsgPack.Mono.csproj">
-      <Project>{6e8c2296-21e9-4113-89c4-76376516aa14}</Project>
-      <Name>MsgPack.Mono</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Source\PlayfieldLoader\PlayfieldLoader.csproj">
       <Project>{E187E908-8CD8-4EC5-B46B-09F81BE9D4C4}</Project>

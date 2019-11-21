@@ -100,12 +100,12 @@ namespace ZoneEngine.ChatCommands
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            "Coordinates of " + character.SelectedTarget.ToString(true) + ": "
+                            "Coordinates of " + character.SelectedTarget.ToString() + ": "
                             + npc.Coordinates().ToString()));
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            "Heading of " + character.SelectedTarget.ToString(true) + ": " + npc.Heading.ToString()));
+                            "Heading of " + character.SelectedTarget.ToString() + ": " + npc.Heading.ToString()));
                 }
             }
             if (args[0].ToLower() == "addwp")
@@ -119,7 +119,7 @@ namespace ZoneEngine.ChatCommands
                     character.Playfield.Publish(
                         ChatTextMessageHandler.Default.CreateIM(
                             character,
-                            "Waypoint added: " + character.SelectedTarget.ToString(true) + ": "
+                            "Waypoint added: " + character.SelectedTarget.ToString() + ": "
                             + character.Coordinates().ToString()));
                 }
             }

@@ -75,8 +75,8 @@
     <Compile Include="StatNamesDefaults.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{18D555CD-B217-48C7-B3BC-0A678964100A}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\CellAO.Database\CellAO.Database.csproj">

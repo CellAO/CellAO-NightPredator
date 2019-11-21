@@ -64,7 +64,7 @@ namespace CellAO.ObjectManager
             Pool.Instance.AddObject(parent, this);
             LogUtil.Debug(
                 DebugInfoDetail.Pool,
-                "Created new object " + id.ToString(true) + " of " + parent.ToString(true));
+                "Created new object " + id.ToString() + " of " + parent.ToString());
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace CellAO.ObjectManager
         /// </summary>
         public void Dispose()
         {
-            LogUtil.Debug(DebugInfoDetail.Pool, "Removed object " + this.Identity.ToString(true) + " of " + this.Parent.ToString(true));
+            LogUtil.Debug(DebugInfoDetail.Pool, "Removed object " + this.Identity.ToString() + " of " + this.Parent.ToString());
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }

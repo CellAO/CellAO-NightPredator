@@ -49,8 +49,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\src\SmokeLounge.AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
-      <Project>{3ceac898-bfca-45ea-bf34-c4bbb85d2da4}</Project>
+    <ProjectReference Include="..\AOtomation\AOtomation.Messaging\SmokeLounge.AOtomation.Messaging.csproj">
+      <Project>{18d555cd-b217-48c7-b3bc-0a678964100a}</Project>
       <Name>SmokeLounge.AOtomation.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\CellAO.Interfaces\CellAO.Interfaces.csproj">

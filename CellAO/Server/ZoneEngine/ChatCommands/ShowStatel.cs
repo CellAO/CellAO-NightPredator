@@ -205,7 +205,7 @@ namespace ZoneEngine.ChatCommands
                     else
                     {
 
-                        replies.Add(ChatTextMessageHandler.Default.Create(character, o2.Identity.ToString() + " " + o2.Identity.ToString(true)));
+                        replies.Add(ChatTextMessageHandler.Default.Create(character, o2.Identity.ToString() + " " + o2.Identity.ToString()));
                         replies.Add(ChatTextMessageHandler.Default.Create(character, "Item template Id: " + o2.Stats[(int)StatIds.acgitemtemplateid].ToString()));
                         foreach (Event se in o2.Events)
                         {

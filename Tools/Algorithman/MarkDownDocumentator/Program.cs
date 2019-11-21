@@ -32,18 +32,14 @@ namespace MarkDownDocumentator
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
     using CellAO.Core.Items;
     using CellAO.Core.Statels;
     using CellAO.Database.Dao;
     using CellAO.Enums;
     using CellAO.Stats;
-
     using SmokeLounge.AOtomation.Messaging.GameData;
     using SmokeLounge.AOtomation.Messaging.Messages;
-
     using Utility;
-
     using ZoneEngine.Core.Playfields;
 
     #endregion

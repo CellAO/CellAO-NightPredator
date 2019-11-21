@@ -148,7 +148,7 @@ namespace ZoneEngine.Core.MessageHandlers
                                 (int)message.Action,
                                 Environment.NewLine,
                                 message.Target[0].Type,
-                                message.Target[0].ToString(true));
+                                message.Target[0].ToString());
                             ChatTextMessageHandler.Default.Send(client.Controller.Character, s);
 #endif
                             client.Controller.UseStatel(message.Target[0]);
